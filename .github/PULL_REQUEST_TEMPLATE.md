@@ -4,6 +4,7 @@
 <!-- Give a brief description of the changes you've made below. -->
 <!-- This section need not be long, but it needs to be informative. -->
 <!-- Go into detail if you feel your changes warrant it. -->
+<!-- Also close any applicable tasks with "Close #<task num>". -->
 
 
 ### Testing <!-- Required -->
