@@ -155,6 +155,7 @@ def run_clang_format_diff(args, file):
         encoding_py3['encoding'] = 'utf-8'
 
     try:
+        os.system("sudo apt-get install clang-format")
         proc = subprocess.Popen(
             invocation,
             stdout=subprocess.PIPE,
