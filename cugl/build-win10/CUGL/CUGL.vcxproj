@@ -1,0 +1,609 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|ARM">
+      <Configuration>Debug</Configuration>
+      <Platform>ARM</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|ARM">
+      <Configuration>Release</Configuration>
+      <Platform>ARM</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\include\cugl\2d\actions\CUAction.h" />
+    <ClInclude Include="..\..\include\cugl\2d\actions\CUActionManager.h" />
+    <ClInclude Include="..\..\include\cugl\2d\actions\CUAnimateAction.h" />
+    <ClInclude Include="..\..\include\cugl\2d\actions\CUFadeAction.h" />
+    <ClInclude Include="..\..\include\cugl\2d\actions\CUMoveAction.h" />
+    <ClInclude Include="..\..\include\cugl\2d\actions\CURotateAction.h" />
+    <ClInclude Include="..\..\include\cugl\2d\actions\CUScaleAction.h" />
+    <ClInclude Include="..\..\include\cugl\2d\actions\cu_actions.h" />
+    <ClInclude Include="..\..\include\cugl\2d\CUAnimationNode.h" />
+    <ClInclude Include="..\..\include\cugl\2d\CUButton.h" />
+    <ClInclude Include="..\..\include\cugl\2d\CUFont.h" />
+    <ClInclude Include="..\..\include\cugl\2d\CULabel.h" />
+    <ClInclude Include="..\..\include\cugl\2d\CUNinePatch.h" />
+    <ClInclude Include="..\..\include\cugl\2d\CUNode.h" />
+    <ClInclude Include="..\..\include\cugl\2d\CUPathNode.h" />
+    <ClInclude Include="..\..\include\cugl\2d\CUPolygonNode.h" />
+    <ClInclude Include="..\..\include\cugl\2d\CUProgressBar.h" />
+    <ClInclude Include="..\..\include\cugl\2d\CUScene.h" />
+    <ClInclude Include="..\..\include\cugl\2d\CUSlider.h" />
+    <ClInclude Include="..\..\include\cugl\2d\CUTextField.h" />
+    <ClInclude Include="..\..\include\cugl\2d\CUTexturedNode.h" />
+    <ClInclude Include="..\..\include\cugl\2d\CUWireNode.h" />
+    <ClInclude Include="..\..\include\cugl\2d\cu_2d.h" />
+    <ClInclude Include="..\..\include\cugl\2d\layout\CUAnchoredLayout.h" />
+    <ClInclude Include="..\..\include\cugl\2d\layout\CUFloatLayout.h" />
+    <ClInclude Include="..\..\include\cugl\2d\layout\CUGridLayout.h" />
+    <ClInclude Include="..\..\include\cugl\2d\layout\CULayout.h" />
+    <ClInclude Include="..\..\include\cugl\2d\layout\cu_layout.h" />
+    <ClInclude Include="..\..\include\cugl\2d\physics\CUBoxObstacle.h" />
+    <ClInclude Include="..\..\include\cugl\2d\physics\CUCapsuleObstacle.h" />
+    <ClInclude Include="..\..\include\cugl\2d\physics\CUComplexObstacle.h" />
+    <ClInclude Include="..\..\include\cugl\2d\physics\CUObstacle.h" />
+    <ClInclude Include="..\..\include\cugl\2d\physics\CUObstacleSelector.h" />
+    <ClInclude Include="..\..\include\cugl\2d\physics\CUObstacleWorld.h" />
+    <ClInclude Include="..\..\include\cugl\2d\physics\CUPolygonObstacle.h" />
+    <ClInclude Include="..\..\include\cugl\2d\physics\CUSimpleObstacle.h" />
+    <ClInclude Include="..\..\include\cugl\2d\physics\CUWheelObstacle.h" />
+    <ClInclude Include="..\..\include\cugl\2d\physics\cu_physics.h" />
+    <ClInclude Include="..\..\include\cugl\ai\behavior\CUBehaviorAction.h" />
+    <ClInclude Include="..\..\include\cugl\ai\behavior\CUBehaviorManager.h" />
+    <ClInclude Include="..\..\include\cugl\ai\behavior\CUBehaviorNode.h" />
+    <ClInclude Include="..\..\include\cugl\ai\behavior\CUBehaviorParser.h" />
+    <ClInclude Include="..\..\include\cugl\ai\behavior\CUCompositeNode.h" />
+    <ClInclude Include="..\..\include\cugl\ai\behavior\CUDecoratorNode.h" />
+    <ClInclude Include="..\..\include\cugl\ai\behavior\CUInverterNode.h" />
+    <ClInclude Include="..\..\include\cugl\ai\behavior\CULeafNode.h" />
+    <ClInclude Include="..\..\include\cugl\ai\behavior\CUPriorityNode.h" />
+    <ClInclude Include="..\..\include\cugl\ai\behavior\CURandomNode.h" />
+    <ClInclude Include="..\..\include\cugl\ai\behavior\CUSelectorNode.h" />
+    <ClInclude Include="..\..\include\cugl\ai\behavior\CUTimerNode.h" />
+    <ClInclude Include="..\..\include\cugl\ai\behavior\cu_behavior.h" />
+    <ClInclude Include="..\..\include\cugl\assets\CUAsset.h" />
+    <ClInclude Include="..\..\include\cugl\assets\CUAssetManager.h" />
+    <ClInclude Include="..\..\include\cugl\assets\CUFontLoader.h" />
+    <ClInclude Include="..\..\include\cugl\assets\CUGenericLoader.h" />
+    <ClInclude Include="..\..\include\cugl\assets\CUJsonLoader.h" />
+    <ClInclude Include="..\..\include\cugl\assets\CUJsonValue.h" />
+    <ClInclude Include="..\..\include\cugl\assets\CULoader.h" />
+    <ClInclude Include="..\..\include\cugl\assets\CUSceneLoader.h" />
+    <ClInclude Include="..\..\include\cugl\assets\CUSoundLoader.h" />
+    <ClInclude Include="..\..\include\cugl\assets\CUTextureLoader.h" />
+    <ClInclude Include="..\..\include\cugl\assets\CUWidgetLoader.h" />
+    <ClInclude Include="..\..\include\cugl\assets\CUWidgetValue.h" />
+    <ClInclude Include="..\..\include\cugl\assets\cu_assets.h" />
+    <ClInclude Include="..\..\include\cugl\audio\codecs\CUAudioDecoder.h" />
+    <ClInclude Include="..\..\include\cugl\audio\codecs\CUFLACDecoder.h" />
+    <ClInclude Include="..\..\include\cugl\audio\codecs\CUMP3Decoder.h" />
+    <ClInclude Include="..\..\include\cugl\audio\codecs\CUOGGDecoder.h" />
+    <ClInclude Include="..\..\include\cugl\audio\codecs\CUWAVDecoder.h" />
+    <ClInclude Include="..\..\include\cugl\audio\codecs\cu_codecs.h" />
+    <ClInclude Include="..\..\include\cugl\audio\CUAudioChannels.h" />
+    <ClInclude Include="..\..\include\cugl\audio\CUAudioManager.h" />
+    <ClInclude Include="..\..\include\cugl\audio\CUAudioSample.h" />
+    <ClInclude Include="..\..\include\cugl\audio\CUAudioWaveform.h" />
+    <ClInclude Include="..\..\include\cugl\audio\CUSound.h" />
+    <ClInclude Include="..\..\include\cugl\audio\cu_audio.h" />
+    <ClInclude Include="..\..\include\cugl\audio\graph\CUAudioFader.h" />
+    <ClInclude Include="..\..\include\cugl\audio\graph\CUAudioInput.h" />
+    <ClInclude Include="..\..\include\cugl\audio\graph\CUAudioMixer.h" />
+    <ClInclude Include="..\..\include\cugl\audio\graph\CUAudioNode.h" />
+    <ClInclude Include="..\..\include\cugl\audio\graph\CUAudioOutput.h" />
+    <ClInclude Include="..\..\include\cugl\audio\graph\CUAudioPanner.h" />
+    <ClInclude Include="..\..\include\cugl\audio\graph\CUAudioPlayer.h" />
+    <ClInclude Include="..\..\include\cugl\audio\graph\CUAudioResampler.h" />
+    <ClInclude Include="..\..\include\cugl\audio\graph\CUAudioScheduler.h" />
+    <ClInclude Include="..\..\include\cugl\audio\graph\CUAudioSpinner.h" />
+    <ClInclude Include="..\..\include\cugl\audio\graph\cu_audio_graph.h" />
+    <ClInclude Include="..\..\include\cugl\base\CUApplication.h" />
+    <ClInclude Include="..\..\include\cugl\base\CUBase.h" />
+    <ClInclude Include="..\..\include\cugl\base\CUDisplay.h" />
+    <ClInclude Include="..\..\include\cugl\base\CUEndian.h" />
+    <ClInclude Include="..\..\include\cugl\base\cu_platform.h" />
+    <ClInclude Include="..\..\include\cugl\base\platform\CUDisplay-impl.h" />
+    <ClInclude Include="..\..\include\cugl\cugl.h" />
+    <ClInclude Include="..\..\include\cugl\input\CUAccelerometer.h" />
+    <ClInclude Include="..\..\include\cugl\input\CUInput.h" />
+    <ClInclude Include="..\..\include\cugl\input\CUKeyboard.h" />
+    <ClInclude Include="..\..\include\cugl\input\CUMouse.h" />
+    <ClInclude Include="..\..\include\cugl\input\CUTextInput.h" />
+    <ClInclude Include="..\..\include\cugl\input\CUTouchscreen.h" />
+    <ClInclude Include="..\..\include\cugl\input\cu_input.h" />
+    <ClInclude Include="..\..\include\cugl\input\gestures\CUPanInput.h" />
+    <ClInclude Include="..\..\include\cugl\input\gestures\CUPinchInput.h" />
+    <ClInclude Include="..\..\include\cugl\input\gestures\CURotationInput.h" />
+    <ClInclude Include="..\..\include\cugl\input\gestures\cu_gesture.h" />
+    <ClInclude Include="..\..\include\cugl\io\CUBinaryReader.h" />
+    <ClInclude Include="..\..\include\cugl\io\CUBinaryWriter.h" />
+    <ClInclude Include="..\..\include\cugl\io\CUJsonReader.h" />
+    <ClInclude Include="..\..\include\cugl\io\CUJsonWriter.h" />
+    <ClInclude Include="..\..\include\cugl\io\CUPathname.h" />
+    <ClInclude Include="..\..\include\cugl\io\CUTextReader.h" />
+    <ClInclude Include="..\..\include\cugl\io\CUTextWriter.h" />
+    <ClInclude Include="..\..\include\cugl\io\cu_io.h" />
+    <ClInclude Include="..\..\include\cugl\math\CUAffine2.h" />
+    <ClInclude Include="..\..\include\cugl\math\CUColor4.h" />
+    <ClInclude Include="..\..\include\cugl\math\CUCubicSpline.h" />
+    <ClInclude Include="..\..\include\cugl\math\CUEasingBezier.h" />
+    <ClInclude Include="..\..\include\cugl\math\CUEasingFunction.h" />
+    <ClInclude Include="..\..\include\cugl\math\CUFrustum.h" />
+    <ClInclude Include="..\..\include\cugl\math\CUMat4.h" />
+    <ClInclude Include="..\..\include\cugl\math\CUMathBase.h" />
+    <ClInclude Include="..\..\include\cugl\math\CUPlane.h" />
+    <ClInclude Include="..\..\include\cugl\math\CUPoly2.h" />
+    <ClInclude Include="..\..\include\cugl\math\CUPolynomial.h" />
+    <ClInclude Include="..\..\include\cugl\math\CUQuaternion.h" />
+    <ClInclude Include="..\..\include\cugl\math\CURay.h" />
+    <ClInclude Include="..\..\include\cugl\math\CURect.h" />
+    <ClInclude Include="..\..\include\cugl\math\CUSize.h" />
+    <ClInclude Include="..\..\include\cugl\math\CUVec2.h" />
+    <ClInclude Include="..\..\include\cugl\math\CUVec3.h" />
+    <ClInclude Include="..\..\include\cugl\math\CUVec4.h" />
+    <ClInclude Include="..\..\include\cugl\math\cu_math.h" />
+    <ClInclude Include="..\..\include\cugl\math\dsp\CUBiquadIIR.h" />
+    <ClInclude Include="..\..\include\cugl\math\dsp\CUDSPMath.h" />
+    <ClInclude Include="..\..\include\cugl\math\dsp\CUFIRFilter.h" />
+    <ClInclude Include="..\..\include\cugl\math\dsp\CUIIRFilter.h" />
+    <ClInclude Include="..\..\include\cugl\math\dsp\CUOnePoleIIR.h" />
+    <ClInclude Include="..\..\include\cugl\math\dsp\CUOneZeroFIR.h" />
+    <ClInclude Include="..\..\include\cugl\math\dsp\CUPoleZeroIIR.h" />
+    <ClInclude Include="..\..\include\cugl\math\dsp\CUTwoPoleIIR.h" />
+    <ClInclude Include="..\..\include\cugl\math\dsp\CUTwoZeroFIR.h" />
+    <ClInclude Include="..\..\include\cugl\math\dsp\cu_dsp.h" />
+    <ClInclude Include="..\..\include\cugl\math\polygon\CUCubicSplineApproximator.h" />
+    <ClInclude Include="..\..\include\cugl\math\polygon\CUDelaunayTriangulator.h" />
+    <ClInclude Include="..\..\include\cugl\math\polygon\CUPathExtruder.h" />
+    <ClInclude Include="..\..\include\cugl\math\polygon\CUPathOutliner.h" />
+    <ClInclude Include="..\..\include\cugl\math\polygon\CUSimpleTriangulator.h" />
+    <ClInclude Include="..\..\include\cugl\math\polygon\cu_polygon.h" />
+    <ClInclude Include="..\..\include\cugl\renderer\CUCamera.h" />
+    <ClInclude Include="..\..\include\cugl\renderer\CUOrthographicCamera.h" />
+    <ClInclude Include="..\..\include\cugl\renderer\CUPerspectiveCamera.h" />
+    <ClInclude Include="..\..\include\cugl\renderer\CUShader.h" />
+    <ClInclude Include="..\..\include\cugl\renderer\CUSpriteBatch.h" />
+    <ClInclude Include="..\..\include\cugl\renderer\CUSpriteShader.h" />
+    <ClInclude Include="..\..\include\cugl\renderer\CUTexture.h" />
+    <ClInclude Include="..\..\include\cugl\renderer\CUVertex.h" />
+    <ClInclude Include="..\..\include\cugl\renderer\cu_renderer.h" />
+    <ClInclude Include="..\..\include\cugl\util\CUAligned.h" />
+    <ClInclude Include="..\..\include\cugl\util\CUDebug.h" />
+    <ClInclude Include="..\..\include\cugl\util\CUFreeList.h" />
+    <ClInclude Include="..\..\include\cugl\util\CUGreedyFreeList.h" />
+    <ClInclude Include="..\..\include\cugl\util\CUStrings.h" />
+    <ClInclude Include="..\..\include\cugl\util\CUThreadPool.h" />
+    <ClInclude Include="..\..\include\cugl\util\CUTimestamp.h" />
+    <ClInclude Include="..\..\include\cugl\util\cu_util.h" />
+    <ClInclude Include="..\..\lib\base\platform\CUDisplay-impl.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\external\cJSON\cJSON.c" />
+    <ClCompile Include="..\..\lib\2d\actions\CUAction.cpp" />
+    <ClCompile Include="..\..\lib\2d\actions\CUActionManager.cpp" />
+    <ClCompile Include="..\..\lib\2d\actions\CUAnimateAction.cpp" />
+    <ClCompile Include="..\..\lib\2d\actions\CUFadeAction.cpp" />
+    <ClCompile Include="..\..\lib\2d\actions\CUMoveAction.cpp" />
+    <ClCompile Include="..\..\lib\2d\actions\CURotateAction.cpp" />
+    <ClCompile Include="..\..\lib\2d\actions\CUScaleAction.cpp" />
+    <ClCompile Include="..\..\lib\2d\CUNinePatch.cpp" />
+    <ClCompile Include="..\..\lib\2d\CUSlider.cpp" />
+    <ClCompile Include="..\..\lib\2d\CUTextField.cpp" />
+    <ClCompile Include="..\..\lib\2d\layout\CUAnchoredLayout.cpp" />
+    <ClCompile Include="..\..\lib\2d\layout\CUFloatLayout.cpp" />
+    <ClCompile Include="..\..\lib\2d\layout\CUGridLayout.cpp" />
+    <ClCompile Include="..\..\lib\2d\layout\CULayout.cpp" />
+    <ClCompile Include="..\..\lib\2d\CUAnimationNode.cpp" />
+    <ClCompile Include="..\..\lib\2d\CUButton.cpp" />
+    <ClCompile Include="..\..\lib\2d\CUFont.cpp" />
+    <ClCompile Include="..\..\lib\2d\CULabel.cpp" />
+    <ClCompile Include="..\..\lib\2d\CUNode.cpp" />
+    <ClCompile Include="..\..\lib\2d\CUPathNode.cpp" />
+    <ClCompile Include="..\..\lib\2d\CUPolygonNode.cpp" />
+    <ClCompile Include="..\..\lib\2d\CUProgressBar.cpp" />
+    <ClCompile Include="..\..\lib\2d\CUScene.cpp" />
+    <ClCompile Include="..\..\lib\2d\CUTexturedNode.cpp" />
+    <ClCompile Include="..\..\lib\2d\CUWireNode.cpp" />
+    <ClCompile Include="..\..\lib\2d\physics\CUBoxObstacle.cpp" />
+    <ClCompile Include="..\..\lib\2d\physics\CUCapsuleObstacle.cpp" />
+    <ClCompile Include="..\..\lib\2d\physics\CUComplexObstacle.cpp" />
+    <ClCompile Include="..\..\lib\2d\physics\CUObstacle.cpp" />
+    <ClCompile Include="..\..\lib\2d\physics\CUObstacleSelector.cpp" />
+    <ClCompile Include="..\..\lib\2d\physics\CUObstacleWorld.cpp" />
+    <ClCompile Include="..\..\lib\2d\physics\CUPolygonObstacle.cpp" />
+    <ClCompile Include="..\..\lib\2d\physics\CUSimpleObstacle.cpp" />
+    <ClCompile Include="..\..\lib\2d\physics\CUWheelObstacle.cpp" />
+    <ClCompile Include="..\..\lib\ai\behavior\CUBehaviorAction.cpp" />
+    <ClCompile Include="..\..\lib\ai\behavior\CUBehaviorManager.cpp" />
+    <ClCompile Include="..\..\lib\ai\behavior\CUBehaviorNode.cpp" />
+    <ClCompile Include="..\..\lib\ai\behavior\CUBehaviorParser.cpp" />
+    <ClCompile Include="..\..\lib\ai\behavior\CUCompositeNode.cpp" />
+    <ClCompile Include="..\..\lib\ai\behavior\CUDecoratorNode.cpp" />
+    <ClCompile Include="..\..\lib\ai\behavior\CUInverterNode.cpp" />
+    <ClCompile Include="..\..\lib\ai\behavior\CULeafNode.cpp" />
+    <ClCompile Include="..\..\lib\ai\behavior\CUPriorityNode.cpp" />
+    <ClCompile Include="..\..\lib\ai\behavior\CURandomNode.cpp" />
+    <ClCompile Include="..\..\lib\ai\behavior\CUSelectorNode.cpp" />
+    <ClCompile Include="..\..\lib\ai\behavior\CUTimerNode.cpp" />
+    <ClCompile Include="..\..\lib\assets\CUAssetManager.cpp" />
+    <ClCompile Include="..\..\lib\assets\CUFontLoader.cpp" />
+    <ClCompile Include="..\..\lib\assets\CUJsonLoader.cpp" />
+    <ClCompile Include="..\..\lib\assets\CUJsonValue.cpp" />
+    <ClCompile Include="..\..\lib\assets\CUSceneLoader.cpp" />
+    <ClCompile Include="..\..\lib\assets\CUSoundLoader.cpp" />
+    <ClCompile Include="..\..\lib\assets\CUTextureLoader.cpp" />
+    <ClCompile Include="..\..\lib\assets\CUWidgetLoader.cpp" />
+    <ClCompile Include="..\..\lib\audio\codecs\CUAudioDecoder.cpp" />
+    <ClCompile Include="..\..\lib\audio\codecs\CUFLACDecoder.cpp" />
+    <ClCompile Include="..\..\lib\audio\codecs\CUMP3Decoder.cpp" />
+    <ClCompile Include="..\..\lib\audio\codecs\CUOGGDecoder.cpp" />
+    <ClCompile Include="..\..\lib\audio\codecs\CUWAVDecoder.cpp" />
+    <ClCompile Include="..\..\lib\audio\CUAudioChannels.cpp" />
+    <ClCompile Include="..\..\lib\audio\CUAudioManager.cpp" />
+    <ClCompile Include="..\..\lib\audio\CUAudioSample.cpp" />
+    <ClCompile Include="..\..\lib\audio\CUAudioWaveform.cpp" />
+    <ClCompile Include="..\..\lib\audio\CUSound.cpp" />
+    <ClCompile Include="..\..\lib\audio\graph\CUAudioFader.cpp" />
+    <ClCompile Include="..\..\lib\audio\graph\CUAudioInput.cpp" />
+    <ClCompile Include="..\..\lib\audio\graph\CUAudioMixer.cpp" />
+    <ClCompile Include="..\..\lib\audio\graph\CUAudioNode.cpp" />
+    <ClCompile Include="..\..\lib\audio\graph\CUAudioOutput.cpp" />
+    <ClCompile Include="..\..\lib\audio\graph\CUAudioPanner.cpp" />
+    <ClCompile Include="..\..\lib\audio\graph\CUAudioPlayer.cpp" />
+    <ClCompile Include="..\..\lib\audio\graph\CUAudioResampler.cpp" />
+    <ClCompile Include="..\..\lib\audio\graph\CUAudioScheduler.cpp" />
+    <ClCompile Include="..\..\lib\audio\graph\CUAudioSpinner.cpp" />
+    <ClCompile Include="..\..\lib\base\CUApplication.cpp" />
+    <ClCompile Include="..\..\lib\base\CUDisplay.cpp" />
+    <ClCompile Include="..\..\lib\base\platform\CUDisplay-SDL.cpp" />
+    <ClCompile Include="..\..\lib\input\CUAccelerometer.cpp" />
+    <ClCompile Include="..\..\lib\input\CUInput.cpp" />
+    <ClCompile Include="..\..\lib\input\CUKeyboard.cpp" />
+    <ClCompile Include="..\..\lib\input\CUMouse.cpp" />
+    <ClCompile Include="..\..\lib\input\CUTextInput.cpp" />
+    <ClCompile Include="..\..\lib\input\CUTouchscreen.cpp" />
+    <ClCompile Include="..\..\lib\input\gestures\CUPanInput.cpp" />
+    <ClCompile Include="..\..\lib\input\gestures\CUPinchInput.cpp" />
+    <ClCompile Include="..\..\lib\input\gestures\CURotationInput.cpp" />
+    <ClCompile Include="..\..\lib\io\CUBinaryReader.cpp" />
+    <ClCompile Include="..\..\lib\io\CUBinaryWriter.cpp" />
+    <ClCompile Include="..\..\lib\io\CUJsonReader.cpp" />
+    <ClCompile Include="..\..\lib\io\CUJsonWriter.cpp" />
+    <ClCompile Include="..\..\lib\io\CUPathname.cpp" />
+    <ClCompile Include="..\..\lib\io\CUTextReader.cpp" />
+    <ClCompile Include="..\..\lib\io\CUTextWriter.cpp" />
+    <ClCompile Include="..\..\lib\math\CUAffine2.cpp" />
+    <ClCompile Include="..\..\lib\math\CUColor4.cpp" />
+    <ClCompile Include="..\..\lib\math\CUCubicSpline.cpp" />
+    <ClCompile Include="..\..\lib\math\CUEasingBezier.cpp" />
+    <ClCompile Include="..\..\lib\math\CUEasingFunction.cpp" />
+    <ClCompile Include="..\..\lib\math\CUFrustum.cpp" />
+    <ClCompile Include="..\..\lib\math\CUMat4.cpp" />
+    <ClCompile Include="..\..\lib\math\CUMathBase.cpp" />
+    <ClCompile Include="..\..\lib\math\CUPlane.cpp" />
+    <ClCompile Include="..\..\lib\math\CUPoly2.cpp" />
+    <ClCompile Include="..\..\lib\math\CUPolynomial.cpp" />
+    <ClCompile Include="..\..\lib\math\CUQuaternion.cpp" />
+    <ClCompile Include="..\..\lib\math\CURay.cpp" />
+    <ClCompile Include="..\..\lib\math\CURect.cpp" />
+    <ClCompile Include="..\..\lib\math\CUSize.cpp" />
+    <ClCompile Include="..\..\lib\math\CUVec2.cpp" />
+    <ClCompile Include="..\..\lib\math\CUVec3.cpp" />
+    <ClCompile Include="..\..\lib\math\CUVec4.cpp" />
+    <ClCompile Include="..\..\lib\math\dsp\CUBiquadIIR.cpp" />
+    <ClCompile Include="..\..\lib\math\dsp\CUDSPMath.cpp" />
+    <ClCompile Include="..\..\lib\math\dsp\CUFIRFilter.cpp" />
+    <ClCompile Include="..\..\lib\math\dsp\CUIIRFilter.cpp" />
+    <ClCompile Include="..\..\lib\math\dsp\CUOnePoleIIR.cpp" />
+    <ClCompile Include="..\..\lib\math\dsp\CUOneZeroFIR.cpp" />
+    <ClCompile Include="..\..\lib\math\dsp\CUPoleZeroIIR.cpp" />
+    <ClCompile Include="..\..\lib\math\dsp\CUTwoPoleIIR.cpp" />
+    <ClCompile Include="..\..\lib\math\dsp\CUTwoZeroFIR.cpp" />
+    <ClCompile Include="..\..\lib\math\polygon\CUCubicSplineApproximator.cpp" />
+    <ClCompile Include="..\..\lib\math\polygon\CUDelaunayTriangulator.cpp" />
+    <ClCompile Include="..\..\lib\math\polygon\CUPathExtruder.cpp" />
+    <ClCompile Include="..\..\lib\math\polygon\CUPathOutliner.cpp" />
+    <ClCompile Include="..\..\lib\math\polygon\CUSimpleTriangulator.cpp" />
+    <ClCompile Include="..\..\lib\renderer\CUCamera.cpp" />
+    <ClCompile Include="..\..\lib\renderer\CUOrthographicCamera.cpp" />
+    <ClCompile Include="..\..\lib\renderer\CUPerspectiveCamera.cpp" />
+    <ClCompile Include="..\..\lib\renderer\CUShader.cpp" />
+    <ClCompile Include="..\..\lib\renderer\CUSpriteBatch.cpp" />
+    <ClCompile Include="..\..\lib\renderer\CUSpriteShader.cpp" />
+    <ClCompile Include="..\..\lib\renderer\CUTexture.cpp" />
+    <ClCompile Include="..\..\lib\util\CUDebug.cpp" />
+    <ClCompile Include="..\..\lib\util\CUStrings.cpp" />
+    <ClCompile Include="..\..\lib\util\CUThreadPool.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\lib\math\cuACC128.inl" />
+    <None Include="..\..\lib\math\dsp\cuDSP128.inl" />
+    <None Include="..\..\lib\renderer\ColorTextureOpenGL.frag" />
+    <None Include="..\..\lib\renderer\ColorTextureOpenGL.vert" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Box2D\Box2D.vcxproj">
+      <Project>{98400d17-43a5-1a40-95be-c53ac78e7694}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{60C028A4-977F-44E9-A709-D79A153D6F69}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>CUGL</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0.18362.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>NotSet</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>NotSet</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>NotSet</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>NotSet</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>NotSet</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>NotSet</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>$(SolutionDir)x86\$(Configuration)\</OutDir>
+    <IntDir>$(ProjectDir)x86\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>$(SolutionDir)x86\$(Configuration)\</OutDir>
+    <IntDir>$(ProjectDir)x86\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IntDir>$(ProjectDir)$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
+    <IntDir>$(ProjectDir)$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <IntDir>$(ProjectDir)$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
+    <IntDir>$(ProjectDir)$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_LIB;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir)../../include;$(ProjectDir)../include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalUsingDirectories>%(AdditionalUsingDirectories)</AdditionalUsingDirectories>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <DisableSpecificWarnings>4068;4018;4800;4244;4305;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <AdditionalOptions>/IGNORE:4006,4221 %(AdditionalOptions)</AdditionalOptions>
+      <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+    </Link>
+    <Lib>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_ttf.lib;SDL2_image.lib;SDL2_codec.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Lib>
+    <Lib>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\lib\Debug\x86\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <SubSystem>Windows</SubSystem>
+      <AdditionalOptions>/IGNORE:4006,4221 %(AdditionalOptions)</AdditionalOptions>
+    </Lib>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
+    <PostBuildEvent>
+      <Message>
+      </Message>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN64;_DEBUG;_WINDOWS;_LIB;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir)../../include;$(ProjectDir)../include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalUsingDirectories>%(AdditionalUsingDirectories)</AdditionalUsingDirectories>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <DisableSpecificWarnings>4068;4018;4800;4244;4305;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <AdditionalOptions>/IGNORE:4006,4221 %(AdditionalOptions)</AdditionalOptions>
+      <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+    </Link>
+    <Lib>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_ttf.lib;SDL2_image.lib;SDL2_codec.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Lib>
+    <Lib>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\lib\Debug\x64\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <SubSystem>Windows</SubSystem>
+      <AdditionalOptions>/IGNORE:4006,4221 %(AdditionalOptions)</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN64;_DEBUG;_WINDOWS;_LIB;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir)../../include;$(ProjectDir)../include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalUsingDirectories>%(AdditionalUsingDirectories)</AdditionalUsingDirectories>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <DisableSpecificWarnings>4068;4018;4800;4244;4305;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <AdditionalOptions>/IGNORE:4006,4221 %(AdditionalOptions)</AdditionalOptions>
+      <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+    </Link>
+    <Lib>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_ttf.lib;SDL2_image.lib;SDL2_codec.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Lib>
+    <Lib>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\lib\Debug\x64\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <SubSystem>Windows</SubSystem>
+      <AdditionalOptions>/IGNORE:4006,4221 %(AdditionalOptions)</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_LIB;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir)../../include;$(ProjectDir)../include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalUsingDirectories>%(AdditionalUsingDirectories)</AdditionalUsingDirectories>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <DisableSpecificWarnings>4068;4018;4800;4244;4305;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <AdditionalOptions>/IGNORE:4006,4221 %(AdditionalOptions)</AdditionalOptions>
+      <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+    <Lib>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_ttf.lib;SDL2_image.lib;SDL2_codec.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Lib>
+    <Lib>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\lib\Release\x86\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <SubSystem>Windows</SubSystem>
+      <AdditionalOptions>/IGNORE:4006,4221 %(AdditionalOptions)</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN64;NDEBUG;_WINDOWS;_LIB;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir)../../include;$(ProjectDir)../include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalUsingDirectories>%(AdditionalUsingDirectories)</AdditionalUsingDirectories>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <DisableSpecificWarnings>4068;4018;4800;4244;4305;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <AdditionalOptions>/IGNORE:4006,4221 %(AdditionalOptions)</AdditionalOptions>
+      <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+    <Lib>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_ttf.lib;SDL2_image.lib;SDL2_codec.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Lib>
+    <Lib>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\lib\Release\x64\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <SubSystem>Windows</SubSystem>
+      <AdditionalOptions>/IGNORE:4006,4221 %(AdditionalOptions)</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN64;NDEBUG;_WINDOWS;_LIB;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir)../../include;$(ProjectDir)../include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalUsingDirectories>%(AdditionalUsingDirectories)</AdditionalUsingDirectories>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <DisableSpecificWarnings>4068;4018;4800;4244;4305;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <AdditionalOptions>/IGNORE:4006,4221 %(AdditionalOptions)</AdditionalOptions>
+      <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+    <Lib>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_ttf.lib;SDL2_image.lib;SDL2_codec.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Lib>
+    <Lib>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\lib\Release\x64\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <SubSystem>Windows</SubSystem>
+      <AdditionalOptions>/IGNORE:4006,4221 %(AdditionalOptions)</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

@@ -1,0 +1,31 @@
+{
+	"textures": {
+		"claw": {
+			"file":     "textures/Claw.png",
+			"minfilter":"nearest",
+			"magfilter":"linear",
+			"wrapS":    "clamp",
+			"wrapT":    "clamp"
+		},
+		"close-normal": {
+			"file":     "textures/CloseNormal.png",
+			"minfilter":"nearest",
+			"magfilter":"linear",
+			"wrapS":    "clamp",
+			"wrapT":    "clamp"
+		},
+		"close-selected": {
+			"file":     "textures/CloseSelected.png",
+			"minfilter":"nearest",
+			"magfilter":"linear",
+			"wrapS":    "clamp",
+			"wrapT":    "clamp"
+		}
+	},
+	"fonts": {
+		"charlemagne": {
+			"file":     "fonts/Charlemagne.ttf",
+			"size":     64
+		}
+	}
+}

@@ -1,0 +1,8 @@
+AudioSequence: Fixed sequence
+STK-style nodes:
+	Filters
+	Generators
+Tapper:
+	Buffers circularly as reads
+	Inner class node to follow buffer
+	Allows fork to two outputs.
