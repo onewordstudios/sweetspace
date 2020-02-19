@@ -107,7 +107,7 @@
 
 /* Begin PBXFileReference section */
 		EB0FF5082016E4A700517030 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
-		EB0FF5FC2016EF4F00517030 /* HelloWorld(Sim).app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "HelloWorld(Sim).app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		EB0FF5FC2016EF4F00517030 /* sweetspace.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = sweetspace.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EB2BE9B21D74952A002FE78B /* HelloApp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HelloApp.cpp; sourceTree = "<group>"; };
 		EB2BE9B31D74952A002FE78B /* HelloApp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HelloApp.h; sourceTree = "<group>"; };
 		EB2BE9B41D74952A002FE78B /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
@@ -143,12 +143,12 @@
 		EB62265A23DD2220007EA978 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS13.2.sdk/System/Library/Frameworks/CoreVideo.framework; sourceTree = DEVELOPER_DIR; };
 		EB62265F23DD2235007EA978 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS13.2.sdk/System/Library/Frameworks/MobileCoreServices.framework; sourceTree = DEVELOPER_DIR; };
 		EB62266023DD2235007EA978 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS13.2.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
-		EB74548C1D74D75C002FBAE6 /* HelloWorld (iOS).app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "HelloWorld (iOS).app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		EB74548C1D74D75C002FBAE6 /* sweetspace.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = sweetspace.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EB7454A61D74D846002FBAE6 /* iOS-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "iOS-Info.plist"; sourceTree = "<group>"; };
 		EB7454A71D74D846002FBAE6 /* iOS.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = iOS.xcassets; sourceTree = "<group>"; };
 		EB7454A81D74D846002FBAE6 /* Landscape.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Landscape.storyboard; sourceTree = "<group>"; };
 		EB7454A91D74D846002FBAE6 /* Portrait.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Portrait.storyboard; sourceTree = "<group>"; };
-		EBBF18911D74904A008E2001 /* HelloWorld (Mac).app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "HelloWorld (Mac).app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		EBBF18911D74904A008E2001 /* Sweetspace (Mac).app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Sweetspace (Mac).app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		EBBF189A1D74904A008E2001 /* Mac.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Mac.xcassets; sourceTree = "<group>"; };
 		EBBF189F1D74904A008E2001 /* Mac-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Mac-Info.plist"; sourceTree = "<group>"; };
 		EBC147141E27F07C005494CE /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
@@ -317,13 +317,14 @@
 				EB4EB19D1E3404F3007BCF09 /* CUGL.xcodeproj */,
 			);
 			sourceTree = "<group>";
+			usesTabs = 1;
 		};
 		EBBF18921D74904A008E2001 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				EBBF18911D74904A008E2001 /* HelloWorld (Mac).app */,
-				EB74548C1D74D75C002FBAE6 /* HelloWorld (iOS).app */,
-				EB0FF5FC2016EF4F00517030 /* HelloWorld(Sim).app */,
+				EBBF18911D74904A008E2001 /* Sweetspace (Mac).app */,
+				EB74548C1D74D75C002FBAE6 /* sweetspace.app */,
+				EB0FF5FC2016EF4F00517030 /* sweetspace.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -356,9 +357,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		EB0FF5FB2016EF4F00517030 /* HelloWorld(Sim) */ = {
+		EB0FF5FB2016EF4F00517030 /* Sweetspace(Sim) */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = EB0FF6162016EF4F00517030 /* Build configuration list for PBXNativeTarget "HelloWorld(Sim)" */;
+			buildConfigurationList = EB0FF6162016EF4F00517030 /* Build configuration list for PBXNativeTarget "Sweetspace(Sim)" */;
 			buildPhases = (
 				EB0FF5F82016EF4F00517030 /* Sources */,
 				EB0FF5F92016EF4F00517030 /* Frameworks */,
@@ -368,14 +369,14 @@
 			);
 			dependencies = (
 			);
-			name = "HelloWorld(Sim)";
+			name = "Sweetspace(Sim)";
 			productName = "HelloWorld (Sim)";
-			productReference = EB0FF5FC2016EF4F00517030 /* HelloWorld(Sim).app */;
+			productReference = EB0FF5FC2016EF4F00517030 /* sweetspace.app */;
 			productType = "com.apple.product-type.application";
 		};
-		EB74548B1D74D75C002FBAE6 /* HelloWorld (iOS) */ = {
+		EB74548B1D74D75C002FBAE6 /* Sweetspace (iOS) */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = EB7454A01D74D75C002FBAE6 /* Build configuration list for PBXNativeTarget "HelloWorld (iOS)" */;
+			buildConfigurationList = EB7454A01D74D75C002FBAE6 /* Build configuration list for PBXNativeTarget "Sweetspace (iOS)" */;
 			buildPhases = (
 				EB7454881D74D75C002FBAE6 /* Sources */,
 				EB7454891D74D75C002FBAE6 /* Frameworks */,
@@ -385,14 +386,14 @@
 			);
 			dependencies = (
 			);
-			name = "HelloWorld (iOS)";
+			name = "Sweetspace (iOS)";
 			productName = "HelloWorld (iOS)";
-			productReference = EB74548C1D74D75C002FBAE6 /* HelloWorld (iOS).app */;
+			productReference = EB74548C1D74D75C002FBAE6 /* sweetspace.app */;
 			productType = "com.apple.product-type.application";
 		};
-		EBBF18901D74904A008E2001 /* HelloWorld (Mac) */ = {
+		EBBF18901D74904A008E2001 /* Sweetspace (Mac) */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = EBBF18A21D74904A008E2001 /* Build configuration list for PBXNativeTarget "HelloWorld (Mac)" */;
+			buildConfigurationList = EBBF18A21D74904A008E2001 /* Build configuration list for PBXNativeTarget "Sweetspace (Mac)" */;
 			buildPhases = (
 				EBBF188D1D74904A008E2001 /* Sources */,
 				EBBF188E1D74904A008E2001 /* Frameworks */,
@@ -402,9 +403,9 @@
 			);
 			dependencies = (
 			);
-			name = "HelloWorld (Mac)";
+			name = "Sweetspace (Mac)";
 			productName = "HelloWorld (Mac)";
-			productReference = EBBF18911D74904A008E2001 /* HelloWorld (Mac).app */;
+			productReference = EBBF18911D74904A008E2001 /* Sweetspace (Mac).app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -414,7 +415,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastUpgradeCheck = 1130;
-				ORGANIZATIONNAME = "Game Design Initiative at Cornell";
+				ORGANIZATIONNAME = onewordstudios;
 				TargetAttributes = {
 					EB0FF5FB2016EF4F00517030 = {
 						CreatedOnToolsVersion = 9.2;
@@ -430,7 +431,7 @@
 					};
 				};
 			};
-			buildConfigurationList = EBBF188C1D74904A008E2001 /* Build configuration list for PBXProject "HelloWorld" */;
+			buildConfigurationList = EBBF188C1D74904A008E2001 /* Build configuration list for PBXProject "Sweetspace" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -449,9 +450,9 @@
 			);
 			projectRoot = "";
 			targets = (
-				EBBF18901D74904A008E2001 /* HelloWorld (Mac) */,
-				EB74548B1D74D75C002FBAE6 /* HelloWorld (iOS) */,
-				EB0FF5FB2016EF4F00517030 /* HelloWorld(Sim) */,
+				EBBF18901D74904A008E2001 /* Sweetspace (Mac) */,
+				EB74548B1D74D75C002FBAE6 /* Sweetspace (iOS) */,
+				EB0FF5FB2016EF4F00517030 /* Sweetspace(Sim) */,
 			);
 		};
 /* End PBXProject section */
@@ -580,7 +581,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(STATIC_LIB)";
 				ONLY_ACTIVE_ARCH = NO;
-				PRODUCT_BUNDLE_IDENTIFIER = edu.cornell.gdiac.sim.HelloWorld;
+				PRODUCT_BUNDLE_IDENTIFIER = fun.onewordstudios.sweetspace;
+				PRODUCT_NAME = sweetspace;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -613,7 +615,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(STATIC_LIB)";
 				ONLY_ACTIVE_ARCH = NO;
-				PRODUCT_BUNDLE_IDENTIFIER = edu.cornell.gdiac.sim.HelloWorld;
+				PRODUCT_BUNDLE_IDENTIFIER = fun.onewordstudios.sweetspace;
+				PRODUCT_NAME = sweetspace;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -637,7 +640,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				ONLY_ACTIVE_ARCH = NO;
-				PRODUCT_BUNDLE_IDENTIFIER = edu.cornell.gdiac.ios.HelloWorld;
+				PRODUCT_BUNDLE_IDENTIFIER = fun.onewordstudios.sweetspace;
+				PRODUCT_NAME = sweetspace;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -659,7 +663,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				ONLY_ACTIVE_ARCH = NO;
-				PRODUCT_BUNDLE_IDENTIFIER = edu.cornell.gdiac.ios.HelloWorld;
+				PRODUCT_BUNDLE_IDENTIFIER = fun.onewordstudios.sweetspace;
+				PRODUCT_NAME = sweetspace;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
@@ -790,7 +795,8 @@
 				INFOPLIST_FILE = "$(SRCROOT)/Resources/Mac-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
-				PRODUCT_BUNDLE_IDENTIFIER = edu.cornell.gdiac.mac.HelloWorld;
+				PRODUCT_BUNDLE_IDENTIFIER = fun.onewordstudios.sweetspace;
+				PRODUCT_NAME = "Sweetspace (Mac)";
 			};
 			name = Debug;
 		};
@@ -804,14 +810,15 @@
 				INFOPLIST_FILE = "$(SRCROOT)/Resources/Mac-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
-				PRODUCT_BUNDLE_IDENTIFIER = edu.cornell.gdiac.mac.HelloWorld;
+				PRODUCT_BUNDLE_IDENTIFIER = fun.onewordstudios.sweetspace;
+				PRODUCT_NAME = "Sweetspace (Mac)";
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		EB0FF6162016EF4F00517030 /* Build configuration list for PBXNativeTarget "HelloWorld(Sim)" */ = {
+		EB0FF6162016EF4F00517030 /* Build configuration list for PBXNativeTarget "Sweetspace(Sim)" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				EB0FF60F2016EF4F00517030 /* Debug */,
@@ -820,7 +827,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		EB7454A01D74D75C002FBAE6 /* Build configuration list for PBXNativeTarget "HelloWorld (iOS)" */ = {
+		EB7454A01D74D75C002FBAE6 /* Build configuration list for PBXNativeTarget "Sweetspace (iOS)" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				EB7454A11D74D75C002FBAE6 /* Debug */,
@@ -829,7 +836,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		EBBF188C1D74904A008E2001 /* Build configuration list for PBXProject "HelloWorld" */ = {
+		EBBF188C1D74904A008E2001 /* Build configuration list for PBXProject "Sweetspace" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				EBBF18A01D74904A008E2001 /* Debug */,
@@ -838,7 +845,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		EBBF18A21D74904A008E2001 /* Build configuration list for PBXNativeTarget "HelloWorld (Mac)" */ = {
+		EBBF18A21D74904A008E2001 /* Build configuration list for PBXNativeTarget "Sweetspace (Mac)" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				EBBF18A31D74904A008E2001 /* Debug */,
