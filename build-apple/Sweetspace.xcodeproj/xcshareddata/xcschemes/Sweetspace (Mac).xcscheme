@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "EBBF18901D74904A008E2001"
-               BuildableName = "HelloWorld (Mac).app"
-               BlueprintName = "HelloWorld (Mac)"
-               ReferencedContainer = "container:HelloWorld.xcodeproj">
+               BuildableName = "Sweetspace (Mac).app"
+               BlueprintName = "Sweetspace (Mac)"
+               ReferencedContainer = "container:Sweetspace.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -27,15 +27,6 @@
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
-      <MacroExpansion>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "EBBF18901D74904A008E2001"
-            BuildableName = "HelloWorld (Mac).app"
-            BlueprintName = "HelloWorld (Mac)"
-            ReferencedContainer = "container:HelloWorld.xcodeproj">
-         </BuildableReference>
-      </MacroExpansion>
       <Testables>
       </Testables>
    </TestAction>
@@ -54,9 +45,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "EBBF18901D74904A008E2001"
-            BuildableName = "HelloWorld (Mac).app"
-            BlueprintName = "HelloWorld (Mac)"
-            ReferencedContainer = "container:HelloWorld.xcodeproj">
+            BuildableName = "Sweetspace (Mac).app"
+            BlueprintName = "Sweetspace (Mac)"
+            ReferencedContainer = "container:Sweetspace.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -71,9 +62,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "EBBF18901D74904A008E2001"
-            BuildableName = "HelloWorld (Mac).app"
-            BlueprintName = "HelloWorld (Mac)"
-            ReferencedContainer = "container:HelloWorld.xcodeproj">
+            BuildableName = "Sweetspace (Mac).app"
+            BlueprintName = "Sweetspace (Mac)"
+            ReferencedContainer = "container:Sweetspace.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
