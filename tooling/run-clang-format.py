@@ -236,7 +236,6 @@ def print_trouble(prog, message, use_colors):
 
 
 def main():
-    os.system("sudo apt-get install clang-format")
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
         '--clang-format-executable',
