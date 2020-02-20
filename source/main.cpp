@@ -34,8 +34,10 @@
 using namespace cugl;
 
 // These really only apply if the game is windowed (not on mobile device)
-#define GAME_WIDTH 1024
-#define GAME_HEIGHT 576
+constexpr unsigned int GAME_WIDTH = 1024;
+constexpr unsigned int GAME_HEIGHT = 576;
+
+constexpr float FRAMERATE = 60.0f;
 
 /**
  * The main entry point of any CUGL application.
@@ -60,7 +62,7 @@ int main(int argc, char* argv[]) {
 
 	// Set the window properties (Only applies to OS X/Windows Desktop)
 	app.setSize(GAME_WIDTH, GAME_HEIGHT);
-	app.setFPS(60.0f);
+	app.setFPS(FRAMERATE);
 	app.setHighDPI(true);
 
 	/// DO NOT MODIFY ANYTHING BELOW THIS LINE
