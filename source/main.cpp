@@ -70,8 +70,8 @@ int main(int argc, char* argv[]) {
 
 	// Run the application until completion
 	app.onStartup();
-	while (app.step())
-		;
+	while (app.step()) {
+	}
 	app.onShutdown();
 
 	exit(0);   // Necessary to quit on mobile devices
