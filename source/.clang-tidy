@@ -1,5 +1,5 @@
 ---
-Checks:          'clang-diagnostic-*,clang-analyzer-*,cppcoreguidelines-*,-misc-throw-by-value-catch-by-reference,-clang-analyzer-alpha.deadcode.UnreachableCode,-cert-err58-cpp,-clang-analyzer-alpha.*,-clang-analyzer-security.insecureAPI.strcpy,readability-identifier-naming,readability-braces-around-statements'
+Checks:          'clang-diagnostic-*,clang-analyzer-*,cppcoreguidelines-*,misc-throw-by-value-catch-by-reference,clang-analyzer-alpha.deadcode.UnreachableCode,cert-err58-cpp,clang-analyzer-alpha.*,clang-analyzer-security.insecureAPI.strcpy,readability-identifier-naming,readability-braces-around-statements'
 WarningsAsErrors: 		''
 HeaderFilterRegex: 		''
 AnalyzeTemporaryDtors: 	false
