@@ -14,33 +14,33 @@
 
 using namespace cugl;
 
-#define RANGE_CLAMP(x,y,z)  (x < y ? y : (x > z ? z : x))
+constexpr float RANGE_CLAMP(float x, float y, float z) { return (x < y ? y : (x > z ? z : x)); }
 
 #pragma mark -
 #pragma mark Input Factors
 
 /** Historical choice from Marmalade */
-#define INPUT_MAXIMUM_FORCE         1000.0f
+constexpr float INPUT_MAXIMUM_FORCE = 1000.0f;
 /** Adjustment factor for touch input */
-#define X_ADJUST_FACTOR             500.0f
-#define Y_ADJUST_FACTOR             50.0f
+constexpr float X_ADJUST_FACTOR = 500.0f;
+constexpr float Y_ADJUST_FACTOR = 50.0f;
 /** Adjustment factor for accelerometer input (found experimentally) */
-#define ACCELEROM_X_FACTOR          5.0f
-#define ACCELEROM_Y_FACTOR          200.0f
+constexpr float ACCELEROM_X_FACTOR = 5.0f;
+constexpr float ACCELEROM_Y_FACTOR = 200.0f;
 /** Adjustment factors for keyboard input */
-#define KEYBOARD_INITIAL_FORCE      10.0f
-#define KEYBOARD_FORCE_INCREMENT    10.0f
-#define KEYBOARD_ACCELERATION       1.2f
-#define KEYBOARD_DAMPEN_AMOUNT      0.75f
+constexpr float KEYBOARD_INITIAL_FORCE = 10.0f;
+constexpr float KEYBOARD_FORCE_INCREMENT = 10.0f;
+constexpr float KEYBOARD_ACCELERATION = 1.2f;
+constexpr float KEYBOARD_DAMPEN_AMOUNT = 0.75f;
 
 /** Whether to active the accelerometer (this is TRICKY!) */
-#define USE_ACCELEROMETER           false
+constexpr bool USE_ACCELEROMETER = false;
 /** The key to use for reseting the game */
-#define RESET_KEY                   KeyCode::R
+constexpr KeyCode RESET_KEY = KeyCode::R;
 /** How the time necessary to process a double tap (in milliseconds) */
-#define EVENT_DOUBLE_CLICK          400
+constexpr unsigned int EVENT_DOUBLE_CLICK = 400;
 /** The key for the event handlers */
-#define LISTENER_KEY                1
+constexpr unsigned int LISTENER_KEY = 1;
 
 #pragma mark -
 #pragma mark Ship Input
@@ -50,16 +50,14 @@ using namespace cugl;
  * This constructor does NOT do any initialzation.  It simply allocates the
  * object. This makes it safe to use this class without a pointer.
  */
-ShipInput::ShipInput() :
-_active(false),
-_keyReset(false),
-_resetPressed(false),
-_forceLeft(0.0f),
-_forceRight(0.0f),
-_forceUp(0.0f),
-_forceDown(0.0f)
-{
-}
+ShipInput::ShipInput()
+	: active(false),
+	  keyReset(false),
+	  forceLeft(0.0f),
+	  forceRight(0.0f),
+	  forceUp(0.0f),
+	  forceDown(0.0f),
+	  resetPressed(false) {}
 
 /**
  * Deactivates this input controller, releasing all listeners.
@@ -68,19 +66,19 @@ _forceDown(0.0f)
  * once it is reinitialized.
  */
 void ShipInput::dispose() {
-    if (_active) {
+	if (active) {
 #ifndef CU_TOUCH_SCREEN
-        Input::deactivate<Keyboard>();
+		Input::deactivate<Keyboard>();
 #else
-        if (USE_ACCELEROMETER) {
-            Input::deactivate<Accelerometer>();
-        }
-        Touchscreen* touch = Input::get<Touchscreen>();
-        touch->removeBeginListener(LISTENER_KEY);
-        touch->removeEndListener(LISTENER_KEY);
-        _active = false;
+		if (USE_ACCELEROMETER) {
+			Input::deactivate<Accelerometer>();
+		}
+		Touchscreen* touch = Input::get<Touchscreen>();
+		touch->removeBeginListener(LISTENER_KEY);
+		touch->removeEndListener(LISTENER_KEY);
+		active = false;
 #endif
-    }
+	}
 }
 
 /**
@@ -93,28 +91,28 @@ void ShipInput::dispose() {
  * @return true if the controller was initialized successfully
  */
 bool ShipInput::init() {
-    _timestamp.mark();
-    bool success = true;
-    
+	timestamp.mark();
+	bool success = true;
+
 // Only process keyboard on desktop
 #ifndef CU_TOUCH_SCREEN
-    success = Input::activate<Keyboard>();
+	success = Input::activate<Keyboard>();
 #else
-    if (USE_ACCELEROMETER) {
-        success = Input::activate<Accelerometer>();
-    }
-    Touchscreen* touch = Input::get<Touchscreen>();
+	if (USE_ACCELEROMETER) {
+		success = Input::activate<Accelerometer>();
+	}
+	Touchscreen* touch = Input::get<Touchscreen>();
 
-    touch->addBeginListener(LISTENER_KEY,[=](const cugl::TouchEvent& event, bool focus) {
-        this->touchBeganCB(event,focus);
-    });
-    touch->addEndListener(LISTENER_KEY,[=](const cugl::TouchEvent& event, bool focus) {
-        this->touchEndedCB(event,focus);
-    });
+	touch->addBeginListener(LISTENER_KEY, [=](const cugl::TouchEvent& event, bool focus) {
+		this->touchBeganCB(event, focus);
+	});
+	touch->addEndListener(LISTENER_KEY, [=](const cugl::TouchEvent& event, bool focus) {
+		this->touchEndedCB(event, focus);
+	});
 #endif
-    
-    _active = success;
-    return success;
+
+	active = success;
+	return success;
 }
 
 /**
@@ -128,70 +126,69 @@ bool ShipInput::init() {
  * frame, so we need to accumulate all of the data together.
  */
 void ShipInput::update(float dt) {
-
 // Only process keyboard on desktop
 #ifndef CU_TOUCH_SCREEN
-    Keyboard* keys = Input::get<Keyboard>();
-    _keyReset  = keys->keyPressed(RESET_KEY);
+	Keyboard* keys = Input::get<Keyboard>();
+	keyReset = keys->keyPressed(RESET_KEY);
 
-    // Forces increase the longer you hold a key.
-    if (keys->keyDown(KeyCode::ARROW_LEFT)) {
-        _forceLeft += KEYBOARD_FORCE_INCREMENT;
-    } else {
-        _forceLeft  = 0.0f;
-    }
-    if (keys->keyDown(KeyCode::ARROW_RIGHT)) {
-        _forceRight += KEYBOARD_FORCE_INCREMENT;
-    } else {
-        _forceRight  = 0.0f;
-    }
-    if (keys->keyDown(KeyCode::ARROW_DOWN)) {
-        _forceDown += KEYBOARD_FORCE_INCREMENT;
-    } else {
-        _forceDown  = 0.0f;
-    }
-    if (keys->keyDown(KeyCode::ARROW_UP)) {
-        _forceUp += KEYBOARD_FORCE_INCREMENT;
-    } else {
-        _forceUp  = 0.0f;
-    }
-    
-    // Clamp everything so it does not fly off to infinity.
-    _forceLeft  = (_forceLeft  > INPUT_MAXIMUM_FORCE ? INPUT_MAXIMUM_FORCE : _forceLeft);
-    _forceRight = (_forceRight > INPUT_MAXIMUM_FORCE ? INPUT_MAXIMUM_FORCE : _forceRight);
-    _forceDown  = (_forceDown  > INPUT_MAXIMUM_FORCE ? INPUT_MAXIMUM_FORCE : _forceDown);
-    _forceUp    = (_forceUp    > INPUT_MAXIMUM_FORCE ? INPUT_MAXIMUM_FORCE : _forceUp);
+	// Forces increase the longer you hold a key.
+	if (keys->keyDown(KeyCode::ARROW_LEFT)) {
+		forceLeft += KEYBOARD_FORCE_INCREMENT;
+	} else {
+		forceLeft = 0.0f;
+	}
+	if (keys->keyDown(KeyCode::ARROW_RIGHT)) {
+		forceRight += KEYBOARD_FORCE_INCREMENT;
+	} else {
+		forceRight = 0.0f;
+	}
+	if (keys->keyDown(KeyCode::ARROW_DOWN)) {
+		forceDown += KEYBOARD_FORCE_INCREMENT;
+	} else {
+		forceDown = 0.0f;
+	}
+	if (keys->keyDown(KeyCode::ARROW_UP)) {
+		forceUp += KEYBOARD_FORCE_INCREMENT;
+	} else {
+		forceUp = 0.0f;
+	}
 
-    // Update the keyboard thrust.  Result is cumulative.
-    _keybdThrust.x += _forceRight;
-    _keybdThrust.x -= _forceLeft;
-    _keybdThrust.y += _forceUp;
-    _keybdThrust.y -= _forceDown;
-    _keybdThrust.x = RANGE_CLAMP(_keybdThrust.x, -INPUT_MAXIMUM_FORCE, INPUT_MAXIMUM_FORCE);
-    _keybdThrust.y = RANGE_CLAMP(_keybdThrust.y, -INPUT_MAXIMUM_FORCE, INPUT_MAXIMUM_FORCE);
-    
-    // Transfer to main thrust. This keeps us from "adding" to accelerometer or touch.
-    _inputThrust.x = _keybdThrust.x/X_ADJUST_FACTOR;
-    _inputThrust.y = _keybdThrust.y/Y_ADJUST_FACTOR;
+	// Clamp everything so it does not fly off to infinity.
+	forceLeft = (forceLeft > INPUT_MAXIMUM_FORCE ? INPUT_MAXIMUM_FORCE : forceLeft);
+	forceRight = (forceRight > INPUT_MAXIMUM_FORCE ? INPUT_MAXIMUM_FORCE : forceRight);
+	forceDown = (forceDown > INPUT_MAXIMUM_FORCE ? INPUT_MAXIMUM_FORCE : forceDown);
+	forceUp = (forceUp > INPUT_MAXIMUM_FORCE ? INPUT_MAXIMUM_FORCE : forceUp);
+
+	// Update the keyboard thrust.  Result is cumulative.
+	keybdThrust.x += forceRight;
+	keybdThrust.x -= forceLeft;
+	keybdThrust.y += forceUp;
+	keybdThrust.y -= forceDown;
+	keybdThrust.x = RANGE_CLAMP(keybdThrust.x, -INPUT_MAXIMUM_FORCE, INPUT_MAXIMUM_FORCE);
+	keybdThrust.y = RANGE_CLAMP(keybdThrust.y, -INPUT_MAXIMUM_FORCE, INPUT_MAXIMUM_FORCE);
+
+	// Transfer to main thrust. This keeps us from "adding" to accelerometer or touch.
+	inputThrust.x = keybdThrust.x / X_ADJUST_FACTOR;
+	inputThrust.y = keybdThrust.y / Y_ADJUST_FACTOR;
 #else
-    // MOBILE CONTROLS
-    if (USE_ACCELEROMETER) {
-        Vec3 acc = Input::get<Accelerometer>()->getAcceleration();
-   
-        // Apply to thrust directly.
-        _inputThrust.x =  acc.x*ACCELEROM_X_FACTOR;
-        _inputThrust.y = acc.y*ACCELEROM_Y_FACTOR;
-    }
-    // Otherwise, uses touch
+	// MOBILE CONTROLS
+	if (USE_ACCELEROMETER) {
+		Vec3 acc = Input::get<Accelerometer>()->getAcceleration();
+
+		// Apply to thrust directly.
+		inputThrust.x = acc.x * ACCELEROM_X_FACTOR;
+		inputThrust.y = acc.y * ACCELEROM_Y_FACTOR;
+	}
+	// Otherwise, uses touch
 #endif
 
-    _resetPressed = _keyReset;
-    if (_keyReset) {
-        _inputThrust = Vec2::ZERO;
-    }
-    
+	resetPressed = keyReset;
+	if (keyReset) {
+		inputThrust = Vec2::ZERO;
+	}
+
 #ifdef CU_TOUCH_SCREEN
-    _keyReset = false;
+	keyReset = false;
 #endif
 }
 
@@ -199,17 +196,17 @@ void ShipInput::update(float dt) {
  * Clears any buffered inputs so that we may start fresh.
  */
 void ShipInput::clear() {
-    _resetPressed = false;
-    _inputThrust = Vec2::ZERO;
-    _keybdThrust = Vec2::ZERO;
-    
-    _forceLeft  = 0.0f;
-    _forceRight = 0.0f;
-    _forceUp    = 0.0f;
-    _forceDown  = 0.0f;
-    
-    _dtouch = Vec2::ZERO;
-    _timestamp.mark();
+	resetPressed = false;
+	inputThrust = Vec2::ZERO;
+	keybdThrust = Vec2::ZERO;
+
+	forceLeft = 0.0f;
+	forceRight = 0.0f;
+	forceUp = 0.0f;
+	forceDown = 0.0f;
+
+	dtouch = Vec2::ZERO;
+	timestamp.mark();
 }
 
 #pragma mark -
@@ -220,33 +217,33 @@ void ShipInput::clear() {
  * @param t     The touch information
  * @param event The associated event
  */
- void ShipInput::touchBeganCB(const cugl::TouchEvent& event, bool focus) {
-     // Update the touch location for later gestures
-     _dtouch.set(event.position);
+void ShipInput::touchBeganCB(const cugl::TouchEvent& event, bool focus) {
+	// Update the touch location for later gestures
+	dtouch.set(event.position);
 }
- 
- /**
-  * Callback for the end of a touch event
-  *
-  * @param t     The touch information
-  * @param event The associated event
-  */
- void ShipInput::touchEndedCB(const cugl::TouchEvent& event, bool focus) {
-     // Check for a double tap.
-     _keyReset =  event.timestamp.ellapsedMillis(_timestamp) <= EVENT_DOUBLE_CLICK;
-     _timestamp = event.timestamp;
-     
-     // If we reset, do not record the thrust
-     if (_keyReset) {
-         return;
-     }
-     
-     // Move the ship in this direction
-     Vec2 finishTouch = event.position-_dtouch;
-     finishTouch.x = RANGE_CLAMP(finishTouch.x, -INPUT_MAXIMUM_FORCE, INPUT_MAXIMUM_FORCE);
-     finishTouch.y = RANGE_CLAMP(finishTouch.y, -INPUT_MAXIMUM_FORCE, INPUT_MAXIMUM_FORCE);
-     
-     // Go ahead and apply to thrust now.
-     _inputThrust.x = finishTouch.x/X_ADJUST_FACTOR;
-     _inputThrust.y = finishTouch.y/-Y_ADJUST_FACTOR;  // Touch coords
- }
+
+/**
+ * Callback for the end of a touch event
+ *
+ * @param t     The touch information
+ * @param event The associated event
+ */
+void ShipInput::touchEndedCB(const cugl::TouchEvent& event, bool focus) {
+	// Check for a double tap.
+	keyReset = event.timestamp.ellapsedMillis(timestamp) <= EVENT_DOUBLE_CLICK;
+	timestamp = event.timestamp;
+
+	// If we reset, do not record the thrust
+	if (keyReset) {
+		return;
+	}
+
+	// Move the ship in this direction
+	Vec2 finishTouch = event.position - dtouch;
+	finishTouch.x = RANGE_CLAMP(finishTouch.x, -INPUT_MAXIMUM_FORCE, INPUT_MAXIMUM_FORCE);
+	finishTouch.y = RANGE_CLAMP(finishTouch.y, -INPUT_MAXIMUM_FORCE, INPUT_MAXIMUM_FORCE);
+
+	// Go ahead and apply to thrust now.
+	inputThrust.x = finishTouch.x / X_ADJUST_FACTOR;
+	inputThrust.y = finishTouch.y / -Y_ADJUST_FACTOR;  // Touch coords
+}
