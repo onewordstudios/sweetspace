@@ -47,9 +47,9 @@ constexpr float SHIP_MAX_SPEED = 10.0f;
 constexpr float SHIP_THRUST_FACTOR = 0.4f;
 
 /** Compute cos (in degrees) from 90 degrees */
-#define DCOS_90(a) (cos(M_PI * (a + 90.0f) / 180.0f))  // NOLINT Walker's old code; no easy fix
+#define DCOS_90(a) (cos(M_PI * (a + 90.0f) / 180.0f)) // NOLINT Walker's old code; no easy fix
 /** Compute sin (in degrees) from 90 degrees */
-#define DSIN_90(a) (sin(M_PI * (a + 90.0f) / 180.0f))  // NOLINT Walker's old code; no easy fix
+#define DSIN_90(a) (sin(M_PI * (a + 90.0f) / 180.0f)) // NOLINT Walker's old code; no easy fix
 /** Clamp x into the range [y,z] */
 constexpr float RANGE_CLAMP(float x, float y, float z) { return (x < y ? y : (x > z ? z : x)); }
 
@@ -125,7 +125,7 @@ void ShipModel::update(float timestep) {
 
 	// Move the ship, updating it.
 	// Adjust the angle by the change in angle
-	angle += turning;  // INVARIANT: -360 < ang < 720
+	angle += turning; // INVARIANT: -360 < ang < 720
 	if (angle > FULL_CIRCLE) angle -= FULL_CIRCLE;
 	if (angle < 0) angle += FULL_CIRCLE;
 

@@ -49,7 +49,7 @@ void Sweetspace::onStartup() {
 	// Queue up the other assets
 	assets->loadDirectoryAsync("json/assets.json", nullptr);
 
-	Application::onStartup();  // YOU MUST END with call to parent
+	Application::onStartup(); // YOU MUST END with call to parent
 }
 
 /**
@@ -76,7 +76,7 @@ void Sweetspace::onShutdown() {
 	Input::deactivate<Mouse>();
 #endif
 
-	Application::onShutdown();	// YOU MUST END with call to parent
+	Application::onShutdown(); // YOU MUST END with call to parent
 }
 
 /**
@@ -94,7 +94,7 @@ void Sweetspace::update(float timestep) {
 	if (!loaded && loading.isActive()) {
 		loading.update(0.01f);
 	} else if (!loaded) {
-		loading.dispose();	// Disables the input listeners in this mode
+		loading.dispose(); // Disables the input listeners in this mode
 		gameplay.init(assets);
 		loaded = true;
 	} else {

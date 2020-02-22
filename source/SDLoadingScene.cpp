@@ -40,7 +40,7 @@ constexpr unsigned int COLOR_VALUE = 192;
 bool LoadingScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 	// Initialize the scene to a locked width
 	Size dimen = Application::get()->getDisplaySize();
-	dimen *= SCENE_WIDTH / dimen.width;	 // Lock the game to a reasonable resolution
+	dimen *= SCENE_WIDTH / dimen.width; // Lock the game to a reasonable resolution
 	if (assets == nullptr) {
 		return false;
 	} else if (!Scene::init(dimen)) {
@@ -52,7 +52,7 @@ bool LoadingScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 	assets->loadDirectory("json/loading.json");
 	auto layer = assets->get<Node>("load");
 	layer->setContentSize(dimen);
-	layer->doLayout();	// This rearranges the children to fit the screen
+	layer->doLayout(); // This rearranges the children to fit the screen
 
 	bar = std::dynamic_pointer_cast<ProgressBar>(assets->get<Node>("load_bar"));
 	button = std::dynamic_pointer_cast<Button>(assets->get<Node>("load_claw_play"));

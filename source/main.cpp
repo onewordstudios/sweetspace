@@ -76,6 +76,6 @@ int main(int argc, char* argv[]) {
 	}
 	app.onShutdown();
 
-	exit(0);   // Necessary to quit on mobile devices
-	return 0;  // This line is never reached
+	exit(0);  // Necessary to quit on mobile devices
+	return 0; // This line is never reached
 }

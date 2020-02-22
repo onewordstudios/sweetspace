@@ -72,7 +72,7 @@ class ShipInput {
 	 * This constructor does NOT do any initialzation.  It simply allocates the
 	 * object. This makes it safe to use this class without a pointer.
 	 */
-	ShipInput();  // Don't initialize.  Allow stack based
+	ShipInput(); // Don't initialize.  Allow stack based
 
 	/**
 	 * Disposes of this input controller, releasing all listeners.

@@ -51,7 +51,7 @@ constexpr float PARALLAX_AMT = 0.1f;
 bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 	// Initialize the scene to a locked width
 	Size dimen = Application::get()->getDisplaySize();
-	dimen *= SCENE_WIDTH / dimen.width;	 // Lock the game to a reasonable resolution
+	dimen *= SCENE_WIDTH / dimen.width; // Lock the game to a reasonable resolution
 	if (assets == nullptr) {
 		return false;
 	} else if (!Scene::init(dimen)) {
@@ -65,7 +65,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 	// Acquire the scene built by the asset loader and resize it the scene
 	auto scene = assets->get<Node>("game");
 	scene->setContentSize(dimen);
-	scene->doLayout();	// Repositions the HUD
+	scene->doLayout(); // Repositions the HUD
 
 	// Get the scene components.
 	allSpace = assets->get<Node>("game_field");
@@ -156,13 +156,13 @@ void GameScene::update(float timestep) {
 	// Reanchor the node at the center of the screen and rotate about center.
 	Vec2 position = farSpace->getPosition();
 	farSpace->setAnchor(offset * PARALLAX_AMT + Vec2::ANCHOR_CENTER);
-	farSpace->setPosition(position);  // Reseting the anchor changes the position
+	farSpace->setPosition(position); // Reseting the anchor changes the position
 	farSpace->setAngle(shipModel->getAngle());
 
 	// Reanchor the node at the center of the screen and rotate about center.
 	position = nearSpace->getPosition();
 	nearSpace->setAnchor(offset + Vec2::ANCHOR_CENTER);
-	nearSpace->setPosition(position);  // Reseting the anchor changes the position
+	nearSpace->setPosition(position); // Reseting the anchor changes the position
 	nearSpace->setAngle(shipModel->getAngle());
 }
 

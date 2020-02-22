@@ -171,7 +171,7 @@ void HelloApp::buildScene() {
 	// Get the image and add it to the node.
 	std::shared_ptr<Texture> texture = _assets->get<Texture>("claw");
 	std::shared_ptr<PolygonNode> claw = PolygonNode::allocWithTexture(texture);
-	claw->setScale(0.1f);  // Magic number to rescale asset
+	claw->setScale(0.1f); // Magic number to rescale asset
 	claw->setAnchor(Vec2::ANCHOR_BOTTOM_CENTER);
 	claw->setPosition(0, 0);
 	_logo->addChild(claw);
@@ -180,7 +180,7 @@ void HelloApp::buildScene() {
 	std::shared_ptr<Font> font = _assets->get<Font>("charlemagne");
 	std::shared_ptr<Label> label = Label::alloc("CUGL", font);
 	label->setAnchor(Vec2::ANCHOR_TOP_CENTER);
-	label->setPosition(15, -15);  // Magic numbers for some manual kerning
+	label->setPosition(15, -15); // Magic numbers for some manual kerning
 	_logo->addChild(label);
 
 	// Put the logo in the middle of the screen

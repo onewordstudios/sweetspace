@@ -245,5 +245,5 @@ void ShipInput::touchEndedCB(const cugl::TouchEvent& event, bool focus) {
 
 	// Go ahead and apply to thrust now.
 	inputThrust.x = finishTouch.x / X_ADJUST_FACTOR;
-	inputThrust.y = finishTouch.y / -Y_ADJUST_FACTOR;  // Touch coords
+	inputThrust.y = finishTouch.y / -Y_ADJUST_FACTOR; // Touch coords
 }
