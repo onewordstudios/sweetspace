@@ -37,13 +37,13 @@
 constexpr float HALF_CIRCLE = 180.0f;
 
 /** Ship Frame Sprite numbers */
-#define SHIP_IMG_LEFT 0// Left bank frame NOLINT Walker's code
-#define SHIP_IMG_FLAT 9// Neutral frame NOLINT Walker's code
+#define SHIP_IMG_LEFT 0   // Left bank frame NOLINT Walker's code
+#define SHIP_IMG_FLAT 9   // Neutral frame NOLINT Walker's code
 #define SHIP_IMG_RIGHT 17 // Right bank frame NOLINT Walker's code
 
 /** Number of rows and cols in film strip */
-#define SHIP_IMG_ROWS 4// NOLINT Walker's code
-#define SHIP_IMG_COLS 5// NOLINT Walker's code
+#define SHIP_IMG_ROWS 4  // NOLINT Walker's code
+#define SHIP_IMG_COLS 5  // NOLINT Walker's code
 #define SHIP_IMG_SIZE 18 // NOLINT Walker's code
 
 #pragma mark -
