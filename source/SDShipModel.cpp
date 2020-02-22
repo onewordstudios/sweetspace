@@ -32,26 +32,26 @@
 //
 #include "SDShipModel.h"
 
-
 using namespace cugl;
 
 #pragma mark -
 #pragma mark Animation Constants and Functions
 
+constexpr unsigned int FULL_CIRCLE = 360;
+
 /** The max turn (in degrees) per frame */
-#define SHIP_MAX_TURN      1.0f
+constexpr float SHIP_MAX_TURN = 1.0f;
 /** The max forward speed */
-#define SHIP_MAX_SPEED    10.0f
+constexpr float SHIP_MAX_SPEED = 10.0f;
 /** Factor to multiply the forward thrust */
-#define SHIP_THRUST_FACTOR 0.4f
+constexpr float SHIP_THRUST_FACTOR = 0.4f;
 
 /** Compute cos (in degrees) from 90 degrees */
-#define DCOS_90(a)  (cos(M_PI*(a+90.0f)/180.0f))
+#define DCOS_90(a) (cos(M_PI * (a + 90.0f) / 180.0f))  // NOLINT Walker's old code; no easy fix
 /** Compute sin (in degrees) from 90 degrees */
-#define DSIN_90(a)  (sin(M_PI*(a+90.0f)/180.0f))
+#define DSIN_90(a) (sin(M_PI * (a + 90.0f) / 180.0f))  // NOLINT Walker's old code; no easy fix
 /** Clamp x into the range [y,z] */
-#define RANGE_CLAMP(x,y,z)  (x < y ? y : (x > z ? z : x))
-
+constexpr float RANGE_CLAMP(float x, float y, float z) { return (x < y ? y : (x > z ? z : x)); }
 
 #pragma mark -
 #pragma mark Constructors
@@ -68,9 +68,9 @@ using namespace cugl;
  * @return  true if the obstacle is initialized properly, false otherwise.
  */
 bool ShipModel::init(const Vec2& pos) {
-    _initial  = pos;
-    _position = pos;
-    return true;
+	initial = pos;
+	position = pos;
+	return true;
 }
 
 /**
@@ -79,10 +79,7 @@ bool ShipModel::init(const Vec2& pos) {
  * Any assets owned by this object will be immediately released.  Once
  * disposed, a ship may not be used until it is initialized again.
  */
-void ShipModel::dispose() {
-    _sprite = nullptr;
-}
-
+void ShipModel::dispose() { sprite = nullptr; }
 
 #pragma mark -
 #pragma mark Animation
@@ -94,12 +91,12 @@ void ShipModel::dispose() {
  * @param value The ship film strip.
  */
 void ShipModel::setSprite(const std::shared_ptr<cugl::AnimationNode>& value) {
-    _sprite = value;
-    if (_sprite != nullptr) {
-        _sprite->setFrame(SHIP_IMG_FLAT);
-        _sprite->setPosition(_position);
-        _sprite->setAnchor(Vec2::ANCHOR_CENTER);
-    }
+	sprite = value;
+	if (sprite != nullptr) {
+		sprite->setFrame(SHIP_IMG_FLAT);
+		sprite->setPosition(position);
+		sprite->setAnchor(Vec2::ANCHOR_CENTER);
+	}
 }
 
 /**
@@ -111,29 +108,29 @@ void ShipModel::setSprite(const std::shared_ptr<cugl::AnimationNode>& value) {
  * @param timestep  Time elapsed since last called.
  */
 void ShipModel::update(float timestep) {
-    // Adjust the active forces.
-    _forward = RANGE_CLAMP(_forward, -SHIP_MAX_SPEED, SHIP_MAX_SPEED);
-    _turning = RANGE_CLAMP(_turning, -SHIP_MAX_TURN, SHIP_MAX_TURN);
-    
-    if (_sprite != nullptr) {
-        advanceFrame();
-    }
-    
-    // Process the ship thrust.
-    if (_forward != 0.0f) {
-        // Thrust key pressed; increase the ship velocity.
-        _velocity.x = (float)(_forward *  (-DCOS_90(_angle)) * SHIP_THRUST_FACTOR);
-        _velocity.y = (float)(_forward *    DSIN_90(_angle)  * SHIP_THRUST_FACTOR);
-    }
-    
-    // Move the ship, updating it.
-    // Adjust the angle by the change in angle
-    _angle += _turning;  // INVARIANT: -360 < ang < 720
-    if (_angle > 360) _angle -= 360;
-    if (_angle < 0)   _angle += 360;
-    
-    // Move the ship
-    _position += _velocity;
+	// Adjust the active forces.
+	forward = RANGE_CLAMP(forward, -SHIP_MAX_SPEED, SHIP_MAX_SPEED);
+	turning = RANGE_CLAMP(turning, -SHIP_MAX_TURN, SHIP_MAX_TURN);
+
+	if (sprite != nullptr) {
+		advanceFrame();
+	}
+
+	// Process the ship thrust.
+	if (forward != 0.0f) {
+		// Thrust key pressed; increase the ship velocity.
+		velocity.x = (float)(forward * (-DCOS_90(angle)) * SHIP_THRUST_FACTOR);
+		velocity.y = (float)(forward * DSIN_90(angle) * SHIP_THRUST_FACTOR);
+	}
+
+	// Move the ship, updating it.
+	// Adjust the angle by the change in angle
+	angle += turning;  // INVARIANT: -360 < ang < 720
+	if (angle > FULL_CIRCLE) angle -= FULL_CIRCLE;
+	if (angle < 0) angle += FULL_CIRCLE;
+
+	// Move the ship
+	position += velocity;
 }
 
 /**
@@ -143,49 +140,51 @@ void ShipModel::update(float timestep) {
  * moving the ship.
  */
 void ShipModel::advanceFrame() {
-    // Our animation depends on the current frame.
-    unsigned int frame = _sprite->getFrame();
-    
-    // Process the ship turning.
-    if (_turning < 0.0f) {
-        unsigned int offset = (unsigned int)((_turning/SHIP_MAX_TURN)*(SHIP_IMG_FLAT-SHIP_IMG_RIGHT));
-        unsigned int goal  = SHIP_IMG_FLAT+offset;
-        if (frame != goal) {
-            frame += (frame < goal ? 1 : -1);
-        }
-        if (frame == SHIP_IMG_FLAT) {
-            _turning = 0.0f;
-        }
-    } else if (_turning > 0.0f) {
-		unsigned int offset = (unsigned int)((_turning/SHIP_MAX_TURN)*(SHIP_IMG_FLAT-SHIP_IMG_LEFT));
-        unsigned int goal  = SHIP_IMG_FLAT-offset;
-        if (frame != goal) {
-            frame += (frame < goal ? 1 : -1);
-        }
-        if (frame == SHIP_IMG_FLAT) {
-            _turning = 0.0f;
-        }
-    } else {
-        if (frame < SHIP_IMG_FLAT) {
-            frame++;
-        } else if (frame > SHIP_IMG_FLAT) {
-            frame--;
-        }
-    }
-    
-    _sprite->setFrame(frame);
+	// Our animation depends on the current frame.
+	unsigned int frame = sprite->getFrame();
+
+	// Process the ship turning.
+	if (turning < 0.0f) {
+		unsigned int offset =
+			(unsigned int)((turning / SHIP_MAX_TURN) * (SHIP_IMG_FLAT - SHIP_IMG_RIGHT));
+		unsigned int goal = SHIP_IMG_FLAT + offset;
+		if (frame != goal) {
+			frame += (frame < goal ? 1 : -1);
+		}
+		if (frame == SHIP_IMG_FLAT) {
+			turning = 0.0f;
+		}
+	} else if (turning > 0.0f) {
+		unsigned int offset =
+			(unsigned int)((turning / SHIP_MAX_TURN) * (SHIP_IMG_FLAT - SHIP_IMG_LEFT));
+		unsigned int goal = SHIP_IMG_FLAT - offset;
+		if (frame != goal) {
+			frame += (frame < goal ? 1 : -1);
+		}
+		if (frame == SHIP_IMG_FLAT) {
+			turning = 0.0f;
+		}
+	} else {
+		if (frame < SHIP_IMG_FLAT) {
+			frame++;
+		} else if (frame > SHIP_IMG_FLAT) {
+			frame--;
+		}
+	}
+
+	sprite->setFrame((int)frame);
 }
 
 /**
  * Resets the ship back to its original settings
  */
 void ShipModel::reset() {
-    _position = _initial;
-    _velocity = Vec2::ZERO;
-    _angle   = 0.0f;
-    _turning = 0.0f;
-    _forward = 0.0f;
-    if (_sprite != nullptr) {
-        _sprite->setFrame(SHIP_IMG_FLAT);
-    }
+	position = initial;
+	velocity = Vec2::ZERO;
+	angle = 0.0f;
+	turning = 0.0f;
+	forward = 0.0f;
+	if (sprite != nullptr) {
+		sprite->setFrame(SHIP_IMG_FLAT);
+	}
 }
