@@ -38,47 +38,44 @@ using namespace cugl;
  * @return true if the controller is initialized properly, false otherwise.
  */
 bool LoadingScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
-    // Initialize the scene to a locked width
-    Size dimen = Application::get()->getDisplaySize();
-    dimen *= SCENE_WIDTH/dimen.width; // Lock the game to a reasonable resolution
-    if (assets == nullptr) {
-        return false;
-    } else if (!Scene::init(dimen)) {
-        return false;
-    }
-    
-    // IMMEDIATELY load the splash screen assets
-    _assets = assets;
-    _assets->loadDirectory("json/loading.json");
-    auto layer = assets->get<Node>("load");
-    layer->setContentSize(dimen);
-    layer->doLayout(); // This rearranges the children to fit the screen
-    
-    _bar = std::dynamic_pointer_cast<ProgressBar>(assets->get<Node>("load_bar"));
-    _button = std::dynamic_pointer_cast<Button>(assets->get<Node>("load_claw_play"));
-    _button->setListener([=](const std::string& name, bool down) {
-        this->_active = down;
-    });
-    
-    Application::get()->setClearColor(Color4(192,192,192,255));
-    addChild(layer);
-    return true;
+	// Initialize the scene to a locked width
+	Size dimen = Application::get()->getDisplaySize();
+	dimen *= SCENE_WIDTH / dimen.width;	 // Lock the game to a reasonable resolution
+	if (assets == nullptr) {
+		return false;
+	} else if (!Scene::init(dimen)) {
+		return false;
+	}
+
+	// IMMEDIATELY load the splash screen assets
+	_assets = assets;
+	_assets->loadDirectory("json/loading.json");
+	auto layer = assets->get<Node>("load");
+	layer->setContentSize(dimen);
+	layer->doLayout();	// This rearranges the children to fit the screen
+
+	_bar = std::dynamic_pointer_cast<ProgressBar>(assets->get<Node>("load_bar"));
+	_button = std::dynamic_pointer_cast<Button>(assets->get<Node>("load_claw_play"));
+	_button->setListener([=](const std::string& name, bool down) { this->_active = down; });
+
+	Application::get()->setClearColor(Color4(192, 192, 192, 255));
+	addChild(layer);
+	return true;
 }
 
 /**
  * Disposes of all (non-static) resources allocated to this mode.
  */
 void LoadingScene::dispose() {
-    // Deactivate the button (platform dependent)
-    if (isPending()) {
-        _button->deactivate();
-    }
-    _button = nullptr;
-    _bar = nullptr;
-    _assets = nullptr;
-    _progress = 0.0f;
+	// Deactivate the button (platform dependent)
+	if (isPending()) {
+		_button->deactivate();
+	}
+	_button = nullptr;
+	_bar = nullptr;
+	_assets = nullptr;
+	_progress = 0.0f;
 }
-
 
 #pragma mark -
 #pragma mark Progress Monitoring
@@ -90,15 +87,15 @@ void LoadingScene::dispose() {
  * @param timestep  The amount of time (in seconds) since the last frame
  */
 void LoadingScene::update(float progress) {
-    if (_progress < 1) {
-        _progress = _assets->progress();
-        if (_progress >= 1) {
-            _progress = 1.0f;
-            _button->setVisible(true);
-            _button->activate(1);
-        }
-        _bar->setProgress(_progress);
-    }
+	if (_progress < 1) {
+		_progress = _assets->progress();
+		if (_progress >= 1) {
+			_progress = 1.0f;
+			_button->setVisible(true);
+			_button->activate(1);
+		}
+		_bar->setProgress(_progress);
+	}
 }
 
 /**
@@ -106,7 +103,4 @@ void LoadingScene::update(float progress) {
  *
  * @return true if loading is complete, but the player has not pressed play
  */
-bool LoadingScene::isPending( ) const {
-    return _button != nullptr && _button->isVisible();
-}
-
+bool LoadingScene::isPending() const { return _button != nullptr && _button->isVisible(); }
