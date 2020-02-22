@@ -18,10 +18,10 @@
 
 using namespace cugl;
 
-/** The ID for the button listener */
-#define LISTENER_ID 1
 /** This is adjusted by screen aspect ratio to get the height */
-#define SCENE_WIDTH 1024
+constexpr unsigned int SCENE_WIDTH = 1024;
+/** The default color r, g, and b value for the background */
+constexpr unsigned int COLOR_VALUE = 192;
 
 #pragma mark -
 #pragma mark Constructors
@@ -48,17 +48,17 @@ bool LoadingScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 	}
 
 	// IMMEDIATELY load the splash screen assets
-	_assets = assets;
-	_assets->loadDirectory("json/loading.json");
+	this->assets = assets;
+	assets->loadDirectory("json/loading.json");
 	auto layer = assets->get<Node>("load");
 	layer->setContentSize(dimen);
 	layer->doLayout();	// This rearranges the children to fit the screen
 
-	_bar = std::dynamic_pointer_cast<ProgressBar>(assets->get<Node>("load_bar"));
-	_button = std::dynamic_pointer_cast<Button>(assets->get<Node>("load_claw_play"));
-	_button->setListener([=](const std::string& name, bool down) { this->_active = down; });
+	bar = std::dynamic_pointer_cast<ProgressBar>(assets->get<Node>("load_bar"));
+	button = std::dynamic_pointer_cast<Button>(assets->get<Node>("load_claw_play"));
+	button->setListener([=](const std::string& name, bool down) { this->_active = down; });
 
-	Application::get()->setClearColor(Color4(192, 192, 192, 255));
+	Application::get()->setClearColor(Color4(COLOR_VALUE, COLOR_VALUE, COLOR_VALUE));
 	addChild(layer);
 	return true;
 }
@@ -69,12 +69,12 @@ bool LoadingScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 void LoadingScene::dispose() {
 	// Deactivate the button (platform dependent)
 	if (isPending()) {
-		_button->deactivate();
+		button->deactivate();
 	}
-	_button = nullptr;
-	_bar = nullptr;
-	_assets = nullptr;
-	_progress = 0.0f;
+	button = nullptr;
+	bar = nullptr;
+	assets = nullptr;
+	progress = 0.0f;
 }
 
 #pragma mark -
@@ -87,14 +87,14 @@ void LoadingScene::dispose() {
  * @param timestep  The amount of time (in seconds) since the last frame
  */
 void LoadingScene::update(float progress) {
-	if (_progress < 1) {
-		_progress = _assets->progress();
-		if (_progress >= 1) {
-			_progress = 1.0f;
-			_button->setVisible(true);
-			_button->activate(1);
+	if (progress < 1) {
+		progress = assets->progress();
+		if (progress >= 1) {
+			progress = 1.0f;
+			button->setVisible(true);
+			button->activate(1);
 		}
-		_bar->setProgress(_progress);
+		bar->setProgress(progress);
 	}
 }
 
@@ -103,4 +103,4 @@ void LoadingScene::update(float progress) {
  *
  * @return true if loading is complete, but the player has not pressed play
  */
-bool LoadingScene::isPending() const { return _button != nullptr && _button->isVisible(); }
+bool LoadingScene::isPending() const { return button != nullptr && button->isVisible(); }

@@ -32,21 +32,21 @@
 class LoadingScene : public cugl::Scene {
    protected:
 	/** The asset manager for loading. */
-	std::shared_ptr<cugl::AssetManager> _assets;
+	std::shared_ptr<cugl::AssetManager> assets;
 
 	// NO CONTROLLER (ALL IN SEPARATE THREAD)
 
 	// VIEW
 	/** The animated progress bar */
-	std::shared_ptr<cugl::ProgressBar> _bar;
+	std::shared_ptr<cugl::ProgressBar> bar;
 	/** The "play" button */
-	std::shared_ptr<cugl::Button> _button;
+	std::shared_ptr<cugl::Button> button;
 
 	// MODEL
 	/** The progress displayed on the screen */
-	float _progress;
+	float progress;
 	/** Whether or not the player has pressed play to continue */
-	bool _completed;
+	bool completed;
 
    public:
 #pragma mark -
@@ -57,7 +57,7 @@ class LoadingScene : public cugl::Scene {
 	 * This constructor does not allocate any objects or start the game.
 	 * This allows us to use the object without a heap pointer.
 	 */
-	LoadingScene() : Scene(), _progress(0.0f) {}
+	LoadingScene() : Scene(), progress(0.0f), completed(false) {}
 
 	/**
 	 * Disposes of all (non-static) resources allocated to this mode.
@@ -70,7 +70,7 @@ class LoadingScene : public cugl::Scene {
 	/**
 	 * Disposes of all (non-static) resources allocated to this mode.
 	 */
-	void dispose();
+	void dispose() override;
 
 	/**
 	 * Initializes the controller contents, making it ready for loading
@@ -94,7 +94,7 @@ class LoadingScene : public cugl::Scene {
 	 *
 	 * @param timestep  The amount of time (in seconds) since the last frame
 	 */
-	void update(float timestep);
+	void update(float timestep) override;
 
 	/**
 	 * Returns true if loading is complete, but the player has not pressed play
