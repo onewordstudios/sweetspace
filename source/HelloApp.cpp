@@ -61,7 +61,7 @@ void HelloApp::onStartup() {
 	// Create a scene graph the same size as the window
 	_scene = Scene::alloc(size.width, size.height);
 	// Create a sprite batch (and background color) to render the scene
-	_batch = SpriteBatch::alloc();
+	batch = SpriteBatch::alloc();
 	setClearColor(Color4(229, 229, 229, 255));
 
 	// Create an asset manager to load all assets
@@ -102,7 +102,7 @@ void HelloApp::onShutdown() {
 	// Delete all smart pointers
 	_logo = nullptr;
 	_scene = nullptr;
-	_batch = nullptr;
+	batch = nullptr;
 	_assets = nullptr;
 
 	// Deativate input
@@ -150,7 +150,7 @@ void HelloApp::update(float timestep) {
  */
 void HelloApp::draw() {
 	// This takes care of begin/end
-	_scene->render(_batch);
+	_scene->render(batch);
 }
 
 /**

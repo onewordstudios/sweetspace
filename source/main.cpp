@@ -28,7 +28,7 @@
 //  Version: 7/1/16
 
 // Include your application class
-#include "HelloApp.h"
+#include "Sweetspace.h"
 
 // This keeps us from having to write cugl:: all the time
 using namespace cugl;
@@ -50,7 +50,7 @@ constexpr float FRAMERATE = 60.0f;
  */
 int main(int argc, char* argv[]) {
 	// Change this to your application class
-	HelloApp app;
+	Sweetspace app;
 
 	/// SET YOUR APPLICATION PROPERTIES
 

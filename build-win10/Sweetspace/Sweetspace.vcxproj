@@ -188,11 +188,21 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\..\source\HelloApp.h" />
+    <ClInclude Include="..\..\source\SDGameScene.h" />
+    <ClInclude Include="..\..\source\SDInput.h" />
+    <ClInclude Include="..\..\source\SDLoadingScene.h" />
+    <ClInclude Include="..\..\source\SDShipModel.h" />
+    <ClInclude Include="..\..\source\Sweetspace.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\source\HelloApp.cpp" />
     <ClCompile Include="..\..\source\main.cpp" />
+    <ClCompile Include="..\..\source\SDGameScene.cpp" />
+    <ClCompile Include="..\..\source\SDInput.cpp" />
+    <ClCompile Include="..\..\source\SDLoadingScene.cpp" />
+    <ClCompile Include="..\..\source\SDShipModel.cpp" />
+    <ClCompile Include="..\..\source\Sweetspace.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Sweetspace.rc" />
