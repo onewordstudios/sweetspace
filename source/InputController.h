@@ -1,4 +1,4 @@
-//
+﻿//
 //  SDInput.h
 //  Ship Demo
 //

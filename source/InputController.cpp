@@ -1,4 +1,4 @@
-//
+﻿//
 //  SDInput.h
 //  Ship Demo
 //
@@ -163,7 +163,7 @@ void InputController::update(float dt) {
 	if (keyReset) {
 		rollAmount = 0;
 	}
-	
+
 #ifdef CU_TOUCH_SCREEN
 	keyReset = false;
 #endif
@@ -194,8 +194,9 @@ void InputController::clear() {
  * @param event The associated event
  */
 void InputController::touchBeganCB(const cugl::TouchEvent& event, bool focus) {
-	// Update the touch location for later gestures, Uncomment if gestures added or position change between touch down and up needed
-	//dtouch.set(event.position);
+	// Update the touch location for later gestures, Uncomment if gestures added or position change
+	// between touch down and up needed
+	// dtouch.set(event.position);
 }
 
 /**
