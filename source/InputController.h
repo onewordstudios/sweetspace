@@ -143,7 +143,7 @@ class InputController {
 	 *
 	 * @return The tap location. cugl::Vec2 of x,y screen coordinates.
 	 */
-	const Vec2 getTapLoc() { return tapLoc; }
+	const cugl::Vec2 getTapLoc() { return tapLoc; }
 
 #pragma mark -
 #pragma mark Touch Callbacks
