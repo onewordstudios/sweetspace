@@ -28,14 +28,16 @@
 //  Version: 7/1/16
 
 // Include your application class
-#include "HelloApp.h"
+#include "Sweetspace.h"
 
 // This keeps us from having to write cugl:: all the time
 using namespace cugl;
 
 // These really only apply if the game is windowed (not on mobile device)
-#define GAME_WIDTH 1024
-#define GAME_HEIGHT 576
+constexpr unsigned int GAME_WIDTH = 1024;
+constexpr unsigned int GAME_HEIGHT = 576;
+
+constexpr float FRAMERATE = 60.0f;
 
 /**
  * The main entry point of any CUGL application.
@@ -48,7 +50,7 @@ using namespace cugl;
  */
 int main(int argc, char* argv[]) {
 	// Change this to your application class
-	HelloApp app;
+	Sweetspace app;
 
 	/// SET YOUR APPLICATION PROPERTIES
 
@@ -60,7 +62,7 @@ int main(int argc, char* argv[]) {
 
 	// Set the window properties (Only applies to OS X/Windows Desktop)
 	app.setSize(GAME_WIDTH, GAME_HEIGHT);
-	app.setFPS(60.0f);
+	app.setFPS(FRAMERATE);
 	app.setHighDPI(true);
 
 	/// DO NOT MODIFY ANYTHING BELOW THIS LINE
@@ -70,10 +72,10 @@ int main(int argc, char* argv[]) {
 
 	// Run the application until completion
 	app.onStartup();
-	while (app.step())
-		;
+	while (app.step()) {
+	}
 	app.onShutdown();
 
-	exit(0);   // Necessary to quit on mobile devices
-	return 0;  // This line is never reached
+	exit(0);  // Necessary to quit on mobile devices
+	return 0; // This line is never reached
 }

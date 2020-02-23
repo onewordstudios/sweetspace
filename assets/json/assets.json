@@ -1,31 +1,116 @@
 {
 	"textures": {
-		"claw": {
-			"file":     "textures/Claw.png",
-			"minfilter":"nearest",
-			"magfilter":"linear",
-			"wrapS":    "clamp",
-			"wrapT":    "clamp"
-		},
-		"close-normal": {
-			"file":     "textures/CloseNormal.png",
-			"minfilter":"nearest",
-			"magfilter":"linear",
-			"wrapS":    "clamp",
-			"wrapT":    "clamp"
-		},
-		"close-selected": {
-			"file":     "textures/CloseSelected.png",
-			"minfilter":"nearest",
-			"magfilter":"linear",
-			"wrapS":    "clamp",
-			"wrapT":    "clamp"
-		}
+		"ship": {
+            "file":   "textures/ships.png"
+        },
+        "space": {
+            "file":  "textures/space.png",
+            "wrapS": "repeat",
+            "wrapT": "repeat"
+        },
+        "planet1": {
+            "file":   "textures/planet1.png"
+        },
+        "planet2": {
+            "file":   "textures/planet2.png"
+        }
 	},
 	"fonts": {
-		"charlemagne": {
-			"file":     "fonts/Charlemagne.ttf",
-			"size":     64
+		"felt32": {
+			"file":     "fonts/MarkerFelt.ttf",
+			"size":     32
 		}
-	}
+	},
+    "scenes" : {
+        "game": {
+            "type"      : "Node",
+            "format"    : {
+                "type" : "Anchored"
+            },
+            "children":  {
+                "field": {
+                    "type": "Node",
+                    "format"    : {
+                        "type" : "Anchored"
+                    },
+                    "data": {
+                        "size":     [2560,2560],
+                        "anchor":   [0.5,0.5]
+                    },
+                    "layout" : {
+                        "x_anchor" : "center",
+                        "y_anchor" : "middle"
+                    },
+                    "children" : {
+                        "far": {
+                            "type": "Image",
+                            "data": {
+                                "texture":  "space",
+                                "position": [1280,1280],
+                                "polygon":  [0,0,0,2560,2560,2560,2560,2560,2560,0,0,0],
+                                "anchor":   [0.5,0.5]
+                            }
+                        },
+                        "near": {
+                            "type": "Node",
+                            "data": {
+                                "size":     [2560,2560],
+                                "position": [1280,1280],
+                                "anchor":   [0.5,0.5]
+                            },
+                            "children": {
+                                "planet_a": {
+                                    "type": "Image",
+                                    "data": {
+                                        "texture":  "planet1",
+                                        "anchor":   [0.5,0.5],
+                                        "position": [955,1080],
+                                        "scale":    0.25
+                                    }
+                                },
+                                "planet_b": {
+                                    "type": "Image",
+                                    "data": {
+                                        "texture":  "planet2",
+                                        "anchor":   [0.5,0.5],
+                                        "position": [1605,1480],
+                                        "scale":    0.25
+                                    }
+                                }
+                            }
+                        },
+                        "player": {
+                            "type": "Animation",
+                            "data": {
+                                "texture":  "ship",
+                                "span":     18,
+                                "cols":     5,
+                                "frame":    9,
+                                "position": [1280,1280],
+                                "anchor":   [0.5,0.5]
+                            }
+                        }
+                    }
+                },
+                "hud" : {
+                    "type": "Label",
+                    "data": {
+                        "font"       : "felt32",
+                        "text"       : "Coords: (128, 128)  ",
+                        "foreground" : [255,255,255,255],
+                        "size"       : [500,70],
+                        "valign"     : "bottom",
+                        "halign"     : "left"
+                    },
+                    "layout" : {
+                        "x_anchor" : "left",
+                        "y_anchor" : "bottom",
+                        "x_offset" : 10,
+                        "y_offset" : 10,
+                        "absolute" : true
+                    }
+                }
+            }
+        }
+    }
 }

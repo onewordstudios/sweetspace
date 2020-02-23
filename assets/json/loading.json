@@ -1,0 +1,100 @@
+{
+	"textures": {
+		"claw": {
+			"file":      "textures/Claw.png",
+            "wrapS":     "clamp",
+            "wrapT":     "clamp",
+            "minfilter": "linear",
+            "magfilter": "linear"
+		},
+        "play": {
+            "file":      "textures/play.png",
+            "wrapS":     "clamp",
+            "wrapT":     "clamp",
+            "minfilter": "linear",
+            "magfilter": "linear"
+        },
+        "progress": {
+            "file":      "textures/progressbar.png",
+            "wrapS":     "clamp",
+            "wrapT":     "clamp",
+            "minfilter": "linear",
+            "magfilter": "linear",
+            "atlas":     {
+                "background" : [0,    5, 400, 35],
+                "foreground" : [16,  45, 384, 75],
+                "leftcap"    : [0,   45,  16, 75],
+                "rightcap"   : [384, 45, 400, 75]
+            }
+        }
+	},
+    "scenes" : {
+        "load" : {
+            "type"      : "Node",
+            "format"    : {
+                "type" : "Anchored"
+            },
+            "children"  : {
+                "claw"  : {
+                    "type"   : "Image",
+                    "format"    : {
+                        "type" : "Anchored"
+                    },
+                    "data"   : {
+                        "texture"  : "claw",
+                        "anchor"   : [0.5,0.5],
+                        "scale"    : 0.4
+                    },
+                    "layout" : {
+                        "x_anchor" : "center",
+                        "y_anchor" : "top",
+                        "y_offset" : -0.4
+                    },
+                    "children" : {
+                        "play"  : {
+                            "type"   : "Button",
+                            "data"   : {
+                                "upnode"   : "up",
+                                "pushable" : [0,100,29,171,100,200,171,171,200,100,171,29,100,0,29,29],
+                                "visible"  : false,
+                                "pushsize" : true,
+                                "anchor"   : [0.5,0.5],
+                                "scale"    : 1.85
+                            },
+                            "children" : {
+                                "up"       : {
+                                    "type"   : "Image",
+                                    "data"   : {
+                                        "texture"  : "play"
+                                    }
+                                }
+                            },
+                            "layout" : {
+                                "x_anchor" : "center",
+                                "y_anchor" : "middle",
+                                "x_offset" :  0.035,
+                                "y_offset" : -0.175
+                            }
+                        }
+
+                    }
+                },
+                "bar"  : {
+                    "type"   : "Progress",
+                    "data"   : {
+                        "anchor"     : [0.5,0.5],
+                        "background" : "progress_background",
+                        "foreground" : "progress_foreground",
+                        "left_cap"   : "progress_leftcap",
+                        "right_cap"  : "progress_rightcap"
+                    },
+                    "layout" : {
+                        "x_anchor" : "center",
+                        "y_anchor" : "bottom",
+                        "y_offset" : 0.15
+                    }
+                }
+            }
+        }
+    }
+}

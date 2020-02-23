@@ -1,5 +1,5 @@
 ---
-Checks:          'clang-diagnostic-*,clang-analyzer-*,cppcoreguidelines-*,-misc-throw-by-value-catch-by-reference,-clang-analyzer-alpha.deadcode.UnreachableCode,-cert-err58-cpp,-clang-analyzer-alpha.*,-clang-analyzer-security.insecureAPI.strcpy,readability-identifier-naming,readability-braces-around-statements'
+Checks:          'clang-diagnostic-*,clang-analyzer-*,cppcoreguidelines-*,misc-throw-by-value-catch-by-reference,clang-analyzer-alpha.deadcode.UnreachableCode,cert-err58-cpp,clang-analyzer-alpha.*,clang-analyzer-security.insecureAPI.strcpy,readability-identifier-naming,readability-braces-around-statements,-cppcoreguidelines-non-private-member-variables-in-classes,-clang-analyzer-optin.cplusplus.VirtualCall,-cppcoreguidelines-special-member-functions,-clang-diagnostic-overloaded-virtual,-clang-diagnostic-delete-non-abstract-non-virtual-dtor'
 WarningsAsErrors: 		''
 HeaderFilterRegex: 		''
 AnalyzeTemporaryDtors: 	false
@@ -100,9 +100,9 @@ CheckOptions:
   - key:             readability-braces-around-statements.ShortStatementLines
     value:           '1'
   - key:             readability-function-size.BranchThreshold
-    value:           '4294967295'
+    value:           '50'
   - key:             readability-function-size.LineThreshold
-    value:           '4294967295'
+    value:           '200'
   - key:             readability-function-size.StatementThreshold
     value:           '800'
   - key:             readability-identifier-naming.AbstractClassCase
@@ -154,19 +154,19 @@ CheckOptions:
   - key:             readability-identifier-naming.ConstantSuffix
     value:           ''
   - key:             readability-identifier-naming.ConstexprFunctionCase
-    value:           camelBack
+    value:           UPPER_CASE
   - key:             readability-identifier-naming.ConstexprFunctionPrefix
     value:           ''
   - key:             readability-identifier-naming.ConstexprFunctionSuffix
     value:           ''
   - key:             readability-identifier-naming.ConstexprMethodCase
-    value:           camelBack
+    value:           UPPER_CASE
   - key:             readability-identifier-naming.ConstexprMethodPrefix
     value:           ''
   - key:             readability-identifier-naming.ConstexprMethodSuffix
     value:           ''
   - key:             readability-identifier-naming.ConstexprVariableCase
-    value:           camelBack
+    value:           UPPER_CASE
   - key:             readability-identifier-naming.ConstexprVariablePrefix
     value:           ''
   - key:             readability-identifier-naming.ConstexprVariableSuffix

@@ -13,21 +13,93 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Source Files\Modes">
+      <UniqueIdentifier>{4da27357-1e6b-4b8b-91c1-8f19ce4bf5c3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Modes">
+      <UniqueIdentifier>{016fd9ec-cf7d-4c9c-b7f4-ff7d6363b1ea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Models">
+      <UniqueIdentifier>{d52e5d41-f523-4864-acb1-4ae943fc2b58}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Models">
+      <UniqueIdentifier>{14a0b81a-78d9-489f-a677-ca2b32c5431f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\SceneGraph">
+      <UniqueIdentifier>{6b167156-b45a-4b76-a67f-0ab90fad1ddd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\SceneGraph">
+      <UniqueIdentifier>{5029e710-07ae-417b-83ae-e2218861ae1c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Controllers">
+      <UniqueIdentifier>{431364ef-2283-485e-9b1a-86d988199bfc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Controllers">
+      <UniqueIdentifier>{19d085e5-545b-42a4-ae93-667ff9245d1f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\source\HelloApp.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\source\Sweetspace.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\InputController.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\GameMode.h">
+      <Filter>Header Files\Modes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\LoadingMode.h">
+      <Filter>Header Files\Modes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\ShipModel.h">
+      <Filter>Header Files\Models</Filter>
+    </ClInclude>
+    <ClInclude Include="DonutModel.h">
+      <Filter>Header Files\Models</Filter>
+    </ClInclude>
+    <ClInclude Include="BreachModel.h">
+      <Filter>Header Files\Models</Filter>
+    </ClInclude>
+    <ClInclude Include="GameGraphRoot.h">
+      <Filter>Header Files\SceneGraph</Filter>
+    </ClInclude>
+    <ClInclude Include="GMController.h">
+      <Filter>Header Files\Controllers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\source\HelloApp.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\source\main.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\Sweetspace.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\InputController.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\GameMode.cpp">
+      <Filter>Source Files\Modes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\LoadingMode.cpp">
+      <Filter>Source Files\Modes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\ShipModel.cpp">
+      <Filter>Source Files\Models</Filter>
+    </ClCompile>
+    <ClCompile Include="DonutModel.cpp">
+      <Filter>Source Files\Models</Filter>
+    </ClCompile>
+    <ClCompile Include="BreachModel.cpp">
+      <Filter>Source Files\Models</Filter>
+    </ClCompile>
+    <ClCompile Include="GameGraphRoot.cpp">
+      <Filter>Source Files\SceneGraph</Filter>
+    </ClCompile>
+    <ClCompile Include="GMController.cpp">
+      <Filter>Source Files\Controllers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
