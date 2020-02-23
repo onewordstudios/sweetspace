@@ -21,7 +21,7 @@
 
 #include <vector>
 
-#include "SDInput.h"
+#include "InputController.h"
 #include "SDShipModel.h"
 
 /**
@@ -38,7 +38,7 @@ class GameMode : public cugl::Scene {
 
 	// CONTROLLERS
 	/** Controller for abstracting out input across multiple platforms */
-	ShipInput input;
+	InputController input;
 
 	// VIEW
 	/** Filmstrip representing the animated ship */

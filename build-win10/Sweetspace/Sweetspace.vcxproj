@@ -188,7 +188,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\..\source\GameMode.h" />
-    <ClInclude Include="..\..\source\SDInput.h" />
+    <ClInclude Include="..\..\source\InputController.h" />
     <ClInclude Include="..\..\source\LoadingMode.h" />
     <ClInclude Include="..\..\source\SDShipModel.h" />
     <ClInclude Include="..\..\source\Sweetspace.h" />
@@ -197,7 +197,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\source\main.cpp" />
     <ClCompile Include="..\..\source\GameMode.cpp" />
-    <ClCompile Include="..\..\source\SDInput.cpp" />
+    <ClCompile Include="..\..\source\InputController.cpp" />
     <ClCompile Include="..\..\source\LoadingMode.cpp" />
     <ClCompile Include="..\..\source\SDShipModel.cpp" />
     <ClCompile Include="..\..\source\Sweetspace.cpp" />

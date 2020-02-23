@@ -10,7 +10,7 @@
 //  Author: Walker White
 //  Version: 1/10/17
 //
-#include "SDInput.h"
+#include "InputController.h"
 
 using namespace cugl;
 
@@ -50,7 +50,7 @@ constexpr unsigned int LISTENER_KEY = 1;
  * This constructor does NOT do any initialzation.  It simply allocates the
  * object. This makes it safe to use this class without a pointer.
  */
-ShipInput::ShipInput()
+InputController::InputController()
 	: active(false),
 	  keyReset(false),
 	  forceLeft(0.0f),
@@ -65,7 +65,7 @@ ShipInput::ShipInput()
  * This method will not dispose of the input controller. It can be reused
  * once it is reinitialized.
  */
-void ShipInput::dispose() {
+void InputController::dispose() {
 	if (active) {
 #ifndef CU_TOUCH_SCREEN
 		Input::deactivate<Keyboard>();
@@ -90,7 +90,7 @@ void ShipInput::dispose() {
  *
  * @return true if the controller was initialized successfully
  */
-bool ShipInput::init() {
+bool InputController::init() {
 	timestamp.mark();
 	bool success = true;
 
@@ -125,7 +125,7 @@ bool ShipInput::init() {
  * the OS, we may see multiple updates of the same touch in a single animation
  * frame, so we need to accumulate all of the data together.
  */
-void ShipInput::update(float dt) {
+void InputController::update(float dt) {
 // Only process keyboard on desktop
 #ifndef CU_TOUCH_SCREEN
 	Keyboard* keys = Input::get<Keyboard>();
@@ -195,7 +195,7 @@ void ShipInput::update(float dt) {
 /**
  * Clears any buffered inputs so that we may start fresh.
  */
-void ShipInput::clear() {
+void InputController::clear() {
 	resetPressed = false;
 	inputThrust = Vec2::ZERO;
 	keybdThrust = Vec2::ZERO;
@@ -217,7 +217,7 @@ void ShipInput::clear() {
  * @param t     The touch information
  * @param event The associated event
  */
-void ShipInput::touchBeganCB(const cugl::TouchEvent& event, bool focus) {
+void InputController::touchBeganCB(const cugl::TouchEvent& event, bool focus) {
 	// Update the touch location for later gestures
 	dtouch.set(event.position);
 }
@@ -228,7 +228,7 @@ void ShipInput::touchBeganCB(const cugl::TouchEvent& event, bool focus) {
  * @param t     The touch information
  * @param event The associated event
  */
-void ShipInput::touchEndedCB(const cugl::TouchEvent& event, bool focus) {
+void InputController::touchEndedCB(const cugl::TouchEvent& event, bool focus) {
 	// Check for a double tap.
 	keyReset = event.timestamp.ellapsedMillis(timestamp) <= EVENT_DOUBLE_CLICK;
 	timestamp = event.timestamp;
