@@ -31,7 +31,7 @@
  * really a mini-GameEngine in its own right.  As in 3152, we separate it out
  * so that we can have a separate mode for the loading screen.
  */
-class GameScene : public cugl::Scene {
+class GameMode : public cugl::Scene {
    protected:
 	/** The asset manager for this game mode. */
 	std::shared_ptr<cugl::AssetManager> assets;
@@ -77,7 +77,7 @@ class GameScene : public cugl::Scene {
 	 * This constructor does not allocate any objects or start the game.
 	 * This allows us to use the object without a heap pointer.
 	 */
-	GameScene() : Scene() {}
+	GameMode() : Scene() {}
 
 	/**
 	 * Disposes of all (non-static) resources allocated to this mode.
@@ -85,7 +85,7 @@ class GameScene : public cugl::Scene {
 	 * This method is different from dispose() in that it ALSO shuts off any
 	 * static resources, like the input controller.
 	 */
-	~GameScene() { dispose(); }
+	~GameMode() { dispose(); }
 
 	/**
 	 * Disposes of all (non-static) resources allocated to this mode.

@@ -14,8 +14,8 @@
 #define __SWEETSPACE_H__
 #include <cugl/cugl.h>
 
-#include "SDGameScene.h"
-#include "SDLoadingScene.h"
+#include "GameMode.h"
+#include "LoadingMode.h"
 
 /**
  * This class represents the application root for the ship demo.
@@ -29,9 +29,9 @@ class Sweetspace : public cugl::Application {
 
 	// Player modes
 	/** The primary controller for the game world */
-	GameScene gameplay;
+	GameMode gameplay;
 	/** The controller for the loading screen */
-	LoadingScene loading;
+	LoadingMode loading;
 
 	/** Whether or not we have finished loading all assets */
 	bool loaded;

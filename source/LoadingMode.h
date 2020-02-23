@@ -14,8 +14,8 @@
 //  Author: Walker White
 //  Version: 1/10/18
 //
-#ifndef __SD_LOADING_SCENE_H__
-#define __SD_LOADING_SCENE_H__
+#ifndef __SD_LOADING_MODE_H__
+#define __SD_LOADING_MODE_H__
 #include <cugl/cugl.h>
 
 /**
@@ -29,7 +29,7 @@
  * Once asset loading is completed, it will display a play button.  Clicking
  * this button will inform the application root to switch to the gameplay mode.
  */
-class LoadingScene : public cugl::Scene {
+class LoadingMode : public cugl::Scene {
    protected:
 	/** The asset manager for loading. */
 	std::shared_ptr<cugl::AssetManager> assets;
@@ -57,7 +57,7 @@ class LoadingScene : public cugl::Scene {
 	 * This constructor does not allocate any objects or start the game.
 	 * This allows us to use the object without a heap pointer.
 	 */
-	LoadingScene() : Scene(), progress(0.0f), completed(false) {}
+	LoadingMode() : Scene(), progress(0.0f), completed(false) {}
 
 	/**
 	 * Disposes of all (non-static) resources allocated to this mode.
@@ -65,7 +65,7 @@ class LoadingScene : public cugl::Scene {
 	 * This method is different from dispose() in that it ALSO shuts off any
 	 * static resources, like the input controller.
 	 */
-	~LoadingScene() { dispose(); }
+	~LoadingMode() { dispose(); }
 
 	/**
 	 * Disposes of all (non-static) resources allocated to this mode.
@@ -104,4 +104,4 @@ class LoadingScene : public cugl::Scene {
 	bool isPending() const;
 };
 
-#endif /* __SD_LOADING_SCENE_H__ */
+#endif /* __SD_LOADING_MODE_H__ */

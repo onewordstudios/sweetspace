@@ -14,7 +14,7 @@
 //  Author: Walker White
 //  Version: 1/10/18
 //
-#include "SDLoadingScene.h"
+#include "LoadingMode.h"
 
 using namespace cugl;
 
@@ -37,7 +37,7 @@ constexpr unsigned int COLOR_VALUE = 192;
  *
  * @return true if the controller is initialized properly, false otherwise.
  */
-bool LoadingScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
+bool LoadingMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 	// Initialize the scene to a locked width
 	Size dimen = Application::get()->getDisplaySize();
 	dimen *= SCENE_WIDTH / dimen.width; // Lock the game to a reasonable resolution
@@ -66,7 +66,7 @@ bool LoadingScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 /**
  * Disposes of all (non-static) resources allocated to this mode.
  */
-void LoadingScene::dispose() {
+void LoadingMode::dispose() {
 	// Deactivate the button (platform dependent)
 	if (isPending()) {
 		button->deactivate();
@@ -86,7 +86,7 @@ void LoadingScene::dispose() {
  *
  * @param timestep  The amount of time (in seconds) since the last frame
  */
-void LoadingScene::update(float progress) {
+void LoadingMode::update(float progress) {
 	if (progress < 1) {
 		progress = assets->progress();
 		if (progress >= 1) {
@@ -103,4 +103,4 @@ void LoadingScene::update(float progress) {
  *
  * @return true if loading is complete, but the player has not pressed play
  */
-bool LoadingScene::isPending() const { return button != nullptr && button->isVisible(); }
+bool LoadingMode::isPending() const { return button != nullptr && button->isVisible(); }

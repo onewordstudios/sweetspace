@@ -15,7 +15,7 @@
 //  Author: Walker White
 //  Version: 1/10/17
 //
-#include "SDGameScene.h"
+#include "GameMode.h"
 
 #include <cugl/cugl.h>
 
@@ -48,7 +48,7 @@ constexpr float PARALLAX_AMT = 0.1f;
  *
  * @return true if the controller is initialized properly, false otherwise.
  */
-bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
+bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 	// Initialize the scene to a locked width
 	Size dimen = Application::get()->getDisplaySize();
 	dimen *= SCENE_WIDTH / dimen.width; // Lock the game to a reasonable resolution
@@ -86,7 +86,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 /**
  * Disposes of all (non-static) resources allocated to this mode.
  */
-void GameScene::dispose() {
+void GameMode::dispose() {
 	if (_active) {
 		removeAllChildren();
 		input.dispose();
@@ -105,7 +105,7 @@ void GameScene::dispose() {
 /**
  * Resets the status of the game so that we can play again.
  */
-void GameScene::reset() {
+void GameMode::reset() {
 	// Reset the ships and input
 	shipModel->reset();
 	input.clear();
@@ -128,7 +128,7 @@ void GameScene::reset() {
  *
  * @param timestep  The amount of time (in seconds) since the last frame
  */
-void GameScene::update(float timestep) {
+void GameMode::update(float timestep) {
 	input.update(timestep);
 
 	// Reset the game if necessary
@@ -175,7 +175,7 @@ void GameScene::update(float timestep) {
  *
  * @return an informative string for the position
  */
-std::string GameScene::positionText(const cugl::Vec2& coords) {
+std::string GameMode::positionText(const cugl::Vec2& coords) {
 	stringstream ss;
 	constexpr unsigned int COORD_SHIFT = 10;
 	ss << "Coords: (" << (int)coords.x / COORD_SHIFT << "," << (int)coords.y / COORD_SHIFT << ")";
