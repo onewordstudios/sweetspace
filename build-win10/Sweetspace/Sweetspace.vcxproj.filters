@@ -45,9 +45,6 @@
     <ClInclude Include="..\..\source\Sweetspace.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\source\InputController.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\source\GameMode.h">
       <Filter>Header Files\Modes</Filter>
     </ClInclude>
@@ -57,16 +54,19 @@
     <ClInclude Include="..\..\source\ShipModel.h">
       <Filter>Header Files\Models</Filter>
     </ClInclude>
-    <ClInclude Include="DonutModel.h">
-      <Filter>Header Files\Models</Filter>
-    </ClInclude>
-    <ClInclude Include="BreachModel.h">
-      <Filter>Header Files\Models</Filter>
-    </ClInclude>
-    <ClInclude Include="GameGraphRoot.h">
+    <ClInclude Include="..\..\source\GameGraphRoot.h">
       <Filter>Header Files\SceneGraph</Filter>
     </ClInclude>
-    <ClInclude Include="GMController.h">
+    <ClInclude Include="..\..\source\BreachModel.h">
+      <Filter>Header Files\Models</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\DonutModel.h">
+      <Filter>Header Files\Models</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\InputController.h">
+      <Filter>Header Files\Controllers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\GMController.h">
       <Filter>Header Files\Controllers</Filter>
     </ClInclude>
   </ItemGroup>
@@ -75,9 +75,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\Sweetspace.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\InputController.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\GameMode.cpp">
@@ -89,17 +86,20 @@
     <ClCompile Include="..\..\source\ShipModel.cpp">
       <Filter>Source Files\Models</Filter>
     </ClCompile>
-    <ClCompile Include="DonutModel.cpp">
-      <Filter>Source Files\Models</Filter>
-    </ClCompile>
-    <ClCompile Include="BreachModel.cpp">
-      <Filter>Source Files\Models</Filter>
-    </ClCompile>
-    <ClCompile Include="GameGraphRoot.cpp">
-      <Filter>Source Files\SceneGraph</Filter>
-    </ClCompile>
-    <ClCompile Include="GMController.cpp">
+    <ClCompile Include="..\..\source\GMController.cpp">
       <Filter>Source Files\Controllers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\InputController.cpp">
+      <Filter>Source Files\Controllers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\BreachModel.cpp">
+      <Filter>Source Files\Models</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\DonutModel.cpp">
+      <Filter>Source Files\Models</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\GameGraphRoot.cpp">
+      <Filter>Source Files\SceneGraph</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
