@@ -195,6 +195,7 @@
     <ClInclude Include="BreachModel.h" />
     <ClInclude Include="DonutModel.h" />
     <ClInclude Include="GameGraphRoot.h" />
+    <ClInclude Include="GMController.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
@@ -207,6 +208,7 @@
     <ClCompile Include="BreachModel.cpp" />
     <ClCompile Include="DonutModel.cpp" />
     <ClCompile Include="GameGraphRoot.cpp" />
+    <ClCompile Include="GMController.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Sweetspace.rc" />

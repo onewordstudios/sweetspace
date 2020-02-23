@@ -31,6 +31,12 @@
     <Filter Include="Header Files\SceneGraph">
       <UniqueIdentifier>{5029e710-07ae-417b-83ae-e2218861ae1c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Controllers">
+      <UniqueIdentifier>{431364ef-2283-485e-9b1a-86d988199bfc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Controllers">
+      <UniqueIdentifier>{19d085e5-545b-42a4-ae93-667ff9245d1f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -60,6 +66,9 @@
     <ClInclude Include="GameGraphRoot.h">
       <Filter>Header Files\SceneGraph</Filter>
     </ClInclude>
+    <ClInclude Include="GMController.h">
+      <Filter>Header Files\Controllers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\source\main.cpp">
@@ -88,6 +97,9 @@
     </ClCompile>
     <ClCompile Include="GameGraphRoot.cpp">
       <Filter>Source Files\SceneGraph</Filter>
+    </ClCompile>
+    <ClCompile Include="GMController.cpp">
+      <Filter>Source Files\Controllers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
