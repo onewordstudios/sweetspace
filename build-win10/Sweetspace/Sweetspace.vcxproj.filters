@@ -58,7 +58,7 @@
       <Filter>Header Files\Models</Filter>
     </ClInclude>
     <ClInclude Include="GameGraphRoot.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\SceneGraph</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -87,7 +87,7 @@
       <Filter>Source Files\Models</Filter>
     </ClCompile>
     <ClCompile Include="GameGraphRoot.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\SceneGraph</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
