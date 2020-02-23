@@ -190,7 +190,7 @@
     <ClInclude Include="..\..\source\GameMode.h" />
     <ClInclude Include="..\..\source\InputController.h" />
     <ClInclude Include="..\..\source\LoadingMode.h" />
-    <ClInclude Include="..\..\source\SDShipModel.h" />
+    <ClInclude Include="..\..\source\ShipModel.h" />
     <ClInclude Include="..\..\source\Sweetspace.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>
@@ -199,7 +199,7 @@
     <ClCompile Include="..\..\source\GameMode.cpp" />
     <ClCompile Include="..\..\source\InputController.cpp" />
     <ClCompile Include="..\..\source\LoadingMode.cpp" />
-    <ClCompile Include="..\..\source\SDShipModel.cpp" />
+    <ClCompile Include="..\..\source\ShipModel.cpp" />
     <ClCompile Include="..\..\source\Sweetspace.cpp" />
   </ItemGroup>
   <ItemGroup>

@@ -22,7 +22,7 @@
 #include <vector>
 
 #include "InputController.h"
-#include "SDShipModel.h"
+#include "ShipModel.h"
 
 /**
  * This class is the primary gameplay constroller for the demo.
