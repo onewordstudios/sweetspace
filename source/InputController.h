@@ -60,6 +60,10 @@ class InputController {
 	 * -1 for way left, 0 for not rolling, 1 for way right
 	 */
 	float rollAmount;
+	/**
+	 * Most Recent Tap location to pass down the scenegraph
+	 */
+	cugl::Vec2 tapLoc;
 
    public:
 #pragma mark -
@@ -132,6 +136,14 @@ class InputController {
 	 * @return The roll amount. -1 is all left, 1 is all right, 0 is neutral.
 	 */
 	const float getRoll() { return rollAmount; }
+	/**
+	 * Returns the most recent tap location.
+	 *
+	 * No Mouse Support Implemented.
+	 *
+	 * @return The tap location. cugl::Vec2 of x,y screen coordinates.
+	 */
+	const Vec2 getTapLoc() { return tapLoc; }
 
 #pragma mark -
 #pragma mark Touch Callbacks
