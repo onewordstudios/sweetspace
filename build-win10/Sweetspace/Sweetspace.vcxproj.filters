@@ -13,6 +13,18 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Source Files\Modes">
+      <UniqueIdentifier>{4da27357-1e6b-4b8b-91c1-8f19ce4bf5c3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Modes">
+      <UniqueIdentifier>{016fd9ec-cf7d-4c9c-b7f4-ff7d6363b1ea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Models">
+      <UniqueIdentifier>{d52e5d41-f523-4864-acb1-4ae943fc2b58}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Models">
+      <UniqueIdentifier>{14a0b81a-78d9-489f-a677-ca2b32c5431f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -21,17 +33,17 @@
     <ClInclude Include="..\..\source\Sweetspace.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\source\LoadingMode.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\source\GameMode.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\source\InputController.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\source\GameMode.h">
+      <Filter>Header Files\Modes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\LoadingMode.h">
+      <Filter>Header Files\Modes</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\source\ShipModel.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Models</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -41,17 +53,17 @@
     <ClCompile Include="..\..\source\Sweetspace.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\source\LoadingMode.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\GameMode.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\source\InputController.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\source\GameMode.cpp">
+      <Filter>Source Files\Modes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\LoadingMode.cpp">
+      <Filter>Source Files\Modes</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\source\ShipModel.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Models</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
