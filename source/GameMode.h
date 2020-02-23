@@ -1,4 +1,4 @@
-//
+﻿//
 //  SDGameScene.h
 //  Ship Demo
 //
@@ -21,6 +21,7 @@
 
 #include <vector>
 
+#include "GameGraphRoot.h"
 #include "InputController.h"
 #include "ShipModel.h"
 
@@ -31,7 +32,7 @@
  * really a mini-GameEngine in its own right.  As in 3152, we separate it out
  * so that we can have a separate mode for the loading screen.
  */
-class GameMode : public cugl::Scene {
+class GameMode {
    protected:
 	/** The asset manager for this game mode. */
 	std::shared_ptr<cugl::AssetManager> assets;
@@ -41,32 +42,13 @@ class GameMode : public cugl::Scene {
 	InputController input;
 
 	// VIEW
-	/** Filmstrip representing the animated ship */
-	std::shared_ptr<cugl::AnimationNode> shipNode;
-	/** Label for on-screen coordinate HUD */
-	std::shared_ptr<cugl::Label> coordHUD;
-	/** Node to hold all of our graphics. Necesary for resolution indepedence. */
-	std::shared_ptr<cugl::Node> allSpace;
-	/** Background in animation parallax. Stores the field of stars */
-	std::shared_ptr<cugl::Node> farSpace;
-	/** Foreground in animation parallax. Stores the planets. */
-	std::shared_ptr<cugl::Node> nearSpace;
+	/** Scenegraph root node */
+	GameGraphRoot sg_root;
 
 	// MODEL
 	// A page-out could dispose of the view as long as it just has this.
 	/** The current coordinates of the ship */
 	std::shared_ptr<ShipModel> shipModel;
-
-	/**
-	 * Returns an informative string for the position
-	 *
-	 * This function is for writing the current ship position to the HUD.
-	 *
-	 * @param coords The current ship coordinates
-	 *
-	 * @return an informative string for the position
-	 */
-	std::string positionText(const cugl::Vec2& coords);
 
    public:
 #pragma mark -
@@ -77,7 +59,7 @@ class GameMode : public cugl::Scene {
 	 * This constructor does not allocate any objects or start the game.
 	 * This allows us to use the object without a heap pointer.
 	 */
-	GameMode() : Scene() {}
+	GameMode() {}
 
 	/**
 	 * Disposes of all (non-static) resources allocated to this mode.
@@ -90,7 +72,7 @@ class GameMode : public cugl::Scene {
 	/**
 	 * Disposes of all (non-static) resources allocated to this mode.
 	 */
-	void dispose() override;
+	void dispose();
 
 	/**
 	 * Initializes the controller contents, and starts the game
@@ -114,12 +96,12 @@ class GameMode : public cugl::Scene {
 	 *
 	 * @param timestep  The amount of time (in seconds) since the last frame
 	 */
-	void update(float timestep) override;
+	void update(float timestep);
 
 	/**
 	 * Resets the status of the game so that we can play again.
 	 */
-	void reset() override;
+	void reset();
 };
 
 #endif /* __GAME_MODE_H__ */
