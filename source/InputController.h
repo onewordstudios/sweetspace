@@ -56,12 +56,14 @@ class InputController {
 	/** The timestamp for the beginning of the current gesture */
 	cugl::Timestamp timestamp;
 
-   protected:
 	// Input results
 	/** Whether the reset action was chosen. */
 	bool resetPressed;
-	/** The thrust produced by the player input */
-	cugl::Vec2 inputThrust;
+	/**
+	 * How much the player is trying to roll
+	 * -1 for way left, 0 for not rolling, 1 for way right
+	 */
+	float rollAmount;
 
    public:
 #pragma mark -
@@ -126,20 +128,14 @@ class InputController {
 #pragma mark -
 #pragma mark Input Results
 	/**
-	 * Returns the current input thrust.
+	 * Returns the current roll amount.
 	 *
-	 * The thrust is determined by the last input method.
+	 * On keyboard, this will be -1, 0, or 1. With accelerometer on mobile, this can take on any
+	 * value in the range [-1, 1].
 	 *
-	 * @return The input thrust
+	 * @return The roll amount. -1 is all left, 1 is all right, 0 is neutral.
 	 */
-	const cugl::Vec2& getThrust() { return inputThrust; }
-
-	/**
-	 * Returns true if the reset button was pressed.
-	 *
-	 * @return true if the reset button was pressed.
-	 */
-	bool didReset() const { return resetPressed; }
+	const float getRoll() { return rollAmount; }
 
 #pragma mark -
 #pragma mark Touch Callbacks

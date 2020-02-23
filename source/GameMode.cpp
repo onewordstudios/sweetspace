@@ -132,15 +132,15 @@ void GameMode::update(float timestep) {
 	input.update(timestep);
 
 	// Reset the game if necessary
-	if (input.didReset()) {
-		reset();
-	}
+	// if (input.didReset()) {
+	//	reset();
+	//}
 
-	Vec2 thrust = input.getThrust();
+	float thrust = input.getRoll();
 
 	// Move the ship (MODEL ONLY)
-	shipModel->setForward(thrust.y);
-	shipModel->setTurning(thrust.x);
+	shipModel->setForward(thrust);
+	shipModel->setTurning(thrust);
 	shipModel->update(timestep);
 
 	// "Drawing" code.  Move everything BUT the ship

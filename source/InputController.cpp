@@ -21,17 +21,11 @@ constexpr float RANGE_CLAMP(float x, float y, float z) { return (x < y ? y : (x 
 
 /** Historical choice from Marmalade */
 constexpr float INPUT_MAXIMUM_FORCE = 1000.0f;
-/** Adjustment factor for touch input */
-constexpr float X_ADJUST_FACTOR = 500.0f;
-constexpr float Y_ADJUST_FACTOR = 50.0f;
 /** Adjustment factor for accelerometer input (found experimentally) */
 constexpr float ACCELEROM_X_FACTOR = 5.0f;
 constexpr float ACCELEROM_Y_FACTOR = 200.0f;
 /** Adjustment factors for keyboard input */
-constexpr float KEYBOARD_INITIAL_FORCE = 10.0f;
 constexpr float KEYBOARD_FORCE_INCREMENT = 10.0f;
-constexpr float KEYBOARD_ACCELERATION = 1.2f;
-constexpr float KEYBOARD_DAMPEN_AMOUNT = 0.75f;
 
 /** Whether to active the accelerometer (this is TRICKY!) */
 constexpr bool USE_ACCELEROMETER = false;
@@ -39,8 +33,6 @@ constexpr bool USE_ACCELEROMETER = false;
 constexpr KeyCode RESET_KEY = KeyCode::R;
 /** How the time necessary to process a double tap (in milliseconds) */
 constexpr unsigned int EVENT_DOUBLE_CLICK = 400;
-/** The key for the event handlers */
-constexpr unsigned int LISTENER_KEY = 1;
 
 #pragma mark -
 #pragma mark Ship Input
@@ -57,7 +49,8 @@ InputController::InputController()
 	  forceRight(0.0f),
 	  forceUp(0.0f),
 	  forceDown(0.0f),
-	  resetPressed(false) {}
+	  resetPressed(false),
+	  rollAmount(0.0f) {}
 
 /**
  * Deactivates this input controller, releasing all listeners.
@@ -168,23 +161,24 @@ void InputController::update(float dt) {
 	keybdThrust.y = RANGE_CLAMP(keybdThrust.y, -INPUT_MAXIMUM_FORCE, INPUT_MAXIMUM_FORCE);
 
 	// Transfer to main thrust. This keeps us from "adding" to accelerometer or touch.
-	inputThrust.x = keybdThrust.x / X_ADJUST_FACTOR;
-	inputThrust.y = keybdThrust.y / Y_ADJUST_FACTOR;
+	rollAmount = 0.0f;
+	// rollAmount.x = keybdThrust.x / X_ADJUST_FACTOR;
+	// rollAmount.y = keybdThrust.y / Y_ADJUST_FACTOR;
 #else
 	// MOBILE CONTROLS
 	if (USE_ACCELEROMETER) {
 		Vec3 acc = Input::get<Accelerometer>()->getAcceleration();
 
 		// Apply to thrust directly.
-		inputThrust.x = acc.x * ACCELEROM_X_FACTOR;
-		inputThrust.y = acc.y * ACCELEROM_Y_FACTOR;
+		rollAmount.x = acc.x * ACCELEROM_X_FACTOR;
+		rollAmount.y = acc.y * ACCELEROM_Y_FACTOR;
 	}
 	// Otherwise, uses touch
 #endif
 
 	resetPressed = keyReset;
 	if (keyReset) {
-		inputThrust = Vec2::ZERO;
+		rollAmount = 0;
 	}
 
 #ifdef CU_TOUCH_SCREEN
@@ -197,7 +191,7 @@ void InputController::update(float dt) {
  */
 void InputController::clear() {
 	resetPressed = false;
-	inputThrust = Vec2::ZERO;
+	rollAmount = 0;
 	keybdThrust = Vec2::ZERO;
 
 	forceLeft = 0.0f;
@@ -244,6 +238,7 @@ void InputController::touchEndedCB(const cugl::TouchEvent& event, bool focus) {
 	finishTouch.y = RANGE_CLAMP(finishTouch.y, -INPUT_MAXIMUM_FORCE, INPUT_MAXIMUM_FORCE);
 
 	// Go ahead and apply to thrust now.
-	inputThrust.x = finishTouch.x / X_ADJUST_FACTOR;
-	inputThrust.y = finishTouch.y / -Y_ADJUST_FACTOR; // Touch coords
+	rollAmount = 0.0f;
+	// rollAmount.x = finishTouch.x / X_ADJUST_FACTOR;
+	// rollAmount.y = finishTouch.y / -Y_ADJUST_FACTOR; // Touch coords
 }
