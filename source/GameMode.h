@@ -15,8 +15,8 @@
 //  Author: Walker White
 //  Version: 1/10/18
 //
-#ifndef __SD_GAME_SCENE_H__
-#define __SD_GAME_SCENE_H__
+#ifndef __GAME_MODE_H__
+#define __GAME_MODE_H__
 #include <cugl/cugl.h>
 
 #include <vector>
@@ -122,4 +122,4 @@ class GameMode : public cugl::Scene {
 	void reset() override;
 };
 
-#endif /* __SD_GAME_SCENE_H__ */
+#endif /* __GAME_MODE_H__ */

@@ -25,6 +25,12 @@
     <Filter Include="Header Files\Models">
       <UniqueIdentifier>{14a0b81a-78d9-489f-a677-ca2b32c5431f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\SceneGraph">
+      <UniqueIdentifier>{6b167156-b45a-4b76-a67f-0ab90fad1ddd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\SceneGraph">
+      <UniqueIdentifier>{5029e710-07ae-417b-83ae-e2218861ae1c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -45,6 +51,12 @@
     <ClInclude Include="..\..\source\ShipModel.h">
       <Filter>Header Files\Models</Filter>
     </ClInclude>
+    <ClInclude Include="DonutModel.h">
+      <Filter>Header Files\Models</Filter>
+    </ClInclude>
+    <ClInclude Include="BreachModel.h">
+      <Filter>Header Files\Models</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\source\main.cpp">
@@ -63,6 +75,12 @@
       <Filter>Source Files\Modes</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\ShipModel.cpp">
+      <Filter>Source Files\Models</Filter>
+    </ClCompile>
+    <ClCompile Include="DonutModel.cpp">
+      <Filter>Source Files\Models</Filter>
+    </ClCompile>
+    <ClCompile Include="BreachModel.cpp">
       <Filter>Source Files\Models</Filter>
     </ClCompile>
   </ItemGroup>

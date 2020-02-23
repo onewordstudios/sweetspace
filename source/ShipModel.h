@@ -30,8 +30,8 @@
 //  Author: Walker White
 //  Version: 1/10/17
 //
-#ifndef __SD_SHIP_MODEL_H__
-#define __SD_SHIP_MODEL_H__
+#ifndef __SHIP_MODEL_H__
+#define __SHIP_MODEL_H__
 #include <cugl/cugl.h>
 
 constexpr float HALF_CIRCLE = 180.0f;
@@ -71,7 +71,6 @@ class ShipModel {
 	/** This macro disables the copy constructor (not allowed on models) */
 	CU_DISALLOW_COPY_AND_ASSIGN(ShipModel);
 
-   private:
 	/**
 	 * Determines the next animation frame for the ship and applies it to the sprite.
 	 *
@@ -276,4 +275,4 @@ class ShipModel {
 	void reset();
 };
 
-#endif /* __SD_SHIP_MODEL_H__ */
+#endif /* __SHIP_MODEL_H__ */
