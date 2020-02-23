@@ -21,6 +21,8 @@ constexpr float RANGE_CLAMP(float x, float y, float z) { return (x < y ? y : (x 
 
 /** Historical choice from Marmalade */
 constexpr float INPUT_MAXIMUM_FORCE = 1000.0f;
+/** Adjustment factor for touch input */
+constexpr float X_ADJUST_FACTOR = 500.0f;
 /** Adjustment factor for accelerometer input (found experimentally) */
 constexpr float ACCELEROM_X_FACTOR = 5.0f;
 constexpr float ACCELEROM_Y_FACTOR = 200.0f;
@@ -47,8 +49,7 @@ InputController::InputController()
 	  keyReset(false),
 	  forceLeft(0.0f),
 	  forceRight(0.0f),
-	  forceUp(0.0f),
-	  forceDown(0.0f),
+	  keybdThrust(0.0f),
 	  resetPressed(false),
 	  rollAmount(0.0f) {}
 
@@ -135,43 +136,25 @@ void InputController::update(float dt) {
 	} else {
 		forceRight = 0.0f;
 	}
-	if (keys->keyDown(KeyCode::ARROW_DOWN)) {
-		forceDown += KEYBOARD_FORCE_INCREMENT;
-	} else {
-		forceDown = 0.0f;
-	}
-	if (keys->keyDown(KeyCode::ARROW_UP)) {
-		forceUp += KEYBOARD_FORCE_INCREMENT;
-	} else {
-		forceUp = 0.0f;
-	}
 
 	// Clamp everything so it does not fly off to infinity.
 	forceLeft = (forceLeft > INPUT_MAXIMUM_FORCE ? INPUT_MAXIMUM_FORCE : forceLeft);
 	forceRight = (forceRight > INPUT_MAXIMUM_FORCE ? INPUT_MAXIMUM_FORCE : forceRight);
-	forceDown = (forceDown > INPUT_MAXIMUM_FORCE ? INPUT_MAXIMUM_FORCE : forceDown);
-	forceUp = (forceUp > INPUT_MAXIMUM_FORCE ? INPUT_MAXIMUM_FORCE : forceUp);
 
 	// Update the keyboard thrust.  Result is cumulative.
-	keybdThrust.x += forceRight;
-	keybdThrust.x -= forceLeft;
-	keybdThrust.y += forceUp;
-	keybdThrust.y -= forceDown;
-	keybdThrust.x = RANGE_CLAMP(keybdThrust.x, -INPUT_MAXIMUM_FORCE, INPUT_MAXIMUM_FORCE);
-	keybdThrust.y = RANGE_CLAMP(keybdThrust.y, -INPUT_MAXIMUM_FORCE, INPUT_MAXIMUM_FORCE);
+	keybdThrust += forceRight;
+	keybdThrust -= forceLeft;
+	keybdThrust = RANGE_CLAMP(keybdThrust, -INPUT_MAXIMUM_FORCE, INPUT_MAXIMUM_FORCE);
 
 	// Transfer to main thrust. This keeps us from "adding" to accelerometer or touch.
-	rollAmount = 0.0f;
-	// rollAmount.x = keybdThrust.x / X_ADJUST_FACTOR;
-	// rollAmount.y = keybdThrust.y / Y_ADJUST_FACTOR;
+	rollAmount = keybdThrust;
 #else
 	// MOBILE CONTROLS
 	if (USE_ACCELEROMETER) {
 		Vec3 acc = Input::get<Accelerometer>()->getAcceleration();
 
 		// Apply to thrust directly.
-		rollAmount.x = acc.x * ACCELEROM_X_FACTOR;
-		rollAmount.y = acc.y * ACCELEROM_Y_FACTOR;
+		rollAmount = acc.x * ACCELEROM_X_FACTOR;
 	}
 	// Otherwise, uses touch
 #endif
@@ -191,13 +174,11 @@ void InputController::update(float dt) {
  */
 void InputController::clear() {
 	resetPressed = false;
-	rollAmount = 0;
-	keybdThrust = Vec2::ZERO;
+	rollAmount = 0.0f;
+	keybdThrust = 0.0f;
 
 	forceLeft = 0.0f;
 	forceRight = 0.0f;
-	forceUp = 0.0f;
-	forceDown = 0.0f;
 
 	dtouch = Vec2::ZERO;
 	timestamp.mark();
@@ -238,7 +219,5 @@ void InputController::touchEndedCB(const cugl::TouchEvent& event, bool focus) {
 	finishTouch.y = RANGE_CLAMP(finishTouch.y, -INPUT_MAXIMUM_FORCE, INPUT_MAXIMUM_FORCE);
 
 	// Go ahead and apply to thrust now.
-	rollAmount = 0.0f;
-	// rollAmount.x = finishTouch.x / X_ADJUST_FACTOR;
-	// rollAmount.y = finishTouch.y / -Y_ADJUST_FACTOR; // Touch coords
+	rollAmount = finishTouch.x / X_ADJUST_FACTOR;
 }
