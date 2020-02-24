@@ -4,8 +4,8 @@
 
 #include <vector>
 
+#include "DonutModel.h"
 #include "InputController.h"
-#include "ShipModel.h"
 
 class GameGraphRoot : public cugl::Scene {
    protected:
@@ -13,8 +13,8 @@ class GameGraphRoot : public cugl::Scene {
 	std::shared_ptr<cugl::AssetManager> assets;
 
 	// VIEW
-	/** Filmstrip representing the animated ship */
-	std::shared_ptr<cugl::AnimationNode> shipNode;
+	/** Filmstrip representing the animated donut */
+	std::shared_ptr<cugl::AnimationNode> donutNode;
 	/** Label for on-screen coordinate HUD */
 	std::shared_ptr<cugl::Label> coordHUD;
 	/** Node to hold all of our graphics. Necesary for resolution indepedence. */
@@ -26,15 +26,15 @@ class GameGraphRoot : public cugl::Scene {
 
 	// MODEL
 	// A page-out could dispose of the view as long as it just has this.
-	/** The current coordinates of the ship */
-	std::shared_ptr<ShipModel> shipModel;
+	/** The current coordinates of the donut */
+	std::shared_ptr<DonutModel> donutModel;
 
 	/**
 	 * Returns an informative string for the position
 	 *
-	 * This function is for writing the current ship position to the HUD.
+	 * This function is for writing the current donut position to the HUD.
 	 *
-	 * @param coords The current ship coordinates
+	 * @param coords The current donut coordinates
 	 *
 	 * @return an informative string for the position
 	 */
@@ -93,6 +93,6 @@ class GameGraphRoot : public cugl::Scene {
 	 */
 	void reset() override;
 
-	std::shared_ptr<ShipModel> GameGraphRoot::getShipModel();
+	std::shared_ptr<DonutModel> GameGraphRoot::getDonutModel();
 };
 #endif /* __GAME_GRAPH_ROOT_H__ */

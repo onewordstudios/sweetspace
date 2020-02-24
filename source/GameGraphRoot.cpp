@@ -54,13 +54,13 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 	allSpace = assets->get<Node>("game_field");
 	farSpace = assets->get<Node>("game_field_far");
 	nearSpace = assets->get<Node>("game_field_near");
-	shipNode = std::dynamic_pointer_cast<AnimationNode>(assets->get<Node>("game_field_player"));
+	donutNode = std::dynamic_pointer_cast<AnimationNode>(assets->get<Node>("game_field_player"));
 	coordHUD = std::dynamic_pointer_cast<Label>(assets->get<Node>("game_hud"));
 
-	// Create the ship model
-	Vec2 shipPos = shipNode->getPosition();
-	shipModel = ShipModel::alloc(shipPos);
-	shipModel->setSprite(shipNode);
+	// Create the donut model
+	Vec2 donutPos = donutNode->getPosition();
+	donutModel = DonutModel::alloc(donutPos);
+	donutModel->setSprite(donutNode);
 
 	addChild(scene);
 	return true;
@@ -75,8 +75,8 @@ void GameGraphRoot::dispose() {
 		allSpace = nullptr;
 		farSpace = nullptr;
 		nearSpace = nullptr;
-		shipNode = nullptr;
-		shipModel = nullptr;
+		donutNode = nullptr;
+		donutModel = nullptr;
 		_active = false;
 	}
 }
@@ -88,8 +88,8 @@ void GameGraphRoot::dispose() {
  * Resets the status of the game so that we can play again.
  */
 void GameGraphRoot::reset() {
-	// Reset the ships and input
-	shipModel->reset();
+	// Reset the donuts and input
+	donutModel->reset();
 
 	// Reset the parallax
 	Vec2 position = farSpace->getPosition();
@@ -110,40 +110,37 @@ void GameGraphRoot::reset() {
  * @param timestep  The amount of time (in seconds) since the last frame
  */
 void GameGraphRoot::update(float timestep) {
-	// Reset the game if necessary
-	// if (input.didReset()) {
-	//	reset();
-	//}
-
-	// "Drawing" code.  Move everything BUT the ship
+	// "Drawing" code.  Move everything BUT the donut
 	// Update the HUD
-	coordHUD->setText(positionText(shipModel->getPosition()));
+	coordHUD->setText(positionText(donutModel->getPosition()));
 
-	Vec2 offset = shipModel->getPosition() - farSpace->getPosition();
+	Vec2 offset = donutModel->getPosition() - farSpace->getPosition();
 
 	// Anchor points are in texture coordinates (0 to 1). Scale it.
 	offset.x = offset.x / allSpace->getContentSize().width;
 	offset.y = offset.y / allSpace->getContentSize().height;
 
+	float angle = donutModel->getAngle();
+
 	// Reanchor the node at the center of the screen and rotate about center.
 	Vec2 position = farSpace->getPosition();
 	farSpace->setAnchor(offset * PARALLAX_AMT + Vec2::ANCHOR_CENTER);
 	farSpace->setPosition(position); // Reseting the anchor changes the position
-	farSpace->setAngle(shipModel->getAngle());
+	farSpace->setAngle(donutModel->getAngle());
 
 	// Reanchor the node at the center of the screen and rotate about center.
 	position = nearSpace->getPosition();
 	nearSpace->setAnchor(offset + Vec2::ANCHOR_CENTER);
 	nearSpace->setPosition(position); // Reseting the anchor changes the position
-	nearSpace->setAngle(shipModel->getAngle());
+	nearSpace->setAngle(donutModel->getAngle());
 }
 
 /**
  * Returns an informative string for the position
  *
- * This function is for writing the current ship position to the HUD.
+ * This function is for writing the current donut position to the HUD.
  *
- * @param coords The current ship coordinates
+ * @param coords The current donut coordinates
  *
  * @return an informative string for the position
  */
@@ -155,7 +152,7 @@ std::string GameGraphRoot::positionText(const cugl::Vec2& coords) {
 }
 
 /**
- * Returns the ShipMode
+ * Returns the donutModel
  *
  */
-std::shared_ptr<ShipModel> GameGraphRoot::getShipModel() { return shipModel; }
+std::shared_ptr<DonutModel> GameGraphRoot::getDonutModel() { return donutModel; }

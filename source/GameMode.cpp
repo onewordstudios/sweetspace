@@ -61,7 +61,7 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 	sgRoot.init(assets);
 
 	// Create the ship model
-	shipModel = sgRoot.getShipModel();
+	donutModel = sgRoot.getDonutModel();
 
 	return true;
 }
@@ -72,7 +72,7 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 void GameMode::dispose() {
 	input.dispose();
 	sgRoot.dispose();
-	shipModel = nullptr;
+	donutModel = nullptr;
 }
 
 #pragma mark -
@@ -83,7 +83,7 @@ void GameMode::dispose() {
  */
 void GameMode::reset() {
 	// Reset the ships and input
-	shipModel->reset();
+	donutModel->reset();
 	sgRoot.reset();
 	input.clear();
 }
@@ -106,9 +106,8 @@ void GameMode::update(float timestep) {
 	float thrust = input.getRoll();
 
 	// Move the ship (MODEL ONLY)
-	shipModel->setForward(thrust);
-	shipModel->setTurning(thrust);
-	shipModel->update(timestep);
+	donutModel->setTurning(thrust);
+	donutModel->update(timestep);
 
 	sgRoot.update(timestep);
 }

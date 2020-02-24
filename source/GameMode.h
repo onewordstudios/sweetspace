@@ -45,7 +45,7 @@ class GameMode {
 	// MODEL
 	// A page-out could dispose of the view as long as it just has this.
 	/** The current coordinates of the ship */
-	std::shared_ptr<ShipModel> shipModel;
+	std::shared_ptr<DonutModel> donutModel;
 
    public:
 #pragma mark -
