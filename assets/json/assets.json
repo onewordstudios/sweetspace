@@ -46,7 +46,7 @@
                             "type": "Image",
                             "data": {
                                 "texture":  "space",
-                                "position": [1280,1280],
+                                "position": [1280,1920],
                                 "polygon":  [0,0,0,2560,2560,2560,2560,2560,2560,0,0,0],
                                 "anchor":   [0.5,0.5]
                             }
@@ -55,7 +55,7 @@
                             "type": "Node",
                             "data": {
                                 "size":     [2560,2560],
-                                "position": [1280,1280],
+                                "position": [1280,1920],
                                 "anchor":   [0.5,0.5]
                             },
                             "children": {

@@ -120,19 +120,19 @@ void GameGraphRoot::update(float timestep) {
 	offset.x = offset.x / allSpace->getContentSize().width;
 	offset.y = offset.y / allSpace->getContentSize().height;
 
-	float angle = donutModel->getAngle();
+	float angle = 2 * M_PI - donutModel->getAngle();
 
 	// Reanchor the node at the center of the screen and rotate about center.
 	Vec2 position = farSpace->getPosition();
-	farSpace->setAnchor(offset * PARALLAX_AMT + Vec2::ANCHOR_CENTER);
+	farSpace->setAnchor(Vec2::ANCHOR_CENTER);
 	farSpace->setPosition(position); // Reseting the anchor changes the position
-	farSpace->setAngle(donutModel->getAngle());
+	farSpace->setAngle(angle);
 
 	// Reanchor the node at the center of the screen and rotate about center.
 	position = nearSpace->getPosition();
 	nearSpace->setAnchor(offset + Vec2::ANCHOR_CENTER);
 	nearSpace->setPosition(position); // Reseting the anchor changes the position
-	nearSpace->setAngle(donutModel->getAngle());
+	nearSpace->setAngle(angle);
 }
 
 /**
@@ -146,8 +146,7 @@ void GameGraphRoot::update(float timestep) {
  */
 std::string GameGraphRoot::positionText(const cugl::Vec2& coords) {
 	stringstream ss;
-	constexpr unsigned int COORD_SHIFT = 10;
-	ss << "Coords: (" << (int)coords.x / COORD_SHIFT << "," << (int)coords.y / COORD_SHIFT << ")";
+	ss << "Angle: (" << (float)donutModel->getAngle() * 180 / (M_PI) << ")";
 	return ss.str();
 }
 

@@ -23,7 +23,6 @@
 
 #include "GameGraphRoot.h"
 #include "InputController.h"
-#include "ShipModel.h"
 
 /**
  * This class is the primary gameplay constroller for the demo.

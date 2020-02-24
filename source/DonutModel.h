@@ -38,10 +38,6 @@ class DonutModel {
    protected:
 	/** INITIAL position of the ship in world space */
 	cugl::Vec2 initial;
-	/** Position of the ship in world space */
-	cugl::Vec2 position;
-	/** Current ship velocity */
-	cugl::Vec2 velocity;
 	/** Angle of the ship in the world space */
 	float angle;
 	/** Current turning thrust (stored to facilitate decay) */
@@ -134,22 +130,13 @@ class DonutModel {
 	// SHORT METHODS CAN BE IN-LINED IN C++
 
 	/**
-	 * Returns the ship velocity as a reference.
-	 *
-	 * This allows us to modify the value.
-	 *
-	 * @return the ship velocity as a reference.
-	 */
-	cugl::Vec2& getVelocity() { return velocity; }
-
-	/**
 	 * Returns the ship position as a reference.
 	 *
 	 * This allows us to modify the value.
 	 *
 	 * @return the ship position as a reference.
 	 */
-	cugl::Vec2& getPosition() { return position; }
+	cugl::Vec2& getPosition() { return initial; }
 
 	/**
 	 * Returns the current angle of the ship in radians.

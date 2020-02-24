@@ -41,10 +41,6 @@ constexpr unsigned int FULL_CIRCLE = 360;
 
 /** The max turn (in degrees) per frame */
 constexpr float SHIP_MAX_TURN = 1.0f;
-/** The max forward speed */
-constexpr float SHIP_MAX_SPEED = 10.0f;
-/** Factor to multiply the forward thrust */
-constexpr float SHIP_THRUST_FACTOR = 0.4f;
 
 /** Compute cos (in degrees) from 90 degrees */
 #define DCOS_90(a) (cos(M_PI * (a + 90.0f) / 180.0f)) // NOLINT Walker's old code; no easy fix
@@ -69,7 +65,6 @@ constexpr float RANGE_CLAMP(float x, float y, float z) { return (x < y ? y : (x 
  */
 bool DonutModel::init(const Vec2& pos) {
 	initial = pos;
-	position = pos;
 	return true;
 }
 
@@ -94,7 +89,6 @@ void DonutModel::setSprite(const std::shared_ptr<cugl::AnimationNode>& value) {
 	sprite = value;
 	if (sprite != nullptr) {
 		sprite->setFrame(SHIP_IMG_FLAT);
-		sprite->setPosition(position);
 		sprite->setAnchor(Vec2::ANCHOR_CENTER);
 	}
 }
@@ -119,9 +113,6 @@ void DonutModel::update(float timestep) {
 	angle += turning; // INVARIANT: -360 < ang < 720
 	if (angle > FULL_CIRCLE) angle -= FULL_CIRCLE;
 	if (angle < 0) angle += FULL_CIRCLE;
-
-	// Move the ship
-	position += velocity;
 }
 
 /**
@@ -170,8 +161,6 @@ void DonutModel::advanceFrame() {
  * Resets the ship back to its original settings
  */
 void DonutModel::reset() {
-	position = initial;
-	velocity = Vec2::ZERO;
 	angle = 0.0f;
 	turning = 0.0f;
 	if (sprite != nullptr) {
