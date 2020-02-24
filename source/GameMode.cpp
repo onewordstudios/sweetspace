@@ -56,14 +56,12 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 		return false;
 	}
 
-	// Start up the input handler
-	this->assets = assets;
 	input.init();
 
-	// Acquire the scene built by the asset loader and resize it the scene
-	auto scene = assets->get<Node>("game");
-	scene->setContentSize(dimen);
-	scene->doLayout(); // Repositions the HUD
+	sgRoot.init(assets);
+
+	// Create the ship model
+	shipModel = sgRoot.getShipModel();
 
 	return true;
 }
@@ -73,6 +71,7 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
  */
 void GameMode::dispose() {
 	input.dispose();
+	sgRoot.dispose();
 	shipModel = nullptr;
 }
 
@@ -85,6 +84,7 @@ void GameMode::dispose() {
 void GameMode::reset() {
 	// Reset the ships and input
 	shipModel->reset();
+	sgRoot.reset();
 	input.clear();
 }
 
@@ -109,4 +109,11 @@ void GameMode::update(float timestep) {
 	shipModel->setForward(thrust);
 	shipModel->setTurning(thrust);
 	shipModel->update(timestep);
+
+	sgRoot.update(timestep);
 }
+
+/**
+ * Draws the game.
+ */
+void GameMode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch) { sgRoot.render(batch); }

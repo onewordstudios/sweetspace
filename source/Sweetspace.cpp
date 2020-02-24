@@ -1,4 +1,4 @@
-//
+﻿//
 //  SDApp.cpp
 //  Ship Demo
 //
@@ -115,6 +115,6 @@ void Sweetspace::draw() {
 	if (!loaded) {
 		loading.render(batch);
 	} else {
-		gameplay.render(batch);
+		gameplay.draw(batch);
 	}
 }

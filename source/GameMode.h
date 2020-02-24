@@ -34,16 +34,13 @@
  */
 class GameMode {
    protected:
-	/** The asset manager for this game mode. */
-	std::shared_ptr<cugl::AssetManager> assets;
-
 	// CONTROLLERS
 	/** Controller for abstracting out input across multiple platforms */
 	InputController input;
 
 	// VIEW
 	/** Scenegraph root node */
-	GameGraphRoot sg_root;
+	GameGraphRoot sgRoot;
 
 	// MODEL
 	// A page-out could dispose of the view as long as it just has this.
@@ -102,6 +99,11 @@ class GameMode {
 	 * Resets the status of the game so that we can play again.
 	 */
 	void reset();
+
+	/**
+	 * Draws the game.
+	 */
+	void draw(const std::shared_ptr<cugl::SpriteBatch>& batch);
 };
 
 #endif /* __GAME_MODE_H__ */

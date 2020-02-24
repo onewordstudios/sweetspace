@@ -92,5 +92,7 @@ class GameGraphRoot : public cugl::Scene {
 	 * Resets the status of the game so that we can play again.
 	 */
 	void reset() override;
+
+	std::shared_ptr<ShipModel> GameGraphRoot::getShipModel();
 };
 #endif /* __GAME_GRAPH_ROOT_H__ */

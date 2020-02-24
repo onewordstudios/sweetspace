@@ -38,8 +38,7 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 	// Initialize the scene to a locked width
 	if (assets == nullptr) {
 		return false;
-	}
-	else if (!Scene::init(dimen)) {
+	} else if (!Scene::init(dimen)) {
 		return false;
 	}
 
@@ -111,12 +110,10 @@ void GameGraphRoot::reset() {
  * @param timestep  The amount of time (in seconds) since the last frame
  */
 void GameGraphRoot::update(float timestep) {
-
 	// Reset the game if necessary
 	// if (input.didReset()) {
 	//	reset();
 	//}
-
 
 	// "Drawing" code.  Move everything BUT the ship
 	// Update the HUD
@@ -156,3 +153,9 @@ std::string GameGraphRoot::positionText(const cugl::Vec2& coords) {
 	ss << "Coords: (" << (int)coords.x / COORD_SHIFT << "," << (int)coords.y / COORD_SHIFT << ")";
 	return ss.str();
 }
+
+/**
+ * Returns the ShipMode
+ *
+ */
+std::shared_ptr<ShipModel> GameGraphRoot::getShipModel() { return shipModel; }
