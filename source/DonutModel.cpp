@@ -13,6 +13,10 @@ using namespace cugl;
 constexpr float DONUT_MAX_SPEED = 10.0f;
 /** Factor to multiply the forward thrust */
 constexpr float DONUT_THRUST_FACTOR = 0.4f;
+constexpr unsigned int FULL_CIRCLE = 360;
+
+/** The max turn (in degrees) per frame */
+constexpr float SHIP_MAX_TURN = 1.0f;
 
 /** Compute cos (in degrees) from 90 degrees */
 #define DCOS_90(a) (cos(M_PI * (a + 90.0f) / 180.0f)) // NOLINT Walker's old code; no easy fix
@@ -64,6 +68,7 @@ void DonutModel::setSprite(const std::shared_ptr<cugl::AnimationNode>& value) {
 	if (sprite != nullptr) {
 //		sprite->setFrame(SHIP_IMG_FLAT);
 		sprite->setPosition(position);
+		sprite->setFrame(SHIP_IMG_FLAT);
 		sprite->setAnchor(Vec2::ANCHOR_CENTER);
 	}
 }
@@ -72,6 +77,7 @@ void DonutModel::setSprite(const std::shared_ptr<cugl::AnimationNode>& value) {
  * Updates the state of the model
  *
  * This method moves the donut forward, dampens the forces (if necessary)
+ * This method moves the donut
  * and updates the sprite if it exists.
  *
  * @param timestep  Time elapsed since last called.
@@ -80,6 +86,7 @@ void DonutModel::update(float timestep) {
 	// Adjust the active forces.
 	forward = RANGE_CLAMP(forward, -DONUT_MAX_SPEED, DONUT_MAX_SPEED);
 //	turning = RANGE_CLAMP(turning, -SHIP_MAX_TURN, SHIP_MAX_TURN);
+	turning = RANGE_CLAMP(turning, -SHIP_MAX_TURN, SHIP_MAX_TURN);
 
 	if (sprite != nullptr) {
 		advanceFrame();
@@ -100,6 +107,10 @@ void DonutModel::update(float timestep) {
 
 	// Move the donut
 	position += velocity;
+	// Adjust the angle by the change in angle
+	angle += turning; // INVARIANT: -360 < ang < 720
+	if (angle > FULL_CIRCLE) angle -= FULL_CIRCLE;
+	if (angle < 0) angle += FULL_CIRCLE;
 }
 
 /**
@@ -140,6 +151,34 @@ void DonutModel::advanceFrame() {
 //			frame--;
 //		}
 //	}
+	// Process the donut turning.
+	if (turning < 0.0f) {
+		unsigned int offset =
+			(unsigned int)((turning / SHIP_MAX_TURN) * (SHIP_IMG_FLAT - SHIP_IMG_RIGHT));
+		unsigned int goal = SHIP_IMG_FLAT + offset;
+		if (frame != goal) {
+			frame += (frame < goal ? 1 : -1);
+		}
+		if (frame == SHIP_IMG_FLAT) {
+			turning = 0.0f;
+		}
+	} else if (turning > 0.0f) {
+		unsigned int offset =
+			(unsigned int)((turning / SHIP_MAX_TURN) * (SHIP_IMG_FLAT - SHIP_IMG_LEFT));
+		unsigned int goal = SHIP_IMG_FLAT - offset;
+		if (frame != goal) {
+			frame += (frame < goal ? 1 : -1);
+		}
+		if (frame == SHIP_IMG_FLAT) {
+			turning = 0.0f;
+		}
+	} else {
+		if (frame < SHIP_IMG_FLAT) {
+			frame++;
+		} else if (frame > SHIP_IMG_FLAT) {
+			frame--;
+		}
+	}
 
 	sprite->setFrame((int)frame);
 }
@@ -155,4 +194,9 @@ void DonutModel::reset() {
 //	if (sprite != nullptr) {
 //		sprite->setFrame(SHIP_IMG_FLAT);
 //	}
+	angle = 0.0f;
+	turning = 0.0f;
+	if (sprite != nullptr) {
+		sprite->setFrame(SHIP_IMG_FLAT);
+	}
 }
