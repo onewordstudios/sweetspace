@@ -36,6 +36,9 @@ constexpr KeyCode RESET_KEY = KeyCode::R;
 /** How the time necessary to process a double tap (in milliseconds) */
 constexpr unsigned int EVENT_DOUBLE_CLICK = 400;
 
+/** The key for the event handlers */
+constexpr unsigned int LISTENER_KEY = 1;
+
 #pragma mark -
 #pragma mark Ship Input
 /**
