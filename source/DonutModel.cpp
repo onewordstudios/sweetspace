@@ -66,7 +66,6 @@ void DonutModel::dispose() { sprite = nullptr; }
 void DonutModel::setSprite(const std::shared_ptr<cugl::AnimationNode>& value) {
 	sprite = value;
 	if (sprite != nullptr) {
-//		sprite->setFrame(SHIP_IMG_FLAT);
 		sprite->setPosition(position);
 		sprite->setFrame(SHIP_IMG_FLAT);
 		sprite->setAnchor(Vec2::ANCHOR_CENTER);
@@ -85,7 +84,6 @@ void DonutModel::setSprite(const std::shared_ptr<cugl::AnimationNode>& value) {
 void DonutModel::update(float timestep) {
 	// Adjust the active forces.
 	forward = RANGE_CLAMP(forward, -DONUT_MAX_SPEED, DONUT_MAX_SPEED);
-//	turning = RANGE_CLAMP(turning, -SHIP_MAX_TURN, SHIP_MAX_TURN);
 	turning = RANGE_CLAMP(turning, -SHIP_MAX_TURN, SHIP_MAX_TURN);
 
 	if (sprite != nullptr) {
@@ -122,35 +120,6 @@ void DonutModel::update(float timestep) {
 void DonutModel::advanceFrame() {
 	// Our animation depends on the current frame.
 	unsigned int frame = sprite->getFrame();
-
-	// Process the ship turning.
-//	if (turning < 0.0f) {
-//		unsigned int offset =
-//			(unsigned int)((turning / SHIP_MAX_TURN) * (SHIP_IMG_FLAT - SHIP_IMG_RIGHT));
-//		unsigned int goal = SHIP_IMG_FLAT + offset;
-//		if (frame != goal) {
-//			frame += (frame < goal ? 1 : -1);
-//		}
-//		if (frame == SHIP_IMG_FLAT) {
-//			turning = 0.0f;
-//		}
-//	} else if (turning > 0.0f) {
-//		unsigned int offset =
-//			(unsigned int)((turning / SHIP_MAX_TURN) * (SHIP_IMG_FLAT - SHIP_IMG_LEFT));
-//		unsigned int goal = SHIP_IMG_FLAT - offset;
-//		if (frame != goal) {
-//			frame += (frame < goal ? 1 : -1);
-//		}
-//		if (frame == SHIP_IMG_FLAT) {
-//			turning = 0.0f;
-//		}
-//	} else {
-//		if (frame < SHIP_IMG_FLAT) {
-//			frame++;
-//		} else if (frame > SHIP_IMG_FLAT) {
-//			frame--;
-//		}
-//	}
 	// Process the donut turning.
 	if (turning < 0.0f) {
 		unsigned int offset =
