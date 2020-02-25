@@ -1,4 +1,4 @@
-//
+﻿//
 //  SDGameScene.h
 //  Ship Demo
 //
@@ -31,9 +31,6 @@ using namespace std;
 /** This is adjusted by screen aspect ratio to get the height */
 constexpr unsigned int SCENE_WIDTH = 1024;
 
-/** The parallax for each layer */
-constexpr float PARALLAX_AMT = 0.1f;
-
 #pragma mark -
 #pragma mark Constructors
 
@@ -54,32 +51,21 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 	dimen *= SCENE_WIDTH / dimen.width; // Lock the game to a reasonable resolution
 	if (assets == nullptr) {
 		return false;
-	} else if (!Scene::init(dimen)) {
-		return false;
 	}
 
-	// Start up the input handler
-	this->assets = assets;
 	input.init();
 
-	// Acquire the scene built by the asset loader and resize it the scene
-	auto scene = assets->get<Node>("game");
-	scene->setContentSize(dimen);
-	scene->doLayout(); // Repositions the HUD
+	sgRoot.init(assets);
 
-	// Get the scene components.
-	allSpace = assets->get<Node>("game_field");
-	farSpace = assets->get<Node>("game_field_far");
-	nearSpace = assets->get<Node>("game_field_near");
-	shipNode = std::dynamic_pointer_cast<AnimationNode>(assets->get<Node>("game_field_player"));
-	coordHUD = std::dynamic_pointer_cast<Label>(assets->get<Node>("game_hud"));
-
-	// Create the ship model
-	Vec2 shipPos = shipNode->getPosition();
-	shipModel = ShipModel::alloc(shipPos);
-	shipModel->setSprite(shipNode);
-
-	addChild(scene);
+	// The following code creates two breaches for the sake of demonstration.
+	Vec2 donutPos = sgRoot.getDonutNode()->getPosition();
+	donutModel = DonutModel::alloc(donutPos);
+	donutModel->setSprite(std::dynamic_pointer_cast<AnimationNode>(sgRoot.getDonutNode()));
+	breaches.push_back(BreachModel::alloc());
+	breaches.push_back(BreachModel::alloc());
+	sgRoot.setBreaches(breaches);
+	breaches.at(1)->setAngle(0.785);
+	sgRoot.setDonutModel(donutModel);
 	return true;
 }
 
@@ -87,16 +73,9 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
  * Disposes of all (non-static) resources allocated to this mode.
  */
 void GameMode::dispose() {
-	if (_active) {
-		removeAllChildren();
-		input.dispose();
-		allSpace = nullptr;
-		farSpace = nullptr;
-		nearSpace = nullptr;
-		shipNode = nullptr;
-		shipModel = nullptr;
-		_active = false;
-	}
+	input.dispose();
+	sgRoot.dispose();
+	donutModel = nullptr;
 }
 
 #pragma mark -
@@ -106,19 +85,9 @@ void GameMode::dispose() {
  * Resets the status of the game so that we can play again.
  */
 void GameMode::reset() {
-	// Reset the ships and input
-	shipModel->reset();
+	donutModel->reset();
+	sgRoot.reset();
 	input.clear();
-
-	// Reset the parallax
-	Vec2 position = farSpace->getPosition();
-	farSpace->setAnchor(Vec2::ANCHOR_CENTER);
-	farSpace->setPosition(position);
-	farSpace->setAngle(0.0f);
-	position = nearSpace->getPosition();
-	nearSpace->setAnchor(Vec2::ANCHOR_CENTER);
-	nearSpace->setPosition(position);
-	nearSpace->setAngle(0.0f);
 }
 
 /**
@@ -138,46 +107,14 @@ void GameMode::update(float timestep) {
 
 	float thrust = input.getRoll();
 
-	// Move the ship (MODEL ONLY)
-	shipModel->setForward(thrust);
-	shipModel->setTurning(thrust);
-	shipModel->update(timestep);
+	// Move the donut (MODEL ONLY)
+	donutModel->setTurning(thrust);
+	donutModel->update(timestep);
 
-	// "Drawing" code.  Move everything BUT the ship
-	// Update the HUD
-	coordHUD->setText(positionText(shipModel->getPosition()));
-
-	Vec2 offset = shipModel->getPosition() - farSpace->getPosition();
-
-	// Anchor points are in texture coordinates (0 to 1). Scale it.
-	offset.x = offset.x / allSpace->getContentSize().width;
-	offset.y = offset.y / allSpace->getContentSize().height;
-
-	// Reanchor the node at the center of the screen and rotate about center.
-	Vec2 position = farSpace->getPosition();
-	farSpace->setAnchor(offset * PARALLAX_AMT + Vec2::ANCHOR_CENTER);
-	farSpace->setPosition(position); // Reseting the anchor changes the position
-	farSpace->setAngle(shipModel->getAngle());
-
-	// Reanchor the node at the center of the screen and rotate about center.
-	position = nearSpace->getPosition();
-	nearSpace->setAnchor(offset + Vec2::ANCHOR_CENTER);
-	nearSpace->setPosition(position); // Reseting the anchor changes the position
-	nearSpace->setAngle(shipModel->getAngle());
+	sgRoot.update(timestep);
 }
 
 /**
- * Returns an informative string for the position
- *
- * This function is for writing the current ship position to the HUD.
- *
- * @param coords The current ship coordinates
- *
- * @return an informative string for the position
+ * Draws the game.
  */
-std::string GameMode::positionText(const cugl::Vec2& coords) {
-	stringstream ss;
-	constexpr unsigned int COORD_SHIFT = 10;
-	ss << "Coords: (" << (int)coords.x / COORD_SHIFT << "," << (int)coords.y / COORD_SHIFT << ")";
-	return ss.str();
-}
+void GameMode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch) { sgRoot.render(batch); }

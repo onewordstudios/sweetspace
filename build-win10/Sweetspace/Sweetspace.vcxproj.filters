@@ -51,9 +51,6 @@
     <ClInclude Include="..\..\source\LoadingMode.h">
       <Filter>Header Files\Modes</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\source\ShipModel.h">
-      <Filter>Header Files\Models</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\source\GameGraphRoot.h">
       <Filter>Header Files\SceneGraph</Filter>
     </ClInclude>
@@ -82,9 +79,6 @@
     </ClCompile>
     <ClCompile Include="..\..\source\LoadingMode.cpp">
       <Filter>Source Files\Modes</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\ShipModel.cpp">
-      <Filter>Source Files\Models</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\GMController.cpp">
       <Filter>Source Files\Controllers</Filter>

@@ -13,6 +13,9 @@
         },
         "planet2": {
             "file":   "textures/planet2.png"
+        },
+        "donut": {
+            "file":   "textures/donut.png"
         }
 	},
 	"fonts": {
@@ -46,7 +49,7 @@
                             "type": "Image",
                             "data": {
                                 "texture":  "space",
-                                "position": [1280,1280],
+                                "position": [1280,1920],
                                 "polygon":  [0,0,0,2560,2560,2560,2560,2560,2560,0,0,0],
                                 "anchor":   [0.5,0.5]
                             }
@@ -55,26 +58,17 @@
                             "type": "Node",
                             "data": {
                                 "size":     [2560,2560],
-                                "position": [1280,1280],
+                                "position": [1280,1920],
                                 "anchor":   [0.5,0.5]
                             },
                             "children": {
                                 "planet_a": {
                                     "type": "Image",
                                     "data": {
-                                        "texture":  "planet1",
+                                        "texture":  "donut",
                                         "anchor":   [0.5,0.5],
-                                        "position": [955,1080],
-                                        "scale":    0.25
-                                    }
-                                },
-                                "planet_b": {
-                                    "type": "Image",
-                                    "data": {
-                                        "texture":  "planet2",
-                                        "anchor":   [0.5,0.5],
-                                        "position": [1605,1480],
-                                        "scale":    0.25
+                                        "position": [1270,640],
+                                        "scale":    2.0
                                     }
                                 }
                             }
