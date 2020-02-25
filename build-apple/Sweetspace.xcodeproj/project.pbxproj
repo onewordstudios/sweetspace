@@ -10,9 +10,6 @@
 		DF3B744C2403A46B0063552F /* DonutModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DF3B74372403A46A0063552F /* DonutModel.cpp */; };
 		DF3B744D2403A46B0063552F /* DonutModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DF3B74372403A46A0063552F /* DonutModel.cpp */; };
 		DF3B744E2403A46B0063552F /* DonutModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DF3B74372403A46A0063552F /* DonutModel.cpp */; };
-		DF3B744F2403A46B0063552F /* ShipModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DF3B743E2403A46A0063552F /* ShipModel.cpp */; };
-		DF3B74502403A46B0063552F /* ShipModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DF3B743E2403A46A0063552F /* ShipModel.cpp */; };
-		DF3B74512403A46B0063552F /* ShipModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DF3B743E2403A46A0063552F /* ShipModel.cpp */; };
 		DF3B74522403A46B0063552F /* InputController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DF3B74402403A46B0063552F /* InputController.cpp */; };
 		DF3B74532403A46B0063552F /* InputController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DF3B74402403A46B0063552F /* InputController.cpp */; };
 		DF3B74542403A46B0063552F /* InputController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DF3B74402403A46B0063552F /* InputController.cpp */; };
@@ -134,7 +131,6 @@
 		DF3B743B2403A46A0063552F /* GameMode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameMode.h; sourceTree = "<group>"; };
 		DF3B743C2403A46A0063552F /* InputController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InputController.h; sourceTree = "<group>"; };
 		DF3B743D2403A46A0063552F /* GameGraphRoot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameGraphRoot.h; sourceTree = "<group>"; };
-		DF3B743E2403A46A0063552F /* ShipModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ShipModel.cpp; sourceTree = "<group>"; };
 		DF3B743F2403A46B0063552F /* BreachModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BreachModel.h; sourceTree = "<group>"; };
 		DF3B74402403A46B0063552F /* InputController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = InputController.cpp; sourceTree = "<group>"; };
 		DF3B74412403A46B0063552F /* DonutModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DonutModel.h; sourceTree = "<group>"; };
@@ -142,7 +138,6 @@
 		DF3B74432403A46B0063552F /* LoadingMode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoadingMode.h; sourceTree = "<group>"; };
 		DF3B74442403A46B0063552F /* GMController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GMController.cpp; sourceTree = "<group>"; };
 		DF3B74452403A46B0063552F /* Sweetspace.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Sweetspace.cpp; sourceTree = "<group>"; };
-		DF3B74462403A46B0063552F /* ShipModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShipModel.h; sourceTree = "<group>"; };
 		DF3B74472403A46B0063552F /* GMController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GMController.h; sourceTree = "<group>"; };
 		DF3B74482403A46B0063552F /* Sweetspace.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Sweetspace.h; sourceTree = "<group>"; };
 		DF3B74492403A46B0063552F /* GameMode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GameMode.cpp; sourceTree = "<group>"; };
@@ -400,8 +395,6 @@
 				DF3B743C2403A46A0063552F /* InputController.h */,
 				DF3B74422403A46B0063552F /* LoadingMode.cpp */,
 				DF3B74432403A46B0063552F /* LoadingMode.h */,
-				DF3B743E2403A46A0063552F /* ShipModel.cpp */,
-				DF3B74462403A46B0063552F /* ShipModel.h */,
 				DF3B74452403A46B0063552F /* Sweetspace.cpp */,
 				DF3B74482403A46B0063552F /* Sweetspace.h */,
 				EB2BE9B41D74952A002FE78B /* main.cpp */,
@@ -591,7 +584,6 @@
 				DF3B745D2403A46B0063552F /* Sweetspace.cpp in Sources */,
 				DF3B74602403A46B0063552F /* GameMode.cpp in Sources */,
 				EB0FF61D2016F06000517030 /* main.cpp in Sources */,
-				DF3B74512403A46B0063552F /* ShipModel.cpp in Sources */,
 				DF3B74632403A46B0063552F /* GameGraphRoot.cpp in Sources */,
 				DF3B74542403A46B0063552F /* InputController.cpp in Sources */,
 			);
@@ -608,7 +600,6 @@
 				DF3B745C2403A46B0063552F /* Sweetspace.cpp in Sources */,
 				DF3B745F2403A46B0063552F /* GameMode.cpp in Sources */,
 				EB7454AE1D74D891002FBAE6 /* main.cpp in Sources */,
-				DF3B74502403A46B0063552F /* ShipModel.cpp in Sources */,
 				DF3B74622403A46B0063552F /* GameGraphRoot.cpp in Sources */,
 				DF3B74532403A46B0063552F /* InputController.cpp in Sources */,
 			);
@@ -625,7 +616,6 @@
 				DF3B745B2403A46B0063552F /* Sweetspace.cpp in Sources */,
 				DF3B745E2403A46B0063552F /* GameMode.cpp in Sources */,
 				EB2BE9B61D74952A002FE78B /* main.cpp in Sources */,
-				DF3B744F2403A46B0063552F /* ShipModel.cpp in Sources */,
 				DF3B74612403A46B0063552F /* GameGraphRoot.cpp in Sources */,
 				DF3B74522403A46B0063552F /* InputController.cpp in Sources */,
 			);
