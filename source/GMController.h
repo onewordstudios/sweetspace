@@ -1,4 +1,87 @@
-#ifndef __GM_CONTROLLER_H__
+﻿#ifndef __GM_CONTROLLER_H__
 #define __GM_CONTROLLER_H__
-class GMController {};
+#include <cugl/cugl.h>
+/**
+ * This class represents the GM of the game
+ */
+class GMController {
+   private:
+	/** Whether or not this input is active */
+	bool active;
+
+	// Input results
+	/**
+	 * Most Recent Tap location to pass down the scenegraph
+	 */
+	cugl::Vec2 tapLoc;
+
+	/** Current number of events on ship */
+	unsigned int numEvents;
+
+   public:
+#pragma mark -
+#pragma mark Constructors
+	/**
+	 * Creates a new GM controller.
+	 *
+	 * This constructor does NOT do any initialization.  It simply allocates the
+	 * object. This makes it safe to use this class without a pointer.
+	 */
+	GMController(); // Don't initialize.  Allow stack based
+
+	/**
+	 * Disposes of this GM controller.
+	 */
+	~GMController() { dispose(); }
+
+	/**
+	 * Deactivates this GM controller.
+	 *
+	 * This method will not dispose of the GM controller. It can be reused
+	 * once it is reinitialized.
+	 */
+	void dispose();
+
+	/**
+	 * Initializes the GM
+	 *
+	 * This method works like a proper constructor, initializing the GM
+	 * controller and allocating memory.
+	 *
+	 * @return true if the controller was initialized successfully
+	 */
+	bool init();
+
+#pragma mark -
+#pragma mark Input Detection
+	/**
+	 * Returns true if the GM is currently active
+	 *
+	 * @return true if the GM is currently active
+	 */
+	bool isActive() const { return active; }
+
+	/**
+	 * Processes the GM.
+	 *
+	 * This method is used to generate and manage current events
+	 */
+	void update(float dt);
+
+	/**
+	 * Clears all events
+	 */
+	void clear();
+
+#pragma mark -
+#pragma mark Input Results
+	/**
+	 * Returns the most recent tap location.
+	 *
+	 * No Mouse Support Implemented.
+	 *
+	 * @return The tap location. cugl::Vec2 of x,y screen coordinates.
+	 */
+	const cugl::Vec2 getTapLoc() { return tapLoc; }
+};
 #endif /* __GM_CONTROLLER_H__ */
