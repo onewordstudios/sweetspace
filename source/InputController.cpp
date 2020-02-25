@@ -1,4 +1,4 @@
-//
+﻿//
 //  SDInput.h
 //  Ship Demo
 //
@@ -35,6 +35,9 @@ constexpr bool USE_ACCELEROMETER = false;
 constexpr KeyCode RESET_KEY = KeyCode::R;
 /** How the time necessary to process a double tap (in milliseconds) */
 constexpr unsigned int EVENT_DOUBLE_CLICK = 400;
+
+/** The key for the event handlers */
+constexpr unsigned int LISTENER_KEY = 1;
 
 #pragma mark -
 #pragma mark Ship Input
@@ -181,6 +184,7 @@ void InputController::clear() {
 	forceRight = 0.0f;
 
 	dtouch = Vec2::ZERO;
+	tapLoc = Vec2::ZERO;
 	timestamp.mark();
 }
 
@@ -193,8 +197,9 @@ void InputController::clear() {
  * @param event The associated event
  */
 void InputController::touchBeganCB(const cugl::TouchEvent& event, bool focus) {
-	// Update the touch location for later gestures
-	dtouch.set(event.position);
+	// Update the touch location for later gestures, Uncomment if gestures added or position change
+	// between touch down and up needed
+	// dtouch.set(event.position);
 }
 
 /**
@@ -204,20 +209,6 @@ void InputController::touchBeganCB(const cugl::TouchEvent& event, bool focus) {
  * @param event The associated event
  */
 void InputController::touchEndedCB(const cugl::TouchEvent& event, bool focus) {
-	// Check for a double tap.
-	keyReset = event.timestamp.ellapsedMillis(timestamp) <= EVENT_DOUBLE_CLICK;
-	timestamp = event.timestamp;
-
-	// If we reset, do not record the thrust
-	if (keyReset) {
-		return;
-	}
-
-	// Move the ship in this direction
-	Vec2 finishTouch = event.position - dtouch;
-	finishTouch.x = RANGE_CLAMP(finishTouch.x, -INPUT_MAXIMUM_FORCE, INPUT_MAXIMUM_FORCE);
-	finishTouch.y = RANGE_CLAMP(finishTouch.y, -INPUT_MAXIMUM_FORCE, INPUT_MAXIMUM_FORCE);
-
-	// Go ahead and apply to thrust now.
-	rollAmount = finishTouch.x / X_ADJUST_FACTOR;
+	// Only need to update the position on touch end event
+	tapLoc.set(event.position);
 }
