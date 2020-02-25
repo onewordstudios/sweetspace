@@ -210,5 +210,5 @@ void InputController::touchBeganCB(const cugl::TouchEvent& event, bool focus) {
  */
 void InputController::touchEndedCB(const cugl::TouchEvent& event, bool focus) {
 	// Only need to update the position on touch end event
-	tapLoc = event.position;
+	tapLoc.set(event.position);
 }
