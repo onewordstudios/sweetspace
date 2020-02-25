@@ -13,6 +13,9 @@
         },
         "planet2": {
             "file":   "textures/planet2.png"
+        },
+        "donut": {
+            "file":   "textures/donut.png"
         }
 	},
 	"fonts": {
@@ -62,10 +65,10 @@
                                 "planet_a": {
                                     "type": "Image",
                                     "data": {
-                                        "texture":  "planet1",
+                                        "texture":  "donut",
                                         "anchor":   [0.5,0.5],
-                                        "position": [1265,640],
-                                        "scale":    3.0
+                                        "position": [1270,640],
+                                        "scale":    4.0
                                     }
                                 }
                             }

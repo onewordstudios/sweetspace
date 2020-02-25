@@ -42,9 +42,10 @@ class GameMode {
 	GameGraphRoot sgRoot;
 
 	// MODEL
-	// A page-out could dispose of the view as long as it just has this.
-	/** The current coordinates of the ship */
+	/** The donut model */
 	std::shared_ptr<DonutModel> donutModel;
+	/** The list of breaches */
+	std::vector<std::shared_ptr<BreachModel>> breaches;
 
    public:
 #pragma mark -

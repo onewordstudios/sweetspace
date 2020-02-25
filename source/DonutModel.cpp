@@ -1,36 +1,4 @@
 ﻿#include "DonutModel.h"
-//
-//  SDShipModel.cpp
-//  Ship Demo
-//
-//  This model encapsulates all of the information for the ship demo. As there
-//  are no collisions in ship demo, this class is pretty simple.
-//
-//  WARNING: There are a lot of shortcuts in this design that will do not adapt
-//  well to data driven design.  This demo has a lot of simplifications to make
-//  it a bit easier to see how everything fits together.  However, the model
-//  classes and how they are initialized will need to be changed if you add
-//  dynamic level loading.
-//
-//  Pay close attention to how this class designed. This class uses our standard
-//  shared-pointer architecture which is common to the entire engine.
-//
-//  1. The constructor does not perform any initialization; it just sets all
-//     attributes to their defaults.
-//
-//  2. All initialization takes place via init methods, which can fail if an
-//     object is initialized more than once.
-//
-//  3. All allocation takes place via static constructors which return a shared
-//     pointer.
-//
-//  Note that this object manages its own texture, but DOES NOT manage its own
-//  scene graph node.  This is a very common way that we will approach complex
-//  objects.
-//
-//  Author: Walker White
-//  Version: 1/10/17
-//
 
 using namespace cugl;
 
@@ -53,7 +21,7 @@ constexpr float RANGE_CLAMP(float x, float y, float z) { return (x < y ? y : (x 
 #pragma mark Constructors
 
 /**
- * Initializes a new ship with the given position
+ * Initializes a new donut with the given position
  *
  * This is an initializer.  It, combined with the constructor, produces the static
  * constructor create().  The initializer and normal constructor are private while
@@ -69,21 +37,21 @@ bool DonutModel::init(const Vec2& pos) {
 }
 
 /**
- * Disposes all resources and assets of this ship
+ * Disposes all resources and assets of this donut
  *
  * Any assets owned by this object will be immediately released.  Once
- * disposed, a ship may not be used until it is initialized again.
+ * disposed, a donut may not be used until it is initialized again.
  */
 void DonutModel::dispose() { sprite = nullptr; }
 
 #pragma mark -
 #pragma mark Animation
 /**
- * Sets the film strip representing this ship.
+ * Sets the film strip representing this donut.
  *
  * Setting this to nullptr clears the value.
  *
- * @param value The ship film strip.
+ * @param value The donut film strip.
  */
 void DonutModel::setSprite(const std::shared_ptr<cugl::AnimationNode>& value) {
 	sprite = value;
@@ -96,7 +64,7 @@ void DonutModel::setSprite(const std::shared_ptr<cugl::AnimationNode>& value) {
 /**
  * Updates the state of the model
  *
- * This method moves the ship forward, dampens the forces (if necessary)
+ * This method moves the donut
  * and updates the sprite if it exists.
  *
  * @param timestep  Time elapsed since last called.
@@ -108,7 +76,6 @@ void DonutModel::update(float timestep) {
 	if (sprite != nullptr) {
 		advanceFrame();
 	}
-	// Move the ship, updating it.
 	// Adjust the angle by the change in angle
 	angle += turning; // INVARIANT: -360 < ang < 720
 	if (angle > FULL_CIRCLE) angle -= FULL_CIRCLE;
@@ -116,16 +83,16 @@ void DonutModel::update(float timestep) {
 }
 
 /**
- * Determines the next animation frame for the ship and applies it to the sprite.
+ * Determines the next animation frame for the donut and applies it to the sprite.
  *
  * This method includes some dampening of the turn, and should be called before
- * moving the ship.
+ * moving the donut.
  */
 void DonutModel::advanceFrame() {
 	// Our animation depends on the current frame.
 	unsigned int frame = sprite->getFrame();
 
-	// Process the ship turning.
+	// Process the donut turning.
 	if (turning < 0.0f) {
 		unsigned int offset =
 			(unsigned int)((turning / SHIP_MAX_TURN) * (SHIP_IMG_FLAT - SHIP_IMG_RIGHT));
@@ -158,7 +125,7 @@ void DonutModel::advanceFrame() {
 }
 
 /**
- * Resets the ship back to its original settings
+ * Resets the donut back to its original settings
  */
 void DonutModel::reset() {
 	angle = 0.0f;

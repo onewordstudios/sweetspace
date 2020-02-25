@@ -31,9 +31,6 @@ using namespace std;
 /** This is adjusted by screen aspect ratio to get the height */
 constexpr unsigned int SCENE_WIDTH = 1024;
 
-/** The parallax for each layer */
-constexpr float PARALLAX_AMT = 0.1f;
-
 #pragma mark -
 #pragma mark Constructors
 
@@ -60,9 +57,15 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 
 	sgRoot.init(assets);
 
-	// Create the ship model
-	donutModel = sgRoot.getDonutModel();
-
+	// The following code creates two breaches for the sake of demonstration.
+	Vec2 donutPos = sgRoot.getDonutNode()->getPosition();
+	donutModel = DonutModel::alloc(donutPos);
+	donutModel->setSprite(std::dynamic_pointer_cast<AnimationNode>(sgRoot.getDonutNode()));
+	breaches.push_back(BreachModel::alloc());
+	breaches.push_back(BreachModel::alloc());
+	sgRoot.setBreaches(breaches);
+	breaches.at(1)->setAngle(0.785);
+	sgRoot.setDonutModel(donutModel);
 	return true;
 }
 
@@ -82,7 +85,6 @@ void GameMode::dispose() {
  * Resets the status of the game so that we can play again.
  */
 void GameMode::reset() {
-	// Reset the ships and input
 	donutModel->reset();
 	sgRoot.reset();
 	input.clear();
@@ -105,7 +107,7 @@ void GameMode::update(float timestep) {
 
 	float thrust = input.getRoll();
 
-	// Move the ship (MODEL ONLY)
+	// Move the donut (MODEL ONLY)
 	donutModel->setTurning(thrust);
 	donutModel->update(timestep);
 

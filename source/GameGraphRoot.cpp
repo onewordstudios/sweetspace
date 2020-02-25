@@ -4,6 +4,7 @@
 
 #include <iostream>
 #include <sstream>
+#include <vector>
 
 using namespace cugl;
 using namespace std;
@@ -14,8 +15,20 @@ using namespace std;
 /** This is adjusted by screen aspect ratio to get the height */
 constexpr unsigned int SCENE_WIDTH = 1024;
 
-/** The parallax for each layer */
-constexpr float PARALLAX_AMT = 0.1f;
+/** 2 pi */
+constexpr float TWO_PI = 2 * M_PI;
+
+/** Pi over 180 for converting between degrees and radians */
+constexpr float PI_180 = M_PI / 180;
+
+/** The scale of the breach textures. */
+constexpr float BREACH_SCALE = 0.25;
+
+/** The diameter of the ship. Also the x coordinate of the center of the ship */
+constexpr unsigned int DIAMETER = 1280;
+
+/** The radius of the ship. Also the y coordinate of the center of the ship */
+constexpr unsigned int RADIUS = 640;
 
 #pragma mark -
 #pragma mark Constructors
@@ -57,11 +70,6 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 	donutNode = std::dynamic_pointer_cast<AnimationNode>(assets->get<Node>("game_field_player"));
 	coordHUD = std::dynamic_pointer_cast<Label>(assets->get<Node>("game_hud"));
 
-	// Create the donut model
-	Vec2 donutPos = donutNode->getPosition();
-	donutModel = DonutModel::alloc(donutPos);
-	donutModel->setSprite(donutNode);
-
 	addChild(scene);
 	return true;
 }
@@ -88,9 +96,6 @@ void GameGraphRoot::dispose() {
  * Resets the status of the game so that we can play again.
  */
 void GameGraphRoot::reset() {
-	// Reset the donuts and input
-	donutModel->reset();
-
 	// Reset the parallax
 	Vec2 position = farSpace->getPosition();
 	farSpace->setAnchor(Vec2::ANCHOR_CENTER);
@@ -112,7 +117,7 @@ void GameGraphRoot::reset() {
 void GameGraphRoot::update(float timestep) {
 	// "Drawing" code.  Move everything BUT the donut
 	// Update the HUD
-	coordHUD->setText(positionText(donutModel->getPosition()));
+	coordHUD->setText(positionText());
 
 	Vec2 offset = donutModel->getPosition() - farSpace->getPosition();
 
@@ -120,7 +125,7 @@ void GameGraphRoot::update(float timestep) {
 	offset.x = offset.x / allSpace->getContentSize().width;
 	offset.y = offset.y / allSpace->getContentSize().height;
 
-	float angle = 2 * M_PI - donutModel->getAngle();
+	float angle = TWO_PI - donutModel->getAngle();
 
 	// Reanchor the node at the center of the screen and rotate about center.
 	Vec2 position = farSpace->getPosition();
@@ -133,6 +138,20 @@ void GameGraphRoot::update(float timestep) {
 	nearSpace->setAnchor(offset + Vec2::ANCHOR_CENTER);
 	nearSpace->setPosition(position); // Reseting the anchor changes the position
 	nearSpace->setAngle(angle);
+	for (int i = 0; i < breaches.size(); i++) {
+		std::shared_ptr<BreachModel> breachModel = breaches.at(i);
+		if (breachModel->getSprite() == nullptr) {
+			std::shared_ptr<Texture> image = assets->get<Texture>("planet2");
+			std::shared_ptr<PolygonNode> breachNode = PolygonNode::allocWithTexture(image);
+			breachModel->setSprite(breachNode);
+			breachNode->setScale(BREACH_SCALE);
+			// Create the donut model
+			nearSpace->addChild(breachNode);
+		}
+		Vec2 breachPos = Vec2(DIAMETER + RADIUS * sin(breachModel->getAngle()),
+							  RADIUS - RADIUS * cos(breachModel->getAngle()));
+		breachModel->getSprite()->setPosition(breachPos);
+	}
 }
 
 /**
@@ -144,14 +163,14 @@ void GameGraphRoot::update(float timestep) {
  *
  * @return an informative string for the position
  */
-std::string GameGraphRoot::positionText(const cugl::Vec2& coords) {
+std::string GameGraphRoot::positionText() {
 	stringstream ss;
-	ss << "Angle: (" << (float)donutModel->getAngle() * 180 / (M_PI) << ")";
+	ss << "Angle: (" << (float)donutModel->getAngle() / PI_180 << ")";
 	return ss.str();
 }
 
 /**
- * Returns the donutModel
+ * Returns the donut node
  *
  */
-std::shared_ptr<DonutModel> GameGraphRoot::getDonutModel() { return donutModel; }
+std::shared_ptr<cugl::Node> GameGraphRoot::getDonutNode() { return donutNode; }

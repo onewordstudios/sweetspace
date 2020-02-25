@@ -4,6 +4,7 @@
 
 #include <vector>
 
+#include "BreachModel.h"
 #include "DonutModel.h"
 #include "InputController.h"
 
@@ -25,9 +26,9 @@ class GameGraphRoot : public cugl::Scene {
 	std::shared_ptr<cugl::Node> nearSpace;
 
 	// MODEL
-	// A page-out could dispose of the view as long as it just has this.
-	/** The current coordinates of the donut */
 	std::shared_ptr<DonutModel> donutModel;
+	/** The list of breaches */
+	std::vector<std::shared_ptr<BreachModel>> breaches;
 
 	/**
 	 * Returns an informative string for the position
@@ -38,7 +39,7 @@ class GameGraphRoot : public cugl::Scene {
 	 *
 	 * @return an informative string for the position
 	 */
-	std::string positionText(const cugl::Vec2& coords);
+	std::string positionText();
 
    public:
 #pragma mark -
@@ -93,6 +94,8 @@ class GameGraphRoot : public cugl::Scene {
 	 */
 	void reset() override;
 
-	std::shared_ptr<DonutModel> GameGraphRoot::getDonutModel();
+	std::shared_ptr<cugl::Node> getDonutNode();
+	void setDonutModel(std::shared_ptr<DonutModel> d) { donutModel = d; };
+	void setBreaches(std::vector<std::shared_ptr<BreachModel>> b) { breaches = b; };
 };
 #endif /* __GAME_GRAPH_ROOT_H__ */
