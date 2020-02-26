@@ -10,6 +10,9 @@ using namespace std;
 /** The maximum number of events on ship at any one time. This will probably need to scale with
  * the number of players*/
 const int MAX_EVENTS = 3;
+/** Spawn rate of breaches = 1/SPAWN_RATE for EVERY UPDATE FRAME. 100 is a very fast rate already.
+ */
+const int SPAWN_RATE = 100;
 /** Array recording which breaches are free or not. */
 array<bool, MAX_EVENTS> breachFree;
 
@@ -76,17 +79,15 @@ void GMController::update(float dt) {
 	}
 
 	// Simple logic for adding a breach when under max and randomly, replace with actual logic later
-	if (rand() % 100 > 1) return;
-	if (numEvents < MAX_EVENTS) {
-		for (int i = 0; i < MAX_EVENTS; i++) {
-			if (breachFree.at(i) == true) {
-				breaches.at(i)->setAngle((rand() % 360) * (float)M_PI / 180.0f);
-				// breaches.at(i)->setIsResolved(false);
-				breachFree.at(i) = false;
-				numEvents++;
-				// CULog("Add Breach");
-				break;
-			}
+	if (rand() % SPAWN_RATE > 1) return;
+	for (int i = 0; i < MAX_EVENTS; i++) {
+		if (breachFree.at(i) == true) {
+			breaches.at(i)->setAngle((rand() % 360) * (float)M_PI / 180.0f);
+			// breaches.at(i)->setIsResolved(false);
+			breachFree.at(i) = false;
+			numEvents++;
+			// CULog("Add Breach");
+			break;
 		}
 	}
 }
