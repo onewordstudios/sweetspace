@@ -66,6 +66,10 @@ void InputController::dispose() {
 	if (active) {
 #ifndef CU_TOUCH_SCREEN
 		Input::deactivate<Keyboard>();
+		Mouse* mouse = Input::get<Mouse>();
+		mouse->removePressListener(LISTENER_KEY);
+		mouse->removeReleaseListener(LISTENER_KEY);
+		active = false;
 #else
 		if (USE_ACCELEROMETER) {
 			Input::deactivate<Accelerometer>();
@@ -94,6 +98,16 @@ bool InputController::init() {
 // Only process keyboard on desktop
 #ifndef CU_TOUCH_SCREEN
 	success = Input::activate<Keyboard>();
+	Mouse* mouse = Input::get<Mouse>();
+	mouse->addPressListener(LISTENER_KEY,
+							[=](const cugl::MouseEvent& event, Uint8 clicks, bool focus) {
+								this->clickBeganCB(event, clicks, focus);
+							});
+	mouse->addReleaseListener(LISTENER_KEY,
+							  [=](const cugl::MouseEvent& event, Uint8 clicks, bool focus) {
+								  this->clickEndedCB(event, clicks, focus);
+							  });
+
 #else
 	if (USE_ACCELEROMETER) {
 		success = Input::activate<Accelerometer>();
@@ -210,5 +224,29 @@ void InputController::touchBeganCB(const cugl::TouchEvent& event, bool focus) {
  */
 void InputController::touchEndedCB(const cugl::TouchEvent& event, bool focus) {
 	// Only need to update the position on touch end event
+	tapLoc.set(event.position);
+}
+
+#pragma mark -
+#pragma mark Click Polling
+/**
+ * Callback for the beginning of a click event
+ *
+ * @param t     The touch information
+ * @param event The associated event
+ */
+void InputController::clickBeganCB(const cugl::MouseEvent& event, Uint8 clicks, bool focus) {
+	// Update the click location for later gestures
+	// dtouch.set(event.position);
+}
+
+/**
+ * Callback for the end of a click event
+ *
+ * @param t     The click information
+ * @param event The associated event
+ */
+void InputController::clickEndedCB(const cugl::MouseEvent& event, Uint8 clicks, bool focus) {
+	// Only need to update the position on click end event
 	tapLoc.set(event.position);
 }
