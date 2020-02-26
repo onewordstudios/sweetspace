@@ -58,7 +58,7 @@ bool LoadingMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 	button = std::dynamic_pointer_cast<Button>(assets->get<Node>("load_claw_play"));
 	button->setListener([=](const std::string& name, bool down) { this->_active = down; });
 
-	Application::get()->setClearColor(Color4(COLOR_VALUE, COLOR_VALUE, COLOR_VALUE));
+	Application::get()->setClearColor(Color4(0.0f, 0.0f, 0.0f));
 	addChild(layer);
 	return true;
 }
