@@ -46,8 +46,6 @@ class DonutModel {
 	float angle;
 	/** Current turning thrust (stored to facilitate decay) */
 	float turning;
-	/** Current forward thrust (stored to facilitate decay) */
-	float forward;
 	/** Reference to image in SceneGraph for animation */
 	std::shared_ptr<cugl::AnimationNode> sprite;
 
@@ -59,7 +57,7 @@ class DonutModel {
 	 * NEVER USE A CONSTRUCTOR WITH NEW. If you want to allocate a model on
 	 * the heap, use one of the static constructors instead.
 	 */
-	DonutModel(void) : angle(0), turning(0), forward(0) {}
+	DonutModel(void) : angle(0), turning(0){}
 
 	/**
 	 * Destroys this donut, releasing all resources.
@@ -142,7 +140,16 @@ class DonutModel {
 	 *
 	 * @return the donut position as a reference.
 	 */
-	cugl::Vec2& getPosition() { return initial; }
+	cugl::Vec2& getPosition() { return position; }
+	
+	/**
+	 * Returns the donut velocity as a reference.
+	 *
+	 * This allows us to modify the value.
+	 *
+	 * @return the donut velocity as a reference.
+	 */
+	cugl::Vec2& getVelocity() { return velocity; }
 
 	/**
 	 * Returns the current angle of the donut in radians.
@@ -171,19 +178,7 @@ class DonutModel {
 	 * @param value The donut turning force
 	 */
 	void setTurning(float value) { turning = value; }
-	/**
-	 * Returns the current turning force on the donut
-	 *
-	 * @return the current turning force on the donut
-	 */
-	float getForward() { return forward; }
-	/**
-	 * Sets the current forward force on the donut
-	 *
-	 * @param value The donut forward force
-	 */
-	void setForward(float value) {forward = value; }
-
+	
 #pragma mark -
 #pragma mark Animation
 	/**

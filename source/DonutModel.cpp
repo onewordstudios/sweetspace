@@ -4,16 +4,8 @@ using namespace cugl;
 
 #pragma mark -
 #pragma mark Animation Constants and Functions
-
-//constexpr unsigned int FULL_CIRCLE = 360;
-
-/** The max turn (in degrees) per frame */
-//constexpr float SHIP_MAX_TURN = 1.0f;
-/** The max forward speed */
-constexpr float DONUT_MAX_SPEED = 10.0f;
 /** Factor to multiply the forward thrust */
 constexpr unsigned int FULL_CIRCLE = 360;
-
 /** The max turn (in degrees) per frame */
 constexpr float DONUT_MAX_TURN = 1.0f;
 
@@ -82,26 +74,16 @@ void DonutModel::setSprite(const std::shared_ptr<cugl::AnimationNode>& value) {
  */
 void DonutModel::update(float timestep) {
 	// Adjust the active forces.
-	forward = RANGE_CLAMP(forward, -DONUT_MAX_SPEED, DONUT_MAX_SPEED);
 	turning = RANGE_CLAMP(turning, -DONUT_MAX_TURN, DONUT_MAX_TURN);
 
 	if (sprite != nullptr) {
 		advanceFrame();
 	}
 
-	// Process the donut thrust.
-//	if (forward != 0.0f) {
-//		// Thrust key pressed; increase the donut velocity.
-		velocity.x = (float)(forward * (-DCOS_90(angle)));
-//	}
-
 	// Adjust the angle by the change in angle
 	angle += turning; // INVARIANT: -360 < ang < 720
 	if (angle > FULL_CIRCLE) angle -= FULL_CIRCLE;
 	if (angle < 0) angle += FULL_CIRCLE;
-	
-	// Move the donut
-	position += velocity;
 }
 
 /**
@@ -152,7 +134,6 @@ void DonutModel::reset() {
 	position = initial;
 	velocity = Vec2::ZERO;
 	angle = 0.0f;
-	forward = 0.0f;
 	if (sprite != nullptr) {
 		sprite->setFrame(SHIP_IMG_FLAT);
 	}
