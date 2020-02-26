@@ -30,7 +30,7 @@ constexpr float ACCELEROM_Y_FACTOR = 200.0f;
 constexpr float KEYBOARD_FORCE_INCREMENT = 10.0f;
 
 /** Whether to active the accelerometer (this is TRICKY!) */
-constexpr bool USE_ACCELEROMETER = false;
+constexpr bool USE_ACCELEROMETER = true;
 /** The key to use for reseting the game */
 constexpr KeyCode RESET_KEY = KeyCode::R;
 /** How the time necessary to process a double tap (in milliseconds) */
