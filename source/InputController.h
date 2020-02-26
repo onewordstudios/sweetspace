@@ -162,6 +162,24 @@ class InputController {
 	 * @param event The associated event
 	 */
 	void touchEndedCB(const cugl::TouchEvent& event, bool focus);
+
+#pragma mark -
+#pragma mark Click Callbacks
+	/**
+	 * Callback for the beginning of a click event
+	 *
+	 * @param t     The click information
+	 * @param event The associated event
+	 */
+	void clickBeganCB(const cugl::MouseEvent& event, Uint8 clicks, bool focus);
+
+	/**
+	 * Callback for the end of a click event
+	 *
+	 * @param t     The click information
+	 * @param event The associated event
+	 */
+	void clickEndedCB(const cugl::MouseEvent& event, Uint8 clicks, bool focus);
 };
 
 #endif /* __SD_INPUT_H__ */
