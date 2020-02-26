@@ -55,6 +55,13 @@ bool GMController::init(const std::vector<std::shared_ptr<BreachModel>> b) {
  * This method is used to run the GM for generating and managing current ship events
  */
 void GMController::update(float dt) {
+	// Removing breaches that have been flagged as resolved
+	for (int i = 0; i < MAX_EVENTS; i++) {
+		if (!breaches.at(i)->getIsResolved()) {
+			breaches.at(i) == nullptr;
+		}
+	}
+
 	// Simple logic for adding breaches when under max, replace with actual logic later
 	if (rand() % 1000 > 1) return;
 	if (numEvents < MAX_EVENTS) {
