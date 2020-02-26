@@ -1,4 +1,4 @@
-//
+﻿//
 //  SDInput.h
 //  Ship Demo
 //
@@ -51,6 +51,7 @@ InputController::InputController()
 	: active(false),
 	  keyReset(false),
 	  forceLeft(0.0f),
+	  tapped(false),
 	  forceRight(0.0f),
 	  keybdThrust(0.0f),
 	  resetPressed(false),
@@ -69,7 +70,6 @@ void InputController::dispose() {
 		Mouse* mouse = Input::get<Mouse>();
 		mouse->removePressListener(LISTENER_KEY);
 		mouse->removeReleaseListener(LISTENER_KEY);
-		active = false;
 #else
 		if (USE_ACCELEROMETER) {
 			Input::deactivate<Accelerometer>();
@@ -77,8 +77,9 @@ void InputController::dispose() {
 		Touchscreen* touch = Input::get<Touchscreen>();
 		touch->removeBeginListener(LISTENER_KEY);
 		touch->removeEndListener(LISTENER_KEY);
-		active = false;
 #endif
+		tapped = false;
+		active = false;
 	}
 }
 
@@ -121,7 +122,7 @@ bool InputController::init() {
 		this->touchEndedCB(event, focus);
 	});
 #endif
-
+	tapped = false;
 	active = success;
 	return success;
 }
@@ -200,6 +201,7 @@ void InputController::update(float dt) {
  */
 void InputController::clear() {
 	resetPressed = false;
+	tapped = false;
 	rollAmount = 0.0f;
 	keybdThrust = 0.0f;
 
@@ -234,10 +236,11 @@ void InputController::touchBeganCB(const cugl::TouchEvent& event, bool focus) {
 void InputController::touchEndedCB(const cugl::TouchEvent& event, bool focus) {
 	// Only need to update the position on touch end event
 	tapLoc.set(event.position);
+	tapped = true;
 }
 
 #pragma mark -
-#pragma mark Click Polling
+#pragma mark Click Callbacks
 /**
  * Callback for the beginning of a click event
  *
@@ -258,4 +261,5 @@ void InputController::clickBeganCB(const cugl::MouseEvent& event, Uint8 clicks, 
 void InputController::clickEndedCB(const cugl::MouseEvent& event, Uint8 clicks, bool focus) {
 	// Only need to update the position on click end event
 	tapLoc.set(event.position);
+	tapped = true;
 }

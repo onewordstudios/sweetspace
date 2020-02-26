@@ -1,4 +1,4 @@
-#ifndef __BREACH_MODEL_H__
+﻿#ifndef __BREACH_MODEL_H__
 #define __BREACH_MODEL_H__
 #include <cugl/cugl.h>
 class BreachModel {
@@ -35,7 +35,7 @@ class BreachModel {
 	void dispose();
 
 	/**
-	 * Initializes a new breach at angle 0.
+	 * Initializes a new breach at an unassigned angle (-1).
 	 *
 	 * An initializer does the real work that the constructor does not.  It
 	 * initializes all assets and makes the object read for use.  By separating
@@ -43,7 +43,7 @@ class BreachModel {
 	 *
 	 * @return true if the obstacle is initialized properly, false otherwise.
 	 */
-	virtual bool init() { return init(0.0f); }
+	virtual bool init() { return init(-1.0f); }
 
 	/**
 	 * Initializes a new breach with the given angle

@@ -140,17 +140,25 @@ void GameGraphRoot::update(float timestep) {
 	nearSpace->setAngle(angle);
 	for (int i = 0; i < breaches.size(); i++) {
 		std::shared_ptr<BreachModel> breachModel = breaches.at(i);
-		if (breachModel->getSprite() == nullptr) {
-			std::shared_ptr<Texture> image = assets->get<Texture>("planet2");
-			std::shared_ptr<PolygonNode> breachNode = PolygonNode::allocWithTexture(image);
-			breachModel->setSprite(breachNode);
-			breachNode->setScale(BREACH_SCALE);
-			// Create the donut model
-			nearSpace->addChild(breachNode);
+		if (!breachModel->getIsResolved()) {
+			if (breachModel->getSprite() == nullptr) {
+				std::shared_ptr<Texture> image = assets->get<Texture>("planet2");
+				std::shared_ptr<PolygonNode> breachNode = PolygonNode::allocWithTexture(image);
+				breachModel->setSprite(breachNode);
+				breachNode->setScale(BREACH_SCALE);
+				// Create the donut model
+				nearSpace->addChild(breachNode);
+			}
+			Vec2 breachPos = Vec2(DIAMETER + RADIUS * sin(breachModel->getAngle()),
+								  RADIUS - RADIUS * cos(breachModel->getAngle()));
+			if (breachModel->getAngle() < 0) {
+				breachPos = Vec2(0, 0);
+			}
+			breachModel->getSprite()->setPosition(breachPos);
+		} else {
+			Vec2 breachPos = Vec2(0, 0);
+			breachModel->getSprite()->setPosition(breachPos);
 		}
-		Vec2 breachPos = Vec2(DIAMETER + RADIUS * sin(breachModel->getAngle()),
-							  RADIUS - RADIUS * cos(breachModel->getAngle()));
-		breachModel->getSprite()->setPosition(breachPos);
 	}
 }
 
