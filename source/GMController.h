@@ -14,7 +14,6 @@ class GMController {
 	/** Current number of breaches on ship */
 	unsigned int numEvents;
 
-	// Return values
 	/** Current list of breaches on ship*/
 	std::vector<std::shared_ptr<BreachModel>> breaches;
 
@@ -53,7 +52,7 @@ class GMController {
 	bool init(std::vector<std::shared_ptr<BreachModel>> breaches);
 
 #pragma mark -
-#pragma mark Input Detection
+#pragma mark GM Handling
 	/**
 	 * Returns true if the GM is currently active
 	 *
@@ -72,16 +71,5 @@ class GMController {
 	 * Clears all events
 	 */
 	void clear();
-
-#pragma mark -
-#pragma mark Input Results
-	/**
-	 * Returns the most recent tap location.
-	 *
-	 * No Mouse Support Implemented.
-	 *
-	 * @return The tap location. cugl::Vec2 of x,y screen coordinates.
-	 */
-	const cugl::Vec2 getTapLoc() { return tapLoc; }
 };
 #endif /* __GM_CONTROLLER_H__ */

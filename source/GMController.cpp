@@ -33,19 +33,18 @@ void GMController::dispose() {
 }
 
 /**
- * Initializes the input control for the given drawing scale.
+ * Initializes the GM
  *
- * This method works like a proper constructor, initializing the input
- * controller and allocating memory.  However, it still does not activate
- * the listeners.  You must call start() do that.
+ * This method works like a proper constructor, initializing the GM
+ * controller and allocating memory.
  *
  * @return true if the controller was initialized successfully
  */
-bool GMController::init(const std::vector<std::shared_ptr<BreachModel>> breaches) {
+bool GMController::init(const std::vector<std::shared_ptr<BreachModel>> b) {
 	bool success = true;
-	/*if (breaches == nullptr) {
-		return false;
-	}*/
+	breaches = b;
+	// Set random seed based on time
+	srand(time(NULL));
 	active = success;
 	return success;
 }
@@ -56,8 +55,10 @@ bool GMController::init(const std::vector<std::shared_ptr<BreachModel>> breaches
  * This method is used to run the GM for generating and managing current ship events
  */
 void GMController::update(float dt) {
+	// Simple logic for adding breaches when under max, replace with actual logic later
 	if (numEvents < MAX_EVENTS) {
-		int angle = rand() % 360;
+		breaches.at(numEvents)->setAngle((rand() % 360) * (float)M_PI / 180.0f);
+		numEvents++;
 	}
 }
 
