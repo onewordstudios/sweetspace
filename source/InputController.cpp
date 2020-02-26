@@ -180,8 +180,6 @@ void InputController::update(float dt) {
 
 		// Apply to thrust directly.
 		rollAmount = acc.x * ACCELEROM_X_FACTOR;
-		if (rollAmount < 100.0f) {
-		}
 	}
 	// Otherwise, uses touch
 #endif
