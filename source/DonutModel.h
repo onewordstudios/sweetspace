@@ -1,4 +1,4 @@
-﻿#ifndef __DONUT_MODEL_H__
+#ifndef __DONUT_MODEL_H__
 #define __DONUT_MODEL_H__
 #include <cugl/cugl.h>
 constexpr float HALF_CIRCLE = 180.0f;
@@ -38,6 +38,8 @@ class DonutModel {
    protected:
 	/** INITIAL position of the donut in world space */
 	cugl::Vec2 initial;
+	/** Current ship velocity */
+	cugl::Vec2 velocity;
 	/** Angle of the donut in the world space */
 	float angle;
 	/** Current turning thrust (stored to facilitate decay) */
@@ -137,6 +139,15 @@ class DonutModel {
 	 * @return the donut position as a reference.
 	 */
 	cugl::Vec2& getPosition() { return initial; }
+
+	/**
+	 * Returns the donut velocity as a reference.
+	 *
+	 * This allows us to modify the value.
+	 *
+	 * @return the donut velocity as a reference.
+	 */
+	cugl::Vec2& getVelocity() { return velocity; }
 
 	/**
 	 * Returns the current angle of the donut in radians.

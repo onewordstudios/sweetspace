@@ -1,14 +1,13 @@
-﻿#include "DonutModel.h"
+#include "DonutModel.h"
 
 using namespace cugl;
 
 #pragma mark -
 #pragma mark Animation Constants and Functions
-
+/** Factor to multiply the forward thrust */
 constexpr unsigned int FULL_CIRCLE = 360;
-
 /** The max turn (in degrees) per frame */
-constexpr float SHIP_MAX_TURN = 1.0f;
+constexpr float DONUT_MAX_TURN = 1.0f;
 
 /** Compute cos (in degrees) from 90 degrees */
 #define DCOS_90(a) (cos(M_PI * (a + 90.0f) / 180.0f)) // NOLINT Walker's old code; no easy fix
@@ -64,6 +63,7 @@ void DonutModel::setSprite(const std::shared_ptr<cugl::AnimationNode>& value) {
 /**
  * Updates the state of the model
  *
+ * This method moves the donut forward, dampens the forces (if necessary)
  * This method moves the donut
  * and updates the sprite if it exists.
  *
@@ -71,11 +71,12 @@ void DonutModel::setSprite(const std::shared_ptr<cugl::AnimationNode>& value) {
  */
 void DonutModel::update(float timestep) {
 	// Adjust the active forces.
-	turning = RANGE_CLAMP(turning, -SHIP_MAX_TURN, SHIP_MAX_TURN);
+	turning = RANGE_CLAMP(turning, -DONUT_MAX_TURN, DONUT_MAX_TURN);
 
 	if (sprite != nullptr) {
 		advanceFrame();
 	}
+
 	// Adjust the angle by the change in angle
 	angle += turning; // INVARIANT: -360 < ang < 720
 	if (angle > FULL_CIRCLE) angle -= FULL_CIRCLE;
@@ -91,11 +92,10 @@ void DonutModel::update(float timestep) {
 void DonutModel::advanceFrame() {
 	// Our animation depends on the current frame.
 	unsigned int frame = sprite->getFrame();
-
 	// Process the donut turning.
 	if (turning < 0.0f) {
 		unsigned int offset =
-			(unsigned int)((turning / SHIP_MAX_TURN) * (SHIP_IMG_FLAT - SHIP_IMG_RIGHT));
+			(unsigned int)((turning / DONUT_MAX_TURN) * (SHIP_IMG_FLAT - SHIP_IMG_RIGHT));
 		unsigned int goal = SHIP_IMG_FLAT + offset;
 		if (frame != goal) {
 			frame += (frame < goal ? 1 : -1);
@@ -105,7 +105,7 @@ void DonutModel::advanceFrame() {
 		}
 	} else if (turning > 0.0f) {
 		unsigned int offset =
-			(unsigned int)((turning / SHIP_MAX_TURN) * (SHIP_IMG_FLAT - SHIP_IMG_LEFT));
+			(unsigned int)((turning / DONUT_MAX_TURN) * (SHIP_IMG_FLAT - SHIP_IMG_LEFT));
 		unsigned int goal = SHIP_IMG_FLAT - offset;
 		if (frame != goal) {
 			frame += (frame < goal ? 1 : -1);
@@ -128,6 +128,11 @@ void DonutModel::advanceFrame() {
  * Resets the donut back to its original settings
  */
 void DonutModel::reset() {
+	velocity = Vec2::ZERO;
+	angle = 0.0f;
+	if (sprite != nullptr) {
+		sprite->setFrame(SHIP_IMG_FLAT);
+	}
 	angle = 0.0f;
 	turning = 0.0f;
 	if (sprite != nullptr) {
