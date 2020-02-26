@@ -41,7 +41,7 @@ class DonutModel {
     /** Position of the ship in world space */
     cugl::Vec2 position;
     /** Current ship velocity */
-    cugl::Vec2  velocity;
+    cugl::Vec2 velocity;
 	/** Angle of the donut in the world space */
 	float angle;
 	/** Current turning thrust (stored to facilitate decay) */

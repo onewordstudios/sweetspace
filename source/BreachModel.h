@@ -73,6 +73,13 @@ class BreachModel {
 	float getAngle() { return (float)M_PI * angle / 180.0f; }
 
 	/**
+	 * Returns the current state of the breach.
+	 *
+	 * @return the current state of the breach.
+	 */
+	bool getIsResolved() { return resolved; }
+
+	/**
 	 * Returns the current sprite of the breach.
 	 *
 	 * @return the current sprite of the breach.
@@ -85,13 +92,6 @@ class BreachModel {
 	 * @param value The breach angle in radians
 	 */
 	void setAngle(float value) { angle = 180.0f * value / (float)M_PI; }
-	
-	/**
-	 * Returns the current state of the breach.
-	 *
-	 * @return the current state of the breach.
-	 */
-	bool getIsResolved() { return resolved; }
 	
 	/**
 	 * Sets the current state of the breach.
