@@ -163,6 +163,13 @@ void InputController::update(float dt) {
 	keybdThrust -= forceLeft;
 	keybdThrust = RANGE_CLAMP(keybdThrust, -INPUT_MAXIMUM_FORCE, INPUT_MAXIMUM_FORCE);
 
+	if (forceRight == 0 && forceLeft == 0) {
+		keybdThrust *= 0.9f;
+		if (abs(keybdThrust) < 1.0f) {
+			keybdThrust = 0.0f;
+		}
+	}
+
 	// Transfer to main thrust. This keeps us from "adding" to accelerometer or touch.
 	rollAmount = keybdThrust;
 #else
@@ -172,6 +179,8 @@ void InputController::update(float dt) {
 
 		// Apply to thrust directly.
 		rollAmount = acc.x * ACCELEROM_X_FACTOR;
+		if (rollAmount < 100.0f) {
+		}
 	}
 	// Otherwise, uses touch
 #endif
