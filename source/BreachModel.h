@@ -1,4 +1,4 @@
-﻿#ifndef __BREACH_MODEL_H__
+#ifndef __BREACH_MODEL_H__
 #define __BREACH_MODEL_H__
 #include <cugl/cugl.h>
 class BreachModel {
@@ -6,6 +6,8 @@ class BreachModel {
    protected:
 	/** The angle at which the breach exists */
 	float angle;
+	/** The state of the breach: resolved or unresolved */
+	bool resolved;
 	/** Reference to image in SceneGraph for animation */
 	std::shared_ptr<cugl::PolygonNode> sprite;
 
@@ -17,7 +19,7 @@ class BreachModel {
 	 * NEVER USE A CONSTRUCTOR WITH NEW. If you want to allocate a model on
 	 * the heap, use one of the static constructors instead.
 	 */
-	BreachModel(void) : angle(0) {}
+	BreachModel(void) : angle(0), resolved(false) {}
 
 	/**
 	 * Destroys this breach, releasing all resources.
@@ -71,6 +73,13 @@ class BreachModel {
 	float getAngle() { return (float)M_PI * angle / 180.0f; }
 
 	/**
+	 * Returns the current state of the breach.
+	 *
+	 * @return the current state of the breach.
+	 */
+	bool getIsResolved() { return resolved; }
+
+	/**
 	 * Returns the current sprite of the breach.
 	 *
 	 * @return the current sprite of the breach.
@@ -83,6 +92,13 @@ class BreachModel {
 	 * @param value The breach angle in radians
 	 */
 	void setAngle(float value) { angle = 180.0f * value / (float)M_PI; }
+
+	/**
+	 * Sets the current state of the breach.
+	 *
+	 * @param isFixed If the breach is fixed.
+	 */
+	void setIsResolved(bool isResolved) { resolved = isResolved; }
 
 	/**
 	 * Sets the sprite of the breach.

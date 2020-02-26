@@ -1,4 +1,4 @@
-﻿#include "BreachModel.h"
+#include "BreachModel.h"
 /**
  * Initializes a new breach with the given angle
  *
