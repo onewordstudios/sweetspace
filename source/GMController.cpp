@@ -66,28 +66,25 @@ void GMController::update(float dt) {
 		if (breaches.at(i) == nullptr) {
 			continue;
 		}
-		if (breachFree.at(i) == false) {
+		if (breaches.at(i)->getIsResolved() == true) {
 			breaches.at(i)->setAngle(0);
 			breachFree.at(i) = true;
-			breaches.at(i)->setIsResolved(true);
+			breaches.at(i)->setIsResolved(false);
 			numEvents--;
-			CULog("Remove Breach");
+			// CULog("Remove Breach");
 		}
 	}
 
 	// Simple logic for adding a breach when under max and randomly, replace with actual logic later
-	if (rand() % 1000 > 1) return;
+	if (rand() % 100 > 1) return;
 	if (numEvents < MAX_EVENTS) {
 		for (int i = 0; i < MAX_EVENTS; i++) {
 			if (breachFree.at(i) == true) {
-				/*if (breaches.at(i) == nullptr) {
-					breaches.at(i)->alloc();
-				}*/
 				breaches.at(i)->setAngle((rand() % 360) * (float)M_PI / 180.0f);
-				breaches.at(i)->setIsResolved(false);
+				// breaches.at(i)->setIsResolved(false);
 				breachFree.at(i) = false;
 				numEvents++;
-				CULog("Add Breach");
+				// CULog("Add Breach");
 				break;
 			}
 		}
