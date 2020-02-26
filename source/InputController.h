@@ -64,6 +64,10 @@ class InputController {
 	 * Most Recent Tap location to pass down the scenegraph
 	 */
 	cugl::Vec2 tapLoc;
+	/**
+	 * Whether a tap recently occurred
+	 */
+	bool tapped;
 
    public:
 #pragma mark -
@@ -136,14 +140,21 @@ class InputController {
 	 * @return The roll amount. -1 is all left, 1 is all right, 0 is neutral.
 	 */
 	const float getRoll() { return rollAmount; }
+
 	/**
-	 * Returns the most recent tap location.
+	 * Returns the most recent tap location if a tap recently happened.
 	 *
-	 * No Mouse Support Implemented.
-	 *
-	 * @return The tap location. cugl::Vec2 of x,y screen coordinates.
+	 * @return The tap location. cugl::Vec2 of x,y screen coordinates. Returns nullptr if no recent
+	 * tap.
 	 */
-	const cugl::Vec2 getTapLoc() { return tapLoc; }
+	const cugl::Vec2 getTapLoc() {
+		if (tapped) {
+			tapped = false;
+			return tapLoc;
+		} else {
+			return nullptr;
+		}
+	}
 
 #pragma mark -
 #pragma mark Touch Callbacks
