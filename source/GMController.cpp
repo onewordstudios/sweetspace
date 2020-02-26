@@ -56,6 +56,7 @@ bool GMController::init(const std::vector<std::shared_ptr<BreachModel>> b) {
  */
 void GMController::update(float dt) {
 	// Simple logic for adding breaches when under max, replace with actual logic later
+	if (rand() % 1000 > 1) return;
 	if (numEvents < MAX_EVENTS) {
 		breaches.at(numEvents)->setAngle((rand() % 360) * (float)M_PI / 180.0f);
 		numEvents++;
