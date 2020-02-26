@@ -151,6 +151,12 @@ void GameGraphRoot::update(float timestep) {
 			}
 			Vec2 breachPos = Vec2(DIAMETER + RADIUS * sin(breachModel->getAngle()),
 								  RADIUS - RADIUS * cos(breachModel->getAngle()));
+			if (breachModel->getAngle() < 0) {
+				breachPos = Vec2(0, 0);
+			}
+			breachModel->getSprite()->setPosition(breachPos);
+		} else {
+			Vec2 breachPos = Vec2(0, 0);
 			breachModel->getSprite()->setPosition(breachPos);
 		}
 	}
