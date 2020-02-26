@@ -152,7 +152,7 @@ class InputController {
 			tapped = false;
 			return tapLoc;
 		} else {
-			return nullptr;
+			return cugl::Vec2::ZERO;
 		}
 	}
 

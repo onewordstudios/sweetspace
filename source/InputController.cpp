@@ -260,6 +260,6 @@ void InputController::clickBeganCB(const cugl::MouseEvent& event, Uint8 clicks, 
  */
 void InputController::clickEndedCB(const cugl::MouseEvent& event, Uint8 clicks, bool focus) {
 	// Only need to update the position on click end event
-	tapped = true;
 	tapLoc.set(event.position);
+	tapped = true;
 }

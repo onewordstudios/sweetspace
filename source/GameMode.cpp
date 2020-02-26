@@ -33,6 +33,8 @@ constexpr unsigned int SCENE_WIDTH = 1024;
 /** The maximum number of events on ship at any one time. This will probably need to scale with the
  * number of players*/
 constexpr unsigned int MAX_EVENTS = 3;
+/** The Angle in radians for which a tap can registers as fixing a breach*/
+constexpr float EPSILON_ANGLE = 0.09f;
 
 #pragma mark -
 #pragma mark Constructors
@@ -108,12 +110,30 @@ void GameMode::reset() {
  */
 void GameMode::update(float timestep) {
 	input.update(timestep);
-	gm.update(timestep);
 
 	// Reset the game if necessary
 	// if (input.didReset()) {
 	//	reset();
 	//}
+
+	// Hack Flag set for breaches. Change this to actual Scenegraph Detection Later
+	if (input.getTapLoc() != Vec2::ZERO) {
+		for (int i = 0; i < MAX_EVENTS; i++) {
+			// CULog("Hello");
+			if (breaches.at(i) == nullptr) {
+				continue;
+			}
+			float diff =
+				(float)M_PI -
+				abs(abs(donutModel->getAngle() - breaches.at(i)->getAngle()) - (float)M_PI);
+			if (diff < EPSILON_ANGLE) {
+				breaches.at(i)->setIsResolved(true);
+				CULog("World");
+			}
+		}
+	}
+	// Exception thrown : read access violation.** array** was nullptr.occurred
+	gm.update(timestep);
 
 	float thrust = input.getRoll();
 
