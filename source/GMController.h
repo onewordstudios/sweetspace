@@ -1,8 +1,10 @@
 ﻿#ifndef __GM_CONTROLLER_H__
 #define __GM_CONTROLLER_H__
+
 #include <cugl/cugl.h>
 
 #include "BreachModel.h"
+
 /**
  * This class represents the GM of the game
  */

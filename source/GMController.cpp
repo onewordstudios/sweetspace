@@ -1,14 +1,17 @@
 ﻿#include "GMController.h"
 
+#include <array>
+
 using namespace cugl;
 using namespace std;
 
 #pragma mark -
-#pragma mark GM Factors
-
-/** The maximum number of events on ship at any one time. This will probably need to scale with the
- * number of players*/
-constexpr unsigned int MAX_EVENTS = 3;
+#pragma mark GM Constants
+/** The maximum number of events on ship at any one time. This will probably need to scale with
+ * the number of players*/
+const int MAX_EVENTS = 3;
+/** Array recording which breaches are free or not. */
+array<bool, MAX_EVENTS> breachFree;
 
 #pragma mark -
 #pragma mark GM
@@ -43,6 +46,9 @@ void GMController::dispose() {
 bool GMController::init(const std::vector<std::shared_ptr<BreachModel>> b) {
 	bool success = true;
 	breaches = b;
+	for (int i = 0; i < MAX_EVENTS; i++) {
+		breachFree.at(i) = true;
+	}
 	// Set random seed based on time
 	srand(time(NULL));
 	active = success;
@@ -57,20 +63,40 @@ bool GMController::init(const std::vector<std::shared_ptr<BreachModel>> b) {
 void GMController::update(float dt) {
 	// Removing breaches that have been flagged as resolved
 	for (int i = 0; i < MAX_EVENTS; i++) {
-		if (!breaches.at(i)->getIsResolved()) {
-			breaches.at(i) == nullptr;
+		if (breaches.at(i) == nullptr) {
+			continue;
+		}
+		if (breaches.at(i)->getIsResolved()) {
+			breaches.at(i) = nullptr;
+			breachFree.at(i) = true;
+			numEvents--;
 		}
 	}
 
-	// Simple logic for adding breaches when under max, replace with actual logic later
+	// Simple logic for adding a breach when under max and randomly, replace with actual logic later
 	if (rand() % 1000 > 1) return;
 	if (numEvents < MAX_EVENTS) {
-		breaches.at(numEvents)->setAngle((rand() % 360) * (float)M_PI / 180.0f);
-		numEvents++;
+		for (int i = 0; i < MAX_EVENTS; i++) {
+			if (breachFree.at(numEvents) == true) {
+				if (breaches.at(numEvents) == nullptr) {
+					breaches.at(numEvents)->alloc();
+				}
+				breaches.at(numEvents)->setAngle((rand() % 360) * (float)M_PI / 180.0f);
+				breachFree.at(numEvents) = false;
+				numEvents++;
+				break;
+			}
+		}
 	}
 }
 
 /**
  * Clears all events
  */
-void GMController::clear() { numEvents = 0; }
+void GMController::clear() {
+	for (int i = 0; i < MAX_EVENTS; i++) {
+		breaches.at(i) = nullptr;
+		breachFree.at(i) = true;
+	}
+	numEvents = 0;
+}
