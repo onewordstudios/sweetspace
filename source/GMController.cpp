@@ -66,10 +66,12 @@ void GMController::update(float dt) {
 		if (breaches.at(i) == nullptr) {
 			continue;
 		}
-		if (breaches.at(i)->getIsResolved()) {
-			breaches.at(i) = nullptr;
+		if (breachFree.at(i) == false) {
+			breaches.at(i)->setAngle(0);
 			breachFree.at(i) = true;
+			breaches.at(i)->setIsResolved(true);
 			numEvents--;
+			CULog("Remove Breach");
 		}
 	}
 
@@ -77,13 +79,15 @@ void GMController::update(float dt) {
 	if (rand() % 1000 > 1) return;
 	if (numEvents < MAX_EVENTS) {
 		for (int i = 0; i < MAX_EVENTS; i++) {
-			if (breachFree.at(numEvents) == true) {
-				if (breaches.at(numEvents) == nullptr) {
-					breaches.at(numEvents)->alloc();
-				}
-				breaches.at(numEvents)->setAngle((rand() % 360) * (float)M_PI / 180.0f);
-				breachFree.at(numEvents) = false;
+			if (breachFree.at(i) == true) {
+				/*if (breaches.at(i) == nullptr) {
+					breaches.at(i)->alloc();
+				}*/
+				breaches.at(i)->setAngle((rand() % 360) * (float)M_PI / 180.0f);
+				breaches.at(i)->setIsResolved(false);
+				breachFree.at(i) = false;
 				numEvents++;
+				CULog("Add Breach");
 				break;
 			}
 		}

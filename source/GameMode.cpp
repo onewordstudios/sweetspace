@@ -119,7 +119,7 @@ void GameMode::update(float timestep) {
 	// Hack Flag set for breaches. Change this to actual Scenegraph Detection Later
 	if (input.getTapLoc() != Vec2::ZERO) {
 		for (int i = 0; i < MAX_EVENTS; i++) {
-			// CULog("Hello");
+			CULog("Hello");
 			if (breaches.at(i) == nullptr) {
 				continue;
 			}
