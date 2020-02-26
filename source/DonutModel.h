@@ -38,8 +38,6 @@ class DonutModel {
    protected:
 	/** INITIAL position of the donut in world space */
 	cugl::Vec2 initial;
-	/** Position of the ship in world space */
-	cugl::Vec2 position;
 	/** Current ship velocity */
 	cugl::Vec2 velocity;
 	/** Angle of the donut in the world space */
@@ -140,7 +138,7 @@ class DonutModel {
 	 *
 	 * @return the donut position as a reference.
 	 */
-	cugl::Vec2& getPosition() { return position; }
+	cugl::Vec2& getPosition() { return initial; }
 
 	/**
 	 * Returns the donut velocity as a reference.

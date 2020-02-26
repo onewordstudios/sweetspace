@@ -32,7 +32,6 @@ constexpr float RANGE_CLAMP(float x, float y, float z) { return (x < y ? y : (x 
  */
 bool DonutModel::init(const Vec2& pos) {
 	initial = pos;
-	position = pos;
 	return true;
 }
 
@@ -56,7 +55,6 @@ void DonutModel::dispose() { sprite = nullptr; }
 void DonutModel::setSprite(const std::shared_ptr<cugl::AnimationNode>& value) {
 	sprite = value;
 	if (sprite != nullptr) {
-		sprite->setPosition(position);
 		sprite->setFrame(SHIP_IMG_FLAT);
 		sprite->setAnchor(Vec2::ANCHOR_CENTER);
 	}
@@ -130,7 +128,6 @@ void DonutModel::advanceFrame() {
  * Resets the donut back to its original settings
  */
 void DonutModel::reset() {
-	position = initial;
 	velocity = Vec2::ZERO;
 	angle = 0.0f;
 	if (sprite != nullptr) {
