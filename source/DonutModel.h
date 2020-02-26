@@ -141,7 +141,7 @@ class DonutModel {
 	 * @return the donut position as a reference.
 	 */
 	cugl::Vec2& getPosition() { return position; }
-	
+
 	/**
 	 * Returns the donut velocity as a reference.
 	 *
