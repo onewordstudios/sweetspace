@@ -92,7 +92,7 @@ class BreachModel {
 	 * @param value The breach angle in radians
 	 */
 	void setAngle(float value) { angle = 180.0f * value / (float)M_PI; }
-	
+
 	/**
 	 * Sets the current state of the breach.
 	 *

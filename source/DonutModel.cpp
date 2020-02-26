@@ -16,7 +16,6 @@ constexpr float DONUT_MAX_TURN = 1.0f;
 /** Clamp x into the range [y,z] */
 constexpr float RANGE_CLAMP(float x, float y, float z) { return (x < y ? y : (x > z ? z : x)); }
 
-
 #pragma mark -
 #pragma mark Constructors
 

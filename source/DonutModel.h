@@ -38,10 +38,10 @@ class DonutModel {
    protected:
 	/** INITIAL position of the donut in world space */
 	cugl::Vec2 initial;
-    /** Position of the ship in world space */
-    cugl::Vec2 position;
-    /** Current ship velocity */
-    cugl::Vec2 velocity;
+	/** Position of the ship in world space */
+	cugl::Vec2 position;
+	/** Current ship velocity */
+	cugl::Vec2 velocity;
 	/** Angle of the donut in the world space */
 	float angle;
 	/** Current turning thrust (stored to facilitate decay) */
@@ -57,7 +57,7 @@ class DonutModel {
 	 * NEVER USE A CONSTRUCTOR WITH NEW. If you want to allocate a model on
 	 * the heap, use one of the static constructors instead.
 	 */
-	DonutModel(void) : angle(0), turning(0){}
+	DonutModel(void) : angle(0), turning(0) {}
 
 	/**
 	 * Destroys this donut, releasing all resources.
@@ -178,7 +178,7 @@ class DonutModel {
 	 * @param value The donut turning force
 	 */
 	void setTurning(float value) { turning = value; }
-	
+
 #pragma mark -
 #pragma mark Animation
 	/**
