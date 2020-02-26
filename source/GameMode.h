@@ -21,6 +21,7 @@
 
 #include <vector>
 
+#include "GMController.h"
 #include "GameGraphRoot.h"
 #include "InputController.h"
 
@@ -36,6 +37,8 @@ class GameMode {
 	// CONTROLLERS
 	/** Controller for abstracting out input across multiple platforms */
 	InputController input;
+	/** Controller for GM */
+	GMController gm;
 
 	// VIEW
 	/** Scenegraph root node */

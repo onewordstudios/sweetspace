@@ -30,6 +30,9 @@ using namespace std;
 
 /** This is adjusted by screen aspect ratio to get the height */
 constexpr unsigned int SCENE_WIDTH = 1024;
+/** The maximum number of events on ship at any one time. This will probably need to scale with the
+ * number of players*/
+constexpr unsigned int MAX_EVENTS = 3;
 
 #pragma mark -
 #pragma mark Constructors
@@ -61,11 +64,15 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 	Vec2 donutPos = sgRoot.getDonutNode()->getPosition();
 	donutModel = DonutModel::alloc(donutPos);
 	donutModel->setSprite(std::dynamic_pointer_cast<AnimationNode>(sgRoot.getDonutNode()));
-	breaches.push_back(BreachModel::alloc());
-	breaches.push_back(BreachModel::alloc());
+	for (int i = 0; i < MAX_EVENTS; i++) {
+		breaches.push_back(BreachModel::alloc());
+	}
 	sgRoot.setBreaches(breaches);
-	breaches.at(1)->setAngle(0.785);
+	// breaches.at(1)->setAngle(0.785);
 	sgRoot.setDonutModel(donutModel);
+
+	gm.init(breaches);
+
 	return true;
 }
 
@@ -74,6 +81,7 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
  */
 void GameMode::dispose() {
 	input.dispose();
+	gm.dispose();
 	sgRoot.dispose();
 	donutModel = nullptr;
 }
@@ -88,6 +96,7 @@ void GameMode::reset() {
 	donutModel->reset();
 	sgRoot.reset();
 	input.clear();
+	gm.clear();
 }
 
 /**
@@ -99,6 +108,7 @@ void GameMode::reset() {
  */
 void GameMode::update(float timestep) {
 	input.update(timestep);
+	gm.update(timestep);
 
 	// Reset the game if necessary
 	// if (input.didReset()) {
