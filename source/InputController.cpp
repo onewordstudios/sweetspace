@@ -1,4 +1,4 @@
-﻿//
+//
 //  SDInput.h
 //  Ship Demo
 //
@@ -24,13 +24,13 @@ constexpr float INPUT_MAXIMUM_FORCE = 1000.0f;
 /** Adjustment factor for touch input */
 constexpr float X_ADJUST_FACTOR = 500.0f;
 /** Adjustment factor for accelerometer input (found experimentally) */
-constexpr float ACCELEROM_X_FACTOR = 5.0f;
+constexpr float ACCELEROM_X_FACTOR = 2.5f;
 constexpr float ACCELEROM_Y_FACTOR = 200.0f;
 /** Adjustment factors for keyboard input */
 constexpr float KEYBOARD_FORCE_INCREMENT = 10.0f;
 
 /** Whether to active the accelerometer (this is TRICKY!) */
-constexpr bool USE_ACCELEROMETER = false;
+constexpr bool USE_ACCELEROMETER = true;
 /** The key to use for reseting the game */
 constexpr KeyCode RESET_KEY = KeyCode::R;
 /** How the time necessary to process a double tap (in milliseconds) */
