@@ -1,6 +1,7 @@
 ﻿#include "GMController.h"
 
 using namespace cugl;
+using namespace std;
 
 #pragma mark -
 #pragma mark GM Factors
@@ -27,17 +28,7 @@ GMController::GMController() : active(false), numEvents(0) {}
  */
 void GMController::dispose() {
 	if (active) {
-#ifndef CU_TOUCH_SCREEN
-		Input::deactivate<Keyboard>();
-#else
-		if (USE_ACCELEROMETER) {
-			Input::deactivate<Accelerometer>();
-		}
-		Touchscreen* touch = Input::get<Touchscreen>();
-		touch->removeBeginListener(LISTENER_KEY);
-		touch->removeEndListener(LISTENER_KEY);
 		active = false;
-#endif
 	}
 }
 
@@ -50,8 +41,11 @@ void GMController::dispose() {
  *
  * @return true if the controller was initialized successfully
  */
-bool GMController::init() {
+bool GMController::init(const std::vector<std::shared_ptr<BreachModel>> breaches) {
 	bool success = true;
+	/*if (breaches == nullptr) {
+		return false;
+	}*/
 	active = success;
 	return success;
 }
@@ -59,9 +53,13 @@ bool GMController::init() {
 /**
  * Processes the GM.
  *
- * This method is used to generate and manage current ship events
+ * This method is used to run the GM for generating and managing current ship events
  */
-void GMController::update(float dt) {}
+void GMController::update(float dt) {
+	if (numEvents < MAX_EVENTS) {
+		int angle = rand() % 360;
+	}
+}
 
 /**
  * Clears all events

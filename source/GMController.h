@@ -1,6 +1,8 @@
 ﻿#ifndef __GM_CONTROLLER_H__
 #define __GM_CONTROLLER_H__
 #include <cugl/cugl.h>
+
+#include "BreachModel.h"
 /**
  * This class represents the GM of the game
  */
@@ -9,14 +11,12 @@ class GMController {
 	/** Whether or not this input is active */
 	bool active;
 
-	// Input results
-	/**
-	 * Most Recent Tap location to pass down the scenegraph
-	 */
-	cugl::Vec2 tapLoc;
-
-	/** Current number of events on ship */
+	/** Current number of breaches on ship */
 	unsigned int numEvents;
+
+	// Return values
+	/** Current list of breaches on ship*/
+	std::vector<std::shared_ptr<BreachModel>> breaches;
 
    public:
 #pragma mark -
@@ -30,7 +30,7 @@ class GMController {
 	GMController(); // Don't initialize.  Allow stack based
 
 	/**
-	 * Disposes of this GM controller.
+	 * Disposes of this GM controller, releasing all resources.
 	 */
 	~GMController() { dispose(); }
 
@@ -50,7 +50,7 @@ class GMController {
 	 *
 	 * @return true if the controller was initialized successfully
 	 */
-	bool init();
+	bool init(std::vector<std::shared_ptr<BreachModel>> breaches);
 
 #pragma mark -
 #pragma mark Input Detection
