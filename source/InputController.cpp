@@ -19,22 +19,15 @@ constexpr float RANGE_CLAMP(float x, float y, float z) { return (x < y ? y : (x 
 #pragma mark -
 #pragma mark Input Factors
 
-/** Historical choice from Marmalade */
-constexpr float INPUT_MAXIMUM_FORCE = 1000.0f;
+#ifdef CU_TOUCH_SCREEN
 /** Adjustment factor for touch input */
 constexpr float X_ADJUST_FACTOR = 500.0f;
 /** Adjustment factor for accelerometer input (found experimentally) */
-constexpr float ACCELEROM_X_FACTOR = 2.5f;
-constexpr float ACCELEROM_Y_FACTOR = 200.0f;
-/** Adjustment factors for keyboard input */
-constexpr float KEYBOARD_FORCE_INCREMENT = 10.0f;
+constexpr float ACCELEROM_X_FACTOR = 0.05f;
+#endif
 
-/** Whether to active the accelerometer (this is TRICKY!) */
-constexpr bool USE_ACCELEROMETER = true;
 /** The key to use for reseting the game */
 constexpr KeyCode RESET_KEY = KeyCode::R;
-/** How the time necessary to process a double tap (in milliseconds) */
-constexpr unsigned int EVENT_DOUBLE_CLICK = 400;
 
 /** The key for the event handlers */
 constexpr unsigned int LISTENER_KEY = 1;
@@ -48,14 +41,7 @@ constexpr unsigned int LISTENER_KEY = 1;
  * object. This makes it safe to use this class without a pointer.
  */
 InputController::InputController()
-	: active(false),
-	  keyReset(false),
-	  forceLeft(0.0f),
-	  tapped(false),
-	  forceRight(0.0f),
-	  keybdThrust(0.0f),
-	  resetPressed(false),
-	  rollAmount(0.0f) {}
+	: active(false), keyReset(false), resetPressed(false), rollAmount(0.0f), tapped(false) {}
 
 /**
  * Deactivates this input controller, releasing all listeners.
@@ -71,9 +57,7 @@ void InputController::dispose() {
 		mouse->removePressListener(LISTENER_KEY);
 		mouse->removeReleaseListener(LISTENER_KEY);
 #else
-		if (USE_ACCELEROMETER) {
-			Input::deactivate<Accelerometer>();
-		}
+		Input::deactivate<Accelerometer>();
 		Touchscreen* touch = Input::get<Touchscreen>();
 		touch->removeBeginListener(LISTENER_KEY);
 		touch->removeEndListener(LISTENER_KEY);
@@ -110,9 +94,7 @@ bool InputController::init() {
 							  });
 
 #else
-	if (USE_ACCELEROMETER) {
-		success = Input::activate<Accelerometer>();
-	}
+	success = Input::activate<Accelerometer>();
 	Touchscreen* touch = Input::get<Touchscreen>();
 
 	touch->addBeginListener(LISTENER_KEY, [=](const cugl::TouchEvent& event, bool focus) {
@@ -145,43 +127,19 @@ void InputController::update(float dt) {
 
 	// Forces increase the longer you hold a key.
 	if (keys->keyDown(KeyCode::ARROW_LEFT)) {
-		forceLeft += KEYBOARD_FORCE_INCREMENT;
+		rollAmount = -1.0f;
+	} else if (keys->keyDown(KeyCode::ARROW_RIGHT)) {
+		rollAmount = 1.0f;
 	} else {
-		forceLeft = 0.0f;
+		rollAmount = 0.0f;
 	}
-	if (keys->keyDown(KeyCode::ARROW_RIGHT)) {
-		forceRight += KEYBOARD_FORCE_INCREMENT;
-	} else {
-		forceRight = 0.0f;
-	}
-
-	// Clamp everything so it does not fly off to infinity.
-	forceLeft = (forceLeft > INPUT_MAXIMUM_FORCE ? INPUT_MAXIMUM_FORCE : forceLeft);
-	forceRight = (forceRight > INPUT_MAXIMUM_FORCE ? INPUT_MAXIMUM_FORCE : forceRight);
-
-	// Update the keyboard thrust.  Result is cumulative.
-	keybdThrust += forceRight;
-	keybdThrust -= forceLeft;
-	keybdThrust = RANGE_CLAMP(keybdThrust, -INPUT_MAXIMUM_FORCE, INPUT_MAXIMUM_FORCE);
-
-	if (forceRight == 0 && forceLeft == 0) {
-		keybdThrust *= 0.9f;
-		if (abs(keybdThrust) < 1.0f) {
-			keybdThrust = 0.0f;
-		}
-	}
-
-	// Transfer to main thrust. This keeps us from "adding" to accelerometer or touch.
-	rollAmount = keybdThrust;
 #else
 	// MOBILE CONTROLS
-	if (USE_ACCELEROMETER) {
-		Vec3 acc = Input::get<Accelerometer>()->getAcceleration();
+	Vec3 acc = Input::get<Accelerometer>()->getAcceleration();
 
-		// Apply to thrust directly.
-		rollAmount = acc.x * ACCELEROM_X_FACTOR;
-	}
-	// Otherwise, uses touch
+	// Apply to thrust directly.
+	rollAmount = acc.x * ACCELEROM_X_FACTOR;
+
 #endif
 
 	resetPressed = keyReset;
@@ -201,10 +159,6 @@ void InputController::clear() {
 	resetPressed = false;
 	tapped = false;
 	rollAmount = 0.0f;
-	keybdThrust = 0.0f;
-
-	forceLeft = 0.0f;
-	forceRight = 0.0f;
 
 	dtouch = Vec2::ZERO;
 	tapLoc = Vec2::ZERO;
