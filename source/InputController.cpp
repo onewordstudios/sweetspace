@@ -19,13 +19,6 @@ constexpr float RANGE_CLAMP(float x, float y, float z) { return (x < y ? y : (x 
 #pragma mark -
 #pragma mark Input Factors
 
-#ifdef CU_TOUCH_SCREEN
-/** Adjustment factor for touch input */
-constexpr float X_ADJUST_FACTOR = 500.0f;
-/** Adjustment factor for accelerometer input (found experimentally) */
-constexpr float ACCELEROM_X_FACTOR = 0.05f;
-#endif
-
 /** The key to use for reseting the game */
 constexpr KeyCode RESET_KEY = KeyCode::R;
 
@@ -138,7 +131,7 @@ void InputController::update(float dt) {
 	Vec3 acc = Input::get<Accelerometer>()->getAcceleration();
 
 	// Apply to thrust directly.
-	rollAmount = acc.x * ACCELEROM_X_FACTOR;
+	rollAmount = acc.x;
 
 #endif
 
