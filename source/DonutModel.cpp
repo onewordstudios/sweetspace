@@ -6,13 +6,15 @@ using namespace cugl;
 #pragma mark Animation Constants and Functions
 /** Factor to multiply the forward thrust */
 constexpr unsigned int FULL_CIRCLE = 360;
-/** The max turn (in degrees) per frame */
-constexpr float DONUT_MAX_TURN = 1.0f;
+/** The max angular velocity (in degrees) per frame */
+constexpr float DONUT_MAX_TURN = 2.0f;
+/** The max force to apply to the donut */
+constexpr float DONUT_MAX_FORCE = 0.5f;
+/** The amount the angular velocity decays by each frame */
+constexpr float DONUT_FRICTION_FACTOR = 0.9f;
+/** The threshold below which the donut has effectively stopped rolling */
+constexpr float DONUT_STOP_THRESHOLD = 0.1f;
 
-/** Compute cos (in degrees) from 90 degrees */
-#define DCOS_90(a) (cos(M_PI * (a + 90.0f) / 180.0f)) // NOLINT Walker's old code; no easy fix
-/** Compute sin (in degrees) from 90 degrees */
-#define DSIN_90(a) (sin(M_PI * (a + 90.0f) / 180.0f)) // NOLINT Walker's old code; no easy fix
 /** Clamp x into the range [y,z] */
 constexpr float RANGE_CLAMP(float x, float y, float z) { return (x < y ? y : (x > z ? z : x)); }
 
@@ -31,7 +33,7 @@ constexpr float RANGE_CLAMP(float x, float y, float z) { return (x < y ? y : (x 
  * @return  true if the obstacle is initialized properly, false otherwise.
  */
 bool DonutModel::init(const Vec2& pos) {
-	initial = pos;
+	sgPos = pos;
 	return true;
 }
 
@@ -71,47 +73,55 @@ void DonutModel::setSprite(const std::shared_ptr<cugl::AnimationNode>& value) {
  */
 void DonutModel::update(float timestep) {
 	// Adjust the active forces.
-	turning = RANGE_CLAMP(turning, -DONUT_MAX_TURN, DONUT_MAX_TURN);
+	velocity = RANGE_CLAMP(velocity, -DONUT_MAX_TURN, DONUT_MAX_TURN);
 
 	if (sprite != nullptr) {
 		advanceFrame();
 	}
 
 	// Adjust the angle by the change in angle
-	angle += turning; // INVARIANT: -360 < ang < 720
-	if (angle > FULL_CIRCLE) angle -= FULL_CIRCLE;
-	if (angle < 0) angle += FULL_CIRCLE;
+	angle += velocity;
+	// INVARIANT: -360 < ang < 720
+	if (angle > FULL_CIRCLE) {
+		angle -= FULL_CIRCLE;
+	} else if (angle < 0) {
+		angle += FULL_CIRCLE;
+	}
+
+	velocity *= DONUT_FRICTION_FACTOR;
+	if (abs(velocity) < DONUT_STOP_THRESHOLD) {
+		velocity = 0;
+	}
 }
 
 /**
- * Determines the next animation frame for the donut and applies it to the sprite.
+ * Applies a force to the donut.
  *
- * This method includes some dampening of the turn, and should be called before
- * moving the donut.
+ * @param value The donut turning force
+ */
+void DonutModel::applyForce(float value) { velocity += DONUT_MAX_FORCE * value; }
+
+/**
+ * Determines the next animation frame for the donut and applies it to the sprite.
  */
 void DonutModel::advanceFrame() {
 	// Our animation depends on the current frame.
 	unsigned int frame = sprite->getFrame();
+	float velocity = RANGE_CLAMP(this->velocity, -DONUT_MAX_TURN, DONUT_MAX_TURN);
 	// Process the donut turning.
-	if (turning < 0.0f) {
+	if (velocity < 0.0f) {
 		unsigned int offset =
-			(unsigned int)((turning / DONUT_MAX_TURN) * (SHIP_IMG_FLAT - SHIP_IMG_RIGHT));
+			(unsigned int)((velocity / DONUT_MAX_TURN) * (SHIP_IMG_FLAT - SHIP_IMG_RIGHT));
 		unsigned int goal = SHIP_IMG_FLAT + offset;
 		if (frame != goal) {
 			frame += (frame < goal ? 1 : -1);
 		}
-		if (frame == SHIP_IMG_FLAT) {
-			turning = 0.0f;
-		}
-	} else if (turning > 0.0f) {
+	} else if (velocity > 0.0f) {
 		unsigned int offset =
-			(unsigned int)((turning / DONUT_MAX_TURN) * (SHIP_IMG_FLAT - SHIP_IMG_LEFT));
+			(unsigned int)((velocity / DONUT_MAX_TURN) * (SHIP_IMG_FLAT - SHIP_IMG_LEFT));
 		unsigned int goal = SHIP_IMG_FLAT - offset;
 		if (frame != goal) {
 			frame += (frame < goal ? 1 : -1);
-		}
-		if (frame == SHIP_IMG_FLAT) {
-			turning = 0.0f;
 		}
 	} else {
 		if (frame < SHIP_IMG_FLAT) {
@@ -128,13 +138,12 @@ void DonutModel::advanceFrame() {
  * Resets the donut back to its original settings
  */
 void DonutModel::reset() {
-	velocity = Vec2::ZERO;
 	angle = 0.0f;
 	if (sprite != nullptr) {
 		sprite->setFrame(SHIP_IMG_FLAT);
 	}
 	angle = 0.0f;
-	turning = 0.0f;
+	velocity = 0.0f;
 	if (sprite != nullptr) {
 		sprite->setFrame(SHIP_IMG_FLAT);
 	}

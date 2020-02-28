@@ -136,7 +136,7 @@ void GameMode::update(float timestep) {
 	float thrust = input.getRoll();
 
 	// Move the donut (MODEL ONLY)
-	donutModel->setTurning(thrust);
+	donutModel->applyForce(thrust);
 	donutModel->update(timestep);
 
 	sgRoot.update(timestep);
