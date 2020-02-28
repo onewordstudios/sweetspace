@@ -55,7 +55,7 @@ int main(int argc, char* argv[]) {
 	/// SET YOUR APPLICATION PROPERTIES
 
 	// The unique application name
-	app.setName("sweetspace");
+	app.setName("SweetSpace");
 
 	// The name of your studio (for organizing save files)
 	app.setOrganization("onewordstudios");
