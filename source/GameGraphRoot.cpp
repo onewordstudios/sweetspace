@@ -16,10 +16,10 @@ using namespace std;
 constexpr unsigned int SCENE_WIDTH = 1024;
 
 /** 2 pi */
-constexpr float TWO_PI = 2 * M_PI;
+constexpr float TWO_PI = (float)(2 * M_PI);
 
 /** Pi over 180 for converting between degrees and radians */
-constexpr float PI_180 = M_PI / 180;
+constexpr float PI_180 = (float)(M_PI / 180);
 
 /** The scale of the breach textures. */
 constexpr float BREACH_SCALE = 0.25;
@@ -119,7 +119,7 @@ void GameGraphRoot::update(float timestep) {
 	// Update the HUD
 	coordHUD->setText(positionText());
 
-	Vec2 offset = donutModel->getPosition() - farSpace->getPosition();
+	Vec2 offset = donutModel->getSceneGraphPosition() - farSpace->getPosition();
 
 	// Anchor points are in texture coordinates (0 to 1). Scale it.
 	offset.x = offset.x / allSpace->getContentSize().width;
