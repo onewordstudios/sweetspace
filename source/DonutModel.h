@@ -41,7 +41,7 @@ class DonutModel {
 	/** Angle of the donut in the world space */
 	float angle;
 	/** Current turning thrust (stored to facilitate decay) */
-	float turning;
+	float velocity;
 	/** Reference to image in SceneGraph for animation */
 	std::shared_ptr<cugl::AnimationNode> sprite;
 
@@ -53,7 +53,7 @@ class DonutModel {
 	 * NEVER USE A CONSTRUCTOR WITH NEW. If you want to allocate a model on
 	 * the heap, use one of the static constructors instead.
 	 */
-	DonutModel(void) : angle(0), turning(0) {}
+	DonutModel(void) : angle(0), velocity(0) {}
 
 	/**
 	 * Destroys this donut, releasing all resources.
@@ -153,18 +153,18 @@ class DonutModel {
 	void setAngle(float value) { angle = HALF_CIRCLE * value / (float)M_PI; }
 
 	/**
-	 * Returns the current turning force on the donut
+	 * Returns the current velocity of the donut.
 	 *
-	 * @return the current turning force on the donut
+	 * @return the current velocity of the donut.
 	 */
-	float getTurning() { return turning; }
+	float getVelocity() { return velocity; }
 
 	/**
-	 * Sets the current turning force on the donut
+	 * Applies a force to the donut.
 	 *
 	 * @param value The donut turning force
 	 */
-	void setTurning(float value) { turning = value; }
+	void applyForce(float value);
 
 #pragma mark -
 #pragma mark Animation
