@@ -31,7 +31,7 @@ constexpr float RANGE_CLAMP(float x, float y, float z) { return (x < y ? y : (x 
  * @return  true if the obstacle is initialized properly, false otherwise.
  */
 bool DonutModel::init(const Vec2& pos) {
-	initial = pos;
+	sgPos = pos;
 	return true;
 }
 
@@ -78,9 +78,13 @@ void DonutModel::update(float timestep) {
 	}
 
 	// Adjust the angle by the change in angle
-	angle += turning; // INVARIANT: -360 < ang < 720
-	if (angle > FULL_CIRCLE) angle -= FULL_CIRCLE;
-	if (angle < 0) angle += FULL_CIRCLE;
+	angle += turning;
+	// INVARIANT: -360 < ang < 720
+	if (angle > FULL_CIRCLE) {
+		angle -= FULL_CIRCLE;
+	} else if (angle < 0) {
+		angle += FULL_CIRCLE;
+	}
 }
 
 /**
@@ -128,7 +132,6 @@ void DonutModel::advanceFrame() {
  * Resets the donut back to its original settings
  */
 void DonutModel::reset() {
-	velocity = Vec2::ZERO;
 	angle = 0.0f;
 	if (sprite != nullptr) {
 		sprite->setFrame(SHIP_IMG_FLAT);

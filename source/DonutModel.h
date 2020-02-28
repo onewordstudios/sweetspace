@@ -35,11 +35,9 @@ class DonutModel {
 	 */
 	void advanceFrame();
 
-   protected:
-	/** INITIAL position of the donut in world space */
-	cugl::Vec2 initial;
-	/** Current ship velocity */
-	cugl::Vec2 velocity;
+	/** Scene graph position of the donut; used to position the asset in the scene graph. Should not
+	 * be modified. */
+	cugl::Vec2 sgPos;
 	/** Angle of the donut in the world space */
 	float angle;
 	/** Current turning thrust (stored to facilitate decay) */
@@ -132,22 +130,13 @@ class DonutModel {
 	// SHORT METHODS CAN BE IN-LINED IN C++
 
 	/**
-	 * Returns the donut position as a reference.
+	 * Returns the donut position in the scene graph as a reference.
 	 *
 	 * This allows us to modify the value.
 	 *
 	 * @return the donut position as a reference.
 	 */
-	cugl::Vec2& getPosition() { return initial; }
-
-	/**
-	 * Returns the donut velocity as a reference.
-	 *
-	 * This allows us to modify the value.
-	 *
-	 * @return the donut velocity as a reference.
-	 */
-	cugl::Vec2& getVelocity() { return velocity; }
+	cugl::Vec2& getPosition() { return sgPos; }
 
 	/**
 	 * Returns the current angle of the donut in radians.
