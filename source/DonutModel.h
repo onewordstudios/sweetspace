@@ -127,16 +127,15 @@ class DonutModel {
 
 #pragma mark -
 #pragma mark Accessors
-	// SHORT METHODS CAN BE IN-LINED IN C++
 
 	/**
 	 * Returns the donut position in the scene graph as a reference.
 	 *
 	 * This allows us to modify the value.
 	 *
-	 * @return the donut position as a reference.
+	 * @return the donut's scene graph position as a reference.
 	 */
-	cugl::Vec2& getPosition() { return sgPos; }
+	cugl::Vec2& getSceneGraphPosition() { return sgPos; }
 
 	/**
 	 * Returns the current angle of the donut in radians.

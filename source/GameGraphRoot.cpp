@@ -119,7 +119,7 @@ void GameGraphRoot::update(float timestep) {
 	// Update the HUD
 	coordHUD->setText(positionText());
 
-	Vec2 offset = donutModel->getPosition() - farSpace->getPosition();
+	Vec2 offset = donutModel->getSceneGraphPosition() - farSpace->getPosition();
 
 	// Anchor points are in texture coordinates (0 to 1). Scale it.
 	offset.x = offset.x / allSpace->getContentSize().width;
