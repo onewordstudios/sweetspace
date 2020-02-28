@@ -13,7 +13,7 @@ constexpr float DONUT_MAX_FORCE = 0.5f;
 /** The amount the angular velocity decays by each frame */
 constexpr float DONUT_FRICTION_FACTOR = 0.9f;
 /** The threshold below which the donut has effectively stopped rolling */
-constexpr float DONUT_STOP_THRESHOLD = 0.1f;
+constexpr float DONUT_STOP_THRESHOLD = 0.01f;
 
 /** Clamp x into the range [y,z] */
 constexpr float RANGE_CLAMP(float x, float y, float z) { return (x < y ? y : (x > z ? z : x)); }
