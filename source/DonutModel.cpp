@@ -15,10 +15,6 @@ constexpr float DONUT_FRICTION_FACTOR = 0.9f;
 /** The threshold below which the donut has effectively stopped rolling */
 constexpr float DONUT_STOP_THRESHOLD = 0.1f;
 
-/** Compute cos (in degrees) from 90 degrees */
-#define DCOS_90(a) (cos(M_PI * (a + 90.0f) / 180.0f)) // NOLINT Walker's old code; no easy fix
-/** Compute sin (in degrees) from 90 degrees */
-#define DSIN_90(a) (sin(M_PI * (a + 90.0f) / 180.0f)) // NOLINT Walker's old code; no easy fix
 /** Clamp x into the range [y,z] */
 constexpr float RANGE_CLAMP(float x, float y, float z) { return (x < y ? y : (x > z ? z : x)); }
 
