@@ -1,7 +1,7 @@
 {
 	"textures": {
-		"ship": {
-            "file":   "textures/ships.png"
+		"donut": {
+            "file":   "textures/yellow.png"
         },
         "space": {
             "file":  "textures/space.png",
@@ -14,8 +14,8 @@
         "planet2": {
             "file":   "textures/planet2.png"
         },
-        "donut": {
-            "file":   "textures/donut.png"
+        "ship": {
+            "file":   "textures/ship.png"
         }
 	},
 	"fonts": {
@@ -42,7 +42,7 @@
                     },
                     "layout" : {
                         "x_anchor" : "center",
-                        "y_anchor" : "middle"
+                        "y_anchor" : "bottom"
                     },
                     "children" : {
                         "far": {
@@ -59,29 +59,27 @@
                             "data": {
                                 "size":     [2560,2560],
                                 "position": [1280,1920],
-                                "anchor":   [0.5,0.5]
+                                "anchor":   [0.5,0.25]
                             },
                             "children": {
                                 "planet_a": {
                                     "type": "Image",
                                     "data": {
-                                        "texture":  "donut",
+                                        "texture":  "ship",
                                         "anchor":   [0.5,0.5],
-                                        "position": [1270,640],
-                                        "scale":    2.0
+                                        "position": [1279,640],
+                                        "scale":    1.35
                                     }
                                 }
                             }
                         },
                         "player": {
-                            "type": "Animation",
+                            "type": "Image",
                             "data": {
-                                "texture":  "ship",
-                                "span":     18,
-                                "cols":     5,
-                                "frame":    9,
-                                "position": [1280,1280],
-                                "anchor":   [0.5,0.5]
+                                "texture":  "donut",
+                                "position": [1280,1344],
+                                "anchor":   [0.5,0.5],
+                                "scale":    0.5
                             }
                         }
                     }

@@ -15,7 +15,7 @@ class GameGraphRoot : public cugl::Scene {
 
 	// VIEW
 	/** Filmstrip representing the animated donut */
-	std::shared_ptr<cugl::AnimationNode> donutNode;
+	std::shared_ptr<cugl::Node> donutNode;
 	/** Label for on-screen coordinate HUD */
 	std::shared_ptr<cugl::Label> coordHUD;
 	/** Node to hold all of our graphics. Necesary for resolution indepedence. */

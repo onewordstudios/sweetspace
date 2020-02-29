@@ -1,23 +1,7 @@
-#ifndef __DONUT_MODEL_H__
+﻿#ifndef __DONUT_MODEL_H__
 #define __DONUT_MODEL_H__
 #include <cugl/cugl.h>
 constexpr float HALF_CIRCLE = 180.0f;
-
-/** Donut Frame Sprite numbers */
-// Left bank frame NOLINTNEXTLINE Walker's code
-#define SHIP_IMG_LEFT 0
-// Neutral frame NOLINTNEXTLINE Walker's code
-#define SHIP_IMG_FLAT 9
-// Right bank frame NOLINTNEXTLINE Walker's code
-#define SHIP_IMG_RIGHT 17
-
-/** Number of rows and cols in film strip */
-// NOLINTNEXTLINE
-#define SHIP_IMG_ROWS 4
-// NOLINTNEXTLINE
-#define SHIP_IMG_COLS 5
-// NOLINTNEXTLINE
-#define SHIP_IMG_SIZE 18
 
 #pragma mark -
 #pragma mark Donut Model
@@ -27,14 +11,6 @@ class DonutModel {
 	/** This macro disables the copy constructor (not allowed on models) */
 	CU_DISALLOW_COPY_AND_ASSIGN(DonutModel);
 
-	/**
-	 * Determines the next animation frame for the donut and applies it to the sprite.
-	 *
-	 * This method includes some dampening of the turn, and should be called before
-	 * moving the donut.
-	 */
-	void advanceFrame();
-
 	/** Scene graph position of the donut; used to position the asset in the scene graph. Should not
 	 * be modified. */
 	cugl::Vec2 sgPos;
@@ -43,7 +19,7 @@ class DonutModel {
 	/** Current turning thrust (stored to facilitate decay) */
 	float velocity;
 	/** Reference to image in SceneGraph for animation */
-	std::shared_ptr<cugl::AnimationNode> sprite;
+	std::shared_ptr<cugl::Node> sprite;
 
    public:
 #pragma mark Constructors
@@ -174,7 +150,7 @@ class DonutModel {
 	 *
 	 * @return a reference to film strip representing this donut.
 	 */
-	std::shared_ptr<cugl::AnimationNode>& getSprite() { return sprite; }
+	std::shared_ptr<cugl::Node>& getSprite() { return sprite; }
 
 	/**
 	 * Sets the film strip representing this donut.
@@ -183,7 +159,7 @@ class DonutModel {
 	 *
 	 * @param value The donut film strip.
 	 */
-	void setSprite(const std::shared_ptr<cugl::AnimationNode>& value);
+	void setSprite(const std::shared_ptr<cugl::Node>& value);
 
 	/**
 	 * Updates the state of the model
