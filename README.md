@@ -1,7 +1,9 @@
 # SweetSpace
 
 Linter Status [![Build Status](https://dev.azure.com/onewordstudios/sweetspace/_apis/build/status/sweetspace-lint?branchName=master)](https://dev.azure.com/onewordstudios/sweetspace/_build/latest?definitionId=2&branchName=master)
+
 Compilation Status [![Build Status](https://dev.azure.com/onewordstudios/sweetspace/_apis/build/status/sweetspace-compile?branchName=master)](https://dev.azure.com/onewordstudios/sweetspace/_build/latest?definitionId=4&branchName=master)
+
 ![Sweetspace game logo](http://onewordstudios.fun/sweetspace/sweetspace_hero.png "Sweetspace - game logo")
 
 Cosmic radiation is tearing through your ship, and you’re the only donuts who can stop it! Donut waste time as you roll and patch your way through these bite-sized holes in your ship. You’ll need to communicate and cooperate to achieve your dream of a sweet, sweet space.
