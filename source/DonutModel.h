@@ -1,4 +1,4 @@
-﻿#ifndef __DONUT_MODEL_H__
+#ifndef __DONUT_MODEL_H__
 #define __DONUT_MODEL_H__
 #include <cugl/cugl.h>
 constexpr float HALF_CIRCLE = 180.0f;
