@@ -14,7 +14,9 @@ Coming August 2020 to Android and iOS.
 
 ### Gameplay Prototype
 
-TODO
+Our programming objective for the Gameplay Prototype was to have a way to test and balance the core movement mechanic of tilting one's phone to move their avatar around the ship. Our prototype successfully implemented the portions of our game that could not be modeled in our nondigital prototype into a CUGL project and provided us a way to tweak the physics constants. Only one sized level is available, and the prototype is currently only single-player, though we began laying the groundwork for multiplayer support.
+
+Our game currently supports rolling around the ship as a single player and resolving issues. Tilt your phone left and right to roll; the further you tilt, the faster you roll. Tap on the screen when your donut is above a green circle to "fix" it. If using the desktop build, roll with the left / right arrow keys and click to emulate tapping.
 
 ## onewordstudios Team
 
@@ -34,7 +36,7 @@ TODO
 
 ## Acknowledgements
 
-Thanks to the [Game Design Initiative at Cornell University](https://gdiac.cis.cornell.edu/) for providing the Cornell University Game Library (CUGL) used for this project, as well as (Box2D)[https://box2d.org/] for the physics engine.
+Thanks to the [Game Design Initiative at Cornell University](https://gdiac.cis.cornell.edu/) for providing the Cornell University Game Library (CUGL) used for this project, as well as [Box2D](https://box2d.org/) for the physics engine.
 
 Continuous Integration provided by [Azure DevOps](https://azure.microsoft.com/en-us/services/devops/).
 
