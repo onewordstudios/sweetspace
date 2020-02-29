@@ -28,7 +28,7 @@ constexpr float BREACH_SCALE = 0.25;
 constexpr unsigned int DIAMETER = 1280;
 
 /** The radius of the ship. Also the y coordinate of the center of the ship */
-constexpr unsigned int RADIUS = 640;
+constexpr unsigned int RADIUS = 550;
 
 #pragma mark -
 #pragma mark Constructors
@@ -67,7 +67,7 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 	allSpace = assets->get<Node>("game_field");
 	farSpace = assets->get<Node>("game_field_far");
 	nearSpace = assets->get<Node>("game_field_near");
-	donutNode = std::dynamic_pointer_cast<AnimationNode>(assets->get<Node>("game_field_player"));
+	donutNode = assets->get<Node>("game_field_player");
 	coordHUD = std::dynamic_pointer_cast<Label>(assets->get<Node>("game_hud"));
 
 	addChild(scene);
@@ -119,12 +119,6 @@ void GameGraphRoot::update(float timestep) {
 	// Update the HUD
 	coordHUD->setText(positionText());
 
-	Vec2 offset = donutModel->getSceneGraphPosition() - farSpace->getPosition();
-
-	// Anchor points are in texture coordinates (0 to 1). Scale it.
-	offset.x = offset.x / allSpace->getContentSize().width;
-	offset.y = offset.y / allSpace->getContentSize().height;
-
 	float angle = TWO_PI - donutModel->getAngle();
 
 	// Reanchor the node at the center of the screen and rotate about center.
@@ -133,11 +127,15 @@ void GameGraphRoot::update(float timestep) {
 	farSpace->setPosition(position); // Reseting the anchor changes the position
 	farSpace->setAngle(angle);
 
-	// Reanchor the node at the center of the screen and rotate about center.
-	position = nearSpace->getPosition();
-	nearSpace->setAnchor(offset + Vec2::ANCHOR_CENTER);
-	nearSpace->setPosition(position); // Reseting the anchor changes the position
+	// Rotate about center.
 	nearSpace->setAngle(angle);
+
+	double radiusRatio = RADIUS / (donutNode->getWidth() / 2.0);
+
+	angle = donutNode->getAngle() - donutModel->getVelocity() * PI_180 * radiusRatio;
+	donutNode->setAnchor(Vec2::ANCHOR_CENTER);
+	donutNode->setAngle(angle);
+
 	for (int i = 0; i < breaches.size(); i++) {
 		std::shared_ptr<BreachModel> breachModel = breaches.at(i);
 		if (!breachModel->getIsResolved()) {
@@ -150,7 +148,7 @@ void GameGraphRoot::update(float timestep) {
 				nearSpace->addChild(breachNode);
 			}
 			Vec2 breachPos = Vec2(DIAMETER + RADIUS * sin(breachModel->getAngle()),
-								  RADIUS - RADIUS * cos(breachModel->getAngle()));
+								  DIAMETER / 2.0f - RADIUS * cos(breachModel->getAngle()));
 			if (breachModel->getAngle() < 0) {
 				breachPos = Vec2(0, 0);
 			}
