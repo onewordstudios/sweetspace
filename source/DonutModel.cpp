@@ -1,4 +1,4 @@
-﻿#include "DonutModel.h"
+#include "DonutModel.h"
 
 using namespace cugl;
 
