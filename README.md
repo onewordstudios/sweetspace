@@ -6,6 +6,10 @@ Compilation Status [![Build Status](https://dev.azure.com/onewordstudios/sweetsp
 
 Cosmic radiation is tearing through your ship, and you’re the only donuts who can stop it! Donut waste time as you roll and patch your way through these bite-sized holes in your ship. You’ll need to communicate and cooperate to achieve your dream of a sweet, sweet space.
 
+A game developed by [onewordstudios](https://onewordstudios.fun) for CS 4152 at Cornell University.
+
+Coming August 2020 to Android and iOS.
+
 ## Current Progress
 
 ### Gameplay Prototype
