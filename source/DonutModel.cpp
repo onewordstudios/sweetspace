@@ -54,10 +54,9 @@ void DonutModel::dispose() { sprite = nullptr; }
  *
  * @param value The donut film strip.
  */
-void DonutModel::setSprite(const std::shared_ptr<cugl::AnimationNode>& value) {
+void DonutModel::setSprite(const std::shared_ptr<cugl::Node>& value) {
 	sprite = value;
 	if (sprite != nullptr) {
-		sprite->setFrame(SHIP_IMG_FLAT);
 		sprite->setAnchor(Vec2::ANCHOR_CENTER);
 	}
 }
@@ -74,10 +73,6 @@ void DonutModel::setSprite(const std::shared_ptr<cugl::AnimationNode>& value) {
 void DonutModel::update(float timestep) {
 	// Adjust the active forces.
 	velocity = RANGE_CLAMP(velocity, -DONUT_MAX_TURN, DONUT_MAX_TURN);
-
-	if (sprite != nullptr) {
-		advanceFrame();
-	}
 
 	// Adjust the angle by the change in angle
 	angle += velocity;
@@ -102,49 +97,9 @@ void DonutModel::update(float timestep) {
 void DonutModel::applyForce(float value) { velocity += DONUT_MAX_FORCE * value; }
 
 /**
- * Determines the next animation frame for the donut and applies it to the sprite.
- */
-void DonutModel::advanceFrame() {
-	// Our animation depends on the current frame.
-	unsigned int frame = sprite->getFrame();
-	float velocity = RANGE_CLAMP(this->velocity, -DONUT_MAX_TURN, DONUT_MAX_TURN);
-	// Process the donut turning.
-	if (velocity < 0.0f) {
-		unsigned int offset =
-			(unsigned int)((velocity / DONUT_MAX_TURN) * (SHIP_IMG_FLAT - SHIP_IMG_RIGHT));
-		unsigned int goal = SHIP_IMG_FLAT + offset;
-		if (frame != goal) {
-			frame += (frame < goal ? 1 : -1);
-		}
-	} else if (velocity > 0.0f) {
-		unsigned int offset =
-			(unsigned int)((velocity / DONUT_MAX_TURN) * (SHIP_IMG_FLAT - SHIP_IMG_LEFT));
-		unsigned int goal = SHIP_IMG_FLAT - offset;
-		if (frame != goal) {
-			frame += (frame < goal ? 1 : -1);
-		}
-	} else {
-		if (frame < SHIP_IMG_FLAT) {
-			frame++;
-		} else if (frame > SHIP_IMG_FLAT) {
-			frame--;
-		}
-	}
-
-	sprite->setFrame((int)frame);
-}
-
-/**
  * Resets the donut back to its original settings
  */
 void DonutModel::reset() {
 	angle = 0.0f;
-	if (sprite != nullptr) {
-		sprite->setFrame(SHIP_IMG_FLAT);
-	}
-	angle = 0.0f;
 	velocity = 0.0f;
-	if (sprite != nullptr) {
-		sprite->setFrame(SHIP_IMG_FLAT);
-	}
 }
