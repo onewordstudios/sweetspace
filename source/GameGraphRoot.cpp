@@ -1,4 +1,4 @@
-﻿#include "GameGraphRoot.h"
+#include "GameGraphRoot.h"
 
 #include <cugl/cugl.h>
 
@@ -125,7 +125,7 @@ void GameGraphRoot::update(float timestep) {
 	Vec2 position = farSpace->getPosition();
 	farSpace->setAnchor(Vec2::ANCHOR_CENTER);
 	farSpace->setPosition(position); // Reseting the anchor changes the position
-	farSpace->setAngle(angle);
+	// farSpace->setAngle(angle);
 
 	// Rotate about center.
 	nearSpace->setAngle(angle);

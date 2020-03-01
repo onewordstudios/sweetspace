@@ -4,10 +4,11 @@
             "file":   "textures/yellow.png"
         },
         "space": {
-            "file":  "textures/space.png",
+            "file":  "textures/sprinkle_skyb256.png",
             "wrapS": "repeat",
             "wrapT": "repeat"
         },
+
         "planet1": {
             "file":   "textures/planet1.png"
         },
