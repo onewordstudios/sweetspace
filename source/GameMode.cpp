@@ -62,7 +62,6 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 
 	sgRoot.init(assets);
 
-	// The following code creates two breaches for the sake of demonstration.
 	Vec2 donutPos = sgRoot.getDonutNode()->getPosition();
 	donutModel = DonutModel::alloc(donutPos);
 	donutModel->setSprite(std::dynamic_pointer_cast<AnimationNode>(sgRoot.getDonutNode()));
@@ -70,7 +69,6 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 		breaches.push_back(BreachModel::alloc());
 	}
 	sgRoot.setBreaches(breaches);
-	// breaches.at(1)->setAngle(0.785);
 	sgRoot.setDonutModel(donutModel);
 
 	gm.init(breaches);

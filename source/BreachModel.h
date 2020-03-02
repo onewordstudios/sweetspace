@@ -45,7 +45,7 @@ class BreachModel {
 	 *
 	 * @return true if the obstacle is initialized properly, false otherwise.
 	 */
-	virtual bool init() { return init(-1.0f); }
+	virtual bool init() { return init(-1.0f, 3); }
 
 	/**
 	 * Initializes a new breach with the given angle
@@ -58,7 +58,7 @@ class BreachModel {
 	 *
 	 * @return true if the obstacle is initialized properly, false otherwise.
 	 */
-	virtual bool init(const float a);
+	virtual bool init(const float a) { return init(a, 3); };
 
 	/**
 	 * Initializes a new breach with the given angle and max health

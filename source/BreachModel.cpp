@@ -4,22 +4,6 @@
 constexpr unsigned int HEALTH_DEFAULT = 3;
 
 /**
- * Initializes a new breach with the given angle and default max health
- *
- * This is an initializer.  It, combined with the constructor, produces the static
- * constructor create().  The initializer and normal constructor are private while
- * the static constructor is not.
- *
- * @param  a  The angle at which the breach exists
- *
- * @return  true if the obstacle is initialized properly, false otherwise.
- */
-bool BreachModel::init(float a) {
-	init(a, HEALTH_DEFAULT);
-	return true;
-}
-
-/**
  * Initializes a new breach with the given angle and max health
  *
  * This is an initializer.  It, combined with the constructor, produces the static
