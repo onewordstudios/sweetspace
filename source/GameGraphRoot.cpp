@@ -1,4 +1,4 @@
-#include "GameGraphRoot.h"
+﻿#include "GameGraphRoot.h"
 
 #include <cugl/cugl.h>
 
@@ -138,7 +138,7 @@ void GameGraphRoot::update(float timestep) {
 
 	for (int i = 0; i < breaches.size(); i++) {
 		std::shared_ptr<BreachModel> breachModel = breaches.at(i);
-		if (!breachModel->getIsResolved()) {
+		if (breachModel->getHealth() == 0) {
 			if (breachModel->getSprite() == nullptr) {
 				std::shared_ptr<Texture> image = assets->get<Texture>("planet2");
 				std::shared_ptr<PolygonNode> breachNode = PolygonNode::allocWithTexture(image);

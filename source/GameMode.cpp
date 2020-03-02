@@ -116,8 +116,24 @@ void GameMode::update(float timestep) {
 	//	reset();
 	//}
 
-	// Hack Flag set for breaches. Change this to actual Scenegraph Detection Later
-	if (input.getTapLoc() != Vec2::ZERO) {
+	// Hack breach health depletion
+	for (int i = 0; i < MAX_EVENTS; i++) {
+		if (breaches.at(i) == nullptr) {
+			continue;
+		}
+		float diff = (float)M_PI -
+					 abs(abs(donutModel->getAngle() - breaches.at(i)->getAngle()) - (float)M_PI);
+
+		if (diff < EPSILON_ANGLE && !breaches.at(i)->isPlayerOn()) {
+			breaches.at(i)->decHealth(1);
+			breaches.at(i)->setIsPlayerOn(true);
+		} else if (diff > EPSILON_ANGLE && breaches.at(i)->isPlayerOn()) {
+			breaches.at(i)->setIsPlayerOn(false);
+		}
+	}
+
+	// Change to jump logic
+	/*if (input.getTapLoc() != Vec2::ZERO) {
 		for (int i = 0; i < MAX_EVENTS; i++) {
 			if (breaches.at(i) == nullptr) {
 				continue;
@@ -126,10 +142,11 @@ void GameMode::update(float timestep) {
 				(float)M_PI -
 				abs(abs(donutModel->getAngle() - breaches.at(i)->getAngle()) - (float)M_PI);
 			if (diff < EPSILON_ANGLE) {
-				breaches.at(i)->setIsResolved(true);
+				breaches.at(i)->setHealth(0);
 			}
 		}
-	}
+	}*/
+
 	// Exception thrown : read access violation.** array** was nullptr.occurred
 	gm.update(timestep);
 

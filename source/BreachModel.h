@@ -6,8 +6,10 @@ class BreachModel {
    protected:
 	/** The angle at which the breach exists */
 	float angle;
-	/** The state of the breach: resolved or unresolved */
-	bool resolved;
+	/** The state of the breach in health: 0 means its resolved */
+	int health;
+	/** Whether the player is currently on this breach */
+	bool playerOn;
 	/** Reference to image in SceneGraph for animation */
 	std::shared_ptr<cugl::PolygonNode> sprite;
 
@@ -19,7 +21,7 @@ class BreachModel {
 	 * NEVER USE A CONSTRUCTOR WITH NEW. If you want to allocate a model on
 	 * the heap, use one of the static constructors instead.
 	 */
-	BreachModel(void) : angle(0), resolved(false) {}
+	BreachModel(void) : angle(0), health(0), playerOn(false) {}
 
 	/**
 	 * Destroys this breach, releasing all resources.
@@ -58,6 +60,19 @@ class BreachModel {
 	 */
 	virtual bool init(const float a);
 
+	/**
+	 * Initializes a new breach with the given angle and max health
+	 *
+	 * An initializer does the real work that the constructor does not.  It
+	 * initializes all assets and makes the object read for use.  By separating
+	 * them, we allow ourselfs non-pointer references to complex objects.
+	 *
+	 * @param a   The angle at which the breach exists
+	 *
+	 * @return true if the obstacle is initialized properly, false otherwise.
+	 */
+	virtual bool init(const float a, const int b);
+
 	static std::shared_ptr<BreachModel> alloc() {
 		std::shared_ptr<BreachModel> result = std::make_shared<BreachModel>();
 		return (result->init() ? result : nullptr);
@@ -73,11 +88,18 @@ class BreachModel {
 	float getAngle() { return (float)M_PI * angle / 180.0f; }
 
 	/**
-	 * Returns the current state of the breach.
+	 * Returns the current health of the breach.
 	 *
-	 * @return the current state of the breach.
+	 * @return the current health of the breach.
 	 */
-	bool getIsResolved() { return resolved; }
+	int getHealth() { return health; }
+
+	/**
+	 * Returns whether the player is currently on the breach.
+	 *
+	 * @return whether the player is currently on the breach.
+	 */
+	int isPlayerOn() { return playerOn; }
 
 	/**
 	 * Returns the current sprite of the breach.
@@ -94,11 +116,25 @@ class BreachModel {
 	void setAngle(float value) { angle = 180.0f * value / (float)M_PI; }
 
 	/**
-	 * Sets the current state of the breach.
+	 * Sets the current health of the breach.
 	 *
-	 * @param isFixed If the breach is fixed.
+	 * @param health New breach health.
 	 */
-	void setIsResolved(bool isResolved) { resolved = isResolved; }
+	void setHealth(int value) { health = value; }
+
+	/**
+	 * Decrements the current health of the breach by value.
+	 *
+	 * @param value Amount to decrement health by.
+	 */
+	void decHealth(int value) { health = health - value; }
+
+	/**
+	 * Sets whether the player is currently on the breach.
+	 *
+	 * @param b Whether the player is currently on the breach.
+	 */
+	void setIsPlayerOn(bool b) { playerOn = b; }
 
 	/**
 	 * Sets the sprite of the breach.
