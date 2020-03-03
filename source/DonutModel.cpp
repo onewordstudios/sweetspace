@@ -1,4 +1,4 @@
-#include "DonutModel.h"
+﻿#include "DonutModel.h"
 
 using namespace cugl;
 
@@ -14,6 +14,11 @@ constexpr float DONUT_MAX_FORCE = 0.5f;
 constexpr float DONUT_FRICTION_FACTOR = 0.9f;
 /** The threshold below which the donut has effectively stopped rolling */
 constexpr float DONUT_STOP_THRESHOLD = 0.01f;
+
+/** The threshold which the donut will begin to fall back to the ground again */
+constexpr float JUMP_HEIGHT = 0.3f;
+/** Downward Acceleration for calculating jump offsets */
+constexpr float GRAVITY = 6.0f;
 
 /** Clamp x into the range [y,z] */
 constexpr float RANGE_CLAMP(float x, float y, float z) { return (x < y ? y : (x > z ? z : x)); }
@@ -34,6 +39,8 @@ constexpr float RANGE_CLAMP(float x, float y, float z) { return (x < y ? y : (x 
  */
 bool DonutModel::init(const Vec2& pos) {
 	sgPos = pos;
+	// Set Initial jump Velocity based on gravity and max jump height
+	jumpVelocity = sqrt(2 * GRAVITY * JUMP_HEIGHT);
 	return true;
 }
 
@@ -68,7 +75,7 @@ void DonutModel::setSprite(const std::shared_ptr<cugl::Node>& value) {
  * This method moves the donut
  * and updates the sprite if it exists.
  *
- * @param timestep  Time elapsed since last called.
+ * @param timestep  Time elapsed (in seconds) since last called.
  */
 void DonutModel::update(float timestep) {
 	// Adjust the active forces.
@@ -87,6 +94,18 @@ void DonutModel::update(float timestep) {
 	if (abs(velocity) < DONUT_STOP_THRESHOLD) {
 		velocity = 0;
 	}
+
+	// Update jump offset depending on time passed since start of jump
+	if (jumping) {
+		jumpOffset = -GRAVITY / 2 * jumpTime * jumpTime + jumpVelocity * jumpTime;
+
+		// Check for end of jump
+		if (jumpTime > 0.0f && jumpOffset <= 0.0f) {
+			jumpOffset = 0.0f;
+			jumping = false;
+		}
+		jumpTime += timestep;
+	}
 }
 
 /**
@@ -97,9 +116,23 @@ void DonutModel::update(float timestep) {
 void DonutModel::applyForce(float value) { velocity += DONUT_MAX_FORCE * value; }
 
 /**
+ * Starts a fixed height jump for the donut.
+ *
+ * @param value The donut turning force
+ */
+void DonutModel::startJump() {
+	jumping = true;
+	jumpTime = 0.0f;
+}
+
+/**
  * Resets the donut back to its original settings
  */
 void DonutModel::reset() {
 	angle = 0.0f;
 	velocity = 0.0f;
+	jumpOffset = 0.0f;
+	jumpTime = 0.0f;
+	jumpVelocity = 0.0f;
+	jumping = false;
 }

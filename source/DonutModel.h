@@ -1,4 +1,4 @@
-#ifndef __DONUT_MODEL_H__
+﻿#ifndef __DONUT_MODEL_H__
 #define __DONUT_MODEL_H__
 #include <cugl/cugl.h>
 constexpr float HALF_CIRCLE = 180.0f;
@@ -18,6 +18,14 @@ class DonutModel {
 	float angle;
 	/** Current turning thrust (stored to facilitate decay) */
 	float velocity;
+	/** Offset from bottom of ship when Jumping based on proportion of hallway */
+	float jumpOffset;
+	/** Whether donut is currently jumping */
+	bool jumping;
+	/** The ellapsed time since the beginning of the jump in seconds */
+	float jumpTime;
+	/** Initial vertical velocity */
+	float jumpVelocity;
 	/** Reference to image in SceneGraph for animation */
 	std::shared_ptr<cugl::Node> sprite;
 
@@ -29,7 +37,8 @@ class DonutModel {
 	 * NEVER USE A CONSTRUCTOR WITH NEW. If you want to allocate a model on
 	 * the heap, use one of the static constructors instead.
 	 */
-	DonutModel(void) : angle(0), velocity(0) {}
+	DonutModel(void)
+		: angle(0), velocity(0), jumpOffset(0), jumping(false), jumpTime(0), jumpVelocity(0) {}
 
 	/**
 	 * Destroys this donut, releasing all resources.
@@ -128,6 +137,34 @@ class DonutModel {
 	void setAngle(float value) { angle = HALF_CIRCLE * value / (float)M_PI; }
 
 	/**
+	 * Returns the current angle of the donut in radians.
+	 *
+	 * @return the current angle of the donut in radians.
+	 */
+	float getJumpOffset() { return jumpOffset; }
+
+	/**
+	 * Sets the current jump offset of the donut in radians.
+	 *
+	 * @param value The jump offset
+	 */
+	void setJumpOffset(float value) { jumpOffset = value; }
+
+	/**
+	 * Sets the current angle of the donut in radians.
+	 *
+	 * @param value The donut angle in radians
+	 */
+	void setIsJumping(bool b) { jumping = b; }
+
+	/**
+	 * Returns whether the donut is currently jumping.
+	 *
+	 * @return whether the donut is currently jumping.
+	 */
+	bool isJumping() { return jumping; }
+
+	/**
 	 * Returns the current velocity of the donut.
 	 *
 	 * @return the current velocity of the donut.
@@ -140,6 +177,13 @@ class DonutModel {
 	 * @param value The donut turning force
 	 */
 	void applyForce(float value);
+
+	/**
+	 * Starts a fixed height jump for the donut.
+	 *
+	 * @param value The donut turning force
+	 */
+	void startJump();
 
 #pragma mark -
 #pragma mark Animation
@@ -167,7 +211,7 @@ class DonutModel {
 	 * This method moves the donut forward, dampens the forces (if necessary)
 	 * and updates the sprite if it exists.
 	 *
-	 * @param timestep  Time elapsed since last called.
+	 * @param timestep  Time elapsed (in seconds) since last called.
 	 */
 	void update(float timestep = 0.0f);
 

@@ -1,4 +1,4 @@
-#include "GameGraphRoot.h"
+﻿#include "GameGraphRoot.h"
 
 #include <cugl/cugl.h>
 
@@ -48,6 +48,7 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 	// Initialize the scene to a locked width
 	Size dimen = Application::get()->getDisplaySize();
 	dimen *= SCENE_WIDTH / dimen.width; // Lock the game to a reasonable resolution
+	screenHeight = dimen.height;
 	// Initialize the scene to a locked width
 	if (assets == nullptr) {
 		return false;
@@ -68,6 +69,7 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 	farSpace = assets->get<Node>("game_field_far");
 	nearSpace = assets->get<Node>("game_field_near");
 	donutNode = assets->get<Node>("game_field_player");
+	donutPos = donutNode->getPosition();
 	coordHUD = std::dynamic_pointer_cast<Label>(assets->get<Node>("game_hud"));
 
 	addChild(scene);
@@ -135,10 +137,13 @@ void GameGraphRoot::update(float timestep) {
 	angle = donutNode->getAngle() - donutModel->getVelocity() * PI_180 * radiusRatio;
 	donutNode->setAnchor(Vec2::ANCHOR_CENTER);
 	donutNode->setAngle(angle);
+	// Draw Jump Offset
+	float donutNewY = donutPos.y + donutModel->getJumpOffset() * screenHeight;
+	donutNode->setPositionY(donutNewY);
 
 	for (int i = 0; i < breaches.size(); i++) {
 		std::shared_ptr<BreachModel> breachModel = breaches.at(i);
-		if (!breachModel->getIsResolved()) {
+		if (breachModel->getHealth() > 0) {
 			if (breachModel->getSprite() == nullptr) {
 				std::shared_ptr<Texture> image = assets->get<Texture>("planet2");
 				std::shared_ptr<PolygonNode> breachNode = PolygonNode::allocWithTexture(image);

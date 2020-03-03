@@ -62,7 +62,6 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 
 	sgRoot.init(assets);
 
-	// The following code creates two breaches for the sake of demonstration.
 	Vec2 donutPos = sgRoot.getDonutNode()->getPosition();
 	donutModel = DonutModel::alloc(donutPos);
 	donutModel->setSprite(std::dynamic_pointer_cast<AnimationNode>(sgRoot.getDonutNode()));
@@ -70,7 +69,6 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 		breaches.push_back(BreachModel::alloc());
 	}
 	sgRoot.setBreaches(breaches);
-	// breaches.at(1)->setAngle(0.785);
 	sgRoot.setDonutModel(donutModel);
 
 	gm.init(breaches);
@@ -116,20 +114,23 @@ void GameMode::update(float timestep) {
 	//	reset();
 	//}
 
-	// Hack Flag set for breaches. Change this to actual Scenegraph Detection Later
-	if (input.getTapLoc() != Vec2::ZERO) {
-		for (int i = 0; i < MAX_EVENTS; i++) {
-			if (breaches.at(i) == nullptr) {
-				continue;
-			}
-			float diff =
-				(float)M_PI -
-				abs(abs(donutModel->getAngle() - breaches.at(i)->getAngle()) - (float)M_PI);
-			if (diff < EPSILON_ANGLE) {
-				breaches.at(i)->setIsResolved(true);
-			}
+	// Breach health depletion
+	for (int i = 0; i < MAX_EVENTS; i++) {
+		if (breaches.at(i) == nullptr) {
+			continue;
+		}
+		float diff = (float)M_PI -
+					 abs(abs(donutModel->getAngle() - breaches.at(i)->getAngle()) - (float)M_PI);
+
+		if (diff < EPSILON_ANGLE && !breaches.at(i)->isPlayerOn() &&
+			donutModel->getJumpOffset() == 0.0f) {
+			breaches.at(i)->decHealth(1);
+			breaches.at(i)->setIsPlayerOn(true);
+		} else if (diff > EPSILON_ANGLE && breaches.at(i)->isPlayerOn()) {
+			breaches.at(i)->setIsPlayerOn(false);
 		}
 	}
+
 	// Exception thrown : read access violation.** array** was nullptr.occurred
 	gm.update(timestep);
 
@@ -137,6 +138,10 @@ void GameMode::update(float timestep) {
 
 	// Move the donut (MODEL ONLY)
 	donutModel->applyForce(thrust);
+	// Jump Logic
+	if (input.getTapLoc() != Vec2::ZERO && !donutModel->isJumping()) {
+		donutModel->startJump();
+	}
 	donutModel->update(timestep);
 
 	sgRoot.update(timestep);

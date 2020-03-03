@@ -9,10 +9,15 @@ using namespace std;
 #pragma mark GM Constants
 /** The maximum number of events on ship at any one time. This will probably need to scale with
  * the number of players*/
-const int MAX_EVENTS = 3;
+const unsigned int MAX_EVENTS = 3;
 /** Spawn rate of breaches = 1/SPAWN_RATE for EVERY UPDATE FRAME. 100 is a very fast rate already.
  */
-const int SPAWN_RATE = 100;
+const unsigned int SPAWN_RATE = 100;
+/** Default Max Health of a Breach*/
+constexpr unsigned int HEALTH_DEFAULT = 3;
+constexpr float HALF_CIRCLE = 180.0f;
+constexpr unsigned int FULL_CIRCLE = 360;
+
 /** Array recording which breaches are free or not. */
 array<bool, MAX_EVENTS> breachFree;
 
@@ -64,23 +69,23 @@ bool GMController::init(const std::vector<std::shared_ptr<BreachModel>> b) {
  * This method is used to run the GM for generating and managing current ship events
  */
 void GMController::update(float dt) {
-	// Removing breaches that have been flagged as resolved
+	// Removing breaches that have 0 health left
 	for (int i = 0; i < MAX_EVENTS; i++) {
 		if (breaches.at(i) == nullptr) {
 			continue;
 		}
-		if (breaches.at(i)->getIsResolved() == true) {
+		if (!breachFree.at(i) && breaches.at(i)->getHealth() == 0) {
 			breaches.at(i)->setAngle(-1);
 			breachFree.at(i) = true;
-			breaches.at(i)->setIsResolved(false);
 		}
 	}
 
 	// Simple logic for adding a breach when under max and randomly, replace with actual logic later
 	if (rand() % SPAWN_RATE > 1) return;
 	for (int i = 0; i < MAX_EVENTS; i++) {
-		if (breachFree.at(i) == true) {
-			breaches.at(i)->setAngle((rand() % 360) * (float)M_PI / 180.0f);
+		if (breachFree.at(i)) {
+			breaches.at(i)->setAngle((rand() % FULL_CIRCLE) * (float)M_PI / HALF_CIRCLE);
+			breaches.at(i)->setHealth(HEALTH_DEFAULT);
 			breachFree.at(i) = false;
 			break;
 		}
