@@ -18,7 +18,6 @@ constexpr unsigned int HEALTH_DEFAULT = 3;
 bool BreachModel::init(float a, int b) {
 	angle = a;
 	health = b;
-	playerOn = false;
 	return true;
 }
 

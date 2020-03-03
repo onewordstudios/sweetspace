@@ -15,6 +15,8 @@ const unsigned int MAX_EVENTS = 3;
 const unsigned int SPAWN_RATE = 100;
 /** Default Max Health of a Breach*/
 constexpr unsigned int HEALTH_DEFAULT = 3;
+constexpr float HALF_CIRCLE = 180.0f;
+constexpr unsigned int FULL_CIRCLE = 360;
 
 /** Array recording which breaches are free or not. */
 array<bool, MAX_EVENTS> breachFree;
@@ -83,7 +85,7 @@ void GMController::update(float dt) {
 	if (rand() % SPAWN_RATE > 1) return;
 	for (int i = 0; i < MAX_EVENTS; i++) {
 		if (breachFree.at(i)) {
-			breaches.at(i)->setAngle((rand() % 360) * (float)M_PI / 180.0f);
+			breaches.at(i)->setAngle((rand() % FULL_CIRCLE) * (float)M_PI / HALF_CIRCLE);
 			breaches.at(i)->setHealth(HEALTH_DEFAULT);
 			breachFree.at(i) = false;
 			break;

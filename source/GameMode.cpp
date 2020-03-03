@@ -114,7 +114,7 @@ void GameMode::update(float timestep) {
 	//	reset();
 	//}
 
-	// Hack breach health depletion
+	// Breach health depletion
 	for (int i = 0; i < MAX_EVENTS; i++) {
 		if (breaches.at(i) == nullptr) {
 			continue;
@@ -122,28 +122,14 @@ void GameMode::update(float timestep) {
 		float diff = (float)M_PI -
 					 abs(abs(donutModel->getAngle() - breaches.at(i)->getAngle()) - (float)M_PI);
 
-		if (diff < EPSILON_ANGLE && !breaches.at(i)->isPlayerOn()) {
+		if (diff < EPSILON_ANGLE && !breaches.at(i)->isPlayerOn() &&
+			donutModel->getJumpOffset() == 0.0f) {
 			breaches.at(i)->decHealth(1);
 			breaches.at(i)->setIsPlayerOn(true);
 		} else if (diff > EPSILON_ANGLE && breaches.at(i)->isPlayerOn()) {
 			breaches.at(i)->setIsPlayerOn(false);
 		}
 	}
-
-	// Change to jump logic
-	/*if (input.getTapLoc() != Vec2::ZERO) {
-		for (int i = 0; i < MAX_EVENTS; i++) {
-			if (breaches.at(i) == nullptr) {
-				continue;
-			}
-			float diff =
-				(float)M_PI -
-				abs(abs(donutModel->getAngle() - breaches.at(i)->getAngle()) - (float)M_PI);
-			if (diff < EPSILON_ANGLE) {
-				breaches.at(i)->setHealth(0);
-			}
-		}
-	}*/
 
 	// Exception thrown : read access violation.** array** was nullptr.occurred
 	gm.update(timestep);
@@ -152,6 +138,10 @@ void GameMode::update(float timestep) {
 
 	// Move the donut (MODEL ONLY)
 	donutModel->applyForce(thrust);
+	// Jump Logic
+	if (input.getTapLoc() != Vec2::ZERO && !donutModel->isJumping()) {
+		donutModel->startJump();
+	}
 	donutModel->update(timestep);
 
 	sgRoot.update(timestep);
