@@ -4,7 +4,7 @@
             "file":   "textures/yellow.png"
         },
         "space": {
-            "file":  "textures/sprinkle_skyb256.png",
+            "file":  "textures/sprinkle_sky256.png",
             "wrapS": "repeat",
             "wrapT": "repeat"
         },

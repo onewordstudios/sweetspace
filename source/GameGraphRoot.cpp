@@ -1,4 +1,4 @@
-﻿#include "GameGraphRoot.h"
+#include "GameGraphRoot.h"
 
 #include <cugl/cugl.h>
 
@@ -157,6 +157,8 @@ void GameGraphRoot::update(float timestep) {
 			if (breachModel->getAngle() < 0) {
 				breachPos = Vec2(0, 0);
 			}
+			breachModel->getSprite()->setScale(BREACH_SCALE * breachModel->getHealth()
+											   / 3);
 			breachModel->getSprite()->setPosition(breachPos);
 		} else {
 			Vec2 breachPos = Vec2(0, 0);
