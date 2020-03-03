@@ -16,7 +16,7 @@ constexpr float DONUT_FRICTION_FACTOR = 0.9f;
 constexpr float DONUT_STOP_THRESHOLD = 0.01f;
 
 /** The threshold which the donut will begin to fall back to the ground again */
-constexpr float JUMP_HEIGHT = 0.5f;
+constexpr float JUMP_HEIGHT = 0.3f;
 /** Downward Acceleration for calculating jump offsets */
 constexpr float GRAVITY = 3.0f;
 

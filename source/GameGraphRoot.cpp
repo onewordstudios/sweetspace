@@ -139,7 +139,6 @@ void GameGraphRoot::update(float timestep) {
 	donutNode->setAngle(angle);
 	// Draw Jump Offset
 	float donutNewY = donutPos.y + donutModel->getJumpOffset() * screenHeight;
-	CULog("Donut Pos: %f", donutNewY);
 	donutNode->setPositionY(donutNewY);
 
 	for (int i = 0; i < breaches.size(); i++) {

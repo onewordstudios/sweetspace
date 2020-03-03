@@ -195,6 +195,8 @@ void InputController::touchEndedCB(const cugl::TouchEvent& event, bool focus) {
 void InputController::clickBeganCB(const cugl::MouseEvent& event, Uint8 clicks, bool focus) {
 	// Update the click location for later gestures
 	// dtouch.set(event.position);
+	tapLoc.set(event.position);
+	tapped = true;
 }
 
 /**
@@ -205,6 +207,4 @@ void InputController::clickBeganCB(const cugl::MouseEvent& event, Uint8 clicks, 
  */
 void InputController::clickEndedCB(const cugl::MouseEvent& event, Uint8 clicks, bool focus) {
 	// Only need to update the position on click end event
-	tapLoc.set(event.position);
-	tapped = true;
 }
