@@ -126,8 +126,11 @@ void GameGraphRoot::update(float timestep) {
 	// Reanchor the node at the center of the screen and rotate about center.
 	Vec2 position = farSpace->getPosition();
 	farSpace->setAnchor(Vec2::ANCHOR_CENTER);
-	farSpace->setPosition(position); // Reseting the anchor changes the position
-	// farSpace->setAngle(angle);
+	if (position == Vec2(1280+256,1920)){
+		farSpace->setPosition(Vec2(1280,1920));
+	} else {
+		farSpace->setPosition(position + Vec2(0.5,0)); // Reseting the anchor changes the position
+	}
 
 	// Rotate about center.
 	nearSpace->setAngle(angle);
