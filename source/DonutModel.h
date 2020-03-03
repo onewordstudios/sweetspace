@@ -24,6 +24,8 @@ class DonutModel {
 	bool jumping;
 	/** The ellapsed time since the beginning of the jump in seconds */
 	float timestamp;
+	/** Current vertical velocity */
+	float jumpVelocity;
 	/** Reference to image in SceneGraph for animation */
 	std::shared_ptr<cugl::Node> sprite;
 
@@ -35,7 +37,8 @@ class DonutModel {
 	 * NEVER USE A CONSTRUCTOR WITH NEW. If you want to allocate a model on
 	 * the heap, use one of the static constructors instead.
 	 */
-	DonutModel(void) : angle(0), velocity(0), jumpOffset(0), jumping(false), timestamp(0) {}
+	DonutModel(void)
+		: angle(0), velocity(0), jumpOffset(0), jumping(false), timestamp(0), jumpVelocity(0) {}
 
 	/**
 	 * Destroys this donut, releasing all resources.

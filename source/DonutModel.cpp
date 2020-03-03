@@ -18,7 +18,7 @@ constexpr float DONUT_STOP_THRESHOLD = 0.01f;
 /** The threshold which the donut will begin to fall back to the ground again */
 constexpr float JUMP_HEIGHT = 0.3f;
 /** Downward Acceleration for calculating jump offsets */
-constexpr float GRAVITY = 3.0f;
+constexpr float GRAVITY = 6.0f;
 
 /** Clamp x into the range [y,z] */
 constexpr float RANGE_CLAMP(float x, float y, float z) { return (x < y ? y : (x > z ? z : x)); }
@@ -95,8 +95,8 @@ void DonutModel::update(float timestep) {
 
 	// Update jump offset depending on time passed since start of jump
 	if (jumping) {
-		float v = sqrt(2 * GRAVITY * JUMP_HEIGHT);
-		jumpOffset = -GRAVITY / 2 * timestamp * timestamp + v * timestamp;
+		jumpVelocity = sqrt(2 * GRAVITY * JUMP_HEIGHT);
+		jumpOffset = -GRAVITY / 2 * timestamp * timestamp + jumpVelocity * timestamp;
 
 		// Check for end of jump
 		if (timestamp > 0.0f && jumpOffset <= 0.0f) {
