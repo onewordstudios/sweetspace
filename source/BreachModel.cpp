@@ -11,13 +11,13 @@ constexpr unsigned int HEALTH_DEFAULT = 3;
  * the static constructor is not.
  *
  * @param  a  The angle at which the breach exists
- * @param  b  The initial health of the breach
+ * @param  health  The initial health of the breach
  *
  * @return  true if the obstacle is initialized properly, false otherwise.
  */
-bool BreachModel::init(float a, int b) {
+bool BreachModel::init(float a, int health) {
 	angle = a;
-	health = b;
+	this->health = health;
 	return true;
 }
 

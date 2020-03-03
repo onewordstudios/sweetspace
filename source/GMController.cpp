@@ -77,7 +77,6 @@ void GMController::update(float dt) {
 		if (!breachFree.at(i) && breaches.at(i)->getHealth() == 0) {
 			breaches.at(i)->setAngle(-1);
 			breachFree.at(i) = true;
-			// breaches.at(i)->setHealth(false);
 		}
 	}
 

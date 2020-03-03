@@ -167,9 +167,9 @@ void InputController::clear() {
  * @param event The associated event
  */
 void InputController::touchBeganCB(const cugl::TouchEvent& event, bool focus) {
-	// Update the touch location for later gestures, Uncomment if gestures added or position change
-	// between touch down and up needed
-	// dtouch.set(event.position);
+	// Update the tap location for jump
+	tapLoc.set(event.position);
+	tapped = true;
 }
 
 /**
@@ -178,11 +178,7 @@ void InputController::touchBeganCB(const cugl::TouchEvent& event, bool focus) {
  * @param t     The touch information
  * @param event The associated event
  */
-void InputController::touchEndedCB(const cugl::TouchEvent& event, bool focus) {
-	// Only need to update the position on touch end event
-	tapLoc.set(event.position);
-	tapped = true;
-}
+void InputController::touchEndedCB(const cugl::TouchEvent& event, bool focus) {}
 
 #pragma mark -
 #pragma mark Click Callbacks
@@ -193,8 +189,7 @@ void InputController::touchEndedCB(const cugl::TouchEvent& event, bool focus) {
  * @param event The associated event
  */
 void InputController::clickBeganCB(const cugl::MouseEvent& event, Uint8 clicks, bool focus) {
-	// Update the click location for later gestures
-	// dtouch.set(event.position);
+	// Update the click location for jump
 	tapLoc.set(event.position);
 	tapped = true;
 }
@@ -205,6 +200,4 @@ void InputController::clickBeganCB(const cugl::MouseEvent& event, Uint8 clicks, 
  * @param t     The click information
  * @param event The associated event
  */
-void InputController::clickEndedCB(const cugl::MouseEvent& event, Uint8 clicks, bool focus) {
-	// Only need to update the position on click end event
-}
+void InputController::clickEndedCB(const cugl::MouseEvent& event, Uint8 clicks, bool focus) {}

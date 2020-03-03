@@ -39,6 +39,8 @@ constexpr float RANGE_CLAMP(float x, float y, float z) { return (x < y ? y : (x 
  */
 bool DonutModel::init(const Vec2& pos) {
 	sgPos = pos;
+	// Set Initial jump Velocity based on gravity and max jump height
+	jumpVelocity = sqrt(2 * GRAVITY * JUMP_HEIGHT);
 	return true;
 }
 
@@ -95,15 +97,14 @@ void DonutModel::update(float timestep) {
 
 	// Update jump offset depending on time passed since start of jump
 	if (jumping) {
-		jumpVelocity = sqrt(2 * GRAVITY * JUMP_HEIGHT);
-		jumpOffset = -GRAVITY / 2 * timestamp * timestamp + jumpVelocity * timestamp;
+		jumpOffset = -GRAVITY / 2 * jumpTime * jumpTime + jumpVelocity * jumpTime;
 
 		// Check for end of jump
-		if (timestamp > 0.0f && jumpOffset <= 0.0f) {
+		if (jumpTime > 0.0f && jumpOffset <= 0.0f) {
 			jumpOffset = 0.0f;
 			jumping = false;
 		}
-		timestamp += timestep;
+		jumpTime += timestep;
 	}
 }
 
@@ -121,7 +122,7 @@ void DonutModel::applyForce(float value) { velocity += DONUT_MAX_FORCE * value; 
  */
 void DonutModel::startJump() {
 	jumping = true;
-	timestamp = 0.0f;
+	jumpTime = 0.0f;
 }
 
 /**
@@ -131,6 +132,7 @@ void DonutModel::reset() {
 	angle = 0.0f;
 	velocity = 0.0f;
 	jumpOffset = 0.0f;
-	timestamp = 0.0f;
+	jumpTime = 0.0f;
+	jumpVelocity = 0.0f;
 	jumping = false;
 }
