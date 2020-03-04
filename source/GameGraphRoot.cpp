@@ -126,10 +126,10 @@ void GameGraphRoot::update(float timestep) {
 	// Reanchor the node at the center of the screen and rotate about center.
 	Vec2 position = farSpace->getPosition();
 	farSpace->setAnchor(Vec2::ANCHOR_CENTER);
-	if (position == Vec2(1280+256,1920)){
+	if (position == Vec2(1280 - 256,1920)){
 		farSpace->setPosition(Vec2(1280,1920));
 	} else {
-		farSpace->setPosition(position + Vec2(0.5,0)); // Reseting the anchor changes the position
+		farSpace->setPosition(position - Vec2(0.5,0)); // Reseting the anchor changes the position
 	}
 
 	// Rotate about center.
@@ -160,8 +160,7 @@ void GameGraphRoot::update(float timestep) {
 			if (breachModel->getAngle() < 0) {
 				breachPos = Vec2(0, 0);
 			}
-			breachModel->getSprite()->setScale(BREACH_SCALE * breachModel->getHealth()
-											   / 3);
+			breachModel->getSprite()->setScale(BREACH_SCALE * breachModel->getHealth() / 3.0f);
 			breachModel->getSprite()->setPosition(breachPos);
 		} else {
 			Vec2 breachPos = Vec2(0, 0);

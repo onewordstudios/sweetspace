@@ -1,7 +1,7 @@
 {
 	"textures": {
 		"donut": {
-            "file":   "textures/yellow.png"
+            "file":   "textures/donut.png"
         },
         "space": {
             "file":  "textures/sprinkle_sky256.png",
