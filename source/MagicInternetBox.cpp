@@ -6,6 +6,8 @@ bool MagicInternetBox::initHost() { return false; }
 
 bool MagicInternetBox::initClient(std::string id) { return false; }
 
+void MagicInternetBox::leaveRoom() {}
+
 std::string MagicInternetBox::getRoomID() { return std::string(); }
 
 int MagicInternetBox::getPlayerID() { return 0; }

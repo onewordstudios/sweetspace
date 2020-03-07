@@ -29,6 +29,11 @@ class MagicInternetBox {
 	bool initClient(std::string id);
 
 	/**
+	 * Disconnect from the room and cleanup this object.
+	 */
+	void leaveRoom();
+
+	/**
 	 * Returns the room ID this controller is connected to.
 	 * Is the empty string if this controller is uninitialized.
 	 */
