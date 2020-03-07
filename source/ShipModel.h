@@ -52,14 +52,14 @@ class ShipModel {
 	 *
 	 * @return the list of donuts.
 	 */
-	std::vector<std::shared_ptr<DonutModel>> getDonutList() { return donuts; }
+	std::vector<std::shared_ptr<DonutModel>>& getDonutList() { return donuts; }
 
 	/**
 	 * Returns the current list of breaches.
 	 *
 	 * @return the current list of breaches.
 	 */
-	std::vector<std::shared_ptr<BreachModel>> getBreachesList() { return breaches; }
+	std::vector<std::shared_ptr<BreachModel>>& getBreachesList() { return breaches; }
 
 	/**
 	 * Create breach.
