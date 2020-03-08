@@ -127,6 +127,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		C58C531CA6998820E3FA7D86 /* ShipModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShipModel.h; sourceTree = "<group>"; };
 		DF3B74372403A46A0063552F /* DonutModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DonutModel.cpp; sourceTree = "<group>"; };
 		DF3B743B2403A46A0063552F /* GameMode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameMode.h; sourceTree = "<group>"; };
 		DF3B743C2403A46A0063552F /* InputController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InputController.h; sourceTree = "<group>"; };
@@ -398,6 +399,7 @@
 				DF3B74452403A46B0063552F /* Sweetspace.cpp */,
 				DF3B74482403A46B0063552F /* Sweetspace.h */,
 				EB2BE9B41D74952A002FE78B /* main.cpp */,
+				C58C531CA6998820E3FA7D86 /* ShipModel.h */,
 			);
 			name = Source;
 			path = ../source;
