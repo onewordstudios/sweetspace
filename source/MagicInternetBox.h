@@ -12,6 +12,26 @@ class MagicInternetBox {
 	 */
 	easywsclient::WebSocket::pointer ws;
 
+	/**
+	 * The type of data being sent during a network packet
+	 */
+	enum NetworkDataType { PositionUpdate, BreachCreate, BreachResolve, DualCreate, DualResolve };
+
+	/**
+	 * Send data over the network as described in the architecture specification.
+	 *
+	 * Angle field is for the angle, if applicable.
+	 * ID field is for the ID of the object being acted on, if applicable.
+	 * Remaining data fields should be filled from first applicable data type back in the same order
+	 * that arguments are passed to the calling method in this class.
+	 *
+	 * Any unused fields should be set to -1.
+	 *
+	 * For example, create dual task passes angle to angle, task id to id, the two players to data1
+	 * and data2 respectively, and sets data3 to -1.
+	 */
+	void sendData(NetworkDataType type, float angle, int id, int data1, int data2, float data3);
+
    public:
 	/**
 	 * Create an empty Network Controller instance. Does no initialization.
