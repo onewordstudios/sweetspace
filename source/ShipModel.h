@@ -1,6 +1,9 @@
 #ifndef __SHIP_MODEL_H__
 #define __SHIP_MODEL_H__
 #include <cugl/cugl.h>
+
+#include "BreachModel.h"
+#include "DonutModel.h"
 class ShipModel {
    private:
    protected:
@@ -9,7 +12,8 @@ class ShipModel {
 	/** Current list of breaches on ship*/
 	std::vector<std::shared_ptr<BreachModel>> breaches;
 	/** Current list of doors on ship*/
-	std::vector<std::shared_ptr<DoorModel>> doors;
+	// std::vector<std::shared_ptr<DoorModel>> doors;
+	// TODO uncomment after DoorModel is implemented
 
    public:
 #pragma mark Constructors

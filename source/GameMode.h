@@ -24,6 +24,7 @@
 #include "GMController.h"
 #include "GameGraphRoot.h"
 #include "InputController.h"
+#include "MagicInternetBox.h"
 
 /**
  * This class is the primary gameplay constroller for the demo.
@@ -33,6 +34,9 @@
  * so that we can have a separate mode for the loading screen.
  */
 class GameMode {
+   private:
+	MagicInternetBox network;
+
    protected:
 	// CONTROLLERS
 	/** Controller for abstracting out input across multiple platforms */

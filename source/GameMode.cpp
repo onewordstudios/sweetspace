@@ -73,6 +73,9 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 
 	gm.init(breaches);
 
+	CULog("Initializing Network");
+	CULog("Network Response %d", network.initHost());
+
 	return true;
 }
 
@@ -108,6 +111,7 @@ void GameMode::reset() {
  */
 void GameMode::update(float timestep) {
 	input.update(timestep);
+	network.update();
 
 	// Reset the game if necessary
 	// if (input.didReset()) {

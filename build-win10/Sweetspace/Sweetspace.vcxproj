@@ -196,6 +196,7 @@
     <ClInclude Include="..\..\source\libraries\easywsclient.hpp" />
     <ClInclude Include="..\..\source\LoadingMode.h" />
     <ClInclude Include="..\..\source\MagicInternetBox.h" />
+    <ClInclude Include="..\..\source\ShipModel.h" />
     <ClInclude Include="..\..\source\Sweetspace.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>

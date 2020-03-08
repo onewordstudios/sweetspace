@@ -17,7 +17,7 @@ class MagicInternetBox {
 	 * Create an empty Network Controller instance. Does no initialization.
 	 * Call one of the init methods to connect and stuff.
 	 */
-	MagicInternetBox(){};
+	MagicInternetBox() { ws = nullptr; };
 
 	/**
 	 * Initialize this controller class as a host.
