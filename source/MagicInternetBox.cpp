@@ -5,7 +5,19 @@ using namespace cugl;
 constexpr auto GAME_SERVER = "ws://sweetspace-server.azurewebsites.net/";
 
 bool MagicInternetBox::initHost() {
-	ws = easywsclient::WebSocket::from_url(GAME_SERVER);
+	using easywsclient::WebSocket;
+#ifdef _WIN32
+	INT rc;
+	WSADATA wsaData;
+
+	rc = WSAStartup(MAKEWORD(2, 2), &wsaData);
+	if (rc) {
+		printf("WSAStartup Failed.\n");
+		return 1;
+	}
+#endif
+
+	ws = easywsclient::WebSocket::from_url("ws://sweetspace-server.azurewebsites.net/");
 	if (!ws) {
 		CULog("FAILED TO CONNECT");
 		return false;
