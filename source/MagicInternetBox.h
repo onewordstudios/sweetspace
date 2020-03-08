@@ -2,7 +2,16 @@
 #define __NETWORK_CONTROLLER_H__
 
 #include <cugl/cugl.h>
+
+#include "libraries/easywsclient.hpp"
+
 class MagicInternetBox {
+   private:
+	/**
+	 * The actual websocket connection
+	 */
+	easywsclient::WebSocket::pointer ws;
+
    public:
 	/**
 	 * Create an empty Network Controller instance. Does no initialization.

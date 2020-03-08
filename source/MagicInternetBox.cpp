@@ -2,7 +2,16 @@
 
 using namespace cugl;
 
-bool MagicInternetBox::initHost() { return false; }
+constexpr auto GAME_SERVER = "wss://sweetspace-server.azurewebsites.net";
+
+bool MagicInternetBox::initHost() {
+	ws = easywsclient::WebSocket::from_url(GAME_SERVER);
+	if (!ws) {
+		return false;
+	}
+	ws->send("hello world");
+	return true;
+}
 
 bool MagicInternetBox::initClient(std::string id) { return false; }
 
@@ -12,7 +21,7 @@ std::string MagicInternetBox::getRoomID() { return std::string(); }
 
 int MagicInternetBox::getPlayerID() { return 0; }
 
-void MagicInternetBox::update() {}
+void MagicInternetBox::update() { ws->poll(); }
 
 void MagicInternetBox::createBreach(float angle, int player, int id) {}
 
