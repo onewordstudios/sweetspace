@@ -33,6 +33,20 @@ class DonutNode : public cugl::PolygonNode {
 	~DonutNode() { dispose(); }
 
 #pragma mark -
+/**
+     * Returns a textured polygon from a Texture object.
+     *
+     * After creation, the polygon will be a rectangle. The vertices of this
+     * polygon will be the corners of the texture.
+     *
+     * @param texture   A shared pointer to a Texture object.
+     *
+     * @return a textured polygon from a Texture object.
+     */
+	static std::shared_ptr<DonutNode> allocWithTexture(const std::shared_ptr<cugl::Texture>& texture) {
+		std::shared_ptr<DonutNode> node = std::make_shared<DonutNode>();
+		return (node->initWithTexture(texture) ? node : nullptr);
+	}
 
 	void setModel(std::shared_ptr<DonutModel> model) { donutModel = model; }
 

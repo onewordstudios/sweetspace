@@ -6,6 +6,7 @@
 
 #include "BreachModel.h"
 #include "DonutModel.h"
+#include "DonutNode.h"
 #include "InputController.h"
 
 class GameGraphRoot : public cugl::Scene {
@@ -30,7 +31,6 @@ class GameGraphRoot : public cugl::Scene {
 	std::shared_ptr<cugl::Node> nearSpace;
 
 	// MODEL
-	std::shared_ptr<DonutModel> donutModel;
 	int playerId;
 	std::vector<std::shared_ptr<DonutModel>> donuts;
 	/** The list of breaches */
@@ -101,9 +101,11 @@ class GameGraphRoot : public cugl::Scene {
 	void reset() override;
 
 	std::shared_ptr<cugl::Node> getDonutNode();
-	void setDonutModel(std::shared_ptr<DonutModel> d) { donutModel = d; };
+
 	void setDonuts(std::vector<std::shared_ptr<DonutModel>> d) { donuts = d; };
+
 	void setBreaches(std::vector<std::shared_ptr<BreachModel>> b) { breaches = b; };
+
 	void setPlayerId(int id) { playerId = id; }
 };
 #endif /* __GAME_GRAPH_ROOT_H__ */
