@@ -1,0 +1,9 @@
+---
+Checks:          '-*'
+WarningsAsErrors: 		''
+HeaderFilterRegex: 		''
+AnalyzeTemporaryDtors: 	false
+User:            		onewordstudios
+CheckOptions:    
+  - key:             cert-dcl59-cpp.HeaderFileExtensions
+    value:           h,hh,hpp,hxx

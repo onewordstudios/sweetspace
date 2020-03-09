@@ -2,13 +2,64 @@
 #define __NETWORK_CONTROLLER_H__
 
 #include <cugl/cugl.h>
+
+#include "ShipModel.h"
+#include "libraries/easywsclient.hpp"
+
 class MagicInternetBox {
+   private:
+	/**
+	 * The actual websocket connection
+	 */
+	easywsclient::WebSocket::pointer ws;
+
+	/**
+	 * The current frame, modulo the network tick rate.
+	 */
+	unsigned int currFrame;
+
+	/**
+	 * ID of the current player
+	 */
+	unsigned int playerID;
+
+	/**
+	 * The type of data being sent during a network packet
+	 */
+	enum NetworkDataType {
+		ConnectionData,
+		PositionUpdate,
+		BreachCreate,
+		BreachResolve,
+		DualCreate,
+		DualResolve
+	};
+
+	/**
+	 * Send data over the network as described in the architecture specification.
+	 *
+	 * Angle field is for the angle, if applicable.
+	 * ID field is for the ID of the object being acted on, if applicable.
+	 * Remaining data fields should be filled from first applicable data type back in the same order
+	 * that arguments are passed to the calling method in this class.
+	 *
+	 * Any unused fields should be set to -1.
+	 *
+	 * For example, create dual task passes angle to angle, task id to id, the two players to data1
+	 * and data2 respectively, and sets data3 to -1.
+	 */
+	void sendData(NetworkDataType type, float angle, int id, int data1, int data2, float data3);
+
    public:
 	/**
 	 * Create an empty Network Controller instance. Does no initialization.
 	 * Call one of the init methods to connect and stuff.
 	 */
-	MagicInternetBox(){};
+	MagicInternetBox() {
+		ws = nullptr;
+		currFrame = 0;
+		playerID = -1;
+	};
 
 	/**
 	 * Initialize this controller class as a host.
@@ -50,7 +101,7 @@ class MagicInternetBox {
 	 * This controller will batch and handle network communication as long as this method is called.
 	 * TODO: Pass ship model into this method after it is created.
 	 */
-	void update();
+	void update(std::shared_ptr<ShipModel> state);
 
 	/**
 	 * Inform other players that a new breach has been created.
