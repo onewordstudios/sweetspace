@@ -1,9 +1,9 @@
 #ifndef __NETWORK_CONTROLLER_H__
 #define __NETWORK_CONTROLLER_H__
 
-#include <ShipModel.h>
 #include <cugl/cugl.h>
 
+#include "ShipModel.h"
 #include "libraries/easywsclient.hpp"
 
 class MagicInternetBox {
