@@ -19,27 +19,29 @@ bool ShipModel::init(std::vector<std::shared_ptr<DonutModel>> &d,
 	return true;
 }
 
-bool ShipModel::createBreach() {
-	breaches.push_back(BreachModel::alloc());
+bool ShipModel::createBreach(float angle, int health, int player) {
+	for (int i = 0; i < breaches.max_size(); i++) {
+		if (breaches.at(i)->getHealth() == 0) {
+			breaches.at(i)->setAngle(angle);
+			breaches.at(i)->setHealth(health);
+			breaches.at(i)->setPlayer(player);
+		}
+	}
 	return true;
 }
 
-bool ShipModel::createBreach(int id) {
-	std::shared_ptr<BreachModel> breach = BreachModel::alloc();
-	breach->setID(id);
-	breaches.push_back(breach);
+bool ShipModel::createBreach(float angle, int health, int player, int id) {
+	if (breaches.at(id)->getHealth() == 0) {
+		breaches.at(id)->setAngle(angle);
+		breaches.at(id)->setHealth(health);
+		breaches.at(id)->setPlayer(player);
+	}
 	return true;
 }
 
 bool ShipModel::resolveBreach(int id) {
-	bool resolved = false;
-	for (int i = 0; i < breaches.size(); i++) {
-		if (breaches.at(i)->getID() == id) {
-			breaches.at(i)->setHealth(0);
-			resolved = true;
-		}
-	}
-	return resolved;
+	breaches.at(id)->setHealth(0);
+	return true;
 }
 
 /**

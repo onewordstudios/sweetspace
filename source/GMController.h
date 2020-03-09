@@ -56,7 +56,8 @@ class GMController {
 	 *
 	 * @return true if the controller was initialized successfully
 	 */
-	bool init(std::vector<std::shared_ptr<DonutModel>> donuts, std::vector<std::shared_ptr<BreachModel>> breaches);
+	bool init(std::vector<std::shared_ptr<DonutModel>> donuts,
+			  std::vector<std::shared_ptr<BreachModel>> breaches);
 
 #pragma mark -
 #pragma mark GM Handling
