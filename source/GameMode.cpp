@@ -136,6 +136,11 @@ void GameMode::update(float timestep) {
 			!breaches.at(i)->isPlayerOn() && donutModel->getJumpOffset() == 0.0f) {
 			breaches.at(i)->decHealth(1);
 			breaches.at(i)->setIsPlayerOn(true);
+
+			if (breaches.at(i)->getHealth() == 0) {
+				net.resolveBreach(i);
+			}
+
 		} else if (diff > EPSILON_ANGLE && breaches.at(i)->isPlayerOn()) {
 			breaches.at(i)->setIsPlayerOn(false);
 		}

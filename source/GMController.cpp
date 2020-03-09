@@ -82,7 +82,7 @@ void GMController::update(float dt) {
 		if (breaches.at(i)->getHealth() == 0) {
 			breaches.at(i)->setAngle(-1);
 			breachFree.at(i) = true;
-			mib.resolveBreach(i);
+			// mib.resolveBreach(i);
 		}
 	}
 
