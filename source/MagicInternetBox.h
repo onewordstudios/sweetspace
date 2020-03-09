@@ -101,7 +101,7 @@ class MagicInternetBox {
 	 * This controller will batch and handle network communication as long as this method is called.
 	 * TODO: Pass ship model into this method after it is created.
 	 */
-	void update(ShipModel& state);
+	void update(std::shared_ptr<ShipModel> state);
 
 	/**
 	 * Inform other players that a new breach has been created.

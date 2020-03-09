@@ -80,12 +80,12 @@ std::string MagicInternetBox::getRoomID() { return std::string(); }
 
 int MagicInternetBox::getPlayerID() { return playerID; }
 
-void MagicInternetBox::update(ShipModel& state) {
+void MagicInternetBox::update(std::shared_ptr<ShipModel> state) {
 	// NETWORK TICK
 	currFrame = (currFrame + 1) % NETWORK_TICK;
 	if (currFrame == 0) {
 		if (playerID != -1) {
-			std::shared_ptr<DonutModel> player = state.getDonuts()[playerID];
+			std::shared_ptr<DonutModel> player = state->getDonuts()[playerID];
 			float angle = player->getAngle();
 			float velocity = player->getVelocity();
 			sendData(PositionUpdate, angle, playerID, -1, -1, velocity);
@@ -121,17 +121,17 @@ void MagicInternetBox::update(ShipModel& state) {
 
 		switch (type) {
 			case PositionUpdate: {
-				std::shared_ptr<DonutModel> donut = state.getDonuts()[id];
+				std::shared_ptr<DonutModel> donut = state->getDonuts()[id];
 				donut->setAngle(angle);
 				donut->setVelocity(data3);
 				break;
 			}
 			case BreachCreate: {
-				state.createBreach(angle, 3, data1, id);
+				state->createBreach(angle, 3, data1, id);
 				break;
 			}
 			case BreachResolve: {
-				state.resolveBreach(id);
+				state->resolveBreach(id);
 				break;
 			}
 			case DualCreate: {
