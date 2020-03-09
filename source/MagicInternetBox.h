@@ -13,6 +13,16 @@ class MagicInternetBox {
 	easywsclient::WebSocket::pointer ws;
 
 	/**
+	 * The current frame, modulo the network tick rate.
+	 */
+	unsigned int currFrame;
+
+	/**
+	 * ID of the current player
+	 */
+	unsigned int playerID;
+
+	/**
 	 * The type of data being sent during a network packet
 	 */
 	enum NetworkDataType { PositionUpdate, BreachCreate, BreachResolve, DualCreate, DualResolve };
@@ -37,7 +47,11 @@ class MagicInternetBox {
 	 * Create an empty Network Controller instance. Does no initialization.
 	 * Call one of the init methods to connect and stuff.
 	 */
-	MagicInternetBox() { ws = nullptr; };
+	MagicInternetBox() {
+		ws = nullptr;
+		currFrame = 0;
+		playerID = 0;
+	};
 
 	/**
 	 * Initialize this controller class as a host.

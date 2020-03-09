@@ -4,6 +4,7 @@ using namespace cugl;
 
 constexpr auto GAME_SERVER = "ws://sweetspace-server.azurewebsites.net/";
 constexpr float FLOAT_PRECISION = 1000.0f;
+constexpr unsigned int NETWORK_TICK = 12;
 
 bool MagicInternetBox::initHost() {
 	using easywsclient::WebSocket;
@@ -54,24 +55,44 @@ std::string MagicInternetBox::getRoomID() { return std::string(); }
 int MagicInternetBox::getPlayerID() { return 0; }
 
 void MagicInternetBox::update() {
+	currFrame = (currFrame + 1) % NETWORK_TICK;
+	if (currFrame == 0) {
+		// NETWORK TICK
+
+		// TODO update numbers
+		float angle = 0.0f;
+		float velocity = 0.0f;
+		sendData(PositionUpdate, angle, playerID, -1, -1, velocity);
+	}
 	ws->poll();
 	ws->dispatchBinary([](const std::vector<uint8_t>& message) {
-		// CULog(">>>\tReceived Websocket Message: %s", message.c_str());
 		NetworkDataType type = static_cast<NetworkDataType>(message[0]);
 		switch (type) {
 			case PositionUpdate: {
+				float angle = (float)message[1] * FLOAT_PRECISION;
+				float velocity = (float)message[4] * FLOAT_PRECISION;
+				unsigned int id = message[2];
 				break;
 			}
 			case BreachCreate: {
+				float angle = (float)message[1] * FLOAT_PRECISION;
+				unsigned int breachID = message[2];
+				unsigned int playerID = message[3];
 				break;
 			}
 			case BreachResolve: {
+				unsigned int breachID = message[2];
 				break;
 			}
 			case DualCreate: {
+				float angle = (float)message[1] * FLOAT_PRECISION;
+				unsigned int taskID = message[2];
+				unsigned int player1 = message[3];
+				unsigned int player2 = message[4];
 				break;
 			}
 			case DualResolve: {
+				unsigned int taskID = message[2];
 				break;
 			}
 		}
