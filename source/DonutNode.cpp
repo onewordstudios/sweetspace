@@ -10,6 +10,9 @@ constexpr unsigned int DIAMETER = 1280;
 /** The radius of the ship. Also the y coordinate of the center of the ship */
 constexpr unsigned int RADIUS = 550;
 
+/** Pi over 180 for converting between degrees and radians */
+constexpr float PI_180 = (float)(M_PI / 180);
+
 void DonutNode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch, const Mat4& transform,
 					 Color4 tint) {
 	Vec2 donutPos = Vec2(DIAMETER + RADIUS * sin(donutModel->getAngle()),
@@ -17,6 +20,10 @@ void DonutNode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch, const Mat4
 	if (donutModel->getAngle() < 0) {
 		donutPos = Vec2(0, 0);
 	}
+	double radiusRatio = RADIUS / (getWidth() / 2.0);
+	float angle = getAngle() - donutModel->getVelocity() * PI_180 * radiusRatio;
+
 	setPosition(donutPos);
+	setAngle(angle);
 	PolygonNode::draw(batch, transform, tint);
 }
