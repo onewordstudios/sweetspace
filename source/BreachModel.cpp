@@ -15,9 +15,10 @@ constexpr unsigned int HEALTH_DEFAULT = 3;
  *
  * @return  true if the obstacle is initialized properly, false otherwise.
  */
-bool BreachModel::init(float a, int health) {
+bool BreachModel::init(float a, int health, int id) {
 	angle = a;
 	this->health = health;
+	this->id = id;
 	return true;
 }
 

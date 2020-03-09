@@ -10,6 +10,8 @@ class BreachModel {
 	int health;
 	/** Whether the player is currently on this breach */
 	bool playerOn;
+	/** Id of the current breach */
+	int id;
 	/** Reference to image in SceneGraph for animation */
 	std::shared_ptr<cugl::PolygonNode> sprite;
 
@@ -21,7 +23,7 @@ class BreachModel {
 	 * NEVER USE A CONSTRUCTOR WITH NEW. If you want to allocate a model on
 	 * the heap, use one of the static constructors instead.
 	 */
-	BreachModel(void) : angle(0), health(0), playerOn(false) {}
+	BreachModel(void) : angle(0), health(0), playerOn(false), id(-1) {}
 
 	/**
 	 * Destroys this breach, releasing all resources.
@@ -45,7 +47,7 @@ class BreachModel {
 	 *
 	 * @return true if the obstacle is initialized properly, false otherwise.
 	 */
-	virtual bool init() { return init(-1.0f, 3); }
+	virtual bool init() { return init(-1.0f, 3, -1); }
 
 	/**
 	 * Initializes a new breach with the given angle
@@ -58,7 +60,7 @@ class BreachModel {
 	 *
 	 * @return true if the obstacle is initialized properly, false otherwise.
 	 */
-	virtual bool init(const float a) { return init(a, 3); };
+	virtual bool init(const float a) { return init(a, 3, -1); };
 
 	/**
 	 * Initializes a new breach with the given angle and max health
@@ -71,7 +73,7 @@ class BreachModel {
 	 *
 	 * @return true if the obstacle is initialized properly, false otherwise.
 	 */
-	virtual bool init(const float a, const int b);
+	virtual bool init(const float a, const int b, const int id);
 
 	static std::shared_ptr<BreachModel> alloc() {
 		std::shared_ptr<BreachModel> result = std::make_shared<BreachModel>();
@@ -135,6 +137,20 @@ class BreachModel {
 	 * @param b Whether the player is currently on the breach.
 	 */
 	void setIsPlayerOn(bool b) { playerOn = b; }
+
+	/**
+	 * Returns the id of the breach.
+	 *
+	 * @return the id of the breach.
+	 */
+	int getID() { return id; }
+
+	/**
+	 * Sets the id of the breach.
+	 *
+	 * @param i the id of the breach.
+	 */
+	void setID(int i) { id = i; }
 
 	/**
 	 * Sets the sprite of the breach.

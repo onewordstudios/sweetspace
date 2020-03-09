@@ -15,7 +15,6 @@ const unsigned int MAX_EVENTS = 3;
 const unsigned int SPAWN_RATE = 100;
 /** Default Max Health of a Breach*/
 constexpr unsigned int HEALTH_DEFAULT = 3;
-constexpr float HALF_CIRCLE = 180.0f;
 constexpr unsigned int FULL_CIRCLE = 360;
 
 /** Array recording which breaches are free or not. */
@@ -51,9 +50,11 @@ void GMController::dispose() {
  *
  * @return true if the controller was initialized successfully
  */
-bool GMController::init(const std::vector<std::shared_ptr<BreachModel>> b) {
+bool GMController::init(const std::vector<std::shared_ptr<DonutModel>> d, const std::vector<std::shared_ptr<BreachModel>> b) {
 	bool success = true;
-	breaches = b;
+	ship->setBreaches(b);
+	ship->setDonuts(d);
+	breaches = ship->getBreaches();
 	for (int i = 0; i < MAX_EVENTS; i++) {
 		breachFree.at(i) = true;
 	}
@@ -97,7 +98,7 @@ void GMController::update(float dt) {
  */
 void GMController::clear() {
 	for (int i = 0; i < MAX_EVENTS; i++) {
-		breaches.at(i) = nullptr;
+        breaches.at(i) = nullptr;
 		breachFree.at(i) = true;
 	}
 	numEvents = 0;
