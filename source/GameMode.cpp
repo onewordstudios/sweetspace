@@ -78,10 +78,10 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 	// gm.setDonuts(shipModel);
 	donutModel = donuts.at(playerId);
 	// Scene graph setup
-	sgRoot.init(assets);
-	donutModel->setSprite(std::dynamic_pointer_cast<AnimationNode>(sgRoot.getDonutNode()));
 	sgRoot.setBreaches(breaches);
-	sgRoot.setDonutModel(donutModel);
+	sgRoot.setDonuts(donuts);
+	sgRoot.setPlayerId(playerId);
+	sgRoot.init(assets);
 
 	return true;
 }

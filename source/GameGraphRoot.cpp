@@ -24,6 +24,12 @@ constexpr float PI_180 = (float)(M_PI / 180);
 /** The scale of the breach textures. */
 constexpr float BREACH_SCALE = 0.25;
 
+/** The scale of the donut textures. */
+constexpr float DONUT_SCALE = 0.5;
+
+/** Offset of donut sprites from the radius of the ship */
+constexpr int DONUT_OFFSET = 200;
+
 /** The diameter of the ship. Also the x coordinate of the center of the ship */
 constexpr unsigned int DIAMETER = 1280;
 
@@ -72,6 +78,30 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 	donutPos = donutNode->getPosition();
 	coordHUD = std::dynamic_pointer_cast<Label>(assets->get<Node>("game_hud"));
 
+	for (int i = 0; i < donuts.size(); i++) {
+		// Player node is handled separately
+		if (i == playerId) {
+			continue;
+		}
+
+		std::shared_ptr<DonutModel> donutModel = donuts.at(i);
+		std::shared_ptr<Texture> image = assets->get<Texture>("donut_friend");
+		std::shared_ptr<DonutNode> donutNode = DonutNode::allocWithTexture(image);
+		donutNode->setModel(donutModel);
+		donutNode->setScale(DONUT_SCALE);
+		nearSpace->addChild(donutNode);
+
+		Vec2 donutPos = Vec2(DIAMETER + (RADIUS+DONUT_OFFSET) * sin(donutModel->getAngle()),
+							 DIAMETER / 2.0f - (RADIUS+DONUT_OFFSET) * cos(donutModel->getAngle()));
+//		if (donutModel->getAngle() < 0) {
+//			donutPos = Vec2(0, 0);
+//		}
+		donutNode->setPosition(donutPos);
+		// For moving donut off screen
+		// Vec2 breachPos = Vec2(0, 0);
+		// donutPos->setPosition(breachPos);
+	}
+
 	addChild(scene);
 	return true;
 }
@@ -86,7 +116,6 @@ void GameGraphRoot::dispose() {
 		farSpace = nullptr;
 		nearSpace = nullptr;
 		donutNode = nullptr;
-		donutModel = nullptr;
 		_active = false;
 	}
 }
@@ -121,7 +150,7 @@ void GameGraphRoot::update(float timestep) {
 	// Update the HUD
 	coordHUD->setText(positionText());
 
-	float angle = TWO_PI - donutModel->getAngle();
+	float angle = TWO_PI - donuts.at(playerId)->getAngle();
 
 	// Reanchor the node at the center of the screen and rotate about center.
 	Vec2 position = farSpace->getPosition();
@@ -134,11 +163,11 @@ void GameGraphRoot::update(float timestep) {
 
 	double radiusRatio = RADIUS / (donutNode->getWidth() / 2.0);
 
-	angle = donutNode->getAngle() - donutModel->getVelocity() * PI_180 * radiusRatio;
+	angle = donutNode->getAngle() - donuts.at(playerId)->getVelocity() * PI_180 * radiusRatio;
 	donutNode->setAnchor(Vec2::ANCHOR_CENTER);
 	donutNode->setAngle(angle);
 	// Draw Jump Offset
-	float donutNewY = donutPos.y + donutModel->getJumpOffset() * screenHeight;
+	float donutNewY = donutPos.y + donuts.at(playerId)->getJumpOffset() * screenHeight;
 	donutNode->setPositionY(donutNewY);
 
 	for (int i = 0; i < breaches.size(); i++) {
@@ -176,7 +205,7 @@ void GameGraphRoot::update(float timestep) {
  */
 std::string GameGraphRoot::positionText() {
 	stringstream ss;
-	ss << "Angle: (" << (float)donutModel->getAngle() / PI_180 << ")";
+	ss << "Angle: (" << (float)donuts.at(playerId)->getAngle() / PI_180 << ")";
 	return ss.str();
 }
 
