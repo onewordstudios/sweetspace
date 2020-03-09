@@ -69,10 +69,6 @@ void MagicInternetBox::sendData(NetworkDataType type, float angle, int id, int d
 	data.push_back((uint8_t)(d3 % ONE_BYTE));
 	data.push_back((uint8_t)(d3 / ONE_BYTE));
 
-	CULog("Angle is %f, converted to %d, mod is %d", angle, angleConv, (angleConv % ONE_BYTE));
-	CULog("Trying to send data %d-%d-%d-%d-%d-%d-%d-%d-%d-%d-%d", data[0], data[1], data[2],
-		  data[3], data[4], data[5], data[6], data[7], data[8], data[9], data[10]);
-
 	ws->sendBinary(data);
 }
 
@@ -105,6 +101,9 @@ void MagicInternetBox::update(std::shared_ptr<ShipModel> state) {
 			CULog("Got message %d, %d", message[0], message[1]);
 			this->playerID = message[1];
 			CULog("Got player id %d", this->getPlayerID());
+			resolveBreach(0);
+			resolveBreach(1);
+			resolveBreach(2);
 			return;
 		}
 
@@ -112,13 +111,6 @@ void MagicInternetBox::update(std::shared_ptr<ShipModel> state) {
 			return;
 		}
 
-		if (message.size() < 11) {
-			CULog("Message small %d", message.size());
-		} else {
-			CULog("Message data %d-%d-%d-%d-%d-%d-%d-%d-%d-%d-%d", message[0], message[1],
-				  message[2], message[3], message[4], message[5], message[6], message[7],
-				  message[8], message[9], message[10]);
-		}
 		NetworkDataType type = static_cast<NetworkDataType>(message[0]);
 
 		float angle = (float)(message[1] + ONE_BYTE * message[2]) / FLOAT_PRECISION;
@@ -136,7 +128,6 @@ void MagicInternetBox::update(std::shared_ptr<ShipModel> state) {
 				std::shared_ptr<DonutModel> donut = state->getDonuts()[id];
 				donut->setAngle(angle);
 				donut->setVelocity(data3);
-				CULog("Got position for player %d with angle %f and velocity %f", id, angle, data3);
 				break;
 			}
 			case BreachCreate: {
@@ -167,9 +158,13 @@ void MagicInternetBox::update(std::shared_ptr<ShipModel> state) {
 
 void MagicInternetBox::createBreach(float angle, int player, int id) {
 	sendData(BreachCreate, angle, id, player, -1, -1.0f);
+	CULog("Creating breach id %d player %d angle %f", id, player, angle);
 }
 
-void MagicInternetBox::resolveBreach(int id) { sendData(BreachResolve, -1.0f, id, -1, -1, -1.0f); }
+void MagicInternetBox::resolveBreach(int id) {
+	sendData(BreachResolve, -1.0f, id, -1, -1, -1.0f);
+	CULog("Sending resolve id %d", id);
+}
 
 void MagicInternetBox::createDualTask(float angle, int player1, int player2, int id) {
 	sendData(DualCreate, angle, id, player1, player2, -1.0f);
