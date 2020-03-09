@@ -61,17 +61,17 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 	input.init();
 
 	sgRoot.init(assets);
-
 	Vec2 donutPos = sgRoot.getDonutNode()->getPosition();
 	donutModel = DonutModel::alloc(donutPos);
 	donutModel->setSprite(std::dynamic_pointer_cast<AnimationNode>(sgRoot.getDonutNode()));
+	donuts.push_back(donutModel);
 	for (int i = 0; i < MAX_EVENTS; i++) {
 		breaches.push_back(BreachModel::alloc());
 	}
 	sgRoot.setBreaches(breaches);
 	sgRoot.setDonutModel(donutModel);
 
-	gm.init(breaches);
+	gm.init(donuts, breaches);
 
 	CULog("Initializing Network");
 	CULog("Network Response %d", network.initHost());

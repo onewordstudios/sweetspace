@@ -110,6 +110,9 @@
     <ClCompile Include="..\..\source\libraries\easywsclient.cpp">
       <Filter>Source Files\Controllers</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\source\ShipModel.cpp">
+      <Filter>Source Files\Models</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Sweetspace.rc">
