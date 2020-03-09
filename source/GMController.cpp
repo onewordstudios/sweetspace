@@ -28,7 +28,7 @@ array<bool, MAX_EVENTS> breachFree;
  * This constructor does NOT do any initialzation.  It simply allocates the
  * object. This makes it safe to use this class without a pointer.
  */
-GMController::GMController() : active(false), numEvents(0) {}
+GMController::GMController() : active(false), numEvents(0), playerId(0) {}
 
 /**
  * Deactivates this input controller, releasing all listeners.
@@ -51,10 +51,14 @@ void GMController::dispose() {
  * @return true if the controller was initialized successfully
  */
 bool GMController::init(std::vector<std::shared_ptr<DonutModel>> d,
-						std::vector<std::shared_ptr<BreachModel>> b) {
+						std::vector<std::shared_ptr<BreachModel>> b, MagicInternetBox mib,
+						int playerId) {
 	bool success = true;
-	ship = ShipModel::alloc(d, b);
-	breaches = ship->getBreaches();
+	// ship = ShipModel::alloc(d, b);
+	donuts = d;
+	breaches = b;
+	this->mib = mib;
+	this->playerId = playerId;
 	for (int i = 0; i < MAX_EVENTS; i++) {
 		breachFree.at(i) = true;
 	}
@@ -75,20 +79,29 @@ void GMController::update(float dt) {
 		if (breaches.at(i) == nullptr) {
 			continue;
 		}
-		if (!breachFree.at(i) && breaches.at(i)->getHealth() == 0) {
+		if (breaches.at(i)->getHealth() == 0) {
 			breaches.at(i)->setAngle(-1);
 			breachFree.at(i) = true;
+			mib.resolveBreach(i);
 		}
 	}
 
-	// Simple logic for adding a breach when under max and randomly, replace with actual logic later
-	if (rand() % SPAWN_RATE > 1) return;
-	for (int i = 0; i < MAX_EVENTS; i++) {
-		if (breachFree.at(i)) {
-			breaches.at(i)->setAngle((rand() % FULL_CIRCLE) * (float)M_PI / HALF_CIRCLE);
-			breaches.at(i)->setHealth(HEALTH_DEFAULT);
-			breachFree.at(i) = false;
-			break;
+	// Check if this is the host for generating breaches
+	if (playerId == 0) {
+		// Simple logic for adding a breach when under max and randomly, replace with actual logic
+		// later
+		if (rand() % SPAWN_RATE > 1) return;
+		for (int i = 0; i < MAX_EVENTS; i++) {
+			if (breachFree.at(i)) {
+				float angle = (rand() % FULL_CIRCLE) * (float)M_PI / HALF_CIRCLE;
+				breaches.at(i)->setAngle(angle);
+				breaches.at(i)->setHealth(HEALTH_DEFAULT);
+				breachFree.at(i) = false;
+				int p = rand() % donuts.size();
+				breaches.at(i)->setPlayer(p);
+				mib.createBreach(angle, p, i);
+				break;
+			}
 		}
 	}
 }
