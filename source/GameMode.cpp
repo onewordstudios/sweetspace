@@ -111,7 +111,7 @@ void GameMode::reset() {
  */
 void GameMode::update(float timestep) {
 	input.update(timestep);
-	network.update();
+	network.update(ShipModel()); // TODO
 
 	// Reset the game if necessary
 	// if (input.didReset()) {

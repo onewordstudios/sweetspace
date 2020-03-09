@@ -26,7 +26,14 @@ class MagicInternetBox {
 	/**
 	 * The type of data being sent during a network packet
 	 */
-	enum NetworkDataType { PositionUpdate, BreachCreate, BreachResolve, DualCreate, DualResolve };
+	enum NetworkDataType {
+		ConnectionData,
+		PositionUpdate,
+		BreachCreate,
+		BreachResolve,
+		DualCreate,
+		DualResolve
+	};
 
 	/**
 	 * Send data over the network as described in the architecture specification.
@@ -51,7 +58,7 @@ class MagicInternetBox {
 	MagicInternetBox() {
 		ws = nullptr;
 		currFrame = 0;
-		playerID = 0;
+		playerID = -1;
 	};
 
 	/**

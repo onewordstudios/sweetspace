@@ -78,20 +78,35 @@ void MagicInternetBox::leaveRoom() {}
 
 std::string MagicInternetBox::getRoomID() { return std::string(); }
 
-int MagicInternetBox::getPlayerID() { return 0; }
+int MagicInternetBox::getPlayerID() { return playerID; }
 
 void MagicInternetBox::update(ShipModel& state) {
+	// NETWORK TICK
 	currFrame = (currFrame + 1) % NETWORK_TICK;
 	if (currFrame == 0) {
-		// NETWORK TICK
-
-		// TODO update numbers
-		float angle = 0.0f;
-		float velocity = 0.0f;
-		sendData(PositionUpdate, angle, playerID, -1, -1, velocity);
+		if (playerID != -1) {
+			std::shared_ptr<DonutModel> player = state.getDonuts()[playerID];
+			float angle = player->getAngle();
+			float velocity = player->getVelocity();
+			sendData(PositionUpdate, angle, playerID, -1, -1, velocity);
+		}
 	}
+
 	ws->poll();
-	ws->dispatchBinary([&state](const std::vector<uint8_t>& message) {
+	ws->dispatchBinary([&state, this](const std::vector<uint8_t>& message) {
+		if (message.size() == 0) {
+			return;
+		}
+		if (playerID == -1 && message[0] == 0) {
+			CULog("Got message %d, %d", message[0], message[1]);
+			this->playerID = message[1];
+			CULog("Got player id %d", this->getPlayerID());
+		}
+
+		if (playerID == -1) {
+			return;
+		}
+
 		NetworkDataType type = static_cast<NetworkDataType>(message[0]);
 
 		float angle = (float)(message[1] + ONE_BYTE * message[2]) / FLOAT_PRECISION;
