@@ -26,6 +26,8 @@ class DonutModel {
 	float jumpTime;
 	/** Initial vertical velocity */
 	float jumpVelocity;
+	bool updated = false;
+	float lastVel = 0;
 
    public:
 #pragma mark Constructors
@@ -176,6 +178,12 @@ class DonutModel {
 	 * @return the current velocity of the donut.
 	 */
 	float getVelocity() { return velocity; }
+
+	void setUpdated(bool b) { updated = b; }
+	bool getUpdated() { return updated; }
+
+	void setLastVel(float f) { lastVel = f; }
+	float getLastVel() { return lastVel; }
 
 	/**
 	 * Applies a force to the donut.

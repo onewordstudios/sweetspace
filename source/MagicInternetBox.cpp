@@ -128,6 +128,7 @@ void MagicInternetBox::update(std::shared_ptr<ShipModel> state) {
 				std::shared_ptr<DonutModel> donut = state->getDonuts()[id];
 				donut->setAngle(angle);
 				donut->setVelocity(data3);
+				donut->setUpdated(true);
 				break;
 			}
 			case BreachCreate: {

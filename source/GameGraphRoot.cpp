@@ -1,4 +1,4 @@
-#include "GameGraphRoot.h"
+﻿#include "GameGraphRoot.h"
 
 #include <cugl/cugl.h>
 
@@ -91,11 +91,12 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 		donutNode->setScale(DONUT_SCALE);
 		nearSpace->addChild(donutNode);
 
-		Vec2 donutPos = Vec2(DIAMETER + (RADIUS+DONUT_OFFSET) * sin(donutModel->getAngle()),
-							 DIAMETER / 2.0f - (RADIUS+DONUT_OFFSET) * cos(donutModel->getAngle()));
-//		if (donutModel->getAngle() < 0) {
-//			donutPos = Vec2(0, 0);
-//		}
+		Vec2 donutPos =
+			Vec2(DIAMETER + (RADIUS + DONUT_OFFSET) * sin(donutModel->getAngle()),
+				 DIAMETER / 2.0f - (RADIUS + DONUT_OFFSET) * cos(donutModel->getAngle()));
+		//		if (donutModel->getAngle() < 0) {
+		//			donutPos = Vec2(0, 0);
+		//		}
 		donutNode->setPosition(donutPos);
 		// For moving donut off screen
 		// Vec2 breachPos = Vec2(0, 0);
@@ -155,11 +156,8 @@ void GameGraphRoot::update(float timestep) {
 	// Reanchor the node at the center of the screen and rotate about center.
 	Vec2 position = farSpace->getPosition();
 	farSpace->setAnchor(Vec2::ANCHOR_CENTER);
-	if (position == Vec2(1280 - 256, 1920)) {
-		farSpace->setPosition(Vec2(1280, 1920));
-	} else {
-		farSpace->setPosition(position - Vec2(0.5, 0)); // Reseting the anchor changes the position
-	}
+	farSpace->setPosition(position); // Reseting the anchor changes the position
+	// farSpace->setAngle(angle);
 
 	// Rotate about center.
 	nearSpace->setAngle(angle);
@@ -189,7 +187,6 @@ void GameGraphRoot::update(float timestep) {
 			if (breachModel->getAngle() < 0) {
 				breachPos = Vec2(0, 0);
 			}
-			breachModel->getSprite()->setScale(BREACH_SCALE * breachModel->getHealth() / 3.0f);
 			breachModel->getSprite()->setPosition(breachPos);
 		} else {
 			Vec2 breachPos = Vec2(0, 0);
