@@ -82,7 +82,7 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 	sgRoot.setBreaches(breaches);
 	sgRoot.setDonutModel(donuts.at(playerId));
 	sgRoot.setDonuts(donuts);
-	sgRoot.setPlayerId(playerid);
+	sgRoot.setPlayerId(playerId);
 
 	return true;
 }
