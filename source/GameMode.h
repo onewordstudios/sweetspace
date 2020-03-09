@@ -59,6 +59,7 @@ class GameMode {
 	std::shared_ptr<ShipModel> shipModel;
 
 	bool host = true;
+	int playerId;
 
    public:
 #pragma mark -
