@@ -98,6 +98,7 @@ void GMController::update(float dt) {
 				breaches.at(i)->setHealth(HEALTH_DEFAULT);
 				breachFree.at(i) = false;
 				int p = rand() % donuts.size();
+				breaches.at(i)->setPlayer(p);
 				mib.createBreach(angle, p, i);
 				break;
 			}
