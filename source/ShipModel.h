@@ -87,15 +87,22 @@ class ShipModel {
 
 	/**
 	 * Create breach.
+	 *
+	 * @param angle	   the location to create the breach.
+	 * @param health   the health of the breach.
+	 * @param player   the player assigned to the breach.
 	 */
-	bool createBreach();
+	bool createBreach(float angle, int health, int player);
 
 	/**
 	 * Create breach with given id.
 	 *
-	 * @param id   the id of breach to be created.
+	 * @param angle	   the location to create the breach.
+	 * @param health   the health of the breach.
+	 * @param player   the player assigned to the breach.
+	 * @param id   	   the id of breach to be created.
 	 */
-	bool createBreach(int id);
+	bool createBreach(float angle, int health, int player, int id);
 
 	/**
 	 * Resolve breach with given id.
