@@ -5,6 +5,7 @@
 
 #include "BreachModel.h"
 #include "DonutModel.h"
+#include "MagicInternetBox.h"
 #include "ShipModel.h"
 
 /**
@@ -22,10 +23,13 @@ class GMController {
 	unsigned int playerId;
 
 	/** Current breaches on ship */
+	std::vector<std::shared_ptr<DonutModel>> donuts;
+
+	/** Current breaches on ship */
 	std::vector<std::shared_ptr<BreachModel>> breaches;
 
-	/** Ship */
-	std::shared_ptr<ShipModel> ship;
+	/** Network Controller for outbound calls */
+	MagicInternetBox mib;
 
    public:
 #pragma mark -

@@ -51,10 +51,13 @@ void GMController::dispose() {
  * @return true if the controller was initialized successfully
  */
 bool GMController::init(std::vector<std::shared_ptr<DonutModel>> d,
-						std::vector<std::shared_ptr<BreachModel>> b, int playerId) {
+						std::vector<std::shared_ptr<BreachModel>> b, MagicInternetBox mib,
+						int playerId) {
 	bool success = true;
 	// ship = ShipModel::alloc(d, b);
-	breaches = ship->getBreaches();
+	donuts = d;
+	breaches = b;
+	this->mib = mib;
 	this->playerId = playerId;
 	for (int i = 0; i < MAX_EVENTS; i++) {
 		breachFree.at(i) = true;
@@ -79,6 +82,7 @@ void GMController::update(float dt) {
 		if (breaches.at(i)->getHealth() == 0) {
 			breaches.at(i)->setAngle(-1);
 			breachFree.at(i) = true;
+			mib.resolveBreach(i);
 		}
 	}
 
@@ -89,9 +93,12 @@ void GMController::update(float dt) {
 		if (rand() % SPAWN_RATE > 1) return;
 		for (int i = 0; i < MAX_EVENTS; i++) {
 			if (breachFree.at(i)) {
-				breaches.at(i)->setAngle((rand() % FULL_CIRCLE) * (float)M_PI / HALF_CIRCLE);
+				float angle = (rand() % FULL_CIRCLE) * (float)M_PI / HALF_CIRCLE;
+				breaches.at(i)->setAngle(angle);
 				breaches.at(i)->setHealth(HEALTH_DEFAULT);
 				breachFree.at(i) = false;
+				int p = rand() % donuts.size();
+				mib.createBreach(angle, p, i);
 				break;
 			}
 		}
