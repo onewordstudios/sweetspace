@@ -11,8 +11,11 @@
 		C58C5561B66760E8D1E3FC80 /* ShipModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C58C51549E90F0CA2D05EB7A /* ShipModel.cpp */; };
 		C58C5B82A24C809F0E12DEFF /* ShipModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C58C51549E90F0CA2D05EB7A /* ShipModel.cpp */; };
 		D15221B4599F05522D32DEBF /* .clang-tidy in Resources */ = {isa = PBXBuildFile; fileRef = D15229B9345EAF5AB804E015 /* .clang-tidy */; };
+		D152249A6EDFF47E4A599BCB /* MagicInternetBox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D1522AD32FF4EBC13A2E3DAA /* MagicInternetBox.cpp */; };
 		D15224E7A69FE0B7FD895B43 /* .clang-tidy in Resources */ = {isa = PBXBuildFile; fileRef = D15229B9345EAF5AB804E015 /* .clang-tidy */; };
 		D152255364224494E2F0AB8F /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = D1522C97841875CFC18AAC81 /* README.md */; };
+		D1522694A1A303303CD9F255 /* MagicInternetBox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D1522AD32FF4EBC13A2E3DAA /* MagicInternetBox.cpp */; };
+		D152289A8BEFC8CF22A38D87 /* MagicInternetBox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D1522AD32FF4EBC13A2E3DAA /* MagicInternetBox.cpp */; };
 		D15229C3F4538D3B2246C091 /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = D1522C97841875CFC18AAC81 /* README.md */; };
 		D1522B23F2A48167D6BE8C82 /* easywsclient.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D15224B029C3A30C7957CB0A /* easywsclient.cpp */; };
 		D1522B7469C58C8C9142F9E4 /* .clang-tidy in Resources */ = {isa = PBXBuildFile; fileRef = D15229B9345EAF5AB804E015 /* .clang-tidy */; };
@@ -143,7 +146,9 @@
 		C58C531CA6998820E3FA7D86 /* ShipModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShipModel.h; sourceTree = "<group>"; };
 		D15224B029C3A30C7957CB0A /* easywsclient.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = easywsclient.cpp; sourceTree = "<group>"; };
 		D15229B9345EAF5AB804E015 /* .clang-tidy */ = {isa = PBXFileReference; lastKnownFileType = "file.clang-tidy"; path = ".clang-tidy"; sourceTree = "<group>"; };
+		D1522AD32FF4EBC13A2E3DAA /* MagicInternetBox.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MagicInternetBox.cpp; sourceTree = "<group>"; };
 		D1522C97841875CFC18AAC81 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		D1522CDD581D837B83C8497D /* MagicInternetBox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MagicInternetBox.h; sourceTree = "<group>"; };
 		D1522F57DD96AF83244A416A /* easywsclient.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = easywsclient.hpp; sourceTree = "<group>"; };
 		DF3B74372403A46A0063552F /* DonutModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DonutModel.cpp; sourceTree = "<group>"; };
 		DF3B743B2403A46A0063552F /* GameMode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameMode.h; sourceTree = "<group>"; };
@@ -430,6 +435,8 @@
 				C58C531CA6998820E3FA7D86 /* ShipModel.h */,
 				C58C51549E90F0CA2D05EB7A /* ShipModel.cpp */,
 				D152243BFFB854157F03E604 /* libraries */,
+				D1522CDD581D837B83C8497D /* MagicInternetBox.h */,
+				D1522AD32FF4EBC13A2E3DAA /* MagicInternetBox.cpp */,
 			);
 			name = Source;
 			path = ../source;
@@ -624,6 +631,7 @@
 				C58C5B82A24C809F0E12DEFF /* ShipModel.cpp in Sources */,
 				D152255364224494E2F0AB8F /* README.md in Sources */,
 				D1522D3B4E12F2B195967EB3 /* easywsclient.cpp in Sources */,
+				D152249A6EDFF47E4A599BCB /* MagicInternetBox.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -643,6 +651,7 @@
 				C58C5561B66760E8D1E3FC80 /* ShipModel.cpp in Sources */,
 				D15229C3F4538D3B2246C091 /* README.md in Sources */,
 				D1522B23F2A48167D6BE8C82 /* easywsclient.cpp in Sources */,
+				D1522694A1A303303CD9F255 /* MagicInternetBox.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -662,6 +671,7 @@
 				C58C509B5D08FC65641A630E /* ShipModel.cpp in Sources */,
 				D1522E95BC9B2BB8B314E512 /* README.md in Sources */,
 				D1522F5560825406C28D9C46 /* easywsclient.cpp in Sources */,
+				D152289A8BEFC8CF22A38D87 /* MagicInternetBox.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
