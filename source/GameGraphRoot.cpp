@@ -78,7 +78,6 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 	donutPos = donutNode->getPosition();
 	coordHUD = std::dynamic_pointer_cast<Label>(assets->get<Node>("game_hud"));
 
-	CULog("NUM DONUTS: %d", donuts.size());
 	for (int i = 0; i < donuts.size(); i++) {
 		// Player node is handled separately
 		if (i == playerId) {
@@ -98,7 +97,6 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 //			donutPos = Vec2(0, 0);
 //		}
 		donutNode->setPosition(donutPos);
-		CULog("ADDED DONUT");
 		// For moving donut off screen
 		// Vec2 breachPos = Vec2(0, 0);
 		// donutPos->setPosition(breachPos);
