@@ -75,6 +75,9 @@
     <ClInclude Include="..\..\source\ShipModel.h">
       <Filter>Header Files\Models</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\source\DonutNode.h">
+      <Filter>Header Files\SceneGraph</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\source\main.cpp">
@@ -112,6 +115,9 @@
     </ClCompile>
     <ClCompile Include="..\..\source\ShipModel.cpp">
       <Filter>Source Files\Models</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\DonutNode.cpp">
+      <Filter>Source Files\SceneGraph</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
