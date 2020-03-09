@@ -63,9 +63,6 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 		host = false;
 		net.initClient(0);
 	}
-	sgRoot.init(assets);
-
-	donutModel->setSprite(std::dynamic_pointer_cast<AnimationNode>(sgRoot.getDonutNode()));
 
 	for (int i = 0; i < MAX_EVENTS; i++) {
 		breaches.push_back(BreachModel::alloc());
@@ -73,8 +70,6 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 	for (int i = 0; i < 3; i++) {
 		donuts.push_back(DonutModel::alloc());
 	}
-	sgRoot.setBreaches(breaches);
-	sgRoot.setDonutModel(donutModel);
 
 	shipModel = ShipModel::alloc(donuts, breaches);
 	gm.init(donuts, breaches, net, -1);
@@ -84,9 +79,15 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 	playerId = net.getPlayerID();
 	gm.setPlayerId(playerId);
 	// gm.setDonuts(shipModel);
+
+	sgRoot.init(assets);
+	donutModel->setSprite(std::dynamic_pointer_cast<AnimationNode>(sgRoot.getDonutNode()));
+	sgRoot.setBreaches(breaches);
 	Vec2 donutPos = sgRoot.getDonutNode()->getPosition();
 	donuts.at(playerId)->getSceneGraphPosition() = donutPos;
 	donutModel = donuts.at(playerId);
+	sgRoot.setDonutModel(donutModel);
+
 	return true;
 }
 
