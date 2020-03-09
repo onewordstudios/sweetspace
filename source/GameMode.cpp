@@ -76,7 +76,7 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 	playerId = net.getPlayerID();
 	gm.setPlayerId(playerId);
 	// gm.setDonuts(shipModel);
-	donutModel = donuts.at(0);
+	donutModel = donuts.at(net.getPlayerID());
 	sgRoot.init(assets);
 	donutModel->setSprite(std::dynamic_pointer_cast<AnimationNode>(sgRoot.getDonutNode()));
 	sgRoot.setBreaches(breaches);
