@@ -165,6 +165,14 @@ class DonutModel {
 	bool isJumping() { return jumping; }
 
 	/**
+	 * Sets the velocity of the donut directly.
+	 * Should really only be called by networking code.
+	 *
+	 * @param v The new velocity of the donut.
+	 */
+	void setVelocity(float v) { velocity = v; }
+
+	/**
 	 * Returns the current velocity of the donut.
 	 *
 	 * @return the current velocity of the donut.

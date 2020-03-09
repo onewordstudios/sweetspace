@@ -3,8 +3,9 @@
 using namespace cugl;
 
 constexpr auto GAME_SERVER = "ws://sweetspace-server.azurewebsites.net/";
-constexpr float FLOAT_PRECISION = 1000.0f;
+constexpr float FLOAT_PRECISION = 10.0f;
 constexpr unsigned int NETWORK_TICK = 12;
+constexpr unsigned int ONE_BYTE = 256;
 
 bool MagicInternetBox::initHost() {
 	using easywsclient::WebSocket;
@@ -31,17 +32,42 @@ bool MagicInternetBox::initHost() {
 	return true;
 }
 
+/*
+
+DATA FORMAT
+
+[ TYPE (enum) | ANGLE (2 bytes) | ID (2 bytes) | data1 (2 bytes) | data2 (2 bytes) | data3 (2 bytes)
+
+Each 2-byte block is stored smaller first, then larger; ie 2^8 * byte1 + byte0 gives the original.
+All data is truncated to fit 16 bytes.
+Floats are multiplied by FLOAT_PRECISION and then cast to int before running through same algorithm
+
+*/
+
 void MagicInternetBox::sendData(NetworkDataType type, float angle, int id, int data1, int data2,
 								float data3) {
 	std::vector<uint8_t> data;
 
 	data.push_back((uint8_t)type);
-	// Approximate float down to 0.001 accuracy
-	data.push_back((uint8_t)(FLOAT_PRECISION * angle));
-	data.push_back(id);
-	data.push_back(data1);
-	data.push_back(data2);
-	data.push_back((uint8_t)(FLOAT_PRECISION * data3));
+
+	int angleConv = (int)(FLOAT_PRECISION * angle);
+
+	data.push_back((uint8_t)(angleConv % ONE_BYTE));
+	data.push_back((uint8_t)(angleConv / ONE_BYTE));
+
+	data.push_back((uint8_t)(id % ONE_BYTE));
+	data.push_back((uint8_t)(id / ONE_BYTE));
+
+	data.push_back((uint8_t)(data1 % ONE_BYTE));
+	data.push_back((uint8_t)(data1 / ONE_BYTE));
+
+	data.push_back((uint8_t)(data2 % ONE_BYTE));
+	data.push_back((uint8_t)(data2 / ONE_BYTE));
+
+	int d3 = (int)(FLOAT_PRECISION * data3);
+
+	data.push_back((uint8_t)(d3 % ONE_BYTE));
+	data.push_back((uint8_t)(d3 / ONE_BYTE));
 
 	ws->sendBinary(data);
 }
@@ -54,7 +80,7 @@ std::string MagicInternetBox::getRoomID() { return std::string(); }
 
 int MagicInternetBox::getPlayerID() { return 0; }
 
-void MagicInternetBox::update() {
+void MagicInternetBox::update(ShipModel& state) {
 	currFrame = (currFrame + 1) % NETWORK_TICK;
 	if (currFrame == 0) {
 		// NETWORK TICK
@@ -65,34 +91,44 @@ void MagicInternetBox::update() {
 		sendData(PositionUpdate, angle, playerID, -1, -1, velocity);
 	}
 	ws->poll();
-	ws->dispatchBinary([](const std::vector<uint8_t>& message) {
+	ws->dispatchBinary([&state](const std::vector<uint8_t>& message) {
 		NetworkDataType type = static_cast<NetworkDataType>(message[0]);
+
+		float angle = (float)(message[1] + ONE_BYTE * message[2]) / FLOAT_PRECISION;
+		int id = (int)(message[3] + ONE_BYTE * message[4]);
+		// Networking code is finnicky and having these magic numbers is the easiest solution
+		// NOLINTNEXTLINE Simple counting numbers
+		int data1 = (int)(message[5] + ONE_BYTE * message[6]);
+		// NOLINTNEXTLINE Ditto
+		int data2 = (int)(message[7] + ONE_BYTE * message[8]);
+		// NOLINTNEXTLINE Ditto
+		float data3 = (float)(message[9] + ONE_BYTE * message[10]) / FLOAT_PRECISION;
+
 		switch (type) {
 			case PositionUpdate: {
-				float angle = (float)message[1] * FLOAT_PRECISION;
-				float velocity = (float)message[4] * FLOAT_PRECISION;
-				unsigned int id = message[2];
+				std::shared_ptr<DonutModel> donut = state.getDonuts()[id];
+				donut->setAngle(angle);
+				donut->setVelocity(data3);
 				break;
 			}
 			case BreachCreate: {
-				float angle = (float)message[1] * FLOAT_PRECISION;
-				unsigned int breachID = message[2];
-				unsigned int playerID = message[3];
+				state.createBreach(angle, 3, data1, id);
 				break;
 			}
 			case BreachResolve: {
-				unsigned int breachID = message[2];
+				state.resolveBreach(id);
 				break;
 			}
 			case DualCreate: {
-				float angle = (float)message[1] * FLOAT_PRECISION;
-				unsigned int taskID = message[2];
-				unsigned int player1 = message[3];
-				unsigned int player2 = message[4];
+				unsigned int taskID = id;
+				unsigned int player1 = data1;
+				unsigned int player2 = data2;
+				// TODO
 				break;
 			}
 			case DualResolve: {
-				unsigned int taskID = message[2];
+				unsigned int taskID = id;
+				// TODO
 				break;
 			}
 		}

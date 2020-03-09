@@ -1,6 +1,7 @@
 #ifndef __NETWORK_CONTROLLER_H__
 #define __NETWORK_CONTROLLER_H__
 
+#include <ShipModel.h>
 #include <cugl/cugl.h>
 
 #include "libraries/easywsclient.hpp"
@@ -93,7 +94,7 @@ class MagicInternetBox {
 	 * This controller will batch and handle network communication as long as this method is called.
 	 * TODO: Pass ship model into this method after it is created.
 	 */
-	void update();
+	void update(ShipModel& state);
 
 	/**
 	 * Inform other players that a new breach has been created.
