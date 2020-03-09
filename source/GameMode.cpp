@@ -59,10 +59,7 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 	}
 
 	input.init();
-	if (!net.initHost()) {
-		host = false;
-		net.initClient(0);
-	}
+	net.initHost();
 
 	for (int i = 0; i < MAX_EVENTS; i++) {
 		breaches.push_back(BreachModel::alloc());
@@ -79,7 +76,7 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 	playerId = net.getPlayerID();
 	gm.setPlayerId(playerId);
 	// gm.setDonuts(shipModel);
-
+	donutModel = donuts.at(0);
 	sgRoot.init(assets);
 	donutModel->setSprite(std::dynamic_pointer_cast<AnimationNode>(sgRoot.getDonutNode()));
 	sgRoot.setBreaches(breaches);
