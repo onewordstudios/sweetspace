@@ -48,6 +48,8 @@ class GameMode {
 	/** The donut model */
 	std::shared_ptr<DonutModel> donutModel;
 	/** The list of breaches */
+	std::vector<std::shared_ptr<DonutModel>> donuts;
+	/** The list of breaches */
 	std::vector<std::shared_ptr<BreachModel>> breaches;
 
    public:

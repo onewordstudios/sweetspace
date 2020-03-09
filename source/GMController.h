@@ -4,6 +4,8 @@
 #include <cugl/cugl.h>
 
 #include "BreachModel.h"
+#include "DonutModel.h"
+#include "ShipModel.h"
 
 /**
  * This class represents the GM of the game
@@ -16,8 +18,11 @@ class GMController {
 	/** Current number of breaches on ship */
 	unsigned int numEvents;
 
-	/** Current list of breaches on ship*/
+	/** Current breaches on ship */
 	std::vector<std::shared_ptr<BreachModel>> breaches;
+
+	/** Ship */
+	std::shared_ptr<ShipModel> ship;
 
    public:
 #pragma mark -
@@ -51,7 +56,8 @@ class GMController {
 	 *
 	 * @return true if the controller was initialized successfully
 	 */
-	bool init(std::vector<std::shared_ptr<BreachModel>> breaches);
+	bool init(std::vector<std::shared_ptr<DonutModel>> donuts,
+			  std::vector<std::shared_ptr<BreachModel>> breaches);
 
 #pragma mark -
 #pragma mark GM Handling
