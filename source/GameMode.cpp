@@ -78,12 +78,14 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 	// gm.setDonuts(shipModel);
 	donutModel = donuts.at(net.getPlayerID());
 	sgRoot.init(assets);
-	donutModel->setSprite(std::dynamic_pointer_cast<AnimationNode>(sgRoot.getDonutNode()));
 	sgRoot.setBreaches(breaches);
 	Vec2 donutPos = sgRoot.getDonutNode()->getPosition();
 	donuts.at(playerId)->getSceneGraphPosition() = donutPos;
 	donutModel = donuts.at(playerId);
+
 	sgRoot.setDonutModel(donutModel);
+	sgRoot.setDonuts(donuts);
+	sgRoot.setPlayerId(playerid);
 
 	return true;
 }
