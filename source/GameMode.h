@@ -24,6 +24,8 @@
 #include "GMController.h"
 #include "GameGraphRoot.h"
 #include "InputController.h"
+#include "MagicInternetBox.h"
+#include "ShipModel.h"
 
 /**
  * This class is the primary gameplay constroller for the demo.
@@ -39,6 +41,8 @@ class GameMode {
 	InputController input;
 	/** Controller for GM */
 	GMController gm;
+	/** Networking controller*/
+	MagicInternetBox net;
 
 	// VIEW
 	/** Scenegraph root node */
@@ -51,6 +55,11 @@ class GameMode {
 	std::vector<std::shared_ptr<DonutModel>> donuts;
 	/** The list of breaches */
 	std::vector<std::shared_ptr<BreachModel>> breaches;
+	/** The Ship model */
+	std::shared_ptr<ShipModel> shipModel;
+
+	bool host = true;
+	int playerId;
 
    public:
 #pragma mark -
