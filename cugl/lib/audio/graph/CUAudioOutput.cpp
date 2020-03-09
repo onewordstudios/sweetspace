@@ -59,16 +59,16 @@ const static std::string DEFAULT_NAME("(DEFAULT DEVICE)");
 
 #pragma mark -
 #pragma mark SDL Audio Loop
-/** 
+/**
  * The SDL callback function
- * 
+ *
  * This is the function that SDL uses to populate the audio buffer
  */
-static void audioCallback(void*  userdata, Uint8* stream, int len) {
-    AudioOutput* device = (AudioOutput*)userdata;
-    Uint32 count = (Uint32)(len/(device->getChannels()*device->getBitRate()));
-    float* output = (float*)stream;
-    device->read(output,count);
+static void audioCallback(void* userdata, Uint8* stream, int len) {
+	AudioOutput* device = (AudioOutput*)userdata;
+	Uint32 count = (Uint32)(len / (device->getChannels() * device->getBitRate()));
+	float* output = (float*)stream;
+	device->read(output, count);
 }
 
 /**
@@ -81,22 +81,22 @@ static void audioCallback(void*  userdata, Uint8* stream, int len) {
  * @return the bit size of the given audio format.
  */
 static size_t sizeof_format(SDL_AudioFormat format) {
-    switch (format) {
-        case AUDIO_S8:
-        case AUDIO_U8:
-            return sizeof(Uint8);
-        case AUDIO_S16LSB:
-        case AUDIO_S16MSB:
-        case AUDIO_U16LSB:
-        case AUDIO_U16MSB:
-            return sizeof(Uint16);
-        case AUDIO_S32LSB:
-        case AUDIO_S32MSB:
-            return sizeof(Uint32);
-        default:
-            return sizeof(float);
-    }
-    
+	switch (format) {
+	case AUDIO_S8:
+	case AUDIO_U8:
+		return sizeof(Uint8);
+	case AUDIO_S16LSB:
+	case AUDIO_S16MSB:
+	case AUDIO_U16LSB:
+	case AUDIO_U16MSB:
+		return sizeof(Uint16);
+	case AUDIO_S32LSB:
+	case AUDIO_S32MSB:
+		return sizeof(Uint32);
+	default:
+		return sizeof(float);
+	}
+
 }
 
 #pragma mark -
@@ -116,16 +116,16 @@ _overhd(0),
 _cvtratio(1.0f),
 _cvtbuffer(nullptr),
 _input(nullptr) {
-    _classname = "AudioOutput";
-    _resampler = NULL;
-    _bitrate = sizeof(float);
+	_classname = "AudioOutput";
+	_resampler = NULL;
+	_bitrate = sizeof(float);
 }
 
 /**
  * Deletes the audio output node, disposing of all resources
  */
 AudioOutput::~AudioOutput() {
-    dispose();
+	dispose();
 }
 
 /**
@@ -149,8 +149,8 @@ AudioOutput::~AudioOutput() {
  * @return true if initialization was successful
  */
 bool AudioOutput::init() {
-    CUAssertLog(AudioManager::get(),"Attempt to allocate a node without an active AudioManager");
-    return init("",DEFAULT_CHANNELS,DEFAULT_SAMPLING,AudioManager::get()->getReadSize());
+	CUAssertLog(AudioManager::get(), "Attempt to allocate a node without an active AudioManager");
+	return init("", DEFAULT_CHANNELS, DEFAULT_SAMPLING, AudioManager::get()->getReadSize());
 }
 
 /**
@@ -177,8 +177,8 @@ bool AudioOutput::init() {
  * @return true if initialization was successful
  */
 bool AudioOutput::init(Uint8 channels, Uint32 rate) {
-    CUAssertLog(AudioManager::get(),"Attempt to allocate a node without an active AudioManager");
-    return init("",channels,rate,AudioManager::get()->getReadSize());
+	CUAssertLog(AudioManager::get(), "Attempt to allocate a node without an active AudioManager");
+	return init("", channels, rate, AudioManager::get()->getReadSize());
 }
 
 /**
@@ -214,7 +214,7 @@ bool AudioOutput::init(Uint8 channels, Uint32 rate) {
  * @return true if initialization was successful
  */
 bool AudioOutput::init(Uint8 channels, Uint32 rate, Uint32 buffer) {
-    return init("",channels,rate,buffer);
+	return init("", channels, rate, buffer);
 }
 
 /**
@@ -238,8 +238,8 @@ bool AudioOutput::init(Uint8 channels, Uint32 rate, Uint32 buffer) {
  * @return true if initialization was successful
  */
 bool AudioOutput::init(const std::string& device) {
-    CUAssertLog(AudioManager::get(),"Attempt to allocate a node without an active AudioManager");
-    return init(device,DEFAULT_CHANNELS,DEFAULT_SAMPLING,AudioManager::get()->getReadSize());
+	CUAssertLog(AudioManager::get(), "Attempt to allocate a node without an active AudioManager");
+	return init(device, DEFAULT_CHANNELS, DEFAULT_SAMPLING, AudioManager::get()->getReadSize());
 }
 
 
@@ -275,51 +275,54 @@ bool AudioOutput::init(const std::string& device) {
  * @return true if initialization was successful
  */
 bool AudioOutput::init(const std::string& device, Uint8 channels, Uint32 rate, Uint32 buffer) {
-    _dvname = device;
-    
-    SDL_AudioSpec want;
-    want.freq = rate;
-    want.channels = channels;
-    want.samples = buffer;
-    want.format = AUDIO_F32SYS;
+	_dvname = device;
 
-    want.callback = audioCallback;
-    want.userdata = this;
-    
-    _device = SDL_OpenAudioDevice((_dvname == "" ? NULL : _dvname.c_str()),
-                                  0, &want, &_audiospec, SDL_AUDIO_ALLOW_ANY_CHANGE);
-    if (_device == 0) {
-        CULogError("[AUDIO] %s", SDL_GetError());
-        return false;
-    } else if (!AudioNode::init(want.channels,want.freq)) {
-        return false;
-    }
-    
-    // Because mobile devices often have other ideas...
-    _bitrate = sizeof(float);
-    if (want.format != _audiospec.format || want.freq != _audiospec.freq || want.channels != _audiospec.channels) {
-        _resampler = SDL_NewAudioStream(want.format, want.channels, want.freq,
-                                       _audiospec.format, _audiospec.channels, _audiospec.freq);
-        if (_resampler == NULL) {
-            SDL_CloseAudioDevice(_device);
-            CULogError("[AUDIO] Could not create a resampler.");
-            return false;
-        }
-        
-        _cvtratio = ((float)want.freq)/_audiospec.freq;
-        _bitrate = sizeof_format(_audiospec.format);
-        size_t bsize = sizeof(float)*_channels*std::ceil(_cvtratio*_audiospec.samples);
-        _cvtbuffer = (float*)malloc(bsize);
-        std::memset(_cvtbuffer,0,bsize);
-        
-        // Initial 0s (else it will pop)
-        SDL_AudioStreamPut(_resampler, _cvtbuffer, sizeof(float)*_channels);
-    }
-    
-    _booted = true;
-    _active = false;
-    _paused = false;
-    return true;
+	SDL_AudioSpec want;
+	want.freq = rate;
+	want.channels = channels;
+	want.samples = buffer;
+	want.format = AUDIO_F32SYS;
+
+	want.callback = audioCallback;
+	want.userdata = this;
+
+	_device = SDL_OpenAudioDevice((_dvname == "" ? NULL : _dvname.c_str()),
+		0, &want, &_audiospec, SDL_AUDIO_ALLOW_ANY_CHANGE);
+	if (_device == 0) {
+		CULogError("[AUDIO] %s", SDL_GetError());
+		return false;
+	}
+	else if (!AudioNode::init(want.channels, want.freq)) {
+		return false;
+	}
+
+	// Because mobile devices often have other ideas...
+	_bitrate = sizeof(float);
+	if (want.format != _audiospec.format || want.freq != _audiospec.freq || want.channels != _audiospec.channels) {
+		_resampler = SDL_NewAudioStream(want.format, want.channels, want.freq,
+			_audiospec.format, _audiospec.channels, _audiospec.freq);
+		if (_resampler == NULL) {
+			SDL_CloseAudioDevice(_device);
+			CULogError("[AUDIO] Could not create a resampler.");
+			return false;
+		}
+
+		_cvtratio = ((float)want.freq) / _audiospec.freq;
+		_bitrate = sizeof_format(_audiospec.format);
+		Uint32 maxchan = std::max(want.channels, _audiospec.channels);
+		size_t bsize = sizeof(float) * maxchan * std::ceil(_cvtratio * _audiospec.samples);
+
+		_cvtbuffer = (float*)malloc(bsize);
+		std::memset(_cvtbuffer, 0, bsize);
+
+		// Initial 0s (else it will pop)
+		SDL_AudioStreamPut(_resampler, _cvtbuffer, sizeof(float) * maxchan);
+	}
+
+	_booted = true;
+	_active = false;
+	_paused = false;
+	return true;
 }
 
 /**
@@ -329,20 +332,20 @@ bool AudioOutput::init(const std::string& device, Uint8 channels, Uint32 rate, U
  * Unlike the destructor, this method allows the node to be reinitialized.
  */
 void AudioOutput::dispose() {
-    if (_booted) {
-        AudioNode::dispose();
-        SDL_PauseAudioDevice(_device, 1);
-        SDL_CloseAudioDevice(_device);
-        _active.store(false);
-        std::atomic_store_explicit(&_input,{},std::memory_order_relaxed);
-        if (_resampler != NULL) {
-            SDL_AudioStreamClear(_resampler);
-            SDL_FreeAudioStream(_resampler);
-            free(_cvtbuffer);
-            _resampler = NULL;
-            _cvtbuffer = nullptr;
-        }
-    }
+	if (_booted) {
+		AudioNode::dispose();
+		SDL_PauseAudioDevice(_device, 1);
+		SDL_CloseAudioDevice(_device);
+		_active.store(false);
+		std::atomic_store_explicit(&_input, {}, std::memory_order_relaxed);
+		if (_resampler != NULL) {
+			SDL_AudioStreamClear(_resampler);
+			SDL_FreeAudioStream(_resampler);
+			free(_cvtbuffer);
+			_resampler = NULL;
+			_cvtbuffer = nullptr;
+		}
+	}
 }
 
 /**
@@ -355,10 +358,10 @@ void AudioOutput::dispose() {
  * @param active    Whether to set this node to active
  */
 void AudioOutput::setActive(bool active) {
-    _active.store(active,std::memory_order_relaxed);
-    if (!_paused.load(std::memory_order_relaxed)) {
-        SDL_PauseAudioDevice(_device, !active);
-    }
+	_active.store(active, std::memory_order_relaxed);
+	if (!_paused.load(std::memory_order_relaxed)) {
+		SDL_PauseAudioDevice(_device, !active);
+	}
 }
 
 #pragma mark -
@@ -369,10 +372,10 @@ void AudioOutput::setActive(bool active) {
  * @return the device associated with this output node.
  */
 const std::string& AudioOutput::getDevice() const {
-    if (_dvname == "") {
-        return DEFAULT_NAME;
-    }
-    return _dvname;
+	if (_dvname == "") {
+		return DEFAULT_NAME;
+	}
+	return _dvname;
 }
 
 /**
@@ -386,24 +389,27 @@ const std::string& AudioOutput::getDevice() const {
  * @return true if the attachment was successful
  */
 bool AudioOutput::attach(const std::shared_ptr<AudioNode>& node) {
-    if (!_booted) {
-        CUAssertLog(_booted, "Cannot attach to an uninitialized output device");
-        return false;
-    } else if (node == nullptr) {
-        detach();
-        return true;
-    } else if (node->getChannels() != _channels) {
-        CUAssertLog(false,"Terminal node of audio graph has wrong number of channels: %d",
-                    node->getChannels());
-        return false;
-    } else if (node->getRate() != _sampling) {
-        CUAssertLog(false,"Terminal node of audio graph has wrong sample rate: %d",
-                    node->getRate());
-        return false;
-    }
-    
-    std::atomic_exchange_explicit(&_input,node,std::memory_order_relaxed);
-    return true;
+	if (!_booted) {
+		CUAssertLog(_booted, "Cannot attach to an uninitialized output device");
+		return false;
+	}
+	else if (node == nullptr) {
+		detach();
+		return true;
+	}
+	else if (node->getChannels() != _channels) {
+		CUAssertLog(false, "Terminal node of audio graph has wrong number of channels: %d",
+			node->getChannels());
+		return false;
+	}
+	else if (node->getRate() != _sampling) {
+		CUAssertLog(false, "Terminal node of audio graph has wrong sample rate: %d",
+			node->getRate());
+		return false;
+	}
+
+	std::atomic_exchange_explicit(&_input, node, std::memory_order_relaxed);
+	return true;
 }
 
 /**
@@ -416,13 +422,13 @@ bool AudioOutput::attach(const std::shared_ptr<AudioNode>& node) {
  * @return  the terminal node of the audio graph (or null if failed)
  */
 std::shared_ptr<AudioNode> AudioOutput::detach() {
-    if (!_booted) {
-        CUAssertLog(_booted, "Cannot detach from an uninitialized output device");
-        return nullptr;
-    }
+	if (!_booted) {
+		CUAssertLog(_booted, "Cannot detach from an uninitialized output device");
+		return nullptr;
+	}
 
-    std::shared_ptr<AudioNode> result = std::atomic_exchange_explicit(&_input,{},std::memory_order_relaxed);
-    return result;
+	std::shared_ptr<AudioNode> result = std::atomic_exchange_explicit(&_input, {}, std::memory_order_relaxed);
+	return result;
 }
 
 
@@ -437,11 +443,11 @@ std::shared_ptr<AudioNode> AudioOutput::detach() {
  * @return true if the node was successfully paused
  */
 bool AudioOutput::pause() {
-    bool success = !_paused.exchange(true);
-    if (success && _active.load(std::memory_order_relaxed)) {
-        SDL_PauseAudioDevice(_device, 1);
-    }
-    return success;
+	bool success = !_paused.exchange(true);
+	if (success && _active.load(std::memory_order_relaxed)) {
+		SDL_PauseAudioDevice(_device, 1);
+	}
+	return success;
 }
 
 /**
@@ -454,11 +460,11 @@ bool AudioOutput::pause() {
  * @return true if the node was successfully resumed
  */
 bool AudioOutput::resume() {
-    bool success = _paused.exchange(false);
-    if (success && _active.load(std::memory_order_relaxed)) {
-        SDL_PauseAudioDevice(_device, 0);
-    }
-    return success;
+	bool success = _paused.exchange(false);
+	if (success && _active.load(std::memory_order_relaxed)) {
+		SDL_PauseAudioDevice(_device, 0);
+	}
+	return success;
 }
 
 /**
@@ -473,8 +479,8 @@ bool AudioOutput::resume() {
  * @return true if this audio node has no more data.
  */
 bool AudioOutput::completed() {
-    std::shared_ptr<AudioNode> input = std::atomic_load_explicit(&_input,std::memory_order_relaxed);
-    return (input == nullptr || input->completed());
+	std::shared_ptr<AudioNode> input = std::atomic_load_explicit(&_input, std::memory_order_relaxed);
+	return (input == nullptr || input->completed());
 }
 
 /**
@@ -495,44 +501,58 @@ bool AudioOutput::completed() {
  * @return the actual number of frames read
  */
 Uint32 AudioOutput::read(float* buffer, Uint32 frames) {
-    Timestamp start;
-    std::shared_ptr<AudioNode> input = std::atomic_load_explicit(&_input,std::memory_order_relaxed);
-    if (input == nullptr || _paused.load(std::memory_order_relaxed)) {
-        std::memset(buffer,0,frames*_channels*_bitrate);
-    } else {
-        // SDL double buffers, so there is no need to put this in another thread
-        // Latency on Apple devices is roughly equal to duration of sample buffer
-        // At 512 sample frames, we can safely take 9ms to do this operation.
-        Sint32 take = 0;
-        if (_resampler != NULL) {
-            bool search = true;
-            while (take < frames && search) {
-                Sint32 amt = std::ceil(frames*_cvtratio);
-                amt = input->read(_cvtbuffer, amt);
-                SDL_AudioStreamPut(_resampler, _cvtbuffer, amt*sizeof(float)*_channels);
-                amt  = SDL_AudioStreamGet(_resampler, buffer+take*_channels,
-                                          (int)((frames-take)*_channels*_bitrate));
-                if (amt == -1) {
-                    CULogError("[AUDIO] Resampling error.");
-                    std::memset(buffer+take*_channels,0,(frames-take)*_channels*_bitrate);
-                    take = frames;
-                } else if (amt == 0) {
-                    search = false;
-                } else {
-                    take += amt/sizeof(float)*_channels;
-                }
-            }
-        } else {
-            take = input->read(buffer, frames);
-        }
-        if (take < frames) {
-            std::memset(buffer+take*_channels*sizeof(float),0,(frames-take)*_channels*_bitrate);
-        }
-    }
-    Timestamp end;
-    Uint64 micros = Timestamp::ellapsedMicros(start,end);
-    _overhd.store(micros,std::memory_order_relaxed);
-    return frames;
+	Timestamp start;
+
+	Uint32 realchan = _audiospec.channels;
+	if (_channels != realchan) {
+		frames *= _channels;
+		frames /= realchan;
+	}
+
+	char* realbuf = (char*)buffer;
+
+	std::shared_ptr<AudioNode> input = std::atomic_load_explicit(&_input, std::memory_order_relaxed);
+	if (input == nullptr || _paused.load(std::memory_order_relaxed)) {
+		std::memset(realbuf, 0, frames * realchan * _bitrate);
+	}
+	else {
+		// SDL double buffers, so there is no need to put this in another thread
+		// Latency on Apple devices is roughly equal to duration of sample buffer
+		// At 512 sample frames, we can safely take 9ms to do this operation.
+		Sint32 take = 0;
+		if (_resampler != NULL) {
+			bool search = true;
+			while (take < frames && search) {
+				Sint32 amt = std::ceil(frames * _cvtratio);
+				amt = input->read(_cvtbuffer, amt);
+				SDL_AudioStreamPut(_resampler, _cvtbuffer, amt * sizeof(float) * _channels);
+				amt = SDL_AudioStreamGet(_resampler,
+					realbuf + take * realchan * _bitrate,
+					(int)((frames - take) * realchan * _bitrate));
+				if (amt == -1) {
+					CULogError("[AUDIO] Resampling error.");
+					std::memset(realbuf + take * realchan * _bitrate, 0, (frames - take) * realchan * _bitrate);
+					take = frames;
+				}
+				else if (amt == 0) {
+					search = false;
+				}
+				else {
+					take += amt / _bitrate * realchan;
+				}
+			}
+		}
+		else {
+			take = input->read(buffer, frames);
+		}
+		if (take < frames) {
+			std::memset(realbuf + take * realchan * _bitrate, 0, (frames - take) * realchan * _bitrate);
+		}
+	}
+	Timestamp end;
+	Uint64 micros = Timestamp::ellapsedMicros(start, end);
+	_overhd.store(micros, std::memory_order_relaxed);
+	return frames;
 }
 
 /**
@@ -547,23 +567,23 @@ Uint32 AudioOutput::read(float* buffer, Uint32 frames) {
  * between devices.
  */
 void AudioOutput::reboot() {
-    bool active = _active.exchange(false);
-    if (active && !_paused.load(std::memory_order_relaxed)) {
-        SDL_PauseAudioDevice(_device, 1);
-    }
-    SDL_CloseAudioDevice(_device);
-    SDL_AudioSpec want = _audiospec;
-    _device = SDL_OpenAudioDevice((_dvname == "" ? NULL : _dvname.c_str()),
-                                  0, &want, &_audiospec, SDL_AUDIO_ALLOW_ANY_CHANGE);
-    if (_device == 0 || _audiospec.format != AUDIO_F32SYS) {
-        CULogError("Reboot of audio device '%s' failed.",_dvname.c_str());
-        _booted = false;
-        return;
-    }
-    if (active && !_paused.load(std::memory_order_relaxed)) {
-        SDL_PauseAudioDevice(_device, 0);
-    }
-    _active.store(active,std::memory_order_relaxed);
+	bool active = _active.exchange(false);
+	if (active && !_paused.load(std::memory_order_relaxed)) {
+		SDL_PauseAudioDevice(_device, 1);
+	}
+	SDL_CloseAudioDevice(_device);
+	SDL_AudioSpec want = _audiospec;
+	_device = SDL_OpenAudioDevice((_dvname == "" ? NULL : _dvname.c_str()),
+		0, &want, &_audiospec, SDL_AUDIO_ALLOW_ANY_CHANGE);
+	if (_device == 0 || _audiospec.format != AUDIO_F32SYS) {
+		CULogError("Reboot of audio device '%s' failed.", _dvname.c_str());
+		_booted = false;
+		return;
+	}
+	if (active && !_paused.load(std::memory_order_relaxed)) {
+		SDL_PauseAudioDevice(_device, 0);
+	}
+	_active.store(active, std::memory_order_relaxed);
 }
 
 /**
@@ -574,7 +594,7 @@ void AudioOutput::reboot() {
  * @return the number of microseconds needed to render the last audio frame.
  */
 Uint64 AudioOutput::getOverhead() const {
-    return _overhd.load(std::memory_order_relaxed);
+	return _overhd.load(std::memory_order_relaxed);
 }
 
 
@@ -597,11 +617,11 @@ Uint64 AudioOutput::getOverhead() const {
  * @return true if the read position was marked.
  */
 bool AudioOutput::mark() {
-    std::shared_ptr<AudioNode> input = std::atomic_load_explicit(&_input,std::memory_order_relaxed);
-    if (input) {
-        return input->mark();
-    }
-    return false;
+	std::shared_ptr<AudioNode> input = std::atomic_load_explicit(&_input, std::memory_order_relaxed);
+	if (input) {
+		return input->mark();
+	}
+	return false;
 }
 
 /**
@@ -618,11 +638,11 @@ bool AudioOutput::mark() {
  * @return true if the read position was marked.
  */
 bool AudioOutput::unmark() {
-    std::shared_ptr<AudioNode> input = std::atomic_load_explicit(&_input,std::memory_order_relaxed);
-    if (input) {
-        return input->unmark();
-    }
-    return false;
+	std::shared_ptr<AudioNode> input = std::atomic_load_explicit(&_input, std::memory_order_relaxed);
+	if (input) {
+		return input->unmark();
+	}
+	return false;
 }
 
 /**
@@ -640,11 +660,11 @@ bool AudioOutput::unmark() {
  * @return true if the read position was moved.
  */
 bool AudioOutput::reset() {
-    std::shared_ptr<AudioNode> input = std::atomic_load_explicit(&_input,std::memory_order_relaxed);
-    if (input) {
-        return input->reset();
-    }
-    return false;
+	std::shared_ptr<AudioNode> input = std::atomic_load_explicit(&_input, std::memory_order_relaxed);
+	if (input) {
+		return input->reset();
+	}
+	return false;
 }
 
 /**
@@ -662,11 +682,11 @@ bool AudioOutput::reset() {
  * @return the actual number of frames advanced; -1 if not supported
  */
 Sint64 AudioOutput::advance(Uint32 frames) {
-    std::shared_ptr<AudioNode> input = std::atomic_load_explicit(&_input,std::memory_order_relaxed);
-    if (input) {
-        return input->advance(frames);
-    }
-    return -1;
+	std::shared_ptr<AudioNode> input = std::atomic_load_explicit(&_input, std::memory_order_relaxed);
+	if (input) {
+		return input->advance(frames);
+	}
+	return -1;
 }
 
 /**
@@ -683,11 +703,11 @@ Sint64 AudioOutput::advance(Uint32 frames) {
  * @return the current frame position of this audio node.
  */
 Sint64 AudioOutput::getPosition() const {
-    std::shared_ptr<AudioNode> input = std::atomic_load_explicit(&_input,std::memory_order_relaxed);
-    if (input) {
-        return input->getPosition();
-    }
-    return -1;
+	std::shared_ptr<AudioNode> input = std::atomic_load_explicit(&_input, std::memory_order_relaxed);
+	if (input) {
+		return input->getPosition();
+	}
+	return -1;
 }
 
 /**
@@ -706,11 +726,11 @@ Sint64 AudioOutput::getPosition() const {
  * @return the new frame position of this audio node.
  */
 Sint64 AudioOutput::setPosition(Uint32 position) {
-    std::shared_ptr<AudioNode> input = std::atomic_load_explicit(&_input,std::memory_order_relaxed);
-    if (input) {
-        return input->setPosition(position);
-    }
-    return -1;
+	std::shared_ptr<AudioNode> input = std::atomic_load_explicit(&_input, std::memory_order_relaxed);
+	if (input) {
+		return input->setPosition(position);
+	}
+	return -1;
 }
 
 /**
@@ -727,11 +747,11 @@ Sint64 AudioOutput::setPosition(Uint32 position) {
  * @return the elapsed time in seconds.
  */
 double AudioOutput::getElapsed() const {
-    std::shared_ptr<AudioNode> input = std::atomic_load_explicit(&_input,std::memory_order_relaxed);
-    if (input) {
-        return input->getElapsed();
-    }
-    return -1;
+	std::shared_ptr<AudioNode> input = std::atomic_load_explicit(&_input, std::memory_order_relaxed);
+	if (input) {
+		return input->getElapsed();
+	}
+	return -1;
 }
 
 /**
@@ -750,11 +770,11 @@ double AudioOutput::getElapsed() const {
  * @return the new elapsed time in seconds.
  */
 double AudioOutput::setElapsed(double time) {
-    std::shared_ptr<AudioNode> input = std::atomic_load_explicit(&_input,std::memory_order_relaxed);
-    if (input) {
-        return input->setElapsed(time);
-    }
-    return -1;
+	std::shared_ptr<AudioNode> input = std::atomic_load_explicit(&_input, std::memory_order_relaxed);
+	if (input) {
+		return input->setElapsed(time);
+	}
+	return -1;
 }
 
 /**
@@ -774,11 +794,11 @@ double AudioOutput::setElapsed(double time) {
  * @return the remaining time in seconds.
  */
 double AudioOutput::getRemaining() const {
-    std::shared_ptr<AudioNode> input = std::atomic_load_explicit(&_input,std::memory_order_relaxed);
-    if (input) {
-        return input->getRemaining();
-    }
-    return -1;
+	std::shared_ptr<AudioNode> input = std::atomic_load_explicit(&_input, std::memory_order_relaxed);
+	if (input) {
+		return input->getRemaining();
+	}
+	return -1;
 }
 
 /**
@@ -799,9 +819,9 @@ double AudioOutput::getRemaining() const {
  * @return the new remaining time in seconds.
  */
 double AudioOutput::setRemaining(double time) {
-    std::shared_ptr<AudioNode> input = std::atomic_load_explicit(&_input,std::memory_order_relaxed);
-    if (input) {
-        return input->setRemaining(time);
-    }
-    return -1;
+	std::shared_ptr<AudioNode> input = std::atomic_load_explicit(&_input, std::memory_order_relaxed);
+	if (input) {
+		return input->setRemaining(time);
+	}
+	return -1;
 }
