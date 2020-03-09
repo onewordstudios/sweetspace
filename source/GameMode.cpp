@@ -59,7 +59,10 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 	}
 
 	input.init();
-
+	if (!net.initHost()) {
+		host = false;
+		net.initClient(0);
+	}
 	sgRoot.init(assets);
 	Vec2 donutPos = sgRoot.getDonutNode()->getPosition();
 	donutModel = DonutModel::alloc(donutPos);
@@ -73,7 +76,7 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 	sgRoot.setDonutModel(donutModel);
 
 	shipModel = ShipModel::alloc(donuts, breaches);
-	gm.init(donuts, breaches, 0);
+	gm.init(donuts, breaches, -1);
 
 	return true;
 }
@@ -110,7 +113,10 @@ void GameMode::reset() {
  */
 void GameMode::update(float timestep) {
 	input.update(timestep);
-
+	net.update();
+	if (net.getPlayerID() != -1) {
+		gm.setPlayerId(net.getPlayerID());
+	}
 	// Reset the game if necessary
 	// if (input.didReset()) {
 	//	reset();
@@ -134,8 +140,28 @@ void GameMode::update(float timestep) {
 	}
 
 	// Exception thrown : read access violation.** array** was nullptr.occurred
+	vector<int> active;
+	vector<int> inactive;
+	for (int i = 0; i < breaches.size(); i++) {
+		std::shared_ptr<BreachModel> breach = breaches.at(i);
+		if (breach->getAngle() > -1) {
+			active.push_back(breach->getID());
+		} else {
+			inactive.push_back(breach->getID());
+		}
+	}
 	gm.update(timestep);
-
+	for (int i = 0; i < breaches.size(); i++) {
+		std::shared_ptr<BreachModel> breach = breaches.at(i);
+		if ((breach->getAngle() <= -1) &&
+			(std::find(active.begin(), active.end(), breach->getID()) != active.end())) {
+			net.resolveBreach(breach->getID());
+		} else if ((breach->getAngle() > -1) &&
+				   !(std::find(active.begin(), active.end(), breach->getID()) != active.end())) {
+			// TODO: change to match player num
+			net.createBreach(breach->getAngle(), 0, breach->getID());
+		}
+	}
 	float thrust = input.getRoll();
 
 	// Move the donut (MODEL ONLY)

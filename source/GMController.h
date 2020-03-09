@@ -19,7 +19,7 @@ class GMController {
 	/** Current number of breaches on ship */
 	unsigned int numEvents;
 
-	/** PlayerId owning this GMController */
+	/** PlayerId owning this GMController. -1 means no player id assigned yet. */
 	unsigned int playerId;
 
 	/** Current breaches on ship */
@@ -86,5 +86,28 @@ class GMController {
 	 * Clears all events
 	 */
 	void clear();
+
+#pragma mark -
+#pragma mark Accessors
+
+	/**
+	 * Sets the current player id of this gm.
+	 *
+	 * @param health New gm player id.
+	 */
+	void setPlayerId(int value) { playerId = value; }
+
+	/**
+	 * Gets the current player id of this gm.
+	 *
+	 */
+	int getPlayerId() { return playerId; }
+
+	/**
+	 * Sets the donut vector to new donut vector
+	 *
+	 * @param donuts New donut vector.
+	 */
+	void setDonuts(std::vector<std::shared_ptr<DonutModel>> donuts) { this->donuts = donuts; }
 };
 #endif /* __GM_CONTROLLER_H__ */

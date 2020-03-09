@@ -24,6 +24,7 @@
 #include "GMController.h"
 #include "GameGraphRoot.h"
 #include "InputController.h"
+#include "MagicInternetBox.h"
 #include "ShipModel.h"
 
 /**
@@ -40,6 +41,8 @@ class GameMode {
 	InputController input;
 	/** Controller for GM */
 	GMController gm;
+	/** Networking controller*/
+	MagicInternetBox net;
 
 	// VIEW
 	/** Scenegraph root node */
@@ -54,6 +57,8 @@ class GameMode {
 	std::vector<std::shared_ptr<BreachModel>> breaches;
 	/** The Ship model */
 	std::shared_ptr<ShipModel> shipModel;
+
+	bool host = true;
 
    public:
 #pragma mark -
