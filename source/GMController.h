@@ -18,6 +18,9 @@ class GMController {
 	/** Current number of breaches on ship */
 	unsigned int numEvents;
 
+	/** PlayerId owning this GMController */
+	unsigned int playerId;
+
 	/** Current breaches on ship */
 	std::vector<std::shared_ptr<BreachModel>> breaches;
 
@@ -56,7 +59,8 @@ class GMController {
 	 *
 	 * @return true if the controller was initialized successfully
 	 */
-	bool init(std::vector<std::shared_ptr<DonutModel>> donuts, std::vector<std::shared_ptr<BreachModel>> breaches);
+	bool init(std::vector<std::shared_ptr<DonutModel>> donuts,
+			  std::vector<std::shared_ptr<BreachModel>> breaches, int playerId);
 
 #pragma mark -
 #pragma mark GM Handling
