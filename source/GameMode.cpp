@@ -71,7 +71,7 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 	sgRoot.setBreaches(breaches);
 	sgRoot.setDonutModel(donutModel);
 
-	gm.init(donuts, breaches);
+	gm.init(donuts, breaches, 0);
 
 	return true;
 }

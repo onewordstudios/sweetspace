@@ -53,7 +53,7 @@ void GMController::dispose() {
 bool GMController::init(std::vector<std::shared_ptr<DonutModel>> d,
 						std::vector<std::shared_ptr<BreachModel>> b, int playerId) {
 	bool success = true;
-	ship = ShipModel::alloc(d, b);
+	// ship = ShipModel::alloc(d, b);
 	breaches = ship->getBreaches();
 	this->playerId = playerId;
 	for (int i = 0; i < MAX_EVENTS; i++) {
@@ -76,7 +76,7 @@ void GMController::update(float dt) {
 		if (breaches.at(i) == nullptr) {
 			continue;
 		}
-		if (!breachFree.at(i) && breaches.at(i)->getHealth() == 0) {
+		if (breaches.at(i)->getHealth() == 0) {
 			breaches.at(i)->setAngle(-1);
 			breachFree.at(i) = true;
 		}
