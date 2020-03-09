@@ -50,10 +50,10 @@ void GMController::dispose() {
  *
  * @return true if the controller was initialized successfully
  */
-bool GMController::init(const std::vector<std::shared_ptr<DonutModel>> d, const std::vector<std::shared_ptr<BreachModel>> b) {
+bool GMController::init(std::vector<std::shared_ptr<DonutModel>> d,
+						std::vector<std::shared_ptr<BreachModel>> b) {
 	bool success = true;
-	ship->setBreaches(b);
-	ship->setDonuts(d);
+	ship = ShipModel::alloc(d, b);
 	breaches = ship->getBreaches();
 	for (int i = 0; i < MAX_EVENTS; i++) {
 		breachFree.at(i) = true;
@@ -98,7 +98,7 @@ void GMController::update(float dt) {
  */
 void GMController::clear() {
 	for (int i = 0; i < MAX_EVENTS; i++) {
-        breaches.at(i) = nullptr;
+		breaches.at(i) = nullptr;
 		breachFree.at(i) = true;
 	}
 	numEvents = 0;

@@ -61,7 +61,6 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 	input.init();
 
 	sgRoot.init(assets);
-
 	Vec2 donutPos = sgRoot.getDonutNode()->getPosition();
 	donutModel = DonutModel::alloc(donutPos);
 	donutModel->setSprite(std::dynamic_pointer_cast<AnimationNode>(sgRoot.getDonutNode()));

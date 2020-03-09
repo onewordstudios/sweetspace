@@ -1,9 +1,9 @@
-#ifndef __SHIP_MODEL_H__
+﻿#ifndef __SHIP_MODEL_H__
 #define __SHIP_MODEL_H__
 #include <cugl/cugl.h>
 
-#include "DonutModel.h"
 #include "BreachModel.h"
+#include "DonutModel.h"
 class ShipModel {
    private:
    protected:
@@ -11,8 +11,8 @@ class ShipModel {
 	std::vector<std::shared_ptr<DonutModel>> donuts;
 	/** Current list of breaches on ship*/
 	std::vector<std::shared_ptr<BreachModel>> breaches;
-//	/** Current list of doors on ship*/
-//	std::vector<std::shared_ptr<DoorModel>> doors;
+	//	/** Current list of doors on ship*/
+	//	std::vector<std::shared_ptr<DoorModel>> doors;
 
    public:
 #pragma mark Constructors
@@ -22,7 +22,7 @@ class ShipModel {
 	 * NEVER USE A CONSTRUCTOR WITH NEW. If you want to allocate a model on
 	 * the heap, use one of the static constructors instead.
 	 */
-	ShipModel(void): donuts(0), breaches(0) {}
+	ShipModel(void) : donuts(0), breaches(0) {}
 
 	/**
 	 * Destroys this breach, releasing all resources.
@@ -46,12 +46,14 @@ class ShipModel {
 	 *
 	 * @return true if the obstacle is initialized properly, false otherwise.
 	 */
-	virtual bool init(std::vector<std::shared_ptr<DonutModel>>& donuts, std::vector<std::shared_ptr<BreachModel>>& breaches);
-	static std::shared_ptr<ShipModel> alloc(std::vector<std::shared_ptr<DonutModel>>& donuts, std::vector<std::shared_ptr<BreachModel>>& breaches) {
+	virtual bool init(std::vector<std::shared_ptr<DonutModel>>& donuts,
+					  std::vector<std::shared_ptr<BreachModel>>& breaches);
+
+	static std::shared_ptr<ShipModel> alloc(std::vector<std::shared_ptr<DonutModel>>& donuts,
+											std::vector<std::shared_ptr<BreachModel>>& breaches) {
 		std::shared_ptr<ShipModel> result = std::make_shared<ShipModel>();
 		return (result->init(donuts, breaches) ? result : nullptr);
 	}
-
 
 #pragma mark -
 #pragma mark Accessors
@@ -70,18 +72,18 @@ class ShipModel {
 	std::vector<std::shared_ptr<BreachModel>>& getBreaches() { return breaches; }
 
 	/**
- * Returns the list of donuts.
- *
- * @return the list of donuts.
- */
-	void setDonuts(const std::vector<std::shared_ptr<DonutModel>>& d) { donuts = d; }
+	 * Returns the list of donuts.
+	 *
+	 * @return the list of donuts.
+	 */
+	void setDonuts(std::vector<std::shared_ptr<DonutModel>>& d) { donuts = d; }
 
 	/**
 	 * Returns the current list of breaches.
 	 *
 	 * @return the current list of breaches.
 	 */
-	void setBreaches(const std::vector<std::shared_ptr<BreachModel>>& b) { breaches = b; }
+	void setBreaches(std::vector<std::shared_ptr<BreachModel>>& b) { breaches = b; }
 
 	/**
 	 * Create breach.

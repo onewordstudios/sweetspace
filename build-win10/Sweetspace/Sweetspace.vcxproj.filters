@@ -69,6 +69,9 @@
     <ClInclude Include="..\..\source\MagicInternetBox.h">
       <Filter>Header Files\Controllers</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\source\ShipModel.h">
+      <Filter>Header Files\Models</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\source\main.cpp">
@@ -100,6 +103,9 @@
     </ClCompile>
     <ClCompile Include="..\..\source\MagicInternetBox.cpp">
       <Filter>Source Files\Controllers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\ShipModel.cpp">
+      <Filter>Source Files\Models</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
