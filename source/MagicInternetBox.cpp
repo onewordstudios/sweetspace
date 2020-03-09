@@ -101,6 +101,7 @@ void MagicInternetBox::update(std::shared_ptr<ShipModel> state) {
 			CULog("Got message %d, %d", message[0], message[1]);
 			this->playerID = message[1];
 			CULog("Got player id %d", this->getPlayerID());
+			return;
 		}
 
 		if (playerID == -1) {
