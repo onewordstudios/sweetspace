@@ -3,7 +3,7 @@
 using namespace cugl;
 
 constexpr auto GAME_SERVER = "ws://sweetspace-server.azurewebsites.net/";
-constexpr float FLOAT_PRECISION = 10.0f;
+constexpr float FLOAT_PRECISION = 180.0f;
 constexpr unsigned int NETWORK_TICK = 12;
 constexpr unsigned int ONE_BYTE = 256;
 
@@ -69,6 +69,10 @@ void MagicInternetBox::sendData(NetworkDataType type, float angle, int id, int d
 	data.push_back((uint8_t)(d3 % ONE_BYTE));
 	data.push_back((uint8_t)(d3 / ONE_BYTE));
 
+	CULog("Angle is %f, converted to %d, mod is %d", angle, angleConv, (angleConv % ONE_BYTE));
+	CULog("Trying to send data %d-%d-%d-%d-%d-%d-%d-%d-%d-%d-%d", data[0], data[1], data[2],
+		  data[3], data[4], data[5], data[6], data[7], data[8], data[9], data[10]);
+
 	ws->sendBinary(data);
 }
 
@@ -108,6 +112,13 @@ void MagicInternetBox::update(std::shared_ptr<ShipModel> state) {
 			return;
 		}
 
+		if (message.size() < 11) {
+			CULog("Message small %d", message.size());
+		} else {
+			CULog("Message data %d-%d-%d-%d-%d-%d-%d-%d-%d-%d-%d", message[0], message[1],
+				  message[2], message[3], message[4], message[5], message[6], message[7],
+				  message[8], message[9], message[10]);
+		}
 		NetworkDataType type = static_cast<NetworkDataType>(message[0]);
 
 		float angle = (float)(message[1] + ONE_BYTE * message[2]) / FLOAT_PRECISION;
@@ -125,14 +136,17 @@ void MagicInternetBox::update(std::shared_ptr<ShipModel> state) {
 				std::shared_ptr<DonutModel> donut = state->getDonuts()[id];
 				donut->setAngle(angle);
 				donut->setVelocity(data3);
+				CULog("Got position for player %d with angle %f and velocity %f", id, angle, data3);
 				break;
 			}
 			case BreachCreate: {
 				state->createBreach(angle, 3, data1, id);
+				CULog("Creating breach %d at angle %f with user %d", id, angle, data1);
 				break;
 			}
 			case BreachResolve: {
 				state->resolveBreach(id);
+				CULog("Resolve breach %d", id);
 				break;
 			}
 			case DualCreate: {
