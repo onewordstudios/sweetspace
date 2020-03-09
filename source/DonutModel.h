@@ -26,8 +26,6 @@ class DonutModel {
 	float jumpTime;
 	/** Initial vertical velocity */
 	float jumpVelocity;
-	/** Reference to image in SceneGraph for animation */
-	std::shared_ptr<cugl::Node> sprite;
 
    public:
 #pragma mark Constructors
@@ -187,23 +185,6 @@ class DonutModel {
 
 #pragma mark -
 #pragma mark Animation
-	/**
-	 * Returns a reference to film strip representing this donut.
-	 *
-	 * It returns nullptr if there is no active film strip.
-	 *
-	 * @return a reference to film strip representing this donut.
-	 */
-	std::shared_ptr<cugl::Node>& getSprite() { return sprite; }
-
-	/**
-	 * Sets the film strip representing this donut.
-	 *
-	 * Setting this to nullptr clears the value.
-	 *
-	 * @param value The donut film strip.
-	 */
-	void setSprite(const std::shared_ptr<cugl::Node>& value);
 
 	/**
 	 * Updates the state of the model
