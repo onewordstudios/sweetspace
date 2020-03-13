@@ -1,4 +1,4 @@
-﻿#ifndef __BREACH_MODEL_H__
+#ifndef __BREACH_MODEL_H__
 #define __BREACH_MODEL_H__
 #include <cugl/cugl.h>
 class BreachModel {
@@ -10,6 +10,8 @@ class BreachModel {
 	int health;
 	/** Whether the player is currently on this breach */
 	bool playerOn;
+	/** Which player can clear this breach */
+	int player;
 	/** Reference to image in SceneGraph for animation */
 	std::shared_ptr<cugl::PolygonNode> sprite;
 
@@ -21,7 +23,7 @@ class BreachModel {
 	 * NEVER USE A CONSTRUCTOR WITH NEW. If you want to allocate a model on
 	 * the heap, use one of the static constructors instead.
 	 */
-	BreachModel(void) : angle(0), health(0), playerOn(false) {}
+	BreachModel(void) : angle(0), health(0), playerOn(false), player(0) {}
 
 	/**
 	 * Destroys this breach, releasing all resources.
@@ -45,7 +47,7 @@ class BreachModel {
 	 *
 	 * @return true if the obstacle is initialized properly, false otherwise.
 	 */
-	virtual bool init() { return init(-1.0f, 3); }
+	virtual bool init() { return init(-1.0f, 3, 0); }
 
 	/**
 	 * Initializes a new breach with the given angle
@@ -58,7 +60,7 @@ class BreachModel {
 	 *
 	 * @return true if the obstacle is initialized properly, false otherwise.
 	 */
-	virtual bool init(const float a) { return init(a, 3); };
+	virtual bool init(const float a) { return init(a, 3, 0); };
 
 	/**
 	 * Initializes a new breach with the given angle and max health
@@ -71,7 +73,7 @@ class BreachModel {
 	 *
 	 * @return true if the obstacle is initialized properly, false otherwise.
 	 */
-	virtual bool init(const float a, const int b);
+	virtual bool init(const float a, const int b, const int c);
 
 	static std::shared_ptr<BreachModel> alloc() {
 		std::shared_ptr<BreachModel> result = std::make_shared<BreachModel>();
@@ -135,6 +137,20 @@ class BreachModel {
 	 * @param b Whether the player is currently on the breach.
 	 */
 	void setIsPlayerOn(bool b) { playerOn = b; }
+
+	/**
+	 * Gets which player is assigned to this breach.
+	 *
+	 * @return Which player is assigned to this breach.
+	 */
+	int getPlayer() { return player; }
+
+	/**
+	 * Sets which player is assigned to this breach.
+	 *
+	 * @param p The player to assign to the breach.
+	 */
+	void setPlayer(int p) { player = p; }
 
 	/**
 	 * Sets the sprite of the breach.

@@ -4,6 +4,9 @@
 #include <cugl/cugl.h>
 
 #include "BreachModel.h"
+#include "DonutModel.h"
+#include "MagicInternetBox.h"
+#include "ShipModel.h"
 
 /**
  * This class represents the GM of the game
@@ -16,8 +19,17 @@ class GMController {
 	/** Current number of breaches on ship */
 	unsigned int numEvents;
 
-	/** Current list of breaches on ship*/
+	/** PlayerId owning this GMController. -1 means no player id assigned yet. */
+	unsigned int playerId;
+
+	/** Current breaches on ship */
+	std::vector<std::shared_ptr<DonutModel>> donuts;
+
+	/** Current breaches on ship */
 	std::vector<std::shared_ptr<BreachModel>> breaches;
+
+	/** Network Controller for outbound calls */
+	MagicInternetBox mib;
 
    public:
 #pragma mark -
@@ -51,7 +63,9 @@ class GMController {
 	 *
 	 * @return true if the controller was initialized successfully
 	 */
-	bool init(std::vector<std::shared_ptr<BreachModel>> breaches);
+	bool init(std::vector<std::shared_ptr<DonutModel>> donuts,
+			  std::vector<std::shared_ptr<BreachModel>> breaches, MagicInternetBox mib,
+			  int playerId);
 
 #pragma mark -
 #pragma mark GM Handling
@@ -73,5 +87,28 @@ class GMController {
 	 * Clears all events
 	 */
 	void clear();
+
+#pragma mark -
+#pragma mark Accessors
+
+	/**
+	 * Sets the current player id of this gm.
+	 *
+	 * @param health New gm player id.
+	 */
+	void setPlayerId(int value) { playerId = value; }
+
+	/**
+	 * Gets the current player id of this gm.
+	 *
+	 */
+	int getPlayerId() { return playerId; }
+
+	/**
+	 * Sets the donut vector to new donut vector
+	 *
+	 * @param donuts New donut vector.
+	 */
+	void setDonuts(std::vector<std::shared_ptr<DonutModel>> donuts) { this->donuts = donuts; }
 };
 #endif /* __GM_CONTROLLER_H__ */

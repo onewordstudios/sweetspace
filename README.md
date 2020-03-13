@@ -42,9 +42,13 @@ Thanks to the [Game Design Initiative at Cornell University](https://gdiac.cis.c
 
 Continuous Integration provided by [Azure DevOps](https://azure.microsoft.com/en-us/services/devops/).
 
+## Contributions
+
+As this is a class project, we are currently not accepting external contributions.
+
 ## Copyright
 
 Copyright © 2020 onewordstudios
 All Rights Reserved
 
-As students ourselves, we are happy to make this repository public as a hopefully useful learning tool. We do still reserve all intellectual property rights. Thanks for visiting.
+As students ourselves, we are happy to make this repository public as a hopefully useful learning tool. We do still reserve all intellectual property rights. Thanks for visiting our repo!
