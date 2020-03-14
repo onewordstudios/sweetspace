@@ -50,7 +50,7 @@ bool DonutModel::init(const Vec2& pos) {
  * Any assets owned by this object will be immediately released.  Once
  * disposed, a donut may not be used until it is initialized again.
  */
-void DonutModel::dispose() { }
+void DonutModel::dispose() {}
 
 #pragma mark -
 #pragma mark Animation
