@@ -39,7 +39,9 @@ constexpr unsigned int MAX_DOORS = 1;
 /** The Angle in radians for which a tap can registers as fixing a breach*/
 constexpr float EPSILON_ANGLE = 0.09f;
 /** The Angle in radians for which a collision occurs*/
-constexpr float BREACH_WIDTH = 0.15f;
+constexpr float DOOR_WIDTH = 0.15f;
+/** The Angle in radians for which a door can be activated*/
+constexpr float DOOR_ACTIVE_ANGLE = 0.25f;
 
 #pragma mark -
 #pragma mark Constructors
@@ -157,15 +159,22 @@ void GameMode::update(float timestep) {
 	}
 
 	for (int i = 0; i < MAX_DOORS; i++) {
-		if (doors.at(i) == nullptr) {
+		if (doors.at(i) == nullptr || doors.at(i)->resolved()) {
 			continue;
 		}
 		float diff =
 			(float)M_PI - abs(abs(donutModel->getAngle() - doors.at(i)->getAngle()) - (float)M_PI);
 
-		if (diff < BREACH_WIDTH) {
+		if (diff < DOOR_WIDTH) {
 			// TODO: Real physics...
 			donutModel->applyForce(-10 * donutModel->getVelocity());
+		}
+		if (diff < DOOR_ACTIVE_ANGLE) {
+			doors.at(i)->addPlayer(playerId);
+		} else {
+			if (doors.at(i)->isPlayerOn(playerId)) {
+				doors.at(i)->removePlayer(playerId);
+			}
 		}
 	}
 

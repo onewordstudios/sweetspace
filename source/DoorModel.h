@@ -1,17 +1,19 @@
 ﻿#ifndef __door_MODEL_H__
 #define __door_MODEL_H__
 #include <cugl/cugl.h>
+
+#include <bitset>
 class DoorModel {
-private:
-protected:
+   private:
+   protected:
 	/** The angle at which the door exists */
 	float angle;
 	/** The state of the door in number of players: >=2 means it is resolved */
-	int playersOn;
+	unsigned char playersOn;
 	/** Reference to image in SceneGraph for animation */
 	std::shared_ptr<cugl::PolygonNode> sprite;
 
-public:
+   public:
 #pragma mark Constructors
 	/*
 	 * Creates a new door at angle 0.
@@ -56,7 +58,10 @@ public:
 	 *
 	 * @return true if the obstacle is initialized properly, false otherwise.
 	 */
-	virtual bool init(const float a) { this->angle = a; return true; };
+	virtual bool init(const float a) {
+		this->angle = a;
+		return true;
+	};
 
 	static std::shared_ptr<DoorModel> alloc() {
 		std::shared_ptr<DoorModel> result = std::make_shared<DoorModel>();
@@ -94,16 +99,29 @@ public:
 	void setAngle(float value) { angle = 180.0f * value / (float)M_PI; }
 
 	/**
-	 * Increments the number of players in range of the door
+	 * Adds the given player's flag from the door.
 	 *
 	 */
-	void incPlayersOn() { playersOn++; }
+	void addPlayer(int id) { playersOn = playersOn | (unsigned char)pow(2, id); }
 
 	/**
-	 * Decrements the number of players in range of the door
+	 * Removes the given player's flag from the door. Requires that this player is on the door
 	 *
 	 */
-	void decPlayersOn() { playersOn--; }
+	void removePlayer(int id) { playersOn = playersOn ^ (unsigned char)pow(2, id); }
+
+	/**
+	 * Returns whether this player is on the door.
+	 */
+	bool isPlayerOn(int id) { return (playersOn & (unsigned char)pow(2, id)) > 0; }
+
+	/**
+	 * Returns whether this door is resolved.
+	 */
+	bool resolved() {
+		std::bitset<8> ids(playersOn);
+		return ids.count() > 2;
+	}
 
 	/**
 	 * Sets the sprite of the door.
