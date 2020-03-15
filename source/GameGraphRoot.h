@@ -7,6 +7,7 @@
 #include "BreachModel.h"
 #include "DonutModel.h"
 #include "DonutNode.h"
+#include "DoorModel.h"
 #include "InputController.h"
 
 class GameGraphRoot : public cugl::Scene {
@@ -35,6 +36,8 @@ class GameGraphRoot : public cugl::Scene {
 	std::vector<std::shared_ptr<DonutModel>> donuts;
 	/** The list of breaches */
 	std::vector<std::shared_ptr<BreachModel>> breaches;
+	/** The list of doors */
+	std::vector<std::shared_ptr<DoorModel>> doors;
 
 	/**
 	 * Returns an informative string for the position
@@ -105,6 +108,8 @@ class GameGraphRoot : public cugl::Scene {
 	void setDonuts(std::vector<std::shared_ptr<DonutModel>> d) { donuts = d; };
 
 	void setBreaches(std::vector<std::shared_ptr<BreachModel>> b) { breaches = b; };
+
+	void setDoors(std::vector<std::shared_ptr<DoorModel>> d) { doors = d; };
 
 	void setPlayerId(int id) { playerId = id; }
 };

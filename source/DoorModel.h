@@ -56,7 +56,7 @@ public:
 	 *
 	 * @return true if the obstacle is initialized properly, false otherwise.
 	 */
-	virtual bool init(const float a) { this->angle = a; };
+	virtual bool init(const float a) { this->angle = a; return true; };
 
 	static std::shared_ptr<DoorModel> alloc() {
 		std::shared_ptr<DoorModel> result = std::make_shared<DoorModel>();

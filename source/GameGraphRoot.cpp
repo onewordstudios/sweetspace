@@ -1,4 +1,4 @@
-#include "GameGraphRoot.h"
+﻿#include "GameGraphRoot.h"
 
 #include <cugl/cugl.h>
 
@@ -91,11 +91,12 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 		donutNode->setScale(DONUT_SCALE);
 		nearSpace->addChild(donutNode);
 
-		Vec2 donutPos = Vec2(DIAMETER + (RADIUS+DONUT_OFFSET) * sin(donutModel->getAngle()),
-							 DIAMETER / 2.0f - (RADIUS+DONUT_OFFSET) * cos(donutModel->getAngle()));
-//		if (donutModel->getAngle() < 0) {
-//			donutPos = Vec2(0, 0);
-//		}
+		Vec2 donutPos =
+			Vec2(DIAMETER + (RADIUS + DONUT_OFFSET) * sin(donutModel->getAngle()),
+				 DIAMETER / 2.0f - (RADIUS + DONUT_OFFSET) * cos(donutModel->getAngle()));
+		//		if (donutModel->getAngle() < 0) {
+		//			donutPos = Vec2(0, 0);
+		//		}
 		donutNode->setPosition(donutPos);
 		// For moving donut off screen
 		// Vec2 breachPos = Vec2(0, 0);
@@ -195,6 +196,23 @@ void GameGraphRoot::update(float timestep) {
 			Vec2 breachPos = Vec2(0, 0);
 			breachModel->getSprite()->setPosition(breachPos);
 		}
+	}
+	for (int i = 0; i < doors.size(); i++) {
+		std::shared_ptr<DoorModel> doorModel = doors.at(i);
+		if (doorModel->getSprite() == nullptr) {
+			std::shared_ptr<Texture> image = assets->get<Texture>("door");
+			std::shared_ptr<PolygonNode> doorNode = PolygonNode::allocWithTexture(image);
+			doorModel->setSprite(doorNode);
+			doorNode->setAnchor(Vec2::ANCHOR_TOP_CENTER);
+			nearSpace->addChild(doorNode);
+		}
+		// TODO:replace awful hacky drawing code
+		Vec2 breachPos = Vec2(DIAMETER + RADIUS * sin(doorModel->getAngle()),
+							  DIAMETER / 2.0f - (RADIUS + 90) * cos(doorModel->getAngle()));
+		if (doorModel->getAngle() < 0) {
+			breachPos = Vec2(0, 0);
+		}
+		doorModel->getSprite()->setPosition(breachPos);
 	}
 }
 

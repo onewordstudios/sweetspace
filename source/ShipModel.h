@@ -4,6 +4,7 @@
 
 #include "BreachModel.h"
 #include "DonutModel.h"
+#include "DoorModel.h"
 class ShipModel {
    private:
    protected:
@@ -12,8 +13,7 @@ class ShipModel {
 	/** Current list of breaches on ship*/
 	std::vector<std::shared_ptr<BreachModel>> breaches;
 	/** Current list of doors on ship*/
-	// std::vector<std::shared_ptr<DoorModel>> doors;
-	// TODO uncomment after DoorModel is implemented
+	std::vector<std::shared_ptr<DoorModel>> doors;
 
    public:
 #pragma mark Constructors

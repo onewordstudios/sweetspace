@@ -17,6 +17,7 @@
 //
 #ifndef __GAME_MODE_H__
 #define __GAME_MODE_H__
+#include <DoorModel.h>
 #include <cugl/cugl.h>
 
 #include <vector>
@@ -55,6 +56,8 @@ class GameMode {
 	std::vector<std::shared_ptr<DonutModel>> donuts;
 	/** The list of breaches */
 	std::vector<std::shared_ptr<BreachModel>> breaches;
+	/** The list of breaches */
+	std::vector<std::shared_ptr<DoorModel>> doors;
 	/** The Ship model */
 	std::shared_ptr<ShipModel> shipModel;
 

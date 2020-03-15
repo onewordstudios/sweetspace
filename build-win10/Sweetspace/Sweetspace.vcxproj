@@ -190,6 +190,7 @@
     <ClInclude Include="..\..\source\BreachModel.h" />
     <ClInclude Include="..\..\source\DonutModel.h" />
     <ClInclude Include="..\..\source\DonutNode.h" />
+    <ClInclude Include="..\..\source\DoorModel.h" />
     <ClInclude Include="..\..\source\GameGraphRoot.h" />
     <ClInclude Include="..\..\source\GameMode.h" />
     <ClInclude Include="..\..\source\GMController.h" />
@@ -205,6 +206,7 @@
     <ClCompile Include="..\..\source\BreachModel.cpp" />
     <ClCompile Include="..\..\source\DonutModel.cpp" />
     <ClCompile Include="..\..\source\DonutNode.cpp" />
+    <ClCompile Include="..\..\source\DoorModel.cpp" />
     <ClCompile Include="..\..\source\GameGraphRoot.cpp" />
     <ClCompile Include="..\..\source\GMController.cpp" />
     <ClCompile Include="..\..\source\libraries\easywsclient.cpp" />
