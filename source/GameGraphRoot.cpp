@@ -1,4 +1,4 @@
-﻿#include "GameGraphRoot.h"
+#include "GameGraphRoot.h"
 
 #include <cugl/cugl.h>
 
@@ -68,7 +68,7 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 	allSpace = assets->get<Node>("game_field");
 	farSpace = assets->get<Node>("game_field_far");
 	nearSpace = assets->get<Node>("game_field_near");
-	donutNode = assets->get<Node>("game_field_player");
+	donutNode = assets->get<Node>("game_field_player1");
 	donutPos = donutNode->getPosition();
 	coordHUD = std::dynamic_pointer_cast<Label>(assets->get<Node>("game_hud"));
 
@@ -126,8 +126,11 @@ void GameGraphRoot::update(float timestep) {
 	// Reanchor the node at the center of the screen and rotate about center.
 	Vec2 position = farSpace->getPosition();
 	farSpace->setAnchor(Vec2::ANCHOR_CENTER);
-	farSpace->setPosition(position); // Reseting the anchor changes the position
-	// farSpace->setAngle(angle);
+	if (position == Vec2(1280 - 256, 1920)) {
+		farSpace->setPosition(Vec2(1280, 1920));
+	} else {
+		farSpace->setPosition(position - Vec2(0.5, 0)); // Reseting the anchor changes the position
+	}
 
 	// Rotate about center.
 	nearSpace->setAngle(angle);
@@ -145,7 +148,7 @@ void GameGraphRoot::update(float timestep) {
 		std::shared_ptr<BreachModel> breachModel = breaches.at(i);
 		if (breachModel->getHealth() > 0) {
 			if (breachModel->getSprite() == nullptr) {
-				std::shared_ptr<Texture> image = assets->get<Texture>("planet2");
+				std::shared_ptr<Texture> image = assets->get<Texture>("breach_purple_squiggle");
 				std::shared_ptr<PolygonNode> breachNode = PolygonNode::allocWithTexture(image);
 				breachModel->setSprite(breachNode);
 				breachNode->setScale(BREACH_SCALE);
@@ -157,6 +160,7 @@ void GameGraphRoot::update(float timestep) {
 			if (breachModel->getAngle() < 0) {
 				breachPos = Vec2(0, 0);
 			}
+			breachModel->getSprite()->setScale(BREACH_SCALE * breachModel->getHealth() / 3.0f);
 			breachModel->getSprite()->setPosition(breachPos);
 		} else {
 			Vec2 breachPos = Vec2(0, 0);

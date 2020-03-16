@@ -21,10 +21,10 @@
             "minfilter": "linear",
             "magfilter": "linear",
             "atlas":     {
-                "background" : [0,    5, 400, 35],
-                "foreground" : [16,  45, 384, 75],
-                "leftcap"    : [0,   45,  16, 75],
-                "rightcap"   : [384, 45, 400, 75]
+                "background" : [0,    0, 400, 40],
+                "foreground" : [30,  40, 370, 80],
+                "leftcap"    : [0,   40,  30, 80],
+                "rightcap"   : [370, 40, 400, 80]
             }
         }
 	},
@@ -43,7 +43,7 @@
                     "data"   : {
                         "texture"  : "claw",
                         "anchor"   : [0.5,0.5],
-                        "scale"    : 0.4
+                        "scale"    : 0.3
                     },
                     "layout" : {
                         "x_anchor" : "center",
@@ -59,7 +59,7 @@
                                 "visible"  : false,
                                 "pushsize" : true,
                                 "anchor"   : [0.5,0.5],
-                                "scale"    : 1.85
+                                "scale"    : 2
                             },
                             "children" : {
                                 "up"       : {
@@ -91,7 +91,7 @@
                     "layout" : {
                         "x_anchor" : "center",
                         "y_anchor" : "bottom",
-                        "y_offset" : 0.15
+                        "y_offset" : 0.2
                     }
                 }
             }

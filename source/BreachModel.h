@@ -1,4 +1,4 @@
-﻿#ifndef __BREACH_MODEL_H__
+#ifndef __BREACH_MODEL_H__
 #define __BREACH_MODEL_H__
 #include <cugl/cugl.h>
 class BreachModel {

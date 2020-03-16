@@ -1,4 +1,4 @@
-﻿#include "DonutModel.h"
+#include "DonutModel.h"
 
 using namespace cugl;
 
@@ -16,9 +16,9 @@ constexpr float DONUT_FRICTION_FACTOR = 0.9f;
 constexpr float DONUT_STOP_THRESHOLD = 0.01f;
 
 /** The threshold which the donut will begin to fall back to the ground again */
-constexpr float JUMP_HEIGHT = 0.3f;
+constexpr float JUMP_HEIGHT = 0.35f;
 /** Downward Acceleration for calculating jump offsets */
-constexpr float GRAVITY = 6.0f;
+constexpr float GRAVITY = 10.0f;
 
 /** Clamp x into the range [y,z] */
 constexpr float RANGE_CLAMP(float x, float y, float z) { return (x < y ? y : (x > z ? z : x)); }
