@@ -82,7 +82,10 @@ class DoorModel {
 	 *
 	 * @return the number of players in range of the door.
 	 */
-	int getPlayersOn() { return playersOn; }
+	int getPlayersOn() {
+		std::bitset<8> ids(playersOn);
+		return ids.count();
+	}
 
 	/**
 	 * Returns the current sprite of the door.
@@ -102,21 +105,13 @@ class DoorModel {
 	 * Adds the given player's flag from the door.
 	 *
 	 */
-	void addPlayer(int id) {
-		playersOn = playersOn | (unsigned char)pow(2, id);
-		if (!resolved()) {
-			getSprite()->setFrame(1);
-		}
-	}
+	void addPlayer(int id) { playersOn = playersOn | (unsigned char)pow(2, id); }
 
 	/**
 	 * Removes the given player's flag from the door. Requires that this player is on the door
 	 *
 	 */
-	void removePlayer(int id) {
-		playersOn = playersOn ^ (unsigned char)pow(2, id);
-		getSprite()->setFrame(0);
-	}
+	void removePlayer(int id) { playersOn = playersOn ^ (unsigned char)pow(2, id); }
 
 	/**
 	 * Returns whether this player is on the door.
@@ -126,10 +121,7 @@ class DoorModel {
 	/**
 	 * Returns whether this door is resolved.
 	 */
-	bool resolved() {
-		std::bitset<8> ids(playersOn);
-		return ids.count() > 2;
-	}
+	bool resolved() { return getPlayersOn() >= 2; }
 
 	/**
 	 * Sets the sprite of the door.

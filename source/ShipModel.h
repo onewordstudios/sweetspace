@@ -23,7 +23,7 @@ class ShipModel {
 	 * NEVER USE A CONSTRUCTOR WITH NEW. If you want to allocate a model on
 	 * the heap, use one of the static constructors instead.
 	 */
-	ShipModel(void) : donuts(0), breaches(0) {}
+	ShipModel(void) : donuts(0), breaches(0), doors(0) {}
 
 	/**
 	 * Destroys this breach, releasing all resources.
@@ -48,12 +48,14 @@ class ShipModel {
 	 * @return true if the obstacle is initialized properly, false otherwise.
 	 */
 	virtual bool init(std::vector<std::shared_ptr<DonutModel>>& donuts,
-					  std::vector<std::shared_ptr<BreachModel>>& breaches);
+					  std::vector<std::shared_ptr<BreachModel>>& breaches,
+					  std::vector<std::shared_ptr<DoorModel>>& doors);
 
 	static std::shared_ptr<ShipModel> alloc(std::vector<std::shared_ptr<DonutModel>>& donuts,
-											std::vector<std::shared_ptr<BreachModel>>& breaches) {
+											std::vector<std::shared_ptr<BreachModel>>& breaches,
+											std::vector<std::shared_ptr<DoorModel>>& doors) {
 		std::shared_ptr<ShipModel> result = std::make_shared<ShipModel>();
-		return (result->init(donuts, breaches) ? result : nullptr);
+		return (result->init(donuts, breaches, doors) ? result : nullptr);
 	}
 
 #pragma mark -
@@ -125,11 +127,13 @@ class ShipModel {
 	bool createDoor(int id);
 
 	/**
-	 * Open door with given id.
+	 * Flag door with given id.
 	 *
 	 * @param id   the id of door to be opened.
+	 * @param player   the player id flagging the door.
+	 * @param flag   the flag to set (on or off, 1 or 0)
 	 */
-	bool openDoor(int id);
+	bool flagDoor(int id, int player, int flag);
 
 	/**
 	 * Close door with given id.

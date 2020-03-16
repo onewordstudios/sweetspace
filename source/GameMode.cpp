@@ -39,7 +39,7 @@ constexpr unsigned int MAX_DOORS = 1;
 /** The Angle in radians for which a tap can registers as fixing a breach*/
 constexpr float EPSILON_ANGLE = 0.09f;
 /** The Angle in radians for which a collision occurs*/
-constexpr float DOOR_WIDTH = 0.15f;
+constexpr float DOOR_WIDTH = 0.12f;
 /** The Angle in radians for which a door can be activated*/
 constexpr float DOOR_ACTIVE_ANGLE = 0.25f;
 
@@ -79,7 +79,7 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 		doors.at(i)->setAngle(M_PI_2);
 	}
 
-	shipModel = ShipModel::alloc(donuts, breaches);
+	shipModel = ShipModel::alloc(donuts, breaches, doors);
 	gm.init(donuts, breaches, net, -1);
 	while (net.getPlayerID() == -1) {
 		net.update(shipModel);
@@ -171,9 +171,11 @@ void GameMode::update(float timestep) {
 		}
 		if (diff < DOOR_ACTIVE_ANGLE) {
 			doors.at(i)->addPlayer(playerId);
+			net.flagDualTask(i, playerId, 1);
 		} else {
 			if (doors.at(i)->isPlayerOn(playerId)) {
 				doors.at(i)->removePlayer(playerId);
+				net.flagDualTask(i, playerId, 0);
 			}
 		}
 	}

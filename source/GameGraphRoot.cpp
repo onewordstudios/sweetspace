@@ -219,6 +219,17 @@ void GameGraphRoot::update(float timestep) {
 			breachPos = Vec2(0, 0);
 		}
 		doorModel->getSprite()->setPosition(breachPos);
+		switch (doorModel->getPlayersOn()) {
+			case 0:
+				doorModel->getSprite()->setFrame(0);
+				break;
+			case 1:
+				doorModel->getSprite()->setFrame(1);
+				break;
+			default:
+				doorModel->getSprite()->setFrame(2);
+				break;
+		}
 	}
 }
 

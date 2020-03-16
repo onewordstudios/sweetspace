@@ -1,4 +1,4 @@
-#ifndef __NETWORK_CONTROLLER_H__
+﻿#ifndef __NETWORK_CONTROLLER_H__
 #define __NETWORK_CONTROLLER_H__
 
 #include <cugl/cugl.h>
@@ -139,8 +139,10 @@ class MagicInternetBox {
 	 * is the responsibility of the receivers of this message to resolve the task.
 	 *
 	 * @param id The dual-task ID
+	 * @param player The player ID who is activating the door
+	 * @param flag Whether the player is on or off the door (1 or 0)
 	 */
-	void flagDualTask(int id);
+	void flagDualTask(int id, int player, int flag);
 };
 
 #endif /* __NETWORK_CONTROLLER_H__ */

@@ -150,7 +150,10 @@ void MagicInternetBox::update(std::shared_ptr<ShipModel> state) {
 			}
 			case DualResolve: {
 				unsigned int taskID = id;
-				// TODO
+				unsigned int player = data1;
+				unsigned int flag = data2;
+				CULog("Flag door %d with player %d", id, player);
+				state->flagDoor(taskID, player, flag);
 				break;
 			}
 		}
@@ -171,4 +174,6 @@ void MagicInternetBox::createDualTask(float angle, int player1, int player2, int
 	sendData(DualCreate, angle, id, player1, player2, -1.0f);
 }
 
-void MagicInternetBox::flagDualTask(int id) { sendData(DualResolve, -1.0f, id, -1, -1, -1.0f); }
+void MagicInternetBox::flagDualTask(int id, int player, int flag) {
+	sendData(DualResolve, -1.0f, id, player, flag, -1.0f);
+}
