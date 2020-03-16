@@ -5,6 +5,11 @@
 #include <bitset>
 class DoorModel {
    private:
+	/** The speed of the door raising */
+	int speed = 20;
+	/** The height of the door */
+	int height = 0;
+
    protected:
 	/** The angle at which the door exists */
 	float angle;
@@ -111,7 +116,22 @@ class DoorModel {
 	 * Removes the given player's flag from the door. Requires that this player is on the door
 	 *
 	 */
-	void removePlayer(int id) { playersOn = playersOn ^ (unsigned char)pow(2, id); }
+	void removePlayer(int id) {
+		if (!resolved()) {
+			playersOn = playersOn ^ (unsigned char)pow(2, id);
+		}
+	}
+
+	bool raiseDoor() {
+		CULog("Height: %f", getSprite()->getHeight());
+		// Why is this * 4? No one knows...
+		if (height < getSprite()->getHeight() * 4) {
+			height += speed;
+			getSprite()->shiftPolygon(0, -1 * speed);
+			return false;
+		}
+		return true;
+	}
 
 	/**
 	 * Returns whether this player is on the door.

@@ -215,9 +215,6 @@ void GameGraphRoot::update(float timestep) {
 		// TODO:replace awful hacky drawing code
 		Vec2 breachPos = Vec2(DIAMETER + DOOR_RADIUS * sin(doorModel->getAngle()),
 							  DIAMETER / 2.0f - (DOOR_RADIUS)*cos(doorModel->getAngle()));
-		if (doorModel->resolved()) {
-			breachPos = Vec2(0, 0);
-		}
 		doorModel->getSprite()->setPosition(breachPos);
 		switch (doorModel->getPlayersOn()) {
 			case 0:

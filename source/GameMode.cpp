@@ -159,7 +159,7 @@ void GameMode::update(float timestep) {
 	}
 
 	for (int i = 0; i < MAX_DOORS; i++) {
-		if (doors.at(i) == nullptr || doors.at(i)->resolved()) {
+		if (doors.at(i) == nullptr || (doors.at(i)->resolved() && doors.at(i)->raiseDoor())) {
 			continue;
 		}
 		float diff =
