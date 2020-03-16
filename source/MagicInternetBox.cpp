@@ -1,11 +1,14 @@
 ﻿#include "MagicInternetBox.h"
 
+#include <sstream>
+
 using namespace cugl;
 
-constexpr auto GAME_SERVER = "ws://sweetspace-server.azurewebsites.net/";
+constexpr auto GAME_SERVER = "ws://localhost:8080/";
 constexpr float FLOAT_PRECISION = 180.0f;
 constexpr unsigned int NETWORK_TICK = 12;
 constexpr unsigned int ONE_BYTE = 256;
+constexpr unsigned int ROOM_LENGTH = 5;
 
 bool MagicInternetBox::initHost() {
 	using easywsclient::WebSocket;
@@ -28,7 +31,45 @@ bool MagicInternetBox::initHost() {
 		CULog("FAILED TO CONNECT");
 		return false;
 	}
-	ws->send("hello world");
+
+	std::vector<uint8_t> data;
+	data.push_back((uint8_t)NetworkDataType::AssignedRoom);
+	ws->sendBinary(data);
+	this->playerID = 0;
+
+	return true;
+}
+
+bool MagicInternetBox::initClient(std::string id) {
+	using easywsclient::WebSocket;
+
+	// I actually don't know what this stuff does but it won't run on Windows without it,
+	// so ¯\_(ツ)_/¯
+#ifdef _WIN32
+	INT rc;
+	WSADATA wsaData;
+
+	rc = WSAStartup(MAKEWORD(2, 2), &wsaData);
+	if (rc) {
+		CULog("WSAStartup Failed");
+		return 1;
+	}
+#endif
+
+	ws = WebSocket::from_url(GAME_SERVER);
+	if (!ws) {
+		CULog("FAILED TO CONNECT");
+		return false;
+	}
+
+	std::vector<uint8_t> data;
+	data.push_back((uint8_t)NetworkDataType::JoinRoom);
+	for (unsigned int i = 0; i < ROOM_LENGTH; i++) {
+		data.push_back((uint8_t)id.at(i));
+	}
+	ws->sendBinary(data);
+	this->playerID = 0;
+
 	return true;
 }
 
@@ -72,19 +113,19 @@ void MagicInternetBox::sendData(NetworkDataType type, float angle, int id, int d
 	ws->sendBinary(data);
 }
 
-bool MagicInternetBox::initClient(std::string id) { return initHost(); }
-
 void MagicInternetBox::leaveRoom() {}
 
-std::string MagicInternetBox::getRoomID() { return std::string(); }
+std::string MagicInternetBox::getRoomID() { return roomID; }
 
 int MagicInternetBox::getPlayerID() { return playerID; }
+
+unsigned int MagicInternetBox::getNumPlayers() { return numPlayers; }
 
 void MagicInternetBox::update(std::shared_ptr<ShipModel> state) {
 	// NETWORK TICK
 	currFrame = (currFrame + 1) % NETWORK_TICK;
 	if (currFrame == 0) {
-		if (playerID != -1) {
+		if (playerID != -1 && roomID != "") {
 			std::shared_ptr<DonutModel> player = state->getDonuts()[playerID];
 			float angle = player->getAngle();
 			float velocity = player->getVelocity();
@@ -97,17 +138,42 @@ void MagicInternetBox::update(std::shared_ptr<ShipModel> state) {
 		if (message.size() == 0) {
 			return;
 		}
-		if (playerID == -1 && message[0] == 0) {
-			CULog("Got message %d, %d", message[0], message[1]);
-			this->playerID = message[1];
-			CULog("Got player id %d", this->getPlayerID());
-			resolveBreach(0);
-			resolveBreach(1);
-			resolveBreach(2);
-			return;
+
+		if (playerID == -1 || roomID == "") {
+			switch (static_cast<NetworkDataType>(message[0])) {
+				case AssignedRoom: {
+					std::stringstream newRoomId;
+					for (unsigned int i = 0; i < ROOM_LENGTH; i++) {
+						newRoomId << (char)message[i + 1];
+					}
+					roomID = newRoomId.str();
+					CULog("Got room ID: %s", roomID.c_str());
+					return;
+				}
+				case JoinRoom: {
+					switch (message[1]) {
+						case 0: {
+							numPlayers = message[2];
+							playerID = (int)numPlayers - 1;
+							CULog("Join Room Success");
+							return;
+						}
+						case 1: {
+							CULog("Room Does Not Exist");
+							return;
+						}
+						case 2: {
+							CULog("Room full");
+							return;
+						}
+					}
+				}
+				default:
+					break;
+			}
 		}
 
-		if (playerID == -1) {
+		if (playerID == -1 || roomID == "") {
 			return;
 		}
 
@@ -131,12 +197,16 @@ void MagicInternetBox::update(std::shared_ptr<ShipModel> state) {
 				donut->setUpdated(true);
 				break;
 			}
+			case Jump: {
+				// TODO
+				break;
+			}
 			case BreachCreate: {
 				state->createBreach(angle, 3, data1, id);
 				CULog("Creating breach %d at angle %f with user %d", id, angle, data1);
 				break;
 			}
-			case BreachResolve: {
+			case BreachShrink: {
 				state->resolveBreach(id);
 				CULog("Resolve breach %d", id);
 				break;
@@ -156,6 +226,12 @@ void MagicInternetBox::update(std::shared_ptr<ShipModel> state) {
 				state->flagDoor(taskID, player, flag);
 				break;
 			}
+			case PlayerJoined: {
+				numPlayers++;
+				return;
+			}
+			default:
+				break;
 		}
 	});
 }
@@ -166,7 +242,7 @@ void MagicInternetBox::createBreach(float angle, int player, int id) {
 }
 
 void MagicInternetBox::resolveBreach(int id) {
-	sendData(BreachResolve, -1.0f, id, -1, -1, -1.0f);
+	sendData(BreachShrink, -1.0f, id, -1, -1, -1.0f);
 	CULog("Sending resolve id %d", id);
 }
 
