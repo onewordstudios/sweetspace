@@ -76,7 +76,7 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 	}
 	for (int i = 0; i < MAX_DOORS; i++) {
 		doors.push_back(DoorModel::alloc());
-		doors.at(i)->setAngle(3.14);
+		doors.at(i)->setAngle(M_PI_2);
 	}
 
 	shipModel = ShipModel::alloc(donuts, breaches);
@@ -167,7 +167,7 @@ void GameMode::update(float timestep) {
 
 		if (diff < DOOR_WIDTH) {
 			// TODO: Real physics...
-			donutModel->applyForce(-10 * donutModel->getVelocity());
+			donutModel->applyForce(-6 * donutModel->getVelocity());
 		}
 		if (diff < DOOR_ACTIVE_ANGLE) {
 			doors.at(i)->addPlayer(playerId);

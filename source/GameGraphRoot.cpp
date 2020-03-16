@@ -36,6 +36,9 @@ constexpr unsigned int DIAMETER = 1280;
 /** The radius of the ship. Also the y coordinate of the center of the ship */
 constexpr unsigned int RADIUS = 550;
 
+/** The radius used for placement of the doors. Should this really exist? probably not. */
+constexpr unsigned int DOOR_RADIUS = 650;
+
 #pragma mark -
 #pragma mark Constructors
 
@@ -201,14 +204,17 @@ void GameGraphRoot::update(float timestep) {
 		std::shared_ptr<DoorModel> doorModel = doors.at(i);
 		if (doorModel->getSprite() == nullptr) {
 			std::shared_ptr<Texture> image = assets->get<Texture>("door");
-			std::shared_ptr<PolygonNode> doorNode = PolygonNode::allocWithTexture(image);
+			std::shared_ptr<AnimationNode> doorNode = AnimationNode::alloc(image, 1, 3);
+			doorNode->setFrame(0);
 			doorModel->setSprite(doorNode);
-			doorNode->setAnchor(Vec2::ANCHOR_TOP_CENTER);
+			doorNode->setAnchor(Vec2::ANCHOR_BOTTOM_CENTER);
+			doorNode->setAngle(doorModel->getAngle());
+			doorNode->setScale(0.3f);
 			nearSpace->addChild(doorNode);
 		}
 		// TODO:replace awful hacky drawing code
-		Vec2 breachPos = Vec2(DIAMETER + RADIUS * sin(doorModel->getAngle()),
-							  DIAMETER / 2.0f - (RADIUS + 90) * cos(doorModel->getAngle()));
+		Vec2 breachPos = Vec2(DIAMETER + DOOR_RADIUS * sin(doorModel->getAngle()),
+							  DIAMETER / 2.0f - (DOOR_RADIUS)*cos(doorModel->getAngle()));
 		if (doorModel->resolved()) {
 			breachPos = Vec2(0, 0);
 		}

@@ -11,7 +11,7 @@ class DoorModel {
 	/** The state of the door in number of players: >=2 means it is resolved */
 	unsigned char playersOn;
 	/** Reference to image in SceneGraph for animation */
-	std::shared_ptr<cugl::PolygonNode> sprite;
+	std::shared_ptr<cugl::AnimationNode> sprite;
 
    public:
 #pragma mark Constructors
@@ -89,7 +89,7 @@ class DoorModel {
 	 *
 	 * @return the current sprite of the door.
 	 */
-	std::shared_ptr<cugl::PolygonNode> getSprite() { return sprite; }
+	std::shared_ptr<cugl::AnimationNode> getSprite() { return sprite; }
 
 	/**
 	 * Sets the current angle of the door in radians.
@@ -102,13 +102,21 @@ class DoorModel {
 	 * Adds the given player's flag from the door.
 	 *
 	 */
-	void addPlayer(int id) { playersOn = playersOn | (unsigned char)pow(2, id); }
+	void addPlayer(int id) {
+		playersOn = playersOn | (unsigned char)pow(2, id);
+		if (!resolved()) {
+			getSprite()->setFrame(1);
+		}
+	}
 
 	/**
 	 * Removes the given player's flag from the door. Requires that this player is on the door
 	 *
 	 */
-	void removePlayer(int id) { playersOn = playersOn ^ (unsigned char)pow(2, id); }
+	void removePlayer(int id) {
+		playersOn = playersOn ^ (unsigned char)pow(2, id);
+		getSprite()->setFrame(0);
+	}
 
 	/**
 	 * Returns whether this player is on the door.
@@ -128,6 +136,6 @@ class DoorModel {
 	 *
 	 * @param value The sprite
 	 */
-	void setSprite(const std::shared_ptr<cugl::PolygonNode> value) { sprite = value; }
+	void setSprite(const std::shared_ptr<cugl::AnimationNode> value) { sprite = value; }
 };
 #endif /* __door_MODEL_H__ */
