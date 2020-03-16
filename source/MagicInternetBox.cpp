@@ -4,7 +4,7 @@
 
 using namespace cugl;
 
-constexpr auto GAME_SERVER = "ws://localhost:8080/";
+constexpr auto GAME_SERVER = "ws://sweetspace-server.azurewebsites.net/";
 constexpr float FLOAT_PRECISION = 180.0f;
 constexpr unsigned int NETWORK_TICK = 12;
 constexpr unsigned int ONE_BYTE = 256;
