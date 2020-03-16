@@ -67,6 +67,7 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 
 	input.init();
 	net.initHost();
+	CULog("%s", net.getRoomID());
 
 	for (int i = 0; i < MAX_EVENTS; i++) {
 		breaches.push_back(BreachModel::alloc());

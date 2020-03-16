@@ -122,13 +122,21 @@ class DoorModel {
 		}
 	}
 
+	/**
+	 * Raises the door.
+	 *
+	 * @return whether the door can be passed under.
+	 */
 	bool raiseDoor() {
-		CULog("Height: %f", getSprite()->getHeight());
-		// Why is this * 4? No one knows...
-		if (height < getSprite()->getHeight() * 4) {
+		if (height < getSprite()->getHeight()) {
 			height += speed;
 			getSprite()->shiftPolygon(0, -1 * speed);
 			return false;
+		} else if (height < getSprite()->getHeight() * 4) {
+			// Why is this * 4? No one knows...
+			height += speed;
+			getSprite()->shiftPolygon(0, -1 * speed);
+			return true;
 		}
 		return true;
 	}
