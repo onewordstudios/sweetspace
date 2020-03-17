@@ -94,13 +94,7 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 		Vec2 donutPos =
 			Vec2(DIAMETER + (RADIUS + DONUT_OFFSET) * sin(donutModel->getAngle()),
 				 DIAMETER / 2.0f - (RADIUS + DONUT_OFFSET) * cos(donutModel->getAngle()));
-		//		if (donutModel->getAngle() < 0) {
-		//			donutPos = Vec2(0, 0);
-		//		}
 		donutNode->setPosition(donutPos);
-		// For moving donut off screen
-		// Vec2 breachPos = Vec2(0, 0);
-		// donutPos->setPosition(breachPos);
 	}
 
 	addChild(scene);
