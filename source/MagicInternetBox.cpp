@@ -10,7 +10,7 @@ constexpr unsigned int NETWORK_TICK = 12;
 constexpr unsigned int ONE_BYTE = 256;
 constexpr unsigned int ROOM_LENGTH = 5;
 
-bool MagicInternetBox::initHost() {
+bool MagicInternetBox::initConnection() {
 	using easywsclient::WebSocket;
 
 	// I actually don't know what this stuff does but it won't run on Windows without it,
@@ -22,7 +22,7 @@ bool MagicInternetBox::initHost() {
 	rc = WSAStartup(MAKEWORD(2, 2), &wsaData);
 	if (rc) {
 		CULog("WSAStartup Failed");
-		return 1;
+		return false;
 	}
 #endif
 
@@ -32,32 +32,24 @@ bool MagicInternetBox::initHost() {
 		return false;
 	}
 
+	return true;
+}
+
+bool MagicInternetBox::initHost() {
+	if (!initConnection()) {
+		return false;
+	}
+
 	std::vector<uint8_t> data;
 	data.push_back((uint8_t)NetworkDataType::AssignedRoom);
 	ws->sendBinary(data);
-	this->playerID = 0;
+	playerID = 0;
 
 	return true;
 }
 
 bool MagicInternetBox::initClient(std::string id) {
-	using easywsclient::WebSocket;
-
-	// I actually don't know what this stuff does but it won't run on Windows without it
-#ifdef _WIN32
-	INT rc;
-	WSADATA wsaData;
-
-	rc = WSAStartup(MAKEWORD(2, 2), &wsaData);
-	if (rc) {
-		CULog("WSAStartup Failed");
-		return 1;
-	}
-#endif
-
-	ws = WebSocket::from_url(GAME_SERVER);
-	if (!ws) {
-		CULog("FAILED TO CONNECT");
+	if (!initConnection()) {
 		return false;
 	}
 
