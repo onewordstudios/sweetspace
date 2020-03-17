@@ -157,7 +157,7 @@ class DoorModel {
 	/**
 	 * Returns whether this door is resolved.
 	 */
-	bool resolved() { return getPlayersOn() >= 1; }
+	bool resolved() { return getPlayersOn() >= 2; }
 
 	/**
 	 * Resets this door.
