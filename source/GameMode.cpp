@@ -35,7 +35,7 @@ constexpr unsigned int SCENE_WIDTH = 1024;
 constexpr unsigned int MAX_EVENTS = 3;
 /** The maximum number of doors on ship at any one time. This will probably need to scale with the
  * number of players*/
-constexpr unsigned int MAX_DOORS = 2;
+constexpr unsigned int MAX_DOORS = 1;
 /** The Angle in radians for which a tap can registers as fixing a breach*/
 constexpr float EPSILON_ANGLE = 0.09f;
 /** The Angle in radians for which a collision occurs*/
