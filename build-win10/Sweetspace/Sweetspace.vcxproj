@@ -218,6 +218,7 @@
     <ClCompile Include="..\..\source\MatchmakingMode.cpp" />
     <ClCompile Include="..\..\source\ShipModel.cpp" />
     <ClCompile Include="..\..\source\Sweetspace.cpp" />
+    <ClCompile Include="MatchmakingGraphRoot.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Sweetspace.rc" />

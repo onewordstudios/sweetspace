@@ -128,6 +128,9 @@
     <ClCompile Include="..\..\source\MatchmakingMode.cpp">
       <Filter>Source Files\Modes</Filter>
     </ClCompile>
+    <ClCompile Include="MatchmakingGraphRoot.cpp">
+      <Filter>Source Files\SceneGraph</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Sweetspace.rc">

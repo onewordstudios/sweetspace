@@ -6,7 +6,6 @@
 
 #include "InputController.h"
 #include "MagicInternetBox.h"
-#include "MatchmakingGraphRoot.h"
 #include "ShipModel.h"
 
 /**
@@ -26,7 +25,7 @@ class MatchmakingMode {
 
 	// VIEW
 	/** Scenegraph root node */
-	MatchmakingGraph sgRoot;
+	MatchmakingGraphRoot sgRoot;
 
 	// MODEL
 	/** The list of breaches */
