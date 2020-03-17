@@ -55,6 +55,7 @@ void InputController::dispose() {
 		touch->removeBeginListener(LISTENER_KEY);
 		touch->removeEndListener(LISTENER_KEY);
 #endif
+		Input::deactivate<TextInput>();
 		tapped = false;
 		active = false;
 	}
@@ -97,6 +98,7 @@ bool InputController::init() {
 		this->touchEndedCB(event, focus);
 	});
 #endif
+	Input::activate<TextInput>();
 	tapped = false;
 	active = success;
 	return success;
