@@ -35,12 +35,15 @@
             "wrapS": "repeat",
             "wrapT": "repeat"
         },
-
-        "planet1": {
-            "file":   "textures/planet1.png"
+        "health": {
+            "file":  "textures/health.png",
+            "wrapS": "repeat",
+            "wrapT": "repeat"
         },
-        "planet2": {
-            "file":   "textures/planet2.png"
+        "health_glow": {
+            "file":  "textures/health_glow.png",
+            "wrapS": "repeat",
+            "wrapT": "repeat"
         },
         "ship": {
             "file":   "textures/ship.png"
@@ -101,13 +104,13 @@
                                 }
                             }
                         },
-                        "player": {
+                        "player1": {
                             "type": "Image",
                             "data": {
                                 "texture":  "donut_yellow",
                                 "position": [1280,1344],
                                 "anchor":   [0.5,0.5],
-                                "scale":    0.5
+                                "scale":    0.32
                             }
                         }
                     }
