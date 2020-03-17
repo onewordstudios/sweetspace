@@ -65,7 +65,7 @@ typedef unsigned __int64 uint64_t;
 #else
 #include <fcntl.h>
 #include <netdb.h>
-#if defined (__ANDROID__)
+#if defined(__ANDROID__)
 #include <netinet/in.h>
 #endif
 #include <netinet/tcp.h>
