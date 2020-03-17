@@ -200,6 +200,7 @@
     <ClInclude Include="..\..\source\MatchmakingMode.h" />
     <ClInclude Include="..\..\source\ShipModel.h" />
     <ClInclude Include="..\..\source\Sweetspace.h" />
+    <ClInclude Include="MatchmakingGraphRoot.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>

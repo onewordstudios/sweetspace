@@ -16,6 +16,7 @@
 
 #include "GameMode.h"
 #include "LoadingMode.h"
+#include "MagicInternetBox.h"
 #include "MatchmakingMode.h"
 
 /**
@@ -35,6 +36,8 @@ class Sweetspace : public cugl::Application {
 	LoadingMode loading;
 	/** The controller for matchmaking */
 	MatchmakingMode matchmaking;
+	/** The controller for networking */
+	MagicInternetBox mib;
 
 	/** Whether or not we have finished loading all assets */
 	bool loaded;
@@ -51,7 +54,7 @@ class Sweetspace : public cugl::Application {
 	 * of initialization from the constructor allows main.cpp to perform
 	 * advanced configuration of the application before it starts.
 	 */
-	Sweetspace() : cugl::Application(), loaded(false) {}
+	Sweetspace() : cugl::Application(), loaded(false), matched(false) {}
 
 	/**
 	 * Disposes of this application, releasing all resources.

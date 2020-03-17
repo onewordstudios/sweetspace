@@ -81,6 +81,9 @@
     <ClInclude Include="..\..\source\MatchmakingMode.h">
       <Filter>Header Files\Modes</Filter>
     </ClInclude>
+    <ClInclude Include="MatchmakingGraphRoot.h">
+      <Filter>Header Files\SceneGraph</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\source\main.cpp">

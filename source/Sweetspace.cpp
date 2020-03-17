@@ -94,10 +94,16 @@ void Sweetspace::onShutdown() {
 void Sweetspace::update(float timestep) {
 	if (!loaded && loading.isActive()) {
 		loading.update(0.01f);
-	} else if (!loaded) {
+	} else if (!loaded && !matched) {
 		loading.dispose(); // Disables the input listeners in this mode
-		gameplay.init(assets);
+		matchmaking.init(assets);
 		loaded = true;
+	} else if (!matched) {
+		matchmaking.update(timestep);
+	} else if (!matched) {
+		matchmaking.dispose();
+		gameplay.init(assets);
+		matched = true;
 	} else {
 		gameplay.update(timestep);
 	}

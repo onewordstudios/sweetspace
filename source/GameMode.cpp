@@ -50,7 +50,7 @@ constexpr float EPSILON_ANGLE = 0.09f;
  *
  * @return true if the controller is initialized properly, false otherwise.
  */
-bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
+bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets, MagicInternetBox net) {
 	// Initialize the scene to a locked width
 	Size dimen = Application::get()->getDisplaySize();
 	dimen *= SCENE_WIDTH / dimen.width; // Lock the game to a reasonable resolution
@@ -59,7 +59,6 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 	}
 
 	input.init();
-	net.initHost();
 
 	for (int i = 0; i < MAX_EVENTS; i++) {
 		breaches.push_back(BreachModel::alloc());
@@ -145,30 +144,7 @@ void GameMode::update(float timestep) {
 			breaches.at(i)->setIsPlayerOn(false);
 		}
 	}
-
-	// Exception thrown : read access violation.** array** was nullptr.occurred
-	/*vector<int> active;
-	vector<int> inactive;
-	for (int i = 0; i < breaches.size(); i++) {
-		std::shared_ptr<BreachModel> breach = breaches.at(i);
-		if (breach->getAngle() > -1) {
-			active.push_back(breach->getID());
-		} else {
-			inactive.push_back(breach->getID());
-		}
-	}*/
 	gm.update(timestep);
-	// for (int i = 0; i < breaches.size(); i++) {
-	//	std::shared_ptr<BreachModel> breach = breaches.at(i);
-	//	if ((breach->getAngle() <= -1) &&
-	//		(std::find(active.begin(), active.end(), breach->getID()) != active.end())) {
-	//		net.resolveBreach(breach->getID());
-	//	} else if ((breach->getAngle() > -1) &&
-	//			   !(std::find(active.begin(), active.end(), breach->getID()) != active.end())) {
-	//		// TODO: change to match player num
-	//		net.createBreach(breach->getAngle(), 0, breach->getID());
-	//	}
-	//}
 	float thrust = input.getRoll();
 
 	// Move the donut (MODEL ONLY)

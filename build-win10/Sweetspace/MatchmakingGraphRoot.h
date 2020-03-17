@@ -1,45 +1,42 @@
-﻿#ifndef __MATCHMAKING_MODE_H__
-#define __MATCHMAKING_MODE_H__
+﻿#ifndef __MATCHMAKING_GRAPH_ROOT_H__
+#define __MATCHMAKING_GRAPH_ROOT_H__
 #include <cugl/cugl.h>
 
 #include <vector>
 
+#include "BreachModel.h"
+#include "DonutModel.h"
+#include "DonutNode.h"
 #include "InputController.h"
-#include "MagicInternetBox.h"
-#include "MatchmakingGraphRoot.h"
-#include "ShipModel.h"
 
-/**
- * This class is the primary gameplay constroller for the demo.
- *
- * A world has its own objects, assets, and input controller.  Thus this is
- * really a mini-GameEngine in its own right.  As in 3152, we separate it out
- * so that we can have a separate mode for the loading screen.
- */
-class MatchmakingMode {
-   protected:
-	// CONTROLLERS
-	/** Controller for abstracting out input across multiple platforms */
-	InputController input;
-	/** Networking controller*/
-	MagicInternetBox net;
+class MatchmakingGraphRoot : public cugl::Scene {
+protected:
+	/** The asset manager for this game mode. */
+	std::shared_ptr<cugl::AssetManager> assets;
+	/** The Screen's Height. */
+	float screenHeight;
 
 	// VIEW
-	/** Scenegraph root node */
-	MatchmakingGraph sgRoot;
+	/** Button to create host */
+	std::shared_ptr<cugl::Button> host;
+	/** Button to create client */
+	std::shared_ptr<cugl::Button> client;
 
 	// MODEL
-	/** The list of breaches */
-	std::vector<std::shared_ptr<DonutModel>> donuts;
-	/** The list of breaches */
-	std::vector<std::shared_ptr<BreachModel>> breaches;
-	/** The Ship model */
-	std::shared_ptr<ShipModel> shipModel;
-
-	bool finished;
 	int playerId;
 
-   public:
+	/**
+	 * Returns an informative string for the position
+	 *
+	 * This function is for writing the current donut position to the HUD.
+	 *
+	 * @param coords The current donut coordinates
+	 *
+	 * @return an informative string for the position
+	 */
+	std::string positionText();
+
+public:
 #pragma mark -
 #pragma mark Constructors
 	/**
@@ -48,7 +45,7 @@ class MatchmakingMode {
 	 * This constructor does not allocate any objects or start the game.
 	 * This allows us to use the object without a heap pointer.
 	 */
-	MatchmakingMode() : finished(false), playerId(-1) {}
+	MatchmakingGraphRoot() : Scene() {}
 
 	/**
 	 * Disposes of all (non-static) resources allocated to this mode.
@@ -56,12 +53,12 @@ class MatchmakingMode {
 	 * This method is different from dispose() in that it ALSO shuts off any
 	 * static resources, like the input controller.
 	 */
-	~MatchmakingMode() { dispose(); }
+	~MatchmakingGraphRoot() { dispose(); }
 
 	/**
 	 * Disposes of all (non-static) resources allocated to this mode.
 	 */
-	void dispose();
+	void dispose() override;
 
 	/**
 	 * Initializes the controller contents, and starts the game
@@ -85,17 +82,11 @@ class MatchmakingMode {
 	 *
 	 * @param timestep  The amount of time (in seconds) since the last frame
 	 */
-	void update(float timestep);
+	void update(float timestep) override;
 
 	/**
 	 * Resets the status of the game so that we can play again.
 	 */
-	void reset();
-
-	/**
-	 * Draws the game.
-	 */
-	void draw(const std::shared_ptr<cugl::SpriteBatch>& batch);
+	void reset() override;
 };
-
-#endif /* __MATCHMAKING_MODE_H__ */
+#endif /* __MATCHMAKING_GRAPH_ROOT_H__ */
