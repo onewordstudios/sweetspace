@@ -96,14 +96,15 @@ void Sweetspace::update(float timestep) {
 		loading.update(0.01f);
 	} else if (!loaded && !matched) {
 		loading.dispose(); // Disables the input listeners in this mode
-		matchmaking.init(assets);
+		matchmaking.init(assets, mib);
 		loaded = true;
-	} else if (!matched) {
+	} else if (!matched && !gameStarted) {
 		matchmaking.update(timestep);
-	} else if (!matched) {
+		matched = matchmaking.isGameReady();
+	} else if (matched && !gameStarted) {
 		matchmaking.dispose();
-		gameplay.init(assets);
-		matched = true;
+		gameplay.init(assets, mib);
+		gameStarted = true;
 	} else {
 		gameplay.update(timestep);
 	}
@@ -121,6 +122,8 @@ void Sweetspace::update(float timestep) {
 void Sweetspace::draw() {
 	if (!loaded) {
 		loading.render(batch);
+	} else if (!gameStarted) {
+		matchmaking.draw(batch);
 	} else {
 		gameplay.draw(batch);
 	}

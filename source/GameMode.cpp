@@ -50,7 +50,7 @@ constexpr float EPSILON_ANGLE = 0.09f;
  *
  * @return true if the controller is initialized properly, false otherwise.
  */
-bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets, MagicInternetBox net) {
+bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets, MagicInternetBox mib) {
 	// Initialize the scene to a locked width
 	Size dimen = Application::get()->getDisplaySize();
 	dimen *= SCENE_WIDTH / dimen.width; // Lock the game to a reasonable resolution
@@ -59,6 +59,7 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets, MagicInte
 	}
 
 	input.init();
+	net = mib;
 
 	for (int i = 0; i < MAX_EVENTS; i++) {
 		breaches.push_back(BreachModel::alloc());

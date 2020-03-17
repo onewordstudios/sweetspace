@@ -43,6 +43,8 @@ class Sweetspace : public cugl::Application {
 	bool loaded;
 	/** Whether or not we have finished matchmaking */
 	bool matched;
+	/** Whether or not the game has started */
+	bool gameStarted;
 
    public:
 	/**
@@ -54,7 +56,7 @@ class Sweetspace : public cugl::Application {
 	 * of initialization from the constructor allows main.cpp to perform
 	 * advanced configuration of the application before it starts.
 	 */
-	Sweetspace() : cugl::Application(), loaded(false), matched(false) {}
+	Sweetspace() : cugl::Application(), loaded(false), matched(false), gameStarted(false) {}
 
 	/**
 	 * Disposes of this application, releasing all resources.

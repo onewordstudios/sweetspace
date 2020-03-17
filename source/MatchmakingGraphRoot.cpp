@@ -27,6 +27,9 @@ constexpr unsigned int DIAMETER = 1280;
 /** The radius of the ship. Also the y coordinate of the center of the ship */
 constexpr unsigned int RADIUS = 550;
 
+/** The key for the event handlers */
+constexpr unsigned int LISTENER_KEY = 1;
+
 #pragma mark -
 #pragma mark Constructors
 
@@ -49,8 +52,7 @@ bool MatchmakingGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& asset
 	// Initialize the scene to a locked width
 	if (assets == nullptr) {
 		return false;
-	}
-	else if (!Scene::init(dimen)) {
+	} else if (!Scene::init(dimen)) {
 		return false;
 	}
 
@@ -64,7 +66,11 @@ bool MatchmakingGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& asset
 	// Get the scene components.
 	host = std::dynamic_pointer_cast<Button>(assets->get<Node>("matchmaking_host"));
 	client = std::dynamic_pointer_cast<Button>(assets->get<Node>("matchmaking_client"));
-
+	roomLabel = std::dynamic_pointer_cast<Label>(assets->get<Node>("matchmaking_room"));
+	roomInput = std::dynamic_pointer_cast<TextField>(assets->get<Node>("matchmaking_input"));
+	host->setPositionY(dimen.height / 2.0f);
+	client->setPositionY(dimen.height / 2.0f);
+	client->setPositionX(SCENE_WIDTH);
 	addChild(scene);
 	return true;
 }
@@ -75,6 +81,10 @@ bool MatchmakingGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& asset
 void MatchmakingGraphRoot::dispose() {
 	if (_active) {
 		removeAllChildren();
+		host = nullptr;
+		client = nullptr;
+		roomInput = nullptr;
+		roomLabel = nullptr;
 		_active = false;
 	}
 }
@@ -85,9 +95,7 @@ void MatchmakingGraphRoot::dispose() {
 /**
  * Resets the status of the game so that we can play again.
  */
-void MatchmakingGraphRoot::reset() {
-
-}
+void MatchmakingGraphRoot::reset() {}
 
 /**
  * The method called to update the game mode.
@@ -99,13 +107,36 @@ void MatchmakingGraphRoot::reset() {
 void MatchmakingGraphRoot::update(float timestep) {
 	// "Drawing" code.  Move everything BUT the donut
 	// Update the HUD
-	coordHUD->setText(positionText());
-
-
+	roomLabel->setText(positionText());
 }
 
 /**
- * Returns an informative string for the position
+ * Returns integers representing which button has been tapped if any
+ *
+ * @param position The screen coordinates of the tap
+ *
+ * @return -1 if no button pressed 0 for host creation, 1 for client creation
+ */
+int MatchmakingGraphRoot::checkButtons(const cugl::Vec2& position) {
+	if (position == Vec2::ZERO) {
+		return -1;
+	} else if (host->containsScreen(position)) {
+		playerId = 0;
+		roomLabel->setVisible(true);
+		host->setVisible(false);
+		client->setVisible(false);
+		return 0;
+	} else if (client->containsScreen(position)) {
+		roomInput->setVisible(true);
+		roomInput->activate(1);
+		return 1;
+	} else {
+		return -1;
+	}
+}
+
+/**
+ * Returns an informative string for the room id
  *
  * This function is for writing the current donut position to the HUD.
  *
@@ -115,6 +146,6 @@ void MatchmakingGraphRoot::update(float timestep) {
  */
 std::string MatchmakingGraphRoot::positionText() {
 	stringstream ss;
-	ss << "Angle: (" << (float)donuts.at(playerId)->getAngle() / PI_180 << ")";
+	ss << "Angle: " << roomId;
 	return ss.str();
 }

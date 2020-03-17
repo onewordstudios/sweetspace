@@ -10,7 +10,7 @@
 #include "InputController.h"
 
 class MatchmakingGraphRoot : public cugl::Scene {
-protected:
+   protected:
 	/** The asset manager for this game mode. */
 	std::shared_ptr<cugl::AssetManager> assets;
 	/** The Screen's Height. */
@@ -21,9 +21,15 @@ protected:
 	std::shared_ptr<cugl::Button> host;
 	/** Button to create client */
 	std::shared_ptr<cugl::Button> client;
+	/** Textfield for entering room ID */
+	std::shared_ptr<cugl::TextField> roomInput;
+	/** Label for room ID */
+	std::shared_ptr<cugl::Label> roomLabel;
 
 	// MODEL
 	int playerId;
+	/** RoomId for host display */
+	std::string roomId;
 
 	/**
 	 * Returns an informative string for the position
@@ -36,7 +42,7 @@ protected:
 	 */
 	std::string positionText();
 
-public:
+   public:
 #pragma mark -
 #pragma mark Constructors
 	/**
@@ -45,7 +51,7 @@ public:
 	 * This constructor does not allocate any objects or start the game.
 	 * This allows us to use the object without a heap pointer.
 	 */
-	MatchmakingGraphRoot() : Scene() {}
+	MatchmakingGraphRoot() : Scene(), roomId("-1"), playerId(-1) {}
 
 	/**
 	 * Disposes of all (non-static) resources allocated to this mode.
@@ -74,7 +80,7 @@ public:
 	bool init(const std::shared_ptr<cugl::AssetManager>& assets);
 
 #pragma mark -
-#pragma mark Gameplay Handling
+#pragma mark Matchmaking Handling
 	/**
 	 * The method called to update the game mode.
 	 *
@@ -88,5 +94,42 @@ public:
 	 * Resets the status of the game so that we can play again.
 	 */
 	void reset() override;
+
+	/**
+	 * Returns integers representing which button has been tapped if any
+	 *
+	 * @param position The screen coordinates of the tap
+	 *
+	 * @return -1 if no 0 for host creation, 1 for client creation
+	 */
+	int checkButtons(const cugl::Vec2& position);
+
+	/**
+	 * Sets roomID
+	 *
+	 * @param roomId The host room id
+	 */
+	void setRoomId(std::string roomId) { this->roomId = roomId; }
+
+	/**
+	 * Gets roomID
+	 *
+	 * @param roomId The room id
+	 */
+	std::string getRoomId() { return roomId; }
+
+	/**
+	 * Sets playerId
+	 *
+	 * @param playerId The new player id
+	 */
+	void setPlayerId(int playerId) { this->playerId = playerId; }
+
+	/**
+	 * Gets playerId
+	 *
+	 * @param roomId The player id
+	 */
+	int getPlayerId() { return playerId; }
 };
 #endif /* __MATCHMAKING_GRAPH_ROOT_H__ */

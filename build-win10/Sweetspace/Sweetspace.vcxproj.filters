@@ -81,7 +81,7 @@
     <ClInclude Include="..\..\source\MatchmakingMode.h">
       <Filter>Header Files\Modes</Filter>
     </ClInclude>
-    <ClInclude Include="MatchmakingGraphRoot.h">
+    <ClInclude Include="..\..\source\MatchmakingGraphRoot.h">
       <Filter>Header Files\SceneGraph</Filter>
     </ClInclude>
   </ItemGroup>
@@ -128,7 +128,7 @@
     <ClCompile Include="..\..\source\MatchmakingMode.cpp">
       <Filter>Source Files\Modes</Filter>
     </ClCompile>
-    <ClCompile Include="MatchmakingGraphRoot.cpp">
+    <ClCompile Include="..\..\source\MatchmakingGraphRoot.cpp">
       <Filter>Source Files\SceneGraph</Filter>
     </ClCompile>
   </ItemGroup>

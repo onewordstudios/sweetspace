@@ -191,10 +191,10 @@
                         		"halign"     : "left"
                     		}
                         },
-                        "position": [300,677],
+                        "position": [0,0],
                         "anchor":   [0.5,0.5],
                         "down"  : [0,0,0,0],
-                        "size"  : [500,500],
+                        "size"  : [100,100]
                     }
                 },
                 "client" : {
@@ -205,16 +205,43 @@
                     		"data": {
                         		"font"       : "felt32",
                         		"text"       : "Join a Lobby",
+                        		"anchor"	 : [0.5,0.5],
                         		"foreground" : [255,255,255,255],
                         		"size"       : [500,70],
                         		"valign"     : "bottom",
                         		"halign"     : "left"
                     		}
                         },
-                        "position": [900,677],
+                        "position": [100,0],
                         "anchor":   [0.5,0.5],
                         "down"  : [0,0,0,0],
-                        "size"  : [500,500],
+                        "size"  : [100,100]
+                    }
+                },
+                "room" : {
+                	"type": "Label",
+                    "data": {
+                       	"font"       : "felt32",
+                       	"text"       : "Lobby ID: ",
+                       	"visible"	 : false,
+                       	"foreground" : [255,0,0,255],
+                       	"anchor"	 : [0.5,0.5],
+                       	"size"       : [100,70],
+                       	"valign"     : "bottom",
+                       	"halign"     : "left"
+                    }
+                },
+                "input" : {
+                	"type": "TextField",
+                    "data": {
+                       	"font"       : "felt32",
+                       	"text"       : "Input Lobby ID Here",
+                       	"visible"	 : false,
+                       	"foreground" : [255,0,0,255],
+                       	"anchor"	 : [0.5,0.5],
+                       	"size"       : [100,70],
+                       	"valign"     : "bottom",
+                       	"halign"     : "left"
                     }
                 }
             }

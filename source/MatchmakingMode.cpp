@@ -31,15 +31,19 @@ constexpr unsigned int MAX_EVENTS = 3;
  *
  * @return true if the controller is initialized properly, false otherwise.
  */
-bool MatchmakingMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
+bool MatchmakingMode::init(const std::shared_ptr<cugl::AssetManager>& assets,
+						   MagicInternetBox mib) {
 	// Initialize the scene to a locked width
 	Size dimen = Application::get()->getDisplaySize();
 	dimen *= SCENE_WIDTH / dimen.width; // Lock the game to a reasonable resolution
 	if (assets == nullptr) {
 		return false;
 	}
-
+	// Set network controller
+	net = mib;
 	input.init();
+
+	// Create ship model for now since it's necessary for network updates
 	for (int i = 0; i < MAX_EVENTS; i++) {
 		breaches.push_back(BreachModel::alloc());
 	}
@@ -48,13 +52,20 @@ bool MatchmakingMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 	}
 
 	shipModel = ShipModel::alloc(donuts, breaches);
+
+	sgRoot.init(assets);
+
 	return true;
 }
 
 /**
  * Disposes of all (non-static) resources allocated to this mode.
  */
-void MatchmakingMode::dispose() { input.dispose(); }
+void MatchmakingMode::dispose() {
+	input.dispose();
+	sgRoot.dispose();
+	shipModel = nullptr;
+}
 
 #pragma mark -
 #pragma mark Gameplay Handling
@@ -73,9 +84,28 @@ void MatchmakingMode::reset() { input.clear(); }
  */
 void MatchmakingMode::update(float timestep) {
 	input.update(timestep);
-	if (net.getRoomID() == "") {
+	// Check if room is ready for play (Replace with button for play later)
+	if (net.getNumPlayers() == 3) {
+		gameReady = true;
 		return;
 	}
+	// Neither host nor client
+	if (sgRoot.getPlayerId() == -1) {
+		int buttonPressed;
+		buttonPressed = sgRoot.checkButtons(input.getTapLoc());
+		if (buttonPressed == 0) {
+			net.initHost();
+			sgRoot.setRoomId(net.getRoomID());
+		} else if (buttonPressed == 1) {
+			sgRoot.setPlayerId(-2);
+		}
+	}
+	// Client, but needs room and id still
+	if (sgRoot.getPlayerId() == -2) {
+		// Check if input in TextField is a room and set roomID
+		// Init client
+	}
+
 	net.update(shipModel);
 }
 
