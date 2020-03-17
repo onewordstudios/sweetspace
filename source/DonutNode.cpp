@@ -18,7 +18,7 @@ void DonutNode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch, const Mat4
 	float vel = donutModel->getVelocity() > 2 ? donutModel->getVelocity() - 364.08
 											  : donutModel->getVelocity();
 	if (!donutModel->getUpdated()) {
-		CULog("accelerate %f", vel / 0.9f - donutModel->getLastVel());
+		// CULog("accelerate %f", vel / 0.9f - donutModel->getLastVel());
 		donutModel->setVelocity(vel + vel / 0.9f - donutModel->getLastVel());
 		donutModel->setLastVel(vel);
 		donutModel->update();

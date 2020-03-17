@@ -25,7 +25,7 @@ constexpr float PI_180 = (float)(M_PI / 180);
 constexpr float BREACH_SCALE = 0.25;
 
 /** The scale of the donut textures. */
-constexpr float DONUT_SCALE = 0.5;
+constexpr float DONUT_SCALE = 0.32;
 
 /** Offset of donut sprites from the radius of the ship */
 constexpr int DONUT_OFFSET = 200;
@@ -84,7 +84,8 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 			continue;
 		}
 		std::shared_ptr<DonutModel> donutModel = donuts.at(i);
-		std::shared_ptr<Texture> image = assets->get<Texture>("donut_" + playerColor.at(donutModel->getColorId()));
+		string donutColor = playerColor.at(static_cast<unsigned long>(donutModel->getColorId()));
+		std::shared_ptr<Texture> image = assets->get<Texture>("donut_" + donutColor);
 		std::shared_ptr<DonutNode> donutNode = DonutNode::allocWithTexture(image);
 		donutNode->setModel(donutModel);
 		donutNode->setScale(DONUT_SCALE);
@@ -171,7 +172,8 @@ void GameGraphRoot::update(float timestep) {
 		std::shared_ptr<BreachModel> breachModel = breaches.at(i);
 		if (breachModel->getHealth() > 0) {
 			if (breachModel->getSprite() == nullptr) {
-				std::shared_ptr<Texture> image = assets->get<Texture>("breach_purple_squiggle");
+				string breachColor = playerColor.at(static_cast<unsigned long>(breachModel->getPlayer()));
+				std::shared_ptr<Texture> image = assets->get<Texture>("breach_" + breachColor);
 				std::shared_ptr<PolygonNode> breachNode = PolygonNode::allocWithTexture(image);
 				breachModel->setSprite(breachNode);
 				breachNode->setScale(BREACH_SCALE);

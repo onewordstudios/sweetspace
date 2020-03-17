@@ -66,9 +66,9 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 	}
 	for (int i = 0; i < 3; i++) {
 		shared_ptr<DonutModel> donut = DonutModel::alloc();
-		int playerColors = sgRoot.playerColor.size() - 1;
-		donut->setColorId(i % playerColors + 1);
-		donuts.push_back(DonutModel::alloc());
+		int friendsColors = int(sgRoot.playerColor.size()) - 1;
+		donut->setColorId(i % friendsColors + 1);
+		donuts.push_back(donut);
 	}
 
 	shipModel = ShipModel::alloc(donuts, breaches);
@@ -79,7 +79,7 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 	playerId = net.getPlayerID();
 	gm.setPlayerId(playerId);
 	// gm.setDonuts(shipModel);
-	donutModel = donuts.at(playerId);
+	donutModel = donuts.at(static_cast<unsigned long>(playerId));
 	donutModel->setColorId(0);
 
 	// Scene graph setup
