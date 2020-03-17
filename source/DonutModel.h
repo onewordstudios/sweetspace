@@ -28,6 +28,8 @@ class DonutModel {
 	float jumpVelocity;
 	bool updated = false;
 	float lastVel = 0;
+	/** Id of donut's color */
+	int colorId;
 
    public:
 #pragma mark Constructors
@@ -184,6 +186,9 @@ class DonutModel {
 
 	void setLastVel(float f) { lastVel = f; }
 	float getLastVel() { return lastVel; }
+
+	void setColorId(int i) { colorId = i; }
+	int getColorId() { return colorId; }
 
 	/**
 	 * Applies a force to the donut.

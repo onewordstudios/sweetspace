@@ -83,9 +83,8 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 		if (i == playerId) {
 			continue;
 		}
-
 		std::shared_ptr<DonutModel> donutModel = donuts.at(i);
-		std::shared_ptr<Texture> image = assets->get<Texture>("donut_friend");
+		std::shared_ptr<Texture> image = assets->get<Texture>("donut_" + playerColor.at(donutModel->getColorId()));
 		std::shared_ptr<DonutNode> donutNode = DonutNode::allocWithTexture(image);
 		donutNode->setModel(donutModel);
 		donutNode->setScale(DONUT_SCALE);
