@@ -5,6 +5,7 @@
 
 #include "BreachModel.h"
 #include "DonutModel.h"
+#include "DoorModel.h"
 #include "MagicInternetBox.h"
 #include "ShipModel.h"
 
@@ -27,6 +28,9 @@ class GMController {
 
 	/** Current breaches on ship */
 	std::vector<std::shared_ptr<BreachModel>> breaches;
+
+	/** Current doors on ship */
+	std::vector<std::shared_ptr<DoorModel>> doors;
 
 	/** Network Controller for outbound calls */
 	MagicInternetBox mib;
@@ -64,8 +68,8 @@ class GMController {
 	 * @return true if the controller was initialized successfully
 	 */
 	bool init(std::vector<std::shared_ptr<DonutModel>> donuts,
-			  std::vector<std::shared_ptr<BreachModel>> breaches, MagicInternetBox mib,
-			  int playerId);
+			  std::vector<std::shared_ptr<BreachModel>> breaches,
+			  std::vector<std::shared_ptr<DoorModel>> doors, MagicInternetBox mib, int playerId);
 
 #pragma mark -
 #pragma mark GM Handling

@@ -35,6 +35,11 @@ bool ShipModel::createBreach(float angle, int health, int player, int id) {
 	return true;
 }
 
+bool ShipModel::createDoor(float angle, int id) {
+	doors.at(id)->setAngle(angle);
+	return true;
+}
+
 bool ShipModel::resolveBreach(int id) {
 	breaches.at(id)->setHealth(0);
 	return true;

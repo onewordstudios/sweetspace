@@ -125,20 +125,28 @@ class DoorModel {
 	/**
 	 * Raises the door.
 	 *
-	 * @return whether the door can be passed under.
 	 */
-	bool raiseDoor() {
+	void raiseDoor() {
 		if (height < getSprite()->getHeight()) {
 			height += speed;
 			getSprite()->shiftPolygon(0, -1 * speed);
-			return false;
 		} else if (height < getSprite()->getHeight() * 4) {
 			// Why is this * 4? No one knows...
 			height += speed;
 			getSprite()->shiftPolygon(0, -1 * speed);
-			return true;
 		}
-		return true;
+	}
+
+	/**
+	 * Returns whether this door can be passed under.
+	 */
+	bool halfOpen() { return sprite != nullptr && height >= getSprite()->getHeight(); }
+
+	/**
+	 * Returns whether this door has been resolved and opened.
+	 */
+	bool resolvedAndRaised() {
+		return sprite != nullptr && resolved() && height >= getSprite()->getHeight() * 4;
 	}
 
 	/**
@@ -149,7 +157,16 @@ class DoorModel {
 	/**
 	 * Returns whether this door is resolved.
 	 */
-	bool resolved() { return getPlayersOn() >= 2; }
+	bool resolved() { return getPlayersOn() >= 1; }
+
+	/**
+	 * Resets this door.
+	 */
+	void clear() {
+		getSprite()->shiftPolygon(0, height);
+		playersOn = 0;
+		height = 0;
+	}
 
 	/**
 	 * Sets the sprite of the door.

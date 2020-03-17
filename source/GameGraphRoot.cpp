@@ -208,14 +208,17 @@ void GameGraphRoot::update(float timestep) {
 			doorNode->setFrame(0);
 			doorModel->setSprite(doorNode);
 			doorNode->setAnchor(Vec2::ANCHOR_BOTTOM_CENTER);
-			doorNode->setAngle(doorModel->getAngle());
 			doorNode->setScale(0.3f);
 			nearSpace->addChild(doorNode);
 		}
 		// TODO:replace awful hacky drawing code
 		Vec2 breachPos = Vec2(DIAMETER + DOOR_RADIUS * sin(doorModel->getAngle()),
 							  DIAMETER / 2.0f - (DOOR_RADIUS)*cos(doorModel->getAngle()));
+		if (doorModel->getAngle() < 0) {
+			breachPos = Vec2(0, 0);
+		}
 		doorModel->getSprite()->setPosition(breachPos);
+		doorModel->getSprite()->setAngle(doorModel->getAngle());
 		switch (doorModel->getPlayersOn()) {
 			case 0:
 				doorModel->getSprite()->setFrame(0);

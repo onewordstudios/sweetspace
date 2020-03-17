@@ -10,6 +10,9 @@ using namespace std;
 /** The maximum number of events on ship at any one time. This will probably need to scale with
  * the number of players*/
 const unsigned int MAX_EVENTS = 3;
+/** The maximum number of events on ship at any one time. This will probably need to scale with
+ * the number of players*/
+const unsigned int MAX_DOORS = 2;
 /** Spawn rate of breaches = 1/SPAWN_RATE for EVERY UPDATE FRAME. 100 is a very fast rate already.
  */
 const unsigned int SPAWN_RATE = 100;
@@ -19,6 +22,9 @@ constexpr unsigned int FULL_CIRCLE = 360;
 
 /** Array recording which breaches are free or not. */
 array<bool, MAX_EVENTS> breachFree;
+
+/** Array recording which doors are free or not. */
+array<bool, MAX_DOORS> doorFree;
 
 #pragma mark -
 #pragma mark GM
@@ -51,16 +57,21 @@ void GMController::dispose() {
  * @return true if the controller was initialized successfully
  */
 bool GMController::init(std::vector<std::shared_ptr<DonutModel>> d,
-						std::vector<std::shared_ptr<BreachModel>> b, MagicInternetBox mib,
+						std::vector<std::shared_ptr<BreachModel>> b,
+						std::vector<std::shared_ptr<DoorModel>> dr, MagicInternetBox mib,
 						int playerId) {
 	bool success = true;
 	// ship = ShipModel::alloc(d, b);
 	donuts = d;
 	breaches = b;
+	doors = dr;
 	this->mib = mib;
 	this->playerId = playerId;
 	for (int i = 0; i < MAX_EVENTS; i++) {
 		breachFree.at(i) = true;
+	}
+	for (int i = 0; i < MAX_DOORS; i++) {
+		doorFree.at(i) = true;
 	}
 	// Set random seed based on time
 	srand(time(NULL));
@@ -86,7 +97,20 @@ void GMController::update(float dt) {
 		}
 	}
 
-	// Check if this is the host for generating breaches
+	// Remove doors that have been resolved and opened. Also raise doors that are resolved.
+	for (int i = 0; i < MAX_DOORS; i++) {
+		if (doors.at(i) == nullptr) {
+			continue;
+		}
+		if (doors.at(i)->resolvedAndRaised()) {
+			doors.at(i)->setAngle(-1);
+			doorFree.at(i) = true;
+		} else if (doors.at(i)->resolved()) {
+			doors.at(i)->raiseDoor();
+		}
+	}
+
+	// Check if this is the host for generating breaches and doors
 	if (playerId == 0) {
 		// Simple logic for adding a breach when under max and randomly, replace with actual logic
 		// later
@@ -100,6 +124,16 @@ void GMController::update(float dt) {
 				int p = rand() % donuts.size();
 				breaches.at(i)->setPlayer(p);
 				mib.createBreach(angle, p, i);
+				break;
+			}
+		}
+		for (int i = 0; i < MAX_DOORS; i++) {
+			if (doorFree.at(i)) {
+				float angle = (rand() % FULL_CIRCLE) * (float)M_PI / HALF_CIRCLE;
+				doors.at(i)->setAngle(angle);
+				doors.at(i)->clear();
+				doorFree.at(i) = false;
+				mib.createDualTask(angle, -1, -1, i);
 				break;
 			}
 		}

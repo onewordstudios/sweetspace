@@ -215,7 +215,7 @@ void MagicInternetBox::update(std::shared_ptr<ShipModel> state) {
 				unsigned int taskID = id;
 				unsigned int player1 = data1;
 				unsigned int player2 = data2;
-				// TODO
+				state->createDoor(angle, id);
 				break;
 			}
 			case DualResolve: {

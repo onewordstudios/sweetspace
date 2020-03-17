@@ -115,16 +115,12 @@ class ShipModel {
 	bool resolveBreach(int id);
 
 	/**
-	 * Create door.
-	 */
-	bool createDoor();
-
-	/**
 	 * Create door with given id.
 	 *
-	 * @param id   the id of door to be created.
+	 * @param angle	   the location to create the door.
+	 * @param id   	   the id of door to be created.
 	 */
-	bool createDoor(int id);
+	bool createDoor(float angle, int id);
 
 	/**
 	 * Flag door with given id.

@@ -35,7 +35,7 @@ constexpr unsigned int SCENE_WIDTH = 1024;
 constexpr unsigned int MAX_EVENTS = 3;
 /** The maximum number of doors on ship at any one time. This will probably need to scale with the
  * number of players*/
-constexpr unsigned int MAX_DOORS = 1;
+constexpr unsigned int MAX_DOORS = 2;
 /** The Angle in radians for which a tap can registers as fixing a breach*/
 constexpr float EPSILON_ANGLE = 0.09f;
 /** The Angle in radians for which a collision occurs*/
@@ -77,11 +77,10 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 	}
 	for (int i = 0; i < MAX_DOORS; i++) {
 		doors.push_back(DoorModel::alloc());
-		doors.at(i)->setAngle(M_PI_2);
 	}
 
 	shipModel = ShipModel::alloc(donuts, breaches, doors);
-	gm.init(donuts, breaches, net, -1);
+	gm.init(donuts, breaches, doors, net, -1);
 	while (net.getPlayerID() == -1) {
 		net.update(shipModel);
 	}
@@ -160,7 +159,7 @@ void GameMode::update(float timestep) {
 	}
 
 	for (int i = 0; i < MAX_DOORS; i++) {
-		if (doors.at(i) == nullptr || (doors.at(i)->resolved() && doors.at(i)->raiseDoor())) {
+		if (doors.at(i) == nullptr || doors.at(i)->halfOpen() || doors.at(i)->getAngle() < 0) {
 			continue;
 		}
 		float diff =
