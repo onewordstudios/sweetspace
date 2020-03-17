@@ -19,20 +19,33 @@ class MagicInternetBox {
 	unsigned int currFrame;
 
 	/**
-	 * ID of the current player
+	 * ID of the current player, or -1 if unassigned
 	 */
-	unsigned int playerID;
+	int playerID;
+
+	/**
+	 * The ID of the current room, or "" if unassigned
+	 */
+	std::string roomID;
+
+	/**
+	 * Number of connected players
+	 */
+	unsigned int numPlayers;
 
 	/**
 	 * The type of data being sent during a network packet
 	 */
 	enum NetworkDataType {
-		ConnectionData,
 		PositionUpdate,
+		Jump,
 		BreachCreate,
-		BreachResolve,
+		BreachShrink,
 		DualCreate,
-		DualResolve
+		DualResolve,
+		AssignedRoom, // Doubles for both creating and created
+		JoinRoom,	  // Doubles for both joining and join response
+		PlayerJoined
 	};
 
 	/**
@@ -59,6 +72,7 @@ class MagicInternetBox {
 		ws = nullptr;
 		currFrame = 0;
 		playerID = -1;
+		numPlayers = 0;
 	};
 
 	/**
@@ -95,6 +109,11 @@ class MagicInternetBox {
 	 * 0 is the host player.
 	 */
 	int getPlayerID();
+
+	/**
+	 * Returns the number of connected players, or -1 if uninitialized.
+	 */
+	unsigned int getNumPlayers();
 
 	/**
 	 * Update method called every frame.
