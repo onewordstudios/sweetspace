@@ -189,10 +189,12 @@
   <ItemGroup>
     <ClInclude Include="..\..\source\BreachModel.h" />
     <ClInclude Include="..\..\source\DonutModel.h" />
+    <ClInclude Include="..\..\source\DonutNode.h" />
     <ClInclude Include="..\..\source\GameGraphRoot.h" />
     <ClInclude Include="..\..\source\GameMode.h" />
     <ClInclude Include="..\..\source\GMController.h" />
     <ClInclude Include="..\..\source\InputController.h" />
+    <ClInclude Include="..\..\source\libraries\easywsclient.hpp" />
     <ClInclude Include="..\..\source\LoadingMode.h" />
     <ClInclude Include="..\..\source\MagicInternetBox.h" />
     <ClInclude Include="..\..\source\ShipModel.h" />
@@ -202,8 +204,10 @@
   <ItemGroup>
     <ClCompile Include="..\..\source\BreachModel.cpp" />
     <ClCompile Include="..\..\source\DonutModel.cpp" />
+    <ClCompile Include="..\..\source\DonutNode.cpp" />
     <ClCompile Include="..\..\source\GameGraphRoot.cpp" />
     <ClCompile Include="..\..\source\GMController.cpp" />
+    <ClCompile Include="..\..\source\libraries\easywsclient.cpp" />
     <ClCompile Include="..\..\source\MagicInternetBox.cpp" />
     <ClCompile Include="..\..\source\main.cpp" />
     <ClCompile Include="..\..\source\GameMode.cpp" />

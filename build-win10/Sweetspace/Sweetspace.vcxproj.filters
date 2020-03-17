@@ -69,8 +69,14 @@
     <ClInclude Include="..\..\source\MagicInternetBox.h">
       <Filter>Header Files\Controllers</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\source\libraries\easywsclient.hpp">
+      <Filter>Header Files\Controllers</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\source\ShipModel.h">
       <Filter>Header Files\Models</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\DonutNode.h">
+      <Filter>Header Files\SceneGraph</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -104,8 +110,14 @@
     <ClCompile Include="..\..\source\MagicInternetBox.cpp">
       <Filter>Source Files\Controllers</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\source\libraries\easywsclient.cpp">
+      <Filter>Source Files\Controllers</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\source\ShipModel.cpp">
       <Filter>Source Files\Models</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\DonutNode.cpp">
+      <Filter>Source Files\SceneGraph</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

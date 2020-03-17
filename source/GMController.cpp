@@ -54,7 +54,6 @@ bool GMController::init(std::vector<std::shared_ptr<DonutModel>> d,
 						std::vector<std::shared_ptr<BreachModel>> b, MagicInternetBox mib,
 						int playerId) {
 	bool success = true;
-	// ship = ShipModel::alloc(d, b);
 	donuts = d;
 	breaches = b;
 	this->mib = mib;
@@ -82,7 +81,6 @@ void GMController::update(float dt) {
 		if (breaches.at(i)->getHealth() == 0) {
 			breaches.at(i)->setAngle(-1);
 			breachFree.at(i) = true;
-			mib.resolveBreach(i);
 		}
 	}
 

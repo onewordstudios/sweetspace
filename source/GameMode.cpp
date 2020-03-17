@@ -71,17 +71,17 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 	shipModel = ShipModel::alloc(donuts, breaches);
 	gm.init(donuts, breaches, net, -1);
 	while (net.getPlayerID() == -1) {
-		net.update();
+		net.update(shipModel);
 	}
 	playerId = net.getPlayerID();
 	gm.setPlayerId(playerId);
 	// gm.setDonuts(shipModel);
 	donutModel = donuts.at(playerId);
 	// Scene graph setup
-	sgRoot.init(assets);
-	donutModel->setSprite(std::dynamic_pointer_cast<AnimationNode>(sgRoot.getDonutNode()));
 	sgRoot.setBreaches(breaches);
-	sgRoot.setDonutModel(donutModel);
+	sgRoot.setDonuts(donuts);
+	sgRoot.setPlayerId(playerId);
+	sgRoot.init(assets);
 
 	return true;
 }
@@ -118,7 +118,7 @@ void GameMode::reset() {
  */
 void GameMode::update(float timestep) {
 	input.update(timestep);
-	net.update();
+	net.update(shipModel);
 	// Reset the game if necessary
 	// if (input.didReset()) {
 	//	reset();
@@ -136,6 +136,11 @@ void GameMode::update(float timestep) {
 			!breaches.at(i)->isPlayerOn() && donutModel->getJumpOffset() == 0.0f) {
 			breaches.at(i)->decHealth(1);
 			breaches.at(i)->setIsPlayerOn(true);
+
+			if (breaches.at(i)->getHealth() == 0) {
+				net.resolveBreach(i);
+			}
+
 		} else if (diff > EPSILON_ANGLE && breaches.at(i)->isPlayerOn()) {
 			breaches.at(i)->setIsPlayerOn(false);
 		}

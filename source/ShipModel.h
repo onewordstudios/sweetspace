@@ -11,8 +11,9 @@ class ShipModel {
 	std::vector<std::shared_ptr<DonutModel>> donuts;
 	/** Current list of breaches on ship*/
 	std::vector<std::shared_ptr<BreachModel>> breaches;
-	//	/** Current list of doors on ship*/
-	//	std::vector<std::shared_ptr<DoorModel>> doors;
+	/** Current list of doors on ship*/
+	// std::vector<std::shared_ptr<DoorModel>> doors;
+	// TODO uncomment after DoorModel is implemented
 
    public:
 #pragma mark Constructors

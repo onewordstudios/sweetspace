@@ -1,5 +1,11 @@
 {
 	"textures": {
+		"donut": {
+            "file":   "textures/donut_yellow.png"
+        },
+        "donut_friend": {
+            "file":   "textures/donut_green.png"
+		},
 		"donut_purple_squiggle": {
             "file":   "textures/donut_breach/donut_purple_squiggle.png"
         },
@@ -123,7 +129,7 @@
                                 "anchor":   [0.5,0.25]
                             },
                             "children": {
-                                "planet_a": {
+                                "ship": {
                                     "type": "Image",
                                     "data": {
                                         "texture":  "ship",
