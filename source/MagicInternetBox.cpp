@@ -67,7 +67,7 @@ bool MagicInternetBox::initClient(std::string id) {
 		data.push_back((uint8_t)id.at(i));
 	}
 	ws->sendBinary(data);
-	this->playerID = 0;
+	roomID = id;
 
 	return true;
 }
