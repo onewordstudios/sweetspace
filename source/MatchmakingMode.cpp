@@ -105,8 +105,9 @@ void MatchmakingMode::update(float timestep) {
 		// Check if input in TextField is a room and set roomID
 		// Init client
 	}
-
-	net.update(shipModel);
+	if (sgRoot.getPlayerId() != -1) {
+		net.update(shipModel);
+	}
 }
 
 /**
