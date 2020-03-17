@@ -66,6 +66,7 @@ void Sweetspace::onStartup() {
 void Sweetspace::onShutdown() {
 	loading.dispose();
 	gameplay.dispose();
+	matchmaking.dispose();
 	assets = nullptr;
 	batch = nullptr;
 

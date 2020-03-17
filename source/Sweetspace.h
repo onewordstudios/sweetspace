@@ -1,4 +1,4 @@
-//
+﻿//
 //  SDApp.cpp
 //  Ship Demo
 //
@@ -16,6 +16,7 @@
 
 #include "GameMode.h"
 #include "LoadingMode.h"
+#include "MatchmakingMode.h"
 
 /**
  * This class represents the application root for the ship demo.
@@ -32,9 +33,13 @@ class Sweetspace : public cugl::Application {
 	GameMode gameplay;
 	/** The controller for the loading screen */
 	LoadingMode loading;
+	/** The controller for matchmaking */
+	MatchmakingMode matchmaking;
 
 	/** Whether or not we have finished loading all assets */
 	bool loaded;
+	/** Whether or not we have finished matchmaking */
+	bool matched;
 
    public:
 	/**
