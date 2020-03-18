@@ -306,13 +306,13 @@ CheckOptions:
   - key:             readability-identifier-naming.StaticVariableSuffix
     value:           ''
   - key:             readability-identifier-naming.StructCase
-    value:           lower_case
+    value:           CamelCase
   - key:             readability-identifier-naming.StructPrefix
     value:           ''
   - key:             readability-identifier-naming.StructSuffix
     value:           ''
   - key:             readability-identifier-naming.TemplateParameterCase
-    value:           lower_case
+    value:           CamelCase
   - key:             readability-identifier-naming.TemplateParameterPrefix
     value:           ''
   - key:             readability-identifier-naming.TemplateParameterSuffix

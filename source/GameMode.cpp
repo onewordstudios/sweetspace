@@ -119,10 +119,6 @@ void GameMode::reset() {
 void GameMode::update(float timestep) {
 	input.update(timestep);
 	net.update(shipModel);
-	// Reset the game if necessary
-	// if (input.didReset()) {
-	//	reset();
-	//}
 
 	// Breach health depletion
 	for (int i = 0; i < MAX_EVENTS; i++) {

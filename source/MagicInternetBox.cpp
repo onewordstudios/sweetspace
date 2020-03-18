@@ -68,11 +68,12 @@ bool MagicInternetBox::initClient(std::string id) {
 
 DATA FORMAT
 
-[ TYPE (enum) | ANGLE (2 bytes) | ID (2 bytes) | data1 (2 bytes) | data2 (2 bytes) | data3 (2 bytes)
+[ TYPE (enum) | ANGLE (2 bytes) | ID (2 bytes) | data1 (2 bytes) | data2 (2 bytes) | data3 (3 bytes)
 
 Each 2-byte block is stored smaller first, then larger; ie 2^8 * byte1 + byte0 gives the original.
 All data is truncated to fit 16 bytes.
 Floats are multiplied by FLOAT_PRECISION and then cast to int before running through same algorithm
+Only data3 can handle negative numbers. The first byte is 1 for positive and 0 for negative.
 
 */
 
@@ -96,8 +97,10 @@ void MagicInternetBox::sendData(NetworkDataType type, float angle, int id, int d
 	data.push_back((uint8_t)(data2 % ONE_BYTE));
 	data.push_back((uint8_t)(data2 / ONE_BYTE));
 
-	int d3 = (int)(FLOAT_PRECISION * data3);
+	int d3Positive = data3 >= 0 ? 1 : 0;
+	int d3 = (int)(FLOAT_PRECISION * abs(data3));
 
+	data.push_back((uint8_t)d3Positive);
 	data.push_back((uint8_t)(d3 % ONE_BYTE));
 	data.push_back((uint8_t)(d3 / ONE_BYTE));
 
@@ -112,6 +115,24 @@ int MagicInternetBox::getPlayerID() { return playerID; }
 
 unsigned int MagicInternetBox::getNumPlayers() { return numPlayers; }
 
+/*
+Struct NetworkMovementData Members:
+	 * Number of frames passed since the last network update.
+	 * If greater than or equal to NETWORK_TICK, then position should be aligned.
+	unsigned int framesSinceUpdate;
+
+	 * The actual angle of the donut, computed from the last network update position.
+	 *
+	float angle;
+
+	 * The angle of the donut computed from its local position during the last network update.
+	 *
+	float oldAngle;
+
+	The angle of the donut exposed to the world is linearly interpolated between oldAngle and
+	angle as framesSinceUpdate increases.
+*/
+
 void MagicInternetBox::update(std::shared_ptr<ShipModel> state) {
 	// NETWORK TICK
 	currFrame = (currFrame + 1) % NETWORK_TICK;
@@ -121,6 +142,26 @@ void MagicInternetBox::update(std::shared_ptr<ShipModel> state) {
 			float angle = player->getAngle();
 			float velocity = player->getVelocity();
 			sendData(PositionUpdate, angle, playerID, -1, -1, velocity);
+		}
+	} else {
+		if (playerID != -1 && roomID != "") {
+			for (unsigned int i = 0; i < state->getDonuts().size(); i++) {
+				if (i == (unsigned int)playerID) {
+					continue;
+				}
+				std::shared_ptr<DonutModel> donut = state->getDonuts()[i];
+				std::shared_ptr<DonutModel::NetworkMovementData> data =
+					donut->networkMoveDONOTTOUCH;
+				data->framesSinceUpdate++;
+				if (data->framesSinceUpdate < NETWORK_TICK) {
+					// Interpolate position
+					float percent = (float)data->framesSinceUpdate / NETWORK_TICK;
+					data->oldAngle += donut->getVelocity();
+					data->angle += donut->getVelocity();
+					float newAngle = data->angle * percent + data->oldAngle * (1.0f - percent);
+					donut->setAngle(newAngle);
+				}
+			}
 		}
 	}
 
@@ -178,14 +219,14 @@ void MagicInternetBox::update(std::shared_ptr<ShipModel> state) {
 		// NOLINTNEXTLINE Ditto
 		int data2 = (int)(message[7] + ONE_BYTE * message[8]);
 		// NOLINTNEXTLINE Ditto
-		float data3 = (float)(message[9] + ONE_BYTE * message[10]) / FLOAT_PRECISION;
+		float data3 = (message[9] == 1 ? 1 : -1) * (float)(message[10] + ONE_BYTE * message[11]) /
+					  FLOAT_PRECISION;
 
 		switch (type) {
 			case PositionUpdate: {
 				std::shared_ptr<DonutModel> donut = state->getDonuts()[id];
 				donut->setAngle(angle);
 				donut->setVelocity(data3);
-				donut->setUpdated(true);
 				break;
 			}
 			case Jump: {

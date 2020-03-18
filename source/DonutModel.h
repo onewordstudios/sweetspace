@@ -26,10 +26,22 @@ class DonutModel {
 	float jumpTime;
 	/** Initial vertical velocity */
 	float jumpVelocity;
-	bool updated = false;
-	float lastVel = 0;
 
    public:
+	struct NetworkMovementData {
+		unsigned int framesSinceUpdate;
+		float angle;
+		float oldAngle;
+	};
+
+	/**
+	 * Data used by the network controller to ease movement for non-player donuts.
+	 *
+	 * Should ONLY be used by the networking class.
+	 * Will break lots of things if messed with externally.
+	 */
+	std::shared_ptr<NetworkMovementData> networkMoveDONOTTOUCH;
+
 #pragma mark Constructors
 	/*
 	 * Creates a new donut at the origin.
@@ -38,7 +50,9 @@ class DonutModel {
 	 * the heap, use one of the static constructors instead.
 	 */
 	DonutModel(void)
-		: angle(0), velocity(0), jumpOffset(0), jumping(false), jumpTime(0), jumpVelocity(0) {}
+		: angle(0), velocity(0), jumpOffset(0), jumping(false), jumpTime(0), jumpVelocity(0) {
+		networkMoveDONOTTOUCH = std::make_shared<NetworkMovementData>();
+	}
 
 	/**
 	 * Destroys this donut, releasing all resources.
@@ -178,12 +192,6 @@ class DonutModel {
 	 * @return the current velocity of the donut.
 	 */
 	float getVelocity() { return velocity; }
-
-	void setUpdated(bool b) { updated = b; }
-	bool getUpdated() { return updated; }
-
-	void setLastVel(float f) { lastVel = f; }
-	float getLastVel() { return lastVel; }
 
 	/**
 	 * Applies a force to the donut.
