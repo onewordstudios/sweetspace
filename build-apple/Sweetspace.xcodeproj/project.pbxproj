@@ -12,12 +12,15 @@
 		C58C5B82A24C809F0E12DEFF /* ShipModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C58C51549E90F0CA2D05EB7A /* ShipModel.cpp */; };
 		D152210B21A0FDE6A6995456 /* easywsclient.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D152292423B890A105CFF1E1 /* easywsclient.cpp */; };
 		D15222477324B444CAE67673 /* MagicInternetBox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D15228511721431DE5C3F8BF /* MagicInternetBox.cpp */; };
+		D152241D12DF18170D97502F /* DoorModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D1522CE16711F9484DFFB224 /* DoorModel.cpp */; };
 		D15224573606D56005192E3D /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = D1522C28835BBA631F29D368 /* README.md */; };
 		D15225B5047A9F0742257B0F /* DonutNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D1522D40CDE7AAE1A66B8F66 /* DonutNode.cpp */; };
 		D152269FB9C3FBF14B624C33 /* DonutNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D1522D40CDE7AAE1A66B8F66 /* DonutNode.cpp */; };
 		D15226A31B180B8600E8235E /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = D1522C28835BBA631F29D368 /* README.md */; };
+		D15226D74B5F1C4C77EC84B1 /* DoorModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D1522CE16711F9484DFFB224 /* DoorModel.cpp */; };
 		D152272F0C47BB34513BF98A /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = D1522C28835BBA631F29D368 /* README.md */; };
 		D152277E2A8E96B810AEB205 /* easywsclient.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D152292423B890A105CFF1E1 /* easywsclient.cpp */; };
+		D152280455B6C3C470B28DBC /* DoorModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D1522CE16711F9484DFFB224 /* DoorModel.cpp */; };
 		D1522849508B74DEDCD3A8EC /* .clang-tidy in Resources */ = {isa = PBXBuildFile; fileRef = D1522B22FF3E0BB5FA6127A8 /* .clang-tidy */; };
 		D152299F2C8972AFC00A35A5 /* .clang-tidy in Resources */ = {isa = PBXBuildFile; fileRef = D1522B22FF3E0BB5FA6127A8 /* .clang-tidy */; };
 		D15229A3B1F12D0046E83FD6 /* .clang-tidy in Resources */ = {isa = PBXBuildFile; fileRef = D1522B22FF3E0BB5FA6127A8 /* .clang-tidy */; };
@@ -148,12 +151,14 @@
 		C58C51549E90F0CA2D05EB7A /* ShipModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ShipModel.cpp; sourceTree = "<group>"; };
 		C58C531CA6998820E3FA7D86 /* ShipModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShipModel.h; sourceTree = "<group>"; };
 		D15224B9EA517A2BFF54A6C2 /* easywsclient.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = easywsclient.hpp; sourceTree = "<group>"; };
+		D15227D97E11C33C1D22A5E2 /* DoorModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DoorModel.h; sourceTree = "<group>"; };
 		D15227FD0DE8BAD86857197F /* MagicInternetBox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MagicInternetBox.h; sourceTree = "<group>"; };
 		D15228511721431DE5C3F8BF /* MagicInternetBox.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MagicInternetBox.cpp; sourceTree = "<group>"; };
 		D152292423B890A105CFF1E1 /* easywsclient.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = easywsclient.cpp; sourceTree = "<group>"; };
 		D1522B22FF3E0BB5FA6127A8 /* .clang-tidy */ = {isa = PBXFileReference; lastKnownFileType = "file.clang-tidy"; path = ".clang-tidy"; sourceTree = "<group>"; };
 		D1522C28835BBA631F29D368 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		D1522C8009B69F3F56057E41 /* DonutNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DonutNode.h; sourceTree = "<group>"; };
+		D1522CE16711F9484DFFB224 /* DoorModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DoorModel.cpp; sourceTree = "<group>"; };
 		D1522D40CDE7AAE1A66B8F66 /* DonutNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DonutNode.cpp; sourceTree = "<group>"; };
 		DF3B74372403A46A0063552F /* DonutModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DonutModel.cpp; sourceTree = "<group>"; };
 		DF3B743B2403A46A0063552F /* GameMode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameMode.h; sourceTree = "<group>"; };
@@ -444,6 +449,8 @@
 				D15227FD0DE8BAD86857197F /* MagicInternetBox.h */,
 				D15228511721431DE5C3F8BF /* MagicInternetBox.cpp */,
 				D1522166C3D73A4C222E4139 /* libraries */,
+				D15227D97E11C33C1D22A5E2 /* DoorModel.h */,
+				D1522CE16711F9484DFFB224 /* DoorModel.cpp */,
 			);
 			name = Source;
 			path = ../source;
@@ -640,6 +647,7 @@
 				D1522B75CBE989BF3E62FFF0 /* MagicInternetBox.cpp in Sources */,
 				D15226A31B180B8600E8235E /* README.md in Sources */,
 				D152277E2A8E96B810AEB205 /* easywsclient.cpp in Sources */,
+				D152280455B6C3C470B28DBC /* DoorModel.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -661,6 +669,7 @@
 				D15229CE017D5510C972C380 /* MagicInternetBox.cpp in Sources */,
 				D15224573606D56005192E3D /* README.md in Sources */,
 				D1522B1EDA7299CAAE55B21E /* easywsclient.cpp in Sources */,
+				D15226D74B5F1C4C77EC84B1 /* DoorModel.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -682,6 +691,7 @@
 				D15222477324B444CAE67673 /* MagicInternetBox.cpp in Sources */,
 				D152272F0C47BB34513BF98A /* README.md in Sources */,
 				D152210B21A0FDE6A6995456 /* easywsclient.cpp in Sources */,
+				D152241D12DF18170D97502F /* DoorModel.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
