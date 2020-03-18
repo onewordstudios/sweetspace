@@ -44,8 +44,9 @@ InputController::InputController()
  */
 void InputController::dispose() {
 	if (active) {
-#ifndef CU_TOUCH_SCREEN
 		Input::deactivate<Keyboard>();
+#ifndef CU_TOUCH_SCREEN
+
 		Mouse* mouse = Input::get<Mouse>();
 		mouse->removePressListener(LISTENER_KEY);
 		mouse->removeReleaseListener(LISTENER_KEY);
@@ -73,10 +74,11 @@ void InputController::dispose() {
 bool InputController::init() {
 	timestamp.mark();
 	bool success = true;
-
+	// Process keyboard on all?
+	success = Input::activate<Keyboard>();
 // Only process keyboard on desktop
 #ifndef CU_TOUCH_SCREEN
-	success = Input::activate<Keyboard>();
+
 	Mouse* mouse = Input::get<Mouse>();
 	mouse->addPressListener(LISTENER_KEY,
 							[=](const cugl::MouseEvent& event, Uint8 clicks, bool focus) {
@@ -98,7 +100,7 @@ bool InputController::init() {
 		this->touchEndedCB(event, focus);
 	});
 #endif
-	Input::activate<TextInput>();
+	success = success && Input::activate<TextInput>();
 	tapped = false;
 	active = success;
 	return success;
