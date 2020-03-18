@@ -4,7 +4,7 @@
 
 using namespace cugl;
 
-constexpr auto GAME_SERVER = "ws://sweetspace-server.azurewebsites.net/";
+constexpr auto GAME_SERVER = "ws://sweetspace-server.herokuapp.com/";
 constexpr float FLOAT_PRECISION = 180.0f;
 constexpr unsigned int NETWORK_TICK = 12; // Constant also defined in ExternalDonutModel.cpp
 constexpr unsigned int ONE_BYTE = 256;
