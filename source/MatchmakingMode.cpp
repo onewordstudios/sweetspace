@@ -32,7 +32,7 @@ constexpr unsigned int MAX_EVENTS = 3;
  * @return true if the controller is initialized properly, false otherwise.
  */
 bool MatchmakingMode::init(const std::shared_ptr<cugl::AssetManager>& assets,
-						   MagicInternetBox& mib) {
+						   std::shared_ptr<MagicInternetBox>& mib) {
 	// Initialize the scene to a locked width
 	Size dimen = Application::get()->getDisplaySize();
 	dimen *= SCENE_WIDTH / dimen.width; // Lock the game to a reasonable resolution
@@ -84,16 +84,12 @@ void MatchmakingMode::reset() { input.clear(); }
  */
 void MatchmakingMode::update(float timestep) {
 	input.update(timestep);
-	// Check if room is ready for play (Replace with button for play later)
-	if (net.getNumPlayers() == 3) {
-		gameReady = true;
-	}
 	// Neither host nor client
 	if (sgRoot.getPlayerId() == -1) {
 		int buttonPressed;
 		buttonPressed = sgRoot.checkButtons(input.getTapLoc());
 		if (buttonPressed == 0) {
-			net.initHost();
+			net->initHost();
 		} else if (buttonPressed == 1) {
 			sgRoot.setPlayerId(-2);
 		}
@@ -105,15 +101,21 @@ void MatchmakingMode::update(float timestep) {
 		string s = sgRoot.getInput(input.getTapLoc());
 		if (s != "") {
 			sgRoot.setRoomId(s);
-			net.initClient(s);
+			net->initClient(s);
 			sgRoot.setPlayerId(1);
 		}
 	}
 	// Only update network loop if inithost or initclient called
 	if (sgRoot.getPlayerId() > -1) {
-		net.update(shipModel);
-		sgRoot.setRoomId(net.getRoomID());
-		sgRoot.setPlayerId(net.getPlayerID());
+		net->update(shipModel);
+		sgRoot.setRoomId(net->getRoomID());
+		if (net->getPlayerID() > -1) {
+			sgRoot.setPlayerId(net->getPlayerID());
+		}
+		// Check if room is ready for play (Replace with button for play later)
+		if (net->getNumPlayers() == 3) {
+			gameReady = true;
+		}
 	}
 	// Update Scene Graph
 	sgRoot.update(timestep);

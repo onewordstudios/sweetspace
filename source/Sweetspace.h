@@ -37,7 +37,7 @@ class Sweetspace : public cugl::Application {
 	/** The controller for matchmaking */
 	MatchmakingMode matchmaking;
 	/** The controller for networking */
-	MagicInternetBox mib;
+	std::shared_ptr<MagicInternetBox> mib;
 
 	/** Whether or not we have finished loading all assets */
 	bool loaded;

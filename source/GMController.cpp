@@ -51,8 +51,8 @@ void GMController::dispose() {
  * @return true if the controller was initialized successfully
  */
 bool GMController::init(std::vector<std::shared_ptr<DonutModel>>& d,
-						std::vector<std::shared_ptr<BreachModel>>& b, MagicInternetBox& mib,
-						int playerId) {
+						std::vector<std::shared_ptr<BreachModel>>& b,
+						std::shared_ptr<MagicInternetBox>& mib, int playerId) {
 	bool success = true;
 	donuts = d;
 	breaches = b;
@@ -97,7 +97,7 @@ void GMController::update(float dt) {
 				breachFree.at(i) = false;
 				int p = rand() % donuts.size();
 				breaches.at(i)->setPlayer(p);
-				mib.createBreach(angle, p, i);
+				mib->createBreach(angle, p, i);
 				break;
 			}
 		}

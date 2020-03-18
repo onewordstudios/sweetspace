@@ -50,7 +50,8 @@ constexpr float EPSILON_ANGLE = 0.09f;
  *
  * @return true if the controller is initialized properly, false otherwise.
  */
-bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets, MagicInternetBox& mib) {
+bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets,
+					std::shared_ptr<MagicInternetBox>& mib) {
 	// Initialize the scene to a locked width
 	Size dimen = Application::get()->getDisplaySize();
 	dimen *= SCENE_WIDTH / dimen.width; // Lock the game to a reasonable resolution
@@ -70,10 +71,10 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets, MagicInte
 
 	shipModel = ShipModel::alloc(donuts, breaches);
 	gm.init(donuts, breaches, net, -1);
-	while (net.getPlayerID() == -1) {
-		net.update(shipModel);
+	while (net->getPlayerID() == -1) {
+		net->update(shipModel);
 	}
-	playerId = net.getPlayerID();
+	playerId = net->getPlayerID();
 	gm.setPlayerId(playerId);
 	// gm.setDonuts(shipModel);
 	donutModel = donuts.at(playerId);
@@ -118,7 +119,7 @@ void GameMode::reset() {
  */
 void GameMode::update(float timestep) {
 	input.update(timestep);
-	net.update(shipModel);
+	net->update(shipModel);
 	// Reset the game if necessary
 	// if (input.didReset()) {
 	//	reset();
@@ -138,7 +139,7 @@ void GameMode::update(float timestep) {
 			breaches.at(i)->setIsPlayerOn(true);
 
 			if (breaches.at(i)->getHealth() == 0) {
-				net.resolveBreach(i);
+				net->resolveBreach(i);
 			}
 
 		} else if (diff > EPSILON_ANGLE && breaches.at(i)->isPlayerOn()) {

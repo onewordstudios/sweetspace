@@ -22,7 +22,7 @@ class MatchmakingMode {
 	/** Controller for abstracting out input across multiple platforms */
 	InputController input;
 	/** Networking controller*/
-	MagicInternetBox net;
+	std::shared_ptr<MagicInternetBox> net;
 
 	// VIEW
 	/** Scenegraph root node */
@@ -76,7 +76,8 @@ class MatchmakingMode {
 	 *
 	 * @return true if the controller is initialized properly, false otherwise.
 	 */
-	bool init(const std::shared_ptr<cugl::AssetManager>& assets, MagicInternetBox& mib);
+	bool init(const std::shared_ptr<cugl::AssetManager>& assets,
+			  std::shared_ptr<MagicInternetBox>& mib);
 
 #pragma mark -
 #pragma mark Matchmaking Handling

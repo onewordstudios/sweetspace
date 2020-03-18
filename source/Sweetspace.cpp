@@ -46,6 +46,8 @@ void Sweetspace::onStartup() {
 	loaded = false;
 	loading.init(assets);
 
+	mib = std::make_shared<MagicInternetBox>();
+
 	// Queue up the other assets
 	assets->loadDirectoryAsync("json/assets.json", nullptr);
 

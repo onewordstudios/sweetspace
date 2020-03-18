@@ -42,7 +42,7 @@ class GameMode {
 	/** Controller for GM */
 	GMController gm;
 	/** Networking controller*/
-	MagicInternetBox net;
+	std::shared_ptr<MagicInternetBox> net;
 
 	// VIEW
 	/** Scenegraph root node */
@@ -96,7 +96,8 @@ class GameMode {
 	 *
 	 * @return true if the controller is initialized properly, false otherwise.
 	 */
-	bool init(const std::shared_ptr<cugl::AssetManager>& assets, MagicInternetBox& net);
+	bool init(const std::shared_ptr<cugl::AssetManager>& assets,
+			  std::shared_ptr<MagicInternetBox>& net);
 
 #pragma mark -
 #pragma mark Gameplay Handling
