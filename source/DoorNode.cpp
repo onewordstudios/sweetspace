@@ -22,17 +22,7 @@ void DoorNode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch, const Mat4&
 	}
 	setPosition(doorPos);
 	setAngle(doorModel->getAngle());
-	switch (doorModel->getPlayersOn()) {
-		case 0:
-			setFrame(0);
-			break;
-		case 1:
-			setFrame(1);
-			break;
-		default:
-			setFrame(2);
-			break;
-	}
+	doorModel->getPlayersOn() < 2 ? setFrame(doorModel->getPlayersOn()) : setFrame(2);
 	float diff = height - doorModel->getHeight();
 	height = doorModel->getHeight();
 	if (diff != 0) {

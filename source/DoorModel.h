@@ -117,7 +117,6 @@ class DoorModel {
 
 	/**
 	 * Removes the given player's flag from the door. Requires that this player is on the door
-	 *
 	 */
 	void removePlayer(int id) {
 		if (!resolved()) {
@@ -127,7 +126,6 @@ class DoorModel {
 
 	/**
 	 * Raises the door.
-	 *
 	 */
 	void raiseDoor() {
 		if (height < MAX_HEIGHT) height += SPEED;
