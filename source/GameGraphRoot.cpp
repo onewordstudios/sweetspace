@@ -25,7 +25,7 @@ constexpr float PI_180 = (float)(M_PI / 180);
 constexpr float BREACH_SCALE = 0.25;
 
 /** The scale of the donut textures. */
-constexpr float DONUT_SCALE = 0.32;
+constexpr float DONUT_SCALE = 0.32f;
 
 /** Offset of donut sprites from the radius of the ship */
 constexpr int DONUT_OFFSET = 200;
