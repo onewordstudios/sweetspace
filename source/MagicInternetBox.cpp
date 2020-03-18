@@ -115,24 +115,6 @@ int MagicInternetBox::getPlayerID() { return playerID; }
 
 unsigned int MagicInternetBox::getNumPlayers() { return numPlayers; }
 
-/*
-Struct NetworkMovementData Members:
-	 * Number of frames passed since the last network update.
-	 * If greater than or equal to NETWORK_TICK, then position should be aligned.
-	unsigned int framesSinceUpdate;
-
-	 * The actual angle of the donut, computed from the last network update position.
-	 *
-	float angle;
-
-	 * The angle of the donut computed from its local position during the last network update.
-	 *
-	float oldAngle;
-
-	The angle of the donut exposed to the world is linearly interpolated between oldAngle and
-	angle as framesSinceUpdate increases.
-*/
-
 void MagicInternetBox::update(std::shared_ptr<ShipModel> state) {
 	// NETWORK TICK
 	currFrame = (currFrame + 1) % NETWORK_TICK;
