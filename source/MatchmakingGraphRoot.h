@@ -23,6 +23,8 @@ class MatchmakingGraphRoot : public cugl::Scene {
 	std::shared_ptr<cugl::Button> client;
 	/** Textfield for entering room ID */
 	std::shared_ptr<cugl::TextField> roomInput;
+	/** Button to Enter Input */
+	std::shared_ptr<cugl::Button> textInput;
 	/** Label for room ID */
 	std::shared_ptr<cugl::Label> roomLabel;
 
@@ -111,7 +113,14 @@ class MatchmakingGraphRoot : public cugl::Scene {
 	 *
 	 * @return -1 if no button pressed 0 for host creation, 1 for client creation
 	 */
-	void MatchmakingGraphRoot::textInputEnded(const cugl::TextInputEvent& event, bool focus);
+	// void MatchmakingGraphRoot::textInputEnded(const cugl::TextInputEvent& event, bool focus);
+
+	/**
+	 * Returns the text from inside the input field
+	 *
+	 * @return a string for the text
+	 */
+	std::string MatchmakingGraphRoot::getInput(const cugl::Vec2& position);
 
 	/**
 	 * Sets roomID

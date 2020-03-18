@@ -69,6 +69,7 @@ bool MatchmakingGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& asset
 	client = std::dynamic_pointer_cast<Button>(assets->get<Node>("matchmaking_client"));
 	roomLabel = std::dynamic_pointer_cast<Label>(assets->get<Node>("matchmaking_room"));
 	roomInput = std::dynamic_pointer_cast<TextField>(assets->get<Node>("matchmaking_input"));
+	textInput = std::dynamic_pointer_cast<Button>(assets->get<Node>("matchmaking_inputbutton"));
 
 	addChild(scene);
 	return true;
@@ -129,6 +130,7 @@ int MatchmakingGraphRoot::checkButtons(const cugl::Vec2& position) {
 		roomInput->setVisible(true);
 		roomInput->activate(2);
 		roomLabel->setVisible(true);
+		textInput->setVisible(true);
 		return 1;
 	} else {
 		return -1;
@@ -141,9 +143,23 @@ int MatchmakingGraphRoot::checkButtons(const cugl::Vec2& position) {
  * @param event The text input event
  *
  */
-void MatchmakingGraphRoot::textInputEnded(const cugl::TextInputEvent& event, bool focus) {
+/*void MatchmakingGraphRoot::textInputEnded(const cugl::TextInputEvent& event, bool focus) {
 	roomId = event.buffer;
 	CULog("Text Input Callback");
+}*/
+
+/**
+ * Returns the text from inside the input field
+ *
+ * @return a string for the text
+ */
+std::string MatchmakingGraphRoot::getInput(const cugl::Vec2& position) {
+	if (position == Vec2::ZERO) {
+		return "";
+	} else if (textInput->containsScreen(position)) {
+		return roomInput->getText();
+	}
+	return "";
 }
 
 /**

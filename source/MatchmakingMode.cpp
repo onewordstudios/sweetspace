@@ -104,11 +104,18 @@ void MatchmakingMode::update(float timestep) {
 	if (sgRoot.getPlayerId() == -2) {
 		// Check if input in TextField is a room and set roomID and set playerID
 		// Init client
+		string s = sgRoot.getInput(input.getTapLoc());
+		if (s != "") {
+			sgRoot.setRoomId(s);
+			net.initClient(s);
+			sgRoot.setPlayerId(1);
+		}
 	}
 	// Only update network loop if inithost or initclient called
 	if (sgRoot.getPlayerId() > -1) {
 		net.update(shipModel);
 	}
+	sgRoot.update(timestep);
 }
 
 /**
