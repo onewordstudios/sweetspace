@@ -18,6 +18,8 @@ class BreachModel {
 	bool needSpriteUpdate;
 
    public:
+	/** Default Max Health of a Breach*/
+	const unsigned int HEALTH_DEFAULT = 3;
 #pragma mark Constructors
 	/*
 	 * Creates a new breach at angle 0.
@@ -172,5 +174,31 @@ class BreachModel {
 	 * @param b
 	 */
 	void setNeedSpriteUpdate(bool b) { needSpriteUpdate = b; }
+
+	/**
+	 * Resets the breach upon recycling.
+	 * @param an
+	 * @param he
+	 * @param pl
+	 */
+	void reset(float an, int he, int pl) {
+		angle = an;
+		health = he;
+		player = pl;
+		needSpriteUpdate = true;
+	}
+
+	/**
+	 * Resets the breach upon recycling.
+	 * @param an
+	 * @param he
+	 * @param pl
+	 */
+	void reset(float an, int pl) {
+		angle = an;
+		health = HEALTH_DEFAULT;
+		player = pl;
+		needSpriteUpdate = true;
+	}
 };
 #endif /* __BREACH_MODEL_H__ */
