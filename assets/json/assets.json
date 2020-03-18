@@ -253,11 +253,11 @@
                 	"type": "Label",
                     "data": {
                        	"font"       : "felt32",
-                       	"text"       : "Lobby ID:           ",
+                       	"text"       : "Lobby ID:                ",
                        	"visible"	 : false,
                        	"foreground" : [255,0,0,255],
                        	"anchor"	 : [0,1],
-                       	"valign"     : "middle",
+                       	"valign"     : "left",
                        	"halign"     : "center"
                     },
                     "layout" : {

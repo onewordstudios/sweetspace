@@ -87,7 +87,6 @@ void MatchmakingMode::update(float timestep) {
 	// Check if room is ready for play (Replace with button for play later)
 	if (net.getNumPlayers() == 3) {
 		gameReady = true;
-		return;
 	}
 	// Neither host nor client
 	if (sgRoot.getPlayerId() == -1) {
@@ -95,8 +94,6 @@ void MatchmakingMode::update(float timestep) {
 		buttonPressed = sgRoot.checkButtons(input.getTapLoc());
 		if (buttonPressed == 0) {
 			net.initHost();
-			sgRoot.setPlayerId(0);
-			sgRoot.setRoomId(net.getRoomID());
 		} else if (buttonPressed == 1) {
 			sgRoot.setPlayerId(-2);
 		}
@@ -115,7 +112,10 @@ void MatchmakingMode::update(float timestep) {
 	// Only update network loop if inithost or initclient called
 	if (sgRoot.getPlayerId() > -1) {
 		net.update(shipModel);
+		sgRoot.setRoomId(net.getRoomID());
+		sgRoot.setPlayerId(net.getPlayerID());
 	}
+	// Update Scene Graph
 	sgRoot.update(timestep);
 }
 

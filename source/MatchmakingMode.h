@@ -36,10 +36,10 @@ class MatchmakingMode {
 	/** The Ship model */
 	std::shared_ptr<ShipModel> shipModel;
 
+	/** True if game is ready to start */
 	bool gameReady;
+	/** Current Player ID */
 	int playerId;
-	/** Whether this is the host */
-	bool host;
 
    public:
 #pragma mark -
@@ -50,7 +50,7 @@ class MatchmakingMode {
 	 * This constructor does not allocate any objects or start the game.
 	 * This allows us to use the object without a heap pointer.
 	 */
-	MatchmakingMode() : gameReady(false), playerId(-1), host(false) {}
+	MatchmakingMode() : gameReady(false), playerId(-1) {}
 
 	/**
 	 * Disposes of all (non-static) resources allocated to this mode.
