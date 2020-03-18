@@ -120,7 +120,7 @@ class MatchmakingGraphRoot : public cugl::Scene {
 	 *
 	 * @return a string for the text
 	 */
-	std::string MatchmakingGraphRoot::getInput(const cugl::Vec2& position);
+	std::string getInput(const cugl::Vec2& position);
 
 	/**
 	 * Sets roomID
