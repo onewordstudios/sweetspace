@@ -17,12 +17,13 @@
 //
 #include "GameMode.h"
 
-#include <ExternalDonutModel.h>
-#include <PlayerDonutModel.h>
 #include <cugl/cugl.h>
 
 #include <iostream>
 #include <sstream>
+
+#include "ExternalDonutModel.h"
+#include "PlayerDonutModel.h"
 
 using namespace cugl;
 using namespace std;

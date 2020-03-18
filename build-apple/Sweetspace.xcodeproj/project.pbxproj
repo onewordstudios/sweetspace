@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C12223392F6704D2EE10713A /* ExternalDonutModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C1222F4322133A83016A4F48 /* ExternalDonutModel.cpp */; };
+		C12223F92AA43CCF674FE286 /* PlayerDonutModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C1222BBC1EB5E0874CCD2C2A /* PlayerDonutModel.cpp */; };
+		C12224CE8F1354665ED3097E /* ExternalDonutModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C1222F4322133A83016A4F48 /* ExternalDonutModel.cpp */; };
+		C122265ED47A5D2CFBAFDADF /* PlayerDonutModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C1222BBC1EB5E0874CCD2C2A /* PlayerDonutModel.cpp */; };
+		C1222CE9FCD72180B66462B2 /* PlayerDonutModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C1222BBC1EB5E0874CCD2C2A /* PlayerDonutModel.cpp */; };
+		C1222E686D1435B6446D0307 /* ExternalDonutModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C1222F4322133A83016A4F48 /* ExternalDonutModel.cpp */; };
 		C58C509B5D08FC65641A630E /* ShipModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C58C51549E90F0CA2D05EB7A /* ShipModel.cpp */; };
 		C58C5561B66760E8D1E3FC80 /* ShipModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C58C51549E90F0CA2D05EB7A /* ShipModel.cpp */; };
 		C58C5B82A24C809F0E12DEFF /* ShipModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C58C51549E90F0CA2D05EB7A /* ShipModel.cpp */; };
@@ -145,6 +151,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		C122270EE9BF22663C6BDB22 /* ExternalDonutModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExternalDonutModel.h; sourceTree = "<group>"; };
+		C1222BBC1EB5E0874CCD2C2A /* PlayerDonutModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PlayerDonutModel.cpp; sourceTree = "<group>"; };
+		C1222EECE0C31958EBE060C3 /* PlayerDonutModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayerDonutModel.h; sourceTree = "<group>"; };
+		C1222F4322133A83016A4F48 /* ExternalDonutModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ExternalDonutModel.cpp; sourceTree = "<group>"; };
 		C58C51549E90F0CA2D05EB7A /* ShipModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ShipModel.cpp; sourceTree = "<group>"; };
 		C58C531CA6998820E3FA7D86 /* ShipModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShipModel.h; sourceTree = "<group>"; };
 		D15224B9EA517A2BFF54A6C2 /* easywsclient.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = easywsclient.hpp; sourceTree = "<group>"; };
@@ -444,6 +454,10 @@
 				D15227FD0DE8BAD86857197F /* MagicInternetBox.h */,
 				D15228511721431DE5C3F8BF /* MagicInternetBox.cpp */,
 				D1522166C3D73A4C222E4139 /* libraries */,
+				C122270EE9BF22663C6BDB22 /* ExternalDonutModel.h */,
+				C1222F4322133A83016A4F48 /* ExternalDonutModel.cpp */,
+				C1222EECE0C31958EBE060C3 /* PlayerDonutModel.h */,
+				C1222BBC1EB5E0874CCD2C2A /* PlayerDonutModel.cpp */,
 			);
 			name = Source;
 			path = ../source;
@@ -640,6 +654,8 @@
 				D1522B75CBE989BF3E62FFF0 /* MagicInternetBox.cpp in Sources */,
 				D15226A31B180B8600E8235E /* README.md in Sources */,
 				D152277E2A8E96B810AEB205 /* easywsclient.cpp in Sources */,
+				C12224CE8F1354665ED3097E /* ExternalDonutModel.cpp in Sources */,
+				C122265ED47A5D2CFBAFDADF /* PlayerDonutModel.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -661,6 +677,8 @@
 				D15229CE017D5510C972C380 /* MagicInternetBox.cpp in Sources */,
 				D15224573606D56005192E3D /* README.md in Sources */,
 				D1522B1EDA7299CAAE55B21E /* easywsclient.cpp in Sources */,
+				C1222E686D1435B6446D0307 /* ExternalDonutModel.cpp in Sources */,
+				C1222CE9FCD72180B66462B2 /* PlayerDonutModel.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -682,6 +700,8 @@
 				D15222477324B444CAE67673 /* MagicInternetBox.cpp in Sources */,
 				D152272F0C47BB34513BF98A /* README.md in Sources */,
 				D152210B21A0FDE6A6995456 /* easywsclient.cpp in Sources */,
+				C12223392F6704D2EE10713A /* ExternalDonutModel.cpp in Sources */,
+				C12223F92AA43CCF674FE286 /* PlayerDonutModel.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
