@@ -17,7 +17,6 @@
 //
 #ifndef __GAME_MODE_H__
 #define __GAME_MODE_H__
-#include <DoorModel.h>
 #include <cugl/cugl.h>
 
 #include <vector>
