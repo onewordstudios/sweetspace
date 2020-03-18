@@ -95,6 +95,7 @@ void MatchmakingMode::update(float timestep) {
 		buttonPressed = sgRoot.checkButtons(input.getTapLoc());
 		if (buttonPressed == 0) {
 			net.initHost();
+			sgRoot.setPlayerId(0);
 			sgRoot.setRoomId(net.getRoomID());
 		} else if (buttonPressed == 1) {
 			sgRoot.setPlayerId(-2);

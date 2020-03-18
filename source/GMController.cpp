@@ -50,8 +50,8 @@ void GMController::dispose() {
  *
  * @return true if the controller was initialized successfully
  */
-bool GMController::init(std::vector<std::shared_ptr<DonutModel>> d,
-						std::vector<std::shared_ptr<BreachModel>> b, MagicInternetBox mib,
+bool GMController::init(std::vector<std::shared_ptr<DonutModel>>& d,
+						std::vector<std::shared_ptr<BreachModel>>& b, MagicInternetBox& mib,
 						int playerId) {
 	bool success = true;
 	donuts = d;
