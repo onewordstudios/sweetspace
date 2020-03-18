@@ -62,15 +62,14 @@ bool MatchmakingGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& asset
 	// Acquire the scene built by the asset loader and resize it the scene
 	auto scene = assets->get<Node>("matchmaking");
 	scene->setContentSize(dimen);
+	scene->doLayout(); // Repositions the HUD
 
 	// Get the scene components.
 	host = std::dynamic_pointer_cast<Button>(assets->get<Node>("matchmaking_host"));
 	client = std::dynamic_pointer_cast<Button>(assets->get<Node>("matchmaking_client"));
 	roomLabel = std::dynamic_pointer_cast<Label>(assets->get<Node>("matchmaking_room"));
 	roomInput = std::dynamic_pointer_cast<TextField>(assets->get<Node>("matchmaking_input"));
-	host->setPositionY(dimen.height / 2.0f);
-	client->setPositionY(dimen.height / 2.0f);
-	client->setPositionX(SCENE_WIDTH);
+
 	addChild(scene);
 	return true;
 }
@@ -146,6 +145,6 @@ int MatchmakingGraphRoot::checkButtons(const cugl::Vec2& position) {
  */
 std::string MatchmakingGraphRoot::positionText() {
 	stringstream ss;
-	ss << "Angle: " << roomId;
+	ss << "Room ID: " << roomId;
 	return ss.str();
 }
