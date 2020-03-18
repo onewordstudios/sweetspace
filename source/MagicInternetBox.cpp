@@ -6,7 +6,7 @@ using namespace cugl;
 
 constexpr auto GAME_SERVER = "ws://sweetspace-server.azurewebsites.net/";
 constexpr float FLOAT_PRECISION = 180.0f;
-constexpr unsigned int NETWORK_TICK = 12;
+constexpr unsigned int NETWORK_TICK = 12; // Constant also defined in ExternalDonutModel.cpp
 constexpr unsigned int ONE_BYTE = 256;
 constexpr unsigned int ROOM_LENGTH = 5;
 
@@ -142,26 +142,6 @@ void MagicInternetBox::update(std::shared_ptr<ShipModel> state) {
 			float angle = player->getAngle();
 			float velocity = player->getVelocity();
 			sendData(PositionUpdate, angle, playerID, -1, -1, velocity);
-		}
-	} else {
-		if (playerID != -1 && roomID != "") {
-			for (unsigned int i = 0; i < state->getDonuts().size(); i++) {
-				if (i == (unsigned int)playerID) {
-					continue;
-				}
-				std::shared_ptr<DonutModel> donut = state->getDonuts()[i];
-				std::shared_ptr<DonutModel::NetworkMovementData> data =
-					donut->networkMoveDONOTTOUCH;
-				data->framesSinceUpdate++;
-				if (data->framesSinceUpdate < NETWORK_TICK) {
-					// Interpolate position
-					float percent = (float)data->framesSinceUpdate / NETWORK_TICK;
-					data->oldAngle += donut->getVelocity();
-					data->angle += donut->getVelocity();
-					float newAngle = data->angle * percent + data->oldAngle * (1.0f - percent);
-					donut->setAngle(newAngle);
-				}
-			}
 		}
 	}
 

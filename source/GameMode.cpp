@@ -17,6 +17,8 @@
 //
 #include "GameMode.h"
 
+#include <ExternalDonutModel.h>
+#include <PlayerDonutModel.h>
 #include <cugl/cugl.h>
 
 #include <iostream>
@@ -64,9 +66,6 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 	for (int i = 0; i < MAX_EVENTS; i++) {
 		breaches.push_back(BreachModel::alloc());
 	}
-	for (int i = 0; i < 3; i++) {
-		donuts.push_back(DonutModel::alloc());
-	}
 
 	shipModel = ShipModel::alloc(donuts, breaches);
 	gm.init(donuts, breaches, net, -1);
@@ -74,6 +73,9 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 		net.update(shipModel);
 	}
 	playerId = net.getPlayerID();
+	for (int i = 0; i < 3; i++) {
+		donuts.push_back(playerId == i ? PlayerDonutModel::alloc() : ExternalDonutModel::alloc());
+	}
 	gm.setPlayerId(playerId);
 	// gm.setDonuts(shipModel);
 	donutModel = donuts.at(playerId);
