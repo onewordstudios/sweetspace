@@ -32,7 +32,7 @@ constexpr unsigned int MAX_EVENTS = 3;
  * @return true if the controller is initialized properly, false otherwise.
  */
 bool MatchmakingMode::init(const std::shared_ptr<cugl::AssetManager>& assets,
-						   MagicInternetBox mib) {
+						   MagicInternetBox& mib) {
 	// Initialize the scene to a locked width
 	Size dimen = Application::get()->getDisplaySize();
 	dimen *= SCENE_WIDTH / dimen.width; // Lock the game to a reasonable resolution

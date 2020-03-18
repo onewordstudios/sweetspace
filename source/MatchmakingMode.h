@@ -76,7 +76,7 @@ class MatchmakingMode {
 	 *
 	 * @return true if the controller is initialized properly, false otherwise.
 	 */
-	bool init(const std::shared_ptr<cugl::AssetManager>& assets, MagicInternetBox mib);
+	bool init(const std::shared_ptr<cugl::AssetManager>& assets, MagicInternetBox& mib);
 
 #pragma mark -
 #pragma mark Matchmaking Handling
