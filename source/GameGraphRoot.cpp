@@ -101,8 +101,7 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 	// Initialize Breaches
 	for (int i = 0; i < breaches.size(); i++) {
 		std::shared_ptr<BreachModel> breachModel = breaches.at(i);
-		string breachColor =
-				playerColor.at(static_cast<unsigned long>(breachModel->getPlayer()));
+		string breachColor = playerColor.at(static_cast<unsigned long>(breachModel->getPlayer()));
 		std::shared_ptr<Texture> image = assets->get<Texture>("breach_" + breachColor);
 		std::shared_ptr<PolygonNode> breachNode = PolygonNode::allocWithTexture(image);
 		breachModel->setSprite(breachNode);
