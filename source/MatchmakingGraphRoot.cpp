@@ -127,11 +127,23 @@ int MatchmakingGraphRoot::checkButtons(const cugl::Vec2& position) {
 		return 0;
 	} else if (client->containsScreen(position)) {
 		roomInput->setVisible(true);
-		roomInput->activate(1);
+		roomInput->activate(2);
+		roomLabel->setVisible(true);
 		return 1;
 	} else {
 		return -1;
 	}
+}
+
+/**
+ * Callback for TextInput
+ *
+ * @param event The text input event
+ *
+ */
+void MatchmakingGraphRoot::textInputEnded(const cugl::TextInputEvent& event, bool focus) {
+	roomId = event.buffer;
+	CULog("Text Input Callback");
 }
 
 /**
