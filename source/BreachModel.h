@@ -182,7 +182,7 @@ class BreachModel {
 	 * @param pl
 	 */
 	void reset(float an, int he, int pl) {
-		angle = an;
+		setAngle(an);
 		health = he;
 		player = pl;
 		needSpriteUpdate = true;
@@ -194,11 +194,6 @@ class BreachModel {
 	 * @param he
 	 * @param pl
 	 */
-	void reset(float an, int pl) {
-		angle = an;
-		health = HEALTH_DEFAULT;
-		player = pl;
-		needSpriteUpdate = true;
-	}
+	void reset(float an, int pl) { reset(an, HEALTH_DEFAULT, pl); }
 };
 #endif /* __BREACH_MODEL_H__ */
