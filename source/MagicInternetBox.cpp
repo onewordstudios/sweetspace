@@ -154,7 +154,7 @@ void MagicInternetBox::update(std::shared_ptr<ShipModel> state) {
 						case 0: {
 							numPlayers = message[2];
 							playerID = (int)numPlayers - 1;
-							CULog("Join Room Success");
+							CULog("Join Room Success; player id %d", playerID);
 							return;
 						}
 						case 1: {
