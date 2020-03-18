@@ -14,6 +14,8 @@ class BreachModel {
 	int player;
 	/** Reference to image in SceneGraph for animation */
 	std::shared_ptr<cugl::PolygonNode> sprite;
+	/** Set to true if sprite needs to be updated */
+	bool needSpriteUpdate;
 
    public:
 #pragma mark Constructors
@@ -158,5 +160,17 @@ class BreachModel {
 	 * @param value The sprite
 	 */
 	void setSprite(const std::shared_ptr<cugl::PolygonNode> value) { sprite = value; }
+
+	/**
+	 * Sets the needSpriteUpdate field.
+	 * @return
+	 */
+	bool getNeedSpriteUpdate() { return needSpriteUpdate; }
+
+	/**
+	 * Gets the needSpriteUpdate field.
+	 * @param b
+	 */
+	void setNeedSpriteUpdate(bool b) { needSpriteUpdate = b; }
 };
 #endif /* __BREACH_MODEL_H__ */

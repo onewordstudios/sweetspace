@@ -78,6 +78,7 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 	donutPos = donutNode->getPosition();
 	coordHUD = std::dynamic_pointer_cast<Label>(assets->get<Node>("game_hud"));
 
+	// Initialize Players
 	for (int i = 0; i < donuts.size(); i++) {
 		// Player node is handled separately
 		if (i == playerId) {
@@ -95,6 +96,22 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 			Vec2(DIAMETER + (RADIUS + DONUT_OFFSET) * sin(donutModel->getAngle()),
 				 DIAMETER / 2.0f - (RADIUS + DONUT_OFFSET) * cos(donutModel->getAngle()));
 		donutNode->setPosition(donutPos);
+	}
+
+	// Initialize Breaches
+	for (int i = 0; i < breaches.size(); i++) {
+		std::shared_ptr<BreachModel> breachModel = breaches.at(i);
+		string breachColor =
+				playerColor.at(static_cast<unsigned long>(breachModel->getPlayer()));
+		std::shared_ptr<Texture> image = assets->get<Texture>("breach_" + breachColor);
+		std::shared_ptr<PolygonNode> breachNode = PolygonNode::allocWithTexture(image);
+		breachModel->setSprite(breachNode);
+		breachNode->setScale(BREACH_SCALE);
+		// Add the breach node
+		nearSpace->addChild(breachNode);
+		// Start position is off screen
+		Vec2 breachPos = Vec2(0, 0);
+		breachModel->getSprite()->setPosition(breachPos);
 	}
 
 	addChild(scene);
@@ -171,15 +188,12 @@ void GameGraphRoot::update(float timestep) {
 	for (int i = 0; i < breaches.size(); i++) {
 		std::shared_ptr<BreachModel> breachModel = breaches.at(i);
 		if (breachModel->getHealth() > 0) {
-			if (breachModel->getSprite() == nullptr) {
+			if (breachModel->getNeedSpriteUpdate()) {
 				string breachColor =
 					playerColor.at(static_cast<unsigned long>(breachModel->getPlayer()));
 				std::shared_ptr<Texture> image = assets->get<Texture>("breach_" + breachColor);
-				std::shared_ptr<PolygonNode> breachNode = PolygonNode::allocWithTexture(image);
-				breachModel->setSprite(breachNode);
-				breachNode->setScale(BREACH_SCALE);
-				// Create the donut model
-				nearSpace->addChild(breachNode);
+				breachModel->getSprite()->setTexture(image);
+				breachModel->setNeedSpriteUpdate(false);
 			}
 			Vec2 breachPos = Vec2(DIAMETER + RADIUS * sin(breachModel->getAngle()),
 								  DIAMETER / 2.0f - RADIUS * cos(breachModel->getAngle()));

@@ -30,6 +30,7 @@ bool ShipModel::createBreach(float angle, int health, int player, int id) {
 	breaches.at(id)->setAngle(angle);
 	breaches.at(id)->setHealth(health);
 	breaches.at(id)->setPlayer(player);
+	breaches.at(id)->setNeedSpriteUpdate(true);
 	return true;
 }
 
