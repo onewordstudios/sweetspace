@@ -19,7 +19,7 @@ class BreachModel {
 
    public:
 	/** Default Max Health of a Breach*/
-	static constexpr unsigned int HEALTH_DEFAULT = 3;
+	const unsigned int HEALTH_DEFAULT = 3;
 #pragma mark Constructors
 	/*
 	 * Creates a new breach at angle 0.
