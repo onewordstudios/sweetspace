@@ -36,9 +36,6 @@ constexpr unsigned int DIAMETER = 1280;
 /** The radius of the ship. Also the y coordinate of the center of the ship */
 constexpr unsigned int RADIUS = 550;
 
-/** The radius used for placement of the doors. Should this really exist? probably not. */
-constexpr unsigned int DOOR_RADIUS = 650;
-
 #pragma mark -
 #pragma mark Constructors
 
@@ -98,6 +95,17 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 			Vec2(DIAMETER + (RADIUS + DONUT_OFFSET) * sin(donutModel->getAngle()),
 				 DIAMETER / 2.0f - (RADIUS + DONUT_OFFSET) * cos(donutModel->getAngle()));
 		donutNode->setPosition(donutPos);
+	}
+
+	for (int i = 0; i < doors.size(); i++) {
+		std::shared_ptr<DoorModel> doorModel = doors.at(i);
+		std::shared_ptr<Texture> image = assets->get<Texture>("door");
+		std::shared_ptr<DoorNode> doorNode = DoorNode::alloc(image, 1, 3);
+		doorNode->setModel(doorModel);
+		doorNode->setFrame(0);
+		doorNode->setAnchor(Vec2::ANCHOR_BOTTOM_CENTER);
+		doorNode->setScale(0.3f);
+		nearSpace->addChild(doorNode);
 	}
 
 	addChild(scene);
@@ -192,37 +200,6 @@ void GameGraphRoot::update(float timestep) {
 		} else {
 			Vec2 breachPos = Vec2(0, 0);
 			breachModel->getSprite()->setPosition(breachPos);
-		}
-	}
-	for (int i = 0; i < doors.size(); i++) {
-		std::shared_ptr<DoorModel> doorModel = doors.at(i);
-		if (doorModel->getSprite() == nullptr) {
-			std::shared_ptr<Texture> image = assets->get<Texture>("door");
-			std::shared_ptr<AnimationNode> doorNode = AnimationNode::alloc(image, 1, 3);
-			doorNode->setFrame(0);
-			doorModel->setSprite(doorNode);
-			doorNode->setAnchor(Vec2::ANCHOR_BOTTOM_CENTER);
-			doorNode->setScale(0.3f);
-			nearSpace->addChild(doorNode);
-		}
-		// TODO:replace awful hacky drawing code
-		Vec2 breachPos = Vec2(DIAMETER + DOOR_RADIUS * sin(doorModel->getAngle()),
-							  DIAMETER / 2.0f - (DOOR_RADIUS)*cos(doorModel->getAngle()));
-		if (doorModel->getAngle() < 0) {
-			breachPos = Vec2(0, 0);
-		}
-		doorModel->getSprite()->setPosition(breachPos);
-		doorModel->getSprite()->setAngle(doorModel->getAngle());
-		switch (doorModel->getPlayersOn()) {
-			case 0:
-				doorModel->getSprite()->setFrame(0);
-				break;
-			case 1:
-				doorModel->getSprite()->setFrame(1);
-				break;
-			default:
-				doorModel->getSprite()->setFrame(2);
-				break;
 		}
 	}
 }

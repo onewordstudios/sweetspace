@@ -8,6 +8,7 @@
 #include "DonutModel.h"
 #include "DonutNode.h"
 #include "DoorModel.h"
+#include "DoorNode.h"
 #include "InputController.h"
 
 class GameGraphRoot : public cugl::Scene {

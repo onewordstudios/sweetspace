@@ -3,20 +3,23 @@
 #include <cugl/cugl.h>
 
 #include <bitset>
+/** The max height of the door*/
+constexpr int MAX_HEIGHT = 1600;
+/** The max height of the door*/
+constexpr int HALF_OPEN = 400;
+/** The speed of the door raising */
+constexpr int SPEED = 20;
+
 class DoorModel {
    private:
-	/** The speed of the door raising */
-	int speed = 20;
 	/** The height of the door */
 	int height = 0;
 
    protected:
 	/** The angle at which the door exists */
 	float angle;
-	/** The state of the door in number of players: >=2 means it is resolved */
+	/** The state of the door */
 	unsigned char playersOn;
-	/** Reference to image in SceneGraph for animation */
-	std::shared_ptr<cugl::AnimationNode> sprite;
 
    public:
 #pragma mark Constructors
@@ -83,6 +86,13 @@ class DoorModel {
 	float getAngle() { return (float)M_PI * angle / 180.0f; }
 
 	/**
+	 * Returns the current height of the door.
+	 *
+	 * @return the current height of the door.
+	 */
+	int getHeight() { return height; }
+
+	/**
 	 * Returns the number of players in range of the door.
 	 *
 	 * @return the number of players in range of the door.
@@ -91,13 +101,6 @@ class DoorModel {
 		std::bitset<8> ids(playersOn);
 		return ids.count();
 	}
-
-	/**
-	 * Returns the current sprite of the door.
-	 *
-	 * @return the current sprite of the door.
-	 */
-	std::shared_ptr<cugl::AnimationNode> getSprite() { return sprite; }
 
 	/**
 	 * Sets the current angle of the door in radians.
@@ -127,27 +130,18 @@ class DoorModel {
 	 *
 	 */
 	void raiseDoor() {
-		if (height < getSprite()->getHeight()) {
-			height += speed;
-			getSprite()->shiftPolygon(0, -1 * speed);
-		} else if (height < getSprite()->getHeight() * 4) {
-			// Why is this * 4? No one knows...
-			height += speed;
-			getSprite()->shiftPolygon(0, -1 * speed);
-		}
+		if (height < MAX_HEIGHT) height += SPEED;
 	}
 
 	/**
 	 * Returns whether this door can be passed under.
 	 */
-	bool halfOpen() { return sprite != nullptr && height >= getSprite()->getHeight(); }
+	bool halfOpen() { return height >= HALF_OPEN; }
 
 	/**
 	 * Returns whether this door has been resolved and opened.
 	 */
-	bool resolvedAndRaised() {
-		return sprite != nullptr && resolved() && height >= getSprite()->getHeight() * 4;
-	}
+	bool resolvedAndRaised() { return resolved() && height >= MAX_HEIGHT; }
 
 	/**
 	 * Returns whether this player is on the door.
@@ -163,16 +157,8 @@ class DoorModel {
 	 * Resets this door.
 	 */
 	void clear() {
-		getSprite()->shiftPolygon(0, height);
 		playersOn = 0;
 		height = 0;
 	}
-
-	/**
-	 * Sets the sprite of the door.
-	 *
-	 * @param value The sprite
-	 */
-	void setSprite(const std::shared_ptr<cugl::AnimationNode> value) { sprite = value; }
 };
 #endif /* __door_MODEL_H__ */
