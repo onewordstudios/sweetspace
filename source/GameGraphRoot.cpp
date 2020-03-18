@@ -172,7 +172,8 @@ void GameGraphRoot::update(float timestep) {
 		std::shared_ptr<BreachModel> breachModel = breaches.at(i);
 		if (breachModel->getHealth() > 0) {
 			if (breachModel->getSprite() == nullptr) {
-				string breachColor = playerColor.at(static_cast<unsigned long>(breachModel->getPlayer()));
+				string breachColor =
+					playerColor.at(static_cast<unsigned long>(breachModel->getPlayer()));
 				std::shared_ptr<Texture> image = assets->get<Texture>("breach_" + breachColor);
 				std::shared_ptr<PolygonNode> breachNode = PolygonNode::allocWithTexture(image);
 				breachModel->setSprite(breachNode);

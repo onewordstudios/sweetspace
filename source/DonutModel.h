@@ -40,7 +40,13 @@ class DonutModel {
 	 * the heap, use one of the static constructors instead.
 	 */
 	DonutModel(void)
-		: angle(0), velocity(0), jumpOffset(0), jumping(false), jumpTime(0), jumpVelocity(0), colorId(0) {}
+		: angle(0),
+		  velocity(0),
+		  jumpOffset(0),
+		  jumping(false),
+		  jumpTime(0),
+		  jumpVelocity(0),
+		  colorId(0) {}
 
 	/**
 	 * Destroys this donut, releasing all resources.
