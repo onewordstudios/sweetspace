@@ -19,12 +19,12 @@ class MagicInternetBox {
 	unsigned int currFrame;
 
 	/**
-	 * ID of the current player, or -1 if unconnected
+	 * ID of the current player, or -1 if unassigned
 	 */
 	int playerID;
 
 	/**
-	 * The ID of the current room, or "" if unconnected
+	 * The ID of the current room, or "" if unassigned
 	 */
 	std::string roomID;
 

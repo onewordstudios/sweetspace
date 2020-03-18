@@ -1,4 +1,4 @@
-﻿#include "MagicInternetBox.h"
+#include "MagicInternetBox.h"
 
 #include <sstream>
 
@@ -43,8 +43,7 @@ bool MagicInternetBox::initHost() {
 bool MagicInternetBox::initClient(std::string id) {
 	using easywsclient::WebSocket;
 
-	// I actually don't know what this stuff does but it won't run on Windows without it,
-	// so ¯\_(ツ)_/¯
+	// I actually don't know what this stuff does but it won't run on Windows without it
 #ifdef _WIN32
 	INT rc;
 	WSADATA wsaData;
@@ -68,7 +67,7 @@ bool MagicInternetBox::initClient(std::string id) {
 		data.push_back((uint8_t)id.at(i));
 	}
 	ws->sendBinary(data);
-	this->playerID = 0;
+	roomID = id;
 
 	return true;
 }

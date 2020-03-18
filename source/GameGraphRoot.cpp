@@ -77,7 +77,7 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 	allSpace = assets->get<Node>("game_field");
 	farSpace = assets->get<Node>("game_field_far");
 	nearSpace = assets->get<Node>("game_field_near");
-	donutNode = assets->get<Node>("game_field_player");
+	donutNode = assets->get<Node>("game_field_player1");
 	donutPos = donutNode->getPosition();
 	coordHUD = std::dynamic_pointer_cast<Label>(assets->get<Node>("game_hud"));
 
@@ -97,13 +97,7 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 		Vec2 donutPos =
 			Vec2(DIAMETER + (RADIUS + DONUT_OFFSET) * sin(donutModel->getAngle()),
 				 DIAMETER / 2.0f - (RADIUS + DONUT_OFFSET) * cos(donutModel->getAngle()));
-		//		if (donutModel->getAngle() < 0) {
-		//			donutPos = Vec2(0, 0);
-		//		}
 		donutNode->setPosition(donutPos);
-		// For moving donut off screen
-		// Vec2 breachPos = Vec2(0, 0);
-		// donutPos->setPosition(breachPos);
 	}
 
 	addChild(scene);
@@ -181,7 +175,7 @@ void GameGraphRoot::update(float timestep) {
 		std::shared_ptr<BreachModel> breachModel = breaches.at(i);
 		if (breachModel->getHealth() > 0) {
 			if (breachModel->getSprite() == nullptr) {
-				std::shared_ptr<Texture> image = assets->get<Texture>("planet2");
+				std::shared_ptr<Texture> image = assets->get<Texture>("breach_purple_squiggle");
 				std::shared_ptr<PolygonNode> breachNode = PolygonNode::allocWithTexture(image);
 				breachModel->setSprite(breachNode);
 				breachNode->setScale(BREACH_SCALE);
