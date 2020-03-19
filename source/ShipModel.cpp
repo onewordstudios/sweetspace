@@ -20,16 +20,12 @@ bool ShipModel::init(std::vector<std::shared_ptr<DonutModel>> &d,
 }
 
 bool ShipModel::createBreach(float angle, int player, int id) {
-	breaches.at(id)->setAngle(angle);
-	breaches.at(id)->setHealth(3);
-	breaches.at(id)->setPlayer(player);
+	breaches.at(id)->reset(angle, player);
 	return true;
 }
 
 bool ShipModel::createBreach(float angle, int health, int player, int id) {
-	breaches.at(id)->setAngle(angle);
-	breaches.at(id)->setHealth(health);
-	breaches.at(id)->setPlayer(player);
+	breaches.at(id)->reset(angle, health, player);
 	return true;
 }
 

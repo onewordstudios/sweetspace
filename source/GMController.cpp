@@ -13,8 +13,6 @@ const unsigned int MAX_EVENTS = 3;
 /** Spawn rate of breaches = 1/SPAWN_RATE for EVERY UPDATE FRAME. 100 is a very fast rate already.
  */
 const unsigned int SPAWN_RATE = 100;
-/** Default Max Health of a Breach*/
-constexpr unsigned int HEALTH_DEFAULT = 3;
 constexpr unsigned int FULL_CIRCLE = 360;
 
 /** Array recording which breaches are free or not. */
@@ -92,11 +90,9 @@ void GMController::update(float dt) {
 		for (int i = 0; i < MAX_EVENTS; i++) {
 			if (breachFree.at(i)) {
 				float angle = (rand() % FULL_CIRCLE) * (float)M_PI / HALF_CIRCLE;
-				breaches.at(i)->setAngle(angle);
-				breaches.at(i)->setHealth(HEALTH_DEFAULT);
 				breachFree.at(i) = false;
 				int p = rand() % donuts.size();
-				breaches.at(i)->setPlayer(p);
+				breaches.at(i)->reset(angle, p);
 				mib->createBreach(angle, p, i);
 				break;
 			}

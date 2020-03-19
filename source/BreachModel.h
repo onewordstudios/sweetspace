@@ -14,8 +14,12 @@ class BreachModel {
 	int player;
 	/** Reference to image in SceneGraph for animation */
 	std::shared_ptr<cugl::PolygonNode> sprite;
+	/** Set to true if sprite needs to be updated */
+	bool needSpriteUpdate;
 
    public:
+	/** Default Max Health of a Breach*/
+	static constexpr unsigned int HEALTH_DEFAULT = 3;
 #pragma mark Constructors
 	/*
 	 * Creates a new breach at angle 0.
@@ -158,5 +162,38 @@ class BreachModel {
 	 * @param value The sprite
 	 */
 	void setSprite(const std::shared_ptr<cugl::PolygonNode> value) { sprite = value; }
+
+	/**
+	 * Sets the needSpriteUpdate field.
+	 * @return
+	 */
+	bool getNeedSpriteUpdate() { return needSpriteUpdate; }
+
+	/**
+	 * Gets the needSpriteUpdate field.
+	 * @param b
+	 */
+	void setNeedSpriteUpdate(bool b) { needSpriteUpdate = b; }
+
+	/**
+	 * Resets the breach upon recycling.
+	 * @param an
+	 * @param he
+	 * @param pl
+	 */
+	void reset(float an, int he, int pl) {
+		setAngle(an);
+		health = he;
+		player = pl;
+		needSpriteUpdate = true;
+	}
+
+	/**
+	 * Resets the breach upon recycling.
+	 * @param an
+	 * @param he
+	 * @param pl
+	 */
+	void reset(float an, int pl) { reset(an, HEALTH_DEFAULT, pl); }
 };
 #endif /* __BREACH_MODEL_H__ */
