@@ -36,6 +36,7 @@ bool MagicInternetBox::initHost() {
 	data.push_back((uint8_t)NetworkDataType::AssignedRoom);
 	ws->sendBinary(data);
 	this->playerID = 0;
+	this->numPlayers = 1;
 
 	return true;
 }
