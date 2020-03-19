@@ -74,28 +74,29 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 	allSpace = assets->get<Node>("game_field");
 	farSpace = assets->get<Node>("game_field_far");
 	nearSpace = assets->get<Node>("game_field_near");
-	donutNode = assets->get<Node>("game_field_player1");
+	donutNode = dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_player1"));
 	donutPos = donutNode->getPosition();
 	coordHUD = std::dynamic_pointer_cast<Label>(assets->get<Node>("game_hud"));
 
 	// Initialize Players
 	for (int i = 0; i < donuts.size(); i++) {
-		// Player node is handled separately
-		if (i == playerId) {
-			continue;
-		}
 		std::shared_ptr<DonutModel> donutModel = donuts.at(i);
 		string donutColor = playerColor.at(static_cast<unsigned long>(donutModel->getColorId()));
 		std::shared_ptr<Texture> image = assets->get<Texture>("donut_" + donutColor);
-		std::shared_ptr<DonutNode> donutNode = DonutNode::allocWithTexture(image);
-		donutNode->setModel(donutModel);
-		donutNode->setScale(DONUT_SCALE);
-		nearSpace->addChild(donutNode);
+		// Player node is handled separately
+		if (i == playerId) {
+			donutNode->setTexture(image);
+		} else {
+			std::shared_ptr<DonutNode> newDonutNode = DonutNode::allocWithTexture(image);
+			newDonutNode->setModel(donutModel);
+			newDonutNode->setScale(DONUT_SCALE);
+			nearSpace->addChild(newDonutNode);
 
-		Vec2 donutPos =
-			Vec2(DIAMETER + (RADIUS + DONUT_OFFSET) * sin(donutModel->getAngle()),
-				 DIAMETER / 2.0f - (RADIUS + DONUT_OFFSET) * cos(donutModel->getAngle()));
-		donutNode->setPosition(donutPos);
+			Vec2 donutPos =
+				Vec2(DIAMETER + (RADIUS + DONUT_OFFSET) * sin(donutModel->getAngle()),
+					 DIAMETER / 2.0f - (RADIUS + DONUT_OFFSET) * cos(donutModel->getAngle()));
+			newDonutNode->setPosition(donutPos);
+		}
 	}
 
 	// Initialize Breaches
