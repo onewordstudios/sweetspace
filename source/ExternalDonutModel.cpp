@@ -11,6 +11,13 @@ bool ExternalDonutModel::init(const cugl::Vec2& pos) {
 	return ret;
 }
 
+void ExternalDonutModel::setAngle(float value) {
+	float newAngle = HALF_CIRCLE * value / (float)M_PI;
+	networkMove.framesSinceUpdate = 0;
+	networkMove.oldAngle = angle;
+	networkMove.angle = newAngle;
+}
+
 void ExternalDonutModel::update(float timestep) {
 	networkMove.framesSinceUpdate++;
 	if (networkMove.framesSinceUpdate < NETWORK_TICK) {

@@ -157,7 +157,11 @@ void GameMode::update(float timestep) {
 	if (input.getTapLoc() != Vec2::ZERO && !donutModel->isJumping()) {
 		donutModel->startJump();
 	}
-	donutModel->update(timestep);
+
+	for (unsigned int i = 0; i < donuts.size(); i++) {
+		donuts[i]->update(timestep);
+	}
+	// donutModel->update(timestep);
 
 	sgRoot.update(timestep);
 }

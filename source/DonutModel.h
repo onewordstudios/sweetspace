@@ -130,7 +130,7 @@ class DonutModel {
 	 *
 	 * @param value The donut angle in radians
 	 */
-	void setAngle(float value) { angle = HALF_CIRCLE * value / (float)M_PI; }
+	virtual void setAngle(float value) { angle = HALF_CIRCLE * value / (float)M_PI; }
 
 	/**
 	 * Returns the current angle of the donut in radians.

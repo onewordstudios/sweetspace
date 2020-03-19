@@ -72,6 +72,9 @@ class ExternalDonutModel : public DonutModel {
 #pragma endregion
 
 	bool init(const cugl::Vec2& pos) override;
+
+	void setAngle(float value) override;
+
 	/**
 	 * Updates the state of the model
 	 *
