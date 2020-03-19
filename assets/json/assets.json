@@ -1,70 +1,37 @@
 {
 	"textures": {
-		"donut": {
-            "file":   "textures/donut_yellow.png"
-        },
-        "donut_friend": {
-            "file":   "textures/donut_green.png"
-		},
-		"donut_purple_squiggle": {
-            "file":   "textures/donut_breach/donut_purple_squiggle.png"
-        },
-        "donut_green_triangle": {
-            "file":   "textures/donut_breach/donut_green_triangle.png"
-        },
-        "donut_orange_circle": {
-            "file":   "textures/donut_breach/donut_orange_circle.png"
-        },
-        "donut_red_dash": {
-            "file":   "textures/donut_breach/donut_red_dash.png"
-        },
-        "donut_yellow_star": {
-            "file":   "textures/donut_breach/donut_yellow_star.png"
-        },
-        "donut_purple": {
-            "file":   "textures/donut_breach/donut_purple.png"
-        },
-        "donut_green": {
-            "file":   "textures/donut_breach/donut_green.png"
-        },
-        "donut_orange": {
-            "file":   "textures/donut_breach/donut_orange.png"
+		"donut_yellow": {
+            "file":   "textures/donuts/donut_yellow.png"
         },
         "donut_red": {
-            "file":   "textures/donut_breach/donut_red.png"
+            "file":   "textures/donuts/donut_red.png"
         },
-        "donut_yellow": {
-            "file":   "textures/donut_breach/donut_yellow.png"
+        "donut_purple": {
+            "file":   "textures/donuts/donut_purple.png"
         },
-        "breach_purple_squiggle": {
-            "file":   "textures/donut_breach/breach_purple_squiggle.png"
+        "donut_green": {
+            "file":   "textures/donuts/donut_green.png"
         },
-        "breach_green_triangle": {
-            "file":   "textures/donut_breach/breach_green_triangle.png"
-        },
-        "breach_orange_circle": {
-            "file":   "textures/donut_breach/breach_orange_circle.png"
-        },
-        "breach_red_dash": {
-            "file":   "textures/donut_breach/breach_red_dash.png"
-        },
-        "breach_yellow_star": {
-            "file":   "textures/donut_breach/breach_yellow_star.png"
-        },
-        "breach_purple": {
-            "file":   "textures/donut_breach/breach_purple.png"
-        },
-        "breach_green": {
-            "file":   "textures/donut_breach/breach_green.png"
-        },
-        "breach_orange": {
-            "file":   "textures/donut_breach/breach_orange.png"
-        },
-        "breach_red": {
-            "file":   "textures/donut_breach/breach_red.png"
+        "donut_orange": {
+            "file":   "textures/donuts/donut_orange.png"
         },
         "breach_yellow": {
-            "file":   "textures/donut_breach/breach_yellow.png"
+            "file":   "textures/breaches/breach_yellow.png"
+        },
+        "breach_red": {
+            "file":   "textures/breaches/breach_red.png"
+        },
+        "breach_purple": {
+            "file":   "textures/breaches/breach_purple.png"
+        },
+        "breach_green": {
+            "file":   "textures/breaches/breach_green.png"
+        },
+        "breach_orange": {
+            "file":   "textures/breaches/breach_orange.png"
+        },
+	"door": {
+            "file":   "textures/door.png"
         },
         "space": {
             "file":  "textures/sprinkle_sky256.png",
@@ -152,7 +119,7 @@
                         "player1": {
                             "type": "Image",
                             "data": {
-                                "texture":  "donut_purple_squiggle",
+                                "texture":  "donut_yellow",
                                 "position": [1280,1344],
                                 "anchor":   [0.5,0.5],
                                 "scale":    0.32

@@ -28,6 +28,8 @@ class DonutModel {
 	float jumpVelocity;
 	bool updated = false;
 	float lastVel = 0;
+	/** Id of donut's color */
+	int colorId;
 
    public:
 #pragma mark Constructors
@@ -38,7 +40,13 @@ class DonutModel {
 	 * the heap, use one of the static constructors instead.
 	 */
 	DonutModel(void)
-		: angle(0), velocity(0), jumpOffset(0), jumping(false), jumpTime(0), jumpVelocity(0) {}
+		: angle(0),
+		  velocity(0),
+		  jumpOffset(0),
+		  jumping(false),
+		  jumpTime(0),
+		  jumpVelocity(0),
+		  colorId(0) {}
 
 	/**
 	 * Destroys this donut, releasing all resources.
@@ -184,6 +192,9 @@ class DonutModel {
 
 	void setLastVel(float f) { lastVel = f; }
 	float getLastVel() { return lastVel; }
+
+	void setColorId(int i) { colorId = i; }
+	int getColorId() { return colorId; }
 
 	/**
 	 * Applies a force to the donut.
