@@ -83,6 +83,11 @@
     </ClInclude>
     <ClInclude Include="..\..\source\ExternalDonutModel.h">
       <Filter>Header Files\Models</Filter>
+    <ClInclude Include="..\..\source\MatchmakingMode.h">
+      <Filter>Header Files\Modes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\MatchmakingGraphRoot.h">
+      <Filter>Header Files\SceneGraph</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -130,6 +135,12 @@
     </ClCompile>
     <ClCompile Include="..\..\source\ExternalDonutModel.cpp">
       <Filter>Source Files\Models</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\MatchmakingMode.cpp">
+      <Filter>Source Files\Modes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\MatchmakingGraphRoot.cpp">
+      <Filter>Source Files\SceneGraph</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

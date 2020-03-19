@@ -1,4 +1,4 @@
-//
+﻿//
 //  SDApp.cpp
 //  Ship Demo
 //
@@ -16,6 +16,8 @@
 
 #include "GameMode.h"
 #include "LoadingMode.h"
+#include "MagicInternetBox.h"
+#include "MatchmakingMode.h"
 
 /**
  * This class represents the application root for the ship demo.
@@ -32,9 +34,17 @@ class Sweetspace : public cugl::Application {
 	GameMode gameplay;
 	/** The controller for the loading screen */
 	LoadingMode loading;
+	/** The controller for matchmaking */
+	MatchmakingMode matchmaking;
+	/** The controller for networking */
+	std::shared_ptr<MagicInternetBox> mib;
 
 	/** Whether or not we have finished loading all assets */
 	bool loaded;
+	/** Whether or not we have finished matchmaking */
+	bool matched;
+	/** Whether or not the game has started */
+	bool gameStarted;
 
    public:
 	/**
@@ -46,7 +56,7 @@ class Sweetspace : public cugl::Application {
 	 * of initialization from the constructor allows main.cpp to perform
 	 * advanced configuration of the application before it starts.
 	 */
-	Sweetspace() : cugl::Application(), loaded(false) {}
+	Sweetspace() : cugl::Application(), loaded(false), matched(false), gameStarted(false) {}
 
 	/**
 	 * Disposes of this application, releasing all resources.
