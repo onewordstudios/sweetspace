@@ -4,7 +4,7 @@
 
 using namespace cugl;
 
-constexpr auto GAME_SERVER = "ws://sweetspace-server.azurewebsites.net/";
+constexpr auto GAME_SERVER = "ws://sweetspace-server.herokuapp.com/";
 constexpr float FLOAT_PRECISION = 180.0f;
 constexpr unsigned int NETWORK_TICK = 12;
 constexpr unsigned int ONE_BYTE = 256;
@@ -36,6 +36,7 @@ bool MagicInternetBox::initHost() {
 	data.push_back((uint8_t)NetworkDataType::AssignedRoom);
 	ws->sendBinary(data);
 	this->playerID = 0;
+	this->numPlayers = 1;
 
 	return true;
 }
@@ -154,7 +155,7 @@ void MagicInternetBox::update(std::shared_ptr<ShipModel> state) {
 						case 0: {
 							numPlayers = message[2];
 							playerID = (int)numPlayers - 1;
-							CULog("Join Room Success");
+							CULog("Join Room Success; player id %d", playerID);
 							return;
 						}
 						case 1: {
@@ -177,6 +178,17 @@ void MagicInternetBox::update(std::shared_ptr<ShipModel> state) {
 		}
 
 		NetworkDataType type = static_cast<NetworkDataType>(message[0]);
+
+		if (type == PlayerJoined) {
+			CULog("Player Joined");
+			numPlayers++;
+			return;
+		}
+
+		if (message[0] > DualResolve) {
+			CULog("Received invalid connection message during gameplay; %d", message[0]);
+			return;
+		}
 
 		float angle = (float)(message[1] + ONE_BYTE * message[2]) / FLOAT_PRECISION;
 		int id = (int)(message[3] + ONE_BYTE * message[4]);
@@ -224,10 +236,6 @@ void MagicInternetBox::update(std::shared_ptr<ShipModel> state) {
 				CULog("Flag door %d with player %d", id, player);
 				state->flagDoor(taskID, player, flag);
 				break;
-			}
-			case PlayerJoined: {
-				numPlayers++;
-				return;
 			}
 			default:
 				break;

@@ -33,7 +33,7 @@ class GMController {
 	std::vector<std::shared_ptr<DoorModel>> doors;
 
 	/** Network Controller for outbound calls */
-	MagicInternetBox mib;
+	shared_ptr<MagicInternetBox> mib;
 
    public:
 #pragma mark -
@@ -69,7 +69,8 @@ class GMController {
 	 */
 	bool init(std::vector<std::shared_ptr<DonutModel>> donuts,
 			  std::vector<std::shared_ptr<BreachModel>> breaches,
-			  std::vector<std::shared_ptr<DoorModel>> doors, MagicInternetBox mib, int playerId);
+			  std::vector<std::shared_ptr<DoorModel>> doors, shared_ptr<MagicInternetBox>& mib,
+			  int playerId);
 
 #pragma mark -
 #pragma mark GM Handling

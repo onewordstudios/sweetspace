@@ -1,30 +1,12 @@
-﻿//
-//  SDGameScene.h
-//  Ship Demo
-//
-//  This is the most important class in this demo.  This class manages the
-//  gameplay for this demo.  It is a relativeluy simple class as we are not
-//  worried about collisions.
-//
-//  WARNING: There are a lot of shortcuts in this design that will do not adapt
-//  well to data driven design.  This demo has a lot of simplifications to make
-//  it a bit easier to see how everything fits together.  However, the model
-//  classes and how they are initialized will need to be changed if you add
-//  dynamic level loading.
-//
-//  Author: Walker White
-//  Version: 1/10/18
-//
-#ifndef __GAME_MODE_H__
-#define __GAME_MODE_H__
+﻿#ifndef __MATCHMAKING_MODE_H__
+#define __MATCHMAKING_MODE_H__
 #include <cugl/cugl.h>
 
 #include <vector>
 
-#include "GMController.h"
-#include "GameGraphRoot.h"
 #include "InputController.h"
 #include "MagicInternetBox.h"
+#include "MatchmakingGraphRoot.h"
 #include "ShipModel.h"
 
 /**
@@ -34,33 +16,29 @@
  * really a mini-GameEngine in its own right.  As in 3152, we separate it out
  * so that we can have a separate mode for the loading screen.
  */
-class GameMode {
+class MatchmakingMode {
    protected:
 	// CONTROLLERS
 	/** Controller for abstracting out input across multiple platforms */
 	InputController input;
-	/** Controller for GM */
-	GMController gm;
 	/** Networking controller*/
 	std::shared_ptr<MagicInternetBox> net;
 
 	// VIEW
 	/** Scenegraph root node */
-	GameGraphRoot sgRoot;
+	MatchmakingGraphRoot sgRoot;
 
 	// MODEL
-	/** The donut model */
-	std::shared_ptr<DonutModel> donutModel;
 	/** The list of breaches */
 	std::vector<std::shared_ptr<DonutModel>> donuts;
 	/** The list of breaches */
 	std::vector<std::shared_ptr<BreachModel>> breaches;
-	/** The list of breaches */
-	std::vector<std::shared_ptr<DoorModel>> doors;
 	/** The Ship model */
 	std::shared_ptr<ShipModel> shipModel;
 
-	bool host = true;
+	/** True if game is ready to start */
+	bool gameReady;
+	/** Current Player ID */
 	int playerId;
 
    public:
@@ -72,7 +50,7 @@ class GameMode {
 	 * This constructor does not allocate any objects or start the game.
 	 * This allows us to use the object without a heap pointer.
 	 */
-	GameMode() {}
+	MatchmakingMode() : gameReady(false), playerId(-1) {}
 
 	/**
 	 * Disposes of all (non-static) resources allocated to this mode.
@@ -80,7 +58,7 @@ class GameMode {
 	 * This method is different from dispose() in that it ALSO shuts off any
 	 * static resources, like the input controller.
 	 */
-	~GameMode() { dispose(); }
+	~MatchmakingMode() { dispose(); }
 
 	/**
 	 * Disposes of all (non-static) resources allocated to this mode.
@@ -99,10 +77,10 @@ class GameMode {
 	 * @return true if the controller is initialized properly, false otherwise.
 	 */
 	bool init(const std::shared_ptr<cugl::AssetManager>& assets,
-			  std::shared_ptr<MagicInternetBox>& net);
+			  std::shared_ptr<MagicInternetBox>& mib);
 
 #pragma mark -
-#pragma mark Gameplay Handling
+#pragma mark Matchmaking Handling
 	/**
 	 * The method called to update the game mode.
 	 *
@@ -118,9 +96,16 @@ class GameMode {
 	void reset();
 
 	/**
+	 * Checks if game is ready to start
+	 *
+	 * @return True if game is ready to start, false otherwise
+	 */
+	bool isGameReady() { return gameReady; }
+
+	/**
 	 * Draws the game.
 	 */
 	void draw(const std::shared_ptr<cugl::SpriteBatch>& batch);
 };
 
-#endif /* __GAME_MODE_H__ */
+#endif /* __MATCHMAKING_MODE_H__ */

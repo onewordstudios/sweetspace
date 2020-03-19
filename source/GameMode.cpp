@@ -57,7 +57,8 @@ constexpr float DOOR_ACTIVE_ANGLE = 0.25f;
  *
  * @return true if the controller is initialized properly, false otherwise.
  */
-bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
+bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets,
+					std::shared_ptr<MagicInternetBox>& mib) {
 	// Initialize the scene to a locked width
 	Size dimen = Application::get()->getDisplaySize();
 	dimen *= SCENE_WIDTH / dimen.width; // Lock the game to a reasonable resolution
@@ -66,7 +67,7 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 	}
 
 	input.init();
-	net.initHost();
+	net = mib;
 
 	for (int i = 0; i < MAX_EVENTS; i++) {
 		breaches.push_back(BreachModel::alloc());
@@ -80,10 +81,10 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 
 	shipModel = ShipModel::alloc(donuts, breaches, doors);
 	gm.init(donuts, breaches, doors, net, -1);
-	while (net.getPlayerID() == -1) {
-		net.update(shipModel);
+	while (net->getPlayerID() == -1) {
+		net->update(shipModel);
 	}
-	playerId = net.getPlayerID();
+	playerId = net->getPlayerID();
 	gm.setPlayerId(playerId);
 	// gm.setDonuts(shipModel);
 	donutModel = donuts.at(playerId);
@@ -129,7 +130,7 @@ void GameMode::reset() {
  */
 void GameMode::update(float timestep) {
 	input.update(timestep);
-	net.update(shipModel);
+	net->update(shipModel);
 	// Reset the game if necessary
 	// if (input.didReset()) {
 	//	reset();
@@ -149,7 +150,7 @@ void GameMode::update(float timestep) {
 			breaches.at(i)->setIsPlayerOn(true);
 
 			if (breaches.at(i)->getHealth() == 0) {
-				net.resolveBreach(i);
+				net->resolveBreach(i);
 			}
 
 		} else if (diff > EPSILON_ANGLE && breaches.at(i)->isPlayerOn()) {
@@ -170,11 +171,11 @@ void GameMode::update(float timestep) {
 		}
 		if (diff < DOOR_ACTIVE_ANGLE) {
 			doors.at(i)->addPlayer(playerId);
-			net.flagDualTask(i, playerId, 1);
+			net->flagDualTask(i, playerId, 1);
 		} else {
 			if (doors.at(i)->isPlayerOn(playerId)) {
 				doors.at(i)->removePlayer(playerId);
-				net.flagDualTask(i, playerId, 0);
+				net->flagDualTask(i, playerId, 0);
 			}
 		}
 	}

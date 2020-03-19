@@ -46,6 +46,8 @@ void Sweetspace::onStartup() {
 	loaded = false;
 	loading.init(assets);
 
+	mib = std::make_shared<MagicInternetBox>();
+
 	// Queue up the other assets
 	assets->loadDirectoryAsync("json/assets.json", nullptr);
 
@@ -66,6 +68,7 @@ void Sweetspace::onStartup() {
 void Sweetspace::onShutdown() {
 	loading.dispose();
 	gameplay.dispose();
+	matchmaking.dispose();
 	assets = nullptr;
 	batch = nullptr;
 
@@ -93,10 +96,17 @@ void Sweetspace::onShutdown() {
 void Sweetspace::update(float timestep) {
 	if (!loaded && loading.isActive()) {
 		loading.update(0.01f);
-	} else if (!loaded) {
+	} else if (!loaded && !matched) {
 		loading.dispose(); // Disables the input listeners in this mode
-		gameplay.init(assets);
+		matchmaking.init(assets, mib);
 		loaded = true;
+	} else if (!matched && !gameStarted) {
+		matchmaking.update(timestep);
+		matched = matchmaking.isGameReady();
+	} else if (matched && !gameStarted) {
+		matchmaking.dispose();
+		gameplay.init(assets, mib);
+		gameStarted = true;
 	} else {
 		gameplay.update(timestep);
 	}
@@ -114,6 +124,8 @@ void Sweetspace::update(float timestep) {
 void Sweetspace::draw() {
 	if (!loaded) {
 		loading.render(batch);
+	} else if (!gameStarted) {
+		matchmaking.draw(batch);
 	} else {
 		gameplay.draw(batch);
 	}

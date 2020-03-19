@@ -58,8 +58,8 @@ void GMController::dispose() {
  */
 bool GMController::init(std::vector<std::shared_ptr<DonutModel>> d,
 						std::vector<std::shared_ptr<BreachModel>> b,
-						std::vector<std::shared_ptr<DoorModel>> dr, MagicInternetBox mib,
-						int playerId) {
+						std::vector<std::shared_ptr<DoorModel>> dr,
+						std::shared_ptr<MagicInternetBox>& mib, int playerId) {
 	bool success = true;
 	donuts = d;
 	breaches = b;
@@ -121,7 +121,7 @@ void GMController::update(float dt) {
 				breachFree.at(i) = false;
 				int p = rand() % donuts.size();
 				breaches.at(i)->setPlayer(p);
-				mib.createBreach(angle, p, i);
+				mib->createBreach(angle, p, i);
 				break;
 			}
 		}
@@ -143,7 +143,7 @@ void GMController::update(float dt) {
 				doors.at(i)->setAngle(angle);
 				doors.at(i)->clear();
 				doorFree.at(i) = false;
-				mib.createDualTask(angle, -1, -1, i);
+				mib->createDualTask(angle, -1, -1, i);
 				break;
 			}
 		}
