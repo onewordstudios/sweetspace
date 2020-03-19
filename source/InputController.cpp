@@ -74,9 +74,9 @@ void InputController::dispose() {
 bool InputController::init() {
 	timestamp.mark();
 	bool success = true;
-	// Process keyboard on all?
+	// Activate keyboard on all
 	success = Input::activate<Keyboard>();
-// Only process keyboard on desktop
+
 #ifndef CU_TOUCH_SCREEN
 
 	Mouse* mouse = Input::get<Mouse>();
