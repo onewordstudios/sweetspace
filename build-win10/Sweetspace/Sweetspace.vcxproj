@@ -197,6 +197,8 @@
     <ClInclude Include="..\..\source\libraries\easywsclient.hpp" />
     <ClInclude Include="..\..\source\LoadingMode.h" />
     <ClInclude Include="..\..\source\MagicInternetBox.h" />
+    <ClInclude Include="..\..\source\MatchmakingGraphRoot.h" />
+    <ClInclude Include="..\..\source\MatchmakingMode.h" />
     <ClInclude Include="..\..\source\ShipModel.h" />
     <ClInclude Include="..\..\source\Sweetspace.h" />
     <ClInclude Include="resource.h" />
@@ -213,6 +215,8 @@
     <ClCompile Include="..\..\source\GameMode.cpp" />
     <ClCompile Include="..\..\source\InputController.cpp" />
     <ClCompile Include="..\..\source\LoadingMode.cpp" />
+    <ClCompile Include="..\..\source\MatchmakingGraphRoot.cpp" />
+    <ClCompile Include="..\..\source\MatchmakingMode.cpp" />
     <ClCompile Include="..\..\source\ShipModel.cpp" />
     <ClCompile Include="..\..\source\Sweetspace.cpp" />
   </ItemGroup>

@@ -137,8 +137,8 @@ class InputController {
 	/**
 	 * Returns the most recent tap location if a tap recently happened.
 	 *
-	 * @return The tap location. cugl::Vec2 of x,y screen coordinates. Returns nullptr if no recent
-	 * tap.
+	 * @return The tap location. cugl::Vec2 of x,y screen coordinates. Returns Vec2::ZERO if no
+	 * recent tap.
 	 */
 	const cugl::Vec2 getTapLoc() {
 		if (tapped) {
