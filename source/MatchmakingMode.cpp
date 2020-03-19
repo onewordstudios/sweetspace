@@ -102,8 +102,9 @@ void MatchmakingMode::update(float timestep) {
 		string s = sgRoot.getInput(input.getTapLoc());
 		if (s != "") {
 			sgRoot.setRoomId(s);
-			net->initClient(s);
-			sgRoot.setPlayerId(1);
+			if (net->initClient(s)) {
+				sgRoot.setPlayerId(1);
+			}
 		}
 	}
 	// Only update network loop if inithost or initclient called
