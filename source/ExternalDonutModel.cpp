@@ -25,7 +25,33 @@ void ExternalDonutModel::update(float timestep) {
 		float percent = (float)networkMove.framesSinceUpdate / NETWORK_TICK;
 		networkMove.oldAngle += velocity;
 		networkMove.angle += velocity;
+
+		// Clamp angles again
+		if (networkMove.oldAngle > FULL_CIRCLE) {
+			networkMove.oldAngle -= FULL_CIRCLE;
+		} else if (networkMove.oldAngle < 0) {
+			networkMove.oldAngle += FULL_CIRCLE;
+		}
+		if (networkMove.angle > FULL_CIRCLE) {
+			networkMove.angle -= FULL_CIRCLE;
+		} else if (networkMove.angle < 0) {
+			networkMove.angle += FULL_CIRCLE;
+		}
+
 		float newAngle = networkMove.angle * percent + networkMove.oldAngle * (1.0f - percent);
+		if (networkMove.oldAngle > 0.8f * FULL_CIRCLE && networkMove.angle < 0.2f * FULL_CIRCLE) {
+			newAngle = (networkMove.angle - FULL_CIRCLE) * percent +
+					   networkMove.oldAngle * (1.0f - percent);
+
+		} else if (networkMove.angle > 0.8f * FULL_CIRCLE &&
+				   networkMove.oldAngle < 0.2f * FULL_CIRCLE) {
+			newAngle = (networkMove.angle - FULL_CIRCLE) * percent +
+					   networkMove.oldAngle * (1.0f - percent);
+		}
+		if (newAngle < 0) {
+			newAngle += FULL_CIRCLE;
+		}
+
 		angle = newAngle;
 	} else {
 		angle += velocity;

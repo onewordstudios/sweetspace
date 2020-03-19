@@ -1,12 +1,14 @@
 ﻿#ifndef __DONUT_MODEL_H__
 #define __DONUT_MODEL_H__
 #include <cugl/cugl.h>
-constexpr float HALF_CIRCLE = 180.0f;
 
 #pragma mark -
 #pragma mark Donut Model
 
 class DonutModel {
+   public:
+	static constexpr float HALF_CIRCLE = 180.0f;
+
    protected:
 	/** This macro disables the copy constructor (not allowed on models) */
 	CU_DISALLOW_COPY_AND_ASSIGN(DonutModel);

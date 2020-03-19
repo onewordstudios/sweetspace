@@ -91,7 +91,7 @@ void GMController::update(float dt) {
 		if (rand() % SPAWN_RATE > 1) return;
 		for (int i = 0; i < MAX_EVENTS; i++) {
 			if (breachFree.at(i)) {
-				float angle = (rand() % FULL_CIRCLE) * (float)M_PI / HALF_CIRCLE;
+				float angle = (rand() % FULL_CIRCLE) * (float)M_PI / DonutModel::HALF_CIRCLE;
 				breaches.at(i)->setAngle(angle);
 				breaches.at(i)->setHealth(HEALTH_DEFAULT);
 				breachFree.at(i) = false;
