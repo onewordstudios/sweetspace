@@ -161,7 +161,6 @@ void GameMode::update(float timestep) {
 	for (unsigned int i = 0; i < donuts.size(); i++) {
 		donuts[i]->update(timestep);
 	}
-	// donutModel->update(timestep);
 
 	sgRoot.update(timestep);
 }
