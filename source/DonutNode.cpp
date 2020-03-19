@@ -15,16 +15,7 @@ constexpr float PI_180 = (float)(M_PI / 180);
 
 void DonutNode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch, const Mat4& transform,
 					 Color4 tint) {
-	float vel = donutModel->getVelocity() > 2 ? donutModel->getVelocity() - 364.08
-											  : donutModel->getVelocity();
-	if (!donutModel->getUpdated()) {
-		donutModel->setVelocity(vel + vel / 0.9f - donutModel->getLastVel());
-		donutModel->setLastVel(vel);
-		donutModel->update();
-	} else {
-		donutModel->setLastVel(vel);
-	}
-	donutModel->setUpdated(false);
+	float vel = donutModel->getVelocity();
 	Vec2 donutPos = Vec2(DIAMETER + RADIUS * sin(donutModel->getAngle()),
 						 DIAMETER / 2.0f - RADIUS * cos(donutModel->getAngle()));
 	if (donutModel->getAngle() < 0) {

@@ -22,6 +22,9 @@
 #include <iostream>
 #include <sstream>
 
+#include "ExternalDonutModel.h"
+#include "PlayerDonutModel.h"
+
 using namespace cugl;
 using namespace std;
 
@@ -72,11 +75,7 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	for (int i = 0; i < MAX_EVENTS; i++) {
 		breaches.push_back(BreachModel::alloc());
 	}
-	for (int i = 0; i < 3; i++) {
-		shared_ptr<DonutModel> donut = DonutModel::alloc();
-		donut->setColorId(i % int(sgRoot.playerColor.size()));
-		donuts.push_back(donut);
-	}
+
 	for (int i = 0; i < MAX_DOORS; i++) {
 		doors.push_back(DoorModel::alloc());
 	}
@@ -87,7 +86,14 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets,
 		net->update(shipModel);
 	}
 	playerId = net->getPlayerID();
+	for (int i = 0; i < 3; i++) {
+		donuts.push_back(playerId == i ? PlayerDonutModel::alloc() : ExternalDonutModel::alloc());
+		shipModel->getDonuts().push_back(donuts[i]);
+		donuts[i]->setColorId(i % int(sgRoot.playerColor.size()));
+	}
 	gm.setPlayerId(playerId);
+	gm.setDonuts(donuts); // TODO All of this should be refactored so that ship model contains a
+						  // single source of truth
 	donutModel = donuts.at(static_cast<unsigned long>(playerId));
 
 	// Scene graph setup
@@ -132,11 +138,8 @@ void GameMode::reset() {
  */
 void GameMode::update(float timestep) {
 	input.update(timestep);
+
 	net->update(shipModel);
-	// Reset the game if necessary
-	// if (input.didReset()) {
-	//	reset();
-	//}
 
 	// Breach health depletion
 	for (int i = 0; i < MAX_EVENTS; i++) {
@@ -191,7 +194,10 @@ void GameMode::update(float timestep) {
 	if (input.getTapLoc() != Vec2::ZERO && !donutModel->isJumping()) {
 		donutModel->startJump();
 	}
-	donutModel->update(timestep);
+
+	for (unsigned int i = 0; i < donuts.size(); i++) {
+		donuts[i]->update(timestep);
+	}
 
 	sgRoot.update(timestep);
 }

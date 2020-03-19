@@ -6,11 +6,11 @@ using namespace cugl;
 
 constexpr auto GAME_SERVER = "ws://sweetspace-server.herokuapp.com/";
 constexpr float FLOAT_PRECISION = 180.0f;
-constexpr unsigned int NETWORK_TICK = 12;
+constexpr unsigned int NETWORK_TICK = 12; // Constant also defined in ExternalDonutModel.cpp
 constexpr unsigned int ONE_BYTE = 256;
 constexpr unsigned int ROOM_LENGTH = 5;
 
-bool MagicInternetBox::initHost() {
+bool MagicInternetBox::initConnection() {
 	using easywsclient::WebSocket;
 
 	// I actually don't know what this stuff does but it won't run on Windows without it,
@@ -22,13 +22,21 @@ bool MagicInternetBox::initHost() {
 	rc = WSAStartup(MAKEWORD(2, 2), &wsaData);
 	if (rc) {
 		CULog("WSAStartup Failed");
-		return 1;
+		return false;
 	}
 #endif
 
 	ws = WebSocket::from_url(GAME_SERVER);
 	if (!ws) {
 		CULog("FAILED TO CONNECT");
+		return false;
+	}
+
+	return true;
+}
+
+bool MagicInternetBox::initHost() {
+	if (!initConnection()) {
 		return false;
 	}
 
@@ -42,23 +50,7 @@ bool MagicInternetBox::initHost() {
 }
 
 bool MagicInternetBox::initClient(std::string id) {
-	using easywsclient::WebSocket;
-
-	// I actually don't know what this stuff does but it won't run on Windows without it
-#ifdef _WIN32
-	INT rc;
-	WSADATA wsaData;
-
-	rc = WSAStartup(MAKEWORD(2, 2), &wsaData);
-	if (rc) {
-		CULog("WSAStartup Failed");
-		return 1;
-	}
-#endif
-
-	ws = WebSocket::from_url(GAME_SERVER);
-	if (!ws) {
-		CULog("FAILED TO CONNECT");
+	if (!initConnection()) {
 		return false;
 	}
 
@@ -77,11 +69,12 @@ bool MagicInternetBox::initClient(std::string id) {
 
 DATA FORMAT
 
-[ TYPE (enum) | ANGLE (2 bytes) | ID (2 bytes) | data1 (2 bytes) | data2 (2 bytes) | data3 (2 bytes)
+[ TYPE (enum) | ANGLE (2 bytes) | ID (2 bytes) | data1 (2 bytes) | data2 (2 bytes) | data3 (3 bytes)
 
 Each 2-byte block is stored smaller first, then larger; ie 2^8 * byte1 + byte0 gives the original.
 All data is truncated to fit 16 bytes.
 Floats are multiplied by FLOAT_PRECISION and then cast to int before running through same algorithm
+Only data3 can handle negative numbers. The first byte is 1 for positive and 0 for negative.
 
 */
 
@@ -105,8 +98,10 @@ void MagicInternetBox::sendData(NetworkDataType type, float angle, int id, int d
 	data.push_back((uint8_t)(data2 % ONE_BYTE));
 	data.push_back((uint8_t)(data2 / ONE_BYTE));
 
-	int d3 = (int)(FLOAT_PRECISION * data3);
+	int d3Positive = data3 >= 0 ? 1 : 0;
+	int d3 = (int)(FLOAT_PRECISION * abs(data3));
 
+	data.push_back((uint8_t)d3Positive);
 	data.push_back((uint8_t)(d3 % ONE_BYTE));
 	data.push_back((uint8_t)(d3 / ONE_BYTE));
 
@@ -198,14 +193,14 @@ void MagicInternetBox::update(std::shared_ptr<ShipModel> state) {
 		// NOLINTNEXTLINE Ditto
 		int data2 = (int)(message[7] + ONE_BYTE * message[8]);
 		// NOLINTNEXTLINE Ditto
-		float data3 = (float)(message[9] + ONE_BYTE * message[10]) / FLOAT_PRECISION;
+		float data3 = (message[9] == 1 ? 1 : -1) * (float)(message[10] + ONE_BYTE * message[11]) /
+					  FLOAT_PRECISION;
 
 		switch (type) {
 			case PositionUpdate: {
 				std::shared_ptr<DonutModel> donut = state->getDonuts()[id];
 				donut->setAngle(angle);
 				donut->setVelocity(data3);
-				donut->setUpdated(true);
 				break;
 			}
 			case Jump: {

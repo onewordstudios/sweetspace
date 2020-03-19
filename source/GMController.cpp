@@ -113,7 +113,7 @@ void GMController::update(float dt) {
 		if (rand() % SPAWN_RATE > 1) return;
 		for (int i = 0; i < MAX_EVENTS; i++) {
 			if (breachFree.at(i)) {
-				float angle = (rand() % FULL_CIRCLE) * (float)M_PI / HALF_CIRCLE;
+				float angle = (rand() % FULL_CIRCLE) * (float)M_PI / DonutModel::HALF_CIRCLE;
 				breachFree.at(i) = false;
 				int p = rand() % donuts.size();
 				breaches.at(i)->reset(angle, p);
@@ -123,7 +123,7 @@ void GMController::update(float dt) {
 		}
 		for (int i = 0; i < MAX_DOORS; i++) {
 			if (doorFree.at(i)) {
-				float angle = (rand() % FULL_CIRCLE) * (float)M_PI / HALF_CIRCLE;
+				float angle = (rand() % FULL_CIRCLE) * (float)M_PI / DonutModel::HALF_CIRCLE;
 				bool goodAngle = true;
 				for (int j = 0; j < donuts.size(); j++) {
 					float diff =

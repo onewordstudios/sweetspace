@@ -1,15 +1,41 @@
 ﻿#ifndef __DONUT_MODEL_H__
 #define __DONUT_MODEL_H__
 #include <cugl/cugl.h>
-constexpr float HALF_CIRCLE = 180.0f;
 
 #pragma mark -
 #pragma mark Donut Model
 
 class DonutModel {
-   private:
+   public:
+	static constexpr float HALF_CIRCLE = 180.0f;
+
+   protected:
 	/** This macro disables the copy constructor (not allowed on models) */
 	CU_DISALLOW_COPY_AND_ASSIGN(DonutModel);
+
+#pragma region Animation Constants and Functions
+	/** Factor to multiply the forward thrust */
+	static constexpr unsigned int FULL_CIRCLE = 360;
+
+	/** The max angular velocity (in degrees) per frame */
+	static constexpr float DONUT_MAX_TURN = 2.0f;
+	/** The max force to apply to the donut */
+	static constexpr float DONUT_MAX_FORCE = 0.5f;
+	/** The amount the angular velocity decays by each frame */
+	static constexpr float DONUT_FRICTION_FACTOR = 0.9f;
+	/** The threshold below which the donut has effectively stopped rolling */
+	static constexpr float DONUT_STOP_THRESHOLD = 0.01f;
+
+	/** The threshold which the donut will begin to fall back to the ground again */
+	static constexpr float JUMP_HEIGHT = 0.35f;
+	/** Downward Acceleration for calculating jump offsets */
+	static constexpr float GRAVITY = 10.0f;
+
+	/** Clamp x into the range [y,z] */
+	static constexpr float RANGE_CLAMP(float x, float y, float z) {
+		return (x < y ? y : (x > z ? z : x));
+	}
+#pragma endregion
 
 	/** Scene graph position of the donut; used to position the asset in the scene graph. Should not
 	 * be modified. */
@@ -26,8 +52,13 @@ class DonutModel {
 	float jumpTime;
 	/** Initial vertical velocity */
 	float jumpVelocity;
-	bool updated = false;
-	float lastVel = 0;
+
+	/**
+	 * Performs state and animation updates for a jumping donut.
+	 *
+	 * Will check if a donut is jumping automatically.
+	 */
+	void updateJump(float timestep);
 	/** Id of donut's color */
 	int colorId;
 
@@ -85,39 +116,6 @@ class DonutModel {
 	 */
 	virtual bool init(const cugl::Vec2& pos);
 
-#pragma mark Static Constructors
-	/**
-	 * Returns a newly allocated donut at the origin.
-	 *
-	 * This is a static constructor. You call it with the DonutModel::alloc().
-	 * We prefer static constructors as they make the usage of shared pointers
-	 * much simpler (and prevent the temptation of making a weak pointer on
-	 * the heap).
-	 *
-	 * @return a newly allocated donut at the origin.
-	 */
-	static std::shared_ptr<DonutModel> alloc() {
-		std::shared_ptr<DonutModel> result = std::make_shared<DonutModel>();
-		return (result->init() ? result : nullptr);
-	}
-
-	/**
-	 * Returns a newly allocated donut at the given position.
-	 *
-	 * This is a static constructor. You call it with the DonutModel::alloc().
-	 * We prefer static constructors as they make the usage of shared pointers
-	 * much simpler (and prevent the temptation of making a weak pointer on
-	 * the heap).
-	 *
-	 * @param pos   Initial position in world coordinates
-	 *
-	 * @return a newly allocated donut at the given position.
-	 */
-	static std::shared_ptr<DonutModel> alloc(const cugl::Vec2& pos) {
-		std::shared_ptr<DonutModel> result = std::make_shared<DonutModel>();
-		return (result->init(pos) ? result : nullptr);
-	}
-
 #pragma mark -
 #pragma mark Accessors
 
@@ -142,7 +140,7 @@ class DonutModel {
 	 *
 	 * @param value The donut angle in radians
 	 */
-	void setAngle(float value) { angle = HALF_CIRCLE * value / (float)M_PI; }
+	virtual void setAngle(float value) { angle = HALF_CIRCLE * value / (float)M_PI; }
 
 	/**
 	 * Returns the current angle of the donut in radians.
@@ -187,12 +185,6 @@ class DonutModel {
 	 */
 	float getVelocity() { return velocity; }
 
-	void setUpdated(bool b) { updated = b; }
-	bool getUpdated() { return updated; }
-
-	void setLastVel(float f) { lastVel = f; }
-	float getLastVel() { return lastVel; }
-
 	void setColorId(int i) { colorId = i; }
 	int getColorId() { return colorId; }
 
@@ -221,7 +213,7 @@ class DonutModel {
 	 *
 	 * @param timestep  Time elapsed (in seconds) since last called.
 	 */
-	void update(float timestep = 0.0f);
+	virtual void update(float timestep = 0.0f) = 0;
 
 	/**
 	 * Resets the donut back to its original settings

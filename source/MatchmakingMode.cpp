@@ -5,6 +5,8 @@
 #include <iostream>
 #include <sstream>
 
+#include "ExternalDonutModel.h"
+
 using namespace cugl;
 using namespace std;
 
@@ -48,7 +50,7 @@ bool MatchmakingMode::init(const std::shared_ptr<cugl::AssetManager>& assets,
 		breaches.push_back(BreachModel::alloc());
 	}
 	for (int i = 0; i < 3; i++) {
-		donuts.push_back(DonutModel::alloc());
+		donuts.push_back(ExternalDonutModel::alloc());
 	}
 	for (int i = 0; i < 1; i++) {
 		doors.push_back(DoorModel::alloc());

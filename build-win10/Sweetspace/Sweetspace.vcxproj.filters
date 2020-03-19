@@ -78,6 +78,12 @@
     <ClInclude Include="..\..\source\DonutNode.h">
       <Filter>Header Files\SceneGraph</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\source\PlayerDonutModel.h">
+      <Filter>Header Files\Models</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\ExternalDonutModel.h">
+      <Filter>Header Files\Models</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\source\DoorModel.h">
       <Filter>Header Files\Models</Filter>
     </ClInclude>
@@ -130,6 +136,12 @@
     </ClCompile>
     <ClCompile Include="..\..\source\DonutNode.cpp">
       <Filter>Source Files\SceneGraph</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\PlayerDonutModel.cpp">
+      <Filter>Source Files\Models</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\ExternalDonutModel.cpp">
+      <Filter>Source Files\Models</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\DoorModel.cpp">
       <Filter>Source Files\Models</Filter>

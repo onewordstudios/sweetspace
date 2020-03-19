@@ -190,6 +190,7 @@
     <ClInclude Include="..\..\source\BreachModel.h" />
     <ClInclude Include="..\..\source\DonutModel.h" />
     <ClInclude Include="..\..\source\DonutNode.h" />
+    <ClInclude Include="..\..\source\ExternalDonutModel.h" />
     <ClInclude Include="..\..\source\DoorModel.h" />
     <ClInclude Include="..\..\source\DoorNode.h" />
     <ClInclude Include="..\..\source\GameGraphRoot.h" />
@@ -199,6 +200,7 @@
     <ClInclude Include="..\..\source\libraries\easywsclient.hpp" />
     <ClInclude Include="..\..\source\LoadingMode.h" />
     <ClInclude Include="..\..\source\MagicInternetBox.h" />
+    <ClInclude Include="..\..\source\PlayerDonutModel.h" />
     <ClInclude Include="..\..\source\MatchmakingGraphRoot.h" />
     <ClInclude Include="..\..\source\MatchmakingMode.h" />
     <ClInclude Include="..\..\source\ShipModel.h" />
@@ -209,6 +211,7 @@
     <ClCompile Include="..\..\source\BreachModel.cpp" />
     <ClCompile Include="..\..\source\DonutModel.cpp" />
     <ClCompile Include="..\..\source\DonutNode.cpp" />
+    <ClCompile Include="..\..\source\ExternalDonutModel.cpp" />
     <ClCompile Include="..\..\source\DoorModel.cpp" />
     <ClCompile Include="..\..\source\DoorNode.cpp" />
     <ClCompile Include="..\..\source\GameGraphRoot.cpp" />
@@ -219,6 +222,7 @@
     <ClCompile Include="..\..\source\GameMode.cpp" />
     <ClCompile Include="..\..\source\InputController.cpp" />
     <ClCompile Include="..\..\source\LoadingMode.cpp" />
+    <ClCompile Include="..\..\source\PlayerDonutModel.cpp" />
     <ClCompile Include="..\..\source\MatchmakingGraphRoot.cpp" />
     <ClCompile Include="..\..\source\MatchmakingMode.cpp" />
     <ClCompile Include="..\..\source\ShipModel.cpp" />

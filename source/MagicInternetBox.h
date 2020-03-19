@@ -49,6 +49,14 @@ class MagicInternetBox {
 	};
 
 	/**
+	 * Initialize the network connection.
+	 * Will establish a connection to the server.
+	 *
+	 * @returns Whether the connection was successfully established
+	 */
+	bool initConnection();
+
+	/**
 	 * Send data over the network as described in the architecture specification.
 	 *
 	 * Angle field is for the angle, if applicable.
