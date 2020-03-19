@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C122202B76FF5A7E71E2DF7F /* MatchmakingMode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C12225092193F10792C2D9D4 /* MatchmakingMode.cpp */; };
+		C122231BF74B6D2B4DFA3857 /* MatchmakingGraphRoot.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C1222700CC73840AA71C9800 /* MatchmakingGraphRoot.cpp */; };
+		C1222440665C00173B68F8B3 /* MatchmakingMode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C12225092193F10792C2D9D4 /* MatchmakingMode.cpp */; };
+		C12227559D5A695B3AD2A84C /* MatchmakingGraphRoot.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C1222700CC73840AA71C9800 /* MatchmakingGraphRoot.cpp */; };
+		C12229A6FE0EE350C0B69408 /* MatchmakingGraphRoot.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C1222700CC73840AA71C9800 /* MatchmakingGraphRoot.cpp */; };
+		C1222FC552DCE75362130E81 /* MatchmakingMode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C12225092193F10792C2D9D4 /* MatchmakingMode.cpp */; };
 		C58C509B5D08FC65641A630E /* ShipModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C58C51549E90F0CA2D05EB7A /* ShipModel.cpp */; };
 		C58C5561B66760E8D1E3FC80 /* ShipModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C58C51549E90F0CA2D05EB7A /* ShipModel.cpp */; };
 		C58C5B82A24C809F0E12DEFF /* ShipModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C58C51549E90F0CA2D05EB7A /* ShipModel.cpp */; };
@@ -145,6 +151,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		C12225092193F10792C2D9D4 /* MatchmakingMode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MatchmakingMode.cpp; sourceTree = "<group>"; };
+		C1222700CC73840AA71C9800 /* MatchmakingGraphRoot.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MatchmakingGraphRoot.cpp; sourceTree = "<group>"; };
 		C58C51549E90F0CA2D05EB7A /* ShipModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ShipModel.cpp; sourceTree = "<group>"; };
 		C58C531CA6998820E3FA7D86 /* ShipModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShipModel.h; sourceTree = "<group>"; };
 		D15224B9EA517A2BFF54A6C2 /* easywsclient.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = easywsclient.hpp; sourceTree = "<group>"; };
@@ -444,6 +452,8 @@
 				D15227FD0DE8BAD86857197F /* MagicInternetBox.h */,
 				D15228511721431DE5C3F8BF /* MagicInternetBox.cpp */,
 				D1522166C3D73A4C222E4139 /* libraries */,
+				C1222700CC73840AA71C9800 /* MatchmakingGraphRoot.cpp */,
+				C12225092193F10792C2D9D4 /* MatchmakingMode.cpp */,
 			);
 			name = Source;
 			path = ../source;
@@ -640,6 +650,8 @@
 				D1522B75CBE989BF3E62FFF0 /* MagicInternetBox.cpp in Sources */,
 				D15226A31B180B8600E8235E /* README.md in Sources */,
 				D152277E2A8E96B810AEB205 /* easywsclient.cpp in Sources */,
+				C12227559D5A695B3AD2A84C /* MatchmakingGraphRoot.cpp in Sources */,
+				C122202B76FF5A7E71E2DF7F /* MatchmakingMode.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -661,6 +673,8 @@
 				D15229CE017D5510C972C380 /* MagicInternetBox.cpp in Sources */,
 				D15224573606D56005192E3D /* README.md in Sources */,
 				D1522B1EDA7299CAAE55B21E /* easywsclient.cpp in Sources */,
+				C12229A6FE0EE350C0B69408 /* MatchmakingGraphRoot.cpp in Sources */,
+				C1222FC552DCE75362130E81 /* MatchmakingMode.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -682,6 +696,8 @@
 				D15222477324B444CAE67673 /* MagicInternetBox.cpp in Sources */,
 				D152272F0C47BB34513BF98A /* README.md in Sources */,
 				D152210B21A0FDE6A6995456 /* easywsclient.cpp in Sources */,
+				C122231BF74B6D2B4DFA3857 /* MatchmakingGraphRoot.cpp in Sources */,
+				C1222440665C00173B68F8B3 /* MatchmakingMode.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
