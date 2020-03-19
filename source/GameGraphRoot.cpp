@@ -1,4 +1,4 @@
-#include "GameGraphRoot.h"
+﻿#include "GameGraphRoot.h"
 
 #include <cugl/cugl.h>
 
@@ -113,6 +113,17 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 		// Start position is off screen
 		Vec2 breachPos = Vec2(0, 0);
 		breachModel->getSprite()->setPosition(breachPos);
+	}
+
+	for (int i = 0; i < doors.size(); i++) {
+		std::shared_ptr<DoorModel> doorModel = doors.at(i);
+		std::shared_ptr<Texture> image = assets->get<Texture>("door");
+		std::shared_ptr<DoorNode> doorNode = DoorNode::alloc(image, 1, 3);
+		doorNode->setModel(doorModel);
+		doorNode->setFrame(0);
+		doorNode->setAnchor(Vec2::ANCHOR_BOTTOM_CENTER);
+		doorNode->setScale(0.3f);
+		nearSpace->addChild(doorNode);
 	}
 
 	addChild(scene);

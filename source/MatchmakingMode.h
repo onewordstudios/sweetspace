@@ -33,6 +33,8 @@ class MatchmakingMode {
 	std::vector<std::shared_ptr<DonutModel>> donuts;
 	/** The list of breaches */
 	std::vector<std::shared_ptr<BreachModel>> breaches;
+	/** The list of doors */
+	std::vector<std::shared_ptr<DoorModel>> doors;
 	/** The Ship model */
 	std::shared_ptr<ShipModel> shipModel;
 

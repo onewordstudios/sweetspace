@@ -30,6 +30,9 @@
         "breach_orange": {
             "file":   "textures/breaches/breach_orange.png"
         },
+	"door": {
+            "file":   "textures/door.png"
+        },
         "space": {
             "file":  "textures/sprinkle_sky256.png",
             "wrapS": "repeat",

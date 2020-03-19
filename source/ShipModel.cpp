@@ -13,9 +13,11 @@
  * @return  true if the obstacle is initialized properly, false otherwise.
  */
 bool ShipModel::init(std::vector<std::shared_ptr<DonutModel>> &d,
-					 std::vector<std::shared_ptr<BreachModel>> &b) {
+					 std::vector<std::shared_ptr<BreachModel>> &b,
+					 std::vector<std::shared_ptr<DoorModel>> &dr) {
 	donuts = d;
 	breaches = b;
+	doors = dr;
 	return true;
 }
 
@@ -29,8 +31,23 @@ bool ShipModel::createBreach(float angle, int health, int player, int id) {
 	return true;
 }
 
+bool ShipModel::createDoor(float angle, int id) {
+	doors.at(id)->clear();
+	doors.at(id)->setAngle(angle);
+	return true;
+}
+
 bool ShipModel::resolveBreach(int id) {
 	breaches.at(id)->setHealth(0);
+	return true;
+}
+
+bool ShipModel::flagDoor(int id, int player, int flag) {
+	if (flag == 0) {
+		doors.at(id)->removePlayer(player);
+	} else {
+		doors.at(id)->addPlayer(player);
+	}
 	return true;
 }
 
