@@ -184,6 +184,11 @@ void MagicInternetBox::update(std::shared_ptr<ShipModel> state) {
 			return;
 		}
 
+		if (message[0] > DualResolve) {
+			CULog("Received invalid connection message during gameplay; %d", message[0]);
+			return;
+		}
+
 		float angle = (float)(message[1] + ONE_BYTE * message[2]) / FLOAT_PRECISION;
 		int id = (int)(message[3] + ONE_BYTE * message[4]);
 		// Networking code is finnicky and having these magic numbers is the easiest solution
