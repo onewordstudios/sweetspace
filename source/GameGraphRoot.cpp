@@ -25,7 +25,7 @@ constexpr float PI_180 = (float)(M_PI / 180);
 constexpr float BREACH_SCALE = 0.25;
 
 /** The scale of the donut textures. */
-constexpr float DONUT_SCALE = 0.5;
+constexpr float DONUT_SCALE = 0.32f;
 
 /** Offset of donut sprites from the radius of the ship */
 constexpr int DONUT_OFFSET = 200;
@@ -74,27 +74,45 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 	allSpace = assets->get<Node>("game_field");
 	farSpace = assets->get<Node>("game_field_far");
 	nearSpace = assets->get<Node>("game_field_near");
-	donutNode = assets->get<Node>("game_field_player1");
+	donutNode = dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_player1"));
 	donutPos = donutNode->getPosition();
 	coordHUD = std::dynamic_pointer_cast<Label>(assets->get<Node>("game_hud"));
 
+	// Initialize Players
 	for (int i = 0; i < donuts.size(); i++) {
+		std::shared_ptr<DonutModel> donutModel = donuts.at(i);
+		string donutColor = playerColor.at(static_cast<unsigned long>(donutModel->getColorId()));
+		std::shared_ptr<Texture> image = assets->get<Texture>("donut_" + donutColor);
 		// Player node is handled separately
 		if (i == playerId) {
-			continue;
+			donutNode->setTexture(image);
+		} else {
+			std::shared_ptr<DonutNode> newDonutNode = DonutNode::allocWithTexture(image);
+			newDonutNode->setModel(donutModel);
+			newDonutNode->setScale(DONUT_SCALE);
+			nearSpace->addChild(newDonutNode);
+
+			Vec2 donutPos =
+				Vec2(DIAMETER + (RADIUS + DONUT_OFFSET) * sin(donutModel->getAngle()),
+					 DIAMETER / 2.0f - (RADIUS + DONUT_OFFSET) * cos(donutModel->getAngle()));
+			newDonutNode->setPosition(donutPos);
 		}
+	}
 
-		std::shared_ptr<DonutModel> donutModel = donuts.at(i);
-		std::shared_ptr<Texture> image = assets->get<Texture>("donut_friend");
-		std::shared_ptr<DonutNode> donutNode = DonutNode::allocWithTexture(image);
-		donutNode->setModel(donutModel);
-		donutNode->setScale(DONUT_SCALE);
-		nearSpace->addChild(donutNode);
-
-		Vec2 donutPos =
-			Vec2(DIAMETER + (RADIUS + DONUT_OFFSET) * sin(donutModel->getAngle()),
-				 DIAMETER / 2.0f - (RADIUS + DONUT_OFFSET) * cos(donutModel->getAngle()));
-		donutNode->setPosition(donutPos);
+	// Initialize Breaches
+	for (int i = 0; i < breaches.size(); i++) {
+		std::shared_ptr<BreachModel> breachModel = breaches.at(i);
+		string breachColor = playerColor.at(static_cast<unsigned long>(
+			donuts.at(static_cast<unsigned long>(breachModel->getPlayer()))->getColorId()));
+		std::shared_ptr<Texture> image = assets->get<Texture>("breach_" + breachColor);
+		std::shared_ptr<PolygonNode> breachNode = PolygonNode::allocWithTexture(image);
+		breachModel->setSprite(breachNode);
+		breachNode->setScale(BREACH_SCALE);
+		// Add the breach node
+		nearSpace->addChild(breachNode);
+		// Start position is off screen
+		Vec2 breachPos = Vec2(0, 0);
+		breachModel->getSprite()->setPosition(breachPos);
 	}
 
 	for (int i = 0; i < doors.size(); i++) {
@@ -182,13 +200,12 @@ void GameGraphRoot::update(float timestep) {
 	for (int i = 0; i < breaches.size(); i++) {
 		std::shared_ptr<BreachModel> breachModel = breaches.at(i);
 		if (breachModel->getHealth() > 0) {
-			if (breachModel->getSprite() == nullptr) {
-				std::shared_ptr<Texture> image = assets->get<Texture>("breach_purple_squiggle");
-				std::shared_ptr<PolygonNode> breachNode = PolygonNode::allocWithTexture(image);
-				breachModel->setSprite(breachNode);
-				breachNode->setScale(BREACH_SCALE);
-				// Create the donut model
-				nearSpace->addChild(breachNode);
+			if (breachModel->getNeedSpriteUpdate()) {
+				string breachColor = playerColor.at(static_cast<unsigned long>(
+					donuts.at(static_cast<unsigned long>(breachModel->getPlayer()))->getColorId()));
+				std::shared_ptr<Texture> image = assets->get<Texture>("breach_" + breachColor);
+				breachModel->getSprite()->setTexture(image);
+				breachModel->setNeedSpriteUpdate(false);
 			}
 			Vec2 breachPos = Vec2(DIAMETER + RADIUS * sin(breachModel->getAngle()),
 								  DIAMETER / 2.0f - RADIUS * cos(breachModel->getAngle()));

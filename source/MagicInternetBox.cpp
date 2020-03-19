@@ -213,7 +213,7 @@ void MagicInternetBox::update(std::shared_ptr<ShipModel> state) {
 				break;
 			}
 			case BreachCreate: {
-				state->createBreach(angle, 3, data1, id);
+				state->createBreach(angle, data1, id);
 				CULog("Creating breach %d at angle %f with user %d", id, angle, data1);
 				break;
 			}
