@@ -138,17 +138,6 @@ int MatchmakingGraphRoot::checkButtons(const cugl::Vec2& position) {
 }
 
 /**
- * Callback for TextInput
- *
- * @param event The text input event
- *
- */
-/*void MatchmakingGraphRoot::textInputEnded(const cugl::TextInputEvent& event, bool focus) {
-	roomId = event.buffer;
-	CULog("Text Input Callback");
-}*/
-
-/**
  * Returns the text from inside the input field
  *
  * @return a string for the text

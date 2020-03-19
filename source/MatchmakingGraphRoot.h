@@ -107,15 +107,6 @@ class MatchmakingGraphRoot : public cugl::Scene {
 	int checkButtons(const cugl::Vec2& position);
 
 	/**
-	 * Reads TextInput and returns the string inside
-	 *
-	 * @param position The screen coordinates of the tap
-	 *
-	 * @return -1 if no button pressed 0 for host creation, 1 for client creation
-	 */
-	// void MatchmakingGraphRoot::textInputEnded(const cugl::TextInputEvent& event, bool focus);
-
-	/**
 	 * Returns the text from inside the input field
 	 *
 	 * @return a string for the text
