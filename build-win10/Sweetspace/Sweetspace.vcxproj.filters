@@ -19,9 +19,6 @@
     <Filter Include="Header Files\Modes">
       <UniqueIdentifier>{016fd9ec-cf7d-4c9c-b7f4-ff7d6363b1ea}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Models">
-      <UniqueIdentifier>{d52e5d41-f523-4864-acb1-4ae943fc2b58}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\Models">
       <UniqueIdentifier>{14a0b81a-78d9-489f-a677-ca2b32c5431f}</UniqueIdentifier>
     </Filter>
@@ -36,6 +33,9 @@
     </Filter>
     <Filter Include="Header Files\Controllers">
       <UniqueIdentifier>{19d085e5-545b-42a4-ae93-667ff9245d1f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Models">
+      <UniqueIdentifier>{d52e5d41-f523-4864-acb1-4ae943fc2b58}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -83,6 +83,12 @@
     </ClInclude>
     <ClInclude Include="..\..\source\ExternalDonutModel.h">
       <Filter>Header Files\Models</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\DoorModel.h">
+      <Filter>Header Files\Models</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\DoorNode.h">
+      <Filter>Header Files\SceneGraph</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\MatchmakingMode.h">
       <Filter>Header Files\Modes</Filter>
@@ -136,6 +142,12 @@
     </ClCompile>
     <ClCompile Include="..\..\source\ExternalDonutModel.cpp">
       <Filter>Source Files\Models</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\DoorModel.cpp">
+      <Filter>Source Files\Models</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\DoorNode.cpp">
+      <Filter>Source Files\SceneGraph</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\MatchmakingMode.cpp">
       <Filter>Source Files\Modes</Filter>

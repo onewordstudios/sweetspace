@@ -208,7 +208,7 @@ void MagicInternetBox::update(std::shared_ptr<ShipModel> state) {
 				break;
 			}
 			case BreachCreate: {
-				state->createBreach(angle, 3, data1, id);
+				state->createBreach(angle, data1, id);
 				CULog("Creating breach %d at angle %f with user %d", id, angle, data1);
 				break;
 			}
@@ -221,12 +221,15 @@ void MagicInternetBox::update(std::shared_ptr<ShipModel> state) {
 				unsigned int taskID = id;
 				unsigned int player1 = data1;
 				unsigned int player2 = data2;
-				// TODO
+				state->createDoor(angle, id);
 				break;
 			}
 			case DualResolve: {
 				unsigned int taskID = id;
-				// TODO
+				unsigned int player = data1;
+				unsigned int flag = data2;
+				CULog("Flag door %d with player %d", id, player);
+				state->flagDoor(taskID, player, flag);
 				break;
 			}
 			default:
@@ -249,4 +252,6 @@ void MagicInternetBox::createDualTask(float angle, int player1, int player2, int
 	sendData(DualCreate, angle, id, player1, player2, -1.0f);
 }
 
-void MagicInternetBox::flagDualTask(int id) { sendData(DualResolve, -1.0f, id, -1, -1, -1.0f); }
+void MagicInternetBox::flagDualTask(int id, int player, int flag) {
+	sendData(DualResolve, -1.0f, id, player, flag, -1.0f);
+}

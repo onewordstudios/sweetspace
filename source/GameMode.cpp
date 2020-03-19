@@ -36,8 +36,15 @@ constexpr unsigned int SCENE_WIDTH = 1024;
 /** The maximum number of events on ship at any one time. This will probably need to scale with the
  * number of players*/
 constexpr unsigned int MAX_EVENTS = 3;
+/** The maximum number of doors on ship at any one time. This will probably need to scale with the
+ * number of players*/
+constexpr unsigned int MAX_DOORS = 1;
 /** The Angle in radians for which a tap can registers as fixing a breach*/
 constexpr float EPSILON_ANGLE = 0.09f;
+/** The Angle in radians for which a collision occurs*/
+constexpr float DOOR_WIDTH = 0.12f;
+/** The Angle in radians for which a door can be activated*/
+constexpr float DOOR_ACTIVE_ANGLE = 0.25f;
 
 #pragma mark -
 #pragma mark Constructors
@@ -69,8 +76,12 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets,
 		breaches.push_back(BreachModel::alloc());
 	}
 
-	shipModel = ShipModel::alloc(donuts, breaches);
-	gm.init(donuts, breaches, net, -1);
+	for (int i = 0; i < MAX_DOORS; i++) {
+		doors.push_back(DoorModel::alloc());
+	}
+
+	shipModel = ShipModel::alloc(donuts, breaches, doors);
+	gm.init(donuts, breaches, doors, net, -1);
 	while (net->getPlayerID() == -1) {
 		net->update(shipModel);
 	}
@@ -78,13 +89,16 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	for (int i = 0; i < 3; i++) {
 		donuts.push_back(playerId == i ? PlayerDonutModel::alloc() : ExternalDonutModel::alloc());
 		shipModel->getDonuts().push_back(donuts[i]);
+		donuts[i]->setColorId(i % int(sgRoot.playerColor.size()));
 	}
 	gm.setPlayerId(playerId);
 	gm.setDonuts(donuts); // TODO All of this should be refactored so that ship model contains a
 						  // single source of truth
-	donutModel = donuts.at(playerId);
+	donutModel = donuts.at(static_cast<unsigned long>(playerId));
+
 	// Scene graph setup
 	sgRoot.setBreaches(breaches);
+	sgRoot.setDoors(doors);
 	sgRoot.setDonuts(donuts);
 	sgRoot.setPlayerId(playerId);
 	sgRoot.init(assets);
@@ -148,6 +162,29 @@ void GameMode::update(float timestep) {
 			breaches.at(i)->setIsPlayerOn(false);
 		}
 	}
+
+	for (int i = 0; i < MAX_DOORS; i++) {
+		if (doors.at(i) == nullptr || doors.at(i)->halfOpen() || doors.at(i)->getAngle() < 0) {
+			continue;
+		}
+		float diff =
+			(float)M_PI - abs(abs(donutModel->getAngle() - doors.at(i)->getAngle()) - (float)M_PI);
+
+		if (diff < DOOR_WIDTH) {
+			// TODO: Real physics...
+			donutModel->applyForce(-6 * donutModel->getVelocity());
+		}
+		if (diff < DOOR_ACTIVE_ANGLE) {
+			doors.at(i)->addPlayer(playerId);
+			net->flagDualTask(i, playerId, 1);
+		} else {
+			if (doors.at(i)->isPlayerOn(playerId)) {
+				doors.at(i)->removePlayer(playerId);
+				net->flagDualTask(i, playerId, 0);
+			}
+		}
+	}
+
 	gm.update(timestep);
 	float thrust = input.getRoll();
 

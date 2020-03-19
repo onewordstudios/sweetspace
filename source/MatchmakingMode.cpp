@@ -52,8 +52,11 @@ bool MatchmakingMode::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	for (int i = 0; i < 3; i++) {
 		donuts.push_back(ExternalDonutModel::alloc());
 	}
+	for (int i = 0; i < 1; i++) {
+		doors.push_back(DoorModel::alloc());
+	}
 
-	shipModel = ShipModel::alloc(donuts, breaches);
+	shipModel = ShipModel::alloc(donuts, breaches, doors);
 
 	sgRoot.init(assets);
 
