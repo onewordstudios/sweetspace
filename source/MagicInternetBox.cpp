@@ -178,6 +178,12 @@ void MagicInternetBox::update(std::shared_ptr<ShipModel> state) {
 
 		NetworkDataType type = static_cast<NetworkDataType>(message[0]);
 
+		if (type == PlayerJoined) {
+			CULog("Player Joined");
+			numPlayers++;
+			return;
+		}
+
 		float angle = (float)(message[1] + ONE_BYTE * message[2]) / FLOAT_PRECISION;
 		int id = (int)(message[3] + ONE_BYTE * message[4]);
 		// Networking code is finnicky and having these magic numbers is the easiest solution
@@ -221,10 +227,6 @@ void MagicInternetBox::update(std::shared_ptr<ShipModel> state) {
 				unsigned int taskID = id;
 				// TODO
 				break;
-			}
-			case PlayerJoined: {
-				numPlayers++;
-				return;
 			}
 			default:
 				break;
