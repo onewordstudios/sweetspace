@@ -134,6 +134,157 @@
                     }
                 }
             }
+        },
+        "matchmaking": {
+            "type"      : "Node",
+            "format"    : {
+                "type" : "Anchored"
+            },
+            "children":  {
+                "host" : {
+                    "type": "Button",
+                    "data": {
+                        "up" : {
+                        	"type"  : "Node",
+            				"format" : {
+            				    "type" : "Anchored"
+           					},
+            				"children": {
+                    			"clientlabel" : {
+                    				"type" : "Label",
+                    				"data": {
+                    					"font"   : "felt32",
+                        				"text"       : "Join a Lobby",
+                        				"anchor"	 : [0.5,0.5],
+                        				"foreground" : [0,0,0,0],
+                        				"valign"     : "middle",
+                        				"halign"     : "center"
+                    				}
+                    			},
+                    			"layout" : {
+                    		  	  "x_anchor" : "center",
+                    		  	  "y_anchor" : "center"
+                    			}
+                    		}
+                        },
+                        "position": [0,0],
+                        "anchor":   [0,0.5],
+                        "down"  : [0,0,0,0],
+                        "size"  : [100,100]
+                    },
+                    "layout" : {
+                        "x_anchor" : "left",
+                        "y_anchor" : "center"
+                    }
+                },
+                "client" : {
+                    "type": "Button",
+                    "data": {
+                        "up"    : {
+                        	"type"   : "Node",
+            				"format" : {
+            				    "type" : "Anchored"
+           					},
+            				"children":  {
+                    			"clientlabel" : {
+                    				"type" : "Label",
+                    				"data": {
+                    					"font"       : "felt32",
+                        				"text"       : "Join a Lobby",
+                        				"anchor"	 : [0.5,0.5],
+                        				"foreground" : [0,0,0,0],
+                        				"valign"     : "middle",
+                        				"halign"     : "center"
+                    				}
+                    			},
+                    			"layout" : {
+                    		  	  "x_anchor" : "center",
+                    		  	  "y_anchor" : "center"
+                    			}
+                    		}
+                        },
+                        "position": [100,0],
+                        "anchor":   [1,0.5],
+                        "down"  : [0,0,0,0],
+                        "size"  : [100,100]
+                    },
+                    "layout" : {
+                        "x_anchor" : "right",
+                        "y_anchor" : "center"
+                    }
+                },
+                "room" : {
+                	"type": "Label",
+                    "data": {
+                       	"font"       : "felt32",
+                       	"text"       : "Lobby ID:                ",
+                       	"visible"	 : false,
+                       	"foreground" : [255,0,0,255],
+                       	"anchor"	 : [0,1],
+                       	"valign"     : "left",
+                       	"halign"     : "center"
+                    },
+                    "layout" : {
+                        "x_anchor" : "left",
+                        "y_anchor" : "top"
+                    }
+                },
+                "input" : {
+                	"type": "TextField",
+                    "data": {
+                       	"font"       : "felt32",
+                       	"text"       : "Input Lobby ID Here",
+                       	"visible"	 : false,
+                       	"foreground" : [255,0,0,255],
+                       	"anchor"	 : [1,1],
+                       	"valign"     : "middle",
+                       	"halign"     : "center"
+                    },
+                    "layout" : {
+                        "x_anchor" : "right",
+                        "y_anchor" : "top",
+                        "absolute" : true
+                    }
+                },
+                "inputbutton" : {
+                    "type": "Button",
+                    "data": {
+                        "up"    : {
+                        	"type"   : "Node",
+            				"format" : {
+            				    "type" : "Anchored"
+           					},
+            				"children":  {
+                    			"clientlabel" : {
+                    				"type" : "Label",
+                    				"data": {
+                    					"font"       : "felt32",
+                        				"text"       : "Enter Room",
+                        				"anchor"	 : [0.5,0.5],
+                        				"foreground" : [0,0,0,0],
+                        				"valign"     : "middle",
+                        				"halign"     : "center"
+                    				}
+                    			},
+                    			"layout" : {
+                    		  	  "x_anchor" : "center",
+                    		  	  "y_anchor" : "center"
+                    			}
+                    		}
+                        },
+                        "position": [100,0],
+                        "anchor":   [1,1],
+                        "visible" : false,
+                        "down"  : [0,0,0,0],
+                        "size"  : [400,100]
+                    },
+                    "layout" : {
+                        "x_anchor" : "right",
+                        "y_anchor" : "center",
+                        "y_offset" : -50
+                    }
+                }
+            }
         }
     }
 }

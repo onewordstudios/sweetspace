@@ -50,7 +50,8 @@ constexpr float EPSILON_ANGLE = 0.09f;
  *
  * @return true if the controller is initialized properly, false otherwise.
  */
-bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
+bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets,
+					std::shared_ptr<MagicInternetBox>& mib) {
 	// Initialize the scene to a locked width
 	Size dimen = Application::get()->getDisplaySize();
 	dimen *= SCENE_WIDTH / dimen.width; // Lock the game to a reasonable resolution
@@ -59,7 +60,7 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 	}
 
 	input.init();
-	net.initHost();
+	net = mib;
 
 	for (int i = 0; i < MAX_EVENTS; i++) {
 		breaches.push_back(BreachModel::alloc());
@@ -72,10 +73,10 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 
 	shipModel = ShipModel::alloc(donuts, breaches);
 	gm.init(donuts, breaches, net, -1);
-	while (net.getPlayerID() == -1) {
-		net.update(shipModel);
+	while (net->getPlayerID() == -1) {
+		net->update(shipModel);
 	}
-	playerId = net.getPlayerID();
+	playerId = net->getPlayerID();
 	gm.setPlayerId(playerId);
 	donutModel = donuts.at(static_cast<unsigned long>(playerId));
 
@@ -120,7 +121,7 @@ void GameMode::reset() {
  */
 void GameMode::update(float timestep) {
 	input.update(timestep);
-	net.update(shipModel);
+	net->update(shipModel);
 	// Reset the game if necessary
 	// if (input.didReset()) {
 	//	reset();
@@ -140,37 +141,14 @@ void GameMode::update(float timestep) {
 			breaches.at(i)->setIsPlayerOn(true);
 
 			if (breaches.at(i)->getHealth() == 0) {
-				net.resolveBreach(i);
+				net->resolveBreach(i);
 			}
 
 		} else if (diff > EPSILON_ANGLE && breaches.at(i)->isPlayerOn()) {
 			breaches.at(i)->setIsPlayerOn(false);
 		}
 	}
-
-	// Exception thrown : read access violation.** array** was nullptr.occurred
-	/*vector<int> active;
-	vector<int> inactive;
-	for (int i = 0; i < breaches.size(); i++) {
-		std::shared_ptr<BreachModel> breach = breaches.at(i);
-		if (breach->getAngle() > -1) {
-			active.push_back(breach->getID());
-		} else {
-			inactive.push_back(breach->getID());
-		}
-	}*/
 	gm.update(timestep);
-	// for (int i = 0; i < breaches.size(); i++) {
-	//	std::shared_ptr<BreachModel> breach = breaches.at(i);
-	//	if ((breach->getAngle() <= -1) &&
-	//		(std::find(active.begin(), active.end(), breach->getID()) != active.end())) {
-	//		net.resolveBreach(breach->getID());
-	//	} else if ((breach->getAngle() > -1) &&
-	//			   !(std::find(active.begin(), active.end(), breach->getID()) != active.end())) {
-	//		// TODO: change to match player num
-	//		net.createBreach(breach->getAngle(), 0, breach->getID());
-	//	}
-	//}
 	float thrust = input.getRoll();
 
 	// Move the donut (MODEL ONLY)
