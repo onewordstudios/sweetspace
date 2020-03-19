@@ -83,6 +83,7 @@
     </ClInclude>
     <ClInclude Include="..\..\source\ExternalDonutModel.h">
       <Filter>Header Files\Models</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\source\MatchmakingMode.h">
       <Filter>Header Files\Modes</Filter>
     </ClInclude>

@@ -77,9 +77,11 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	playerId = net->getPlayerID();
 	for (int i = 0; i < 3; i++) {
 		donuts.push_back(playerId == i ? PlayerDonutModel::alloc() : ExternalDonutModel::alloc());
+		shipModel->getDonuts().push_back(donuts[i]);
 	}
 	gm.setPlayerId(playerId);
-	// gm.setDonuts(shipModel);
+	gm.setDonuts(donuts); // TODO All of this should be refactored so that ship model contains a
+						  // single source of truth
 	donutModel = donuts.at(playerId);
 	// Scene graph setup
 	sgRoot.setBreaches(breaches);
