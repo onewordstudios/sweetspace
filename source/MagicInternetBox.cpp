@@ -231,7 +231,7 @@ void MagicInternetBox::update(std::shared_ptr<ShipModel> state) {
 
 		NetworkDataType type = static_cast<NetworkDataType>(message[0]);
 
-		if (message[0] > DualResolve) {
+		if (type > DualResolve) {
 			CULog("Received invalid connection message during gameplay; %d", message[0]);
 			return;
 		}
