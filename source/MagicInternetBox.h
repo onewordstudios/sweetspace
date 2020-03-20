@@ -7,11 +7,42 @@
 #include "libraries/easywsclient.hpp"
 
 class MagicInternetBox {
+   public:
+	/**
+	 * Status of whether the game is ready to start
+	 */
+	enum MatchmakingStatus {
+		Uninitialized = -1,
+		/** Connecting to server; room ID not assigned yet */
+		HostConnecting = 0,
+		/** Connected and room ID assigned; waiting for other players */
+		HostWaitingOnOthers,
+		/** Unknown error as host */
+		HostError,
+		/** Connecting to server; player ID not assigned yet */
+		ClientConnecting = 100,
+		/** Connected and player ID assigned; waiting for other players */
+		ClientWaitingOnOthers,
+		/** Room ID does not exist */
+		ClientRoomInvalid,
+		/** Room ID is full already */
+		ClientRoomFull,
+		/** Unknown error as client */
+		ClientError,
+		/** Game has started */
+		GameStart = 200
+	};
+
    private:
 	/**
 	 * The actual websocket connection
 	 */
 	easywsclient::WebSocket::pointer ws;
+
+	/**
+	 * The current status
+	 */
+	MatchmakingStatus status;
 
 	/**
 	 * The current frame, modulo the network tick rate.
@@ -78,6 +109,7 @@ class MagicInternetBox {
 	 */
 	MagicInternetBox() {
 		ws = nullptr;
+		status = Uninitialized;
 		currFrame = 0;
 		playerID = -1;
 		numPlayers = 0;
@@ -102,6 +134,11 @@ class MagicInternetBox {
 	bool initClient(std::string id);
 
 	/**
+	 * Query the current matchmaking status
+	 */
+	MatchmakingStatus matchStatus();
+
+	/**
 	 * Disconnect from the room and cleanup this object.
 	 */
 	void leaveRoom();
@@ -124,9 +161,21 @@ class MagicInternetBox {
 	unsigned int getNumPlayers();
 
 	/**
-	 * Update method called every frame.
+	 * Start the game with the current number of players.
+	 * Should only be called when the matchmaking status is waiting on others
+	 */
+	void startGame();
+
+	/**
+	 * Update method called every frame during matchmaking phase.
+	 * Should be called as long as {@link matchStatus()} is not returning {@code GameStart} and
+	 * should not be called after.
+	 */
+	void update();
+
+	/**
+	 * Update method called every frame during gameplay.
 	 * This controller will batch and handle network communication as long as this method is called.
-	 * TODO: Pass ship model into this method after it is created.
 	 */
 	void update(std::shared_ptr<ShipModel> state);
 
