@@ -131,6 +131,19 @@ int MagicInternetBox::getPlayerID() { return playerID; }
 
 unsigned int MagicInternetBox::getNumPlayers() { return numPlayers; }
 
+void MagicInternetBox::startGame() {
+	switch (status) {
+		case HostWaitingOnOthers:
+		case ClientWaitingOnOthers:
+			break;
+		default:
+			CULog("ERROR: Trying to start game during invalid state %d", status);
+			return;
+	}
+
+	status = GameStart;
+}
+
 void MagicInternetBox::update() {
 	switch (status) {
 		case Uninitialized:

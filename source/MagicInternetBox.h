@@ -161,6 +161,12 @@ class MagicInternetBox {
 	unsigned int getNumPlayers();
 
 	/**
+	 * Start the game with the current number of players.
+	 * Should only be called when the matchmaking status is waiting on others
+	 */
+	void startGame();
+
+	/**
 	 * Update method called every frame during matchmaking phase.
 	 * Should be called as long as {@link matchStatus()} is not returning {@code GameStart} and
 	 * should not be called after.
