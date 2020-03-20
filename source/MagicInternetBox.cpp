@@ -11,6 +11,15 @@ constexpr unsigned int ONE_BYTE = 256;
 constexpr unsigned int ROOM_LENGTH = 5;
 
 bool MagicInternetBox::initConnection() {
+	switch (status) {
+		case Uninitialized:
+		case HostError:
+		case ClientError:
+			break;
+		default:
+			CULog("ERROR: MIB already initialized");
+			return false;
+	}
 	using easywsclient::WebSocket;
 
 	// I actually don't know what this stuff does but it won't run on Windows without it,
@@ -37,6 +46,7 @@ bool MagicInternetBox::initConnection() {
 
 bool MagicInternetBox::initHost() {
 	if (!initConnection()) {
+		status = HostError;
 		return false;
 	}
 
@@ -45,12 +55,14 @@ bool MagicInternetBox::initHost() {
 	ws->sendBinary(data);
 	this->playerID = 0;
 	this->numPlayers = 1;
+	status = HostConnecting;
 
 	return true;
 }
 
 bool MagicInternetBox::initClient(std::string id) {
 	if (!initConnection()) {
+		status = ClientError;
 		return false;
 	}
 
@@ -61,6 +73,7 @@ bool MagicInternetBox::initClient(std::string id) {
 	}
 	ws->sendBinary(data);
 	roomID = id;
+	status = ClientConnecting;
 
 	return true;
 }
@@ -108,6 +121,8 @@ void MagicInternetBox::sendData(NetworkDataType type, float angle, int id, int d
 	ws->sendBinary(data);
 }
 
+MagicInternetBox::MatchmakingStatus MagicInternetBox::matchStatus() { return status; }
+
 void MagicInternetBox::leaveRoom() {}
 
 std::string MagicInternetBox::getRoomID() { return roomID; }
@@ -116,69 +131,92 @@ int MagicInternetBox::getPlayerID() { return playerID; }
 
 unsigned int MagicInternetBox::getNumPlayers() { return numPlayers; }
 
-void MagicInternetBox::update(std::shared_ptr<ShipModel> state) {
-	// NETWORK TICK
-	currFrame = (currFrame + 1) % NETWORK_TICK;
-	if (currFrame == 0) {
-		if (playerID != -1 && roomID != "") {
-			std::shared_ptr<DonutModel> player = state->getDonuts()[playerID];
-			float angle = player->getAngle();
-			float velocity = player->getVelocity();
-			sendData(PositionUpdate, angle, playerID, -1, -1, velocity);
-		}
+void MagicInternetBox::update() {
+	switch (status) {
+		case Uninitialized:
+			CULog("ERROR: Update called on MIB before initialization; aborting");
+			return;
+		case GameStart:
+			CULog("ERROR: Matchmaking update called on MIB after game start; aborting");
+			return;
+		default:
+			break;
 	}
 
 	ws->poll();
-	ws->dispatchBinary([&state, this](const std::vector<uint8_t>& message) {
+	ws->dispatchBinary([this](const std::vector<uint8_t>& message) {
 		if (message.size() == 0) {
-			return;
-		}
-
-		if (playerID == -1 || roomID == "") {
-			switch (static_cast<NetworkDataType>(message[0])) {
-				case AssignedRoom: {
-					std::stringstream newRoomId;
-					for (unsigned int i = 0; i < ROOM_LENGTH; i++) {
-						newRoomId << (char)message[i + 1];
-					}
-					roomID = newRoomId.str();
-					CULog("Got room ID: %s", roomID.c_str());
-					return;
-				}
-				case JoinRoom: {
-					switch (message[1]) {
-						case 0: {
-							numPlayers = message[2];
-							playerID = (int)numPlayers - 1;
-							CULog("Join Room Success; player id %d", playerID);
-							return;
-						}
-						case 1: {
-							CULog("Room Does Not Exist");
-							return;
-						}
-						case 2: {
-							CULog("Room full");
-							return;
-						}
-					}
-				}
-				default:
-					break;
-			}
-		}
-
-		if (playerID == -1 || roomID == "") {
 			return;
 		}
 
 		NetworkDataType type = static_cast<NetworkDataType>(message[0]);
 
-		if (type == PlayerJoined) {
-			CULog("Player Joined");
-			numPlayers++;
+		switch (type) {
+			case AssignedRoom: {
+				std::stringstream newRoomId;
+				for (unsigned int i = 0; i < ROOM_LENGTH; i++) {
+					newRoomId << (char)message[i + 1];
+				}
+				roomID = newRoomId.str();
+				CULog("Got room ID: %s", roomID.c_str());
+				status = HostWaitingOnOthers;
+				return;
+			}
+			case JoinRoom: {
+				switch (message[1]) {
+					case 0: {
+						numPlayers = message[2];
+						playerID = (int)numPlayers - 1;
+						CULog("Join Room Success; player id %d", playerID);
+						status = ClientWaitingOnOthers;
+						return;
+					}
+					case 1: {
+						CULog("Room Does Not Exist");
+						status = ClientRoomInvalid;
+						return;
+					}
+					case 2: {
+						CULog("Room Full");
+						status = ClientRoomFull;
+						return;
+					}
+				}
+			}
+			case PlayerJoined: {
+				CULog("Player Joined");
+				numPlayers++;
+				return;
+			}
+			default:
+				CULog("Received invalid gameplay message during connection; %d", message[0]);
+				return;
+		}
+	});
+}
+
+void MagicInternetBox::update(std::shared_ptr<ShipModel> state) {
+	if (status != GameStart) {
+		CULog("ERROR: Gameplay update called on MIB before game start; aborting");
+		return;
+	}
+
+	// NETWORK TICK
+	currFrame = (currFrame + 1) % NETWORK_TICK;
+	if (currFrame == 0) {
+		std::shared_ptr<DonutModel> player = state->getDonuts()[playerID];
+		float angle = player->getAngle();
+		float velocity = player->getVelocity();
+		sendData(PositionUpdate, angle, playerID, -1, -1, velocity);
+	}
+
+	ws->poll();
+	ws->dispatchBinary([&state](const std::vector<uint8_t>& message) {
+		if (message.size() == 0) {
 			return;
 		}
+
+		NetworkDataType type = static_cast<NetworkDataType>(message[0]);
 
 		if (message[0] > DualResolve) {
 			CULog("Received invalid connection message during gameplay; %d", message[0]);
@@ -221,7 +259,7 @@ void MagicInternetBox::update(std::shared_ptr<ShipModel> state) {
 				unsigned int taskID = id;
 				unsigned int player1 = data1;
 				unsigned int player2 = data2;
-				state->createDoor(angle, id);
+				state->createDoor(angle, taskID);
 				break;
 			}
 			case DualResolve: {
