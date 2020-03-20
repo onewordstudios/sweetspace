@@ -14,6 +14,18 @@ Coming August 2020 to Android and iOS.
 
 ## Current Progress
 
+### Technical Prototype
+
+The primary objective for the Technical Prototype was the solve the largest technical hurdle of our game's development - networking. Our goal was to have a fixed number of players (3) be able to join together into the same ship and see each other's movements. This we achieved. We also managed to add primitive support for doors, which require two players to be up against in order to open. Much of the physics is placeholder and will be improved, as will the UI, network interpolation, and general game balance. Still, it seems to work.
+
+Our game currently supports rolling around the ship in a group of three. While doing so, you can fix breaches of your color by rolling over it back and forth three times. You can also open locked doors by having two players both touch the door. You cannot interact with breaches of other colors - you'll need the correct colored player to come over and fix those. Tilt or use the arrow keys to roll left and right. Tap or click to jump (doesn't really have a purpose yet).
+
+**MATCHMAKING INSTRUCTIONS**
+
+The matchmaking is currently very fragile and will be improved greatly in future releases. For now, follow these steps. First, our free-tier Heroku Dyno sleeps after a period of inactivity, so go to [https://status.onewordstudios.fun/](https://status.onewordstudios.fun/) to make sure the server is up and running first. Next, one player should choose "Host" inside the app and give the other two players the game code. The other two players will need to click "Join" and enter the code into the textbox in the bottom right. On mobile, the onscreen keyboard may cover up the textbox; sorry. We've been fighting with the scene graph for a while now and this is the best we've gotten so far. You'll need to delete the placeholder text in there first and then enter the game code. When finished (tap outside to close the keyboard so you can see the textbox again), make sure the code is correct and then tap the "Join" button **once**. If you tap multiple times, the app may softlock. If you enter the wrong game code, the app *will* softlock. These are all things that we'll fix later, but for now are quite fragile. When all three players have joined, the game should automatically start.
+
+There is no disconnect detection; everyone should just close the app when done. There is also no conflict resolution yet, so in the relatively unlikely but possible event that a player gets de-sync-ed, you'll have to restart the game.
+
 ### Gameplay Prototype
 
 Our programming objective for the Gameplay Prototype was to have a way to test and balance the core movement mechanic of tilting one's phone to move their avatar around the ship. Our prototype successfully implemented the portions of our game that could not be modeled in our nondigital prototype into a CUGL project and provided us a way to tweak the physics constants. Only one sized level is available, and the prototype is currently only single-player, though we began laying the groundwork for multiplayer support.
