@@ -18,6 +18,9 @@
 		C122265ED47A5D2CFBAFDADF /* PlayerDonutModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C1222BBC1EB5E0874CCD2C2A /* PlayerDonutModel.cpp */; };
 		C12227559D5A695B3AD2A84C /* MatchmakingGraphRoot.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C1222700CC73840AA71C9800 /* MatchmakingGraphRoot.cpp */; };
 		C12229A6FE0EE350C0B69408 /* MatchmakingGraphRoot.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C1222700CC73840AA71C9800 /* MatchmakingGraphRoot.cpp */; };
+		C1222A784AAFE1C7BC89BC94 /* GLaDOS.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C122229A6EDF1DAB4330F1B7 /* GLaDOS.cpp */; };
+		C1222BA1DAB6BA55C0C6DEDA /* GLaDOS.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C122229A6EDF1DAB4330F1B7 /* GLaDOS.cpp */; };
+		C1222C87F6E3205CB0FD5628 /* GLaDOS.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C122229A6EDF1DAB4330F1B7 /* GLaDOS.cpp */; };
 		C1222CE9FCD72180B66462B2 /* PlayerDonutModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C1222BBC1EB5E0874CCD2C2A /* PlayerDonutModel.cpp */; };
 		C1222E686D1435B6446D0307 /* ExternalDonutModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C1222F4322133A83016A4F48 /* ExternalDonutModel.cpp */; };
 		C1222FC552DCE75362130E81 /* MatchmakingMode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C12225092193F10792C2D9D4 /* MatchmakingMode.cpp */; };
@@ -51,9 +54,6 @@
 		DF3B74552403A46B0063552F /* LoadingMode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DF3B74422403A46B0063552F /* LoadingMode.cpp */; };
 		DF3B74562403A46B0063552F /* LoadingMode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DF3B74422403A46B0063552F /* LoadingMode.cpp */; };
 		DF3B74572403A46B0063552F /* LoadingMode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DF3B74422403A46B0063552F /* LoadingMode.cpp */; };
-		DF3B74582403A46B0063552F /* GMController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DF3B74442403A46B0063552F /* GMController.cpp */; };
-		DF3B74592403A46B0063552F /* GMController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DF3B74442403A46B0063552F /* GMController.cpp */; };
-		DF3B745A2403A46B0063552F /* GMController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DF3B74442403A46B0063552F /* GMController.cpp */; };
 		DF3B745B2403A46B0063552F /* Sweetspace.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DF3B74452403A46B0063552F /* Sweetspace.cpp */; };
 		DF3B745C2403A46B0063552F /* Sweetspace.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DF3B74452403A46B0063552F /* Sweetspace.cpp */; };
 		DF3B745D2403A46B0063552F /* Sweetspace.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DF3B74452403A46B0063552F /* Sweetspace.cpp */; };
@@ -162,8 +162,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		7B3270692425A569004A3B36 /* GLaDOS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLaDOS.h; sourceTree = "<group>"; };
 		A577C9232422AA0D00B12ADE /* DoorNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DoorNode.cpp; sourceTree = "<group>"; };
 		A577C9272422AA0D00B12ADE /* DoorNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DoorNode.h; sourceTree = "<group>"; };
+		C122229A6EDF1DAB4330F1B7 /* GLaDOS.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLaDOS.cpp; sourceTree = "<group>"; };
 		C12225092193F10792C2D9D4 /* MatchmakingMode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MatchmakingMode.cpp; sourceTree = "<group>"; };
 		C1222700CC73840AA71C9800 /* MatchmakingGraphRoot.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MatchmakingGraphRoot.cpp; sourceTree = "<group>"; };
 		C122270EE9BF22663C6BDB22 /* ExternalDonutModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExternalDonutModel.h; sourceTree = "<group>"; };
@@ -191,9 +193,7 @@
 		DF3B74412403A46B0063552F /* DonutModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DonutModel.h; sourceTree = "<group>"; };
 		DF3B74422403A46B0063552F /* LoadingMode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LoadingMode.cpp; sourceTree = "<group>"; };
 		DF3B74432403A46B0063552F /* LoadingMode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoadingMode.h; sourceTree = "<group>"; };
-		DF3B74442403A46B0063552F /* GMController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GMController.cpp; sourceTree = "<group>"; };
 		DF3B74452403A46B0063552F /* Sweetspace.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Sweetspace.cpp; sourceTree = "<group>"; };
-		DF3B74472403A46B0063552F /* GMController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GMController.h; sourceTree = "<group>"; };
 		DF3B74482403A46B0063552F /* Sweetspace.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Sweetspace.h; sourceTree = "<group>"; };
 		DF3B74492403A46B0063552F /* GameMode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GameMode.cpp; sourceTree = "<group>"; };
 		DF3B744A2403A46B0063552F /* GameGraphRoot.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GameGraphRoot.cpp; sourceTree = "<group>"; };
@@ -457,8 +457,8 @@
 				DF3B743D2403A46A0063552F /* GameGraphRoot.h */,
 				DF3B74492403A46B0063552F /* GameMode.cpp */,
 				DF3B743B2403A46A0063552F /* GameMode.h */,
-				DF3B74442403A46B0063552F /* GMController.cpp */,
-				DF3B74472403A46B0063552F /* GMController.h */,
+				C122229A6EDF1DAB4330F1B7 /* GLaDOS.cpp */,
+				7B3270692425A569004A3B36 /* GLaDOS.h */,
 				DF3B74402403A46B0063552F /* InputController.cpp */,
 				DF3B743C2403A46A0063552F /* InputController.h */,
 				DF3B74422403A46B0063552F /* LoadingMode.cpp */,
@@ -665,7 +665,6 @@
 			files = (
 				DF3B744E2403A46B0063552F /* DonutModel.cpp in Sources */,
 				DF3B74572403A46B0063552F /* LoadingMode.cpp in Sources */,
-				DF3B745A2403A46B0063552F /* GMController.cpp in Sources */,
 				DF3B74662403A46B0063552F /* BreachModel.cpp in Sources */,
 				DF3B745D2403A46B0063552F /* Sweetspace.cpp in Sources */,
 				DF3B74602403A46B0063552F /* GameMode.cpp in Sources */,
@@ -682,6 +681,7 @@
 				D152280455B6C3C470B28DBC /* DoorModel.cpp in Sources */,
 				C12227559D5A695B3AD2A84C /* MatchmakingGraphRoot.cpp in Sources */,
 				C122202B76FF5A7E71E2DF7F /* MatchmakingMode.cpp in Sources */,
+				C1222A784AAFE1C7BC89BC94 /* GLaDOS.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -691,7 +691,6 @@
 			files = (
 				DF3B744D2403A46B0063552F /* DonutModel.cpp in Sources */,
 				DF3B74562403A46B0063552F /* LoadingMode.cpp in Sources */,
-				DF3B74592403A46B0063552F /* GMController.cpp in Sources */,
 				DF3B74652403A46B0063552F /* BreachModel.cpp in Sources */,
 				DF3B745C2403A46B0063552F /* Sweetspace.cpp in Sources */,
 				DF3B745F2403A46B0063552F /* GameMode.cpp in Sources */,
@@ -709,6 +708,7 @@
 				D15226D74B5F1C4C77EC84B1 /* DoorModel.cpp in Sources */,
 				C12229A6FE0EE350C0B69408 /* MatchmakingGraphRoot.cpp in Sources */,
 				C1222FC552DCE75362130E81 /* MatchmakingMode.cpp in Sources */,
+				C1222C87F6E3205CB0FD5628 /* GLaDOS.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -718,7 +718,6 @@
 			files = (
 				DF3B744C2403A46B0063552F /* DonutModel.cpp in Sources */,
 				DF3B74552403A46B0063552F /* LoadingMode.cpp in Sources */,
-				DF3B74582403A46B0063552F /* GMController.cpp in Sources */,
 				DF3B74642403A46B0063552F /* BreachModel.cpp in Sources */,
 				DF3B745B2403A46B0063552F /* Sweetspace.cpp in Sources */,
 				DF3B745E2403A46B0063552F /* GameMode.cpp in Sources */,
@@ -736,6 +735,7 @@
 				D152241D12DF18170D97502F /* DoorModel.cpp in Sources */,
 				C122231BF74B6D2B4DFA3857 /* MatchmakingGraphRoot.cpp in Sources */,
 				C1222440665C00173B68F8B3 /* MatchmakingMode.cpp in Sources */,
+				C1222BA1DAB6BA55C0C6DEDA /* GLaDOS.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
