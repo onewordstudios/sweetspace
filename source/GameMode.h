@@ -52,7 +52,7 @@ class GameMode {
 	/** A reference to the player donut */
 	std::shared_ptr<DonutModel> donutModel;
 	/** The Ship model */
-	std::shared_ptr<ShipModel> shipModel;
+	std::shared_ptr<ShipModel> ship;
 
 	bool host = true;
 	int playerID;

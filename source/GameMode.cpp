@@ -73,13 +73,13 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	net = mib;
 
 	playerID = net->getPlayerID();
-	shipModel = ShipModel::alloc(net->getNumPlayers(), MAX_EVENTS, MAX_DOORS, playerID);
-	gm.init(shipModel, net);
+	ship = ShipModel::alloc(net->getNumPlayers(), MAX_EVENTS, MAX_DOORS, playerID);
+	gm.init(ship, net);
 
-	donutModel = shipModel->getDonuts().at(static_cast<unsigned long>(playerID));
+	donutModel = ship->getDonuts().at(static_cast<unsigned long>(playerID));
 
 	// Scene graph setup
-	sgRoot.init(assets, shipModel, playerID);
+	sgRoot.init(assets, ship, playerID);
 
 	return true;
 }
@@ -117,50 +117,50 @@ void GameMode::reset() {
 void GameMode::update(float timestep) {
 	input.update(timestep);
 
-	net->update(shipModel);
+	net->update(ship);
 
 	// Breach health depletion
 	for (int i = 0; i < MAX_EVENTS; i++) {
-		if (shipModel->getBreaches().at(i) == nullptr) {
+		if (ship->getBreaches().at(i) == nullptr) {
 			continue;
 		}
-		float diff = (float)M_PI -
-					 abs(abs(donutModel->getAngle() - shipModel->getBreaches().at(i)->getAngle()) -
-						 (float)M_PI);
+		float diff =
+			(float)M_PI -
+			abs(abs(donutModel->getAngle() - ship->getBreaches().at(i)->getAngle()) - (float)M_PI);
 
-		if (playerID == shipModel->getBreaches().at(i)->getPlayer() && diff < EPSILON_ANGLE &&
-			!shipModel->getBreaches().at(i)->isPlayerOn() && donutModel->getJumpOffset() == 0.0f) {
-			shipModel->getBreaches().at(i)->decHealth(1);
-			shipModel->getBreaches().at(i)->setIsPlayerOn(true);
+		if (playerID == ship->getBreaches().at(i)->getPlayer() && diff < EPSILON_ANGLE &&
+			!ship->getBreaches().at(i)->isPlayerOn() && donutModel->getJumpOffset() == 0.0f) {
+			ship->getBreaches().at(i)->decHealth(1);
+			ship->getBreaches().at(i)->setIsPlayerOn(true);
 
-			if (shipModel->getBreaches().at(i)->getHealth() == 0) {
+			if (ship->getBreaches().at(i)->getHealth() == 0) {
 				net->resolveBreach(i);
 			}
 
-		} else if (diff > EPSILON_ANGLE && shipModel->getBreaches().at(i)->isPlayerOn()) {
-			shipModel->getBreaches().at(i)->setIsPlayerOn(false);
+		} else if (diff > EPSILON_ANGLE && ship->getBreaches().at(i)->isPlayerOn()) {
+			ship->getBreaches().at(i)->setIsPlayerOn(false);
 		}
 	}
 
 	for (int i = 0; i < MAX_DOORS; i++) {
-		if (shipModel->getDoors().at(i) == nullptr || shipModel->getDoors().at(i)->halfOpen() ||
-			shipModel->getDoors().at(i)->getAngle() < 0) {
+		if (ship->getDoors().at(i) == nullptr || ship->getDoors().at(i)->halfOpen() ||
+			ship->getDoors().at(i)->getAngle() < 0) {
 			continue;
 		}
-		float diff = (float)M_PI -
-					 abs(abs(donutModel->getAngle() - shipModel->getDoors().at(i)->getAngle()) -
-						 (float)M_PI);
+		float diff =
+			(float)M_PI -
+			abs(abs(donutModel->getAngle() - ship->getDoors().at(i)->getAngle()) - (float)M_PI);
 
 		if (diff < DOOR_WIDTH) {
 			// TODO: Real physics...
 			donutModel->applyForce(-6 * donutModel->getVelocity());
 		}
 		if (diff < DOOR_ACTIVE_ANGLE) {
-			shipModel->getDoors().at(i)->addPlayer(playerID);
+			ship->getDoors().at(i)->addPlayer(playerID);
 			net->flagDualTask(i, playerID, 1);
 		} else {
-			if (shipModel->getDoors().at(i)->isPlayerOn(playerID)) {
-				shipModel->getDoors().at(i)->removePlayer(playerID);
+			if (ship->getDoors().at(i)->isPlayerOn(playerID)) {
+				ship->getDoors().at(i)->removePlayer(playerID);
 				net->flagDualTask(i, playerID, 0);
 			}
 		}
@@ -176,8 +176,8 @@ void GameMode::update(float timestep) {
 		donutModel->startJump();
 	}
 
-	for (unsigned int i = 0; i < shipModel->getDonuts().size(); i++) {
-		shipModel->getDonuts()[i]->update(timestep);
+	for (unsigned int i = 0; i < ship->getDonuts().size(); i++) {
+		ship->getDonuts()[i]->update(timestep);
 	}
 
 	sgRoot.update(timestep);
