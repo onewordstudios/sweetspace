@@ -21,7 +21,7 @@
 
 #include <vector>
 
-#include "GMController.h"
+#include "GLaDOS.h"
 #include "GameGraphRoot.h"
 #include "InputController.h"
 #include "MagicInternetBox.h"
