@@ -10,9 +10,10 @@
 #include "ShipModel.h"
 
 /**
- * This class represents the GM of the game
+ * Game Logic and Distribution Operations Synthesizer
+ * The controller class responsible for generating the challenges in the game.
  */
-class GMController {
+class GLaDOS {
    private:
 	/** Whether or not this input is active */
 	bool active;
@@ -38,12 +39,12 @@ class GMController {
 	 * This constructor does NOT do any initialization.  It simply allocates the
 	 * object. This makes it safe to use this class without a pointer.
 	 */
-	GMController(); // Don't initialize.  Allow stack based
+	GLaDOS(); // Don't initialize.  Allow stack based
 
 	/**
 	 * Disposes of this GM controller, releasing all resources.
 	 */
-	~GMController() { dispose(); }
+	~GLaDOS() { dispose(); }
 
 	/**
 	 * Deactivates this GM controller.

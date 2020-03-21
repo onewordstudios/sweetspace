@@ -40,7 +40,7 @@ class GameMode {
 	/** Controller for abstracting out input across multiple platforms */
 	InputController input;
 	/** Controller for GM */
-	GMController gm;
+	GLaDOS gm;
 	/** Networking controller*/
 	std::shared_ptr<MagicInternetBox> net;
 
