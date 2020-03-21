@@ -28,7 +28,7 @@
 #include "ShipModel.h"
 
 /**
- * This class is the primary gameplay constroller for the demo.
+ * This class is the primary gameplay controller.
  *
  * A world has its own objects, assets, and input controller.  Thus this is
  * really a mini-GameEngine in its own right.  As in 3152, we separate it out
@@ -49,14 +49,8 @@ class GameMode {
 	GameGraphRoot sgRoot;
 
 	// MODEL
-	/** The donut model */
+	/** A reference to the player donut */
 	std::shared_ptr<DonutModel> donutModel;
-	/** The list of breaches */
-	std::vector<std::shared_ptr<DonutModel>> donuts;
-	/** The list of breaches */
-	std::vector<std::shared_ptr<BreachModel>> breaches;
-	/** The list of breaches */
-	std::vector<std::shared_ptr<DoorModel>> doors;
 	/** The Ship model */
 	std::shared_ptr<ShipModel> shipModel;
 
@@ -72,7 +66,7 @@ class GameMode {
 	 * This constructor does not allocate any objects or start the game.
 	 * This allows us to use the object without a heap pointer.
 	 */
-	GameMode() {}
+	GameMode() : playerId(-1) {}
 
 	/**
 	 * Disposes of all (non-static) resources allocated to this mode.

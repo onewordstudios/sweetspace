@@ -72,36 +72,14 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	input.init();
 	net = mib;
 
-	for (int i = 0; i < MAX_EVENTS; i++) {
-		breaches.push_back(BreachModel::alloc());
-	}
-
-	for (int i = 0; i < MAX_DOORS; i++) {
-		doors.push_back(DoorModel::alloc());
-	}
-
-	shipModel = ShipModel::alloc(donuts, breaches, doors);
-	gm.init(donuts, breaches, doors, net, -1);
-	while (net->getPlayerID() == -1) {
-		net->update(shipModel);
-	}
 	playerId = net->getPlayerID();
-	for (int i = 0; i < 3; i++) {
-		donuts.push_back(playerId == i ? PlayerDonutModel::alloc() : ExternalDonutModel::alloc());
-		shipModel->getDonuts().push_back(donuts[i]);
-		donuts[i]->setColorId(i % int(sgRoot.playerColor.size()));
-	}
-	gm.setPlayerId(playerId);
-	gm.setDonuts(donuts); // TODO All of this should be refactored so that ship model contains a
-						  // single source of truth
-	donutModel = donuts.at(static_cast<unsigned long>(playerId));
+	shipModel = ShipModel::alloc(net->getNumPlayers(), MAX_EVENTS, MAX_DOORS, playerId);
+	gm.init(shipModel, net);
+
+	donutModel = shipModel->getDonuts().at(static_cast<unsigned long>(playerId));
 
 	// Scene graph setup
-	sgRoot.setBreaches(breaches);
-	sgRoot.setDoors(doors);
-	sgRoot.setDonuts(donuts);
-	sgRoot.setPlayerId(playerId);
-	sgRoot.init(assets);
+	sgRoot.init(assets, shipModel, playerId);
 
 	return true;
 }
@@ -143,43 +121,46 @@ void GameMode::update(float timestep) {
 
 	// Breach health depletion
 	for (int i = 0; i < MAX_EVENTS; i++) {
-		if (breaches.at(i) == nullptr) {
+		if (shipModel->getBreaches().at(i) == nullptr) {
 			continue;
 		}
 		float diff = (float)M_PI -
-					 abs(abs(donutModel->getAngle() - breaches.at(i)->getAngle()) - (float)M_PI);
+					 abs(abs(donutModel->getAngle() - shipModel->getBreaches().at(i)->getAngle()) -
+						 (float)M_PI);
 
-		if (playerId == breaches.at(i)->getPlayer() && diff < EPSILON_ANGLE &&
-			!breaches.at(i)->isPlayerOn() && donutModel->getJumpOffset() == 0.0f) {
-			breaches.at(i)->decHealth(1);
-			breaches.at(i)->setIsPlayerOn(true);
+		if (playerId == shipModel->getBreaches().at(i)->getPlayer() && diff < EPSILON_ANGLE &&
+			!shipModel->getBreaches().at(i)->isPlayerOn() && donutModel->getJumpOffset() == 0.0f) {
+			shipModel->getBreaches().at(i)->decHealth(1);
+			shipModel->getBreaches().at(i)->setIsPlayerOn(true);
 
-			if (breaches.at(i)->getHealth() == 0) {
+			if (shipModel->getBreaches().at(i)->getHealth() == 0) {
 				net->resolveBreach(i);
 			}
 
-		} else if (diff > EPSILON_ANGLE && breaches.at(i)->isPlayerOn()) {
-			breaches.at(i)->setIsPlayerOn(false);
+		} else if (diff > EPSILON_ANGLE && shipModel->getBreaches().at(i)->isPlayerOn()) {
+			shipModel->getBreaches().at(i)->setIsPlayerOn(false);
 		}
 	}
 
 	for (int i = 0; i < MAX_DOORS; i++) {
-		if (doors.at(i) == nullptr || doors.at(i)->halfOpen() || doors.at(i)->getAngle() < 0) {
+		if (shipModel->getDoors().at(i) == nullptr || shipModel->getDoors().at(i)->halfOpen() ||
+			shipModel->getDoors().at(i)->getAngle() < 0) {
 			continue;
 		}
-		float diff =
-			(float)M_PI - abs(abs(donutModel->getAngle() - doors.at(i)->getAngle()) - (float)M_PI);
+		float diff = (float)M_PI -
+					 abs(abs(donutModel->getAngle() - shipModel->getDoors().at(i)->getAngle()) -
+						 (float)M_PI);
 
 		if (diff < DOOR_WIDTH) {
 			// TODO: Real physics...
 			donutModel->applyForce(-6 * donutModel->getVelocity());
 		}
 		if (diff < DOOR_ACTIVE_ANGLE) {
-			doors.at(i)->addPlayer(playerId);
+			shipModel->getDoors().at(i)->addPlayer(playerId);
 			net->flagDualTask(i, playerId, 1);
 		} else {
-			if (doors.at(i)->isPlayerOn(playerId)) {
-				doors.at(i)->removePlayer(playerId);
+			if (shipModel->getDoors().at(i)->isPlayerOn(playerId)) {
+				shipModel->getDoors().at(i)->removePlayer(playerId);
 				net->flagDualTask(i, playerId, 0);
 			}
 		}
@@ -195,8 +176,8 @@ void GameMode::update(float timestep) {
 		donutModel->startJump();
 	}
 
-	for (unsigned int i = 0; i < donuts.size(); i++) {
-		donuts[i]->update(timestep);
+	for (unsigned int i = 0; i < shipModel->getDonuts().size(); i++) {
+		shipModel->getDonuts()[i]->update(timestep);
 	}
 
 	sgRoot.update(timestep);

@@ -54,16 +54,11 @@ void GMController::dispose() {
  *
  * @return true if the controller was initialized successfully
  */
-bool GMController::init(std::vector<std::shared_ptr<DonutModel>> d,
-						std::vector<std::shared_ptr<BreachModel>> b,
-						std::vector<std::shared_ptr<DoorModel>> dr,
-						std::shared_ptr<MagicInternetBox>& mib, int playerId) {
+bool GMController::init(std::shared_ptr<ShipModel> ship, std::shared_ptr<MagicInternetBox> mib) {
 	bool success = true;
-	donuts = d;
-	breaches = b;
-	doors = dr;
+	this->ship = ship;
 	this->mib = mib;
-	this->playerId = playerId;
+	this->playerId = mib->getPlayerID();
 	for (int i = 0; i < MAX_EVENTS; i++) {
 		breachFree.at(i) = true;
 	}
@@ -84,25 +79,25 @@ bool GMController::init(std::vector<std::shared_ptr<DonutModel>> d,
 void GMController::update(float dt) {
 	// Removing breaches that have 0 health left
 	for (int i = 0; i < MAX_EVENTS; i++) {
-		if (breaches.at(i) == nullptr) {
+		if (ship->getBreaches().at(i) == nullptr) {
 			continue;
 		}
-		if (breaches.at(i)->getHealth() == 0) {
-			breaches.at(i)->setAngle(-1);
+		if (ship->getBreaches().at(i)->getHealth() == 0) {
+			ship->getBreaches().at(i)->setAngle(-1);
 			breachFree.at(i) = true;
 		}
 	}
 
 	// Remove doors that have been resolved and opened. Also raise doors that are resolved.
 	for (int i = 0; i < MAX_DOORS; i++) {
-		if (doors.at(i) == nullptr) {
+		if (ship->getDoors().at(i) == nullptr) {
 			continue;
 		}
-		if (doors.at(i)->resolvedAndRaised()) {
-			doors.at(i)->setAngle(-1);
+		if (ship->getDoors().at(i)->resolvedAndRaised()) {
+			ship->getDoors().at(i)->setAngle(-1);
 			doorFree.at(i) = true;
-		} else if (doors.at(i)->resolved()) {
-			doors.at(i)->raiseDoor();
+		} else if (ship->getDoors().at(i)->resolved()) {
+			ship->getDoors().at(i)->raiseDoor();
 		}
 	}
 
@@ -115,8 +110,8 @@ void GMController::update(float dt) {
 			if (breachFree.at(i)) {
 				float angle = (rand() % FULL_CIRCLE) * (float)M_PI / DonutModel::HALF_CIRCLE;
 				breachFree.at(i) = false;
-				int p = rand() % donuts.size();
-				breaches.at(i)->reset(angle, p);
+				int p = rand() % ship->getDonuts().size();
+				ship->getBreaches().at(i)->reset(angle, p);
 				mib->createBreach(angle, p, i);
 				break;
 			}
@@ -125,9 +120,10 @@ void GMController::update(float dt) {
 			if (doorFree.at(i)) {
 				float angle = (rand() % FULL_CIRCLE) * (float)M_PI / DonutModel::HALF_CIRCLE;
 				bool goodAngle = true;
-				for (int j = 0; j < donuts.size(); j++) {
+				for (int j = 0; j < ship->getDonuts().size(); j++) {
 					float diff =
-						(float)M_PI - abs(abs(donuts.at(j)->getAngle() - angle) - (float)M_PI);
+						(float)M_PI -
+						abs(abs(ship->getDonuts().at(j)->getAngle() - angle) - (float)M_PI);
 					if (diff < MIN_ANGLE_DIFF) {
 						goodAngle = false;
 						break;
@@ -136,8 +132,8 @@ void GMController::update(float dt) {
 				if (!goodAngle) {
 					continue;
 				}
-				doors.at(i)->setAngle(angle);
-				doors.at(i)->clear();
+				ship->getDoors().at(i)->setAngle(angle);
+				ship->getDoors().at(i)->clear();
 				doorFree.at(i) = false;
 				mib->createDualTask(angle, -1, -1, i);
 				break;
@@ -151,7 +147,7 @@ void GMController::update(float dt) {
  */
 void GMController::clear() {
 	for (int i = 0; i < MAX_EVENTS; i++) {
-		breaches.at(i) = nullptr;
+		ship->getBreaches().at(i) = nullptr;
 		breachFree.at(i) = true;
 	}
 	numEvents = 0;

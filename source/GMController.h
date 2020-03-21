@@ -20,17 +20,11 @@ class GMController {
 	/** Current number of breaches on ship */
 	unsigned int numEvents;
 
-	/** PlayerId owning this GMController. -1 means no player id assigned yet. */
+	/** Current player ID */
 	unsigned int playerId;
 
-	/** Current breaches on ship */
-	std::vector<std::shared_ptr<DonutModel>> donuts;
-
-	/** Current breaches on ship */
-	std::vector<std::shared_ptr<BreachModel>> breaches;
-
-	/** Current doors on ship */
-	std::vector<std::shared_ptr<DoorModel>> doors;
+	/** The state of the ship */
+	std::shared_ptr<ShipModel> ship;
 
 	/** Network Controller for outbound calls */
 	shared_ptr<MagicInternetBox> mib;
@@ -67,10 +61,7 @@ class GMController {
 	 *
 	 * @return true if the controller was initialized successfully
 	 */
-	bool init(std::vector<std::shared_ptr<DonutModel>> donuts,
-			  std::vector<std::shared_ptr<BreachModel>> breaches,
-			  std::vector<std::shared_ptr<DoorModel>> doors, shared_ptr<MagicInternetBox>& mib,
-			  int playerId);
+	bool init(std::shared_ptr<ShipModel> ship, std::shared_ptr<MagicInternetBox> mib);
 
 #pragma mark -
 #pragma mark GM Handling
@@ -105,15 +96,7 @@ class GMController {
 
 	/**
 	 * Gets the current player id of this gm.
-	 *
 	 */
 	int getPlayerId() { return playerId; }
-
-	/**
-	 * Sets the donut vector to new donut vector
-	 *
-	 * @param donuts New donut vector.
-	 */
-	void setDonuts(std::vector<std::shared_ptr<DonutModel>> donuts) { this->donuts = donuts; }
 };
 #endif /* __GM_CONTROLLER_H__ */
