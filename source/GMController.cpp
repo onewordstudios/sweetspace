@@ -32,7 +32,7 @@ array<bool, MAX_DOORS> doorFree;
  * This constructor does NOT do any initialzation.  It simply allocates the
  * object. This makes it safe to use this class without a pointer.
  */
-GMController::GMController() : active(false), numEvents(0), playerId(0) {}
+GMController::GMController() : active(false), numEvents(0), playerID(0) {}
 
 /**
  * Deactivates this input controller, releasing all listeners.
@@ -58,7 +58,7 @@ bool GMController::init(std::shared_ptr<ShipModel> ship, std::shared_ptr<MagicIn
 	bool success = true;
 	this->ship = ship;
 	this->mib = mib;
-	this->playerId = mib->getPlayerID();
+	this->playerID = mib->getPlayerID();
 	for (int i = 0; i < MAX_EVENTS; i++) {
 		breachFree.at(i) = true;
 	}
@@ -102,7 +102,7 @@ void GMController::update(float dt) {
 	}
 
 	// Check if this is the host for generating breaches and doors
-	if (playerId == 0) {
+	if (playerID == 0) {
 		// Simple logic for adding a breach when under max and randomly, replace with actual logic
 		// later
 		if (rand() % SPAWN_RATE > 1) return;

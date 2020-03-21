@@ -55,7 +55,7 @@ class GameMode {
 	std::shared_ptr<ShipModel> shipModel;
 
 	bool host = true;
-	int playerId;
+	int playerID;
 
    public:
 #pragma mark -
@@ -66,7 +66,7 @@ class GameMode {
 	 * This constructor does not allocate any objects or start the game.
 	 * This allows us to use the object without a heap pointer.
 	 */
-	GameMode() : playerId(-1) {}
+	GameMode() : playerID(-1) {}
 
 	/**
 	 * Disposes of all (non-static) resources allocated to this mode.

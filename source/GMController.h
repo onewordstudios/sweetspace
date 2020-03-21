@@ -21,7 +21,7 @@ class GMController {
 	unsigned int numEvents;
 
 	/** Current player ID */
-	unsigned int playerId;
+	unsigned int playerID;
 
 	/** The state of the ship */
 	std::shared_ptr<ShipModel> ship;
@@ -92,11 +92,11 @@ class GMController {
 	 *
 	 * @param health New gm player id.
 	 */
-	void setPlayerId(int value) { playerId = value; }
+	void setPlayerId(int value) { playerID = value; }
 
 	/**
 	 * Gets the current player id of this gm.
 	 */
-	int getPlayerId() { return playerId; }
+	int getPlayerId() { return playerID; }
 };
 #endif /* __GM_CONTROLLER_H__ */

@@ -72,14 +72,14 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	input.init();
 	net = mib;
 
-	playerId = net->getPlayerID();
-	shipModel = ShipModel::alloc(net->getNumPlayers(), MAX_EVENTS, MAX_DOORS, playerId);
+	playerID = net->getPlayerID();
+	shipModel = ShipModel::alloc(net->getNumPlayers(), MAX_EVENTS, MAX_DOORS, playerID);
 	gm.init(shipModel, net);
 
-	donutModel = shipModel->getDonuts().at(static_cast<unsigned long>(playerId));
+	donutModel = shipModel->getDonuts().at(static_cast<unsigned long>(playerID));
 
 	// Scene graph setup
-	sgRoot.init(assets, shipModel, playerId);
+	sgRoot.init(assets, shipModel, playerID);
 
 	return true;
 }
@@ -128,7 +128,7 @@ void GameMode::update(float timestep) {
 					 abs(abs(donutModel->getAngle() - shipModel->getBreaches().at(i)->getAngle()) -
 						 (float)M_PI);
 
-		if (playerId == shipModel->getBreaches().at(i)->getPlayer() && diff < EPSILON_ANGLE &&
+		if (playerID == shipModel->getBreaches().at(i)->getPlayer() && diff < EPSILON_ANGLE &&
 			!shipModel->getBreaches().at(i)->isPlayerOn() && donutModel->getJumpOffset() == 0.0f) {
 			shipModel->getBreaches().at(i)->decHealth(1);
 			shipModel->getBreaches().at(i)->setIsPlayerOn(true);
@@ -156,12 +156,12 @@ void GameMode::update(float timestep) {
 			donutModel->applyForce(-6 * donutModel->getVelocity());
 		}
 		if (diff < DOOR_ACTIVE_ANGLE) {
-			shipModel->getDoors().at(i)->addPlayer(playerId);
-			net->flagDualTask(i, playerId, 1);
+			shipModel->getDoors().at(i)->addPlayer(playerID);
+			net->flagDualTask(i, playerID, 1);
 		} else {
-			if (shipModel->getDoors().at(i)->isPlayerOn(playerId)) {
-				shipModel->getDoors().at(i)->removePlayer(playerId);
-				net->flagDualTask(i, playerId, 0);
+			if (shipModel->getDoors().at(i)->isPlayerOn(playerID)) {
+				shipModel->getDoors().at(i)->removePlayer(playerID);
+				net->flagDualTask(i, playerID, 0);
 			}
 		}
 	}

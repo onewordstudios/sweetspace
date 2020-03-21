@@ -52,7 +52,7 @@ constexpr unsigned int RADIUS = 550;
  */
 bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 						 std::shared_ptr<ShipModel> ship, unsigned int playerID) {
-	this->playerId = playerID;
+	this->playerID = playerID;
 	this->ship = ship;
 
 	// Initialize the scene to a locked width
@@ -88,7 +88,7 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 		string donutColor = playerColor.at(static_cast<unsigned long>(donutModel->getColorId()));
 		std::shared_ptr<Texture> image = assets->get<Texture>("donut_" + donutColor);
 		// Player node is handled separately
-		if (i == playerId) {
+		if (i == playerID) {
 			donutNode->setTexture(image);
 		} else {
 			std::shared_ptr<DonutNode> newDonutNode = DonutNode::allocWithTexture(image);
@@ -180,7 +180,7 @@ void GameGraphRoot::update(float timestep) {
 	// Update the HUD
 	coordHUD->setText(positionText());
 
-	float angle = TWO_PI - ship->getDonuts().at(playerId)->getAngle();
+	float angle = TWO_PI - ship->getDonuts().at(playerID)->getAngle();
 
 	// Reanchor the node at the center of the screen and rotate about center.
 	Vec2 position = farSpace->getPosition();
@@ -197,11 +197,11 @@ void GameGraphRoot::update(float timestep) {
 	double radiusRatio = RADIUS / (donutNode->getWidth() / 2.0);
 
 	angle = donutNode->getAngle() -
-			ship->getDonuts().at(playerId)->getVelocity() * PI_180 * radiusRatio;
+			ship->getDonuts().at(playerID)->getVelocity() * PI_180 * radiusRatio;
 	donutNode->setAnchor(Vec2::ANCHOR_CENTER);
 	donutNode->setAngle(angle);
 	// Draw Jump Offset
-	float donutNewY = donutPos.y + ship->getDonuts().at(playerId)->getJumpOffset() * screenHeight;
+	float donutNewY = donutPos.y + ship->getDonuts().at(playerID)->getJumpOffset() * screenHeight;
 	donutNode->setPositionY(donutNewY);
 
 	for (int i = 0; i < ship->getBreaches().size(); i++) {
@@ -241,7 +241,7 @@ void GameGraphRoot::update(float timestep) {
  */
 std::string GameGraphRoot::positionText() {
 	stringstream ss;
-	ss << "Angle: (" << (float)ship->getDonuts().at(playerId)->getAngle() / PI_180 << ")";
+	ss << "Angle: (" << (float)ship->getDonuts().at(playerID)->getAngle() / PI_180 << ")";
 	return ss.str();
 }
 

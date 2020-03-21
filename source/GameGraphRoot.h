@@ -32,7 +32,7 @@ class GameGraphRoot : public cugl::Scene {
 
 	// MODEL
 	/** Id of the current client */
-	unsigned int playerId;
+	unsigned int playerID;
 	/** The ship */
 	std::shared_ptr<ShipModel> ship;
 
