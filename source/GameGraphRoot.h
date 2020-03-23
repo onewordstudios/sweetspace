@@ -4,6 +4,9 @@
 
 #include <vector>
 
+#include "BreachModel.h"
+#include "BreachNode.h"
+#include "DonutModel.h"
 #include "DonutNode.h"
 #include "DoorNode.h"
 #include "InputController.h"
@@ -29,6 +32,8 @@ class GameGraphRoot : public cugl::Scene {
 	std::shared_ptr<cugl::Node> farSpace;
 	/** Foreground in animation parallax. Stores the planets. */
 	std::shared_ptr<cugl::Node> nearSpace;
+	/** Parent node of all breaches, is child of nearSpace */
+	std::shared_ptr<cugl::Node> breachesNode;
 
 	// MODEL
 	/** Id of the current client */
@@ -52,7 +57,10 @@ class GameGraphRoot : public cugl::Scene {
 #pragma mark Public Consts
 	/** Possible colors for player representations */
 	const std::vector<string> playerColor{"yellow", "red", "purple", "green", "orange"};
-
+	/** number of possible player colors */
+	static constexpr int NUM_COLORS = 5;
+	/** The scale of the breach textures. */
+	static constexpr float BREACH_SCALE = 0.25;
 #pragma mark -
 #pragma mark Constructors
 	/**

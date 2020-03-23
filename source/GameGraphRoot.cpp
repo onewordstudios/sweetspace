@@ -21,9 +21,6 @@ constexpr float TWO_PI = (float)(2 * M_PI);
 /** Pi over 180 for converting between degrees and radians */
 constexpr float PI_180 = (float)(M_PI / 180);
 
-/** The scale of the breach textures. */
-constexpr float BREACH_SCALE = 0.25;
-
 /** The scale of the donut textures. */
 constexpr float DONUT_SCALE = 0.32f;
 
@@ -81,6 +78,8 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	donutNode = dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_player1"));
 	donutPos = donutNode->getPosition();
 	coordHUD = std::dynamic_pointer_cast<Label>(assets->get<Node>("game_hud"));
+	breachesNode = Node::alloc();
+	nearSpace->addChildWithName(breachesNode, "breaches_node");
 
 	// Initialize Players
 	for (int i = 0; i < ship->getDonuts().size(); i++) {
@@ -111,14 +110,15 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 										   .at(static_cast<unsigned long>(breachModel->getPlayer()))
 										   ->getColorId()));
 		std::shared_ptr<Texture> image = assets->get<Texture>("breach_" + breachColor);
-		std::shared_ptr<PolygonNode> breachNode = PolygonNode::allocWithTexture(image);
-		breachModel->setSprite(breachNode);
+		std::shared_ptr<BreachNode> breachNode = BreachNode::allocWithTexture(image);
+		breachNode->setModel(breachModel);
+		breachNode->setTag(i + 1);
 		breachNode->setScale(BREACH_SCALE);
-		// Add the breach node
-		nearSpace->addChild(breachNode);
 		// Start position is off screen
 		Vec2 breachPos = Vec2(0, 0);
-		breachModel->getSprite()->setPosition(breachPos);
+		breachNode->setPosition(breachPos);
+		// Add the breach node
+		breachesNode->addChild(breachNode);
 	}
 
 	for (int i = 0; i < ship->getDoors().size(); i++) {
@@ -206,26 +206,16 @@ void GameGraphRoot::update(float timestep) {
 
 	for (int i = 0; i < ship->getBreaches().size(); i++) {
 		std::shared_ptr<BreachModel> breachModel = ship->getBreaches().at(i);
-		if (breachModel->getHealth() > 0) {
-			if (breachModel->getNeedSpriteUpdate()) {
-				string breachColor = playerColor.at(static_cast<unsigned long>(
-					ship->getDonuts()
-						.at(static_cast<unsigned long>(breachModel->getPlayer()))
-						->getColorId()));
-				std::shared_ptr<Texture> image = assets->get<Texture>("breach_" + breachColor);
-				breachModel->getSprite()->setTexture(image);
-				breachModel->setNeedSpriteUpdate(false);
-			}
-			Vec2 breachPos = Vec2(DIAMETER + RADIUS * sin(breachModel->getAngle()),
-								  DIAMETER / 2.0f - RADIUS * cos(breachModel->getAngle()));
-			if (breachModel->getAngle() < 0) {
-				breachPos = Vec2(0, 0);
-			}
-			breachModel->getSprite()->setScale(BREACH_SCALE * breachModel->getHealth() / 3.0f);
-			breachModel->getSprite()->setPosition(breachPos);
-		} else {
-			Vec2 breachPos = Vec2(0, 0);
-			breachModel->getSprite()->setPosition(breachPos);
+		if (breachModel->getHealth() > 0 && breachModel->getNeedSpriteUpdate()) {
+			string breachColor = playerColor.at(static_cast<unsigned long>(
+				ship->getDonuts()
+					.at(static_cast<unsigned long>(breachModel->getPlayer()))
+					->getColorId()));
+			std::shared_ptr<Texture> image = assets->get<Texture>("breach_" + breachColor);
+			shared_ptr<BreachNode> breachNode =
+				dynamic_pointer_cast<BreachNode>(breachesNode->getChildByTag(i + 1));
+			breachNode->setTexture(image);
+			breachModel->setNeedSpriteUpdate(false);
 		}
 	}
 }
