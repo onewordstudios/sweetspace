@@ -131,6 +131,8 @@ int MatchmakingGraphRoot::checkButtons(const cugl::Vec2& position) {
 		roomInput->activate(2);
 		roomLabel->setVisible(true);
 		textInput->setVisible(true);
+		host->setVisible(false);
+		client->setVisible(false);
 		return 1;
 	} else {
 		return -1;

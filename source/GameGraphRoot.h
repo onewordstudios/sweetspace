@@ -7,6 +7,8 @@
 #include "BreachModel.h"
 #include "DonutModel.h"
 #include "DonutNode.h"
+#include "DoorModel.h"
+#include "DoorNode.h"
 #include "InputController.h"
 
 class GameGraphRoot : public cugl::Scene {
@@ -20,7 +22,7 @@ class GameGraphRoot : public cugl::Scene {
 
 	// VIEW
 	/** Filmstrip representing the player's animated donut */
-	std::shared_ptr<cugl::Node> donutNode;
+	std::shared_ptr<cugl::PolygonNode> donutNode;
 	/** Label for on-screen coordinate HUD */
 	std::shared_ptr<cugl::Label> coordHUD;
 	/** Node to hold all of our graphics. Necesary for resolution indepedence. */
@@ -31,10 +33,14 @@ class GameGraphRoot : public cugl::Scene {
 	std::shared_ptr<cugl::Node> nearSpace;
 
 	// MODEL
+	/** Id of the current client */
 	int playerId;
+	/** The list of donuts */
 	std::vector<std::shared_ptr<DonutModel>> donuts;
 	/** The list of breaches */
 	std::vector<std::shared_ptr<BreachModel>> breaches;
+	/** The list of doors */
+	std::vector<std::shared_ptr<DoorModel>> doors;
 
 	/**
 	 * Returns an informative string for the position
@@ -48,6 +54,11 @@ class GameGraphRoot : public cugl::Scene {
 	std::string positionText();
 
    public:
+#pragma mark -
+#pragma mark Public Consts
+	/** Possible colors for player representations */
+	const std::vector<string> playerColor{"yellow", "red", "purple", "green", "orange"};
+
 #pragma mark -
 #pragma mark Constructors
 	/**
@@ -105,6 +116,8 @@ class GameGraphRoot : public cugl::Scene {
 	void setDonuts(std::vector<std::shared_ptr<DonutModel>> d) { donuts = d; };
 
 	void setBreaches(std::vector<std::shared_ptr<BreachModel>> b) { breaches = b; };
+
+	void setDoors(std::vector<std::shared_ptr<DoorModel>> d) { doors = d; };
 
 	void setPlayerId(int id) { playerId = id; }
 };

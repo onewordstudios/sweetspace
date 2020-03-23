@@ -5,6 +5,8 @@
 #include <iostream>
 #include <sstream>
 
+#include "ExternalDonutModel.h"
+
 using namespace cugl;
 using namespace std;
 
@@ -13,9 +15,6 @@ using namespace std;
 
 /** This is adjusted by screen aspect ratio to get the height */
 constexpr unsigned int SCENE_WIDTH = 1024;
-/** The maximum number of events on ship at any one time. This will probably need to scale with the
- * number of players*/
-constexpr unsigned int MAX_EVENTS = 3;
 
 #pragma mark -
 #pragma mark Constructors
@@ -43,16 +42,6 @@ bool MatchmakingMode::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	net = mib;
 	input.init();
 
-	// Create ship model for now since it's necessary for network updates
-	for (int i = 0; i < MAX_EVENTS; i++) {
-		breaches.push_back(BreachModel::alloc());
-	}
-	for (int i = 0; i < 3; i++) {
-		donuts.push_back(DonutModel::alloc());
-	}
-
-	shipModel = ShipModel::alloc(donuts, breaches);
-
 	sgRoot.init(assets);
 
 	return true;
@@ -64,7 +53,6 @@ bool MatchmakingMode::init(const std::shared_ptr<cugl::AssetManager>& assets,
 void MatchmakingMode::dispose() {
 	input.dispose();
 	sgRoot.dispose();
-	shipModel = nullptr;
 }
 
 #pragma mark -
@@ -102,13 +90,14 @@ void MatchmakingMode::update(float timestep) {
 		string s = sgRoot.getInput(input.getTapLoc());
 		if (s != "") {
 			sgRoot.setRoomId(s);
-			net->initClient(s);
-			sgRoot.setPlayerId(1);
+			if (net->initClient(s)) {
+				sgRoot.setPlayerId(1);
+			}
 		}
 	}
 	// Only update network loop if inithost or initclient called
 	if (sgRoot.getPlayerId() > -1) {
-		net->update(shipModel);
+		net->update();
 		sgRoot.setRoomId(net->getRoomID());
 		if (net->getPlayerID() > -1) {
 			sgRoot.setPlayerId(net->getPlayerID());
@@ -116,6 +105,7 @@ void MatchmakingMode::update(float timestep) {
 		// Check if room is ready for play (Replace with button for play later)
 		if (net->getNumPlayers() == 3) {
 			gameReady = true;
+			net->startGame();
 		}
 	}
 	// Update Scene Graph

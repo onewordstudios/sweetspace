@@ -28,14 +28,6 @@ class MatchmakingMode {
 	/** Scenegraph root node */
 	MatchmakingGraphRoot sgRoot;
 
-	// MODEL
-	/** The list of breaches */
-	std::vector<std::shared_ptr<DonutModel>> donuts;
-	/** The list of breaches */
-	std::vector<std::shared_ptr<BreachModel>> breaches;
-	/** The Ship model */
-	std::shared_ptr<ShipModel> shipModel;
-
 	/** True if game is ready to start */
 	bool gameReady;
 	/** Current Player ID */

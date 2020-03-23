@@ -3,27 +3,6 @@
 using namespace cugl;
 
 #pragma mark -
-#pragma mark Animation Constants and Functions
-/** Factor to multiply the forward thrust */
-constexpr unsigned int FULL_CIRCLE = 360;
-/** The max angular velocity (in degrees) per frame */
-constexpr float DONUT_MAX_TURN = 2.0f;
-/** The max force to apply to the donut */
-constexpr float DONUT_MAX_FORCE = 0.5f;
-/** The amount the angular velocity decays by each frame */
-constexpr float DONUT_FRICTION_FACTOR = 0.9f;
-/** The threshold below which the donut has effectively stopped rolling */
-constexpr float DONUT_STOP_THRESHOLD = 0.01f;
-
-/** The threshold which the donut will begin to fall back to the ground again */
-constexpr float JUMP_HEIGHT = 0.35f;
-/** Downward Acceleration for calculating jump offsets */
-constexpr float GRAVITY = 10.0f;
-
-/** Clamp x into the range [y,z] */
-constexpr float RANGE_CLAMP(float x, float y, float z) { return (x < y ? y : (x > z ? z : x)); }
-
-#pragma mark -
 #pragma mark Constructors
 
 /**
@@ -56,45 +35,6 @@ void DonutModel::dispose() {}
 #pragma mark Animation
 
 /**
- * Updates the state of the model
- *
- * This method moves the donut forward, dampens the forces (if necessary)
- * This method moves the donut
- *
- * @param timestep  Time elapsed (in seconds) since last called.
- */
-void DonutModel::update(float timestep) {
-	// Adjust the active forces.
-	velocity = RANGE_CLAMP(velocity, -DONUT_MAX_TURN, DONUT_MAX_TURN);
-
-	// Adjust the angle by the change in angle
-	angle += velocity;
-	// INVARIANT: -360 < ang < 720
-	if (angle > FULL_CIRCLE) {
-		angle -= FULL_CIRCLE;
-	} else if (angle < 0) {
-		angle += FULL_CIRCLE;
-	}
-
-	velocity *= DONUT_FRICTION_FACTOR;
-	if (abs(velocity) < DONUT_STOP_THRESHOLD) {
-		velocity = 0;
-	}
-
-	// Update jump offset depending on time passed since start of jump
-	if (jumping) {
-		jumpOffset = -GRAVITY / 2 * jumpTime * jumpTime + jumpVelocity * jumpTime;
-
-		// Check for end of jump
-		if (jumpTime > 0.0f && jumpOffset <= 0.0f) {
-			jumpOffset = 0.0f;
-			jumping = false;
-		}
-		jumpTime += timestep;
-	}
-}
-
-/**
  * Applies a force to the donut.
  *
  * @param value The donut turning force
@@ -109,6 +49,20 @@ void DonutModel::applyForce(float value) { velocity += DONUT_MAX_FORCE * value; 
 void DonutModel::startJump() {
 	jumping = true;
 	jumpTime = 0.0f;
+}
+
+void DonutModel::updateJump(float timestep) {
+	// Update jump offset depending on time passed since start of jump
+	if (jumping) {
+		jumpOffset = -GRAVITY / 2 * jumpTime * jumpTime + jumpVelocity * jumpTime;
+
+		// Check for end of jump
+		if (jumpTime > 0.0f && jumpOffset <= 0.0f) {
+			jumpOffset = 0.0f;
+			jumping = false;
+		}
+		jumpTime += timestep;
+	}
 }
 
 /**
