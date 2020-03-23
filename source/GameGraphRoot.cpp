@@ -75,11 +75,10 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 	donutPos = donutNode->getPosition();
 	coordHUD = std::dynamic_pointer_cast<Label>(assets->get<Node>("game_hud"));
 	breachesNode = Node::alloc();
-	breachesNode->init();
 	nearSpace->addChildWithName(breachesNode, "breaches_node");
 
-		// Initialize Players
-		for (int i = 0; i < donuts.size(); i++) {
+	// Initialize Players
+	for (int i = 0; i < donuts.size(); i++) {
 		std::shared_ptr<DonutModel> donutModel = donuts.at(i);
 		string donutColor = playerColor.at(static_cast<unsigned long>(donutModel->getColorId()));
 		std::shared_ptr<Texture> image = assets->get<Texture>("donut_" + donutColor);

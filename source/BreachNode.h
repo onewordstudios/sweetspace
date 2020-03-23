@@ -54,9 +54,7 @@ class BreachNode : public cugl::AnimationNode {
 #pragma mark -
 #pragma mark Getters & Setters
 
-	void setModel(std::shared_ptr<BreachModel> model) {
-		breachModel = model;
-	}
+	void setModel(std::shared_ptr<BreachModel> model) { breachModel = model; }
 
 	std::shared_ptr<BreachModel> getModel() { return breachModel; }
 
