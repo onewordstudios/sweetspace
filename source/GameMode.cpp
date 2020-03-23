@@ -89,7 +89,7 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	for (int i = 0; i < 3; i++) {
 		donuts.push_back(playerId == i ? PlayerDonutModel::alloc() : ExternalDonutModel::alloc());
 		shipModel->getDonuts().push_back(donuts[i]);
-		donuts[i]->setColorId(i % int(sgRoot.playerColor.size()));
+		donuts[i]->setColorId(sgRoot.toColorId(i));
 	}
 	gm.setPlayerId(playerId);
 	gm.setDonuts(donuts); // TODO All of this should be refactored so that ship model contains a

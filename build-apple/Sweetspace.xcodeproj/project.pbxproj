@@ -24,6 +24,7 @@
 		C58C509B5D08FC65641A630E /* ShipModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C58C51549E90F0CA2D05EB7A /* ShipModel.cpp */; };
 		C58C5561B66760E8D1E3FC80 /* ShipModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C58C51549E90F0CA2D05EB7A /* ShipModel.cpp */; };
 		C58C5B82A24C809F0E12DEFF /* ShipModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C58C51549E90F0CA2D05EB7A /* ShipModel.cpp */; };
+		D15220621F9C106302ACEBBB /* BreachNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D1522B5DE1BDF682A53D6F29 /* BreachNode.cpp */; };
 		D152210B21A0FDE6A6995456 /* easywsclient.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D152292423B890A105CFF1E1 /* easywsclient.cpp */; };
 		D15222477324B444CAE67673 /* MagicInternetBox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D15228511721431DE5C3F8BF /* MagicInternetBox.cpp */; };
 		D152241D12DF18170D97502F /* DoorModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D1522CE16711F9484DFFB224 /* DoorModel.cpp */; };
@@ -36,12 +37,14 @@
 		D152277E2A8E96B810AEB205 /* easywsclient.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D152292423B890A105CFF1E1 /* easywsclient.cpp */; };
 		D152280455B6C3C470B28DBC /* DoorModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D1522CE16711F9484DFFB224 /* DoorModel.cpp */; };
 		D1522849508B74DEDCD3A8EC /* .clang-tidy in Resources */ = {isa = PBXBuildFile; fileRef = D1522B22FF3E0BB5FA6127A8 /* .clang-tidy */; };
+		D152294B962A6F545D187713 /* BreachNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D1522B5DE1BDF682A53D6F29 /* BreachNode.cpp */; };
 		D152299F2C8972AFC00A35A5 /* .clang-tidy in Resources */ = {isa = PBXBuildFile; fileRef = D1522B22FF3E0BB5FA6127A8 /* .clang-tidy */; };
 		D15229A3B1F12D0046E83FD6 /* .clang-tidy in Resources */ = {isa = PBXBuildFile; fileRef = D1522B22FF3E0BB5FA6127A8 /* .clang-tidy */; };
 		D15229CE017D5510C972C380 /* MagicInternetBox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D15228511721431DE5C3F8BF /* MagicInternetBox.cpp */; };
 		D1522B1EDA7299CAAE55B21E /* easywsclient.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D152292423B890A105CFF1E1 /* easywsclient.cpp */; };
 		D1522B75CBE989BF3E62FFF0 /* MagicInternetBox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D15228511721431DE5C3F8BF /* MagicInternetBox.cpp */; };
 		D1522F66D7605010BF4DE624 /* DonutNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D1522D40CDE7AAE1A66B8F66 /* DonutNode.cpp */; };
+		D1522FE380CFE13F14305356 /* BreachNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D1522B5DE1BDF682A53D6F29 /* BreachNode.cpp */; };
 		DF3B744C2403A46B0063552F /* DonutModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DF3B74372403A46A0063552F /* DonutModel.cpp */; };
 		DF3B744D2403A46B0063552F /* DonutModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DF3B74372403A46A0063552F /* DonutModel.cpp */; };
 		DF3B744E2403A46B0063552F /* DonutModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DF3B74372403A46A0063552F /* DonutModel.cpp */; };
@@ -177,7 +180,9 @@
 		D15227FD0DE8BAD86857197F /* MagicInternetBox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MagicInternetBox.h; sourceTree = "<group>"; };
 		D15228511721431DE5C3F8BF /* MagicInternetBox.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MagicInternetBox.cpp; sourceTree = "<group>"; };
 		D152292423B890A105CFF1E1 /* easywsclient.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = easywsclient.cpp; sourceTree = "<group>"; };
+		D15229D4A1FC5FE07FD97699 /* BreachNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BreachNode.h; sourceTree = "<group>"; };
 		D1522B22FF3E0BB5FA6127A8 /* .clang-tidy */ = {isa = PBXFileReference; lastKnownFileType = "file.clang-tidy"; path = ".clang-tidy"; sourceTree = "<group>"; };
+		D1522B5DE1BDF682A53D6F29 /* BreachNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BreachNode.cpp; sourceTree = "<group>"; };
 		D1522C28835BBA631F29D368 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		D1522C8009B69F3F56057E41 /* DonutNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DonutNode.h; sourceTree = "<group>"; };
 		D1522CE16711F9484DFFB224 /* DoorModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DoorModel.cpp; sourceTree = "<group>"; };
@@ -481,6 +486,8 @@
 				D1522CE16711F9484DFFB224 /* DoorModel.cpp */,
 				C1222700CC73840AA71C9800 /* MatchmakingGraphRoot.cpp */,
 				C12225092193F10792C2D9D4 /* MatchmakingMode.cpp */,
+				D1522B5DE1BDF682A53D6F29 /* BreachNode.cpp */,
+				D15229D4A1FC5FE07FD97699 /* BreachNode.h */,
 			);
 			name = Source;
 			path = ../source;
@@ -682,6 +689,7 @@
 				D152280455B6C3C470B28DBC /* DoorModel.cpp in Sources */,
 				C12227559D5A695B3AD2A84C /* MatchmakingGraphRoot.cpp in Sources */,
 				C122202B76FF5A7E71E2DF7F /* MatchmakingMode.cpp in Sources */,
+				D152294B962A6F545D187713 /* BreachNode.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -709,6 +717,7 @@
 				D15226D74B5F1C4C77EC84B1 /* DoorModel.cpp in Sources */,
 				C12229A6FE0EE350C0B69408 /* MatchmakingGraphRoot.cpp in Sources */,
 				C1222FC552DCE75362130E81 /* MatchmakingMode.cpp in Sources */,
+				D1522FE380CFE13F14305356 /* BreachNode.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -736,6 +745,7 @@
 				D152241D12DF18170D97502F /* DoorModel.cpp in Sources */,
 				C122231BF74B6D2B4DFA3857 /* MatchmakingGraphRoot.cpp in Sources */,
 				C1222440665C00173B68F8B3 /* MatchmakingMode.cpp in Sources */,
+				D15220621F9C106302ACEBBB /* BreachNode.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

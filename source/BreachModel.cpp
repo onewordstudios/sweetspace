@@ -28,4 +28,4 @@ bool BreachModel::init(float a, int health, int p) {
  * Any assets owned by this object will be immediately released.  Once
  * disposed, a breach may not be used until it is initialized again.
  */
-void BreachModel::dispose() { sprite = nullptr; }
+void BreachModel::dispose() {}

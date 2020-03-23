@@ -12,8 +12,6 @@ class BreachModel {
 	bool playerOn;
 	/** Which player can clear this breach */
 	int player;
-	/** Reference to image in SceneGraph for animation */
-	std::shared_ptr<cugl::PolygonNode> sprite;
 	/** Set to true if sprite needs to be updated */
 	bool needSpriteUpdate;
 
@@ -108,13 +106,6 @@ class BreachModel {
 	int isPlayerOn() { return playerOn; }
 
 	/**
-	 * Returns the current sprite of the breach.
-	 *
-	 * @return the current sprite of the breach.
-	 */
-	std::shared_ptr<cugl::PolygonNode> getSprite() { return sprite; }
-
-	/**
 	 * Sets the current angle of the breach in radians.
 	 *
 	 * @param value The breach angle in radians
@@ -155,13 +146,6 @@ class BreachModel {
 	 * @param p The player to assign to the breach.
 	 */
 	void setPlayer(int p) { player = p; }
-
-	/**
-	 * Sets the sprite of the breach.
-	 *
-	 * @param value The sprite
-	 */
-	void setSprite(const std::shared_ptr<cugl::PolygonNode> value) { sprite = value; }
 
 	/**
 	 * Sets the needSpriteUpdate field.
