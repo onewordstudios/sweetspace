@@ -63,9 +63,6 @@
     <ClInclude Include="..\..\source\InputController.h">
       <Filter>Header Files\Controllers</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\source\GMController.h">
-      <Filter>Header Files\Controllers</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\source\MagicInternetBox.h">
       <Filter>Header Files\Controllers</Filter>
     </ClInclude>
@@ -96,6 +93,9 @@
     <ClInclude Include="..\..\source\MatchmakingGraphRoot.h">
       <Filter>Header Files\SceneGraph</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\source\GLaDOS.h">
+      <Filter>Header Files\Controllers</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\source\BreachNode.h">
       <Filter>Header Files\SceneGraph</Filter>
     </ClInclude>
@@ -112,9 +112,6 @@
     </ClCompile>
     <ClCompile Include="..\..\source\LoadingMode.cpp">
       <Filter>Source Files\Modes</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\GMController.cpp">
-      <Filter>Source Files\Controllers</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\InputController.cpp">
       <Filter>Source Files\Controllers</Filter>
@@ -157,6 +154,9 @@
     </ClCompile>
     <ClCompile Include="..\..\source\MatchmakingGraphRoot.cpp">
       <Filter>Source Files\SceneGraph</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\GLaDOS.cpp">
+      <Filter>Source Files\Controllers</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\BreachNode.cpp">
       <Filter>Source Files\SceneGraph</Filter>

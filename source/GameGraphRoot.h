@@ -8,9 +8,9 @@
 #include "BreachNode.h"
 #include "DonutModel.h"
 #include "DonutNode.h"
-#include "DoorModel.h"
 #include "DoorNode.h"
 #include "InputController.h"
+#include "ShipModel.h"
 
 class GameGraphRoot : public cugl::Scene {
    protected:
@@ -37,13 +37,9 @@ class GameGraphRoot : public cugl::Scene {
 
 	// MODEL
 	/** Id of the current client */
-	int playerId;
-	/** The list of donuts */
-	std::vector<std::shared_ptr<DonutModel>> donuts;
-	/** The list of breaches */
-	std::vector<std::shared_ptr<BreachModel>> breaches;
-	/** The list of doors */
-	std::vector<std::shared_ptr<DoorModel>> doors;
+	unsigned int playerID;
+	/** The ship */
+	std::shared_ptr<ShipModel> ship;
 
 	/**
 	 * Returns an informative string for the position
@@ -99,7 +95,8 @@ class GameGraphRoot : public cugl::Scene {
 	 *
 	 * @return true if the controller is initialized properly, false otherwise.
 	 */
-	bool init(const std::shared_ptr<cugl::AssetManager>& assets);
+	bool init(const std::shared_ptr<cugl::AssetManager>& assets, std::shared_ptr<ShipModel> ship,
+			  unsigned int playerID);
 
 #pragma mark -
 #pragma mark Gameplay Handling
@@ -118,22 +115,5 @@ class GameGraphRoot : public cugl::Scene {
 	void reset() override;
 
 	std::shared_ptr<cugl::Node> getDonutNode();
-
-	void setDonuts(std::vector<std::shared_ptr<DonutModel>> d) { donuts = d; };
-
-	void setBreaches(std::vector<std::shared_ptr<BreachModel>> b) { breaches = b; };
-
-	void setDoors(std::vector<std::shared_ptr<DoorModel>> d) { doors = d; };
-
-	void setPlayerId(int id) { playerId = id; }
-
-#pragma mark -
-#pragma mark Helpers
-	/**
-	 * Converts playerId to colorId
-	 * @param p
-	 * @return
-	 */
-	static int toColorId(int p) { return p % NUM_COLORS; }
 };
 #endif /* __GAME_GRAPH_ROOT_H__ */

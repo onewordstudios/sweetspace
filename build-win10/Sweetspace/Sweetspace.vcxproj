@@ -196,7 +196,7 @@
     <ClInclude Include="..\..\source\DoorNode.h" />
     <ClInclude Include="..\..\source\GameGraphRoot.h" />
     <ClInclude Include="..\..\source\GameMode.h" />
-    <ClInclude Include="..\..\source\GMController.h" />
+    <ClInclude Include="..\..\source\GLaDOS.h" />
     <ClInclude Include="..\..\source\InputController.h" />
     <ClInclude Include="..\..\source\libraries\easywsclient.hpp" />
     <ClInclude Include="..\..\source\LoadingMode.h" />
@@ -217,7 +217,7 @@
     <ClCompile Include="..\..\source\DoorModel.cpp" />
     <ClCompile Include="..\..\source\DoorNode.cpp" />
     <ClCompile Include="..\..\source\GameGraphRoot.cpp" />
-    <ClCompile Include="..\..\source\GMController.cpp" />
+    <ClCompile Include="..\..\source\GLaDOS.cpp" />
     <ClCompile Include="..\..\source\libraries\easywsclient.cpp" />
     <ClCompile Include="..\..\source\MagicInternetBox.cpp" />
     <ClCompile Include="..\..\source\main.cpp" />

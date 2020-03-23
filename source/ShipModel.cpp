@@ -1,23 +1,27 @@
 ﻿#include "ShipModel.h"
 
-/**
- * Initializes a new ship with the given donuts and breaches
- *
- * This is an initializer.  It, combined with the constructor, produces the static
- * constructor create().  The initializer and normal constructor are private while
- * the static constructor is not.
- *
- * @param  d  The list of donuts
- * @param  b  The list of breaches
- *
- * @return  true if the obstacle is initialized properly, false otherwise.
- */
-bool ShipModel::init(std::vector<std::shared_ptr<DonutModel>> &d,
-					 std::vector<std::shared_ptr<BreachModel>> &b,
-					 std::vector<std::shared_ptr<DoorModel>> &dr) {
-	donuts = d;
-	breaches = b;
-	doors = dr;
+#include "ExternalDonutModel.h"
+#include "PlayerDonutModel.h"
+
+bool ShipModel::init(unsigned int numPlayers, unsigned int numBreaches, unsigned int numDoors,
+					 unsigned int playerID) {
+	// Instantiate donut models and assign colors
+	for (unsigned int i = 0; i < numPlayers; i++) {
+		donuts.push_back(playerID == i ? PlayerDonutModel::alloc() : ExternalDonutModel::alloc());
+		// TODO modulo max number of colors once constants are factored out
+		donuts[i]->setColorId(i);
+	}
+
+	// Instantiate breach models
+	for (unsigned int i = 0; i < numBreaches; i++) {
+		breaches.push_back(BreachModel::alloc());
+	}
+
+	// Instantiate door models
+	for (unsigned int i = 0; i < numDoors; i++) {
+		doors.push_back(DoorModel::alloc());
+	}
+
 	return true;
 }
 
@@ -51,10 +55,16 @@ bool ShipModel::flagDoor(int id, int player, int flag) {
 	return true;
 }
 
+bool ShipModel::closeDoor(int id) { return false; }
+
 /**
  * Disposes all resources and assets of this breach.
  *
  * Any assets owned by this object will be immediately released.  Once
  * disposed, a breach may not be used until it is initialized again.
  */
-void ShipModel::dispose() {}
+void ShipModel::dispose() {
+	donuts.clear();
+	doors.clear();
+	breaches.clear();
+}

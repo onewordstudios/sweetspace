@@ -39,23 +39,32 @@ class ShipModel {
 	void dispose();
 
 	/**
-	 * Initializes ship.
+	 * Initializes ship model.
 	 *
-	 * An initializer does the real work that the constructor does not.  It
-	 * initializes all assets and makes the object read for use.  By separating
-	 * them, we allow ourselfs non-pointer references to complex objects.
+	 * @param numPlayers  The number of players in this ship
+	 * @param numBreaches The number of breaches in this ship
+	 * @param numDoors    The number of doors in this ship
+	 * @param playerID    The ID of the current local player
 	 *
-	 * @return true if the obstacle is initialized properly, false otherwise.
+	 * @return true if the model is initialized properly, false otherwise.
 	 */
-	virtual bool init(std::vector<std::shared_ptr<DonutModel>>& donuts,
-					  std::vector<std::shared_ptr<BreachModel>>& breaches,
-					  std::vector<std::shared_ptr<DoorModel>>& doors);
+	bool init(unsigned int numPlayers, unsigned int numBreaches, unsigned int numDoors,
+			  unsigned int playerID);
 
-	static std::shared_ptr<ShipModel> alloc(std::vector<std::shared_ptr<DonutModel>>& donuts,
-											std::vector<std::shared_ptr<BreachModel>>& breaches,
-											std::vector<std::shared_ptr<DoorModel>>& doors) {
+	/**
+	 * Create and return a shared pointer to a new ship model.
+	 *
+	 * @param numPlayers  The number of players in this ship
+	 * @param numBreaches The number of breaches in this ship
+	 * @param numDoors    The number of doors in this ship
+	 * @param playerID    The ID of the current local player
+	 *
+	 * @return A smart pointer to a newly initialized ship model
+	 */
+	static std::shared_ptr<ShipModel> alloc(unsigned int numPlayers, unsigned int numBreaches,
+											unsigned int numDoors, unsigned int playerID) {
 		std::shared_ptr<ShipModel> result = std::make_shared<ShipModel>();
-		return (result->init(donuts, breaches, doors) ? result : nullptr);
+		return (result->init(numPlayers, numBreaches, numDoors, playerID) ? result : nullptr);
 	}
 
 #pragma mark -
@@ -75,18 +84,11 @@ class ShipModel {
 	std::vector<std::shared_ptr<BreachModel>>& getBreaches() { return breaches; }
 
 	/**
-	 * Returns the list of donuts.
+	 * Returns the current list of doors.
 	 *
-	 * @return the list of donuts.
+	 * @return the current list of doors.
 	 */
-	void setDonuts(std::vector<std::shared_ptr<DonutModel>>& d) { donuts = d; }
-
-	/**
-	 * Returns the current list of breaches.
-	 *
-	 * @return the current list of breaches.
-	 */
-	void setBreaches(std::vector<std::shared_ptr<BreachModel>>& b) { breaches = b; }
+	std::vector<std::shared_ptr<DoorModel>>& getDoors() { return doors; }
 
 	/**
 	 * Create breach.

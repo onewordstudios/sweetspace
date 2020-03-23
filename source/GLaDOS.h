@@ -10,9 +10,10 @@
 #include "ShipModel.h"
 
 /**
- * This class represents the GM of the game
+ * Game Logic and Distribution Operations Synthesizer
+ * The controller class responsible for generating the challenges in the game.
  */
-class GMController {
+class GLaDOS {
    private:
 	/** Whether or not this input is active */
 	bool active;
@@ -20,17 +21,11 @@ class GMController {
 	/** Current number of breaches on ship */
 	unsigned int numEvents;
 
-	/** PlayerId owning this GMController. -1 means no player id assigned yet. */
-	unsigned int playerId;
+	/** Current player ID */
+	unsigned int playerID;
 
-	/** Current breaches on ship */
-	std::vector<std::shared_ptr<DonutModel>> donuts;
-
-	/** Current breaches on ship */
-	std::vector<std::shared_ptr<BreachModel>> breaches;
-
-	/** Current doors on ship */
-	std::vector<std::shared_ptr<DoorModel>> doors;
+	/** The state of the ship */
+	std::shared_ptr<ShipModel> ship;
 
 	/** Network Controller for outbound calls */
 	shared_ptr<MagicInternetBox> mib;
@@ -44,12 +39,12 @@ class GMController {
 	 * This constructor does NOT do any initialization.  It simply allocates the
 	 * object. This makes it safe to use this class without a pointer.
 	 */
-	GMController(); // Don't initialize.  Allow stack based
+	GLaDOS(); // Don't initialize.  Allow stack based
 
 	/**
 	 * Disposes of this GM controller, releasing all resources.
 	 */
-	~GMController() { dispose(); }
+	~GLaDOS() { dispose(); }
 
 	/**
 	 * Deactivates this GM controller.
@@ -67,10 +62,7 @@ class GMController {
 	 *
 	 * @return true if the controller was initialized successfully
 	 */
-	bool init(std::vector<std::shared_ptr<DonutModel>> donuts,
-			  std::vector<std::shared_ptr<BreachModel>> breaches,
-			  std::vector<std::shared_ptr<DoorModel>> doors, shared_ptr<MagicInternetBox>& mib,
-			  int playerId);
+	bool init(std::shared_ptr<ShipModel> ship, std::shared_ptr<MagicInternetBox> mib);
 
 #pragma mark -
 #pragma mark GM Handling
@@ -101,19 +93,11 @@ class GMController {
 	 *
 	 * @param health New gm player id.
 	 */
-	void setPlayerId(int value) { playerId = value; }
+	void setPlayerId(int value) { playerID = value; }
 
 	/**
 	 * Gets the current player id of this gm.
-	 *
 	 */
-	int getPlayerId() { return playerId; }
-
-	/**
-	 * Sets the donut vector to new donut vector
-	 *
-	 * @param donuts New donut vector.
-	 */
-	void setDonuts(std::vector<std::shared_ptr<DonutModel>> donuts) { this->donuts = donuts; }
+	int getPlayerId() { return playerID; }
 };
 #endif /* __GM_CONTROLLER_H__ */

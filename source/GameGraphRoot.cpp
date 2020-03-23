@@ -47,7 +47,11 @@ constexpr unsigned int RADIUS = 550;
  *
  * @return true if the controller is initialized properly, false otherwise.
  */
-bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets) {
+bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
+						 std::shared_ptr<ShipModel> ship, unsigned int playerID) {
+	this->playerID = playerID;
+	this->ship = ship;
+
 	// Initialize the scene to a locked width
 	Size dimen = Application::get()->getDisplaySize();
 	dimen *= SCENE_WIDTH / dimen.width; // Lock the game to a reasonable resolution
@@ -78,12 +82,12 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 	nearSpace->addChildWithName(breachesNode, "breaches_node");
 
 	// Initialize Players
-	for (int i = 0; i < donuts.size(); i++) {
-		std::shared_ptr<DonutModel> donutModel = donuts.at(i);
+	for (int i = 0; i < ship->getDonuts().size(); i++) {
+		std::shared_ptr<DonutModel> donutModel = ship->getDonuts().at(i);
 		string donutColor = playerColor.at(static_cast<unsigned long>(donutModel->getColorId()));
 		std::shared_ptr<Texture> image = assets->get<Texture>("donut_" + donutColor);
 		// Player node is handled separately
-		if (i == playerId) {
+		if (i == playerID) {
 			donutNode->setTexture(image);
 		} else {
 			std::shared_ptr<DonutNode> newDonutNode = DonutNode::allocWithTexture(image);
@@ -99,10 +103,12 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 	}
 
 	// Initialize Breaches
-	for (int i = 0; i < breaches.size(); i++) {
-		std::shared_ptr<BreachModel> breachModel = breaches.at(i);
-		string breachColor = playerColor.at(static_cast<unsigned long>(
-			donuts.at(static_cast<unsigned long>(breachModel->getPlayer()))->getColorId()));
+	for (int i = 0; i < ship->getBreaches().size(); i++) {
+		std::shared_ptr<BreachModel> breachModel = ship->getBreaches().at(i);
+		string breachColor = playerColor.at(
+			static_cast<unsigned long>(ship->getDonuts()
+										   .at(static_cast<unsigned long>(breachModel->getPlayer()))
+										   ->getColorId()));
 		std::shared_ptr<Texture> image = assets->get<Texture>("breach_" + breachColor);
 		std::shared_ptr<BreachNode> breachNode = BreachNode::allocWithTexture(image);
 		breachNode->setModel(breachModel);
@@ -115,8 +121,8 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 		breachesNode->addChild(breachNode);
 	}
 
-	for (int i = 0; i < doors.size(); i++) {
-		std::shared_ptr<DoorModel> doorModel = doors.at(i);
+	for (int i = 0; i < ship->getDoors().size(); i++) {
+		std::shared_ptr<DoorModel> doorModel = ship->getDoors().at(i);
 		std::shared_ptr<Texture> image = assets->get<Texture>("door");
 		std::shared_ptr<DoorNode> doorNode = DoorNode::alloc(image, 1, 3);
 		doorNode->setModel(doorModel);
@@ -174,7 +180,7 @@ void GameGraphRoot::update(float timestep) {
 	// Update the HUD
 	coordHUD->setText(positionText());
 
-	float angle = TWO_PI - donuts.at(playerId)->getAngle();
+	float angle = TWO_PI - ship->getDonuts().at(playerID)->getAngle();
 
 	// Reanchor the node at the center of the screen and rotate about center.
 	Vec2 position = farSpace->getPosition();
@@ -190,18 +196,21 @@ void GameGraphRoot::update(float timestep) {
 
 	double radiusRatio = RADIUS / (donutNode->getWidth() / 2.0);
 
-	angle = donutNode->getAngle() - donuts.at(playerId)->getVelocity() * PI_180 * radiusRatio;
+	angle = donutNode->getAngle() -
+			ship->getDonuts().at(playerID)->getVelocity() * PI_180 * radiusRatio;
 	donutNode->setAnchor(Vec2::ANCHOR_CENTER);
 	donutNode->setAngle(angle);
 	// Draw Jump Offset
-	float donutNewY = donutPos.y + donuts.at(playerId)->getJumpOffset() * screenHeight;
+	float donutNewY = donutPos.y + ship->getDonuts().at(playerID)->getJumpOffset() * screenHeight;
 	donutNode->setPositionY(donutNewY);
 
-	for (int i = 0; i < breaches.size(); i++) {
-		std::shared_ptr<BreachModel> breachModel = breaches.at(i);
+	for (int i = 0; i < ship->getBreaches().size(); i++) {
+		std::shared_ptr<BreachModel> breachModel = ship->getBreaches().at(i);
 		if (breachModel->getHealth() > 0 && breachModel->getNeedSpriteUpdate()) {
 			string breachColor = playerColor.at(static_cast<unsigned long>(
-				donuts.at(static_cast<unsigned long>(breachModel->getPlayer()))->getColorId()));
+				ship->getDonuts()
+					.at(static_cast<unsigned long>(breachModel->getPlayer()))
+					->getColorId()));
 			std::shared_ptr<Texture> image = assets->get<Texture>("breach_" + breachColor);
 			shared_ptr<BreachNode> breachNode =
 				dynamic_pointer_cast<BreachNode>(breachesNode->getChildByTag(i + 1));
@@ -222,7 +231,7 @@ void GameGraphRoot::update(float timestep) {
  */
 std::string GameGraphRoot::positionText() {
 	stringstream ss;
-	ss << "Angle: (" << (float)donuts.at(playerId)->getAngle() / PI_180 << ")";
+	ss << "Angle: (" << (float)ship->getDonuts().at(playerID)->getAngle() / PI_180 << ")";
 	return ss.str();
 }
 
