@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7B2F9C822429960500283B4A /* DoorNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A577C9232422AA0D00B12ADE /* DoorNode.cpp */; };
 		A577C9282422AA0E00B12ADE /* DoorNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A577C9232422AA0D00B12ADE /* DoorNode.cpp */; };
 		A577C9292422AA0E00B12ADE /* DoorNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A577C9232422AA0D00B12ADE /* DoorNode.cpp */; };
 		C122202B76FF5A7E71E2DF7F /* MatchmakingMode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C12225092193F10792C2D9D4 /* MatchmakingMode.cpp */; };
@@ -685,6 +686,7 @@
 				D152277E2A8E96B810AEB205 /* easywsclient.cpp in Sources */,
 				C12224CE8F1354665ED3097E /* ExternalDonutModel.cpp in Sources */,
 				C122265ED47A5D2CFBAFDADF /* PlayerDonutModel.cpp in Sources */,
+				7B2F9C822429960500283B4A /* DoorNode.cpp in Sources */,
 				D152280455B6C3C470B28DBC /* DoorModel.cpp in Sources */,
 				C12227559D5A695B3AD2A84C /* MatchmakingGraphRoot.cpp in Sources */,
 				C122202B76FF5A7E71E2DF7F /* MatchmakingMode.cpp in Sources */,
