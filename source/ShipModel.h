@@ -14,6 +14,8 @@ class ShipModel {
 	std::vector<std::shared_ptr<BreachModel>> breaches;
 	/** Current list of doors on ship*/
 	std::vector<std::shared_ptr<DoorModel>> doors;
+	/** Current health of the ship */
+	float health;
 
    public:
 #pragma mark Constructors
@@ -139,5 +141,19 @@ class ShipModel {
 	 * @param id   the id of door to be closed.
 	 */
 	bool closeDoor(int id);
+
+	/**
+	 * Set health of the ship
+	 *
+	 * @param health the health of the ship
+	 */
+	bool setHealth(float health);
+
+	/**
+	 * Get health of the ship
+	 *
+	 * @return health the health of the ship
+	 */
+	bool getHealth() { return health; }
 };
 #endif /* __SHIP_MODEL_H__ */
