@@ -32,6 +32,8 @@ class MatchmakingGraphRoot : public cugl::Scene {
 	int playerId;
 	/** RoomId for host display */
 	std::string roomId;
+	/** Whether the text input field is active */
+	bool roomInputFocused;
 
 	/**
 	 * Returns an informative string for the position

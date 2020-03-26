@@ -70,6 +70,7 @@ bool MatchmakingGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& asset
 	roomLabel = std::dynamic_pointer_cast<Label>(assets->get<Node>("matchmaking_room"));
 	roomInput = std::dynamic_pointer_cast<TextField>(assets->get<Node>("matchmaking_input"));
 	textInput = std::dynamic_pointer_cast<Button>(assets->get<Node>("matchmaking_inputbutton"));
+	roomInputFocused = false;
 
 	addChild(scene);
 	return true;
@@ -108,6 +109,10 @@ void MatchmakingGraphRoot::update(float timestep) {
 	// "Drawing" code.  Move everything BUT the donut
 	// Update the HUD
 	roomLabel->setText(positionText());
+	if (!roomInputFocused && roomInput->hasFocus()) {
+		roomInput->setText(std::string(), false);
+		roomInputFocused = roomInput->hasFocus();
+	}
 }
 
 /**
@@ -156,11 +161,7 @@ std::string MatchmakingGraphRoot::getInput(const cugl::Vec2& position) {
 /**
  * Returns an informative string for the room id
  *
- * This function is for writing the current donut position to the HUD.
- *
- * @param coords The current donut coordinates
- *
- * @return an informative string for the position
+ * @return an informative string for the room id
  */
 std::string MatchmakingGraphRoot::positionText() {
 	stringstream ss;
