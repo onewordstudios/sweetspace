@@ -184,6 +184,7 @@
 		D15228511721431DE5C3F8BF /* MagicInternetBox.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MagicInternetBox.cpp; sourceTree = "<group>"; };
 		D152292423B890A105CFF1E1 /* easywsclient.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = easywsclient.cpp; sourceTree = "<group>"; };
 		D15229D4A1FC5FE07FD97699 /* BreachNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BreachNode.h; sourceTree = "<group>"; };
+		D15229D4EADCD12676DC1C03 /* MatchmakingGraphRoot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MatchmakingGraphRoot.h; sourceTree = "<group>"; };
 		D1522B22FF3E0BB5FA6127A8 /* .clang-tidy */ = {isa = PBXFileReference; lastKnownFileType = "file.clang-tidy"; path = ".clang-tidy"; sourceTree = "<group>"; };
 		D1522B5DE1BDF682A53D6F29 /* BreachNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BreachNode.cpp; sourceTree = "<group>"; };
 		D1522C28835BBA631F29D368 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
@@ -489,6 +490,7 @@
 				C12225092193F10792C2D9D4 /* MatchmakingMode.cpp */,
 				D1522B5DE1BDF682A53D6F29 /* BreachNode.cpp */,
 				D15229D4A1FC5FE07FD97699 /* BreachNode.h */,
+				D15229D4EADCD12676DC1C03 /* MatchmakingGraphRoot.h */,
 			);
 			name = Source;
 			path = ../source;
