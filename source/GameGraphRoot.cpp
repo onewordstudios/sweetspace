@@ -132,6 +132,13 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 		nearSpace->addChild(doorNode);
 	}
 
+	std::shared_ptr<Texture> image = assets->get<Texture>("health");
+	std::shared_ptr<HealthNode> healthNode = HealthNode::alloc(image, 1,  12);
+	healthNode->setFrame(0);
+	healthNode->setAnchor(Vec2::ANCHOR_BOTTOM_CENTER);
+	nearSpace->addChild(healthNode);
+
+
 	addChild(scene);
 	return true;
 }

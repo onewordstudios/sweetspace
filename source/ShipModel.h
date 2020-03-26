@@ -147,7 +147,7 @@ class ShipModel {
 	 *
 	 * @param health the health of the ship
 	 */
-	bool setHealth(float health);
+	void setHealth(float health) { this->health = health; };
 
 	/**
 	 * Get health of the ship
