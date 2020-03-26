@@ -121,6 +121,8 @@ void MagicInternetBox::sendData(NetworkDataType type, float angle, int id, int d
 	ws->sendBinary(data);
 }
 
+bool MagicInternetBox::reconnect(std::string id) { return false; }
+
 MagicInternetBox::MatchmakingStatus MagicInternetBox::matchStatus() { return status; }
 
 void MagicInternetBox::leaveRoom() {}
