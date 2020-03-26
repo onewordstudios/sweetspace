@@ -272,16 +272,14 @@ void MagicInternetBox::update(std::shared_ptr<ShipModel> state) {
 				break;
 			}
 			case DualCreate: {
-				unsigned int taskID = id;
-				unsigned int player1 = data1;
-				unsigned int player2 = data2;
+				int taskID = id;
 				state->createDoor(angle, taskID);
 				break;
 			}
 			case DualResolve: {
-				unsigned int taskID = id;
-				unsigned int player = data1;
-				unsigned int flag = data2;
+				int taskID = id;
+				int player = data1;
+				int flag = data2;
 				CULog("Flag door %d with player %d", id, player);
 				state->flagDoor(taskID, player, flag);
 				break;
