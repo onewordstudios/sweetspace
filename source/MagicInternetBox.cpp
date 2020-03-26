@@ -121,6 +121,8 @@ void MagicInternetBox::sendData(NetworkDataType type, float angle, int id, int d
 	ws->sendBinary(data);
 }
 
+bool MagicInternetBox::reconnect(std::string id) { return false; }
+
 MagicInternetBox::MatchmakingStatus MagicInternetBox::matchStatus() { return status; }
 
 void MagicInternetBox::leaveRoom() {}
@@ -255,7 +257,8 @@ void MagicInternetBox::update(std::shared_ptr<ShipModel> state) {
 				break;
 			}
 			case Jump: {
-				// TODO
+				CULog("Received jump %d", id);
+				state->getDonuts()[id]->startJump();
 				break;
 			}
 			case BreachCreate: {
@@ -306,3 +309,5 @@ void MagicInternetBox::createDualTask(float angle, int player1, int player2, int
 void MagicInternetBox::flagDualTask(int id, int player, int flag) {
 	sendData(DualResolve, -1.0f, id, player, flag, -1.0f);
 }
+
+void MagicInternetBox::jump(int player) { sendData(Jump, -1.0f, player, -1, -1, -1.0f); }

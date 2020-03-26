@@ -30,7 +30,13 @@ class MagicInternetBox {
 		/** Unknown error as client */
 		ClientError,
 		/** Game has started */
-		GameStart = 200
+		GameStart = 200,
+		/** Attempting to reconnect to a room after dropping */
+		Reconnecting = 500,
+		/** Unknown error when reconnecting */
+		ReconnectFailure,
+		/** Game has ended */
+		GameEnded = 900
 	};
 
    private:
@@ -134,6 +140,17 @@ class MagicInternetBox {
 	bool initClient(std::string id);
 
 	/**
+	 * Reconnect to a game that you lost connection from.
+	 * Will attempt to rejoin the room. Query {@link matchStatus()} over the next few frames to see
+	 * the progress. If {@code GameEnded} is returned, then the room does not have a valid game
+	 * going at this time.
+	 *
+	 * @param id The room ID
+	 * @returns Whether a connection was successfully established
+	 */
+	bool reconnect(std::string id);
+
+	/**
 	 * Query the current matchmaking status
 	 */
 	MatchmakingStatus matchStatus();
@@ -219,6 +236,13 @@ class MagicInternetBox {
 	 * @param flag Whether the player is on or off the door (1 or 0)
 	 */
 	void flagDualTask(int id, int player, int flag);
+
+	/**
+	 * Inform other players that a player has initiated a jump.
+	 *
+	 * @param player The player ID who is jumping
+	 */
+	void jump(int player);
 };
 
 #endif /* __NETWORK_CONTROLLER_H__ */
