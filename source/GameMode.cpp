@@ -174,6 +174,7 @@ void GameMode::update(float timestep) {
 	// Jump Logic
 	if (input.getTapLoc() != Vec2::ZERO && !donutModel->isJumping()) {
 		donutModel->startJump();
+		net->jump(playerID);
 	}
 
 	for (unsigned int i = 0; i < ship->getDonuts().size(); i++) {

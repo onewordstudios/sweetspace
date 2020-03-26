@@ -236,6 +236,13 @@ class MagicInternetBox {
 	 * @param flag Whether the player is on or off the door (1 or 0)
 	 */
 	void flagDualTask(int id, int player, int flag);
+
+	/**
+	 * Inform other players that a player has initiated a jump.
+	 *
+	 * @param player The player ID who is jumping
+	 */
+	void jump(int player);
 };
 
 #endif /* __NETWORK_CONTROLLER_H__ */
