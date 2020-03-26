@@ -28,6 +28,8 @@
 	<string>Landscape</string>
 	<key>UIRequiredDeviceCapabilities</key>
 	<array>
+		<string>accelerometer</string>
+		<string>opengles-3</string>
 		<string>armv7</string>
 	</array>
 	<key>UIRequiresFullScreen</key>
