@@ -27,13 +27,13 @@ class MatchmakingGraphRoot : public cugl::Scene {
 	std::shared_ptr<cugl::Button> textInput;
 	/** Label for room ID */
 	std::shared_ptr<cugl::Label> roomLabel;
+	/** Label for instruction */
+	std::shared_ptr<cugl::Label> instrLabel;
 
 	// MODEL
 	int playerId;
 	/** RoomId for host display */
 	std::string roomId;
-	/** Whether the text input field is active */
-	bool roomInputFocused;
 
 	/**
 	 * Returns an informative string for the position

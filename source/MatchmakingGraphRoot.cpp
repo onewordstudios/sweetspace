@@ -70,7 +70,7 @@ bool MatchmakingGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& asset
 	roomLabel = std::dynamic_pointer_cast<Label>(assets->get<Node>("matchmaking_room"));
 	roomInput = std::dynamic_pointer_cast<TextField>(assets->get<Node>("matchmaking_input"));
 	textInput = std::dynamic_pointer_cast<Button>(assets->get<Node>("matchmaking_inputbutton"));
-	roomInputFocused = false;
+	instrLabel = std::dynamic_pointer_cast<Label>(assets->get<Node>("matchmaking_instr"));
 
 	addChild(scene);
 	return true;
@@ -109,10 +109,6 @@ void MatchmakingGraphRoot::update(float timestep) {
 	// "Drawing" code.  Move everything BUT the donut
 	// Update the HUD
 	roomLabel->setText(positionText());
-	if (!roomInputFocused && roomInput->hasFocus()) {
-		roomInput->setText(std::string(), false);
-		roomInputFocused = roomInput->hasFocus();
-	}
 }
 
 /**
@@ -138,6 +134,7 @@ int MatchmakingGraphRoot::checkButtons(const cugl::Vec2& position) {
 		textInput->setVisible(true);
 		host->setVisible(false);
 		client->setVisible(false);
+		instrLabel->setVisible(true);
 		return 1;
 	} else {
 		return -1;
