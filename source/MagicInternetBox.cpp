@@ -197,7 +197,7 @@ void MagicInternetBox::resolveState(std::shared_ptr<ShipModel> state,
 			state->createBreach(angle, message[doorIndex], message[doorIndex + 1]);
 		} else if (breaches[i]->getHealth() > 0 && message[doorIndex] == 0) {
 			CULog("Found unresolved breach that should be resolved, id %d", i);
-			state->resolveBreach(i);
+			state->resolveBreach((int)i);
 		}
 	}
 }
