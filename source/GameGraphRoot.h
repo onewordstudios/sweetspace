@@ -9,9 +9,9 @@
 #include "DonutModel.h"
 #include "DonutNode.h"
 #include "DoorNode.h"
+#include "HealthNode.h"
 #include "InputController.h"
 #include "ShipModel.h"
-#include "HealthNode.h"
 
 class GameGraphRoot : public cugl::Scene {
    protected:
