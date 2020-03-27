@@ -2,10 +2,12 @@
 #define SWEETSPACE_HEALTHNODE_H
 
 #include <cugl/2d/CUAnimationNode.h>
+#include "ShipModel.h"
 
 class HealthNode : public cugl::AnimationNode {
 #pragma mark Values
 protected:
+    std::shared_ptr<ShipModel> ship;
 
 public:
 #pragma mark -
@@ -52,6 +54,8 @@ public:
     }
 
 #pragma mark -
+
+    void setModel(std::shared_ptr<ShipModel> model) { ship = model; }
 
     void draw(const std::shared_ptr<cugl::SpriteBatch> &batch, const cugl::Mat4 &transform,
             cugl::Color4 tint) override;

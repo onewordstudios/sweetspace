@@ -166,7 +166,16 @@ void GameMode::update(float timestep) {
 		}
 	}
 
-	ship->setHealth(1 / (ship->getBreaches().size()));
+	if((ship->getBreaches().size()) == 0) {
+		ship->setHealth(11);
+	} else {
+		int h = 0;
+		for(int i = 0; i < ship->getBreaches().size(); i++) {
+			h = h + ship->getBreaches().at(i)->getHealth();
+		}
+		ship->setHealth(12 - h);
+	}
+
 
 	gm.update(timestep);
 	float thrust = input.getRoll();

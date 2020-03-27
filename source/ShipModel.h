@@ -1,4 +1,4 @@
-﻿#ifndef __SHIP_MODEL_H__
+#ifndef __SHIP_MODEL_H__
 #define __SHIP_MODEL_H__
 #include <cugl/cugl.h>
 
@@ -14,8 +14,8 @@ class ShipModel {
 	std::vector<std::shared_ptr<BreachModel>> breaches;
 	/** Current list of doors on ship*/
 	std::vector<std::shared_ptr<DoorModel>> doors;
-	/** Current health of the ship */
-	float health;
+	/** Current health of the ship*/
+	int health;
 
    public:
 #pragma mark Constructors
@@ -147,13 +147,13 @@ class ShipModel {
 	 *
 	 * @param health the health of the ship
 	 */
-	void setHealth(float health) { this->health = health; };
+	void setHealth(int health) { this->health = health; };
 
 	/**
 	 * Get health of the ship
 	 *
 	 * @return health the health of the ship
 	 */
-	bool getHealth() { return health; }
+	int getHealth() { return health; }
 };
 #endif /* __SHIP_MODEL_H__ */

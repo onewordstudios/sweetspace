@@ -23,7 +23,7 @@ bool ShipModel::init(unsigned int numPlayers, unsigned int numBreaches, unsigned
 	}
 
 	// Instantiate health
-	health = 1 / breaches.size();
+	health = 11;
 
 	return true;
 }
