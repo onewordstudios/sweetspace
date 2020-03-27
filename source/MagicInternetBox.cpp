@@ -153,6 +153,7 @@ void MagicInternetBox::syncState(std::shared_ptr<ShipModel> state) {
 		data.push_back((uint8_t)(d3 % ONE_BYTE));
 		data.push_back((uint8_t)(d3 / ONE_BYTE));
 	}
+	ws->sendBinary(data);
 }
 
 void MagicInternetBox::resolveState(std::shared_ptr<ShipModel> state,
@@ -170,7 +171,7 @@ void MagicInternetBox::resolveState(std::shared_ptr<ShipModel> state,
 						  FLOAT_PRECISION;
 			if (abs(doors[i]->getAngle() - angle) > FLOAT_EPSILON) {
 				CULog("Found open door that should be closed, id %d", i);
-				state->createDoor(-1.0f, (int)i);
+				state->createDoor(angle, (int)i);
 			}
 		} else {
 			if (doors[i]->getAngle() != -1.0f) {
@@ -194,11 +195,12 @@ void MagicInternetBox::resolveState(std::shared_ptr<ShipModel> state,
 			float angle = (float)(message[doorIndex + 2] + ONE_BYTE * message[doorIndex + 3]) /
 						  FLOAT_PRECISION;
 			CULog("Found resolved breach that should be unresolved, id %d", i);
-			state->createBreach(angle, message[doorIndex], message[doorIndex + 1]);
+			state->createBreach(angle, message[doorIndex], message[doorIndex + 1], i);
 		} else if (breaches[i]->getHealth() > 0 && message[doorIndex] == 0) {
 			CULog("Found unresolved breach that should be resolved, id %d", i);
 			state->resolveBreach((int)i);
 		}
+		doorIndex += 4;
 	}
 }
 
@@ -321,6 +323,7 @@ void MagicInternetBox::update(std::shared_ptr<ShipModel> state) {
 
 		if (type == StateSync) {
 			resolveState(state, message);
+			return;
 		}
 
 		if (type > DualResolve) {
