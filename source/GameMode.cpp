@@ -131,7 +131,7 @@ void GameMode::update(float timestep) {
 			abs(abs(donutModel->getAngle() - ship->getBreaches().at(i)->getAngle()) - (float)M_PI);
 
 		if (!donutModel->isJumping() && playerID != ship->getBreaches().at(i)->getPlayer() &&
-			diff < BREACH_WIDTH) {
+			diff < BREACH_WIDTH && ship->getBreaches().at(i)->getHealth() != 0) {
 			donutModel->applyForce(-6 * donutModel->getVelocity());
 		} else if (playerID == ship->getBreaches().at(i)->getPlayer() && diff < EPSILON_ANGLE &&
 				   !ship->getBreaches().at(i)->isPlayerOn() &&
