@@ -8,6 +8,7 @@ class HealthNode : public cugl::AnimationNode {
 #pragma mark Values
 protected:
     std::shared_ptr<ShipModel> ship;
+    int section;
 
 public:
 #pragma mark -
@@ -56,6 +57,10 @@ public:
 #pragma mark -
 
     void setModel(std::shared_ptr<ShipModel> model) { ship = model; }
+
+    void setSection(int s) { section = s; }
+
+    int getSection() { return section; }
 
     void draw(const std::shared_ptr<cugl::SpriteBatch> &batch, const cugl::Mat4 &transform,
             cugl::Color4 tint) override;
