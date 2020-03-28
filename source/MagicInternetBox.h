@@ -82,7 +82,8 @@ class MagicInternetBox {
 		DualResolve,
 		AssignedRoom, // Doubles for both creating and created
 		JoinRoom,	  // Doubles for both joining and join response
-		PlayerJoined
+		PlayerJoined,
+		PlayerDisconnect
 	};
 
 	/**
