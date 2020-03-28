@@ -43,6 +43,8 @@ constexpr unsigned int MAX_DOORS = 1;
 constexpr float EPSILON_ANGLE = 0.09f;
 /** The Angle in radians for which a collision occurs*/
 constexpr float DOOR_WIDTH = 0.12f;
+/** The Angle in radians for which a breach donut collision occurs*/
+constexpr float BREACH_WIDTH = 0.2f;
 /** The Angle in radians for which a door can be activated*/
 constexpr float DOOR_ACTIVE_ANGLE = 0.25f;
 
@@ -128,8 +130,11 @@ void GameMode::update(float timestep) {
 		float diff =
 			(float)M_PI - abs(abs(donutModel->getAngle() - breach->getAngle()) - (float)M_PI);
 
-		if (playerID == breach->getPlayer() && diff < EPSILON_ANGLE && !breach->isPlayerOn() &&
-			donutModel->getJumpOffset() == 0.0f && breach->getHealth() > 0) {
+		if (!donutModel->isJumping() && playerID != breach->getPlayer() && diff < BREACH_WIDTH) {
+			donutModel->applyForce(-6 * donutModel->getVelocity());
+		} else if (playerID == breach->getPlayer() && diff < EPSILON_ANGLE &&
+				   !breach->isPlayerOn() && donutModel->getJumpOffset() == 0.0f &&
+				   breach->getHealth() > 0) {
 			breach->decHealth(1);
 			breach->setIsPlayerOn(true);
 
