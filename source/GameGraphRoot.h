@@ -56,9 +56,9 @@ class GameGraphRoot : public cugl::Scene {
 #pragma mark -
 #pragma mark Public Consts
 	/** Possible colors for player representations */
-	const std::vector<string> playerColor{"yellow", "red", "purple", "green", "orange"};
+	const std::vector<string> playerColor{"yellow", "red", "purple", "green", "orange", "cyan"};
 	/** number of possible player colors */
-	static constexpr int NUM_COLORS = 5;
+	static constexpr int NUM_COLORS = 6;
 	/** The scale of the breach textures. */
 	static constexpr float BREACH_SCALE = 0.25;
 #pragma mark -

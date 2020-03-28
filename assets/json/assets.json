@@ -128,7 +128,7 @@
                                 "texture":  "donut_yellow",
                                 "position": [1280,1344],
                                 "anchor":   [0.5,0.5],
-                                "scale":    0.32
+                                "scale":    0.4
                             }
                         }
                     }
