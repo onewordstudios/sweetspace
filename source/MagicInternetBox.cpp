@@ -176,8 +176,8 @@ void MagicInternetBox::resolveState(std::shared_ptr<ShipModel> state,
 		} else {
 			if (doors[i]->getAngle() != -1.0f) {
 				CULog("Found closed door that should be open, id %d", i);
-				state->flagDoor((int)i, 0, 1);
-				state->flagDoor((int)i, 1, 1);
+				state->getDoors()[i]->setAngle(-1);
+				state->getDoors()[i]->clear();
 			}
 		}
 
