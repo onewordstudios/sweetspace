@@ -8,17 +8,20 @@ using namespace cugl;
 constexpr unsigned int DIAMETER = 1280;
 
 /** The radius used for placement of the doors. */
-constexpr unsigned int DOOR_RADIUS = 650;
+constexpr float DOOR_RADIUS = 650;
+
+/** Position to place DoorNode offscreen. */
+constexpr float OFF_SCREEN_POS = 1500;
 
 /** The height of the door. */
 int height = 0;
 
 void DoorNode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch, const Mat4& transform,
 					Color4 tint) {
-	Vec2 doorPos = Vec2(DIAMETER + DOOR_RADIUS * sin(doorModel->getAngle()),
-						DIAMETER / 2.0f - (DOOR_RADIUS)*cos(doorModel->getAngle()));
+	Vec2 doorPos = Vec2(DOOR_RADIUS * sin(doorModel->getAngle()),
+						- (DOOR_RADIUS)*cos(doorModel->getAngle()));
 	if (doorModel->getAngle() < 0) {
-		doorPos = Vec2(0, 0);
+		doorPos = Vec2(OFF_SCREEN_POS, OFF_SCREEN_POS);
 	}
 	setPosition(doorPos);
 	setAngle(doorModel->getAngle());
