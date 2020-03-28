@@ -27,6 +27,8 @@ class MatchmakingGraphRoot : public cugl::Scene {
 	std::shared_ptr<cugl::Button> textInput;
 	/** Label for room ID */
 	std::shared_ptr<cugl::Label> roomLabel;
+	/** Label for instruction */
+	std::shared_ptr<cugl::Label> instrLabel;
 
 	// MODEL
 	int playerId;

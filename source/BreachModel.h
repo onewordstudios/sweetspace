@@ -49,7 +49,7 @@ class BreachModel {
 	 *
 	 * @return true if the obstacle is initialized properly, false otherwise.
 	 */
-	virtual bool init() { return init(-1.0f, 3, 0); }
+	virtual bool init() { return init(-1.0f, 0, 0); }
 
 	/**
 	 * Initializes a new breach with the given angle
@@ -62,7 +62,7 @@ class BreachModel {
 	 *
 	 * @return true if the obstacle is initialized properly, false otherwise.
 	 */
-	virtual bool init(const float a) { return init(a, 3, 0); };
+	virtual bool init(const float a) { return init(a, 0, 0); };
 
 	/**
 	 * Initializes a new breach with the given angle and max health
@@ -124,7 +124,12 @@ class BreachModel {
 	 *
 	 * @param value Amount to decrement health by.
 	 */
-	void decHealth(int value) { health = health - value; }
+	void decHealth(int value) {
+		health = health - value;
+		if (health < 0) {
+			health = 0;
+		}
+	}
 
 	/**
 	 * Sets whether the player is currently on the breach.

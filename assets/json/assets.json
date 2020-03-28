@@ -226,21 +226,37 @@
                         "y_anchor" : "bottom"
                     }
                 },
+                "instr" : {
+                    "type": "Label",
+                    "data": {
+                        "font"       : "felt32",
+                        "text"       : "Input Lobby ID Here:",
+                        "visible"    : false,
+                        "foreground" : [255,0,0,255],
+                        "anchor"     : [0,1],
+                        "valign"     : "middle",
+                        "halign"     : "center"
+                    },
+                    "layout" : {
+                        "x_anchor" : "left",
+                        "y_anchor" : "top"
+                    }
+                },
                 "input" : {
                 	"type": "TextField",
                     "data": {
                        	"font"       : "felt32",
-                       	"text"       : "Input Lobby ID Here",
+                       	"text"       : "sweet",
                        	"visible"	 : false,
                        	"foreground" : [255,0,0,255],
-                       	"anchor"	 : [1,0],
+                       	"anchor"	 : [0,1],
                        	"valign"     : "middle",
                        	"halign"     : "center"
                     },
                     "layout" : {
-                        "x_anchor" : "right",
-                        "y_anchor" : "bottom",
-                        "absolute" : true
+                        "x_anchor" : "left",
+                        "y_anchor" : "top",
+                        "x_offset" : 0.4
                     }
                 },
                 "inputbutton" : {
@@ -251,7 +267,7 @@
 				    "data": {
 				        "upnode"   : "up",
 				        "position" : [0,0],
-				        "anchor"   : [0,1],
+				        "anchor"   : [1,1],
 				        "size"     : [0,0],
 				        "visible"  : false,
 				        "scale" : 0.5
@@ -265,7 +281,7 @@
                         }
 				    },
                     "layout" : {
-                        "x_anchor" : "center",
+                        "x_anchor" : "right",
                         "y_anchor" : "top"
                     }
                 }
