@@ -3,6 +3,8 @@
 using namespace cugl;
 
 constexpr unsigned int NETWORK_TICK = 12; // Originally defined in MagicInternetBox.cpp
+constexpr float BEG_DONUT = 0.2f;
+constexpr float END_DONUT = 1.0f - BEG_DONUT;
 
 bool ExternalDonutModel::init(const cugl::Vec2& pos) {
 	bool ret = DonutModel::init(pos);
@@ -39,12 +41,13 @@ void ExternalDonutModel::update(float timestep) {
 		}
 
 		float newAngle = networkMove.angle * percent + networkMove.oldAngle * (1.0f - percent);
-		if (networkMove.oldAngle > 0.8f * FULL_CIRCLE && networkMove.angle < 0.2f * FULL_CIRCLE) {
+		if (networkMove.oldAngle > END_DONUT * FULL_CIRCLE &&
+			networkMove.angle < BEG_DONUT * FULL_CIRCLE) {
 			newAngle = (networkMove.angle - FULL_CIRCLE) * percent +
 					   networkMove.oldAngle * (1.0f - percent);
 
-		} else if (networkMove.angle > 0.8f * FULL_CIRCLE &&
-				   networkMove.oldAngle < 0.2f * FULL_CIRCLE) {
+		} else if (networkMove.angle > END_DONUT * FULL_CIRCLE &&
+				   networkMove.oldAngle < BEG_DONUT * FULL_CIRCLE) {
 			newAngle = (networkMove.angle - FULL_CIRCLE) * percent +
 					   networkMove.oldAngle * (1.0f - percent);
 		}
