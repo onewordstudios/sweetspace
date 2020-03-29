@@ -12,9 +12,11 @@ constexpr unsigned int ROOM_LENGTH = 5;
 
 bool MagicInternetBox::initConnection() {
 	switch (status) {
+		case Disconnected:
 		case Uninitialized:
 		case HostError:
 		case ClientError:
+		case ReconnectError:
 			break;
 		default:
 			CULog("ERROR: MIB already initialized");

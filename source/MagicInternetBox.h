@@ -12,6 +12,7 @@ class MagicInternetBox {
 	 * Status of whether the game is ready to start
 	 */
 	enum MatchmakingStatus {
+		Disconnected = -2,
 		Uninitialized = -1,
 		/** Connecting to server; room ID not assigned yet */
 		HostConnecting = 0,
