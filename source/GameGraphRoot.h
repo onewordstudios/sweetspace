@@ -9,6 +9,7 @@
 #include "DonutModel.h"
 #include "DonutNode.h"
 #include "DoorNode.h"
+#include "HealthNode.h"
 #include "InputController.h"
 #include "ShipModel.h"
 

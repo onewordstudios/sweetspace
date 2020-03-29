@@ -99,6 +99,9 @@
     <ClInclude Include="..\..\source\BreachNode.h">
       <Filter>Header Files\SceneGraph</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\source\HealthNode.h">
+      <Filter>Header Files\SceneGraph</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\source\main.cpp">
@@ -159,6 +162,9 @@
       <Filter>Source Files\Controllers</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\BreachNode.cpp">
+      <Filter>Source Files\SceneGraph</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\HealthNode.cpp">
       <Filter>Source Files\SceneGraph</Filter>
     </ClCompile>
   </ItemGroup>

@@ -131,19 +131,22 @@ void GameMode::update(float timestep) {
 			(float)M_PI - abs(abs(donutModel->getAngle() - breach->getAngle()) - (float)M_PI);
 
 		if (!donutModel->isJumping() && playerID != breach->getPlayer() && diff < BREACH_WIDTH) {
-			donutModel->applyForce(-6 * donutModel->getVelocity());
-		} else if (playerID == breach->getPlayer() && diff < EPSILON_ANGLE &&
-				   !breach->isPlayerOn() && donutModel->getJumpOffset() == 0.0f &&
-				   breach->getHealth() > 0) {
-			breach->decHealth(1);
-			breach->setIsPlayerOn(true);
+			if (!donutModel->isJumping() && playerID != ship->getBreaches().at(i)->getPlayer() &&
+				diff < BREACH_WIDTH && ship->getBreaches().at(i)->getHealth() != 0) {
+				donutModel->applyForce(-6 * donutModel->getVelocity());
+			} else if (playerID == breach->getPlayer() && diff < EPSILON_ANGLE &&
+					   !breach->isPlayerOn() && donutModel->getJumpOffset() == 0.0f &&
+					   breach->getHealth() > 0) {
+				breach->decHealth(1);
+				breach->setIsPlayerOn(true);
 
-			if (breach->getHealth() == 0) {
-				net->resolveBreach(i);
+				if (breach->getHealth() == 0) {
+					net->resolveBreach(i);
+				}
+
+			} else if (diff > EPSILON_ANGLE && ship->getBreaches().at(i)->isPlayerOn()) {
+				ship->getBreaches().at(i)->setIsPlayerOn(false);
 			}
-
-		} else if (diff > EPSILON_ANGLE && ship->getBreaches().at(i)->isPlayerOn()) {
-			ship->getBreaches().at(i)->setIsPlayerOn(false);
 		}
 	}
 
@@ -169,6 +172,16 @@ void GameMode::update(float timestep) {
 				net->flagDualTask(i, playerID, 0);
 			}
 		}
+	}
+
+	if ((ship->getBreaches().size()) == 0) {
+		ship->setHealth(11);
+	} else {
+		int h = 0;
+		for (int i = 0; i < ship->getBreaches().size(); i++) {
+			h = h + ship->getBreaches().at(i)->getHealth();
+		}
+		ship->setHealth(12 - h);
 	}
 
 	gm.update(timestep);
