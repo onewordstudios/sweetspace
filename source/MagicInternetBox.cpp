@@ -383,10 +383,12 @@ void MagicInternetBox::update(std::shared_ptr<ShipModel> state) {
 		switch (type) {
 			case PlayerJoined: {
 				numPlayers++;
+				CULog("Player has reconnected");
 				return;
 			}
 			case PlayerDisconnect: {
 				numPlayers--;
+				CULog("Player has disconnected");
 				return;
 			}
 			case StateSync: {
