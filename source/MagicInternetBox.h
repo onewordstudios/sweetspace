@@ -72,6 +72,11 @@ class MagicInternetBox {
 	unsigned int numPlayers;
 
 	/**
+	 * Number of frames since the last inbound server message
+	 */
+	unsigned int lastConnection;
+
+	/**
 	 * The type of data being sent during a network packet
 	 */
 	enum NetworkDataType {
@@ -148,6 +153,7 @@ class MagicInternetBox {
 		currFrame = 0;
 		playerID = -1;
 		numPlayers = 0;
+		lastConnection = 0;
 	};
 
 	/**

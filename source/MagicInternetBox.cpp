@@ -11,6 +11,7 @@ constexpr unsigned int STATE_SYNC_FREQ = NETWORK_TICK * 5;
 constexpr unsigned int ONE_BYTE = 256;
 constexpr unsigned int ROOM_LENGTH = 5;
 constexpr float FLOAT_EPSILON = 0.1f;
+constexpr unsigned int SERVER_TIMEOUT = 300;
 
 bool MagicInternetBox::initConnection() {
 	switch (status) {
@@ -340,6 +341,8 @@ void MagicInternetBox::update(std::shared_ptr<ShipModel> state) {
 		return;
 	}
 
+	lastConnection++;
+
 	// NETWORK TICK
 	currFrame = (currFrame + 1) % STATE_SYNC_FREQ;
 	if (currFrame % NETWORK_TICK == 0) {
@@ -348,9 +351,17 @@ void MagicInternetBox::update(std::shared_ptr<ShipModel> state) {
 		float velocity = player->getVelocity();
 		sendData(PositionUpdate, angle, playerID, -1, -1, velocity);
 
-		// STATE SYNC
-		if (currFrame == 0 && playerID == 0) {
-			syncState(state);
+		// STATE SYNC (and check for server connection)
+		if (currFrame == 0) {
+			if (playerID == 0) {
+				syncState(state);
+			}
+			if (lastConnection > SERVER_TIMEOUT) {
+				CULog("HAS NOT RECEIVED SERVER MESSAGE IN TIMEOUT FRAMES; assuming disconnected");
+				status = Disconnected;
+				ws->close();
+				return;
+			}
 		}
 	}
 
@@ -366,6 +377,8 @@ void MagicInternetBox::update(std::shared_ptr<ShipModel> state) {
 			CULog("Received invalid connection message during gameplay; %d", message[0]);
 			return;
 		}
+
+		lastConnection = 0;
 
 		switch (type) {
 			case PlayerJoined: {
