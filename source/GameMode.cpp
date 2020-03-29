@@ -64,6 +64,8 @@ constexpr float DOOR_ACTIVE_ANGLE = 15.0f;
  */
 bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets,
 					std::shared_ptr<MagicInternetBox>& mib) {
+	auto source = assets->get<Sound>("theme");
+	AudioChannels::get()->playMusic(source, true, source->getVolume());
 	// Initialize the scene to a locked width
 	Size dimen = Application::get()->getDisplaySize();
 	dimen *= SCENE_WIDTH / dimen.width; // Lock the game to a reasonable resolution
