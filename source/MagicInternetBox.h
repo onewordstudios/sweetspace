@@ -34,7 +34,7 @@ class MagicInternetBox {
 		/** Attempting to reconnect to a room after dropping */
 		Reconnecting = 500,
 		/** Unknown error when reconnecting */
-		ReconnectFailure,
+		ReconnectError,
 		/** Game has ended */
 		GameEnded = 900
 	};
@@ -74,16 +74,21 @@ class MagicInternetBox {
 	 * The type of data being sent during a network packet
 	 */
 	enum NetworkDataType {
-		PositionUpdate,
+		// Gameplay messages
+		PositionUpdate = 0,
 		Jump,
 		BreachCreate,
 		BreachShrink,
 		DualCreate,
 		DualResolve,
-		AssignedRoom, // Doubles for both creating and created
-		JoinRoom,	  // Doubles for both joining and join response
-		PlayerJoined,
-		PlayerDisconnect
+
+		// Connection messages that can be received during gameplay
+		PlayerJoined = 50, // Doubles for both matchmaking and reconnect
+		PlayerDisconnect,  //
+
+		// Matchmaking messages only
+		AssignedRoom = 100, // Doubles for both creating and created
+		JoinRoom			// Doubles for both joining and join response
 	};
 
 	/**

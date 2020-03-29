@@ -78,6 +78,24 @@ bool MagicInternetBox::initClient(std::string id) {
 	return true;
 }
 
+bool MagicInternetBox::reconnect(std::string id) {
+	if (!initConnection()) {
+		status = ReconnectError;
+		return false;
+	}
+
+	std::vector<uint8_t> data;
+	data.push_back((uint8_t)NetworkDataType::JoinRoom);
+	for (unsigned int i = 0; i < ROOM_LENGTH; i++) {
+		data.push_back((uint8_t)id.at(i));
+	}
+	ws->sendBinary(data);
+	roomID = id;
+	status = Reconnecting;
+
+	return true;
+}
+
 /*
 
 DATA FORMAT
@@ -120,8 +138,6 @@ void MagicInternetBox::sendData(NetworkDataType type, float angle, int id, int d
 
 	ws->sendBinary(data);
 }
-
-bool MagicInternetBox::reconnect(std::string id) { return false; }
 
 MagicInternetBox::MatchmakingStatus MagicInternetBox::matchStatus() { return status; }
 
@@ -196,6 +212,29 @@ void MagicInternetBox::update() {
 						status = ClientRoomFull;
 						return;
 					}
+					case 3: {
+						// Reconnecting success
+						if (status != Reconnecting) {
+							CULog(
+								"ERROR: Received reconnecting response from server when not "
+								"reconnecting");
+							return;
+						}
+						status = GameStart;
+						playerID = message[2];
+						numPlayers = message[3];
+						return;
+					}
+					case 4: {
+						if (status != Reconnecting) {
+							CULog(
+								"ERROR: Received reconnecting response from server when not "
+								"reconnecting");
+							return;
+						}
+						status = ReconnectError;
+						return;
+					}
 				}
 			}
 			case PlayerJoined: {
@@ -226,16 +265,29 @@ void MagicInternetBox::update(std::shared_ptr<ShipModel> state) {
 	}
 
 	ws->poll();
-	ws->dispatchBinary([&state](const std::vector<uint8_t>& message) {
+	ws->dispatchBinary([&state, this](const std::vector<uint8_t>& message) {
 		if (message.size() == 0) {
 			return;
 		}
 
 		NetworkDataType type = static_cast<NetworkDataType>(message[0]);
 
-		if (type > DualResolve) {
+		if (type > AssignedRoom) {
 			CULog("Received invalid connection message during gameplay; %d", message[0]);
 			return;
+		}
+
+		switch (type) {
+			case PlayerJoined: {
+				numPlayers++;
+				return;
+			}
+			case PlayerDisconnect: {
+				numPlayers--;
+				return;
+			}
+			default:
+				break;
 		}
 
 		float angle = (float)(message[1] + ONE_BYTE * message[2]) / FLOAT_PRECISION;
@@ -257,7 +309,6 @@ void MagicInternetBox::update(std::shared_ptr<ShipModel> state) {
 				break;
 			}
 			case Jump: {
-				CULog("Received jump %d", id);
 				state->getDonuts()[id]->startJump();
 				break;
 			}
