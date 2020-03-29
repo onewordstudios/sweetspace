@@ -39,14 +39,14 @@ constexpr unsigned int MAX_EVENTS = 3;
 /** The maximum number of doors on ship at any one time. This will probably need to scale with the
  * number of players*/
 constexpr unsigned int MAX_DOORS = 1;
-/** The Angle in radians for which a tap can registers as fixing a breach*/
-constexpr float EPSILON_ANGLE = 0.09f;
-/** The Angle in radians for which a collision occurs*/
-constexpr float DOOR_WIDTH = 0.12f;
-/** The Angle in radians for which a breach donut collision occurs*/
-constexpr float BREACH_WIDTH = 0.2f;
-/** The Angle in radians for which a door can be activated*/
-constexpr float DOOR_ACTIVE_ANGLE = 0.25f;
+/** The Angle in degrees for fixing a breach*/
+constexpr float EPSILON_ANGLE = 5.2f;
+/** The Angle in degrees for which a collision occurs*/
+constexpr float DOOR_WIDTH = 7.0f;
+/** The Angle in degrees for which a breach donut collision occurs*/
+constexpr float BREACH_WIDTH = 11.0f;
+/** The Angle in degrees for which a door can be activated*/
+constexpr float DOOR_ACTIVE_ANGLE = 15.0f;
 
 #pragma mark -
 #pragma mark Constructors
@@ -64,6 +64,8 @@ constexpr float DOOR_ACTIVE_ANGLE = 0.25f;
  */
 bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets,
 					std::shared_ptr<MagicInternetBox>& mib) {
+	auto source = assets->get<Sound>("theme");
+	AudioChannels::get()->playMusic(source, true, source->getVolume());
 	// Initialize the scene to a locked width
 	Size dimen = Application::get()->getDisplaySize();
 	dimen *= SCENE_WIDTH / dimen.width; // Lock the game to a reasonable resolution
@@ -128,7 +130,8 @@ void GameMode::update(float timestep) {
 			continue;
 		}
 		float diff =
-			(float)M_PI - abs(abs(donutModel->getAngle() - breach->getAngle()) - (float)M_PI);
+			(float)DonutModel::HALF_CIRCLE -
+			abs(abs(donutModel->getAngle() - breach->getAngle()) - (float)DonutModel::HALF_CIRCLE);
 
 		if (!donutModel->isJumping() && playerID != breach->getPlayer() && diff < BREACH_WIDTH &&
 			breach->getHealth() != 0) {
@@ -153,9 +156,9 @@ void GameMode::update(float timestep) {
 			ship->getDoors().at(i)->getAngle() < 0) {
 			continue;
 		}
-		float diff =
-			(float)M_PI -
-			abs(abs(donutModel->getAngle() - ship->getDoors().at(i)->getAngle()) - (float)M_PI);
+		float diff = (float)DonutModel::HALF_CIRCLE -
+					 abs(abs(donutModel->getAngle() - ship->getDoors().at(i)->getAngle()) -
+						 (float)DonutModel::HALF_CIRCLE);
 
 		if (diff < DOOR_WIDTH) {
 			// TODO: Real physics...

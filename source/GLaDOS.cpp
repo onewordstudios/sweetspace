@@ -17,7 +17,7 @@ const unsigned int MAX_DOORS = 1;
  */
 const unsigned int SPAWN_RATE = 100;
 constexpr unsigned int FULL_CIRCLE = 360;
-constexpr float MIN_ANGLE_DIFF = 0.5f;
+constexpr float MIN_ANGLE_DIFF = 29.0f;
 /** Array recording which breaches are free or not. */
 array<bool, MAX_EVENTS> breachFree;
 
@@ -110,16 +110,32 @@ void GLaDOS::update(float dt) {
 	if (rand() % SPAWN_RATE > 1) return;
 	for (int i = 0; i < MAX_EVENTS; i++) {
 		if (breachFree.at(i)) {
-			float angle = (rand() % FULL_CIRCLE) * (float)M_PI / DonutModel::HALF_CIRCLE;
+			float angle = rand() % FULL_CIRCLE;
 			bool goodAngle = true;
 			for (int j = 0; j < ship->getDonuts().size(); j++) {
-				float diff = (float)M_PI -
-							 abs(abs(ship->getDonuts().at(j)->getAngle() - angle) - (float)M_PI);
+				float diff = (float)DonutModel::HALF_CIRCLE -
+							 abs(abs(ship->getDonuts().at(j)->getAngle() - angle) -
+								 (float)DonutModel::HALF_CIRCLE);
 				if (diff < MIN_ANGLE_DIFF) {
 					goodAngle = false;
 					break;
 				}
 			}
+
+			// Make sure it's not too close to other breaches
+			for (unsigned int k = 0; k < ship->getBreaches().size(); k++) {
+				if (k == i) {
+					continue;
+				}
+				float breachAngle = ship->getBreaches()[k]->getAngle();
+				float diff = (float)DonutModel::HALF_CIRCLE -
+							 abs(abs(breachAngle - angle) - (float)DonutModel::HALF_CIRCLE);
+				if (breachAngle != -1 && diff < MIN_ANGLE_DIFF) {
+					goodAngle = false;
+					break;
+				}
+			}
+
 			if (!goodAngle) {
 				continue;
 			}
@@ -132,11 +148,12 @@ void GLaDOS::update(float dt) {
 	}
 	for (int i = 0; i < MAX_DOORS; i++) {
 		if (doorFree.at(i)) {
-			float angle = (rand() % FULL_CIRCLE) * (float)M_PI / DonutModel::HALF_CIRCLE;
+			float angle = rand() % FULL_CIRCLE;
 			bool goodAngle = true;
 			for (int j = 0; j < ship->getDonuts().size(); j++) {
-				float diff = (float)M_PI -
-							 abs(abs(ship->getDonuts().at(j)->getAngle() - angle) - (float)M_PI);
+				float diff = (float)DonutModel::HALF_CIRCLE -
+							 abs(abs(ship->getDonuts().at(j)->getAngle() - angle) -
+								 (float)DonutModel::HALF_CIRCLE);
 				if (diff < MIN_ANGLE_DIFF) {
 					goodAngle = false;
 					break;
