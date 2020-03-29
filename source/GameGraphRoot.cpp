@@ -22,7 +22,7 @@ constexpr float TWO_PI = (float)(2 * M_PI);
 constexpr float PI_180 = (float)(M_PI / 180);
 
 /** The scale of the donut textures. */
-constexpr float DONUT_SCALE = 0.32f;
+constexpr float DONUT_SCALE = 0.4f;
 
 /** Offset of donut sprites from the radius of the ship */
 constexpr int DONUT_OFFSET = 200;
@@ -130,6 +130,17 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 		doorNode->setAnchor(Vec2::ANCHOR_BOTTOM_CENTER);
 		doorNode->setScale(0.3f);
 		nearSpace->addChild(doorNode);
+	}
+
+	for (int i = 0; i < 8; i++) {
+		std::shared_ptr<Texture> image = assets->get<Texture>("health_glow");
+		std::shared_ptr<HealthNode> healthNode = HealthNode::alloc(image, 1, 12);
+		healthNode->setModel(ship);
+		healthNode->setFrame(11);
+		healthNode->setSection(i);
+		healthNode->setAnchor(Vec2::ANCHOR_BOTTOM_CENTER);
+		healthNode->setScale(0.55f);
+		nearSpace->addChild(healthNode);
 	}
 
 	addChild(scene);
