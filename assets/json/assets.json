@@ -67,6 +67,13 @@
             "file":   "textures/confirm_join.png"
         }
 	},
+	"sounds": {
+        "theme": {
+            "type":     "sample",
+            "file":     "sounds/music.wav",
+            "volume":   0.4
+        }
+    },
 	"fonts": {
 		"felt32": {
 			"file":     "fonts/Montserrat-Medium.ttf",
