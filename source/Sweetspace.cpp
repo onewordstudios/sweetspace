@@ -40,7 +40,6 @@ void Sweetspace::onStartup() {
 
 	assets->attach<Font>(FontLoader::alloc()->getHook());
 	assets->attach<Texture>(TextureLoader::alloc()->getHook());
-	assets->attach<Sound>(SoundLoader::alloc()->getHook());
 	assets->attach<Node>(SceneLoader::alloc()->getHook());
 
 	// Create a "loading" screen
@@ -50,7 +49,6 @@ void Sweetspace::onStartup() {
 	mib = std::make_shared<MagicInternetBox>();
 
 	// Queue up the other assets
-	AudioChannels::start(24);
 	assets->loadDirectoryAsync("json/assets.json", nullptr);
 
 	Application::onStartup(); // YOU MUST END with call to parent
