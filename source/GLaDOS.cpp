@@ -111,6 +111,18 @@ void GLaDOS::update(float dt) {
 	for (int i = 0; i < MAX_EVENTS; i++) {
 		if (breachFree.at(i)) {
 			float angle = (rand() % FULL_CIRCLE) * (float)M_PI / DonutModel::HALF_CIRCLE;
+			bool goodAngle = true;
+			for (int j = 0; j < ship->getDonuts().size(); j++) {
+				float diff = (float)M_PI -
+							 abs(abs(ship->getDonuts().at(j)->getAngle() - angle) - (float)M_PI);
+				if (diff < MIN_ANGLE_DIFF) {
+					goodAngle = false;
+					break;
+				}
+			}
+			if (!goodAngle) {
+				continue;
+			}
 			breachFree.at(i) = false;
 			int p = rand() % ship->getDonuts().size();
 			ship->getBreaches().at(i)->reset(angle, p);

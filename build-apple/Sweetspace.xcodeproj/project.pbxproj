@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3CDD11B1242D1DDF00FD21F8 /* HealthNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3CDD11AC242D1DDF00FD21F8 /* HealthNode.cpp */; };
+		3CDD11B2242D1DDF00FD21F8 /* HealthNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3CDD11AC242D1DDF00FD21F8 /* HealthNode.cpp */; };
+		3CDD11B3242D1DDF00FD21F8 /* HealthNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3CDD11AC242D1DDF00FD21F8 /* HealthNode.cpp */; };
 		7B2F9C822429960500283B4A /* DoorNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A577C9232422AA0D00B12ADE /* DoorNode.cpp */; };
 		A577C9282422AA0E00B12ADE /* DoorNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A577C9232422AA0D00B12ADE /* DoorNode.cpp */; };
 		A577C9292422AA0E00B12ADE /* DoorNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A577C9232422AA0D00B12ADE /* DoorNode.cpp */; };
@@ -166,6 +169,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		3CDD11AC242D1DDF00FD21F8 /* HealthNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HealthNode.cpp; sourceTree = "<group>"; };
+		3CDD11B0242D1DDF00FD21F8 /* HealthNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HealthNode.h; sourceTree = "<group>"; };
 		7B3270692425A569004A3B36 /* GLaDOS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLaDOS.h; sourceTree = "<group>"; };
 		A577C9232422AA0D00B12ADE /* DoorNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DoorNode.cpp; sourceTree = "<group>"; };
 		A577C9272422AA0D00B12ADE /* DoorNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DoorNode.h; sourceTree = "<group>"; };
@@ -474,6 +479,8 @@
 				DF3B74482403A46B0063552F /* Sweetspace.h */,
 				EB2BE9B41D74952A002FE78B /* main.cpp */,
 				C58C531CA6998820E3FA7D86 /* ShipModel.h */,
+				3CDD11AC242D1DDF00FD21F8 /* HealthNode.cpp */,
+				3CDD11B0242D1DDF00FD21F8 /* HealthNode.h */,
 				C58C51549E90F0CA2D05EB7A /* ShipModel.cpp */,
 				D1522D40CDE7AAE1A66B8F66 /* DonutNode.cpp */,
 				D1522C8009B69F3F56057E41 /* DonutNode.h */,
@@ -690,6 +697,7 @@
 				C122265ED47A5D2CFBAFDADF /* PlayerDonutModel.cpp in Sources */,
 				7B2F9C822429960500283B4A /* DoorNode.cpp in Sources */,
 				D152280455B6C3C470B28DBC /* DoorModel.cpp in Sources */,
+				3CDD11B3242D1DDF00FD21F8 /* HealthNode.cpp in Sources */,
 				C12227559D5A695B3AD2A84C /* MatchmakingGraphRoot.cpp in Sources */,
 				C122202B76FF5A7E71E2DF7F /* MatchmakingMode.cpp in Sources */,
 				C1222A784AAFE1C7BC89BC94 /* GLaDOS.cpp in Sources */,
@@ -718,6 +726,7 @@
 				C1222E686D1435B6446D0307 /* ExternalDonutModel.cpp in Sources */,
 				C1222CE9FCD72180B66462B2 /* PlayerDonutModel.cpp in Sources */,
 				D15226D74B5F1C4C77EC84B1 /* DoorModel.cpp in Sources */,
+				3CDD11B2242D1DDF00FD21F8 /* HealthNode.cpp in Sources */,
 				C12229A6FE0EE350C0B69408 /* MatchmakingGraphRoot.cpp in Sources */,
 				C1222FC552DCE75362130E81 /* MatchmakingMode.cpp in Sources */,
 				C1222C87F6E3205CB0FD5628 /* GLaDOS.cpp in Sources */,
@@ -746,6 +755,7 @@
 				C12223392F6704D2EE10713A /* ExternalDonutModel.cpp in Sources */,
 				C12223F92AA43CCF674FE286 /* PlayerDonutModel.cpp in Sources */,
 				D152241D12DF18170D97502F /* DoorModel.cpp in Sources */,
+				3CDD11B1242D1DDF00FD21F8 /* HealthNode.cpp in Sources */,
 				C122231BF74B6D2B4DFA3857 /* MatchmakingGraphRoot.cpp in Sources */,
 				C1222440665C00173B68F8B3 /* MatchmakingMode.cpp in Sources */,
 				C1222BA1DAB6BA55C0C6DEDA /* GLaDOS.cpp in Sources */,
