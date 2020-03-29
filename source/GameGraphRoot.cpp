@@ -281,8 +281,6 @@ void GameGraphRoot::update(float timestep) {
                     shipSegsNode->getChildByTag(static_cast<unsigned int>(leftMostSeg)));
             newLeftSegment->setAngle(fmod(segment->getAngle() - SEG_SIZE, MAX_ANGLE));
 		}
-		segment->setAngle(static_cast<float>((i - 2) * M_PI / 4));
-		shipSegsNode->addChildWithTag(segment, static_cast<unsigned int>(i));
 	}
 }
 
