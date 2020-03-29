@@ -11,12 +11,15 @@ constexpr unsigned int STATE_SYNC_FREQ = NETWORK_TICK * 5;
 constexpr unsigned int ONE_BYTE = 256;
 constexpr unsigned int ROOM_LENGTH = 5;
 constexpr float FLOAT_EPSILON = 0.1f;
+constexpr unsigned int SERVER_TIMEOUT = 300;
 
 bool MagicInternetBox::initConnection() {
 	switch (status) {
+		case Disconnected:
 		case Uninitialized:
 		case HostError:
 		case ClientError:
+		case ReconnectError:
 			break;
 		default:
 			CULog("ERROR: MIB already initialized");
@@ -76,6 +79,24 @@ bool MagicInternetBox::initClient(std::string id) {
 	ws->sendBinary(data);
 	roomID = id;
 	status = ClientConnecting;
+
+	return true;
+}
+
+bool MagicInternetBox::reconnect(std::string id) {
+	if (!initConnection()) {
+		status = ReconnectError;
+		return false;
+	}
+
+	std::vector<uint8_t> data;
+	data.push_back((uint8_t)NetworkDataType::JoinRoom);
+	for (unsigned int i = 0; i < ROOM_LENGTH; i++) {
+		data.push_back((uint8_t)id.at(i));
+	}
+	ws->sendBinary(data);
+	roomID = id;
+	status = Reconnecting;
 
 	return true;
 }
@@ -204,8 +225,6 @@ void MagicInternetBox::resolveState(std::shared_ptr<ShipModel> state,
 	}
 }
 
-bool MagicInternetBox::reconnect(std::string id) { return false; }
-
 MagicInternetBox::MatchmakingStatus MagicInternetBox::matchStatus() { return status; }
 
 void MagicInternetBox::leaveRoom() {}
@@ -279,6 +298,29 @@ void MagicInternetBox::update() {
 						status = ClientRoomFull;
 						return;
 					}
+					case 3: {
+						// Reconnecting success
+						if (status != Reconnecting) {
+							CULog(
+								"ERROR: Received reconnecting response from server when not "
+								"reconnecting");
+							return;
+						}
+						status = GameStart;
+						playerID = message[2];
+						numPlayers = message[3];
+						return;
+					}
+					case 4: {
+						if (status != Reconnecting) {
+							CULog(
+								"ERROR: Received reconnecting response from server when not "
+								"reconnecting");
+							return;
+						}
+						status = ReconnectError;
+						return;
+					}
 				}
 			}
 			case PlayerJoined: {
@@ -299,6 +341,8 @@ void MagicInternetBox::update(std::shared_ptr<ShipModel> state) {
 		return;
 	}
 
+	lastConnection++;
+
 	// NETWORK TICK
 	currFrame = (currFrame + 1) % STATE_SYNC_FREQ;
 	if (currFrame % NETWORK_TICK == 0) {
@@ -307,9 +351,17 @@ void MagicInternetBox::update(std::shared_ptr<ShipModel> state) {
 		float velocity = player->getVelocity();
 		sendData(PositionUpdate, angle, playerID, -1, -1, velocity);
 
-		// STATE SYNC
-		if (currFrame == 0 && playerID == 0) {
-			syncState(state);
+		// STATE SYNC (and check for server connection)
+		if (currFrame == 0) {
+			if (playerID == 0) {
+				syncState(state);
+			}
+			if (lastConnection > SERVER_TIMEOUT) {
+				CULog("HAS NOT RECEIVED SERVER MESSAGE IN TIMEOUT FRAMES; assuming disconnected");
+				status = Disconnected;
+				ws->close();
+				return;
+			}
 		}
 	}
 
@@ -321,14 +373,30 @@ void MagicInternetBox::update(std::shared_ptr<ShipModel> state) {
 
 		NetworkDataType type = static_cast<NetworkDataType>(message[0]);
 
-		if (type == StateSync) {
-			resolveState(state, message);
+		if (type > AssignedRoom) {
+			CULog("Received invalid connection message during gameplay; %d", message[0]);
 			return;
 		}
 
-		if (type > DualResolve) {
-			CULog("Received invalid connection message during gameplay; %d", message[0]);
-			return;
+		lastConnection = 0;
+
+		switch (type) {
+			case PlayerJoined: {
+				numPlayers++;
+				CULog("Player has reconnected");
+				return;
+			}
+			case PlayerDisconnect: {
+				numPlayers--;
+				CULog("Player has disconnected");
+				return;
+			}
+			case StateSync: {
+				resolveState(state, message);
+				return;
+			}
+			default:
+				break;
 		}
 
 		float angle = (float)(message[1] + ONE_BYTE * message[2]) / FLOAT_PRECISION;
@@ -350,7 +418,6 @@ void MagicInternetBox::update(std::shared_ptr<ShipModel> state) {
 				break;
 			}
 			case Jump: {
-				CULog("Received jump %d", id);
 				state->getDonuts()[id]->startJump();
 				break;
 			}
