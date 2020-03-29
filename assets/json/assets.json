@@ -87,28 +87,28 @@
                     },
                     "data": {
                         "size":     [2560,2560],
-                        "anchor":   [0.5,0.5]
+                        "anchor":   [0,0]
                     },
                     "layout" : {
                         "x_anchor" : "center",
-                        "y_anchor" : "bottom"
+                        "y_anchor" : "middle"
                     },
                     "children" : {
                         "far": {
                             "type": "Image",
                             "data": {
                                 "texture":  "space",
-                                "position": [1280,1920],
-                                "polygon":  [0,0,0,2560,2560,2560,2560,2560,2560,0,0,0],
-                                "anchor":   [0.5,0.5]
+                                "anchor":   [0.5,0.5],
+                                "position": [0,0],
+                                "polygon":  [0,0,0,2560,2560,2560,2560,2560,2560,0,0,0]
                             }
                         },
                         "near": {
                             "type": "Node",
                             "data": {
                                 "size":     [2560,2560],
-                                "position": [1280,1920],
-                                "anchor":   [0.5,0.25]
+                                "anchor":   [0,0],
+                                "position": [0,420]
                             },
                             "children": {
                                 "ship": {
@@ -116,8 +116,15 @@
                                     "data": {
                                         "texture":  "ship",
                                         "anchor":   [0.5,0.5],
-                                        "position": [1279,640],
+                                        "position": [0,0],
                                         "scale":    1.35
+                                    }
+                                },
+                                "breaches": {
+                                    "type": "Node",
+                                    "data": {
+                                        "anchor":   [0,0],
+                                        "position": [0,0]
                                     }
                                 }
                             }
@@ -126,7 +133,7 @@
                             "type": "Image",
                             "data": {
                                 "texture":  "donut_yellow",
-                                "position": [1280,1344],
+                                "position": [0,-155],
                                 "anchor":   [0.5,0.5],
                                 "scale":    0.4
                             }

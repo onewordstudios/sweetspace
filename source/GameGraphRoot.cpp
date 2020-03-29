@@ -25,7 +25,7 @@ constexpr float PI_180 = (float)(M_PI / 180);
 constexpr float DONUT_SCALE = 0.4f;
 
 /** Offset of donut sprites from the radius of the ship */
-constexpr int DONUT_OFFSET = 200;
+constexpr int DONUT_OFFSET = 195;
 
 /** The diameter of the ship. Also the x coordinate of the center of the ship */
 constexpr unsigned int DIAMETER = 1280;
@@ -76,10 +76,9 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	farSpace = assets->get<Node>("game_field_far");
 	nearSpace = assets->get<Node>("game_field_near");
 	donutNode = dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_player1"));
+	breachesNode = assets->get<Node>("game_field_near_breaches");
 	donutPos = donutNode->getPosition();
 	coordHUD = std::dynamic_pointer_cast<Label>(assets->get<Node>("game_hud"));
-	breachesNode = Node::alloc();
-	nearSpace->addChildWithName(breachesNode, "breaches_node");
 
 	// Initialize Players
 	for (int i = 0; i < ship->getDonuts().size(); i++) {
@@ -95,9 +94,8 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 			newDonutNode->setScale(DONUT_SCALE);
 			nearSpace->addChild(newDonutNode);
 
-			Vec2 donutPos =
-				Vec2(DIAMETER + (RADIUS + DONUT_OFFSET) * sin(donutModel->getAngle()),
-					 DIAMETER / 2.0f - (RADIUS + DONUT_OFFSET) * cos(donutModel->getAngle()));
+			Vec2 donutPos = Vec2((RADIUS + DONUT_OFFSET) * sin(donutModel->getAngle()),
+								 -(RADIUS + DONUT_OFFSET) * cos(donutModel->getAngle()));
 			newDonutNode->setPosition(donutPos);
 		}
 	}
@@ -196,8 +194,8 @@ void GameGraphRoot::update(float timestep) {
 	// Reanchor the node at the center of the screen and rotate about center.
 	Vec2 position = farSpace->getPosition();
 	farSpace->setAnchor(Vec2::ANCHOR_CENTER);
-	if (position == Vec2(1280 - 256, 1920)) {
-		farSpace->setPosition(Vec2(1280, 1920));
+	if (position.x == -256) {
+		farSpace->setPositionX(0);
 	} else {
 		farSpace->setPosition(position - Vec2(0.5, 0)); // Reseting the anchor changes the position
 	}
