@@ -71,6 +71,9 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets,
 		return false;
 	}
 
+	timer = 100;
+	end = false;
+
 	input.init();
 	net = mib;
 
@@ -120,6 +123,12 @@ void GameMode::update(float timestep) {
 	input.update(timestep);
 
 	net->update(ship);
+
+	timer = timer - 1;
+	if(timer == 0) {
+	    end = true;
+	    CULog("end");
+	}
 
 	// Breach health depletion
 	for (int i = 0; i < MAX_EVENTS; i++) {
