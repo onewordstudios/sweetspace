@@ -143,8 +143,8 @@ void GameMode::update(float timestep) {
 				net->resolveBreach(i);
 			}
 
-		} else if (diff > EPSILON_ANGLE && ship->getBreaches().at(i)->isPlayerOn()) {
-			ship->getBreaches().at(i)->setIsPlayerOn(false);
+		} else if (diff > EPSILON_ANGLE && breach->isPlayerOn()) {
+			breach->setIsPlayerOn(false);
 		}
 	}
 
