@@ -127,7 +127,8 @@ void GLaDOS::update(float dt) {
 					continue;
 				}
 				std::shared_ptr<BreachModel> breach = ship->getBreaches()[k];
-				if (breach->getAngle() != -1 && abs(breach->getAngle() - angle) < MIN_ANGLE_DIFF) {
+				const float breachAngle = breach->getAngle();
+				if (breachAngle != -1 && abs(breachAngle - angle) < MIN_ANGLE_DIFF) {
 					goodAngle = false;
 					break;
 				}
