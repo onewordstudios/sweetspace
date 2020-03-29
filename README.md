@@ -14,6 +14,16 @@ Coming August 2020 to Android and iOS.
 
 ## Current Progress
 
+### Pre-Alpha Release
+
+This is kind of a grab-bag release, with a bunch of small, behind-the-scenes changes that aren't super visible. Some changes to the networking API that were unfortunately not backwards compatible means that the technical prototype will no longer connect to our server.
+
+The most visible change is that players now collide with breaches of other colors, and thus need to jump over them. As we need all major challenges and game features implemented by pre-beta, this is a significant step towards making the jump feature necessary. The major purpose of this release, therefore, is to get an opportunity to playtest how this obstacle changes the dynamic of gameplay.  In theory, it should no longer be possible to just hold the phone sideways and roll forever, with both doors and breaches getting in your way now.
+
+The networking is a bit more robust, with rudimentary discrepancy resolution built-in (as well as a myriad of backend changes). It's still not completely perfect, and you will occasionally see stuff flicker. The matchmaking screen has been drastically improved, in that the keyboard no longer covers up the input box. The instructions are otherwise identical to what's listed below.
+
+Our game still supports rolling around the ship in a group of three. While doing so, you can fix breaches of your color by rolling over it back and forth three times. You can also open locked doors by having two players both touch the door. You cannot roll through or fix breaches of other colors - you'll need the correct colored player to come over and fix those. Instead, tap or click to jump over those breaches. Tilt or use the arrow keys to roll left and right.
+
 ### Technical Prototype
 
 The primary objective for the Technical Prototype was the solve the largest technical hurdle of our game's development - networking. Our goal was to have a fixed number of players (3) be able to join together into the same ship and see each other's movements. This we achieved. We also managed to add primitive support for doors, which require two players to be up against in order to open. Much of the physics is placeholder and will be improved, as will the UI, network interpolation, and general game balance. Still, it seems to work.
@@ -61,6 +71,7 @@ As this is a class project, we are currently not accepting external contribution
 ## Copyright
 
 Copyright © 2020 onewordstudios
+
 All Rights Reserved
 
 As students ourselves, we are happy to make this repository public as a hopefully useful learning tool. We do still reserve all intellectual property rights. Thanks for visiting our repo!
