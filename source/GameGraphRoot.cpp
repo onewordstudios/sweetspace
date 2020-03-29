@@ -122,7 +122,7 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	for (int i = 0; i < ship->getDoors().size(); i++) {
 		std::shared_ptr<DoorModel> doorModel = ship->getDoors().at(i);
 		std::shared_ptr<Texture> image = assets->get<Texture>("door");
-		std::shared_ptr<DoorNode> doorNode = DoorNode::alloc(image, 1, 3);
+		std::shared_ptr<DoorNode> doorNode = DoorNode::alloc(image, 5, 7, 32);
 		doorNode->setModel(doorModel);
 		doorNode->setFrame(0);
 		doorNode->setAnchor(Vec2::ANCHOR_BOTTOM_CENTER);
@@ -189,7 +189,7 @@ void GameGraphRoot::update(float timestep) {
 	// Update the HUD
 	coordHUD->setText(positionText());
 
-	float angle = TWO_PI - ship->getDonuts().at(playerID)->getAngle();
+	float angle = DonutModel::FULL_CIRCLE - ship->getDonuts().at(playerID)->getAngle();
 
 	// Reanchor the node at the center of the screen and rotate about center.
 	Vec2 position = farSpace->getPosition();
@@ -201,7 +201,7 @@ void GameGraphRoot::update(float timestep) {
 	}
 
 	// Rotate about center.
-	nearSpace->setAngle(angle);
+	nearSpace->setAngle(PI_180 * angle);
 
 	double radiusRatio = RADIUS / (donutNode->getWidth() / 2.0);
 
@@ -240,7 +240,7 @@ void GameGraphRoot::update(float timestep) {
  */
 std::string GameGraphRoot::positionText() {
 	stringstream ss;
-	ss << "Angle: (" << (float)ship->getDonuts().at(playerID)->getAngle() / PI_180 << ")";
+	ss << "Angle: (" << (float)ship->getDonuts().at(playerID)->getAngle() << ")";
 	return ss.str();
 }
 

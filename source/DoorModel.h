@@ -79,11 +79,11 @@ class DoorModel {
 #pragma mark -
 #pragma mark Accessors
 	/**
-	 * Returns the current angle of the door in radians.
+	 * Returns the current angle of the door in degrees.
 	 *
-	 * @return the current angle of the door in radians.
+	 * @return the current angle of the door in degrees.
 	 */
-	float getAngle() { return (float)M_PI * angle / 180.0f; }
+	float getAngle() { return angle; }
 
 	/**
 	 * Returns the current height of the door.
@@ -103,11 +103,11 @@ class DoorModel {
 	}
 
 	/**
-	 * Sets the current angle of the door in radians.
+	 * Sets the current angle of the door in degrees.
 	 *
-	 * @param value The door angle in radians
+	 * @param value The door angle in degrees
 	 */
-	void setAngle(float value) { angle = 180.0f * value / (float)M_PI; }
+	void setAngle(float value) { angle = value; }
 
 	/**
 	 * Adds the given player's flag from the door.

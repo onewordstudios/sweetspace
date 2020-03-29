@@ -1,4 +1,4 @@
-#ifndef __BREACH_MODEL_H__
+﻿#ifndef __BREACH_MODEL_H__
 #define __BREACH_MODEL_H__
 #include <cugl/cugl.h>
 class BreachModel {
@@ -85,11 +85,11 @@ class BreachModel {
 #pragma mark -
 #pragma mark Accessors
 	/**
-	 * Returns the current angle of the breach in radians.
+	 * Returns the current angle of the breach in degrees.
 	 *
-	 * @return the current angle of the breach in radians.
+	 * @return the current angle of the breach in degrees.
 	 */
-	float getAngle() { return (float)M_PI * angle / 180.0f; }
+	float getAngle() { return angle; }
 
 	/**
 	 * Returns the current health of the breach.
@@ -106,11 +106,11 @@ class BreachModel {
 	int isPlayerOn() { return playerOn; }
 
 	/**
-	 * Sets the current angle of the breach in radians.
+	 * Sets the current angle of the breach in degrees.
 	 *
-	 * @param value The breach angle in radians
+	 * @param value The breach angle in degrees
 	 */
-	void setAngle(float value) { angle = 180.0f * value / (float)M_PI; }
+	void setAngle(float value) { angle = value; }
 
 	/**
 	 * Sets the current health of the breach.
