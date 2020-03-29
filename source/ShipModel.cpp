@@ -22,6 +22,9 @@ bool ShipModel::init(unsigned int numPlayers, unsigned int numBreaches, unsigned
 		doors.push_back(DoorModel::alloc());
 	}
 
+	// Instantiate health
+	health = 11;
+
 	return true;
 }
 

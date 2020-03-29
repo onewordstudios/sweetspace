@@ -7,14 +7,19 @@ using namespace cugl;
 constexpr auto GAME_SERVER = "ws://sweetspace-server.herokuapp.com/";
 constexpr float FLOAT_PRECISION = 180.0f;
 constexpr unsigned int NETWORK_TICK = 12; // Constant also defined in ExternalDonutModel.cpp
+constexpr unsigned int STATE_SYNC_FREQ = NETWORK_TICK * 5;
 constexpr unsigned int ONE_BYTE = 256;
 constexpr unsigned int ROOM_LENGTH = 5;
+constexpr float FLOAT_EPSILON = 0.1f;
+constexpr unsigned int SERVER_TIMEOUT = 300;
 
 bool MagicInternetBox::initConnection() {
 	switch (status) {
+		case Disconnected:
 		case Uninitialized:
 		case HostError:
 		case ClientError:
+		case ReconnectError:
 			break;
 		default:
 			CULog("ERROR: MIB already initialized");
@@ -78,6 +83,24 @@ bool MagicInternetBox::initClient(std::string id) {
 	return true;
 }
 
+bool MagicInternetBox::reconnect(std::string id) {
+	if (!initConnection()) {
+		status = ReconnectError;
+		return false;
+	}
+
+	std::vector<uint8_t> data;
+	data.push_back((uint8_t)NetworkDataType::JoinRoom);
+	for (unsigned int i = 0; i < ROOM_LENGTH; i++) {
+		data.push_back((uint8_t)id.at(i));
+	}
+	ws->sendBinary(data);
+	roomID = id;
+	status = Reconnecting;
+
+	return true;
+}
+
 /*
 
 DATA FORMAT
@@ -121,7 +144,86 @@ void MagicInternetBox::sendData(NetworkDataType type, float angle, int id, int d
 	ws->sendBinary(data);
 }
 
-bool MagicInternetBox::reconnect(std::string id) { return false; }
+void MagicInternetBox::syncState(std::shared_ptr<ShipModel> state) {
+	std::vector<uint8_t> data;
+	data.push_back(StateSync);
+
+	const auto& doors = state->getDoors();
+	data.push_back((uint8_t)doors.size());
+	for (unsigned int i = 0; i < doors.size(); i++) {
+		if (doors[i]->getAngle() == -1) {
+			data.push_back(0);
+			data.push_back(0);
+			data.push_back(0);
+		} else {
+			data.push_back(1);
+
+			int d3 = (int)(FLOAT_PRECISION * doors[i]->getAngle());
+			data.push_back((uint8_t)(d3 % ONE_BYTE));
+			data.push_back((uint8_t)(d3 / ONE_BYTE));
+		}
+	}
+
+	const auto& breaches = state->getBreaches();
+	data.push_back((uint8_t)breaches.size());
+	for (unsigned int i = 0; i < breaches.size(); i++) {
+		data.push_back(breaches[i]->getHealth());
+		data.push_back(breaches[i]->getPlayer());
+
+		int d3 = (int)(FLOAT_PRECISION * breaches[i]->getAngle());
+		data.push_back((uint8_t)(d3 % ONE_BYTE));
+		data.push_back((uint8_t)(d3 / ONE_BYTE));
+	}
+	ws->sendBinary(data);
+}
+
+void MagicInternetBox::resolveState(std::shared_ptr<ShipModel> state,
+									const std::vector<uint8_t>& message) {
+	const auto& doors = state->getDoors();
+	if (doors.size() != message[1]) {
+		CULog("ERROR: DOOR ARRAY SIZE DISCREPANCY; local %d but server %d", doors.size(),
+			  message[1]);
+		return;
+	}
+	int doorIndex = 2;
+	for (unsigned int i = 0; i < doors.size(); i++) {
+		if (message[doorIndex]) {
+			float angle = (float)(message[doorIndex + 1] + ONE_BYTE * message[doorIndex + 2]) /
+						  FLOAT_PRECISION;
+			if (abs(doors[i]->getAngle() - angle) > FLOAT_EPSILON) {
+				CULog("Found open door that should be closed, id %d", i);
+				state->createDoor(angle, (int)i);
+			}
+		} else {
+			if (doors[i]->getAngle() != -1.0f) {
+				CULog("Found closed door that should be open, id %d", i);
+				state->getDoors()[i]->setAngle(-1);
+				state->getDoors()[i]->clear();
+			}
+		}
+
+		doorIndex += 3;
+	}
+
+	const auto& breaches = state->getBreaches();
+	if (breaches.size() != message[doorIndex++]) {
+		CULog("ERROR: BREACH ARRAY SIZE DISCREPANCY; local %d but server %d", breaches.size(),
+			  message[doorIndex - 1]);
+		return;
+	}
+	for (unsigned int i = 0; i < breaches.size(); i++) {
+		if (breaches[i]->getHealth() == 0 && message[doorIndex] > 0) {
+			float angle = (float)(message[doorIndex + 2] + ONE_BYTE * message[doorIndex + 3]) /
+						  FLOAT_PRECISION;
+			CULog("Found resolved breach that should be unresolved, id %d", i);
+			state->createBreach(angle, message[doorIndex], message[doorIndex + 1], i);
+		} else if (breaches[i]->getHealth() > 0 && message[doorIndex] == 0) {
+			CULog("Found unresolved breach that should be resolved, id %d", i);
+			state->resolveBreach((int)i);
+		}
+		doorIndex += 4;
+	}
+}
 
 MagicInternetBox::MatchmakingStatus MagicInternetBox::matchStatus() { return status; }
 
@@ -196,6 +298,29 @@ void MagicInternetBox::update() {
 						status = ClientRoomFull;
 						return;
 					}
+					case 3: {
+						// Reconnecting success
+						if (status != Reconnecting) {
+							CULog(
+								"ERROR: Received reconnecting response from server when not "
+								"reconnecting");
+							return;
+						}
+						status = GameStart;
+						playerID = message[2];
+						numPlayers = message[3];
+						return;
+					}
+					case 4: {
+						if (status != Reconnecting) {
+							CULog(
+								"ERROR: Received reconnecting response from server when not "
+								"reconnecting");
+							return;
+						}
+						status = ReconnectError;
+						return;
+					}
 				}
 			}
 			case PlayerJoined: {
@@ -216,26 +341,62 @@ void MagicInternetBox::update(std::shared_ptr<ShipModel> state) {
 		return;
 	}
 
+	lastConnection++;
+
 	// NETWORK TICK
-	currFrame = (currFrame + 1) % NETWORK_TICK;
-	if (currFrame == 0) {
+	currFrame = (currFrame + 1) % STATE_SYNC_FREQ;
+	if (currFrame % NETWORK_TICK == 0) {
 		std::shared_ptr<DonutModel> player = state->getDonuts()[playerID];
 		float angle = player->getAngle();
 		float velocity = player->getVelocity();
 		sendData(PositionUpdate, angle, playerID, -1, -1, velocity);
+
+		// STATE SYNC (and check for server connection)
+		if (currFrame == 0) {
+			if (playerID == 0) {
+				syncState(state);
+			}
+			if (lastConnection > SERVER_TIMEOUT) {
+				CULog("HAS NOT RECEIVED SERVER MESSAGE IN TIMEOUT FRAMES; assuming disconnected");
+				status = Disconnected;
+				ws->close();
+				return;
+			}
+		}
 	}
 
 	ws->poll();
-	ws->dispatchBinary([&state](const std::vector<uint8_t>& message) {
+	ws->dispatchBinary([&state, this](const std::vector<uint8_t>& message) {
 		if (message.size() == 0) {
 			return;
 		}
 
 		NetworkDataType type = static_cast<NetworkDataType>(message[0]);
 
-		if (type > DualResolve) {
+		if (type > AssignedRoom) {
 			CULog("Received invalid connection message during gameplay; %d", message[0]);
 			return;
+		}
+
+		lastConnection = 0;
+
+		switch (type) {
+			case PlayerJoined: {
+				numPlayers++;
+				CULog("Player has reconnected");
+				return;
+			}
+			case PlayerDisconnect: {
+				numPlayers--;
+				CULog("Player has disconnected");
+				return;
+			}
+			case StateSync: {
+				resolveState(state, message);
+				return;
+			}
+			default:
+				break;
 		}
 
 		float angle = (float)(message[1] + ONE_BYTE * message[2]) / FLOAT_PRECISION;
@@ -257,7 +418,6 @@ void MagicInternetBox::update(std::shared_ptr<ShipModel> state) {
 				break;
 			}
 			case Jump: {
-				CULog("Received jump %d", id);
 				state->getDonuts()[id]->startJump();
 				break;
 			}
@@ -272,16 +432,14 @@ void MagicInternetBox::update(std::shared_ptr<ShipModel> state) {
 				break;
 			}
 			case DualCreate: {
-				unsigned int taskID = id;
-				unsigned int player1 = data1;
-				unsigned int player2 = data2;
+				int taskID = id;
 				state->createDoor(angle, taskID);
 				break;
 			}
 			case DualResolve: {
-				unsigned int taskID = id;
-				unsigned int player = data1;
-				unsigned int flag = data2;
+				int taskID = id;
+				int player = data1;
+				int flag = data2;
 				CULog("Flag door %d with player %d", id, player);
 				state->flagDoor(taskID, player, flag);
 				break;

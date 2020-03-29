@@ -4,9 +4,6 @@
 
 using namespace cugl;
 
-/** The diameter of the ship. Also the x coordinate of the center of the ship */
-constexpr unsigned int DIAMETER = 1280;
-
 /** The radius of the ship. Also the y coordinate of the center of the ship */
 constexpr unsigned int RADIUS = 580;
 
@@ -18,8 +15,8 @@ void DonutNode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch, const Mat4
 	const float jump = 1.0f - donutModel->getJumpOffset();
 
 	float vel = donutModel->getVelocity();
-	Vec2 donutPos = Vec2(DIAMETER + jump * RADIUS * sin(donutModel->getAngle()),
-						 DIAMETER / 2.0f - jump * RADIUS * cos(donutModel->getAngle()));
+	Vec2 donutPos = Vec2(jump * RADIUS * sin(donutModel->getAngle()),
+						 -jump * RADIUS * cos(donutModel->getAngle()));
 	if (donutModel->getAngle() < 0) {
 		donutPos = Vec2(0, 0);
 	}
