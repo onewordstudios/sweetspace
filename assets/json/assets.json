@@ -113,6 +113,13 @@
                                         "position": [0,0],
                                         "scale":    1.35
                                     }
+                                },
+                                "breaches": {
+                                    "type": "Node",
+                                    "data": {
+                                        "anchor":   [0,0],
+                                        "position": [0,0]
+                                    }
                                 }
                             }
                         },

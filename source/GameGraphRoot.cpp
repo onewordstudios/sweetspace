@@ -76,12 +76,9 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	farSpace = assets->get<Node>("game_field_far");
 	nearSpace = assets->get<Node>("game_field_near");
 	donutNode = dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_player1"));
+    breachesNode = assets->get<Node>("game_field_near_breaches");
 	donutPos = donutNode->getPosition();
 	coordHUD = std::dynamic_pointer_cast<Label>(assets->get<Node>("game_hud"));
-	breachesNode = Node::alloc();
-	breachesNode->setAnchor(Vec2(0, 0));
-	breachesNode->setPosition(Vec2(0, 0));
-	nearSpace->addChildWithName(breachesNode, "breaches_node");
 
 	// Initialize Players
 	for (int i = 0; i < ship->getDonuts().size(); i++) {
