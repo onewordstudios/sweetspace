@@ -49,9 +49,9 @@ class DoorNode : public cugl::AnimationNode {
 	 * @return a newly allocated filmstrip node from the given texture.
 	 */
 	static std::shared_ptr<DoorNode> alloc(const std::shared_ptr<cugl::Texture> &texture, int rows,
-										   int cols) {
+										   int cols, int size) {
 		std::shared_ptr<DoorNode> node = std::make_shared<DoorNode>();
-		return (node->initWithFilmstrip(texture, rows, cols) ? node : nullptr);
+		return (node->initWithFilmstrip(texture, rows, cols, size) ? node : nullptr);
 	}
 
 #pragma mark -

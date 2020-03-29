@@ -19,6 +19,9 @@ constexpr float PI_180 = (float)(M_PI / 180);
 /** The height of the door. */
 int height = 0;
 
+/** The max frame this door can have. */
+int frameCap = 0;
+
 void DoorNode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch, const Mat4& transform,
 					Color4 tint) {
 	Vec2 doorPos = Vec2(DOOR_RADIUS * sin(doorModel->getAngle() * PI_180),
@@ -28,7 +31,14 @@ void DoorNode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch, const Mat4&
 	}
 	setPosition(doorPos);
 	setAngle(doorModel->getAngle() * PI_180);
-	doorModel->getPlayersOn() < 2 ? setFrame(doorModel->getPlayersOn()) : setFrame(2);
+
+	frameCap = doorModel->getPlayersOn() < 2 ? doorModel->getPlayersOn() * 16 : 31;
+	if (getFrame() < frameCap) {
+		setFrame(getFrame() + 1);
+	} else if (getFrame() > frameCap) {
+		setFrame(getFrame() - 1);
+	}
+
 	float diff = height - doorModel->getHeight();
 	height = doorModel->getHeight();
 	if (diff != 0) {
