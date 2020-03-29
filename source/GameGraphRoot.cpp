@@ -122,7 +122,7 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	for (int i = 0; i < ship->getDoors().size(); i++) {
 		std::shared_ptr<DoorModel> doorModel = ship->getDoors().at(i);
 		std::shared_ptr<Texture> image = assets->get<Texture>("door");
-		std::shared_ptr<DoorNode> doorNode = DoorNode::alloc(image, 5, 7, 32);
+		std::shared_ptr<DoorNode> doorNode = DoorNode::alloc(image, 4, 10, 32);
 		doorNode->setModel(doorModel);
 		doorNode->setFrame(0);
 		doorNode->setAnchor(Vec2::ANCHOR_BOTTOM_CENTER);
