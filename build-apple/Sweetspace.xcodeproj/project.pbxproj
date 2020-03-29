@@ -73,6 +73,9 @@
 		DF3B74642403A46B0063552F /* BreachModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DF3B744B2403A46B0063552F /* BreachModel.cpp */; };
 		DF3B74652403A46B0063552F /* BreachModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DF3B744B2403A46B0063552F /* BreachModel.cpp */; };
 		DF3B74662403A46B0063552F /* BreachModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DF3B744B2403A46B0063552F /* BreachModel.cpp */; };
+		DFECA6F12431610C008342FB /* sounds in Resources */ = {isa = PBXBuildFile; fileRef = DFECA6ED2431610C008342FB /* sounds */; };
+		DFECA6F22431610C008342FB /* sounds in Resources */ = {isa = PBXBuildFile; fileRef = DFECA6ED2431610C008342FB /* sounds */; };
+		DFECA6F32431610C008342FB /* sounds in Resources */ = {isa = PBXBuildFile; fileRef = DFECA6ED2431610C008342FB /* sounds */; };
 		EB0FF5092016E4A700517030 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EB0FF5082016E4A700517030 /* CoreFoundation.framework */; };
 		EB0FF6172016EFB200517030 /* iOS.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EB7454A71D74D846002FBAE6 /* iOS.xcassets */; };
 		EB0FF6182016EFB200517030 /* Landscape.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EB7454A81D74D846002FBAE6 /* Landscape.storyboard */; };
@@ -210,6 +213,7 @@
 		DF3B74492403A46B0063552F /* GameMode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GameMode.cpp; sourceTree = "<group>"; };
 		DF3B744A2403A46B0063552F /* GameGraphRoot.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GameGraphRoot.cpp; sourceTree = "<group>"; };
 		DF3B744B2403A46B0063552F /* BreachModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BreachModel.cpp; sourceTree = "<group>"; };
+		DFECA6ED2431610C008342FB /* sounds */ = {isa = PBXFileReference; lastKnownFileType = folder; path = sounds; sourceTree = "<group>"; };
 		EB0FF5082016E4A700517030 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		EB0FF5FC2016EF4F00517030 /* sweetspace.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = sweetspace.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EB2BE9B41D74952A002FE78B /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
@@ -346,6 +350,7 @@
 		EB2BE9B71D749870002FE78B /* Assets */ = {
 			isa = PBXGroup;
 			children = (
+				DFECA6ED2431610C008342FB /* sounds */,
 				EBFE7C041E19B496001007C2 /* json */,
 				EB2BE9BA1D7498D2002FE78B /* textures */,
 				EB2BE9B81D7498C9002FE78B /* fonts */,
@@ -640,6 +645,7 @@
 				EB0FF61C2016EFC500517030 /* fonts in Resources */,
 				EB0FF6172016EFB200517030 /* iOS.xcassets in Resources */,
 				EB0FF6182016EFB200517030 /* Landscape.storyboard in Resources */,
+				DFECA6F32431610C008342FB /* sounds in Resources */,
 				EB0FF6192016EFB200517030 /* Portrait.storyboard in Resources */,
 				EB42669721F68F6900A9DE61 /* DeviceMargins.plist in Resources */,
 				D152299F2C8972AFC00A35A5 /* .clang-tidy in Resources */,
@@ -655,6 +661,7 @@
 				EB7454AB1D74D846002FBAE6 /* iOS.xcassets in Resources */,
 				EB7454AC1D74D846002FBAE6 /* Landscape.storyboard in Resources */,
 				EBFE7C051E19B496001007C2 /* json in Resources */,
+				DFECA6F22431610C008342FB /* sounds in Resources */,
 				EB7454AD1D74D846002FBAE6 /* Portrait.storyboard in Resources */,
 				EB42669621F68F6900A9DE61 /* DeviceMargins.plist in Resources */,
 				D15229A3B1F12D0046E83FD6 /* .clang-tidy in Resources */,
@@ -667,6 +674,7 @@
 			files = (
 				EBFE7C091E19B4AC001007C2 /* json in Resources */,
 				EB2BE9BB1D7498D2002FE78B /* textures in Resources */,
+				DFECA6F12431610C008342FB /* sounds in Resources */,
 				EB2BE9B91D7498C9002FE78B /* fonts in Resources */,
 				EBBF189B1D74904A008E2001 /* Mac.xcassets in Resources */,
 				D1522849508B74DEDCD3A8EC /* .clang-tidy in Resources */,
