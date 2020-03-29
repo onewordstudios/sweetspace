@@ -12,6 +12,7 @@ class MagicInternetBox {
 	 * Status of whether the game is ready to start
 	 */
 	enum MatchmakingStatus {
+		Disconnected = -2,
 		Uninitialized = -1,
 		/** Connecting to server; room ID not assigned yet */
 		HostConnecting = 0,
@@ -34,7 +35,7 @@ class MagicInternetBox {
 		/** Attempting to reconnect to a room after dropping */
 		Reconnecting = 500,
 		/** Unknown error when reconnecting */
-		ReconnectFailure,
+		ReconnectError,
 		/** Game has ended */
 		GameEnded = 900
 	};
@@ -71,19 +72,30 @@ class MagicInternetBox {
 	unsigned int numPlayers;
 
 	/**
+	 * Number of frames since the last inbound server message
+	 */
+	unsigned int lastConnection;
+
+	/**
 	 * The type of data being sent during a network packet
 	 */
 	enum NetworkDataType {
-		PositionUpdate,
+		// Gameplay messages
+		PositionUpdate = 0,
 		Jump,
 		BreachCreate,
 		BreachShrink,
 		DualCreate,
 		DualResolve,
-		AssignedRoom, // Doubles for both creating and created
-		JoinRoom,	  // Doubles for both joining and join response
-		PlayerJoined,
-		StateSync
+		StateSync,
+
+		// Connection messages that can be received during gameplay
+		PlayerJoined = 50, // Doubles for both matchmaking and reconnect
+		PlayerDisconnect,  //
+
+		// Matchmaking messages only
+		AssignedRoom = 100, // Doubles for both creating and created
+		JoinRoom			// Doubles for both joining and join response
 	};
 
 	/**
@@ -141,6 +153,7 @@ class MagicInternetBox {
 		currFrame = 0;
 		playerID = -1;
 		numPlayers = 0;
+		lastConnection = 0;
 	};
 
 	/**
