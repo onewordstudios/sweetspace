@@ -16,7 +16,7 @@ Coming August 2020 to Android and iOS.
 
 ### Pre-Alpha Release
 
-This is kind of a grab-bag release, with a bunch of small, behind-the-scenes changes that aren't super visible. Some changes to the networking API that were unfortunately not backwards compatible means that the technical prototype will no longer connect to our server.
+This is kind of a grab-bag release, with a bunch of small, behind-the-scenes changes that aren't super visible. Some changes to the networking API that were unfortunately not backwards compatible mean that the technical prototype will no longer connect to our server.
 
 The most visible change is that players now collide with breaches of other colors, and thus need to jump over them. As we need all major challenges and game features implemented by pre-beta, this is a significant step towards making the jump feature necessary. The major purpose of this release, therefore, is to get an opportunity to playtest how this obstacle changes the dynamic of gameplay.  In theory, it should no longer be possible to just hold the phone sideways and roll forever, with both doors and breaches getting in your way now.
 
