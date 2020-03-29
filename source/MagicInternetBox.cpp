@@ -7,8 +7,10 @@ using namespace cugl;
 constexpr auto GAME_SERVER = "ws://sweetspace-server.herokuapp.com/";
 constexpr float FLOAT_PRECISION = 180.0f;
 constexpr unsigned int NETWORK_TICK = 12; // Constant also defined in ExternalDonutModel.cpp
+constexpr unsigned int STATE_SYNC_FREQ = NETWORK_TICK * 5;
 constexpr unsigned int ONE_BYTE = 256;
 constexpr unsigned int ROOM_LENGTH = 5;
+constexpr float FLOAT_EPSILON = 0.1f;
 
 bool MagicInternetBox::initConnection() {
 	switch (status) {
@@ -141,6 +143,87 @@ void MagicInternetBox::sendData(NetworkDataType type, float angle, int id, int d
 	ws->sendBinary(data);
 }
 
+void MagicInternetBox::syncState(std::shared_ptr<ShipModel> state) {
+	std::vector<uint8_t> data;
+	data.push_back(StateSync);
+
+	const auto& doors = state->getDoors();
+	data.push_back((uint8_t)doors.size());
+	for (unsigned int i = 0; i < doors.size(); i++) {
+		if (doors[i]->getAngle() == -1) {
+			data.push_back(0);
+			data.push_back(0);
+			data.push_back(0);
+		} else {
+			data.push_back(1);
+
+			int d3 = (int)(FLOAT_PRECISION * doors[i]->getAngle());
+			data.push_back((uint8_t)(d3 % ONE_BYTE));
+			data.push_back((uint8_t)(d3 / ONE_BYTE));
+		}
+	}
+
+	const auto& breaches = state->getBreaches();
+	data.push_back((uint8_t)breaches.size());
+	for (unsigned int i = 0; i < breaches.size(); i++) {
+		data.push_back(breaches[i]->getHealth());
+		data.push_back(breaches[i]->getPlayer());
+
+		int d3 = (int)(FLOAT_PRECISION * breaches[i]->getAngle());
+		data.push_back((uint8_t)(d3 % ONE_BYTE));
+		data.push_back((uint8_t)(d3 / ONE_BYTE));
+	}
+	ws->sendBinary(data);
+}
+
+void MagicInternetBox::resolveState(std::shared_ptr<ShipModel> state,
+									const std::vector<uint8_t>& message) {
+	const auto& doors = state->getDoors();
+	if (doors.size() != message[1]) {
+		CULog("ERROR: DOOR ARRAY SIZE DISCREPANCY; local %d but server %d", doors.size(),
+			  message[1]);
+		return;
+	}
+	int doorIndex = 2;
+	for (unsigned int i = 0; i < doors.size(); i++) {
+		if (message[doorIndex]) {
+			float angle = (float)(message[doorIndex + 1] + ONE_BYTE * message[doorIndex + 2]) /
+						  FLOAT_PRECISION;
+			if (abs(doors[i]->getAngle() - angle) > FLOAT_EPSILON) {
+				CULog("Found open door that should be closed, id %d", i);
+				state->createDoor(angle, (int)i);
+			}
+		} else {
+			if (doors[i]->getAngle() != -1.0f) {
+				CULog("Found closed door that should be open, id %d", i);
+				state->getDoors()[i]->setAngle(-1);
+				state->getDoors()[i]->clear();
+			}
+		}
+
+		doorIndex += 3;
+	}
+
+	const auto& breaches = state->getBreaches();
+	if (breaches.size() != message[doorIndex++]) {
+		CULog("ERROR: BREACH ARRAY SIZE DISCREPANCY; local %d but server %d", breaches.size(),
+			  message[doorIndex - 1]);
+		return;
+	}
+	for (unsigned int i = 0; i < breaches.size(); i++) {
+		if (breaches[i]->getHealth() == 0 && message[doorIndex] > 0) {
+			float angle = (float)(message[doorIndex + 2] + ONE_BYTE * message[doorIndex + 3]) /
+						  FLOAT_PRECISION;
+			CULog("Found resolved breach that should be unresolved, id %d", i);
+			state->createBreach(angle, message[doorIndex], message[doorIndex + 1], i);
+		} else if (breaches[i]->getHealth() > 0 && message[doorIndex] == 0) {
+			CULog("Found unresolved breach that should be resolved, id %d", i);
+			state->resolveBreach((int)i);
+		}
+		doorIndex += 4;
+	}
+}
+
 MagicInternetBox::MatchmakingStatus MagicInternetBox::matchStatus() { return status; }
 
 void MagicInternetBox::leaveRoom() {}
@@ -258,12 +341,17 @@ void MagicInternetBox::update(std::shared_ptr<ShipModel> state) {
 	}
 
 	// NETWORK TICK
-	currFrame = (currFrame + 1) % NETWORK_TICK;
-	if (currFrame == 0) {
+	currFrame = (currFrame + 1) % STATE_SYNC_FREQ;
+	if (currFrame % NETWORK_TICK == 0) {
 		std::shared_ptr<DonutModel> player = state->getDonuts()[playerID];
 		float angle = player->getAngle();
 		float velocity = player->getVelocity();
 		sendData(PositionUpdate, angle, playerID, -1, -1, velocity);
+
+		// STATE SYNC
+		if (currFrame == 0 && playerID == 0) {
+			syncState(state);
+		}
 	}
 
 	ws->poll();
@@ -286,6 +374,10 @@ void MagicInternetBox::update(std::shared_ptr<ShipModel> state) {
 			}
 			case PlayerDisconnect: {
 				numPlayers--;
+				return;
+			}
+			case StateSync: {
+				resolveState(state, message);
 				return;
 			}
 			default:
@@ -325,16 +417,14 @@ void MagicInternetBox::update(std::shared_ptr<ShipModel> state) {
 				break;
 			}
 			case DualCreate: {
-				unsigned int taskID = id;
-				unsigned int player1 = data1;
-				unsigned int player2 = data2;
+				int taskID = id;
 				state->createDoor(angle, taskID);
 				break;
 			}
 			case DualResolve: {
-				unsigned int taskID = id;
-				unsigned int player = data1;
-				unsigned int flag = data2;
+				int taskID = id;
+				int player = data1;
+				int flag = data2;
 				CULog("Flag door %d with player %d", id, player);
 				state->flagDoor(taskID, player, flag);
 				break;

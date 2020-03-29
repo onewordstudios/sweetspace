@@ -82,6 +82,7 @@ class MagicInternetBox {
 		BreachShrink,
 		DualCreate,
 		DualResolve,
+		StateSync,
 
 		// Connection messages that can be received during gameplay
 		PlayerJoined = 50, // Doubles for both matchmaking and reconnect
@@ -114,6 +115,27 @@ class MagicInternetBox {
 	 * and data2 respectively, and sets data3 to -1.
 	 */
 	void sendData(NetworkDataType type, float angle, int id, int data1, int data2, float data3);
+
+	/**
+	 * Broadcast the state of the ship as host to all other players. Will broadcast status and
+	 * location of all breaches and doors. Does NOT broadcast location and jump status of other
+	 * players, as this data will self-resolve over time and de-syncing on it will not cause issues
+	 * with the gameplay.
+	 *
+	 * Should only be called as host.
+	 *
+	 * @param state The current, definitive state of the ship
+	 */
+	void syncState(std::shared_ptr<ShipModel> state);
+
+	/**
+	 * Compare the current state of the ship with the state given by the host, and will resolve any
+	 * discrepancies in favor of the host.
+	 *
+	 * @param state The current, potentially de-synced state of the ship
+	 * @param message The actual state of the ship message from the host
+	 */
+	void resolveState(std::shared_ptr<ShipModel> state, const std::vector<uint8_t>& message);
 
    public:
 	/**
