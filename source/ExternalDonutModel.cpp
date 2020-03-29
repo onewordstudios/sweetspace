@@ -1,4 +1,4 @@
-#include "ExternalDonutModel.h"
+﻿#include "ExternalDonutModel.h"
 
 using namespace cugl;
 
@@ -14,7 +14,7 @@ bool ExternalDonutModel::init(const cugl::Vec2& pos) {
 }
 
 void ExternalDonutModel::setAngle(float value) {
-	float newAngle = HALF_CIRCLE * value / (float)M_PI;
+	float newAngle = value;
 	networkMove.framesSinceUpdate = 0;
 	networkMove.oldAngle = angle;
 	networkMove.angle = newAngle;

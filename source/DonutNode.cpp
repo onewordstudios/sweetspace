@@ -15,8 +15,8 @@ void DonutNode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch, const Mat4
 	const float jump = 1.0f - donutModel->getJumpOffset();
 
 	float vel = donutModel->getVelocity();
-	Vec2 donutPos = Vec2(jump * RADIUS * sin(donutModel->getAngle()),
-						 -jump * RADIUS * cos(donutModel->getAngle()));
+	Vec2 donutPos = Vec2(jump * RADIUS * sin(donutModel->getAngle() * PI_180),
+						 -jump * RADIUS * cos(donutModel->getAngle() * PI_180));
 	if (donutModel->getAngle() < 0) {
 		donutPos = Vec2(0, 0);
 	}
