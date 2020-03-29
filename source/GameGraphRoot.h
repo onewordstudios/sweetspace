@@ -35,6 +35,12 @@ class GameGraphRoot : public cugl::Scene {
 	std::shared_ptr<cugl::Node> nearSpace;
 	/** Parent node of all breaches, is child of nearSpace */
 	std::shared_ptr<cugl::Node> breachesNode;
+	/** Parent node of all ship segments, is child of nearSpace */
+	std::shared_ptr<cugl::Node> shipSegsNode;
+	/** Tag of the left most ship segment */
+	int leftMostSeg;
+    /** Tag of the right most ship segment */
+	int rightMostSeg;
 
 	// MODEL
 	/** Id of the current client */

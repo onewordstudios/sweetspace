@@ -33,6 +33,18 @@ constexpr unsigned int DIAMETER = 1280;
 /** The radius of the ship. Also the y coordinate of the center of the ship */
 constexpr unsigned int RADIUS = 550;
 
+/** Maximum number of possibly visible ship segments at a time */
+constexpr unsigned int VISIBLE_SEGS = 5;
+
+/** The angle in degree of a single ship segment */
+constexpr float SEG_SIZE = 45;
+
+/** The screen angle at which a ship segment is no longer visible */
+constexpr float SEG_CUTOFF_ANGLE = 47.5;
+
+/** The size of the level in degrees */
+constexpr float MAX_ANGLE = 360;
+
 #pragma mark -
 #pragma mark Constructors
 
@@ -77,8 +89,24 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	nearSpace = assets->get<Node>("game_field_near");
 	donutNode = dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_player1"));
 	breachesNode = assets->get<Node>("game_field_near_breaches");
+	shipSegsNode = assets->get<Node>("game_field_near_shipsegments");
 	donutPos = donutNode->getPosition();
 	coordHUD = std::dynamic_pointer_cast<Label>(assets->get<Node>("game_hud"));
+
+	// Initialize Ship Segments
+	leftMostSeg = 0;
+	rightMostSeg = VISIBLE_SEGS - 1;
+	std::shared_ptr<Texture> seg0 = assets->get<Texture>("shipseg0");
+	std::shared_ptr<Texture> seg1 = assets->get<Texture>("shipseg1");
+	for (int i = 0; i < VISIBLE_SEGS; i++) {
+		std::shared_ptr<PolygonNode> segment =
+			cugl::PolygonNode::allocWithTexture(i % 2 == 0 ? seg0 : seg1);
+		segment->setAnchor(Vec2::ANCHOR_TOP_CENTER);
+		segment->setScale(0.32);
+		segment->setPosition(Vec2(0, 0));
+		segment->setAngle(static_cast<float>((i - 2) * M_PI / 4));
+		shipSegsNode->addChildWithTag(segment, static_cast<unsigned int>(i));
+	}
 
 	// Initialize Players
 	for (int i = 0; i < ship->getDonuts().size(); i++) {
@@ -205,27 +233,56 @@ void GameGraphRoot::update(float timestep) {
 
 	double radiusRatio = RADIUS / (donutNode->getWidth() / 2.0);
 
-	angle = donutNode->getAngle() -
-			ship->getDonuts().at(playerID)->getVelocity() * PI_180 * radiusRatio;
+	// Update client donut
+	angle =
+		static_cast<float>(donutNode->getAngle() -
+						   ship->getDonuts().at(playerID)->getVelocity() * PI_180 * radiusRatio);
 	donutNode->setAnchor(Vec2::ANCHOR_CENTER);
 	donutNode->setAngle(angle);
 	// Draw Jump Offset
 	float donutNewY = donutPos.y + ship->getDonuts().at(playerID)->getJumpOffset() * screenHeight;
 	donutNode->setPositionY(donutNewY);
 
+	// Update breaches textures if recycled
 	for (int i = 0; i < ship->getBreaches().size(); i++) {
-		std::shared_ptr<BreachModel> breachModel = ship->getBreaches().at(i);
+		std::shared_ptr<BreachModel> breachModel =
+			ship->getBreaches().at(static_cast<unsigned long>(i));
 		if (breachModel->getHealth() > 0 && breachModel->getNeedSpriteUpdate()) {
 			string breachColor = playerColor.at(static_cast<unsigned long>(
 				ship->getDonuts()
 					.at(static_cast<unsigned long>(breachModel->getPlayer()))
 					->getColorId()));
 			std::shared_ptr<Texture> image = assets->get<Texture>("breach_" + breachColor);
-			shared_ptr<BreachNode> breachNode =
-				dynamic_pointer_cast<BreachNode>(breachesNode->getChildByTag(i + 1));
+			shared_ptr<BreachNode> breachNode = dynamic_pointer_cast<BreachNode>(
+				breachesNode->getChildByTag(static_cast<unsigned int>(i + 1)));
 			breachNode->setTexture(image);
 			breachModel->setNeedSpriteUpdate(false);
 		}
+	}
+
+	// Update ship segments
+	std::shared_ptr<Texture> seg0 = assets->get<Texture>("shipseg0");
+	std::shared_ptr<Texture> seg1 = assets->get<Texture>("shipseg1");
+	for (int i = 0; i < VISIBLE_SEGS; i++) {
+		std::shared_ptr<PolygonNode> segment = dynamic_pointer_cast<cugl::PolygonNode>(
+			shipSegsNode->getChildByTag(static_cast<unsigned int>(i)));
+		// If segments rotate too far left, move left-most segment to the right side
+		if (i == rightMostSeg && nearSpace->getAngle() + segment->getAngle() <= SEG_CUTOFF_ANGLE) {
+		    rightMostSeg = (i + 1) % VISIBLE_SEGS;
+		    leftMostSeg = (i + 2) % VISIBLE_SEGS;
+            std::shared_ptr<PolygonNode> newRightSegment = dynamic_pointer_cast<cugl::PolygonNode>(
+                    shipSegsNode->getChildByTag(static_cast<unsigned int>(rightMostSeg)));
+            newRightSegment->setAngle(fmod(segment->getAngle() + SEG_SIZE, MAX_ANGLE));
+		} else if (i == leftMostSeg &&
+				   nearSpace->getAngle() + segment->getAngle() >= -SEG_CUTOFF_ANGLE) {
+            leftMostSeg = (i - 1) % VISIBLE_SEGS;
+            rightMostSeg = (i - 2) % VISIBLE_SEGS;
+            std::shared_ptr<PolygonNode> newLeftSegment = dynamic_pointer_cast<cugl::PolygonNode>(
+                    shipSegsNode->getChildByTag(static_cast<unsigned int>(leftMostSeg)));
+            newLeftSegment->setAngle(fmod(segment->getAngle() - SEG_SIZE, MAX_ANGLE));
+		}
+		segment->setAngle(static_cast<float>((i - 2) * M_PI / 4));
+		shipSegsNode->addChildWithTag(segment, static_cast<unsigned int>(i));
 	}
 }
 
