@@ -7,7 +7,6 @@
 
 class DonutModel {
    public:
-	static constexpr unsigned int FULL_CIRCLE = 360;
 	static constexpr float HALF_CIRCLE = 180.0f;
 
    protected:
@@ -41,6 +40,8 @@ class DonutModel {
 	cugl::Vec2 sgPos;
 	/** Angle of the donut in the world space */
 	float angle;
+	/** Size of the level */
+	float maxAngle;
 	/** Current turning thrust (stored to facilitate decay) */
 	float velocity;
 	/** Offset from bottom of ship when Jumping based on proportion of hallway */
@@ -76,7 +77,8 @@ class DonutModel {
 		  jumping(false),
 		  jumpTime(0),
 		  jumpVelocity(0),
-		  colorId(0) {}
+		  colorId(0),
+		  maxAngle(360) {}
 
 	/**
 	 * Destroys this donut, releasing all resources.
@@ -98,9 +100,11 @@ class DonutModel {
 	 * initializes all assets and makes the object read for use.  By separating
 	 * them, we allow ourselfs non-pointer references to complex objects.
 	 *
+	 * @param lvlSize	The max angle the donut is allowed to have
+	 *
 	 * @return true if the obstacle is initialized properly, false otherwise.
 	 */
-	virtual bool init() { return init(cugl::Vec2::ZERO); }
+	virtual bool init(float lvlSize) { return init(cugl::Vec2::ZERO, lvlSize); }
 
 	/**
 	 * Initializes a new donut with the given position
@@ -110,10 +114,11 @@ class DonutModel {
 	 * them, we allow ourselfs non-pointer references to complex objects.
 	 *
 	 * @param pos   Initial position in world coordinates
+	 * @param lvlSize	The max angle the donut is allowed to have
 	 *
 	 * @return true if the obstacle is initialized properly, false otherwise.
 	 */
-	virtual bool init(const cugl::Vec2& pos);
+	virtual bool init(const cugl::Vec2& pos, float lvlSize);
 
 #pragma mark -
 #pragma mark Accessors

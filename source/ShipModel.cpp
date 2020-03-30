@@ -4,10 +4,10 @@
 #include "PlayerDonutModel.h"
 
 bool ShipModel::init(unsigned int numPlayers, unsigned int numBreaches, unsigned int numDoors,
-					 unsigned int playerID) {
+					 unsigned int playerID, float lvlSize) {
 	// Instantiate donut models and assign colors
 	for (unsigned int i = 0; i < numPlayers; i++) {
-		donuts.push_back(playerID == i ? PlayerDonutModel::alloc() : ExternalDonutModel::alloc());
+		donuts.push_back(playerID == i ? PlayerDonutModel::alloc(size) : ExternalDonutModel::alloc(size));
 		// TODO modulo max number of colors once constants are factored out
 		donuts[i]->setColorId(i);
 	}
@@ -24,6 +24,9 @@ bool ShipModel::init(unsigned int numPlayers, unsigned int numBreaches, unsigned
 
 	// Instantiate health
 	health = 11;
+
+	// Initialize size
+	size = lvlSize;
 
 	return true;
 }
