@@ -3,12 +3,15 @@
 
 #include <cugl/2d/CUAnimationNode.h>
 
+#include "DonutModel.h"
 #include "DoorModel.h"
 
 class DoorNode : public cugl::AnimationNode {
 #pragma mark Values
    protected:
 	std::shared_ptr<DoorModel> doorModel;
+	/** Reference to the player donut model */
+	std::shared_ptr<DonutModel> playerDonutModel;
 
    public:
 #pragma mark -
@@ -57,6 +60,8 @@ class DoorNode : public cugl::AnimationNode {
 #pragma mark -
 
 	void setModel(std::shared_ptr<DoorModel> model) { doorModel = model; }
+
+	void setDonutModel(std::shared_ptr<DonutModel> model) { playerDonutModel = model; }
 
 	std::shared_ptr<DoorModel> getModel() { return doorModel; }
 

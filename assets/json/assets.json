@@ -137,6 +137,13 @@
                                         "anchor":   [0,0],
                                         "position": [0,0]
                                     }
+                                },
+                                "doors": {
+                                    "type": "Node",
+                                    "data": {
+                                        "anchor":   [0,0],
+                                        "position": [0,0]
+                                    }
                                 }
                             }
                         },

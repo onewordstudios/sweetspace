@@ -90,6 +90,7 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	donutNode = dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_player1"));
 	breachesNode = assets->get<Node>("game_field_near_breaches");
 	shipSegsNode = assets->get<Node>("game_field_near_shipsegments");
+	doorsNode = assets->get<Node>("game_field_near_doors");
 	donutPos = donutNode->getPosition();
 	coordHUD = std::dynamic_pointer_cast<Label>(assets->get<Node>("game_hud"));
 
@@ -147,6 +148,7 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 		breachesNode->addChild(breachNode);
 	}
 
+	// Initialize Doors
 	for (int i = 0; i < ship->getDoors().size(); i++) {
 		std::shared_ptr<DoorModel> doorModel = ship->getDoors().at(i);
 		std::shared_ptr<Texture> image = assets->get<Texture>("door");
@@ -155,7 +157,7 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 		doorNode->setFrame(0);
 		doorNode->setAnchor(Vec2::ANCHOR_BOTTOM_CENTER);
 		doorNode->setScale(0.3f);
-		nearSpace->addChild(doorNode);
+		doorsNode->addChild(doorNode);
 	}
 
 	for (int i = 0; i < 8; i++) {

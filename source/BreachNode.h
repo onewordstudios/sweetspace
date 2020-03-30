@@ -4,12 +4,15 @@
 #include <cugl/2d/CUAnimationNode.h>
 
 #include "BreachModel.h"
+#include "DonutModel.h"
 
 class BreachNode : public cugl::AnimationNode {
 #pragma mark Values
    protected:
 	/** Reference to the model of this node. */
 	std::shared_ptr<BreachModel> breachModel;
+	/** Reference to the player donut model */
+	std::shared_ptr<DonutModel> playerDonutModel;
 
    public:
 #pragma mark -
@@ -55,6 +58,8 @@ class BreachNode : public cugl::AnimationNode {
 #pragma mark Getters & Setters
 
 	void setModel(std::shared_ptr<BreachModel> model) { breachModel = model; }
+
+	void setDonutModel(std::shared_ptr<DonutModel> model) { playerDonutModel = model; }
 
 	std::shared_ptr<BreachModel> getModel() { return breachModel; }
 
