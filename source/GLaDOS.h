@@ -65,7 +65,8 @@ class GLaDOS {
 	 *
 	 * @return true if the controller was initialized successfully
 	 */
-	bool init(std::shared_ptr<ShipModel> ship, std::shared_ptr<MagicInternetBox> mib, float lvlSize);
+	bool init(std::shared_ptr<ShipModel> ship, std::shared_ptr<MagicInternetBox> mib,
+			  float lvlSize);
 
 #pragma mark -
 #pragma mark GM Handling

@@ -53,7 +53,8 @@ void GLaDOS::dispose() {
  *
  * @return true if the controller was initialized successfully
  */
-bool GLaDOS::init(std::shared_ptr<ShipModel> ship, std::shared_ptr<MagicInternetBox> mib, float lvlSize) {
+bool GLaDOS::init(std::shared_ptr<ShipModel> ship, std::shared_ptr<MagicInternetBox> mib,
+				  float lvlSize) {
 	bool success = true;
 	this->ship = ship;
 	this->mib = mib;

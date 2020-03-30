@@ -43,13 +43,13 @@ void ExternalDonutModel::update(float timestep) {
 		float newAngle = networkMove.angle * percent + networkMove.oldAngle * (1.0f - percent);
 		if (networkMove.oldAngle > END_DONUT * maxAngle &&
 			networkMove.angle < BEG_DONUT * maxAngle) {
-			newAngle = networkMove.angle * percent +
-					   (networkMove.oldAngle - maxAngle) * (1.0f - percent);
+			newAngle =
+				networkMove.angle * percent + (networkMove.oldAngle - maxAngle) * (1.0f - percent);
 
 		} else if (networkMove.angle > END_DONUT * maxAngle &&
 				   networkMove.oldAngle < BEG_DONUT * maxAngle) {
-			newAngle = (networkMove.angle - maxAngle) * percent +
-					   networkMove.oldAngle * (1.0f - percent);
+			newAngle =
+				(networkMove.angle - maxAngle) * percent + networkMove.oldAngle * (1.0f - percent);
 		}
 		if (newAngle < 0) {
 			newAngle += maxAngle;

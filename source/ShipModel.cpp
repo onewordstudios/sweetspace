@@ -7,7 +7,8 @@ bool ShipModel::init(unsigned int numPlayers, unsigned int numBreaches, unsigned
 					 unsigned int playerID, float lvlSize) {
 	// Instantiate donut models and assign colors
 	for (unsigned int i = 0; i < numPlayers; i++) {
-		donuts.push_back(playerID == i ? PlayerDonutModel::alloc(size) : ExternalDonutModel::alloc(size));
+		donuts.push_back(playerID == i ? PlayerDonutModel::alloc(size)
+									   : ExternalDonutModel::alloc(size));
 		// TODO modulo max number of colors once constants are factored out
 		donuts[i]->setColorId(i);
 	}
