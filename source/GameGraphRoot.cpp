@@ -105,7 +105,7 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 		segment->setScale(0.32);
 		segment->setPosition(Vec2(0, 0));
 		segment->setAngle((i - 2) * SEG_SIZE);
-		shipSegsNode->addChildWithTag(segment, static_cast<unsigned int>(i));
+		shipSegsNode->addChildWithTag(segment, static_cast<unsigned int>(i + 1));
 	}
 
 	// Initialize Players
@@ -271,21 +271,21 @@ void GameGraphRoot::update(float timestep) {
 	std::shared_ptr<Texture> seg1 = assets->get<Texture>("shipseg1");
 	for (int i = 0; i < VISIBLE_SEGS; i++) {
 		std::shared_ptr<PolygonNode> segment = dynamic_pointer_cast<cugl::PolygonNode>(
-			shipSegsNode->getChildByTag(static_cast<unsigned int>(i)));
+			shipSegsNode->getChildByTag(static_cast<unsigned int>(i + 1)));
 		// If segments rotate too far left, move left-most segment to the right side
 		if (i == rightMostSeg &&
 			wrapAngle(nearSpace->getAngle() + segment->getAngle()) <= SEG_CUTOFF_ANGLE) {
 			rightMostSeg = (i + 1) % VISIBLE_SEGS;
 			leftMostSeg = (i + 2) % VISIBLE_SEGS;
 			std::shared_ptr<PolygonNode> newRightSegment = dynamic_pointer_cast<cugl::PolygonNode>(
-				shipSegsNode->getChildByTag(static_cast<unsigned int>(rightMostSeg)));
+				shipSegsNode->getChildByTag(static_cast<unsigned int>(rightMostSeg + 1)));
 			newRightSegment->setAngle(wrapAngle(segment->getAngle() + SEG_SIZE));
 		} else if (i == leftMostSeg && wrapAngle(nearSpace->getAngle() + segment->getAngle()) >=
 										   MAX_ANGLE - SEG_CUTOFF_ANGLE) {
 			leftMostSeg = (i + VISIBLE_SEGS - 1) % VISIBLE_SEGS;
 			rightMostSeg = (i + VISIBLE_SEGS - 2) % VISIBLE_SEGS;
 			std::shared_ptr<PolygonNode> newLeftSegment = dynamic_pointer_cast<cugl::PolygonNode>(
-				shipSegsNode->getChildByTag(static_cast<unsigned int>(leftMostSeg)));
+				shipSegsNode->getChildByTag(static_cast<unsigned int>(leftMostSeg + 1)));
 			newLeftSegment->setAngle(wrapAngle(segment->getAngle() - SEG_SIZE));
 		}
 	}
