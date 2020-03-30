@@ -17,7 +17,7 @@ class ShipModel {
 	/** Current health of the ship*/
 	int health;
 	/** Size of the ship. Minimum value should be 360. Default value 360 */
-	float size;
+	float shipSize;
 
    public:
 #pragma mark Constructors
@@ -64,12 +64,12 @@ class ShipModel {
 	 * @param numBreaches The number of breaches in this ship
 	 * @param numDoors    The number of doors in this ship
 	 * @param playerID    The ID of the current local player
-	 * @param lvlSize		  The size of the level
+	 * @param shipSize		  The size of the level
 	 *
 	 * @return true if the model is initialized properly, false otherwise.
 	 */
 	bool init(unsigned int numPlayers, unsigned int numBreaches, unsigned int numDoors,
-			  unsigned int playerID, float lvlSize);
+			  unsigned int playerID, float shipSize);
 
 	/**
 	 * Create and return a shared pointer to a new ship model.
@@ -94,16 +94,16 @@ class ShipModel {
 	 * @param numBreaches The number of breaches in this ship
 	 * @param numDoors    The number of doors in this ship
 	 * @param playerID    The ID of the current local player
-	 * @param lvlSize	  The size of the level
+	 * @param shipSize	  The size of the level
 	 *
 	 * @return A smart pointer to a newly initialized ship model
 	 */
 	static std::shared_ptr<ShipModel> alloc(unsigned int numPlayers, unsigned int numBreaches,
 											unsigned int numDoors, unsigned int playerID,
-											float lvlSize) {
+											float shipSize) {
 		std::shared_ptr<ShipModel> result = std::make_shared<ShipModel>();
-		return (result->init(numPlayers, numBreaches, numDoors, playerID, lvlSize) ? result
-																				   : nullptr);
+		return (result->init(numPlayers, numBreaches, numDoors, playerID, shipSize) ? result
+																					: nullptr);
 	}
 
 #pragma mark -
@@ -198,13 +198,13 @@ class ShipModel {
 	 *
 	 * @param the size of the ship
 	 */
-	void setSize(int s) { size = s; };
+	void setSize(float s) { shipSize = s; };
 
 	/**
 	 * Get size of the ship
 	 *
 	 * @return the size of the ship
 	 */
-	int getSize() { return size; }
+	float getSize() { return shipSize; }
 };
 #endif /* __SHIP_MODEL_H__ */

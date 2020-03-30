@@ -24,9 +24,6 @@ class GLaDOS {
 	/** Current player ID */
 	unsigned int playerID;
 
-	/** Size of the level */
-	float size;
-
 	/** The state of the ship */
 	std::shared_ptr<ShipModel> ship;
 
@@ -65,8 +62,7 @@ class GLaDOS {
 	 *
 	 * @return true if the controller was initialized successfully
 	 */
-	bool init(std::shared_ptr<ShipModel> ship, std::shared_ptr<MagicInternetBox> mib,
-			  float lvlSize);
+	bool init(std::shared_ptr<ShipModel> ship, std::shared_ptr<MagicInternetBox> mib);
 
 #pragma mark -
 #pragma mark GM Handling

@@ -77,9 +77,9 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	net = mib;
 
 	playerID = net->getPlayerID();
-	float lvlSize = 360; // TODO level size comes from level file
-	ship = ShipModel::alloc(net->getNumPlayers(), MAX_EVENTS, MAX_DOORS, playerID, lvlSize);
-	gm.init(ship, net, lvlSize);
+	float shipSize = 360; // TODO level size comes from level file
+	ship = ShipModel::alloc(net->getNumPlayers(), MAX_EVENTS, MAX_DOORS, playerID, shipSize);
+	gm.init(ship, net);
 
 	donutModel = ship->getDonuts().at(static_cast<unsigned long>(playerID));
 

@@ -6,8 +6,8 @@ constexpr unsigned int NETWORK_TICK = 12; // Originally defined in MagicInternet
 constexpr float BEG_DONUT = 0.2f;
 constexpr float END_DONUT = 1.0f - BEG_DONUT;
 
-bool ExternalDonutModel::init(const cugl::Vec2& pos, float lvlSize) {
-	bool ret = DonutModel::init(pos, lvlSize);
+bool ExternalDonutModel::init(const cugl::Vec2& pos, float shipSize) {
+	bool ret = DonutModel::init(pos, shipSize);
 	// Initialize with finished interpolation
 	networkMove.framesSinceUpdate = NETWORK_TICK;
 	return ret;
@@ -29,30 +29,30 @@ void ExternalDonutModel::update(float timestep) {
 		networkMove.angle += velocity;
 
 		// Clamp angles again
-		if (networkMove.oldAngle > maxAngle) {
-			networkMove.oldAngle -= maxAngle;
+		if (networkMove.oldAngle > shipSize) {
+			networkMove.oldAngle -= shipSize;
 		} else if (networkMove.oldAngle < 0) {
-			networkMove.oldAngle += maxAngle;
+			networkMove.oldAngle += shipSize;
 		}
-		if (networkMove.angle > maxAngle) {
-			networkMove.angle -= maxAngle;
+		if (networkMove.angle > shipSize) {
+			networkMove.angle -= shipSize;
 		} else if (networkMove.angle < 0) {
-			networkMove.angle += maxAngle;
+			networkMove.angle += shipSize;
 		}
 
 		float newAngle = networkMove.angle * percent + networkMove.oldAngle * (1.0f - percent);
-		if (networkMove.oldAngle > END_DONUT * maxAngle &&
-			networkMove.angle < BEG_DONUT * maxAngle) {
+		if (networkMove.oldAngle > END_DONUT * shipSize &&
+			networkMove.angle < BEG_DONUT * shipSize) {
 			newAngle =
-				networkMove.angle * percent + (networkMove.oldAngle - maxAngle) * (1.0f - percent);
+				networkMove.angle * percent + (networkMove.oldAngle - shipSize) * (1.0f - percent);
 
-		} else if (networkMove.angle > END_DONUT * maxAngle &&
-				   networkMove.oldAngle < BEG_DONUT * maxAngle) {
+		} else if (networkMove.angle > END_DONUT * shipSize &&
+				   networkMove.oldAngle < BEG_DONUT * shipSize) {
 			newAngle =
-				(networkMove.angle - maxAngle) * percent + networkMove.oldAngle * (1.0f - percent);
+				(networkMove.angle - shipSize) * percent + networkMove.oldAngle * (1.0f - percent);
 		}
 		if (newAngle < 0) {
-			newAngle += maxAngle;
+			newAngle += shipSize;
 		}
 
 		angle = newAngle;

@@ -53,13 +53,11 @@ void GLaDOS::dispose() {
  *
  * @return true if the controller was initialized successfully
  */
-bool GLaDOS::init(std::shared_ptr<ShipModel> ship, std::shared_ptr<MagicInternetBox> mib,
-				  float lvlSize) {
+bool GLaDOS::init(std::shared_ptr<ShipModel> ship, std::shared_ptr<MagicInternetBox> mib) {
 	bool success = true;
 	this->ship = ship;
 	this->mib = mib;
 	this->playerID = mib->getPlayerID();
-	size = lvlSize;
 	for (int i = 0; i < MAX_EVENTS; i++) {
 		breachFree.at(i) = true;
 	}
@@ -111,7 +109,7 @@ void GLaDOS::update(float dt) {
 	if (rand() % SPAWN_RATE > 1) return;
 	for (int i = 0; i < MAX_EVENTS; i++) {
 		if (breachFree.at(i)) {
-			float angle = rand() % (int)size;
+			float angle = rand() % (int)(ship->getSize());
 			bool goodAngle = true;
 			for (int j = 0; j < ship->getDonuts().size(); j++) {
 				float diff = (float)DonutModel::HALF_CIRCLE -
@@ -149,7 +147,7 @@ void GLaDOS::update(float dt) {
 	}
 	for (int i = 0; i < MAX_DOORS; i++) {
 		if (doorFree.at(i)) {
-			float angle = rand() % (int)size;
+			float angle = rand() % (int)(ship->getSize());
 			bool goodAngle = true;
 			for (int j = 0; j < ship->getDonuts().size(); j++) {
 				float diff = (float)DonutModel::HALF_CIRCLE -
