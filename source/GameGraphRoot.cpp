@@ -40,7 +40,7 @@ constexpr unsigned int VISIBLE_SEGS = 6;
 constexpr float SEG_SIZE = (float)(45 * M_PI / 180);
 
 /** The screen angle at which a ship segment is no longer visible */
-constexpr float SEG_CUTOFF_ANGLE = (float)(90 * M_PI / 180);
+constexpr float SEG_CUTOFF_ANGLE = (float)(100 * M_PI / 180);
 
 /** The size of the level in degrees */
 constexpr float MAX_ANGLE = (float)(360 * M_PI / 180);
@@ -104,7 +104,7 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 		segment->setAnchor(Vec2::ANCHOR_TOP_CENTER);
 		segment->setScale(0.32);
 		segment->setPosition(Vec2(0, 0));
-		segment->setAngle(static_cast<float>((i - 2) * M_PI / 4));
+		segment->setAngle((i - 2) * SEG_SIZE);
 		shipSegsNode->addChildWithTag(segment, static_cast<unsigned int>(i));
 	}
 
@@ -205,9 +205,12 @@ void GameGraphRoot::reset() {
 	nearSpace->setAngle(0.0f);
 }
 
-
 /** Helper function for degree wrapping around */
-float wrapAngle(float f) { return fmod(f, MAX_ANGLE); };
+float wrapAngle(float f) {
+	float mod = fmod(f, MAX_ANGLE);
+	return mod < 0 ? MAX_ANGLE + mod : mod;
+};
+
 /**
  * The method called to update the game mode.
  *
@@ -277,10 +280,10 @@ void GameGraphRoot::update(float timestep) {
 			std::shared_ptr<PolygonNode> newRightSegment = dynamic_pointer_cast<cugl::PolygonNode>(
 				shipSegsNode->getChildByTag(static_cast<unsigned int>(rightMostSeg)));
 			newRightSegment->setAngle(wrapAngle(segment->getAngle() + SEG_SIZE));
-		} else if (i == leftMostSeg &&
-				   wrapAngle(nearSpace->getAngle() + segment->getAngle()) >= -SEG_CUTOFF_ANGLE) {
-			leftMostSeg = (i - 1) % VISIBLE_SEGS;
-			rightMostSeg = (i - 2) % VISIBLE_SEGS;
+		} else if (i == leftMostSeg && wrapAngle(nearSpace->getAngle() + segment->getAngle()) >=
+										   MAX_ANGLE - SEG_CUTOFF_ANGLE) {
+			leftMostSeg = (i + VISIBLE_SEGS - 1) % VISIBLE_SEGS;
+			rightMostSeg = (i + VISIBLE_SEGS - 2) % VISIBLE_SEGS;
 			std::shared_ptr<PolygonNode> newLeftSegment = dynamic_pointer_cast<cugl::PolygonNode>(
 				shipSegsNode->getChildByTag(static_cast<unsigned int>(leftMostSeg)));
 			newLeftSegment->setAngle(wrapAngle(segment->getAngle() - SEG_SIZE));
