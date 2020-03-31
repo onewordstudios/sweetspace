@@ -216,7 +216,7 @@ void MagicInternetBox::resolveState(std::shared_ptr<ShipModel> state,
 			float angle = (float)(message[doorIndex + 2] + ONE_BYTE * message[doorIndex + 3]) /
 						  FLOAT_PRECISION;
 			CULog("Found resolved breach that should be unresolved, id %d", i);
-			state->createBreach(angle, message[doorIndex], message[doorIndex + 1], i);
+			state->createBreach(angle, message[doorIndex], message[doorIndex + 1], (int)i);
 		} else if (breaches[i]->getHealth() > 0 && message[doorIndex] == 0) {
 			CULog("Found unresolved breach that should be resolved, id %d", i);
 			state->resolveBreach((int)i);
