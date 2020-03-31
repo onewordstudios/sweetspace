@@ -216,7 +216,7 @@ CheckOptions:
   - key:             readability-identifier-naming.InlineNamespaceSuffix
     value:           ''
   - key:             readability-identifier-naming.LocalConstantCase
-    value:           UPPER_CASE
+    value:           camelBack
   - key:             readability-identifier-naming.LocalConstantPrefix
     value:           ''
   - key:             readability-identifier-naming.LocalConstantSuffix
