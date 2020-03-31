@@ -47,6 +47,10 @@ constexpr float DOOR_WIDTH = 7.0f;
 constexpr float BREACH_WIDTH = 11.0f;
 /** The Angle in degrees for which a door can be activated*/
 constexpr float DOOR_ACTIVE_ANGLE = 15.0f;
+/** Initial health of ship */
+constexpr int SHIP_INITIAL_HEALTH = 11;
+/** Force to push back during collision */
+constexpr float REBOUND_FORCE = -6;
 
 #pragma mark -
 #pragma mark Constructors
@@ -135,7 +139,7 @@ void GameMode::update(float timestep) {
 
 		if (!donutModel->isJumping() && playerID != breach->getPlayer() && diff < BREACH_WIDTH &&
 			breach->getHealth() != 0) {
-			donutModel->applyForce(-6 * donutModel->getVelocity());
+			donutModel->applyForce(REBOUND_FORCE * donutModel->getVelocity());
 		} else if (playerID == breach->getPlayer() && diff < EPSILON_ANGLE &&
 				   !breach->isPlayerOn() && donutModel->getJumpOffset() == 0.0f &&
 				   breach->getHealth() > 0) {
@@ -162,7 +166,7 @@ void GameMode::update(float timestep) {
 
 		if (diff < DOOR_WIDTH) {
 			// TODO: Real physics...
-			donutModel->applyForce(-6 * donutModel->getVelocity());
+			donutModel->applyForce(REBOUND_FORCE * donutModel->getVelocity());
 		}
 		if (diff < DOOR_ACTIVE_ANGLE) {
 			ship->getDoors().at(i)->addPlayer(playerID);
@@ -176,13 +180,13 @@ void GameMode::update(float timestep) {
 	}
 
 	if ((ship->getBreaches().size()) == 0) {
-		ship->setHealth(11);
+		ship->setHealth(SHIP_INITIAL_HEALTH);
 	} else {
 		int h = 0;
 		for (int i = 0; i < ship->getBreaches().size(); i++) {
 			h = h + ship->getBreaches().at(i)->getHealth();
 		}
-		ship->setHealth(12 - h);
+		ship->setHealth(SHIP_INITIAL_HEALTH + 1 - h);
 	}
 
 	gm.update(timestep);
