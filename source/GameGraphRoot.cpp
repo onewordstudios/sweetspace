@@ -182,7 +182,7 @@ void GameGraphRoot::update(float timestep) {
 	// Update the HUD
 	coordHUD->setText(positionText());
 
-	float angle = DonutModel::FULL_CIRCLE - ship->getDonuts().at(playerID)->getAngle();
+	float angle = (float)(fmod(ship->getSize() - ship->getDonuts().at(playerID)->getAngle(), 360));
 
 	// Reanchor the node at the center of the screen and rotate about center.
 	Vec2 position = farSpace->getPosition();
@@ -198,8 +198,8 @@ void GameGraphRoot::update(float timestep) {
 
 	double radiusRatio = globals::RADIUS / (donutNode->getWidth() / 2.0);
 
-	angle = donutNode->getAngle() -
-			ship->getDonuts().at(playerID)->getVelocity() * PI_180 * radiusRatio;
+	angle = (float)(donutNode->getAngle() -
+					ship->getDonuts().at(playerID)->getVelocity() * PI_180 * radiusRatio);
 	donutNode->setAnchor(Vec2::ANCHOR_CENTER);
 	donutNode->setAngle(angle);
 	// Draw Jump Offset

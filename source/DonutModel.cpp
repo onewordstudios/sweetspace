@@ -16,10 +16,11 @@ using namespace cugl;
  *
  * @return  true if the obstacle is initialized properly, false otherwise.
  */
-bool DonutModel::init(const Vec2& pos) {
+bool DonutModel::init(const Vec2& pos, float shipSize) {
 	sgPos = pos;
 	// Set Initial jump Velocity based on gravity and max jump height
 	jumpVelocity = sqrt(2 * GRAVITY * JUMP_HEIGHT);
+	this->shipSize = shipSize;
 	return true;
 }
 
