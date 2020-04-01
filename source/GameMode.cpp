@@ -49,14 +49,6 @@ constexpr float BREACH_WIDTH = 0.2f;
 constexpr float DOOR_ACTIVE_ANGLE = 0.25f;
 /** Time limit for the round */
 constexpr float TIME = 30;
-/** The Angle in degrees for fixing a breach*/
-constexpr float EPSILON_ANGLE = 5.2f;
-/** The Angle in degrees for which a collision occurs*/
-constexpr float DOOR_WIDTH = 7.0f;
-/** The Angle in degrees for which a breach donut collision occurs*/
-constexpr float BREACH_WIDTH = 11.0f;
-/** The Angle in degrees for which a door can be activated*/
-constexpr float DOOR_ACTIVE_ANGLE = 15.0f;
 
 #pragma mark -
 #pragma mark Constructors
@@ -145,7 +137,6 @@ void GameMode::update(float timestep) {
 			continue;
 		}
 		float diff =
-			(float)M_PI - abs(abs(donutModel->getAngle() - breach->getAngle()) - (float)M_PI);
 			(float)DonutModel::HALF_CIRCLE -
 			abs(abs(donutModel->getAngle() - breach->getAngle()) - (float)DonutModel::HALF_CIRCLE);
 
@@ -172,9 +163,6 @@ void GameMode::update(float timestep) {
 			ship->getDoors().at(i)->getAngle() < 0) {
 			continue;
 		}
-		float diff =
-			(float)M_PI -
-			abs(abs(donutModel->getAngle() - ship->getDoors().at(i)->getAngle()) - (float)M_PI);
 		float diff = (float)DonutModel::HALF_CIRCLE -
 					 abs(abs(donutModel->getAngle() - ship->getDoors().at(i)->getAngle()) -
 						 (float)DonutModel::HALF_CIRCLE);
