@@ -20,9 +20,9 @@ class PlayerDonutModel : public DonutModel {
 	 *
 	 * @return a newly allocated donut at the origin.
 	 */
-	static std::shared_ptr<DonutModel> alloc() {
+	static std::shared_ptr<DonutModel> alloc(float shipSize) {
 		std::shared_ptr<PlayerDonutModel> result = std::make_shared<PlayerDonutModel>();
-		return (result->DonutModel::init() ? result : nullptr);
+		return (result->DonutModel::init(shipSize) ? result : nullptr);
 	}
 
 	/**
@@ -37,9 +37,9 @@ class PlayerDonutModel : public DonutModel {
 	 *
 	 * @return a newly allocated donut at the given position.
 	 */
-	static std::shared_ptr<DonutModel> alloc(const cugl::Vec2& pos) {
+	static std::shared_ptr<DonutModel> alloc(const cugl::Vec2& pos, float shipSize) {
 		std::shared_ptr<PlayerDonutModel> result = std::make_shared<PlayerDonutModel>();
-		return (result->init(pos) ? result : nullptr);
+		return (result->init(pos, shipSize) ? result : nullptr);
 	}
 #pragma endregion
 	/**
