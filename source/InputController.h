@@ -1,16 +1,4 @@
-﻿//
-//  SDInput.h
-//  Ship Demo
-//
-//  This input controller is primarily designed for keyboard control.  On mobile
-//  you will notice that we use gestures to emulate keyboard commands. They even
-//  use the same variables (though we need other variables for internal keyboard
-//  emulation).  This simplifies our design quite a bit.
-//
-//  Author: Walker White
-//  Version: 1/10/17
-//
-#ifndef __SD_INPUT_H__
+﻿#ifndef __SD_INPUT_H__
 #define __SD_INPUT_H__
 #include <cugl/cugl.h>
 

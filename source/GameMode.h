@@ -1,21 +1,4 @@
-﻿//
-//  SDGameScene.h
-//  Ship Demo
-//
-//  This is the most important class in this demo.  This class manages the
-//  gameplay for this demo.  It is a relativeluy simple class as we are not
-//  worried about collisions.
-//
-//  WARNING: There are a lot of shortcuts in this design that will do not adapt
-//  well to data driven design.  This demo has a lot of simplifications to make
-//  it a bit easier to see how everything fits together.  However, the model
-//  classes and how they are initialized will need to be changed if you add
-//  dynamic level loading.
-//
-//  Author: Walker White
-//  Version: 1/10/18
-//
-#ifndef __GAME_MODE_H__
+﻿#ifndef __GAME_MODE_H__
 #define __GAME_MODE_H__
 #include <cugl/cugl.h>
 

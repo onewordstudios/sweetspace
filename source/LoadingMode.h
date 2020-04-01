@@ -1,19 +1,3 @@
-//
-//  SDLoadingScene.h
-//  Ship Demo
-//
-//  This module provides a very barebones loading screen.  Most of the time you
-//  will not need a loading screen, because the assets will load so fast.  But
-//  just in case, this is a simple example you can use in your games.
-//
-//  We know from 3152 that you all like to customize this screen.  Therefore,
-//  we have kept it as simple as possible so that it is easy to modify. In
-//  fact, this loading screen uses the new modular JSON format for defining
-//  scenes.  See the file "loading.json" for how to change this scene.
-//
-//  Author: Walker White
-//  Version: 1/10/18
-//
 #ifndef __SD_LOADING_MODE_H__
 #define __SD_LOADING_MODE_H__
 #include <cugl/cugl.h>
