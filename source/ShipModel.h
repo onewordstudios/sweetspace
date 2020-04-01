@@ -216,7 +216,7 @@ class ShipModel {
 	 * @return if timer has ended
 	 */
 	bool timerEnded() { return timer < 1; }
-  /**
+	/**
 	 * Set size of the ship
 	 *
 	 * @param the size of the ship
@@ -229,6 +229,5 @@ class ShipModel {
 	 * @return the size of the ship
 	 */
 	float getSize() { return shipSize; }
-
 };
 #endif /* __SHIP_MODEL_H__ */
