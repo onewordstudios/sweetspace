@@ -7,6 +7,7 @@
 
 class DonutModel {
    public:
+	static constexpr unsigned int FULL_CIRCLE = 360;
 	static constexpr float HALF_CIRCLE = 180.0f;
 
    protected:
@@ -14,8 +15,6 @@ class DonutModel {
 	CU_DISALLOW_COPY_AND_ASSIGN(DonutModel);
 
 #pragma region Animation Constants and Functions
-	/** Factor to multiply the forward thrust */
-	static constexpr unsigned int FULL_CIRCLE = 360;
 
 	/** The max angular velocity (in degrees) per frame */
 	static constexpr float DONUT_MAX_TURN = 2.0f;
@@ -129,37 +128,37 @@ class DonutModel {
 	cugl::Vec2& getSceneGraphPosition() { return sgPos; }
 
 	/**
-	 * Returns the current angle of the donut in radians.
+	 * Returns the current angle of the donut in degrees.
 	 *
-	 * @return the current angle of the donut in radians.
+	 * @return the current angle of the donut in degrees.
 	 */
-	float getAngle() { return (float)M_PI * angle / HALF_CIRCLE; }
+	float getAngle() { return angle; }
 
 	/**
-	 * Sets the current angle of the donut in radians.
+	 * Sets the current angle of the donut in degrees.
 	 *
-	 * @param value The donut angle in radians
+	 * @param value The donut angle in degrees
 	 */
-	virtual void setAngle(float value) { angle = HALF_CIRCLE * value / (float)M_PI; }
+	virtual void setAngle(float value) { angle = value; }
 
 	/**
-	 * Returns the current angle of the donut in radians.
+	 * Returns the jump offset.
 	 *
-	 * @return the current angle of the donut in radians.
+	 * @return the jump offset.
 	 */
 	float getJumpOffset() { return jumpOffset; }
 
 	/**
-	 * Sets the current jump offset of the donut in radians.
+	 * Sets the current jump offset of the donut.
 	 *
 	 * @param value The jump offset
 	 */
 	void setJumpOffset(float value) { jumpOffset = value; }
 
 	/**
-	 * Sets the current angle of the donut in radians.
+	 * Sets whether the donut is jumping.
 	 *
-	 * @param value The donut angle in radians
+	 * @param b whether or not the donut is jumping
 	 */
 	void setIsJumping(bool b) { jumping = b; }
 

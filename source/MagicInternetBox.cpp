@@ -5,7 +5,7 @@
 using namespace cugl;
 
 constexpr auto GAME_SERVER = "ws://sweetspace-server.herokuapp.com/";
-constexpr float FLOAT_PRECISION = 180.0f;
+constexpr float FLOAT_PRECISION = 10.0f;
 constexpr unsigned int NETWORK_TICK = 12; // Constant also defined in ExternalDonutModel.cpp
 constexpr unsigned int STATE_SYNC_FREQ = NETWORK_TICK * 5;
 constexpr unsigned int ONE_BYTE = 256;

@@ -49,6 +49,14 @@ constexpr float BREACH_WIDTH = 0.2f;
 constexpr float DOOR_ACTIVE_ANGLE = 0.25f;
 /** Time limit for the round */
 constexpr float TIME = 30;
+/** The Angle in degrees for fixing a breach*/
+constexpr float EPSILON_ANGLE = 5.2f;
+/** The Angle in degrees for which a collision occurs*/
+constexpr float DOOR_WIDTH = 7.0f;
+/** The Angle in degrees for which a breach donut collision occurs*/
+constexpr float BREACH_WIDTH = 11.0f;
+/** The Angle in degrees for which a door can be activated*/
+constexpr float DOOR_ACTIVE_ANGLE = 15.0f;
 
 #pragma mark -
 #pragma mark Constructors
@@ -66,6 +74,8 @@ constexpr float TIME = 30;
  */
 bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets,
 					std::shared_ptr<MagicInternetBox>& mib) {
+	auto source = assets->get<Sound>("theme");
+	AudioChannels::get()->playMusic(source, true, source->getVolume());
 	// Initialize the scene to a locked width
 	Size dimen = Application::get()->getDisplaySize();
 	dimen *= SCENE_WIDTH / dimen.width; // Lock the game to a reasonable resolution
@@ -136,6 +146,8 @@ void GameMode::update(float timestep) {
 		}
 		float diff =
 			(float)M_PI - abs(abs(donutModel->getAngle() - breach->getAngle()) - (float)M_PI);
+			(float)DonutModel::HALF_CIRCLE -
+			abs(abs(donutModel->getAngle() - breach->getAngle()) - (float)DonutModel::HALF_CIRCLE);
 
 		if (!donutModel->isJumping() && playerID != breach->getPlayer() && diff < BREACH_WIDTH &&
 			breach->getHealth() != 0) {
@@ -163,6 +175,9 @@ void GameMode::update(float timestep) {
 		float diff =
 			(float)M_PI -
 			abs(abs(donutModel->getAngle() - ship->getDoors().at(i)->getAngle()) - (float)M_PI);
+		float diff = (float)DonutModel::HALF_CIRCLE -
+					 abs(abs(donutModel->getAngle() - ship->getDoors().at(i)->getAngle()) -
+						 (float)DonutModel::HALF_CIRCLE);
 
 		if (diff < DOOR_WIDTH) {
 			// TODO: Real physics...
