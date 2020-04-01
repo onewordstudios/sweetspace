@@ -51,6 +51,8 @@ constexpr float DOOR_ACTIVE_ANGLE = 15.0f;
 constexpr int SHIP_INITIAL_HEALTH = 11;
 /** Force to push back during collision */
 constexpr float REBOUND_FORCE = -6;
+/** Starting time for the round */
+constexpr unsigned int TIME = 30;
 
 #pragma mark -
 #pragma mark Constructors
@@ -86,6 +88,7 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	gm.init(ship, net);
 
 	donutModel = ship->getDonuts().at(static_cast<unsigned long>(playerID));
+	ship->initTimer(TIME);
 
 	// Scene graph setup
 	sgRoot.init(assets, ship, playerID);
@@ -127,6 +130,10 @@ void GameMode::update(float timestep) {
 	input.update(timestep);
 
 	net->update(ship);
+
+	if (!(ship->timerEnded())) {
+		ship->updateTimer(timestep);
+	}
 
 	// Breach health depletion
 	for (int i = 0; i < MAX_EVENTS; i++) {
