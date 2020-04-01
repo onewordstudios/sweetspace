@@ -98,6 +98,6 @@ class GLaDOS {
 	/**
 	 * Gets the current player id of this gm.
 	 */
-	int getPlayerId() { return playerID; }
+	int getPlayerId() { return (int)playerID; }
 };
 #endif /* __GM_CONTROLLER_H__ */

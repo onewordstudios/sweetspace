@@ -55,7 +55,7 @@ class MatchmakingGraphRoot : public cugl::Scene {
 	 * This constructor does not allocate any objects or start the game.
 	 * This allows us to use the object without a heap pointer.
 	 */
-	MatchmakingGraphRoot() : Scene(), roomId(""), playerId(-1) {}
+	MatchmakingGraphRoot() : Scene(), screenHeight(0), playerId(-1), roomId("") {}
 
 	/**
 	 * Disposes of all (non-static) resources allocated to this mode.
