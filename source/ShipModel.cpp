@@ -3,6 +3,8 @@
 #include "ExternalDonutModel.h"
 #include "PlayerDonutModel.h"
 
+constexpr int INITIAL_HEALTH = 11;
+
 bool ShipModel::init(unsigned int numPlayers, unsigned int numBreaches, unsigned int numDoors,
 					 unsigned int playerID, float shipSize) {
 	// Instantiate donut models and assign colors
@@ -10,7 +12,7 @@ bool ShipModel::init(unsigned int numPlayers, unsigned int numBreaches, unsigned
 		donuts.push_back(playerID == i ? PlayerDonutModel::alloc(shipSize)
 									   : ExternalDonutModel::alloc(shipSize));
 		// TODO modulo max number of colors once constants are factored out
-		donuts[i]->setColorId(i);
+		donuts[i]->setColorId((int)i);
 	}
 
 	// Instantiate breach models
@@ -24,7 +26,7 @@ bool ShipModel::init(unsigned int numPlayers, unsigned int numBreaches, unsigned
 	}
 
 	// Instantiate health
-	health = 11;
+	health = INITIAL_HEALTH;
 
 	// Initialize size
 	this->shipSize = shipSize;

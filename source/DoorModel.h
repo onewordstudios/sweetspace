@@ -1,5 +1,5 @@
-﻿#ifndef __door_MODEL_H__
-#define __door_MODEL_H__
+﻿#ifndef __DOOR_MODEL_H__
+#define __DOOR_MODEL_H__
 #include <cugl/cugl.h>
 
 #include <bitset>
@@ -9,6 +9,8 @@ constexpr int MAX_HEIGHT = 1600;
 constexpr int HALF_OPEN = 400;
 /** The speed of the door raising */
 constexpr int SPEED = 20;
+/** The size to make the bitset */
+constexpr unsigned int MAX_PLAYERS = 8;
 
 class DoorModel {
    private:
@@ -98,7 +100,7 @@ class DoorModel {
 	 * @return the number of players in range of the door.
 	 */
 	int getPlayersOn() {
-		std::bitset<8> ids(playersOn);
+		std::bitset<MAX_PLAYERS> ids(playersOn);
 		return ids.count();
 	}
 
@@ -159,4 +161,4 @@ class DoorModel {
 		height = 0;
 	}
 };
-#endif /* __door_MODEL_H__ */
+#endif /* __DOOR_MODEL_H__ */

@@ -1,8 +1,5 @@
 ﻿#include "BreachModel.h"
 
-/** Default Max Health of a Breach*/
-constexpr unsigned int HEALTH_DEFAULT = 3;
-
 /**
  * Initializes a new breach with the given angle and max health
  *

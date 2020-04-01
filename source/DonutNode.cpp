@@ -20,7 +20,7 @@ void DonutNode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch, const Mat4
 	if (donutModel->getAngle() < 0) {
 		donutPos = Vec2(0, 0);
 	}
-	double radiusRatio = RADIUS / (getWidth() / 2.0);
+	float radiusRatio = RADIUS / (getWidth() / 2);
 	float angle = getAngle() - vel * PI_180 * radiusRatio;
 
 	setPosition(donutPos);
