@@ -61,6 +61,14 @@ class GameGraphRoot : public cugl::Scene {
 	 */
 	std::string positionText();
 
+	/**
+	 * Returns the wrapped value of input around the ship size.
+	 *
+	 * @param f degree in radians
+	 * @return Wrapped angle in radians
+	 */
+	float wrapAngle(float f);
+
    public:
 #pragma mark -
 #pragma mark Public Consts

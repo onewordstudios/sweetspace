@@ -71,16 +71,16 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 
 	// Initialize Ship Segments
 	leftMostSeg = 0;
-	rightMostSeg = VISIBLE_SEGS - 1;
+	rightMostSeg = globals::VISIBLE_SEGS - 1;
 	std::shared_ptr<Texture> seg0 = assets->get<Texture>("shipseg0");
 	std::shared_ptr<Texture> seg1 = assets->get<Texture>("shipseg1");
-	for (int i = 0; i < VISIBLE_SEGS; i++) {
+	for (int i = 0; i < globals::VISIBLE_SEGS; i++) {
 		std::shared_ptr<PolygonNode> segment =
 			cugl::PolygonNode::allocWithTexture(i % 2 == 0 ? seg0 : seg1);
 		segment->setAnchor(Vec2::ANCHOR_TOP_CENTER);
 		segment->setScale(0.32);
 		segment->setPosition(Vec2(0, 0));
-		segment->setAngle((i - 2) * SEG_SIZE);
+		segment->setAngle((i - 2) * globals::SEG_SIZE);
 		shipSegsNode->addChildWithTag(segment, static_cast<unsigned int>(i + 1));
 	}
 
@@ -183,9 +183,9 @@ void GameGraphRoot::reset() {
 }
 
 /** Helper function for degree wrapping around */
-float wrapAngle(float f) {
-	float mod = fmod(f, MAX_ANGLE);
-	return mod < 0 ? MAX_ANGLE + mod : mod;
+float GameGraphRoot::wrapAngle(float f) {
+	float mod = fmod(f, ship->getSize() * globals::PI_180);
+	return mod < 0 ? ship->getSize() + mod : mod;
 };
 
 /**
@@ -244,24 +244,24 @@ void GameGraphRoot::update(float timestep) {
 	// Update ship segments
 	std::shared_ptr<Texture> seg0 = assets->get<Texture>("shipseg0");
 	std::shared_ptr<Texture> seg1 = assets->get<Texture>("shipseg1");
-	for (int i = 0; i < VISIBLE_SEGS; i++) {
+	for (int i = 0; i < globals::VISIBLE_SEGS; i++) {
 		std::shared_ptr<PolygonNode> segment = dynamic_pointer_cast<cugl::PolygonNode>(
 			shipSegsNode->getChildByTag(static_cast<unsigned int>(i + 1)));
 		// If segments rotate too far left, move left-most segment to the right side
 		if (i == rightMostSeg &&
-			wrapAngle(nearSpace->getAngle() + segment->getAngle()) <= SEG_CUTOFF_ANGLE) {
-			rightMostSeg = (i + 1) % VISIBLE_SEGS;
-			leftMostSeg = (i + 2) % VISIBLE_SEGS;
+			wrapAngle(nearSpace->getAngle() + segment->getAngle()) <= globals::SEG_CUTOFF_ANGLE) {
+			rightMostSeg = (i + 1) % globals::VISIBLE_SEGS;
+			leftMostSeg = (i + 2) % globals::VISIBLE_SEGS;
 			std::shared_ptr<PolygonNode> newRightSegment = dynamic_pointer_cast<cugl::PolygonNode>(
 				shipSegsNode->getChildByTag(static_cast<unsigned int>(rightMostSeg + 1)));
-			newRightSegment->setAngle(wrapAngle(segment->getAngle() + SEG_SIZE));
+			newRightSegment->setAngle(wrapAngle(segment->getAngle() + globals::SEG_SIZE));
 		} else if (i == leftMostSeg && wrapAngle(nearSpace->getAngle() + segment->getAngle()) >=
-										   MAX_ANGLE - SEG_CUTOFF_ANGLE) {
-			leftMostSeg = (i + VISIBLE_SEGS - 1) % VISIBLE_SEGS;
-			rightMostSeg = (i + VISIBLE_SEGS - 2) % VISIBLE_SEGS;
+										   ship->getSize() - globals::SEG_CUTOFF_ANGLE) {
+			leftMostSeg = (i + globals::VISIBLE_SEGS - 1) % globals::VISIBLE_SEGS;
+			rightMostSeg = (i + globals::VISIBLE_SEGS - 2) % globals::VISIBLE_SEGS;
 			std::shared_ptr<PolygonNode> newLeftSegment = dynamic_pointer_cast<cugl::PolygonNode>(
 				shipSegsNode->getChildByTag(static_cast<unsigned int>(leftMostSeg + 1)));
-			newLeftSegment->setAngle(wrapAngle(segment->getAngle() - SEG_SIZE));
+			newLeftSegment->setAngle(wrapAngle(segment->getAngle() - globals::SEG_SIZE));
 		}
 	}
 }
