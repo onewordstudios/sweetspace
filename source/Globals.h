@@ -29,7 +29,7 @@ constexpr unsigned int RADIUS = 550; // NOLINT
 constexpr float PI = 3.14159265358979323846264338327950288f; // NOLINT
 
 /** Pi divided by 180 for converting between degrees and radians */
-constexpr float PI_180 = (float)(PI / 180.0f); // NOLINT
+constexpr float PI_180 = PI / 180.0f; // NOLINT
 
 } // namespace globals
 

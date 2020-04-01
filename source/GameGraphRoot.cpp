@@ -14,9 +14,6 @@ using namespace std;
 #pragma mark -
 #pragma mark Level Layout
 
-/** 2 pi */
-constexpr float TWO_PI = (float)(2 * M_PI);
-
 /** The scale of the donut textures. */
 constexpr float DONUT_SCALE = 0.4f;
 
