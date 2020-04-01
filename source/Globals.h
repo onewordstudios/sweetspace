@@ -22,6 +22,9 @@ constexpr unsigned int NETWORK_TICK = 12; // NOLINT
 /** Health of the ship to start */
 constexpr int INITIAL_SHIP_HEALTH = 11; // NOLINT
 
+/** Radius of the ship for the scene graph */
+constexpr unsigned int RADIUS = 550; // NOLINT
+
 } // namespace globals
 
 #endif /* __GLOBALS_H__ */

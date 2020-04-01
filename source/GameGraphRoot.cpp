@@ -26,12 +26,6 @@ constexpr float DONUT_SCALE = 0.4f;
 /** Offset of donut sprites from the radius of the ship */
 constexpr int DONUT_OFFSET = 195;
 
-/** The diameter of the ship. Also the x coordinate of the center of the ship */
-constexpr unsigned int DIAMETER = 1280;
-
-/** The radius of the ship. Also the y coordinate of the center of the ship */
-constexpr unsigned int RADIUS = 550;
-
 #pragma mark -
 #pragma mark Constructors
 
@@ -93,8 +87,8 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 			newDonutNode->setScale(DONUT_SCALE);
 			nearSpace->addChild(newDonutNode);
 
-			Vec2 donutPos = Vec2((RADIUS + DONUT_OFFSET) * sin(donutModel->getAngle()),
-								 -(RADIUS + DONUT_OFFSET) * cos(donutModel->getAngle()));
+			Vec2 donutPos = Vec2((globals::RADIUS + DONUT_OFFSET) * sin(donutModel->getAngle()),
+								 -(globals::RADIUS + DONUT_OFFSET) * cos(donutModel->getAngle()));
 			newDonutNode->setPosition(donutPos);
 		}
 	}
@@ -202,7 +196,7 @@ void GameGraphRoot::update(float timestep) {
 	// Rotate about center.
 	nearSpace->setAngle(PI_180 * angle);
 
-	double radiusRatio = RADIUS / (donutNode->getWidth() / 2.0);
+	double radiusRatio = globals::RADIUS / (donutNode->getWidth() / 2.0);
 
 	angle = donutNode->getAngle() -
 			ship->getDonuts().at(playerID)->getVelocity() * PI_180 * radiusRatio;
