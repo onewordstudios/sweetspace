@@ -16,10 +16,9 @@
 //
 #include "LoadingMode.h"
 
-using namespace cugl;
+#include "Globals.h"
 
-/** This is adjusted by screen aspect ratio to get the height */
-constexpr unsigned int SCENE_WIDTH = 1024;
+using namespace cugl;
 
 constexpr float CLEAR_COLOR_R = 13.0f;
 constexpr float CLEAR_COLOR_G = 21.0f;
@@ -42,7 +41,7 @@ constexpr float CLEAR_COLOR_B = 51.0f;
 bool LoadingMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 	// Initialize the scene to a locked width
 	Size dimen = Application::get()->getDisplaySize();
-	dimen *= SCENE_WIDTH / dimen.width; // Lock the game to a reasonable resolution
+	dimen *= globals::SCENE_WIDTH / dimen.width; // Lock the game to a reasonable resolution
 	if (assets == nullptr) {
 		return false;
 	} else if (!Scene::init(dimen)) {

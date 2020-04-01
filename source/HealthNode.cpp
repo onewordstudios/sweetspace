@@ -2,6 +2,8 @@
 
 #include <cugl/2d/CUAnimationNode.h>
 
+#include "Globals.h"
+
 using namespace cugl;
 
 /** The diameter of the ship. Also the x coordinate of the center of the ship */
@@ -56,7 +58,8 @@ void HealthNode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch, const Mat
 	}
 
 	setAngle((float)(M_PI * 45 * section) / 180.0f);
-	ship->getHealth() > 11 ? setFrame(11) : setFrame(ship->getHealth());
+	ship->getHealth() > globals::INITIAL_SHIP_HEALTH ? setFrame(globals::INITIAL_SHIP_HEALTH)
+													 : setFrame(ship->getHealth());
 
 	AnimationNode::draw(batch, transform, tint);
 }

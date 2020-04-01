@@ -23,6 +23,7 @@
 #include <sstream>
 
 #include "ExternalDonutModel.h"
+#include "Globals.h"
 #include "PlayerDonutModel.h"
 
 using namespace cugl;
@@ -30,9 +31,6 @@ using namespace std;
 
 #pragma mark -
 #pragma mark Level Layout
-
-/** This is adjusted by screen aspect ratio to get the height */
-constexpr unsigned int SCENE_WIDTH = 1024;
 /** The maximum number of events on ship at any one time. This will probably need to scale with the
  * number of players*/
 constexpr unsigned int MAX_EVENTS = 3;
@@ -47,8 +45,6 @@ constexpr float DOOR_WIDTH = 7.0f;
 constexpr float BREACH_WIDTH = 11.0f;
 /** The Angle in degrees for which a door can be activated*/
 constexpr float DOOR_ACTIVE_ANGLE = 15.0f;
-/** Initial health of ship */
-constexpr int SHIP_INITIAL_HEALTH = 11;
 /** Force to push back during collision */
 constexpr float REBOUND_FORCE = -6;
 
@@ -72,7 +68,7 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	AudioChannels::get()->playMusic(source, true, source->getVolume());
 	// Initialize the scene to a locked width
 	Size dimen = Application::get()->getDisplaySize();
-	dimen *= SCENE_WIDTH / dimen.width; // Lock the game to a reasonable resolution
+	dimen *= globals::SCENE_WIDTH / dimen.width; // Lock the game to a reasonable resolution
 	if (assets == nullptr) {
 		return false;
 	}
@@ -180,13 +176,13 @@ void GameMode::update(float timestep) {
 	}
 
 	if ((ship->getBreaches().size()) == 0) {
-		ship->setHealth(SHIP_INITIAL_HEALTH);
+		ship->setHealth(globals::INITIAL_SHIP_HEALTH);
 	} else {
 		int h = 0;
 		for (int i = 0; i < ship->getBreaches().size(); i++) {
 			h = h + ship->getBreaches().at(i)->getHealth();
 		}
-		ship->setHealth(SHIP_INITIAL_HEALTH + 1 - h);
+		ship->setHealth(globals::INITIAL_SHIP_HEALTH + 1 - h);
 	}
 
 	gm.update(timestep);
