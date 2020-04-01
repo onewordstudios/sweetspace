@@ -39,16 +39,14 @@ constexpr unsigned int MAX_EVENTS = 3;
 /** The maximum number of doors on ship at any one time. This will probably need to scale with the
  * number of players*/
 constexpr unsigned int MAX_DOORS = 1;
-/** The Angle in radians for which a tap can registers as fixing a breach*/
-constexpr float EPSILON_ANGLE = 0.09f;
-/** The Angle in radians for which a collision occurs*/
-constexpr float DOOR_WIDTH = 0.12f;
-/** The Angle in radians for which a breach donut collision occurs*/
-constexpr float BREACH_WIDTH = 0.2f;
-/** The Angle in radians for which a door can be activated*/
-constexpr float DOOR_ACTIVE_ANGLE = 0.25f;
-/** Time limit for the round */
-constexpr float TIME = 30;
+/** The Angle in degrees for fixing a breach*/
+constexpr float EPSILON_ANGLE = 5.2f;
+/** The Angle in degrees for which a collision occurs*/
+constexpr float DOOR_WIDTH = 7.0f;
+/** The Angle in degrees for which a breach donut collision occurs*/
+constexpr float BREACH_WIDTH = 11.0f;
+/** The Angle in degrees for which a door can be activated*/
+constexpr float DOOR_ACTIVE_ANGLE = 15.0f;
 
 #pragma mark -
 #pragma mark Constructors
