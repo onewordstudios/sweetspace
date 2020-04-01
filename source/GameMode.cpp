@@ -23,6 +23,7 @@
 #include <sstream>
 
 #include "ExternalDonutModel.h"
+#include "Globals.h"
 #include "PlayerDonutModel.h"
 
 using namespace cugl;
@@ -30,9 +31,6 @@ using namespace std;
 
 #pragma mark -
 #pragma mark Level Layout
-
-/** This is adjusted by screen aspect ratio to get the height */
-constexpr unsigned int SCENE_WIDTH = 1024;
 /** The maximum number of events on ship at any one time. This will probably need to scale with the
  * number of players*/
 constexpr unsigned int MAX_EVENTS = 3;
@@ -47,6 +45,10 @@ constexpr float DOOR_WIDTH = 7.0f;
 constexpr float BREACH_WIDTH = 11.0f;
 /** The Angle in degrees for which a door can be activated*/
 constexpr float DOOR_ACTIVE_ANGLE = 15.0f;
+/** Force to push back during collision */
+constexpr float REBOUND_FORCE = -6;
+/** Starting time for the round */
+constexpr unsigned int TIME = 30;
 
 #pragma mark -
 #pragma mark Constructors
@@ -68,7 +70,7 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	AudioChannels::get()->playMusic(source, true, source->getVolume());
 	// Initialize the scene to a locked width
 	Size dimen = Application::get()->getDisplaySize();
-	dimen *= SCENE_WIDTH / dimen.width; // Lock the game to a reasonable resolution
+	dimen *= globals::SCENE_WIDTH / dimen.width; // Lock the game to a reasonable resolution
 	if (assets == nullptr) {
 		return false;
 	}
@@ -77,10 +79,12 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	net = mib;
 
 	playerID = net->getPlayerID();
-	ship = ShipModel::alloc(net->getNumPlayers(), MAX_EVENTS, MAX_DOORS, playerID);
+	float shipSize = 360; // TODO level size comes from level file
+	ship = ShipModel::alloc(net->getNumPlayers(), MAX_EVENTS, MAX_DOORS, playerID, shipSize);
 	gm.init(ship, net);
 
 	donutModel = ship->getDonuts().at(static_cast<unsigned long>(playerID));
+	ship->initTimer(TIME);
 
 	// Scene graph setup
 	sgRoot.init(assets, ship, playerID);
@@ -123,6 +127,10 @@ void GameMode::update(float timestep) {
 
 	net->update(ship);
 
+	if (!(ship->timerEnded())) {
+		ship->updateTimer(timestep);
+	}
+
 	// Breach health depletion
 	for (int i = 0; i < MAX_EVENTS; i++) {
 		std::shared_ptr<BreachModel> breach = ship->getBreaches().at(i);
@@ -135,7 +143,7 @@ void GameMode::update(float timestep) {
 
 		if (!donutModel->isJumping() && playerID != breach->getPlayer() && diff < BREACH_WIDTH &&
 			breach->getHealth() != 0) {
-			donutModel->applyForce(-6 * donutModel->getVelocity());
+			donutModel->applyForce(REBOUND_FORCE * donutModel->getVelocity());
 		} else if (playerID == breach->getPlayer() && diff < EPSILON_ANGLE &&
 				   !breach->isPlayerOn() && donutModel->getJumpOffset() == 0.0f &&
 				   breach->getHealth() > 0) {
@@ -162,7 +170,7 @@ void GameMode::update(float timestep) {
 
 		if (diff < DOOR_WIDTH) {
 			// TODO: Real physics...
-			donutModel->applyForce(-6 * donutModel->getVelocity());
+			donutModel->applyForce(REBOUND_FORCE * donutModel->getVelocity());
 		}
 		if (diff < DOOR_ACTIVE_ANGLE) {
 			ship->getDoors().at(i)->addPlayer(playerID);
@@ -176,13 +184,13 @@ void GameMode::update(float timestep) {
 	}
 
 	if ((ship->getBreaches().size()) == 0) {
-		ship->setHealth(11);
+		ship->setHealth(globals::INITIAL_SHIP_HEALTH);
 	} else {
 		int h = 0;
 		for (int i = 0; i < ship->getBreaches().size(); i++) {
 			h = h + ship->getBreaches().at(i)->getHealth();
 		}
-		ship->setHealth(12 - h);
+		ship->setHealth(globals::INITIAL_SHIP_HEALTH + 1 - h);
 	}
 
 	gm.update(timestep);

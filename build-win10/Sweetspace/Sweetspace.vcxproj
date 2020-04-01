@@ -197,6 +197,7 @@
     <ClInclude Include="..\..\source\GameGraphRoot.h" />
     <ClInclude Include="..\..\source\GameMode.h" />
     <ClInclude Include="..\..\source\GLaDOS.h" />
+    <ClInclude Include="..\..\source\Globals.h" />
     <ClInclude Include="..\..\source\HealthNode.h" />
     <ClInclude Include="..\..\source\InputController.h" />
     <ClInclude Include="..\..\source\libraries\easywsclient.hpp" />

@@ -48,9 +48,9 @@ class ExternalDonutModel : public DonutModel {
 	 *
 	 * @return a newly allocated donut at the origin.
 	 */
-	static std::shared_ptr<DonutModel> alloc() {
+	static std::shared_ptr<DonutModel> alloc(float shipSize) {
 		std::shared_ptr<ExternalDonutModel> result = std::make_shared<ExternalDonutModel>();
-		return (result->DonutModel::init() ? result : nullptr);
+		return (result->DonutModel::init(shipSize) ? result : nullptr);
 	}
 
 	/**
@@ -65,13 +65,13 @@ class ExternalDonutModel : public DonutModel {
 	 *
 	 * @return a newly allocated donut at the given position.
 	 */
-	static std::shared_ptr<DonutModel> alloc(const cugl::Vec2& pos) {
+	static std::shared_ptr<DonutModel> alloc(const cugl::Vec2& pos, float shipSize) {
 		std::shared_ptr<ExternalDonutModel> result = std::make_shared<ExternalDonutModel>();
-		return (result->init(pos) ? result : nullptr);
+		return (result->init(pos, shipSize) ? result : nullptr);
 	}
 #pragma endregion
 
-	bool init(const cugl::Vec2& pos) override;
+	bool init(const cugl::Vec2& pos, float shipSize) override;
 
 	void setAngle(float value) override;
 

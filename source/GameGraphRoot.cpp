@@ -6,44 +6,19 @@
 #include <sstream>
 #include <vector>
 
+#include "Globals.h"
+
 using namespace cugl;
 using namespace std;
 
 #pragma mark -
 #pragma mark Level Layout
 
-/** This is adjusted by screen aspect ratio to get the height */
-constexpr unsigned int SCENE_WIDTH = 1024;
-
-/** 2 pi */
-constexpr float TWO_PI = (float)(2 * M_PI);
-
-/** Pi over 180 for converting between degrees and radians */
-constexpr float PI_180 = (float)(M_PI / 180);
-
 /** The scale of the donut textures. */
 constexpr float DONUT_SCALE = 0.4f;
 
 /** Offset of donut sprites from the radius of the ship */
 constexpr int DONUT_OFFSET = 195;
-
-/** The diameter of the ship. Also the x coordinate of the center of the ship */
-constexpr unsigned int DIAMETER = 1280;
-
-/** The radius of the ship. Also the y coordinate of the center of the ship */
-constexpr unsigned int RADIUS = 550;
-
-/** Maximum number of possibly visible ship segments at a time */
-constexpr unsigned int VISIBLE_SEGS = 6;
-
-/** The angle in degree of a single ship segment */
-constexpr float SEG_SIZE = (float)(45 * M_PI / 180);
-
-/** The screen angle at which a ship segment is no longer visible */
-constexpr float SEG_CUTOFF_ANGLE = (float)(100 * M_PI / 180);
-
-/** The size of the level in degrees */
-constexpr float MAX_ANGLE = (float)(360 * M_PI / 180);
 
 #pragma mark -
 #pragma mark Constructors
@@ -66,7 +41,7 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 
 	// Initialize the scene to a locked width
 	Size dimen = Application::get()->getDisplaySize();
-	dimen *= SCENE_WIDTH / dimen.width; // Lock the game to a reasonable resolution
+	dimen *= globals::SCENE_WIDTH / dimen.width; // Lock the game to a reasonable resolution
 	screenHeight = dimen.height;
 	// Initialize the scene to a locked width
 	if (assets == nullptr) {
@@ -123,8 +98,8 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 			newDonutNode->setScale(DONUT_SCALE);
 			nearSpace->addChild(newDonutNode);
 
-			Vec2 donutPos = Vec2((RADIUS + DONUT_OFFSET) * sin(donutModel->getAngle()),
-								 -(RADIUS + DONUT_OFFSET) * cos(donutModel->getAngle()));
+			Vec2 donutPos = Vec2((globals::RADIUS + DONUT_OFFSET) * sin(donutModel->getAngle()),
+								 -(globals::RADIUS + DONUT_OFFSET) * cos(donutModel->getAngle()));
 			newDonutNode->setPosition(donutPos);
 		}
 	}
@@ -225,7 +200,7 @@ void GameGraphRoot::update(float timestep) {
 	// Update the HUD
 	coordHUD->setText(positionText());
 
-	float angle = DonutModel::FULL_CIRCLE - ship->getDonuts().at(playerID)->getAngle();
+	float angle = (float)(fmod(ship->getSize() - ship->getDonuts().at(playerID)->getAngle(), 360));
 
 	// Reanchor the node at the center of the screen and rotate about center.
 	Vec2 position = farSpace->getPosition();
@@ -237,14 +212,12 @@ void GameGraphRoot::update(float timestep) {
 	}
 
 	// Rotate about center.
-	nearSpace->setAngle(PI_180 * angle);
+	nearSpace->setAngle(globals::PI_180 * angle);
 
-	double radiusRatio = RADIUS / (donutNode->getWidth() / 2.0);
+	double radiusRatio = globals::RADIUS / (donutNode->getWidth() / 2.0);
 
-	// Update client donut
-	angle =
-		static_cast<float>(donutNode->getAngle() -
-						   ship->getDonuts().at(playerID)->getVelocity() * PI_180 * radiusRatio);
+	angle = (float)(donutNode->getAngle() -
+					ship->getDonuts().at(playerID)->getVelocity() * globals::PI_180 * radiusRatio);
 	donutNode->setAnchor(Vec2::ANCHOR_CENTER);
 	donutNode->setAngle(angle);
 	// Draw Jump Offset
@@ -304,7 +277,14 @@ void GameGraphRoot::update(float timestep) {
  */
 std::string GameGraphRoot::positionText() {
 	stringstream ss;
-	ss << "Angle: (" << (float)ship->getDonuts().at(playerID)->getAngle() << ")";
+	if (ship->timerEnded() && ship->getHealth() > 10) {
+		ss << "You Win!";
+	} else if (ship->timerEnded()) {
+		ss << "You Lose.";
+	} else {
+		ss << "Time Left: " << trunc(ship->timer);
+	}
+
 	return ss.str();
 }
 

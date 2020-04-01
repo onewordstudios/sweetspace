@@ -120,25 +120,41 @@ cugl::Rect cugl::impl::DisplayBounds() {
 cugl::Rect cugl::impl::DisplayUsableBounds(cugl::Display::Orientation orientation) {
     cugl::Rect result;
     CGRect displayRect = [[UIScreen mainScreen] bounds];
+    
+    // Convert to CUGL Rect
     result.origin.x = displayRect.origin.x;
     result.origin.y = displayRect.origin.y;
     result.size.width  = displayRect.size.width;
     result.size.height = displayRect.size.height;
+    
+    if (@available(iOS 11.0, *)) {
+        // TODO: This cannot be queried in orientation we are not.
+        NSArray<UIWindow *> *windows = [[UIApplication sharedApplication] windows];
+        if (windows.count > 0) {
+            UIWindow* main = windows[0];
+            result.origin.x += main.safeAreaInsets.left;
+            result.size.width  -= (main.safeAreaInsets.left+main.safeAreaInsets.right);
+            result.origin.y += main.safeAreaInsets.bottom;
+            result.size.height -= (main.safeAreaInsets.top+main.safeAreaInsets.bottom);
+            return result;
+        }
+    }
+    
+    // Fallback on earlier versions
     bool portrait = displayRect.size.width < displayRect.size.height;
     if (orientation != cugl::Display::Orientation::UNKNOWN) {
         portrait = (orientation == cugl::Display::Orientation::PORTRAIT ||
                     orientation == cugl::Display::Orientation::UPSIDE_DOWN);
     }
+    
     NSDictionary* data = device_info();
     if (data != nil && [[data valueForKey:@"notch"] boolValue]) {
         // This information is in points
         NSDictionary* bounds = [data valueForKey: portrait ? @"portrait" : @"landscape"];
         result.origin.x += [[bounds valueForKey:@"left"] intValue];
-        
         result.size.width -= ([[bounds valueForKey:@"left"] intValue]+
                               [[bounds valueForKey:@"right"] intValue]);
         result.origin.y += [[bounds valueForKey:@"bottom"] intValue];
-        
         result.size.height -= ([[bounds valueForKey:@"bottom"] intValue]+
                                [[bounds valueForKey:@"top"] intValue]);
     } else {
