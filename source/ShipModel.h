@@ -16,6 +16,8 @@ class ShipModel {
 	std::vector<std::shared_ptr<DoorModel>> doors;
 	/** Current health of the ship*/
 	int health;
+	/** Size of the ship. Minimum value should be 360. Default value 360 */
+	float shipSize;
 
    public:
 	/** Current health of the ship*/
@@ -53,7 +55,23 @@ class ShipModel {
 	 * @return true if the model is initialized properly, false otherwise.
 	 */
 	bool init(unsigned int numPlayers, unsigned int numBreaches, unsigned int numDoors,
-			  unsigned int playerID);
+			  unsigned int playerID) {
+		return init(numPlayers, numBreaches, numDoors, playerID, (float)360);
+	}
+
+	/**
+	 * Initializes ship model.
+	 *
+	 * @param numPlayers  The number of players in this ship
+	 * @param numBreaches The number of breaches in this ship
+	 * @param numDoors    The number of doors in this ship
+	 * @param playerID    The ID of the current local player
+	 * @param shipSize		  The size of the level
+	 *
+	 * @return true if the model is initialized properly, false otherwise.
+	 */
+	bool init(unsigned int numPlayers, unsigned int numBreaches, unsigned int numDoors,
+			  unsigned int playerID, float shipSize);
 
 	/**
 	 * Create and return a shared pointer to a new ship model.
@@ -69,6 +87,25 @@ class ShipModel {
 											unsigned int numDoors, unsigned int playerID) {
 		std::shared_ptr<ShipModel> result = std::make_shared<ShipModel>();
 		return (result->init(numPlayers, numBreaches, numDoors, playerID) ? result : nullptr);
+	}
+
+	/**
+	 * Create and return a shared pointer to a new ship model.
+	 *
+	 * @param numPlayers  The number of players in this ship
+	 * @param numBreaches The number of breaches in this ship
+	 * @param numDoors    The number of doors in this ship
+	 * @param playerID    The ID of the current local player
+	 * @param shipSize	  The size of the level
+	 *
+	 * @return A smart pointer to a newly initialized ship model
+	 */
+	static std::shared_ptr<ShipModel> alloc(unsigned int numPlayers, unsigned int numBreaches,
+											unsigned int numDoors, unsigned int playerID,
+											float shipSize) {
+		std::shared_ptr<ShipModel> result = std::make_shared<ShipModel>();
+		return (result->init(numPlayers, numBreaches, numDoors, playerID, shipSize) ? result
+																					: nullptr);
 	}
 
 #pragma mark -
@@ -159,6 +196,7 @@ class ShipModel {
 	int getHealth() { return health; }
 
 	/**
+
 	 * Get health of the ship
 	 *
 	 * @return health the health of the ship
@@ -178,5 +216,19 @@ class ShipModel {
 	 * @return if timer has ended
 	 */
 	bool timerEnded() { return timer < 1; }
+  /**
+	 * Set size of the ship
+	 *
+	 * @param the size of the ship
+	 */
+	void setSize(float s) { shipSize = s; };
+
+	/**
+	 * Get size of the ship
+	 *
+	 * @return the size of the ship
+	 */
+	float getSize() { return shipSize; }
+
 };
 #endif /* __SHIP_MODEL_H__ */
