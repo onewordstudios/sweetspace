@@ -25,6 +25,12 @@ constexpr int INITIAL_SHIP_HEALTH = 11; // NOLINT
 /** Radius of the ship for the scene graph */
 constexpr unsigned int RADIUS = 550; // NOLINT
 
+/** Pi */
+constexpr float PI = 3.14159265358979323846264338327950288f; // NOLINT
+
+/** Pi divided by 180 for converting between degrees and radians */
+constexpr float PI_180 = (float)(PI / 180.0f); // NOLINT
+
 } // namespace globals
 
 #endif /* __GLOBALS_H__ */

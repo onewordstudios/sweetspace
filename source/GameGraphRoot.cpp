@@ -17,9 +17,6 @@ using namespace std;
 /** 2 pi */
 constexpr float TWO_PI = (float)(2 * M_PI);
 
-/** Pi over 180 for converting between degrees and radians */
-constexpr float PI_180 = (float)(M_PI / 180);
-
 /** The scale of the donut textures. */
 constexpr float DONUT_SCALE = 0.4f;
 
@@ -194,12 +191,12 @@ void GameGraphRoot::update(float timestep) {
 	}
 
 	// Rotate about center.
-	nearSpace->setAngle(PI_180 * angle);
+	nearSpace->setAngle(globals::PI_180 * angle);
 
 	double radiusRatio = globals::RADIUS / (donutNode->getWidth() / 2.0);
 
 	angle = (float)(donutNode->getAngle() -
-					ship->getDonuts().at(playerID)->getVelocity() * PI_180 * radiusRatio);
+					ship->getDonuts().at(playerID)->getVelocity() * globals::PI_180 * radiusRatio);
 	donutNode->setAnchor(Vec2::ANCHOR_CENTER);
 	donutNode->setAngle(angle);
 	// Draw Jump Offset
