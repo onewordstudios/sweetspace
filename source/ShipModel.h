@@ -20,6 +20,8 @@ class ShipModel {
 	float shipSize;
 
    public:
+	/** Current health of the ship*/
+	float timer;
 #pragma mark Constructors
 	/*
 	 * Creates a ship.
@@ -184,7 +186,7 @@ class ShipModel {
 	 *
 	 * @param health the health of the ship
 	 */
-	void setHealth(int health) { this->health = health; };
+	void setHealth(int health) { this->health = health; }
 
 	/**
 	 * Get health of the ship
@@ -193,6 +195,27 @@ class ShipModel {
 	 */
 	int getHealth() { return health; }
 
+	/**
+
+	 * Get health of the ship
+	 *
+	 * @return health the health of the ship
+	 */
+	void initTimer(float startTime) { timer = startTime; }
+
+	/**
+	 * Update timer of the ship
+	 *
+	 * @param time amount of time to detract from timer
+	 */
+	void updateTimer(float time) { timer = timer - time; }
+
+	/**
+	 * Get if timer has ended
+	 *
+	 * @return if timer has ended
+	 */
+	bool timerEnded() { return timer < 1; }
 	/**
 	 * Set size of the ship
 	 *
