@@ -6,14 +6,13 @@
 #include <sstream>
 #include <vector>
 
+#include "Globals.h"
+
 using namespace cugl;
 using namespace std;
 
 #pragma mark -
 #pragma mark Level Layout
-
-/** This is adjusted by screen aspect ratio to get the height */
-constexpr unsigned int SCENE_WIDTH = 1024;
 
 #pragma mark -
 #pragma mark Constructors
@@ -32,7 +31,7 @@ constexpr unsigned int SCENE_WIDTH = 1024;
 bool MatchmakingGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 	// Initialize the scene to a locked width
 	Size dimen = Application::get()->getDisplaySize();
-	dimen *= SCENE_WIDTH / dimen.width; // Lock the game to a reasonable resolution
+	dimen *= globals::SCENE_WIDTH / dimen.width; // Lock the game to a reasonable resolution
 	screenHeight = dimen.height;
 	// Initialize the scene to a locked width
 	if (assets == nullptr) {

@@ -1,10 +1,3 @@
-//
-//  main.cpp
-//  Cornell University Game Library (CUGL)
-//
-//  This is the main entry class for your application.  You may need to modify
-//  it slightly for your application class or platform.
-//
 //  CUGL zlib License:
 //      This software is provided 'as-is', without any express or implied
 //      warranty.  In no event will the authors be held liable for any damages
@@ -23,18 +16,13 @@
 //      be misrepresented as being the original software.
 //
 //      3. This notice may not be removed or altered from any source distribution.
-//
-//  Author: Walker White
-//  Version: 7/1/16
-
-// Include your application class
+#include "Globals.h"
 #include "Sweetspace.h"
 
 // This keeps us from having to write cugl:: all the time
 using namespace cugl;
 
 // These really only apply if the game is windowed (not on mobile device)
-constexpr unsigned int GAME_WIDTH = 1024;
 constexpr unsigned int GAME_HEIGHT = 576;
 
 constexpr float FRAMERATE = 60.0f;
@@ -61,7 +49,7 @@ int main(int argc, char* argv[]) {
 	app.setOrganization("onewordstudios");
 
 	// Set the window properties (Only applies to OS X/Windows Desktop)
-	app.setSize(GAME_WIDTH, GAME_HEIGHT);
+	app.setSize(globals::SCENE_WIDTH, GAME_HEIGHT);
 	app.setFPS(FRAMERATE);
 	app.setHighDPI(true);
 

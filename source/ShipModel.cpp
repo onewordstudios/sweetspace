@@ -1,9 +1,8 @@
 ﻿#include "ShipModel.h"
 
 #include "ExternalDonutModel.h"
+#include "Globals.h"
 #include "PlayerDonutModel.h"
-
-constexpr int INITIAL_HEALTH = 11;
 
 bool ShipModel::init(unsigned int numPlayers, unsigned int numBreaches, unsigned int numDoors,
 					 unsigned int playerID, float shipSize) {
@@ -26,7 +25,7 @@ bool ShipModel::init(unsigned int numPlayers, unsigned int numBreaches, unsigned
 	}
 
 	// Instantiate health
-	health = INITIAL_HEALTH;
+	health = globals::INITIAL_SHIP_HEALTH;
 
 	// Initialize size
 	this->shipSize = shipSize;

@@ -2,29 +2,25 @@
 
 #include <cugl/2d/CUAnimationNode.h>
 
+#include "Globals.h"
+
 using namespace cugl;
 
-/** The diameter of the ship. Also the x coordinate of the center of the ship */
-constexpr unsigned int DIAMETER = 1280;
+const Vec2 pos0 = Vec2(globals::RADIUS * sin(0), -205 * cos(0));
 
-/** The radius of the ship. */
-constexpr unsigned int RADIUS = 550;
+const Vec2 pos1 = Vec2(147 + globals::RADIUS * sin(0), -142 * cos(0));
 
-const Vec2 pos0 = Vec2(RADIUS * sin(0), -205 * cos(0));
+const Vec2 pos2 = Vec2(202 + globals::RADIUS * sin(0), cos(0));
 
-const Vec2 pos1 = Vec2(147 + RADIUS * sin(0), -142 * cos(0));
+const Vec2 pos3 = Vec2(145 + globals::RADIUS * sin(0), (globals::RADIUS - 410) * cos(0));
 
-const Vec2 pos2 = Vec2(202 + RADIUS * sin(0), cos(0));
+const Vec2 pos4 = Vec2(globals::RADIUS * sin(0), 202 * cos(0));
 
-const Vec2 pos3 = Vec2(145 + RADIUS * sin(0), (RADIUS - 410) * cos(0));
+const Vec2 pos5 = Vec2(-145 + globals::RADIUS * sin(0), (globals::RADIUS - 410) * cos(0));
 
-const Vec2 pos4 = Vec2(RADIUS * sin(0), 202 * cos(0));
+const Vec2 pos6 = Vec2(-202 + globals::RADIUS * sin(0), cos(0));
 
-const Vec2 pos5 = Vec2(-145 + RADIUS * sin(0), (RADIUS - 410) * cos(0));
-
-const Vec2 pos6 = Vec2(-202 + RADIUS * sin(0), cos(0));
-
-const Vec2 pos7 = Vec2(-147 + RADIUS * sin(0), -142 * cos(0));
+const Vec2 pos7 = Vec2(-147 + globals::RADIUS * sin(0), -142 * cos(0));
 
 void HealthNode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch, const Mat4& transform,
 					  Color4 tint) {
@@ -56,7 +52,8 @@ void HealthNode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch, const Mat
 	}
 
 	setAngle((float)(M_PI * 45 * section) / 180.0f);
-	ship->getHealth() > 11 ? setFrame(11) : setFrame(ship->getHealth());
+	ship->getHealth() > globals::INITIAL_SHIP_HEALTH ? setFrame(globals::INITIAL_SHIP_HEALTH)
+													 : setFrame(ship->getHealth());
 
 	AnimationNode::draw(batch, transform, tint);
 }

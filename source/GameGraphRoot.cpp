@@ -6,32 +6,19 @@
 #include <sstream>
 #include <vector>
 
+#include "Globals.h"
+
 using namespace cugl;
 using namespace std;
 
 #pragma mark -
 #pragma mark Level Layout
 
-/** This is adjusted by screen aspect ratio to get the height */
-constexpr unsigned int SCENE_WIDTH = 1024;
-
-/** 2 pi */
-constexpr float TWO_PI = (float)(2 * M_PI);
-
-/** Pi over 180 for converting between degrees and radians */
-constexpr float PI_180 = (float)(M_PI / 180);
-
 /** The scale of the donut textures. */
 constexpr float DONUT_SCALE = 0.4f;
 
 /** Offset of donut sprites from the radius of the ship */
 constexpr int DONUT_OFFSET = 195;
-
-/** The diameter of the ship. Also the x coordinate of the center of the ship */
-constexpr unsigned int DIAMETER = 1280;
-
-/** The radius of the ship. Also the y coordinate of the center of the ship */
-constexpr unsigned int RADIUS = 550;
 
 #pragma mark -
 #pragma mark Constructors
@@ -54,7 +41,7 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 
 	// Initialize the scene to a locked width
 	Size dimen = Application::get()->getDisplaySize();
-	dimen *= SCENE_WIDTH / dimen.width; // Lock the game to a reasonable resolution
+	dimen *= globals::SCENE_WIDTH / dimen.width; // Lock the game to a reasonable resolution
 	screenHeight = dimen.height;
 	// Initialize the scene to a locked width
 	if (assets == nullptr) {
@@ -94,8 +81,8 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 			newDonutNode->setScale(DONUT_SCALE);
 			nearSpace->addChild(newDonutNode);
 
-			Vec2 donutPos = Vec2((RADIUS + DONUT_OFFSET) * sin(donutModel->getAngle()),
-								 -(RADIUS + DONUT_OFFSET) * cos(donutModel->getAngle()));
+			Vec2 donutPos = Vec2((globals::RADIUS + DONUT_OFFSET) * sin(donutModel->getAngle()),
+								 -(globals::RADIUS + DONUT_OFFSET) * cos(donutModel->getAngle()));
 			newDonutNode->setPosition(donutPos);
 		}
 	}
@@ -201,12 +188,12 @@ void GameGraphRoot::update(float timestep) {
 	}
 
 	// Rotate about center.
-	nearSpace->setAngle(PI_180 * angle);
+	nearSpace->setAngle(globals::PI_180 * angle);
 
-	double radiusRatio = RADIUS / (donutNode->getWidth() / 2.0);
+	double radiusRatio = globals::RADIUS / (donutNode->getWidth() / 2.0);
 
 	angle = (float)(donutNode->getAngle() -
-					ship->getDonuts().at(playerID)->getVelocity() * PI_180 * radiusRatio);
+					ship->getDonuts().at(playerID)->getVelocity() * globals::PI_180 * radiusRatio);
 	donutNode->setAnchor(Vec2::ANCHOR_CENTER);
 	donutNode->setAngle(angle);
 	// Draw Jump Offset

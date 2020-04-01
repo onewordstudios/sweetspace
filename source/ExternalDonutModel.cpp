@@ -1,15 +1,16 @@
 ﻿#include "ExternalDonutModel.h"
 
+#include "Globals.h"
+
 using namespace cugl;
 
-constexpr unsigned int NETWORK_TICK = 12; // Originally defined in MagicInternetBox.cpp
 constexpr float BEG_DONUT = 0.2f;
 constexpr float END_DONUT = 1.0f - BEG_DONUT;
 
 bool ExternalDonutModel::init(const cugl::Vec2& pos, float shipSize) {
 	bool ret = DonutModel::init(pos, shipSize);
 	// Initialize with finished interpolation
-	networkMove.framesSinceUpdate = NETWORK_TICK;
+	networkMove.framesSinceUpdate = globals::NETWORK_TICK;
 	return ret;
 }
 
@@ -22,9 +23,9 @@ void ExternalDonutModel::setAngle(float value) {
 
 void ExternalDonutModel::update(float timestep) {
 	networkMove.framesSinceUpdate++;
-	if (networkMove.framesSinceUpdate < NETWORK_TICK) {
+	if (networkMove.framesSinceUpdate < globals::NETWORK_TICK) {
 		// Interpolate position
-		float percent = (float)networkMove.framesSinceUpdate / NETWORK_TICK;
+		float percent = (float)networkMove.framesSinceUpdate / globals::NETWORK_TICK;
 		networkMove.oldAngle += velocity;
 		networkMove.angle += velocity;
 

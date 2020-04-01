@@ -2,6 +2,8 @@
 
 #include <cugl/2d/CUAnimationNode.h>
 
+#include "Globals.h"
+
 using namespace cugl;
 
 /** The radius used for placement of the doors. */
@@ -9,9 +11,6 @@ constexpr float DOOR_RADIUS = 650;
 
 /** Position to place DoorNode offscreen. */
 constexpr float OFF_SCREEN_POS = 1500;
-
-/** Pi over 180 for converting between degrees and radians */
-constexpr float PI_180 = (float)(M_PI / 180);
 
 /** The frame of the animation strip to freeze on when one player is on the door */
 constexpr int ONE_PLAYER_FRAME = 16;
@@ -26,13 +25,13 @@ int frameCap = 0;
 
 void DoorNode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch, const Mat4& transform,
 					Color4 tint) {
-	Vec2 doorPos = Vec2(DOOR_RADIUS * sin(doorModel->getAngle() * PI_180),
-						-(DOOR_RADIUS)*cos(doorModel->getAngle() * PI_180));
+	Vec2 doorPos = Vec2(DOOR_RADIUS * sin(doorModel->getAngle() * globals::PI_180),
+						-(DOOR_RADIUS)*cos(doorModel->getAngle() * globals::PI_180));
 	if (doorModel->getAngle() < 0) {
 		doorPos = Vec2(OFF_SCREEN_POS, OFF_SCREEN_POS);
 	}
 	setPosition(doorPos);
-	setAngle(doorModel->getAngle() * PI_180);
+	setAngle(doorModel->getAngle() * globals::PI_180);
 
 	frameCap = doorModel->getPlayersOn() < 2 ? doorModel->getPlayersOn() * ONE_PLAYER_FRAME
 											 : TWO_PLAYER_FRAME;

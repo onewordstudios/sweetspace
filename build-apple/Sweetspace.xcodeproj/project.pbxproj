@@ -175,6 +175,7 @@
 		3CDD11AC242D1DDF00FD21F8 /* HealthNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HealthNode.cpp; sourceTree = "<group>"; };
 		3CDD11B0242D1DDF00FD21F8 /* HealthNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HealthNode.h; sourceTree = "<group>"; };
 		7B3270692425A569004A3B36 /* GLaDOS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLaDOS.h; sourceTree = "<group>"; };
+		7BDE1A3E243422EC0080F7CB /* Globals.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Globals.h; sourceTree = "<group>"; };
 		A577C9232422AA0D00B12ADE /* DoorNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DoorNode.cpp; sourceTree = "<group>"; };
 		A577C9272422AA0D00B12ADE /* DoorNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DoorNode.h; sourceTree = "<group>"; };
 		C122229A6EDF1DAB4330F1B7 /* GLaDOS.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLaDOS.cpp; sourceTree = "<group>"; };
@@ -476,6 +477,7 @@
 				DF3B743B2403A46A0063552F /* GameMode.h */,
 				C122229A6EDF1DAB4330F1B7 /* GLaDOS.cpp */,
 				7B3270692425A569004A3B36 /* GLaDOS.h */,
+				7BDE1A3E243422EC0080F7CB /* Globals.h */,
 				DF3B74402403A46B0063552F /* InputController.cpp */,
 				DF3B743C2403A46A0063552F /* InputController.h */,
 				DF3B74422403A46B0063552F /* LoadingMode.cpp */,
