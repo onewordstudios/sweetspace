@@ -185,7 +185,7 @@ void GameGraphRoot::reset() {
 /** Helper function for degree wrapping around */
 float GameGraphRoot::wrapAngle(float f) {
 	float mod = fmod(f, ship->getSize() * globals::PI_180);
-	return mod < 0 ? ship->getSize() + mod : mod;
+	return mod < 0 ? ship->getSize() * globals::PI_180 + mod : mod;
 };
 
 /**
@@ -244,19 +244,21 @@ void GameGraphRoot::update(float timestep) {
 	// Update ship segments
 	std::shared_ptr<Texture> seg0 = assets->get<Texture>("shipseg0");
 	std::shared_ptr<Texture> seg1 = assets->get<Texture>("shipseg1");
+	std::shared_ptr<PolygonNode> segment;
 	for (int i = 0; i < globals::VISIBLE_SEGS; i++) {
-		std::shared_ptr<PolygonNode> segment = dynamic_pointer_cast<cugl::PolygonNode>(
+		segment = dynamic_pointer_cast<cugl::PolygonNode>(
 			shipSegsNode->getChildByTag(static_cast<unsigned int>(i + 1)));
 		// If segments rotate too far left, move left-most segment to the right side
 		if (i == rightMostSeg &&
-			wrapAngle(nearSpace->getAngle() + segment->getAngle()) <= globals::SEG_CUTOFF_ANGLE) {
+			wrapAngle(nearSpace->getAngle() + segment->getAngle()) < globals::SEG_CUTOFF_ANGLE) {
 			rightMostSeg = (i + 1) % globals::VISIBLE_SEGS;
 			leftMostSeg = (i + 2) % globals::VISIBLE_SEGS;
 			std::shared_ptr<PolygonNode> newRightSegment = dynamic_pointer_cast<cugl::PolygonNode>(
 				shipSegsNode->getChildByTag(static_cast<unsigned int>(rightMostSeg + 1)));
 			newRightSegment->setAngle(wrapAngle(segment->getAngle() + globals::SEG_SIZE));
-		} else if (i == leftMostSeg && wrapAngle(nearSpace->getAngle() + segment->getAngle()) >=
-										   ship->getSize() - globals::SEG_CUTOFF_ANGLE) {
+		} else if (i == leftMostSeg &&
+				   wrapAngle(nearSpace->getAngle() + segment->getAngle()) >
+					   ship->getSize() * globals::PI_180 - globals::SEG_CUTOFF_ANGLE) {
 			leftMostSeg = (i + globals::VISIBLE_SEGS - 1) % globals::VISIBLE_SEGS;
 			rightMostSeg = (i + globals::VISIBLE_SEGS - 2) % globals::VISIBLE_SEGS;
 			std::shared_ptr<PolygonNode> newLeftSegment = dynamic_pointer_cast<cugl::PolygonNode>(
