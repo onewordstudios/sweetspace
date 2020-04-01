@@ -47,6 +47,8 @@ constexpr float DOOR_WIDTH = 0.12f;
 constexpr float BREACH_WIDTH = 0.2f;
 /** The Angle in radians for which a door can be activated*/
 constexpr float DOOR_ACTIVE_ANGLE = 0.25f;
+/** Time limit for the round */
+constexpr float TIME = 30;
 
 #pragma mark -
 #pragma mark Constructors
@@ -71,9 +73,6 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets,
 		return false;
 	}
 
-	timer = 100;
-	end = false;
-
 	input.init();
 	net = mib;
 
@@ -82,6 +81,7 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	gm.init(ship, net);
 
 	donutModel = ship->getDonuts().at(static_cast<unsigned long>(playerID));
+	ship->initTimer(TIME);
 
 	// Scene graph setup
 	sgRoot.init(assets, ship, playerID);
@@ -124,10 +124,8 @@ void GameMode::update(float timestep) {
 
 	net->update(ship);
 
-	timer = timer - 1;
-	if(timer == 0) {
-	    end = true;
-	    CULog("end");
+	if (!(ship->timerEnded())) {
+		ship->updateTimer(timestep);
 	}
 
 	// Breach health depletion
