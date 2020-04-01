@@ -110,7 +110,7 @@ void GLaDOS::update(float dt) {
 	if (rand() % SPAWN_RATE > 1) return;
 	for (int i = 0; i < MAX_EVENTS; i++) {
 		if (breachFree.at(i)) {
-			float angle = rand() % FULL_CIRCLE;
+			float angle = (float)(rand() % FULL_CIRCLE);
 			bool goodAngle = true;
 			for (int j = 0; j < ship->getDonuts().size(); j++) {
 				float diff = (float)DonutModel::HALF_CIRCLE -
@@ -140,7 +140,7 @@ void GLaDOS::update(float dt) {
 				continue;
 			}
 			breachFree.at(i) = false;
-			int p = rand() % ship->getDonuts().size();
+			int p = (int)(rand() % ship->getDonuts().size());
 			ship->getBreaches().at(i)->reset(angle, p);
 			mib->createBreach(angle, p, i);
 			break;
@@ -148,7 +148,7 @@ void GLaDOS::update(float dt) {
 	}
 	for (int i = 0; i < MAX_DOORS; i++) {
 		if (doorFree.at(i)) {
-			float angle = rand() % FULL_CIRCLE;
+			float angle = (float)(rand() % FULL_CIRCLE);
 			bool goodAngle = true;
 			for (int j = 0; j < ship->getDonuts().size(); j++) {
 				float diff = (float)DonutModel::HALF_CIRCLE -

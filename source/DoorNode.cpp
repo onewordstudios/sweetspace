@@ -4,9 +4,6 @@
 
 using namespace cugl;
 
-/** The diameter of the ship. Also the x coordinate of the center of the ship */
-constexpr unsigned int DIAMETER = 1280;
-
 /** The radius used for placement of the doors. */
 constexpr float DOOR_RADIUS = 650;
 
@@ -15,6 +12,11 @@ constexpr float OFF_SCREEN_POS = 1500;
 
 /** Pi over 180 for converting between degrees and radians */
 constexpr float PI_180 = (float)(M_PI / 180);
+
+/** The frame of the animation strip to freeze on when one player is on the door */
+constexpr int ONE_PLAYER_FRAME = 16;
+/** The frame of the animation strip to freeze on when two players are on the door */
+constexpr int TWO_PLAYER_FRAME = 31;
 
 /** The height of the door. */
 int height = 0;
@@ -32,17 +34,18 @@ void DoorNode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch, const Mat4&
 	setPosition(doorPos);
 	setAngle(doorModel->getAngle() * PI_180);
 
-	frameCap = doorModel->getPlayersOn() < 2 ? doorModel->getPlayersOn() * 16 : 31;
+	frameCap = doorModel->getPlayersOn() < 2 ? doorModel->getPlayersOn() * ONE_PLAYER_FRAME
+											 : TWO_PLAYER_FRAME;
 	if (getFrame() < frameCap) {
-		setFrame(getFrame() + 1);
+		setFrame((int)getFrame() + 1);
 	} else if (getFrame() > frameCap) {
-		setFrame(getFrame() - 1);
+		setFrame((int)getFrame() - 1);
 	}
 
-	float diff = height - doorModel->getHeight();
+	int diff = height - doorModel->getHeight();
 	height = doorModel->getHeight();
 	if (diff != 0) {
-		shiftPolygon(0, diff);
+		shiftPolygon(0, (float)diff);
 	}
 	AnimationNode::draw(batch, transform, tint);
 }

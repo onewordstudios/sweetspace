@@ -27,7 +27,7 @@ class ShipModel {
 	 * NEVER USE A CONSTRUCTOR WITH NEW. If you want to allocate a model on
 	 * the heap, use one of the static constructors instead.
 	 */
-	ShipModel(void) : donuts(0), breaches(0), doors(0) {}
+	ShipModel(void) : donuts(0), breaches(0), doors(0), health(0) {}
 
 	/**
 	 * Destroys this breach, releasing all resources.
