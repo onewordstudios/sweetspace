@@ -51,6 +51,8 @@ constexpr float DOOR_ACTIVE_ANGLE = 15.0f;
 constexpr int SHIP_INITIAL_HEALTH = 11;
 /** Force to push back during collision */
 constexpr float REBOUND_FORCE = -6;
+/** Starting time for the round */
+constexpr unsigned int TIME = 30;
 
 #pragma mark -
 #pragma mark Constructors
