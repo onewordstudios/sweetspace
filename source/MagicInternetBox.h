@@ -6,6 +6,16 @@
 #include "ShipModel.h"
 #include "libraries/easywsclient.hpp"
 
+/**
+ * The controller that handles all communication between clients and the server.
+ *
+ * This class should only be instantiated once. It provides initialization methods to be called
+ * before use, and update methods to be called on appropriate frames.
+ *
+ * Pass information into this class by calling the appropriate methods; this information will be
+ * broadcast to other players. Information from other players are automatically dispatched to the
+ * Ship Model during the call to update.
+ */
 class MagicInternetBox {
    public:
 	/**
