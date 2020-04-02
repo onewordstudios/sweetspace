@@ -239,7 +239,7 @@ class ShipModel {
 	 *
 	 * @param direction of roll
 	 */
-	void setRollDir(int dir) { rollDir = dir == 0 ? -1 : 1; }
+	void setRollDir(int dir) { rollDir = dir; }
 
 	/**
 	 * Get roll direction of challenge

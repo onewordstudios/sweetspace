@@ -31,7 +31,7 @@ constexpr float DOOR_ACTIVE_ANGLE = 15.0f;
 /** Force to push back during collision */
 constexpr float REBOUND_FORCE = -6;
 /** Starting time for the round */
-constexpr unsigned int TIME = 30;
+constexpr unsigned int TIME = 45;
 
 #pragma mark -
 #pragma mark Constructors
@@ -68,6 +68,7 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets,
 
 	donutModel = ship->getDonuts().at(static_cast<unsigned long>(playerID));
 	ship->initTimer(TIME);
+	allSame = false;
 
 	// Scene graph setup
 	sgRoot.init(assets, ship, playerID);
@@ -193,30 +194,38 @@ void GameMode::update(float timestep) {
 
 	if (gm.allPlayerChallenge() && trunc(ship->timer) > 10) {
 		if (!(ship->getChallenge())) {
-			ship->setRollDir(0);
+			rand() % 2 == 0 ? ship->setRollDir(-1) : ship->setRollDir(1);
 			startTime = 0;
-			endTime = trunc(ship->timer) - 7;
+			endTime = trunc(ship->timer) - 6;
+			allSame = false;
 			ship->setChallenge(true);
-		}
-		bool dir = signbit(ship->getRollDir());
 
-		while (startTime < 7) {
+		}
+
+		while (trunc(startTime) < 7) {
 			bool sameDir = true;
 			for (unsigned int i = 0; i < ship->getDonuts().size(); i++) {
-				if (ship->getDonuts()[i]->getVelocity() > 0) {
-					sameDir = false;
+				if(ship->getRollDir() == -1){
+					if (ship->getDonuts()[i]->getVelocity() > 0) {
+						sameDir = false;
+					}
+				} else {
+					if (ship->getDonuts()[i]->getVelocity() < 0) {
+						sameDir = false;
+					}
 				}
 			}
 			if (sameDir) {
-				startTime = startTime + timestep;
+				allSame = true;
 			}
+			startTime = startTime + timestep;
 		}
 		if (trunc(ship->timer) == endTime) {
 			CULog("End Challenge");
-			if (endTime > trunc(startTime)) {
-				CULog("Failed Challenge");
-			} else {
+			if (allSame) {
 				CULog("Challenge Completed");
+			} else {
+				CULog("Challenge Failed");
 			}
 			gm.setAllPlayerChallenge(false);
 			ship->setChallenge(false);
