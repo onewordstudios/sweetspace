@@ -103,7 +103,7 @@ void MatchmakingMode::update(float timestep) {
 			sgRoot.setPlayerId(net->getPlayerID());
 		}
 		// Check if room is ready for play (Replace with button for play later)
-		if (net->getNumPlayers() == 3) {
+		if (net->getNumPlayers() == 1) {
 			gameReady = true;
 			net->startGame();
 		}

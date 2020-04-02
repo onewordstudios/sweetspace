@@ -4,59 +4,65 @@
 
 using namespace cugl;
 
-/** The diameter of the ship. Also the x coordinate of the center of the ship */
-constexpr unsigned int DIAMETER = 1280;
-
 /** The radius of the ship. */
 constexpr unsigned int RADIUS = 550;
 
-const Vec2 pos0 = Vec2(RADIUS * sin(0), -205 * cos(0));
+/** Angle between each section of the ship. */
+constexpr float ANGLE = 45;
 
-const Vec2 pos1 = Vec2(147 + RADIUS * sin(0), -142 * cos(0));
+/** Pi over 180 for converting between degrees and radians */
+constexpr float PI_180 = (float)(M_PI / 180);
 
-const Vec2 pos2 = Vec2(202 + RADIUS * sin(0), cos(0));
+/** Maximum health of the ship. */
+constexpr unsigned int MAX_HEALTH = 11;
 
-const Vec2 pos3 = Vec2(145 + RADIUS * sin(0), (RADIUS - 410) * cos(0));
+/** An offset in the x direction for health bar display. */
+constexpr float X_OFFSET_1 = 147;
+/** An offset in the x direction for health bar display. */
+constexpr float X_OFFSET_2 = 202;
+/** An offset in the x direction for health bar display. */
+constexpr float X_OFFSET_3 = 145;
 
-const Vec2 pos4 = Vec2(RADIUS * sin(0), 202 * cos(0));
-
-const Vec2 pos5 = Vec2(-145 + RADIUS * sin(0), (RADIUS - 410) * cos(0));
-
-const Vec2 pos6 = Vec2(-202 + RADIUS * sin(0), cos(0));
-
-const Vec2 pos7 = Vec2(-147 + RADIUS * sin(0), -142 * cos(0));
+/** An offset in the y direction for health bar display. */
+constexpr float Y_OFFSET_1 = -205;
+/** An offset in the y direction for health bar display. */
+constexpr float Y_OFFSET_2 = -142;
+/** An offset in the y direction for health bar display. */
+constexpr float Y_OFFSET_3 = (RADIUS - 410);
+/** An offset in the y direction for health bar display. */
+constexpr float Y_OFFSET_4 = 202;
 
 void HealthNode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch, const Mat4& transform,
 					  Color4 tint) {
 	switch (section) {
 		case 0:
-			setPosition(pos0);
+			setPosition(static_cast<float>(RADIUS * sin(0)),  static_cast<float>(Y_OFFSET_1 * cos(0)));
 			break;
 		case 1:
-			setPosition(pos1);
+			setPosition(static_cast<float>(X_OFFSET_1 + RADIUS * sin(0)), static_cast<float>(Y_OFFSET_2 * cos(0)));
 			break;
 		case 2:
-			setPosition(pos2);
+			setPosition(static_cast<float>(X_OFFSET_2 + RADIUS * sin(0)), static_cast<float>(cos(0)));
 			break;
 		case 3:
-			setPosition(pos3);
+			setPosition(static_cast<float>(X_OFFSET_3 + RADIUS * sin(0)), static_cast<float>(Y_OFFSET_3 * cos(0)));
 			break;
 		case 4:
-			setPosition(pos4);
+			setPosition(static_cast<float>(RADIUS * sin(0)), static_cast<float>(Y_OFFSET_4 * cos(0)));
 			break;
 		case 5:
-			setPosition(pos5);
+			setPosition(static_cast<float>(-X_OFFSET_3 + RADIUS * sin(0)), static_cast<float>(Y_OFFSET_3 * cos(0)));
 			break;
 		case 6:
-			setPosition(pos6);
+			setPosition(static_cast<float>(-X_OFFSET_2 + RADIUS * sin(0)), static_cast<float>(cos(0)));
 			break;
-		case 7:
-			setPosition(pos7);
+		default:
+			setPosition(static_cast<float>(-X_OFFSET_1 + RADIUS * sin(0)), static_cast<float>(Y_OFFSET_2 * cos(0)));
 			break;
 	}
 
-	setAngle((float)(M_PI * 45 * section) / 180.0f);
-	ship->getHealth() > 11 ? setFrame(11) : setFrame(ship->getHealth());
+	setAngle(ANGLE * static_cast<float>(section) * PI_180);
+	ship->getHealth() > MAX_HEALTH ? setFrame(MAX_HEALTH) : setFrame(ship->getHealth());
 
 	AnimationNode::draw(batch, transform, tint);
 }
