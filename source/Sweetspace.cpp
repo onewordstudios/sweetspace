@@ -2,8 +2,10 @@
 
 using namespace cugl;
 
-#pragma mark -
-#pragma mark Gameplay Control
+/** The round number each mode in the enum steps up by */
+constexpr unsigned int MODE_ENUM_STEP = 100;
+
+#pragma region Setup
 
 /**
  * The method called after OpenGL is initialized, but before running the application.
@@ -70,6 +72,8 @@ void Sweetspace::onShutdown() {
 	Application::onShutdown(); // YOU MUST END with call to parent
 }
 
+#pragma endregion
+
 /**
  * Update the game mode. Should be called each frame.
  *
@@ -122,16 +126,16 @@ void Sweetspace::update(float timestep) {
  * drawing code.
  */
 void Sweetspace::draw() {
-	switch (status / 100) {
-		case Loading / 100: {
+	switch (status / MODE_ENUM_STEP) {
+		case Loading / MODE_ENUM_STEP: {
 			loading.render(batch);
 			return;
 		}
-		case MainMenu / 100: {
+		case MainMenu / MODE_ENUM_STEP: {
 			matchmaking.draw(batch);
 			return;
 		}
-		case Game / 100: {
+		case Game / MODE_ENUM_STEP: {
 			gameplay.draw(batch);
 			return;
 		}

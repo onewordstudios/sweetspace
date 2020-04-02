@@ -40,8 +40,6 @@ bool LoadingMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 	layer->doLayout(); // This rearranges the children to fit the screen
 
 	bar = std::dynamic_pointer_cast<ProgressBar>(assets->get<Node>("load_bar"));
-	button = std::dynamic_pointer_cast<Button>(assets->get<Node>("load_claw_play"));
-	button->setListener([=](const std::string& name, bool down) { this->_active = down; });
 
 	Application::get()->setClearColor(Color4(CLEAR_COLOR_R, CLEAR_COLOR_G, CLEAR_COLOR_B));
 	addChild(layer);
@@ -53,10 +51,6 @@ bool LoadingMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
  */
 void LoadingMode::dispose() {
 	// Deactivate the button (platform dependent)
-	if (button != nullptr && button->isVisible()) {
-		button->deactivate();
-	}
-	button = nullptr;
 	bar = nullptr;
 	assets = nullptr;
 	progress = 0.0f;
@@ -76,8 +70,6 @@ void LoadingMode::update(float timestep) {
 		progress = assets->progress();
 		if (progress >= 1) {
 			progress = 1.0f;
-			button->setVisible(true);
-			button->activate(1);
 		}
 		bar->setProgress(progress);
 	}

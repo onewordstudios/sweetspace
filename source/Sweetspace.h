@@ -21,17 +21,18 @@ class Sweetspace : public cugl::Application {
 	 * An enumeration representing the current mode of the game.
 	 *
 	 * Implementation note: each main mode is a multiple of 100. Transitions LEAVING a mode
-	 * increment within the same block of 100.
+	 * increment within the same block of 100. Their ones digit corresponds to the hundreds digit of
+	 * the outbound mode. 0 is not a valid mode.
 	 */
 	enum GameStatus {
 		/** Loading screen */
-		Loading = 0,
-		LoadToMain,
+		Loading = 100,
+		LoadToMain = 102,
 		/** Main menu screen */
-		MainMenu = 100,
-		MainToGame,
+		MainMenu = 200,
+		MainToGame = 203,
 		/** Primary game screen */
-		Game = 200
+		Game = 300
 	};
 
 	GameStatus status;
