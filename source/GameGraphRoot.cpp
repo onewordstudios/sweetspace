@@ -116,6 +116,8 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 		breachNode->setModel(breachModel);
 		breachNode->setTag(i + 1);
 		breachNode->setScale(BREACH_SCALE);
+		breachNode->setShipSize(ship->getSize());
+		breachNode->setDonutModel(ship->getDonuts().at(playerID));
 		// Start position is off screen
 		Vec2 breachPos = Vec2(0, 0);
 		breachNode->setPosition(breachPos);

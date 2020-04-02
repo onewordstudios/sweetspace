@@ -13,6 +13,10 @@ class BreachNode : public cugl::AnimationNode {
 	std::shared_ptr<BreachModel> breachModel;
 	/** Reference to the player donut model */
 	std::shared_ptr<DonutModel> playerDonutModel;
+	/** Size of the ship. Needed for visibility determination */
+	float shipSize;
+	/** Whether the breach is being shown right now */
+	bool isShown;
 
    public:
 #pragma mark -
@@ -60,6 +64,8 @@ class BreachNode : public cugl::AnimationNode {
 	void setModel(std::shared_ptr<BreachModel> model) { breachModel = model; }
 
 	void setDonutModel(std::shared_ptr<DonutModel> model) { playerDonutModel = model; }
+
+	void setShipSize(float f) { shipSize = f; }
 
 	std::shared_ptr<BreachModel> getModel() { return breachModel; }
 
