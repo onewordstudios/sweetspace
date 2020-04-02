@@ -36,10 +36,10 @@ constexpr float PI_180 = PI / 180.0f; // NOLINT
     constexpr unsigned int VISIBLE_SEGS = 6;
 
 /** The angle in degree of a single ship segment */
-    constexpr float SEG_SIZE = (float)(45 * PI / 180);
+    constexpr float SEG_SIZE = 45 * PI_180;
 
 /** The screen angle at which a ship segment is no longer visible */
-    constexpr float SEG_CUTOFF_ANGLE = (float)(100 * PI / 180);
+    constexpr float SEG_CUTOFF_ANGLE = 90 * PI_180;
 } // namespace globals
 
 #endif /* __GLOBALS_H__ */

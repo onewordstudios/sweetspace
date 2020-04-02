@@ -137,9 +137,8 @@ void GameMode::update(float timestep) {
 		if (breach == nullptr) {
 			continue;
 		}
-		float diff =
-			(float)DonutModel::HALF_CIRCLE -
-			abs(abs(donutModel->getAngle() - breach->getAngle()) - (float)DonutModel::HALF_CIRCLE);
+		float diff = ship->getSize() / 2 -
+					 abs(abs(donutModel->getAngle() - breach->getAngle()) - ship->getSize() / 2);
 
 		if (!donutModel->isJumping() && playerID != breach->getPlayer() && diff < BREACH_WIDTH &&
 			breach->getHealth() != 0) {
@@ -164,9 +163,9 @@ void GameMode::update(float timestep) {
 			ship->getDoors().at(i)->getAngle() < 0) {
 			continue;
 		}
-		float diff = (float)DonutModel::HALF_CIRCLE -
+		float diff = ship->getSize() / 2 -
 					 abs(abs(donutModel->getAngle() - ship->getDoors().at(i)->getAngle()) -
-						 (float)DonutModel::HALF_CIRCLE);
+						 ship->getSize() / 2);
 
 		if (diff < DOOR_WIDTH) {
 			// TODO: Real physics...
