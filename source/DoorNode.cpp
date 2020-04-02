@@ -28,16 +28,10 @@ void DoorNode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch, const Mat4&
 	Vec2 doorPos;
 	if (doorModel->getAngle() >= 0) {
 		// Door is currently active
-		float absDiff =
-			(shipSize / 2 -
-			 abs(abs(playerDonutModel->getAngle() - doorModel->getAngle()) - shipSize / 2)) *
-			globals::PI_180;
-		float onScreenAngle =
-			absDiff *
-			(doorModel->getAngle() >= fmod(playerDonutModel->getAngle() + shipSize / 2, shipSize) ||
-					 doorModel->getAngle() < playerDonutModel->getAngle()
-				 ? -1
-				 : 1);
+		float onScreenAngle = doorModel->getAngle() - playerDonutModel->getAngle();
+		onScreenAngle = onScreenAngle >= 0 ? onScreenAngle : shipSize + onScreenAngle;
+		onScreenAngle = onScreenAngle > shipSize / 2 ? onScreenAngle - shipSize : onScreenAngle;
+		onScreenAngle *= globals::PI_180;
 		if (!isShown && onScreenAngle < globals::SEG_CUTOFF_ANGLE &&
 			onScreenAngle > -globals::SEG_CUTOFF_ANGLE) {
 			// Door is coming into visible range
@@ -45,6 +39,7 @@ void DoorNode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch, const Mat4&
 			doorPos = Vec2(DOOR_RADIUS * sin(relativeAngle), -DOOR_RADIUS * cos(relativeAngle));
 			setPosition(doorPos);
 			isShown = true;
+			setAngle(relativeAngle);
 			CULog("Door coming into view at %f", onScreenAngle / globals::PI_180);
 		} else if (isShown && (onScreenAngle >= globals::SEG_CUTOFF_ANGLE ||
 							   onScreenAngle <= -globals::SEG_CUTOFF_ANGLE)) {
@@ -68,8 +63,6 @@ void DoorNode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch, const Mat4&
 		if (diff != 0) {
 			shiftPolygon(0, (float)diff);
 		}
-
-		setAngle(doorModel->getAngle() / shipSize * globals::PI * 2);
 	} else {
 		// Door is currently inactive
 		doorPos = Vec2(OFF_SCREEN_POS, OFF_SCREEN_POS);
