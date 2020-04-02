@@ -1,21 +1,9 @@
-﻿//
-//  SDInput.h
-//  Ship Demo
-//
-//  This input controller is primarily designed for keyboard control.  On mobile
-//  you will notice that we use gestures to emulate keyboard commands. They even
-//  use the same variables (though we need other variables for internal keyboard
-//  emulation).  This simplifies our design quite a bit.
-//
-//  Author: Walker White
-//  Version: 1/10/17
-//
-#ifndef __SD_INPUT_H__
-#define __SD_INPUT_H__
+﻿#ifndef __INPUT_CONTROLLER_H__
+#define __INPUT_CONTROLLER_H__
 #include <cugl/cugl.h>
 
 /**
- * This class represents player input in the ship demo.
+ * This class represents player input.
  *
  * This input handler uses the CUGL input API.  It uses the polling API for
  * keyboard, but the callback API for touch.  This demonstrates a mix of ways
@@ -186,4 +174,4 @@ class InputController {
 	void clickEndedCB(const cugl::MouseEvent& event, Uint8 clicks, bool focus);
 };
 
-#endif /* __SD_INPUT_H__ */
+#endif /* __INPUT_CONTROLLER_H__ */

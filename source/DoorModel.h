@@ -101,7 +101,7 @@ class DoorModel {
 	 */
 	int getPlayersOn() {
 		std::bitset<MAX_PLAYERS> ids(playersOn);
-		return ids.count();
+		return (int)ids.count();
 	}
 
 	/**
