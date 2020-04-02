@@ -1,16 +1,4 @@
-﻿//
-//  SDApp.cpp
-//  Ship Demo
-//
-//  This is the root class for your game.  The file main.cpp accesses this class
-//  to run the application.  While you could put most of your game logic in
-//  this class, we prefer to break the game up into player modes and have a
-//  class for each mode.
-//
-//  Author: Walker White
-//  Version: 1/10/17
-//
-#include "Sweetspace.h"
+﻿#include "Sweetspace.h"
 
 using namespace cugl;
 
@@ -47,9 +35,7 @@ void Sweetspace::onStartup() {
 	loaded = false;
 	loading.init(assets);
 
-	mib = std::make_shared<MagicInternetBox>();
-
-	// Queue up the other assets
+	// Queue up the other assets NOLINTNEXTLINE
 	AudioChannels::start(24);
 	assets->loadDirectoryAsync("json/assets.json", nullptr);
 
@@ -97,17 +83,17 @@ void Sweetspace::onShutdown() {
  */
 void Sweetspace::update(float timestep) {
 	if (!loaded && loading.isActive()) {
-		loading.update(0.01f);
+		loading.update(0.01f); // NOLINT
 	} else if (!loaded && !matched) {
 		loading.dispose(); // Disables the input listeners in this mode
-		matchmaking.init(assets, mib);
+		matchmaking.init(assets);
 		loaded = true;
 	} else if (!matched && !gameStarted) {
 		matchmaking.update(timestep);
 		matched = matchmaking.isGameReady();
 	} else if (matched && !gameStarted) {
 		matchmaking.dispose();
-		gameplay.init(assets, mib);
+		gameplay.init(assets);
 		gameStarted = true;
 	} else {
 		gameplay.update(timestep);

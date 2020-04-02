@@ -6,6 +6,16 @@
 #include "ShipModel.h"
 #include "libraries/easywsclient.hpp"
 
+/**
+ * The controller that handles all communication between clients and the server.
+ *
+ * This class is a singleton. It provides initialization methods to be called
+ * before use, and update methods to be called on appropriate frames.
+ *
+ * Pass information into this class by calling the appropriate methods; this information will be
+ * broadcast to other players. Information from other players are automatically dispatched to the
+ * Ship Model during the call to update.
+ */
 class MagicInternetBox {
    public:
 	/**
@@ -41,6 +51,11 @@ class MagicInternetBox {
 	};
 
    private:
+	/**
+	 * The singleton instance of this class.
+	 */
+	static std::shared_ptr<MagicInternetBox> instance;
+
 	/**
 	 * The actual websocket connection
 	 */
@@ -142,10 +157,10 @@ class MagicInternetBox {
 	 */
 	void resolveState(std::shared_ptr<ShipModel> state, const std::vector<uint8_t>& message);
 
-   public:
 	/**
 	 * Create an empty Network Controller instance. Does no initialization.
 	 * Call one of the init methods to connect and stuff.
+	 * This constructor is private, as this class is a singleton.
 	 */
 	MagicInternetBox() {
 		ws = nullptr;
@@ -155,6 +170,20 @@ class MagicInternetBox {
 		numPlayers = 0;
 		lastConnection = 0;
 	};
+
+   public:
+	/**
+	 * Grab a pointer to the singleton instance of this class
+	 */
+	static std::shared_ptr<MagicInternetBox> getInstance() {
+		if (instance == nullptr) {
+			// clang-tidy doesn't like this raw pointer assignment, but it's a singleton so it
+			// should be fine NOLINTNEXTLINE
+			MagicInternetBox* temp = new MagicInternetBox();
+			instance = std::shared_ptr<MagicInternetBox>(temp);
+		}
+		return instance;
+	}
 
 	/**
 	 * Initialize this controller class as a host.

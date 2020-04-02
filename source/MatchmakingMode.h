@@ -10,11 +10,7 @@
 #include "ShipModel.h"
 
 /**
- * This class is the primary gameplay constroller for the demo.
- *
- * A world has its own objects, assets, and input controller.  Thus this is
- * really a mini-GameEngine in its own right.  As in 3152, we separate it out
- * so that we can have a separate mode for the loading screen.
+ * The primary controller for the main menu / matchmaking mode
  */
 class MatchmakingMode {
    protected:
@@ -42,7 +38,7 @@ class MatchmakingMode {
 	 * This constructor does not allocate any objects or start the game.
 	 * This allows us to use the object without a heap pointer.
 	 */
-	MatchmakingMode() : gameReady(false), playerId(-1) {}
+	MatchmakingMode() : gameReady(false), playerId(-1), net(nullptr) {}
 
 	/**
 	 * Disposes of all (non-static) resources allocated to this mode.
@@ -68,8 +64,7 @@ class MatchmakingMode {
 	 *
 	 * @return true if the controller is initialized properly, false otherwise.
 	 */
-	bool init(const std::shared_ptr<cugl::AssetManager>& assets,
-			  std::shared_ptr<MagicInternetBox>& mib);
+	bool init(const std::shared_ptr<cugl::AssetManager>& assets);
 
 #pragma mark -
 #pragma mark Matchmaking Handling

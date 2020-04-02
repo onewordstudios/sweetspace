@@ -1,21 +1,4 @@
-﻿//
-//  SDGameScene.h
-//  Ship Demo
-//
-//  This is the most important class in this demo.  This class manages the
-//  gameplay for this demo.  It is a relativeluy simple class as we are not
-//  worried about collisions.
-//
-//  WARNING: There are a lot of shortcuts in this design that will do not adapt
-//  well to data driven design.  This demo has a lot of simplifications to make
-//  it a bit easier to see how everything fits together.  However, the model
-//  classes and how they are initialized will need to be changed if you add
-//  dynamic level loading.
-//
-//  Author: Walker White
-//  Version: 1/10/17
-//
-#include "GameMode.h"
+﻿#include "GameMode.h"
 
 #include <cugl/cugl.h>
 
@@ -64,8 +47,7 @@ constexpr unsigned int TIME = 30;
  *
  * @return true if the controller is initialized properly, false otherwise.
  */
-bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets,
-					std::shared_ptr<MagicInternetBox>& mib) {
+bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 	auto source = assets->get<Sound>("theme");
 	AudioChannels::get()->playMusic(source, true, source->getVolume());
 	// Initialize the scene to a locked width
@@ -76,12 +58,13 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	}
 
 	input.init();
-	net = mib;
 
+	net = MagicInternetBox::getInstance();
 	playerID = net->getPlayerID();
+
 	float shipSize = 360; // TODO level size comes from level file
 	ship = ShipModel::alloc(net->getNumPlayers(), MAX_EVENTS, MAX_DOORS, playerID, shipSize);
-	gm.init(ship, net);
+	gm.init(ship);
 
 	donutModel = ship->getDonuts().at(static_cast<unsigned long>(playerID));
 	ship->initTimer(TIME);
