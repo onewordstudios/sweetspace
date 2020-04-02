@@ -6,15 +6,13 @@
 #include <sstream>
 
 #include "ExternalDonutModel.h"
+#include "Globals.h"
 
 using namespace cugl;
 using namespace std;
 
 #pragma mark -
 #pragma mark Constants
-
-/** This is adjusted by screen aspect ratio to get the height */
-constexpr unsigned int SCENE_WIDTH = 1024;
 
 #pragma mark -
 #pragma mark Constructors
@@ -34,7 +32,7 @@ bool MatchmakingMode::init(const std::shared_ptr<cugl::AssetManager>& assets,
 						   std::shared_ptr<MagicInternetBox>& mib) {
 	// Initialize the scene to a locked width
 	Size dimen = Application::get()->getDisplaySize();
-	dimen *= SCENE_WIDTH / dimen.width; // Lock the game to a reasonable resolution
+	dimen *= globals::SCENE_WIDTH / dimen.width; // Lock the game to a reasonable resolution
 	if (assets == nullptr) {
 		return false;
 	}
@@ -103,7 +101,7 @@ void MatchmakingMode::update(float timestep) {
 			sgRoot.setPlayerId(net->getPlayerID());
 		}
 		// Check if room is ready for play (Replace with button for play later)
-		if (net->getNumPlayers() == 1) {
+		if (net->getNumPlayers() == globals::NUM_PLAYERS) {
 			gameReady = true;
 			net->startGame();
 		}

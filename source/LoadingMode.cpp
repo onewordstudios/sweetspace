@@ -16,12 +16,13 @@
 //
 #include "LoadingMode.h"
 
+#include "Globals.h"
+
 using namespace cugl;
 
-/** This is adjusted by screen aspect ratio to get the height */
-constexpr unsigned int SCENE_WIDTH = 1024;
-/** The default color r, g, and b value for the background */
-constexpr unsigned int COLOR_VALUE = 192;
+constexpr float CLEAR_COLOR_R = 13.0f;
+constexpr float CLEAR_COLOR_G = 21.0f;
+constexpr float CLEAR_COLOR_B = 51.0f;
 
 #pragma mark -
 #pragma mark Constructors
@@ -40,7 +41,7 @@ constexpr unsigned int COLOR_VALUE = 192;
 bool LoadingMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 	// Initialize the scene to a locked width
 	Size dimen = Application::get()->getDisplaySize();
-	dimen *= SCENE_WIDTH / dimen.width; // Lock the game to a reasonable resolution
+	dimen *= globals::SCENE_WIDTH / dimen.width; // Lock the game to a reasonable resolution
 	if (assets == nullptr) {
 		return false;
 	} else if (!Scene::init(dimen)) {
@@ -58,7 +59,7 @@ bool LoadingMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 	button = std::dynamic_pointer_cast<Button>(assets->get<Node>("load_claw_play"));
 	button->setListener([=](const std::string& name, bool down) { this->_active = down; });
 
-	Application::get()->setClearColor(Color4(13.0f, 21.0f, 51.0f));
+	Application::get()->setClearColor(Color4(CLEAR_COLOR_R, CLEAR_COLOR_G, CLEAR_COLOR_B));
 	addChild(layer);
 	return true;
 }

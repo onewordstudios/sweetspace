@@ -2,15 +2,29 @@
 
 #include <sstream>
 
+#include "Globals.h"
+
 using namespace cugl;
 
+/** The networking server */
 constexpr auto GAME_SERVER = "ws://sweetspace-server.herokuapp.com/";
+
+/** The precision to multiply floating point numbers by */
 constexpr float FLOAT_PRECISION = 10.0f;
-constexpr unsigned int NETWORK_TICK = 12; // Constant also defined in ExternalDonutModel.cpp
-constexpr unsigned int STATE_SYNC_FREQ = NETWORK_TICK * 5;
+
+/** The state synchronization frequency */
+constexpr unsigned int STATE_SYNC_FREQ = globals::NETWORK_TICK * 5;
+
+/** One byte */
 constexpr unsigned int ONE_BYTE = 256;
+
+/** Number of characters in a ship ID */
 constexpr unsigned int ROOM_LENGTH = 5;
+
+/** How close to consider floating point numbers identical */
 constexpr float FLOAT_EPSILON = 0.1f;
+
+/** How many ticks without a server message before considering oneself disconnected */
 constexpr unsigned int SERVER_TIMEOUT = 300;
 
 bool MagicInternetBox::initConnection() {
@@ -216,7 +230,7 @@ void MagicInternetBox::resolveState(std::shared_ptr<ShipModel> state,
 			float angle = (float)(message[doorIndex + 2] + ONE_BYTE * message[doorIndex + 3]) /
 						  FLOAT_PRECISION;
 			CULog("Found resolved breach that should be unresolved, id %d", i);
-			state->createBreach(angle, message[doorIndex], message[doorIndex + 1], i);
+			state->createBreach(angle, message[doorIndex], message[doorIndex + 1], (int)i);
 		} else if (breaches[i]->getHealth() > 0 && message[doorIndex] == 0) {
 			CULog("Found unresolved breach that should be resolved, id %d", i);
 			state->resolveBreach((int)i);
@@ -345,7 +359,7 @@ void MagicInternetBox::update(std::shared_ptr<ShipModel> state) {
 
 	// NETWORK TICK
 	currFrame = (currFrame + 1) % STATE_SYNC_FREQ;
-	if (currFrame % NETWORK_TICK == 0) {
+	if (currFrame % globals::NETWORK_TICK == 0) {
 		std::shared_ptr<DonutModel> player = state->getDonuts()[playerID];
 		float angle = player->getAngle();
 		float velocity = player->getVelocity();

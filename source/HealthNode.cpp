@@ -1,4 +1,5 @@
 ﻿#include "HealthNode.h"
+#include "Globals.h"
 
 #include <cugl/2d/CUAnimationNode.h>
 
@@ -9,9 +10,6 @@ constexpr unsigned int RADIUS = 550;
 
 /** Angle between each section of the ship. */
 constexpr float ANGLE = 45;
-
-/** Pi over 180 for converting between degrees and radians */
-constexpr float PI_180 = (float)(M_PI / 180);
 
 /** Maximum health of the ship. */
 constexpr unsigned int MAX_HEALTH = 11;

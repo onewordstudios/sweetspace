@@ -9,10 +9,10 @@ void PlayerDonutModel::update(float timestep) {
 	// Adjust the angle by the change in angle
 	angle += velocity;
 	// INVARIANT: -360 < ang < 720
-	if (angle > FULL_CIRCLE) {
-		angle -= FULL_CIRCLE;
+	if (angle > shipSize) {
+		angle -= shipSize;
 	} else if (angle < 0) {
-		angle += FULL_CIRCLE;
+		angle += shipSize;
 	}
 
 	velocity *= DONUT_FRICTION_FACTOR;
