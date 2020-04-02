@@ -9,6 +9,7 @@
 #include "DonutModel.h"
 #include "DonutNode.h"
 #include "DoorNode.h"
+#include "Globals.h"
 #include "HealthNode.h"
 #include "InputController.h"
 #include "ShipModel.h"
@@ -49,6 +50,8 @@ class GameGraphRoot : public cugl::Scene {
 	unsigned int playerID;
 	/** The ship */
 	std::shared_ptr<ShipModel> ship;
+	/** Angle of the player donut model from the last frame */
+	float prevPlayerAngle;
 
 	/**
 	 * Returns an informative string for the position
@@ -67,7 +70,10 @@ class GameGraphRoot : public cugl::Scene {
 	 * @param f degree in radians
 	 * @return Wrapped angle in radians
 	 */
-	float wrapAngle(float f);
+	float wrapAngle(float f) {
+		float mod = fmod(f, globals::TWO_PI);
+		return mod < 0 ? globals::TWO_PI + mod : mod;
+	};
 
    public:
 #pragma mark -

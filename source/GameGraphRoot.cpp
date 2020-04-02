@@ -20,6 +20,9 @@ constexpr float DONUT_SCALE = 0.4f;
 /** Offset of donut sprites from the radius of the ship */
 constexpr int DONUT_OFFSET = 195;
 
+/** The scale of the ship segments. */
+constexpr float SEG_SCALE = 0.33f;
+
 #pragma mark -
 #pragma mark Constructors
 
@@ -38,6 +41,7 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 						 std::shared_ptr<ShipModel> ship, unsigned int playerID) {
 	this->playerID = playerID;
 	this->ship = ship;
+	this->prevPlayerAngle = ship->getDonuts().at(playerID)->getAngle();
 
 	// Initialize the scene to a locked width
 	Size dimen = Application::get()->getDisplaySize();
@@ -78,7 +82,7 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 		std::shared_ptr<PolygonNode> segment =
 			cugl::PolygonNode::allocWithTexture(i % 2 == 0 ? seg0 : seg1);
 		segment->setAnchor(Vec2::ANCHOR_TOP_CENTER);
-		segment->setScale(0.32);
+		segment->setScale(SEG_SCALE);
 		segment->setPosition(Vec2(0, 0));
 		segment->setAngle((i - 2) * globals::SEG_SIZE);
 		shipSegsNode->addChildWithTag(segment, static_cast<unsigned int>(i + 1));
@@ -186,12 +190,6 @@ void GameGraphRoot::reset() {
 	nearSpace->setAngle(0.0f);
 }
 
-/** Helper function for degree wrapping around */
-float GameGraphRoot::wrapAngle(float f) {
-	float mod = fmod(f, ship->getSize() * globals::PI_180);
-	return mod < 0 ? ship->getSize() * globals::PI_180 + mod : mod;
-};
-
 /**
  * The method called to update the game mode.
  *
@@ -204,8 +202,6 @@ void GameGraphRoot::update(float timestep) {
 	// Update the HUD
 	coordHUD->setText(positionText());
 
-	float angle = (float)(fmod(ship->getSize() - ship->getDonuts().at(playerID)->getAngle(), 360));
-
 	// Reanchor the node at the center of the screen and rotate about center.
 	Vec2 position = farSpace->getPosition();
 	farSpace->setAnchor(Vec2::ANCHOR_CENTER);
@@ -215,13 +211,19 @@ void GameGraphRoot::update(float timestep) {
 		farSpace->setPosition(position - Vec2(0.5, 0)); // Reseting the anchor changes the position
 	}
 
-	// Rotate about center.
-	nearSpace->setAngle(globals::PI_180 * angle);
+	// Rotate nearSpace about center.
+	float newPlayerAngle = ship->getDonuts().at(playerID)->getAngle();
+	float delta = (prevPlayerAngle - newPlayerAngle) * globals::PI_180;
+	delta = delta < -globals::PI
+				? delta + ship->getSize() * globals::PI_180
+				: delta > globals::PI ? delta - ship->getSize() * globals::PI_180 : delta;
+	nearSpace->setAngle(wrapAngle(nearSpace->getAngle() + delta));
+	prevPlayerAngle = newPlayerAngle;
 
 	double radiusRatio = globals::RADIUS / (donutNode->getWidth() / 2.0);
 
-	angle = (float)(donutNode->getAngle() -
-					ship->getDonuts().at(playerID)->getVelocity() * globals::PI_180 * radiusRatio);
+	float angle = (float)(donutNode->getAngle() - ship->getDonuts().at(playerID)->getVelocity() *
+													  globals::PI_180 * radiusRatio);
 	donutNode->setAnchor(Vec2::ANCHOR_CENTER);
 	donutNode->setAngle(angle);
 	// Draw Jump Offset
@@ -260,9 +262,8 @@ void GameGraphRoot::update(float timestep) {
 			std::shared_ptr<PolygonNode> newRightSegment = dynamic_pointer_cast<cugl::PolygonNode>(
 				shipSegsNode->getChildByTag(static_cast<unsigned int>(rightMostSeg + 1)));
 			newRightSegment->setAngle(wrapAngle(segment->getAngle() + globals::SEG_SIZE));
-		} else if (i == leftMostSeg &&
-				   wrapAngle(nearSpace->getAngle() + segment->getAngle()) >
-					   ship->getSize() * globals::PI_180 - globals::SEG_CUTOFF_ANGLE) {
+		} else if (i == leftMostSeg && wrapAngle(nearSpace->getAngle() + segment->getAngle()) >
+										   globals::TWO_PI - globals::SEG_CUTOFF_ANGLE) {
 			leftMostSeg = (i + globals::VISIBLE_SEGS - 1) % globals::VISIBLE_SEGS;
 			rightMostSeg = (i + globals::VISIBLE_SEGS - 2) % globals::VISIBLE_SEGS;
 			std::shared_ptr<PolygonNode> newLeftSegment = dynamic_pointer_cast<cugl::PolygonNode>(
@@ -290,7 +291,6 @@ std::string GameGraphRoot::positionText() {
 	} else {
 		ss << "Time Left: " << trunc(ship->timer);
 	}
-
 	return ss.str();
 }
 
