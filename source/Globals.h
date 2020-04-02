@@ -28,18 +28,21 @@ constexpr unsigned int RADIUS = 550; // NOLINT
 /** Pi */
 constexpr float PI = 3.14159265358979323846264338327950288f; // NOLINT
 
+/** Two Pi */
+constexpr float TWO_PI = 2 * PI; // NOLINT
+
 /** Pi divided by 180 for converting between degrees and radians */
 constexpr float PI_180 = PI / 180.0f; // NOLINT
 
 #pragma mark Scenegraph
 /** Maximum number of possibly visible ship segments at a time */
-    constexpr unsigned int VISIBLE_SEGS = 6;
+constexpr unsigned int VISIBLE_SEGS = 6;
 
 /** The angle in degree of a single ship segment */
-    constexpr float SEG_SIZE = 45 * PI_180;
+constexpr float SEG_SIZE = 45 * PI_180;
 
 /** The screen angle at which a ship segment is no longer visible */
-    constexpr float SEG_CUTOFF_ANGLE = 90 * PI_180;
+constexpr float SEG_CUTOFF_ANGLE = 90 * PI_180;
 } // namespace globals
 
 #endif /* __GLOBALS_H__ */
