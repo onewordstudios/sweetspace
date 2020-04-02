@@ -1,16 +1,4 @@
-﻿//
-//  SDApp.cpp
-//  Ship Demo
-//
-//  This is the root class for your game.  The file main.cpp accesses this class
-//  to run the application.  While you could put most of your game logic in
-//  this class, we prefer to break the game up into player modes and have a
-//  class for each mode.
-//
-//  Author: Walker White
-//  Version: 1/10/17
-//
-#ifndef __SWEETSPACE_H__
+﻿#ifndef __SWEETSPACE_H__
 #define __SWEETSPACE_H__
 #include <cugl/cugl.h>
 
@@ -20,7 +8,7 @@
 #include "MatchmakingMode.h"
 
 /**
- * This class represents the application root for the ship demo.
+ * The application root.
  */
 class Sweetspace : public cugl::Application {
    protected:

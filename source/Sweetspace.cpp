@@ -1,16 +1,4 @@
-﻿//
-//  SDApp.cpp
-//  Ship Demo
-//
-//  This is the root class for your game.  The file main.cpp accesses this class
-//  to run the application.  While you could put most of your game logic in
-//  this class, we prefer to break the game up into player modes and have a
-//  class for each mode.
-//
-//  Author: Walker White
-//  Version: 1/10/17
-//
-#include "Sweetspace.h"
+﻿#include "Sweetspace.h"
 
 using namespace cugl;
 
