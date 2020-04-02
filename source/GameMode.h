@@ -11,11 +11,10 @@
 #include "ShipModel.h"
 
 /**
- * This class is the primary gameplay controller.
+ * The primary gameplay controller.
  *
  * A world has its own objects, assets, and input controller.  Thus this is
- * really a mini-GameEngine in its own right.  As in 3152, we separate it out
- * so that we can have a separate mode for the loading screen.
+ * really a mini-GameEngine in its own right.
  */
 class GameMode {
    protected:

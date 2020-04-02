@@ -10,11 +10,7 @@
 #include "ShipModel.h"
 
 /**
- * This class is the primary gameplay constroller for the demo.
- *
- * A world has its own objects, assets, and input controller.  Thus this is
- * really a mini-GameEngine in its own right.  As in 3152, we separate it out
- * so that we can have a separate mode for the loading screen.
+ * The primary controller for the main menu / matchmaking mode
  */
 class MatchmakingMode {
    protected:

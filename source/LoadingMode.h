@@ -1,5 +1,5 @@
-#ifndef __SD_LOADING_MODE_H__
-#define __SD_LOADING_MODE_H__
+#ifndef __LOADING_MODE_H__
+#define __LOADING_MODE_H__
 #include <cugl/cugl.h>
 
 /**
@@ -88,4 +88,4 @@ class LoadingMode : public cugl::Scene {
 	bool isPending() const;
 };
 
-#endif /* __SD_LOADING_MODE_H__ */
+#endif /* __LOADING_MODE_H__ */
