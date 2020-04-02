@@ -18,16 +18,10 @@ void BreachNode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch, const Mat
 	Vec2 breachPos;
 	if (breachModel->getHealth() > 0) {
 		// Breach is currently active
-		float absDiff =
-			(shipSize / 2 -
-			 abs(abs(playerDonutModel->getAngle() - breachModel->getAngle()) - shipSize / 2)) *
-			globals::PI_180;
-		float onScreenAngle =
-			absDiff * (breachModel->getAngle() >=
-								   fmod(playerDonutModel->getAngle() + shipSize / 2, shipSize) ||
-							   breachModel->getAngle() < playerDonutModel->getAngle()
-						   ? -1
-						   : 1);
+		float onScreenAngle = breachModel->getAngle() - playerDonutModel->getAngle();
+		onScreenAngle = onScreenAngle >= 0 ? onScreenAngle : shipSize + onScreenAngle;
+		onScreenAngle = onScreenAngle > shipSize / 2 ? onScreenAngle - shipSize : onScreenAngle;
+		onScreenAngle *= globals::PI_180;
 		if (!isShown && onScreenAngle < globals::SEG_CUTOFF_ANGLE &&
 			onScreenAngle > -globals::SEG_CUTOFF_ANGLE) {
 			// Breach is coming into visible range
