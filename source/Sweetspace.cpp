@@ -37,7 +37,7 @@ void Sweetspace::onStartup() {
 
 	mib = std::make_shared<MagicInternetBox>();
 
-	// Queue up the other assets
+	// Queue up the other assets NOLINTNEXTLINE
 	AudioChannels::start(24);
 	assets->loadDirectoryAsync("json/assets.json", nullptr);
 
@@ -85,7 +85,7 @@ void Sweetspace::onShutdown() {
  */
 void Sweetspace::update(float timestep) {
 	if (!loaded && loading.isActive()) {
-		loading.update(0.01f);
+		loading.update(0.01f); // NOLINT
 	} else if (!loaded && !matched) {
 		loading.dispose(); // Disables the input listeners in this mode
 		matchmaking.init(assets, mib);
