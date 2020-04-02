@@ -28,8 +28,7 @@ using namespace std;
  *
  * @return true if the controller is initialized properly, false otherwise.
  */
-bool MatchmakingMode::init(const std::shared_ptr<cugl::AssetManager>& assets,
-						   std::shared_ptr<MagicInternetBox>& mib) {
+bool MatchmakingMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 	// Initialize the scene to a locked width
 	Size dimen = Application::get()->getDisplaySize();
 	dimen *= globals::SCENE_WIDTH / dimen.width; // Lock the game to a reasonable resolution
@@ -37,7 +36,7 @@ bool MatchmakingMode::init(const std::shared_ptr<cugl::AssetManager>& assets,
 		return false;
 	}
 	// Set network controller
-	net = mib;
+	net = MagicInternetBox::getInstance();
 	input.init();
 
 	sgRoot.init(assets);
