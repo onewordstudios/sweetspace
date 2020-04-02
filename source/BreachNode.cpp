@@ -44,8 +44,8 @@ void BreachNode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch, const Mat
 			setPosition(breachPos);
 			isShown = false;
 			CULog("Going out at %f", onScreenAngle / globals::PI_180);
-		};
-		setScale(GameGraphRoot::BREACH_SCALE * (float)breachModel->getHealth() / BREACH_SCALE)
+		}
+		setScale(GameGraphRoot::BREACH_SCALE * (float)breachModel->getHealth() / BREACH_SCALE);
 	} else {
 		// Breach is currently inactive
 		breachPos = Vec2(OFF_SCREEN_POS, OFF_SCREEN_POS);
