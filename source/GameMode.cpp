@@ -191,6 +191,40 @@ void GameMode::update(float timestep) {
 		ship->getDonuts()[i]->update(timestep);
 	}
 
+	if (gm.allPlayerChallenge() && trunc(ship->timer) > 10) {
+		if (!(ship->getChallenge())) {
+			ship->setRollDir(0);
+			startTime = 0;
+			endTime = trunc(ship->timer) - 7;
+			ship->setChallenge(true);
+		}
+		bool dir = signbit(ship->getRollDir());
+
+		while (startTime < 7) {
+			bool sameDir = true;
+			for (unsigned int i = 0; i < ship->getDonuts().size(); i++) {
+				if (ship->getDonuts()[i]->getVelocity() > 0) {
+					sameDir = false;
+				}
+			}
+			if (sameDir) {
+				startTime = startTime + timestep;
+			}
+		}
+		if (trunc(ship->timer) == endTime) {
+			CULog("End Challenge");
+			if (endTime > trunc(startTime)) {
+				CULog("Failed Challenge");
+			} else {
+				CULog("Challenge Completed");
+			}
+			gm.setAllPlayerChallenge(false);
+			ship->setChallenge(false);
+		}
+	} else {
+		gm.setAllPlayerChallenge(false);
+	}
+
 	sgRoot.update(timestep);
 }
 

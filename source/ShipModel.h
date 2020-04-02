@@ -18,9 +18,13 @@ class ShipModel {
 	int health;
 	/** Size of the ship. Minimum value should be 360. Default value 360 */
 	float shipSize;
+	/** Roll direction of all player challenge*/
+	int rollDir;
+	/** If a all player challenge is in effect*/
+	bool challenge;
 
    public:
-	/** Current health of the ship*/
+	/** Game timer*/
 	float timer;
 #pragma mark Constructors
 	/*
@@ -229,5 +233,33 @@ class ShipModel {
 	 * @return the size of the ship
 	 */
 	float getSize() { return shipSize; }
+
+	/**
+	 * Set roll direction of challenge
+	 *
+	 * @param direction of roll
+	 */
+	void setRollDir(int dir) { rollDir = dir == 0 ? -1 : 1; }
+
+	/**
+	 * Get roll direction of challenge
+	 *
+	 * @return direction of roll
+	 */
+	int getRollDir() { return rollDir; }
+
+	/**
+	 * Set true if challenge.
+	 *
+	 * @param if challenge
+	 */
+	void setChallenge(bool c) { challenge = c; }
+
+	/**
+	 * Get if in challenge.
+	 *
+	 * @return if in challenge
+	 */
+	bool getChallenge() { return challenge; }
 };
 #endif /* __SHIP_MODEL_H__ */

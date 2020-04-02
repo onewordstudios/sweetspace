@@ -30,6 +30,8 @@ bool ShipModel::init(unsigned int numPlayers, unsigned int numBreaches, unsigned
 	// Initialize size
 	this->shipSize = shipSize;
 
+	challenge = false;
+
 	return true;
 }
 

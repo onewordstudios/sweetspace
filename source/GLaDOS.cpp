@@ -64,6 +64,7 @@ bool GLaDOS::init(std::shared_ptr<ShipModel> ship, std::shared_ptr<MagicInternet
 	for (int i = 0; i < MAX_DOORS; i++) {
 		doorFree.at(i) = true;
 	}
+	allChallenge = false;
 	// Set random seed based on time
 	srand(time(NULL));
 	active = success;
@@ -167,6 +168,9 @@ void GLaDOS::update(float dt) {
 			mib->createDualTask(angle, -1, -1, i);
 			break;
 		}
+	}
+	if (rand() % 6 == 1 && !allChallenge) {
+		allChallenge = true;
 	}
 }
 

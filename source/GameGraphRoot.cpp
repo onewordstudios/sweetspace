@@ -227,10 +227,13 @@ void GameGraphRoot::update(float timestep) {
  */
 std::string GameGraphRoot::positionText() {
 	stringstream ss;
+	string dir = ship->getRollDir() == -1 ? "LEFT" : "RIGHT";
 	if (ship->timerEnded() && ship->getHealth() > 10) {
 		ss << "You Win!";
 	} else if (ship->timerEnded()) {
 		ss << "You Lose.";
+	} else if (ship->getChallenge()) {
+		ss << "STABILZER ERROR: ROLL " + dir;
 	} else {
 		ss << "Time Left: " << trunc(ship->timer);
 	}

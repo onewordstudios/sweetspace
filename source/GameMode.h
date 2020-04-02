@@ -38,6 +38,8 @@ class GameMode {
 
 	bool host = true;
 	int playerID;
+	float startTime;
+	float endTime;
 
    public:
 #pragma mark -
