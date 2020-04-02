@@ -134,6 +134,8 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 		doorNode->setFrame(0);
 		doorNode->setAnchor(Vec2::ANCHOR_BOTTOM_CENTER);
 		doorNode->setScale(0.3f);
+		doorNode->setShipSize(ship->getSize());
+		doorNode->setDonutModel(ship->getDonuts().at(playerID));
 		doorsNode->addChild(doorNode);
 	}
 
