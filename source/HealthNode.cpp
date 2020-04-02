@@ -59,7 +59,7 @@ void HealthNode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch, const Mat
 			break;
 	}
 
-	setAngle(ANGLE * static_cast<float>(section) * PI_180);
+	setAngle(ANGLE * static_cast<float>(section) * globals::PI_180);
 	ship->getHealth() > MAX_HEALTH ? setFrame(MAX_HEALTH) : setFrame(ship->getHealth());
 
 	AnimationNode::draw(batch, transform, tint);
