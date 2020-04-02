@@ -81,11 +81,11 @@ class LoadingMode : public cugl::Scene {
 	void update(float timestep) override;
 
 	/**
-	 * Returns true if loading is complete, but the player has not pressed play
+	 * Returns true if loading is complete
 	 *
-	 * @return true if loading is complete, but the player has not pressed play
+	 * @return true if loading is complete
 	 */
-	bool isPending() const;
+	bool isLoaded() const;
 };
 
 #endif /* __LOADING_MODE_H__ */

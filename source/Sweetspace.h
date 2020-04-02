@@ -11,11 +11,30 @@
  * The application root.
  */
 class Sweetspace : public cugl::Application {
-   protected:
+   private:
 	/** The global sprite batch for drawing (only want one of these) */
 	std::shared_ptr<cugl::SpriteBatch> batch;
 	/** The global asset manager */
 	std::shared_ptr<cugl::AssetManager> assets;
+
+	/**
+	 * An enumeration representing the current mode of the game.
+	 *
+	 * Implementation note: each main mode is a multiple of 100. Transitions LEAVING a mode
+	 * increment within the same block of 100.
+	 */
+	enum GameStatus {
+		/** Loading screen */
+		Loading = 0,
+		LoadToMain,
+		/** Main menu screen */
+		MainMenu = 100,
+		MainToGame,
+		/** Primary game screen */
+		Game = 200
+	};
+
+	GameStatus status;
 
 	// Player modes
 	/** The primary controller for the game world */
@@ -42,7 +61,15 @@ class Sweetspace : public cugl::Application {
 	 * of initialization from the constructor allows main.cpp to perform
 	 * advanced configuration of the application before it starts.
 	 */
-	Sweetspace() : cugl::Application(), loaded(false), matched(false), gameStarted(false) {}
+	Sweetspace()
+		: cugl::Application(),
+		  status(Loading),
+		  gameplay(),
+		  loading(),
+		  matchmaking(),
+		  loaded(false),
+		  matched(false),
+		  gameStarted(false) {}
 
 	/**
 	 * Disposes of this application, releasing all resources.

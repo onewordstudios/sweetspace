@@ -53,7 +53,7 @@ bool LoadingMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
  */
 void LoadingMode::dispose() {
 	// Deactivate the button (platform dependent)
-	if (isPending()) {
+	if (button != nullptr && button->isVisible()) {
 		button->deactivate();
 	}
 	button = nullptr;
@@ -71,7 +71,7 @@ void LoadingMode::dispose() {
  *
  * @param timestep  The amount of time (in seconds) since the last frame
  */
-void LoadingMode::update(float progress) {
+void LoadingMode::update(float timestep) {
 	if (progress < 1) {
 		progress = assets->progress();
 		if (progress >= 1) {
@@ -88,4 +88,4 @@ void LoadingMode::update(float progress) {
  *
  * @return true if loading is complete, but the player has not pressed play
  */
-bool LoadingMode::isPending() const { return button != nullptr && button->isVisible(); }
+bool LoadingMode::isLoaded() const { return progress == 1.0f; }

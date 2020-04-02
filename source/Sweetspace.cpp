@@ -71,50 +71,69 @@ void Sweetspace::onShutdown() {
 }
 
 /**
- * The method called to update the application data.
+ * Update the game mode. Should be called each frame.
  *
- * This is your core loop and should be replaced with your custom implementation.
- * This method should contain any code that is not an OpenGL call.
- *
- * When overriding this method, you do not need to call the parent method
- * at all. The default implmentation does nothing.
+ * Part 1 of 2 within the lifecycle of a frame. Computes all game computations and state updates in
+ * preparation for the draw phase. This method contains basically all gameplay code that is not an
+ * OpenGL call.
  *
  * @param timestep  The amount of time (in seconds) since the last frame
  */
 void Sweetspace::update(float timestep) {
-	if (!loaded && loading.isActive()) {
-		loading.update(0.01f); // NOLINT
-	} else if (!loaded && !matched) {
-		loading.dispose(); // Disables the input listeners in this mode
-		matchmaking.init(assets);
-		loaded = true;
-	} else if (!matched && !gameStarted) {
-		matchmaking.update(timestep);
-		matched = matchmaking.isGameReady();
-	} else if (matched && !gameStarted) {
-		matchmaking.dispose();
-		gameplay.init(assets);
-		gameStarted = true;
-	} else {
-		gameplay.update(timestep);
+	switch (status) {
+		case Loading: {
+			loading.update(0.01f); // NOLINT
+			if (loading.isLoaded()) {
+				status = LoadToMain;
+			}
+			return;
+		}
+		case LoadToMain: {
+			loading.dispose(); // Disables the input listeners in this mode
+			matchmaking.init(assets);
+			status = MainMenu;
+			return;
+		}
+		case MainMenu: {
+			matchmaking.update(timestep);
+			if (matchmaking.isGameReady()) {
+				status = MainToGame;
+			}
+			return;
+		}
+		case MainToGame: {
+			matchmaking.dispose();
+			gameplay.init(assets);
+			status = Game;
+			return;
+		}
+		case Game: {
+			gameplay.update(timestep);
+			return;
+		}
 	}
 }
 
 /**
- * The method called to draw the application to the screen.
+ * Draws the game. Should be called each frame.
  *
- * This is your core loop and should be replaced with your custom implementation.
- * This method should OpenGL and related drawing calls.
- *
- * When overriding this method, you do not need to call the parent method
- * at all. The default implmentation does nothing.
+ * Part 2 of 2 within the lifecycle of a frame. Renders the game state to the screen after
+ * computations are complete from the update phase. This method contains all OpenGL and related
+ * drawing code.
  */
 void Sweetspace::draw() {
-	if (!loaded) {
-		loading.render(batch);
-	} else if (!gameStarted) {
-		matchmaking.draw(batch);
-	} else {
-		gameplay.draw(batch);
+	switch (status / 100) {
+		case Loading / 100: {
+			loading.render(batch);
+			return;
+		}
+		case MainMenu / 100: {
+			matchmaking.draw(batch);
+			return;
+		}
+		case Game / 100: {
+			gameplay.draw(batch);
+			return;
+		}
 	}
 }
