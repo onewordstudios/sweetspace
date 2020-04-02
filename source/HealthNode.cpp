@@ -54,11 +54,11 @@ void HealthNode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch, const Mat
 			setPosition(static_cast<float>(RADIUS * sin(0)),
 						static_cast<float>(Y_OFFSET_4 * cos(0)));
 			break;
-		case 5:
+		case 5: // NOLINT
 			setPosition(static_cast<float>(-X_OFFSET_3 + RADIUS * sin(0)),
 						static_cast<float>(Y_OFFSET_3 * cos(0)));
 			break;
-		case 6:
+		case 6: // NOLINT
 			setPosition(static_cast<float>(-X_OFFSET_2 + RADIUS * sin(0)),
 						static_cast<float>(cos(0)));
 			break;
