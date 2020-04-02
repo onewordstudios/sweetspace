@@ -1,7 +1,8 @@
 ﻿#include "HealthNode.h"
-#include "Globals.h"
 
 #include <cugl/2d/CUAnimationNode.h>
+
+#include "Globals.h"
 
 using namespace cugl;
 
@@ -34,28 +35,36 @@ void HealthNode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch, const Mat
 					  Color4 tint) {
 	switch (section) {
 		case 0:
-			setPosition(static_cast<float>(RADIUS * sin(0)),  static_cast<float>(Y_OFFSET_1 * cos(0)));
+			setPosition(static_cast<float>(RADIUS * sin(0)),
+						static_cast<float>(Y_OFFSET_1 * cos(0)));
 			break;
 		case 1:
-			setPosition(static_cast<float>(X_OFFSET_1 + RADIUS * sin(0)), static_cast<float>(Y_OFFSET_2 * cos(0)));
+			setPosition(static_cast<float>(X_OFFSET_1 + RADIUS * sin(0)),
+						static_cast<float>(Y_OFFSET_2 * cos(0)));
 			break;
 		case 2:
-			setPosition(static_cast<float>(X_OFFSET_2 + RADIUS * sin(0)), static_cast<float>(cos(0)));
+			setPosition(static_cast<float>(X_OFFSET_2 + RADIUS * sin(0)),
+						static_cast<float>(cos(0)));
 			break;
 		case 3:
-			setPosition(static_cast<float>(X_OFFSET_3 + RADIUS * sin(0)), static_cast<float>(Y_OFFSET_3 * cos(0)));
+			setPosition(static_cast<float>(X_OFFSET_3 + RADIUS * sin(0)),
+						static_cast<float>(Y_OFFSET_3 * cos(0)));
 			break;
 		case 4:
-			setPosition(static_cast<float>(RADIUS * sin(0)), static_cast<float>(Y_OFFSET_4 * cos(0)));
+			setPosition(static_cast<float>(RADIUS * sin(0)),
+						static_cast<float>(Y_OFFSET_4 * cos(0)));
 			break;
 		case 5:
-			setPosition(static_cast<float>(-X_OFFSET_3 + RADIUS * sin(0)), static_cast<float>(Y_OFFSET_3 * cos(0)));
+			setPosition(static_cast<float>(-X_OFFSET_3 + RADIUS * sin(0)),
+						static_cast<float>(Y_OFFSET_3 * cos(0)));
 			break;
 		case 6:
-			setPosition(static_cast<float>(-X_OFFSET_2 + RADIUS * sin(0)), static_cast<float>(cos(0)));
+			setPosition(static_cast<float>(-X_OFFSET_2 + RADIUS * sin(0)),
+						static_cast<float>(cos(0)));
 			break;
 		default:
-			setPosition(static_cast<float>(-X_OFFSET_1 + RADIUS * sin(0)), static_cast<float>(Y_OFFSET_2 * cos(0)));
+			setPosition(static_cast<float>(-X_OFFSET_1 + RADIUS * sin(0)),
+						static_cast<float>(Y_OFFSET_2 * cos(0)));
 			break;
 	}
 
