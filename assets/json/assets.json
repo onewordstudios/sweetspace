@@ -89,6 +89,15 @@
 		},
 		"dial_hand" : {
 			"file": "textures/main_menu/dial_hand.png"
+		},
+		"purple_plate" : {
+			"file": "textures/main_menu/purple_plate.png"
+		},
+		"start_btn" : {
+			"file": "textures/main_menu/start_up.png"
+		},
+		"start_btn_down" : {
+			"file": "textures/main_menu/start_down.png"
 		}
 	},
 	"sounds": {
@@ -362,6 +371,66 @@
 										"texture"  : "dial_hand",
 										"anchor"   : [0.5,0.5],
 										"scale"    : 1
+									},
+									"layout" : {
+										"x_anchor" : "center",
+										"y_anchor" : "middle"
+									}
+								}
+							}
+						},
+						"wrap" : {
+							"type" : "Node",
+							"format" : { "type" : "Anchored" },
+							"data"   : {
+								"anchor"   : [0,0.5],
+								"scale"    : 1,
+								"size" : [600,560]
+							},
+							"layout" : {
+								"x_anchor" : "center",
+								"y_anchor" : "middle"
+							},
+							"children" : {
+								"plate" : {
+									"type" : "Image",
+									"format" : {
+										"type" : "Anchored"
+									},
+									"data"   : {
+										"texture"  : "purple_plate",
+										"anchor"   : [0.5,0],
+										"scale"    : 1
+									},
+									"layout" : {
+										"x_anchor" : "center",
+										"y_anchor" : "middle"
+									}
+								},
+								"startbtn" : {
+									"type": "Button",
+									"format" : {
+										"type" : "Anchored"
+									},
+									"data": {
+										"upnode"   : "up",
+										"downnode" : "down",
+										"anchor"   : [0.5,1],
+										"scale" : 1
+									},
+									"children" : {
+										"up" : {
+											"type"   : "Image",
+											"data"   : {
+												"texture"  : "start_btn"
+											}
+										},
+										"down" : {
+											"type"   : "Image",
+											"data"   : {
+												"texture"  : "start_btn_down"
+											}
+										}
 									},
 									"layout" : {
 										"x_anchor" : "center",
