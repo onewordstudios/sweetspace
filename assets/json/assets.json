@@ -111,6 +111,10 @@
 		"felt32": {
 			"file":     "fonts/Montserrat-Medium.ttf",
 			"size":     32
+		},
+		"mont_black_italic_big" : {
+			"file":     "fonts/Montserrat-BlackItalic.ttf",
+			"size":     96
 		}
 	},
     "scenes" : {
@@ -340,7 +344,8 @@
 					"data"   : {
 						"texture"  : "purple_panel",
 						"anchor"   : [0.5,0],
-						"scale"    : 0.5
+						"scale"    : 0.5,
+						"visible" : false
 					},
 					"layout" : {
 						"x_anchor" : "center",
@@ -389,7 +394,8 @@
 							},
 							"layout" : {
 								"x_anchor" : "center",
-								"y_anchor" : "middle"
+								"y_anchor" : "middle",
+								"x_offset" : 0.05
 							},
 							"children" : {
 								"plate" : {
@@ -399,12 +405,30 @@
 									},
 									"data"   : {
 										"texture"  : "purple_plate",
-										"anchor"   : [0.5,0],
+										"anchor"   : [0.5,1],
 										"scale"    : 1
 									},
 									"layout" : {
 										"x_anchor" : "center",
-										"y_anchor" : "middle"
+										"y_anchor" : "top"
+									},
+									"children" : {
+										"room" : {
+											"type": "Label",
+											"data": {
+												"font"       : "mont_black_italic_big",
+												"text"       : "1 2 3 4 5",
+												"foreground" : [248,231,78,255],
+												"anchor"	 : [0.5,0.5],
+												"valign"     : "middle",
+												"halign"     : "center",
+												"scale" : 1
+											},
+											"layout" : {
+												"x_anchor" : "center",
+												"y_anchor" : "middle"
+											}
+										}
 									}
 								},
 								"startbtn" : {
@@ -415,8 +439,12 @@
 									"data": {
 										"upnode"   : "up",
 										"downnode" : "down",
-										"anchor"   : [0.5,1],
+										"anchor"   : [0.5,0],
 										"scale" : 1
+									},
+									"layout" : {
+										"x_anchor" : "center",
+										"y_anchor" : "bottom"
 									},
 									"children" : {
 										"up" : {
@@ -431,32 +459,28 @@
 												"texture"  : "start_btn_down"
 											}
 										}
-									},
-									"layout" : {
-										"x_anchor" : "center",
-										"y_anchor" : "middle"
 									}
 								}
 							}
 						}
 					}
 				},
-				"room" : {
-                	"type": "Label",
-                    "data": {
-                       	"font"       : "felt32",
-                       	"text"       : "Lobby ID:                ",
-                       	"visible"	 : false,
-                       	"foreground" : [255,0,0,255],
-                       	"anchor"	 : [0,0],
-                       	"valign"     : "left",
-                       	"halign"     : "center"
-                    },
-                    "layout" : {
-                        "x_anchor" : "left",
-                        "y_anchor" : "bottom"
-                    }
-                },
+				"client" : {
+					"type" : "Image",
+					"format" : { "type" : "Anchored" },
+					"data"   : {
+						"texture"  : "blue_panel",
+						"anchor"   : [0.5,0],
+						"scale"    : 0.5,
+						"visible" : false
+					},
+					"layout" : {
+						"x_anchor" : "center",
+						"y_anchor" : "bottom"
+					},
+					"children" : {
+					}
+				},
                 "instr" : {
                     "type": "Label",
                     "data": {

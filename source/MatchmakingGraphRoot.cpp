@@ -52,12 +52,14 @@ bool MatchmakingGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& asset
 	host = std::dynamic_pointer_cast<Button>(assets->get<Node>("matchmaking_home_btnwrap_hostbtn"));
 	client =
 		std::dynamic_pointer_cast<Button>(assets->get<Node>("matchmaking_home_btnwrap_clientbtn"));
-	roomLabel = std::dynamic_pointer_cast<Label>(assets->get<Node>("matchmaking_room"));
+	roomLabel =
+		std::dynamic_pointer_cast<Label>(assets->get<Node>("matchmaking_host_wrap_plate_room"));
 	roomInput = std::dynamic_pointer_cast<TextField>(assets->get<Node>("matchmaking_input"));
 	textInput = std::dynamic_pointer_cast<Button>(assets->get<Node>("matchmaking_inputbutton"));
 	instrLabel = std::dynamic_pointer_cast<Label>(assets->get<Node>("matchmaking_instr"));
 
 	mainScreen = assets->get<Node>("matchmaking_home");
+	hostScreen = assets->get<Node>("matchmaking_host");
 
 	addChild(scene);
 	return true;
@@ -106,7 +108,7 @@ int MatchmakingGraphRoot::checkButtons(const cugl::Vec2& position) {
 		return -1;
 	} else if (host->containsScreen(position)) {
 		playerId = 0;
-		roomLabel->setVisible(true);
+		hostScreen->setVisible(true);
 		mainScreen->setVisible(false);
 		return 0;
 	} else if (client->containsScreen(position)) {
@@ -142,8 +144,4 @@ std::string MatchmakingGraphRoot::getInput(const cugl::Vec2& position) {
  *
  * @return an informative string for the room id
  */
-std::string MatchmakingGraphRoot::positionText() {
-	stringstream ss;
-	ss << "Room ID: " << roomId;
-	return ss.str();
-}
+std::string MatchmakingGraphRoot::positionText() { return roomId; }
