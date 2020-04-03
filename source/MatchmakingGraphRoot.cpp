@@ -57,6 +57,8 @@ bool MatchmakingGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& asset
 	textInput = std::dynamic_pointer_cast<Button>(assets->get<Node>("matchmaking_inputbutton"));
 	instrLabel = std::dynamic_pointer_cast<Label>(assets->get<Node>("matchmaking_instr"));
 
+	mainScreen = assets->get<Node>("matchmaking_home");
+
 	addChild(scene);
 	return true;
 }
@@ -90,11 +92,7 @@ void MatchmakingGraphRoot::reset() {}
  *
  * @param timestep  The amount of time (in seconds) since the last frame
  */
-void MatchmakingGraphRoot::update(float timestep) {
-	// "Drawing" code.  Move everything BUT the donut
-	// Update the HUD
-	roomLabel->setText(positionText());
-}
+void MatchmakingGraphRoot::update(float timestep) { roomLabel->setText(positionText()); }
 
 /**
  * Returns integers representing which button has been tapped if any
@@ -109,17 +107,16 @@ int MatchmakingGraphRoot::checkButtons(const cugl::Vec2& position) {
 	} else if (host->containsScreen(position)) {
 		playerId = 0;
 		roomLabel->setVisible(true);
-		host->setVisible(false);
-		client->setVisible(false);
+		mainScreen->setVisible(false);
 		return 0;
 	} else if (client->containsScreen(position)) {
 		roomInput->setVisible(true);
 		roomInput->activate(2);
 		roomLabel->setVisible(true);
 		textInput->setVisible(true);
-		host->setVisible(false);
-		client->setVisible(false);
 		instrLabel->setVisible(true);
+
+		mainScreen->setVisible(false);
 		return 1;
 	} else {
 		return -1;

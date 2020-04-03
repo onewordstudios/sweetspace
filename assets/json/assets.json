@@ -178,25 +178,42 @@
             "format"    : {
                 "type" : "Anchored"
             },
+			"data"   : {
+				"anchor"   : [0.5,0.5],
+				"scale"    : 1
+			},
+			"layout" : {
+				"x_anchor" : "center",
+				"y_anchor" : "middle"
+			},
             "children":  {
 				"mainmenubg" : {
 					"type" : "Image",
 					"format"    : {
-								"type" : "Anchored"
-							},
-							"data"   : {
-								"texture"  : "main_menu_bg",
-								"anchor"   : [0.5,0.5],
-								"scale"    : 0.5
-							},
-							"layout" : {
-								"x_anchor" : "center",
-								"y_anchor" : "middle"
-							}
+						"type" : "Anchored"
+					},
+					"data"   : {
+						"texture"  : "main_menu_bg",
+						"anchor"   : [0.5,0.5],
+						"scale"    : 0.5
+					},
+					"layout" : {
+						"x_anchor" : "center",
+						"y_anchor" : "middle"
+					}
 				},
 				"home" : {
 					"type" : "Node",
 					"format" : { "type" : "Anchored" },
+					"data"   : {
+						"anchor"   : [0.5,0.5],
+						"scale"    : 1,
+						"size" : [1600,500]
+					},
+					"layout" : {
+						"x_anchor" : "center",
+						"y_anchor" : "middle"
+					},
 					"children" : {
 						"splash" : {
 							"type" : "Image",
@@ -205,7 +222,7 @@
 							},
 							"data"   : {
 								"texture"  : "game_title",
-								"anchor"   : [0.5,0],
+								"anchor"   : [0.5,0.5],
 								"scale"    : 0.5
 							},
 							"layout" : {
@@ -218,7 +235,8 @@
 							"format" : { "type" : "Anchored" },
 							"data"   : {
 								"anchor"   : [0.5,0],
-								"scale"    : 1
+								"scale"    : 1,
+								"size" :[1200,200]
 							},
 							"layout" : {
 								"x_anchor" : "center",
@@ -232,7 +250,7 @@
 									},
 									"data": {
 										"upnode"   : "up",
-										"anchor"   : [1,1],
+										"anchor"   : [1,0.5],
 										"scale" : 0.5
 									},
 									"children" : {
@@ -244,7 +262,7 @@
 										}
 									},
 									"layout" : {
-										"x_anchor" : "left",
+										"x_anchor" : "center",
 										"y_anchor" : "middle"
 									}
 								},
@@ -255,7 +273,7 @@
 									},
 									"data": {
 										"upnode"   : "up",
-										"anchor"   : [0,1],
+										"anchor"   : [0,0.5],
 										"scale" : 0.5
 									},
 									"children" : {
@@ -267,7 +285,7 @@
 										}
 									},
 									"layout" : {
-										"x_anchor" : "left",
+										"x_anchor" : "center",
 										"y_anchor" : "middle"
 									}
 								}
