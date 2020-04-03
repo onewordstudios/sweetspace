@@ -48,8 +48,10 @@ constexpr unsigned int TIME = 30;
  * @return true if the controller is initialized properly, false otherwise.
  */
 bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
+	// Music Initialization
 	auto source = assets->get<Sound>("theme");
 	AudioChannels::get()->playMusic(source, true, source->getVolume());
+
 	// Initialize the scene to a locked width
 	Size dimen = Application::get()->getDisplaySize();
 	dimen *= globals::SCENE_WIDTH / dimen.width; // Lock the game to a reasonable resolution
@@ -57,11 +59,15 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 		return false;
 	}
 
+	// Input Initialization
 	input.init();
 
+	// Network Initialization
 	net = MagicInternetBox::getInstance();
 	playerID = net->getPlayerID();
+	roomId = net->getRoomID();
 
+	// Ship Initialization
 	float shipSize = 360; // TODO level size comes from level file
 	ship = ShipModel::alloc(net->getNumPlayers(), MAX_EVENTS, MAX_DOORS, playerID, shipSize);
 	gm.init(ship);
@@ -69,7 +75,7 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 	donutModel = ship->getDonuts().at(static_cast<unsigned long>(playerID));
 	ship->initTimer(TIME);
 
-	// Scene graph setup
+	// Scene graph Initialization
 	sgRoot.init(assets, ship, playerID);
 
 	return true;
@@ -109,6 +115,24 @@ void GameMode::update(float timestep) {
 	input.update(timestep);
 
 	net->update(ship);
+
+	// Connection Status Checks
+	status = net->matchStatus();
+	switch (status) {
+		case MagicInternetBox::Disconnected:
+			net->reconnect(roomId);
+			break;
+		case MagicInternetBox::GameEnded:
+			// Insert Game Ended Screen
+			break;
+		case MagicInternetBox::Reconnecting:
+			// Still Reconnecting
+			break;
+		case MagicInternetBox::GameStart:
+			break;
+		default:
+			CULog("ERROR: Uncaught MatchmakingStatus Value Occurred");
+	}
 
 	if (!(ship->timerEnded())) {
 		ship->updateTimer(timestep);
