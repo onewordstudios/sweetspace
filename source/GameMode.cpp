@@ -24,8 +24,8 @@ constexpr float BREACH_WIDTH = 11.0f;
 constexpr float DOOR_ACTIVE_ANGLE = 15.0f;
 /** Force to push back during collision */
 constexpr float REBOUND_FORCE = -6;
-/** Starting time for the round */
-constexpr unsigned int TIME = 30;
+/** Initial health of the ship */
+int initHealth;
 
 #pragma mark -
 #pragma mark Constructors
@@ -57,12 +57,13 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 	playerID = net->getPlayerID();
 	std::shared_ptr<LevelModel> level = assets->get<LevelModel>(LEVEL_ONE_KEY);
 	float shipSize = level->getShipSize();
+	initHealth = level->getInitHealth();
 	ship = ShipModel::alloc(net->getNumPlayers(), level->getMaxBreaches(), level->getMaxDoors(),
-							playerID, shipSize);
+							playerID, shipSize, initHealth);
 	gm.init(ship, level);
 
 	donutModel = ship->getDonuts().at(static_cast<unsigned long>(playerID));
-	ship->initTimer(TIME);
+	ship->initTimer(level->getTime());
 
 	// Scene graph setup
 	sgRoot.init(assets, ship, playerID);
@@ -161,13 +162,13 @@ void GameMode::update(float timestep) {
 	}
 
 	if ((ship->getBreaches().size()) == 0) {
-		ship->setHealth(globals::INITIAL_SHIP_HEALTH);
+		ship->setHealth(initHealth);
 	} else {
 		int h = 0;
 		for (int i = 0; i < ship->getBreaches().size(); i++) {
 			h = h + ship->getBreaches().at(i)->getHealth();
 		}
-		ship->setHealth(globals::INITIAL_SHIP_HEALTH + 1 - h);
+		ship->setHealth(initHealth + 1 - h);
 	}
 
 	gm.update(timestep);

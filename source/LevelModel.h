@@ -29,9 +29,14 @@ class LevelModel : public Asset {
 	/** Spawn rate of breaches = 1/SPAWN_RATE for EVERY UPDATE FRAME. 100 is a very fast rate
 	 * already. */
 	unsigned int spawnRate;
+	/** Min angle difference between a donut and an obstacle*/
 	float minAngleDiff;
 	/** Size of the ship in degrees*/
 	float shipSize;
+	/** Starting time for the timer*/
+	float time;
+	/** Starting health for the ship*/
+	int initHealth;
 
    public:
 #pragma mark Static Constructors
@@ -97,6 +102,19 @@ class LevelModel : public Asset {
 	 */
 	const float getShipSize() const { return shipSize; }
 
+	/**
+	 * Returns the starting time
+	 *
+	 * @return the starting time
+	 */
+	const float getTime() const { return time; }
+
+	/**
+	 * Returns the init health
+	 *
+	 * @return the init health
+	 */
+	const int getInitHealth() const { return initHealth; }
 #pragma mark -
 #pragma mark Asset Loading
 	/**
@@ -131,7 +149,9 @@ class LevelModel : public Asset {
 		maxDoors = json->get(MAX_DOOR_FIELD)->asInt();
 		spawnRate = json->get(SPAWN_RATE_FIELD)->asInt();
 		minAngleDiff = json->get(MIN_ANGLE_DIFF_FIELD)->asFloat();
-		shipSize = json->get(SHIP_SIZE_FIELD)->asInt();
+		shipSize = json->get(SHIP_SIZE_FIELD)->asFloat();
+		time = json->get(TIME_FIELD)->asFloat();
+		initHealth = json->get(INIT_HEALTH_FIELD)->asInt();
 		return true;
 	}
 
