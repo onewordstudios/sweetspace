@@ -201,14 +201,16 @@ void GameMode::update(float timestep) {
 	}
 
 	gm.update(timestep);
-	float thrust = input.getRoll();
 
-	// Move the donut (MODEL ONLY)
-	donutModel->applyForce(thrust);
-	// Jump Logic
-	if (input.getTapLoc() != Vec2::ZERO && !donutModel->isJumping()) {
-		donutModel->startJump();
-		net->jump(playerID);
+	// Move the donut (MODEL ONLY) if client is connected
+	if (status == MagicInternetBox::GameStart) {
+		float thrust = input.getRoll();
+		donutModel->applyForce(thrust);
+		// Jump Logic
+		if (input.getTapLoc() != Vec2::ZERO && !donutModel->isJumping()) {
+			donutModel->startJump();
+			net->jump(playerID);
+		}
 	}
 
 	for (unsigned int i = 0; i < ship->getDonuts().size(); i++) {
