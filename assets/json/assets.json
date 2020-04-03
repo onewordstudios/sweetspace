@@ -65,7 +65,10 @@
         },
         "confirm_join": {
             "file":   "textures/confirm_join.png"
-        }
+        },
+		"game_title": {
+			"file": "textures/main_menu/sweetspace.png"
+		}
 	},
 	"sounds": {
         "theme": {
@@ -173,6 +176,38 @@
                 "type" : "Anchored"
             },
             "children":  {
+				"home" : {
+					"type" : "Node",
+					"format" : { "type" : "Anchored" },
+					"children" : {
+						"splash" : {
+							"type" : "Image",
+							"format"    : {
+								"type" : "Anchored"
+							},
+							"data"   : {
+								"texture"  : "game_title",
+								"anchor"   : [0.5,0.5],
+								"scale"    : 0.5
+							},
+							"layout" : {
+								"x_anchor" : "center",
+								"y_anchor" : "middle"
+							}
+						},
+						"btnwrap" : {
+							"type" : "Node",
+							"format" : { "type" : "Anchored" },
+							"layout" : {
+								"x_anchor" : "center",
+								"y_anchor" : "bottom"
+							},
+							"children" : {
+							
+							}
+						}
+					}
+				},
                 "host" : {
 				    "type": "Button",
 				    "format" : {

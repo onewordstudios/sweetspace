@@ -35,6 +35,7 @@ class Sweetspace : public cugl::Application {
 		Game = 300
 	};
 
+	/** The current status of the game */
 	GameStatus status;
 
 	// Player modes
