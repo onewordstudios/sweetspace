@@ -1,4 +1,4 @@
-#ifndef __GLOBALS_H__
+﻿#ifndef __GLOBALS_H__
 #define __GLOBALS_H__
 
 /**
@@ -14,7 +14,7 @@ namespace globals {
 constexpr unsigned int SCENE_WIDTH = 1024; // NOLINT
 
 /** Number of players needed for the game - will be replaced with a range in the future */
-constexpr unsigned int NUM_PLAYERS = 3; // NOLINT
+constexpr unsigned int NUM_PLAYERS = 1; // NOLINT
 
 /** Network tick frequency */
 constexpr unsigned int NETWORK_TICK = 12; // NOLINT

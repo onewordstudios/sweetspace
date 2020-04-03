@@ -1,0 +1,6 @@
+{
+	"maxBreaches" : 2,
+	"maxDoors" : 1,
+	"spawnRate" : 1000,
+	"minAngle" : 1	
+}
