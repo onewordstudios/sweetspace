@@ -243,7 +243,7 @@
 								"y_anchor" : "bottom"
 							},
 							"children" : {
-								"host" : {
+								"hostbtn" : {
 									"type": "Button",
 									"format" : {
 										"type" : "Anchored"
@@ -266,7 +266,7 @@
 										"y_anchor" : "middle"
 									}
 								},
-								"client" : {
+								"clientbtn" : {
 									"type": "Button",
 									"format" : {
 										"type" : "Anchored"
