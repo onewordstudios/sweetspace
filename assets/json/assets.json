@@ -77,6 +77,18 @@
 		},
 		"main_menu_bg": {
 			"file": "textures/main_menu/sweetspace_bg.png"
+		},
+		"purple_panel" : {
+			"file": "textures/main_menu/purple_panel.png"
+		},
+		"blue_panel" : {
+			"file": "textures/main_menu/blue_panel.png"
+		},
+		"dial" : {
+			"file": "textures/main_menu/dial.png"
+		},
+		"dial_hand" : {
+			"file": "textures/main_menu/dial_hand.png"
 		}
 	},
 	"sounds": {
@@ -313,7 +325,53 @@
 						}
 					}
 				},
-                
+                "host" : {
+					"type" : "Image",
+					"format" : { "type" : "Anchored" },
+					"data"   : {
+						"texture"  : "purple_panel",
+						"anchor"   : [0.5,0],
+						"scale"    : 0.5
+					},
+					"layout" : {
+						"x_anchor" : "center",
+						"y_anchor" : "bottom"
+					},
+					"children" : {
+						"dial" : {
+							"type" : "Image",
+							"format" : {
+								"type" : "Anchored"
+							},
+							"data"   : {
+								"texture"  : "dial",
+								"anchor"   : [1,0.5],
+								"scale"    : 1
+							},
+							"layout" : {
+								"x_anchor" : "center",
+								"y_anchor" : "middle"
+							},
+							"children" : {
+								"hand" : {
+									"type" : "Image",
+									"format" : {
+										"type" : "Anchored"
+									},
+									"data"   : {
+										"texture"  : "dial_hand",
+										"anchor"   : [0.5,0.5],
+										"scale"    : 1
+									},
+									"layout" : {
+										"x_anchor" : "center",
+										"y_anchor" : "middle"
+									}
+								}
+							}
+						}
+					}
+				},
 				"room" : {
                 	"type": "Label",
                     "data": {
