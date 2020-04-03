@@ -65,6 +65,18 @@
         },
         "confirm_join": {
             "file":   "textures/confirm_join.png"
+        },
+        "reconnect_dim": {
+            "file":   "textures/reconnect_dim.png"
+        },
+        "reconnect_bg": {
+            "file":   "textures/reconnect_bg.png"
+        },
+        "reconnect_text": {
+            "file":   "textures/reconnect_text.png"
+        },
+        "reconnect_ellipses": {
+            "file":   "textures/reconnect_ellipses.png"
         }
 	},
 	"sounds": {
@@ -144,7 +156,55 @@
                                 "anchor":   [0.5,0.5],
                                 "scale":    0.4
                             }
-                        }
+                        },
+                        "reconnect": {
+							"type"      : "Node",
+				            "format"    : {
+				                "type" : "Anchored"
+				            },
+				            "children":  {
+				            	"dim" : {
+				            		"type": "Image",
+				                    "data": {
+				                        "texture":  "reconnect_dim",
+				                        "position": [0,0],
+				                        "anchor":   [0.5,0.5],
+				                        "scale":    1,
+				                        "visible":  false
+				                    }
+				            	},
+				            	"bg" : {
+				            		"type": "Image",
+				                    "data": {
+				                        "texture":  "reconnect_bg",
+				                        "position": [0,0],
+				                        "anchor":   [0.5,0.5],
+				                        "scale":    0.6,
+				                        "visible":  false
+				                    }
+				            	},
+				            	"text" : {
+				            		"type": "Image",
+				                    "data": {
+				                        "texture":  "reconnect_text",
+				                        "position": [0,-75],
+				                        "anchor":   [0.5,0.5],
+				                        "scale":    0.6,
+				                        "visible":  false
+				                    }
+				            	},
+				            	"ellipses" : {
+				            		"type": "Image",
+				                    "data": {
+				                        "texture":  "reconnect_ellipses",
+				                        "position": [0,-125],
+				                        "anchor":   [0.5,0.5],
+				                        "scale":    0.6,
+				                        "visible":  false
+				                    }
+				            	}
+				            }
+				        }
                     }
                 },
                 "hud" : {

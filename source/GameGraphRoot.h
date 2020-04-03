@@ -11,6 +11,7 @@
 #include "DoorNode.h"
 #include "HealthNode.h"
 #include "InputController.h"
+#include "MagicInternetBox.h"
 #include "ShipModel.h"
 
 class GameGraphRoot : public cugl::Scene {
@@ -35,6 +36,15 @@ class GameGraphRoot : public cugl::Scene {
 	std::shared_ptr<cugl::Node> nearSpace;
 	/** Parent node of all breaches, is child of nearSpace */
 	std::shared_ptr<cugl::Node> breachesNode;
+	// Reconnection Textures
+	/** Reconnect Overlay Dim */
+	std::shared_ptr<cugl::PolygonNode> reconnectDim;
+	/** Reconnect Overlay Background */
+	std::shared_ptr<cugl::PolygonNode> reconnectBg;
+	/** Reconnect Overlay Text */
+	std::shared_ptr<cugl::PolygonNode> reconnectText;
+	/** Reconnect Overlay Ellipses */
+	std::shared_ptr<cugl::PolygonNode> reconnectEllipses;
 
 	// MODEL
 	/** Id of the current client */
@@ -53,6 +63,9 @@ class GameGraphRoot : public cugl::Scene {
 	 */
 	std::string positionText();
 
+	/** Local record of Network Status */
+	MagicInternetBox::MatchmakingStatus status;
+
    public:
 #pragma mark -
 #pragma mark Public Consts
@@ -70,7 +83,7 @@ class GameGraphRoot : public cugl::Scene {
 	 * This constructor does not allocate any objects or start the game.
 	 * This allows us to use the object without a heap pointer.
 	 */
-	GameGraphRoot() : Scene() {}
+	GameGraphRoot() : Scene(), status(MagicInternetBox::Uninitialized) {}
 
 	/**
 	 * Disposes of all (non-static) resources allocated to this mode.
@@ -116,5 +129,21 @@ class GameGraphRoot : public cugl::Scene {
 	void reset() override;
 
 	std::shared_ptr<cugl::Node> getDonutNode();
+
+#pragma mark -
+#pragma mark Accessors
+	/**
+	 * Set connection status
+	 *
+	 * @param status the connection status of the ship
+	 */
+	void setStatus(MagicInternetBox::MatchmakingStatus status) { this->status = status; }
+
+	/**
+	 * Get health of the ship
+	 *
+	 * @return health the health of the ship
+	 */
+	MagicInternetBox::MatchmakingStatus getStatus() { return status; }
 };
 #endif /* __GAME_GRAPH_ROOT_H__ */
