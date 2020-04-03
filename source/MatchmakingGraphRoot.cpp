@@ -60,6 +60,7 @@ bool MatchmakingGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& asset
 
 	mainScreen = assets->get<Node>("matchmaking_home");
 	hostScreen = assets->get<Node>("matchmaking_host");
+	clientScreen = assets->get<Node>("matchmaking_client");
 
 	addChild(scene);
 	return true;
@@ -119,6 +120,7 @@ int MatchmakingGraphRoot::checkButtons(const cugl::Vec2& position) {
 		instrLabel->setVisible(true);
 
 		mainScreen->setVisible(false);
+		clientScreen->setVisible(true);
 		return 1;
 	} else {
 		return -1;

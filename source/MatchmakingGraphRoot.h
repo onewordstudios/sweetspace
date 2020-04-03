@@ -29,10 +29,13 @@ class MatchmakingGraphRoot : public cugl::Scene {
 	std::shared_ptr<cugl::Label> roomLabel;
 	/** Label for instruction */
 	std::shared_ptr<cugl::Label> instrLabel;
+
 	/** The node containing all UI for the starting splash screen */
 	std::shared_ptr<cugl::Node> mainScreen;
 	/** The node containing all UI for the host screen */
 	std::shared_ptr<cugl::Node> hostScreen;
+	/** The node containing all UI for the client screen */
+	std::shared_ptr<cugl::Node> clientScreen;
 
 	// MODEL
 	int playerId;
