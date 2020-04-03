@@ -36,10 +36,10 @@ constexpr float PI_180 = PI / 180.0f; // NOLINT
 #pragma mark -
 #pragma mark Scenegraph
 /** Width of the screen, used in windowed mode */
-    constexpr unsigned int SCENE_WIDTH = 1024; // NOLINT
+constexpr unsigned int SCENE_WIDTH = 1024; // NOLINT
 
 /** Radius of the ship for the scene graph */
-    constexpr unsigned int RADIUS = 550; // NOLINT
+constexpr unsigned int RADIUS = 550; // NOLINT
 
 /** Maximum number of possibly visible ship segments at a time */
 constexpr unsigned int VISIBLE_SEGS = 6;
