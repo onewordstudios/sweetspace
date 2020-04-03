@@ -49,8 +49,9 @@ bool MatchmakingGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& asset
 	scene->doLayout(); // Repositions the HUD
 
 	// Get the scene components.
-	host = std::dynamic_pointer_cast<Button>(assets->get<Node>("matchmaking_host"));
-	client = std::dynamic_pointer_cast<Button>(assets->get<Node>("matchmaking_client"));
+	host = std::dynamic_pointer_cast<Button>(assets->get<Node>("matchmaking_home_btnwrap_host"));
+	client =
+		std::dynamic_pointer_cast<Button>(assets->get<Node>("matchmaking_home_btnwrap_client"));
 	roomLabel = std::dynamic_pointer_cast<Label>(assets->get<Node>("matchmaking_room"));
 	roomInput = std::dynamic_pointer_cast<TextField>(assets->get<Node>("matchmaking_input"));
 	textInput = std::dynamic_pointer_cast<Button>(assets->get<Node>("matchmaking_inputbutton"));

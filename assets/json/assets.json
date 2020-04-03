@@ -58,10 +58,10 @@
             "file":   "textures/ship.png"
         },
         "create_lobby": {
-            "file":   "textures/create_button.png"
+            "file":   "textures/main_menu/create_up.png"
 		},
 		"join_lobby": {
-            "file":   "textures/join_button.png"
+            "file":   "textures/main_menu/join_up.png"
         },
         "confirm_join": {
             "file":   "textures/confirm_join.png"
@@ -187,7 +187,7 @@
 							},
 							"data"   : {
 								"texture"  : "game_title",
-								"anchor"   : [0.5,0.5],
+								"anchor"   : [0.5,0],
 								"scale"    : 0.5
 							},
 							"layout" : {
@@ -198,66 +198,65 @@
 						"btnwrap" : {
 							"type" : "Node",
 							"format" : { "type" : "Anchored" },
+							"data"   : {
+								"anchor"   : [0.5,0],
+								"scale"    : 1
+							},
 							"layout" : {
 								"x_anchor" : "center",
 								"y_anchor" : "bottom"
 							},
 							"children" : {
-							
+								"host" : {
+									"type": "Button",
+									"format" : {
+										"type" : "Anchored"
+									},
+									"data": {
+										"upnode"   : "up",
+										"anchor"   : [1,1],
+										"scale" : 0.5
+									},
+									"children" : {
+										"up" : {
+											"type"   : "Image",
+											"data"   : {
+												"texture"  : "create_lobby"
+											}
+										}
+									},
+									"layout" : {
+										"x_anchor" : "left",
+										"y_anchor" : "middle"
+									}
+								},
+								"client" : {
+									"type": "Button",
+									"format" : {
+										"type" : "Anchored"
+									},
+									"data": {
+										"upnode"   : "up",
+										"anchor"   : [0,1],
+										"scale" : 0.5
+									},
+									"children" : {
+										"up" : {
+											"type"   : "Image",
+											"data"   : {
+												"texture"  : "join_lobby"
+											}
+										}
+									},
+									"layout" : {
+										"x_anchor" : "left",
+										"y_anchor" : "middle"
+									}
+								}
 							}
 						}
 					}
 				},
-                "host" : {
-				    "type": "Button",
-				    "format" : {
-				        "type" : "Anchored"
-				    },
-				    "data": {
-				        "upnode"   : "up",
-				        "position" : [0,0],
-				        "anchor"   : [0,1],
-				        "size"     : [0,0],
-				        "scale" : 0.5
-				    },
-				    "children" : {
-				    	"up" : {
-                            "type"   : "Image",
-                            "data"   : {
-                                "texture"  : "create_lobby"
-                            }
-                        }
-				    },
-				    "layout" : {
-				        "x_anchor" : "left",
-				        "y_anchor" : "top"
-				    }
-				},
-                "client" : {
-                    "type": "Button",
-                    "format" : {
-				        "type" : "Anchored"
-				    },
-				    "data": {
-				        "upnode"   : "up",
-				        "position" : [0,0],
-				        "anchor"   : [0,1],
-				        "size"     : [0,0],
-				        "scale" : 0.5
-				    },
-				    "children" : {
-				    	"up" : {
-                            "type"   : "Image",
-                            "data"   : {
-                                "texture"  : "join_lobby"
-                            }
-                        }
-				    },
-                    "layout" : {
-                        "x_anchor" : "center",
-                        "y_anchor" : "top"
-                    }
-                },
                 "room" : {
                 	"type": "Label",
                     "data": {
