@@ -70,6 +70,7 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	breachesNode = assets->get<Node>("game_field_near_breaches");
 	shipSegsNode = assets->get<Node>("game_field_near_shipsegments");
 	doorsNode = assets->get<Node>("game_field_near_doors");
+	externalDonutsNode = assets->get<Node>("game_field_near_externaldonuts");
 	donutPos = donutNode->getPosition();
 	coordHUD = std::dynamic_pointer_cast<Label>(assets->get<Node>("game_hud"));
 
@@ -100,7 +101,9 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 			std::shared_ptr<DonutNode> newDonutNode = DonutNode::allocWithTexture(image);
 			newDonutNode->setModel(donutModel);
 			newDonutNode->setScale(DONUT_SCALE);
-			nearSpace->addChild(newDonutNode);
+			newDonutNode->setShipSize(ship->getSize());
+			newDonutNode->setDonutModel(ship->getDonuts().at(playerID));
+			externalDonutsNode->addChild(newDonutNode);
 
 			Vec2 donutPos = Vec2((globals::RADIUS + DONUT_OFFSET) * sin(donutModel->getAngle()),
 								 -(globals::RADIUS + DONUT_OFFSET) * cos(donutModel->getAngle()));

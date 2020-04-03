@@ -144,6 +144,13 @@
                                         "anchor":   [0,0],
                                         "position": [0,0]
                                     }
+                                },
+                                "externaldonuts": {
+                                    "type": "Node",
+                                    "data": {
+                                        "anchor":   [0,0],
+                                        "position": [0,0]
+                                    }
                                 }
                             }
                         },

@@ -40,6 +40,8 @@ class GameGraphRoot : public cugl::Scene {
 	std::shared_ptr<cugl::Node> shipSegsNode;
 	/** Parent node of all doors, is child of nearSpace */
 	std::shared_ptr<cugl::Node> doorsNode;
+	/** Parent node of all external donuts, is child of nearSpace */
+	std::shared_ptr<cugl::Node> externalDonutsNode;
 	/** Tag of the left most ship segment */
 	int leftMostSeg;
 	/** Tag of the right most ship segment */
