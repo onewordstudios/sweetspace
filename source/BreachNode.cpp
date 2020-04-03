@@ -29,6 +29,7 @@ void BreachNode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch, const Mat
 			breachPos = Vec2(globals::RADIUS * sin(relativeAngle),
 							 -(float)globals::RADIUS * cos(relativeAngle));
 			setPosition(breachPos);
+			setAngle(relativeAngle);
 			isShown = true;
 			CULog("Coming into view at %f", onScreenAngle / globals::PI_180);
 		} else if (isShown && (onScreenAngle >= globals::SEG_CUTOFF_ANGLE ||

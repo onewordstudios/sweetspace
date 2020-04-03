@@ -86,13 +86,13 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 		segment->setScale(SEG_SCALE);
 		segment->setPosition(Vec2(0, 0));
 		segment->setAngle((i - 2) * globals::SEG_SIZE);
-		shipSegsNode->addChildWithTag(segment, static_cast<unsigned int>(i + 1));
+		shipSegsNode->addChildWithTag(segment, (unsigned int)(i + 1));
 	}
 
 	// Initialize Players
 	for (int i = 0; i < ship->getDonuts().size(); i++) {
-		std::shared_ptr<DonutModel> donutModel = ship->getDonuts().at(i);
-		string donutColor = playerColor.at(static_cast<unsigned long>(donutModel->getColorId()));
+		std::shared_ptr<DonutModel> donutModel = ship->getDonuts().at((unsigned long)i);
+		string donutColor = playerColor.at((unsigned long)donutModel->getColorId());
 		std::shared_ptr<Texture> image = assets->get<Texture>("donut_" + donutColor);
 		// Player node is handled separately
 		if (i == playerID) {
@@ -113,15 +113,14 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 
 	// Initialize Breaches
 	for (int i = 0; i < ship->getBreaches().size(); i++) {
-		std::shared_ptr<BreachModel> breachModel = ship->getBreaches().at(i);
-		string breachColor = playerColor.at(
-			static_cast<unsigned long>(ship->getDonuts()
-										   .at(static_cast<unsigned long>(breachModel->getPlayer()))
-										   ->getColorId()));
+		std::shared_ptr<BreachModel> breachModel = ship->getBreaches().at((unsigned long)i);
+		string breachColor = playerColor.at((unsigned long)ship->getDonuts()
+												.at((unsigned long)breachModel->getPlayer())
+												->getColorId());
 		std::shared_ptr<Texture> image = assets->get<Texture>("breach_" + breachColor);
 		std::shared_ptr<BreachNode> breachNode = BreachNode::allocWithTexture(image);
 		breachNode->setModel(breachModel);
-		breachNode->setTag(i + 1);
+		breachNode->setTag((unsigned int)(i + 1));
 		breachNode->setScale(BREACH_SCALE);
 		breachNode->setShipSize(ship->getSize());
 		breachNode->setDonutModel(ship->getDonuts().at(playerID));
@@ -134,7 +133,7 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 
 	// Initialize Doors
 	for (int i = 0; i < ship->getDoors().size(); i++) {
-		std::shared_ptr<DoorModel> doorModel = ship->getDoors().at(i);
+		std::shared_ptr<DoorModel> doorModel = ship->getDoors().at((unsigned long)i);
 		std::shared_ptr<Texture> image = assets->get<Texture>("door");
 		std::shared_ptr<DoorNode> doorNode = DoorNode::alloc(image, 1, 32, 32);
 		doorNode->setModel(doorModel);
@@ -235,16 +234,15 @@ void GameGraphRoot::update(float timestep) {
 
 	// Update breaches textures if recycled
 	for (int i = 0; i < ship->getBreaches().size(); i++) {
-		std::shared_ptr<BreachModel> breachModel =
-			ship->getBreaches().at(static_cast<unsigned long>(i));
+		std::shared_ptr<BreachModel> breachModel = ship->getBreaches().at((unsigned long)i);
 		if (breachModel->getHealth() > 0 && breachModel->getNeedSpriteUpdate()) {
-			string breachColor = playerColor.at(static_cast<unsigned long>(
-				ship->getDonuts()
-					.at(static_cast<unsigned long>(breachModel->getPlayer()))
-					->getColorId()));
+			string breachColor =
+				playerColor.at((unsigned long)(ship->getDonuts()
+												   .at((unsigned long)breachModel->getPlayer())
+												   ->getColorId()));
 			std::shared_ptr<Texture> image = assets->get<Texture>("breach_" + breachColor);
 			shared_ptr<BreachNode> breachNode = dynamic_pointer_cast<BreachNode>(
-				breachesNode->getChildByTag(static_cast<unsigned int>(i + 1)));
+				breachesNode->getChildByTag((unsigned int)(i + 1)));
 			breachNode->setTexture(image);
 			breachModel->setNeedSpriteUpdate(false);
 		}
@@ -256,21 +254,21 @@ void GameGraphRoot::update(float timestep) {
 	std::shared_ptr<PolygonNode> segment;
 	for (int i = 0; i < globals::VISIBLE_SEGS; i++) {
 		segment = dynamic_pointer_cast<cugl::PolygonNode>(
-			shipSegsNode->getChildByTag(static_cast<unsigned int>(i + 1)));
+			shipSegsNode->getChildByTag((unsigned int)(i + 1)));
 		// If segments rotate too far left, move left-most segment to the right side
 		if (i == rightMostSeg &&
 			wrapAngle(nearSpace->getAngle() + segment->getAngle()) < globals::SEG_CUTOFF_ANGLE) {
 			rightMostSeg = (i + 1) % globals::VISIBLE_SEGS;
 			leftMostSeg = (i + 2) % globals::VISIBLE_SEGS;
 			std::shared_ptr<PolygonNode> newRightSegment = dynamic_pointer_cast<cugl::PolygonNode>(
-				shipSegsNode->getChildByTag(static_cast<unsigned int>(rightMostSeg + 1)));
+				shipSegsNode->getChildByTag((unsigned int)(rightMostSeg + 1)));
 			newRightSegment->setAngle(wrapAngle(segment->getAngle() + globals::SEG_SIZE));
 		} else if (i == leftMostSeg && wrapAngle(nearSpace->getAngle() + segment->getAngle()) >
 										   globals::TWO_PI - globals::SEG_CUTOFF_ANGLE) {
 			leftMostSeg = (i + globals::VISIBLE_SEGS - 1) % globals::VISIBLE_SEGS;
 			rightMostSeg = (i + globals::VISIBLE_SEGS - 2) % globals::VISIBLE_SEGS;
 			std::shared_ptr<PolygonNode> newLeftSegment = dynamic_pointer_cast<cugl::PolygonNode>(
-				shipSegsNode->getChildByTag(static_cast<unsigned int>(leftMostSeg + 1)));
+				shipSegsNode->getChildByTag((unsigned int)(leftMostSeg + 1)));
 			newLeftSegment->setAngle(wrapAngle(segment->getAngle() - globals::SEG_SIZE));
 		}
 	}
