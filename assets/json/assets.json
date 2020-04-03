@@ -65,7 +65,23 @@
         },
         "confirm_join": {
             "file":   "textures/confirm_join.png"
+        },
+        "challenge_panel": {
+            "file":   "textures/pannel_pink.png"
+        },
+        "panel_hanger":   {
+            "file":   "textures/pannel_hanger_pink.png"
+        },
+        "panel_text":   {
+          "file":   "textures/text_self_instruction.png"
+        },
+        "panel_progress_0":   {
+          "file":   "textures/text_self_instruction_0.png"
+        },
+        "panel_progress_1":   {
+          "file":   "textures/text_self_instruction_1.png"
         }
+
 	},
 	"sounds": {
         "theme": {

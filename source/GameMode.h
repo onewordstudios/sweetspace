@@ -40,7 +40,7 @@ class GameMode {
 	int playerID;
 	float startTime;
 	float endTime;
-	bool allSame;
+	int challengeProg;
 
    public:
 #pragma mark -

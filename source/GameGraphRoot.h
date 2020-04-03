@@ -12,6 +12,7 @@
 #include "HealthNode.h"
 #include "InputController.h"
 #include "ShipModel.h"
+#include "ChallengeNode.h"
 
 class GameGraphRoot : public cugl::Scene {
    protected:

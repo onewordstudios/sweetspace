@@ -20,6 +20,9 @@ constexpr float DONUT_SCALE = 0.4f;
 /** Offset of donut sprites from the radius of the ship */
 constexpr int DONUT_OFFSET = 195;
 
+/** Offset of donut sprites from the radius of the ship */
+constexpr int CHALLENGE_OFFSET = 195;
+
 #pragma mark -
 #pragma mark Constructors
 
@@ -214,6 +217,41 @@ void GameGraphRoot::update(float timestep) {
 			breachModel->setNeedSpriteUpdate(false);
 		}
 	}
+
+//    std::shared_ptr<Texture> image = assets->get<Texture>("panel_hanger");
+//    std::shared_ptr<ChallengeNode> cHangerNode = ChallengeNode::alloc(image, 1, 1);
+//    std::shared_ptr<DonutModel> donutModel = ship->getDonuts().at(playerID);
+//    cHangerNode->setModel(donutModel);
+//    cHangerNode->setScale(0.7f);
+//    nearSpace->addChild(cHangerNode);
+//
+//    std::shared_ptr<Texture> image2 = assets->get<Texture>("challenge_panel");
+//    std::shared_ptr<ChallengeNode> cNode = ChallengeNode::alloc(image2, 1, 1);
+//    cNode->setModel(donutModel);
+//    cNode->setScale(0.7f, 0.3f);
+//    nearSpace->addChild(cNode);
+//
+//    std::shared_ptr<Texture> image3 = assets->get<Texture>("panel_text");
+//    std::shared_ptr<ChallengeNode> panelTextNode = ChallengeNode::alloc(image3, 1, 1);
+//    panelTextNode->setModel(donutModel);
+//    panelTextNode->setScale(0.7f);
+//    nearSpace->addChild(panelTextNode);
+//
+//    cHangerNode->setPosition(donutModel->getSceneGraphPosition().x, donutModel->getSceneGraphPosition().y - 200);
+//    cNode->setPosition(donutModel->getSceneGraphPosition().x, donutModel->getSceneGraphPosition().y - 275);
+//    panelTextNode->setPosition(donutModel->getSceneGraphPosition().x, donutModel->getSceneGraphPosition().y - 275);
+//
+//
+//    for(int i = 0; i < 10; i++) {
+//        std::shared_ptr<Texture> image4 = assets->get<Texture>("panel_progress_0");
+//        std::shared_ptr<ChallengeNode> panelArrowNode = ChallengeNode::alloc(image4, 1, 1);
+//        panelArrowNode->setModel(donutModel);
+//        panelArrowNode->setScale(0.3f);
+//        panelArrowNode->setPosition(donutModel->getSceneGraphPosition().x - 130 + (i * 30), donutModel->getSceneGraphPosition().y - 315);
+//        nearSpace->addChild(panelArrowNode);
+//    }
+
+
 }
 
 /**
