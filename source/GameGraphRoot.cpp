@@ -23,6 +23,26 @@ constexpr int DONUT_OFFSET = 195;
 /** The scale of the ship segments. */
 constexpr float SEG_SCALE = 0.33f;
 
+/** The scale of the doors. */
+constexpr float DOOR_SCALE = 0.3f;
+
+/** Number of animation frames of doors */
+constexpr int DOOR_FRAMES = 32;
+
+/** Loop range of the background image */
+constexpr int BG_SCROLL_LIMIT = 256;
+
+/** Parallax speed of background image */
+constexpr float BG_SCROLL_SPEED = 0.5;
+
+/** Number of health bar nodes */
+constexpr int NUM_HEALTH_BAR = 8;
+
+/** Number of health bar frames */
+constexpr int HEALTH_BAR_FRAMES = 12;
+
+/** Scaling factor of health nodes */
+constexpr float HEALTH_NODE_SCALE = 0.55f;
 #pragma mark -
 #pragma mark Constructors
 
@@ -85,7 +105,7 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 		segment->setAnchor(Vec2::ANCHOR_TOP_CENTER);
 		segment->setScale(SEG_SCALE);
 		segment->setPosition(Vec2(0, 0));
-		segment->setAngle((i - 2) * globals::SEG_SIZE);
+		segment->setAngle(globals::SEG_SIZE * ((float)i - 2));
 		shipSegsNode->addChildWithTag(segment, (unsigned int)(i + 1));
 	}
 
@@ -105,8 +125,8 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 			newDonutNode->setDonutModel(ship->getDonuts().at(playerID));
 			externalDonutsNode->addChild(newDonutNode);
 
-			Vec2 donutPos = Vec2((globals::RADIUS + DONUT_OFFSET) * sin(donutModel->getAngle()),
-								 -(globals::RADIUS + DONUT_OFFSET) * cos(donutModel->getAngle()));
+			Vec2 donutPos = Vec2(sin(donutModel->getAngle() * (globals::RADIUS + DONUT_OFFSET)),
+								 -cos(donutModel->getAngle()) * (globals::RADIUS + DONUT_OFFSET));
 			newDonutNode->setPosition(donutPos);
 		}
 	}
@@ -135,24 +155,25 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	for (int i = 0; i < ship->getDoors().size(); i++) {
 		std::shared_ptr<DoorModel> doorModel = ship->getDoors().at((unsigned long)i);
 		std::shared_ptr<Texture> image = assets->get<Texture>("door");
-		std::shared_ptr<DoorNode> doorNode = DoorNode::alloc(image, 1, 32, 32);
+		std::shared_ptr<DoorNode> doorNode = DoorNode::alloc(image, 1, DOOR_FRAMES, DOOR_FRAMES);
 		doorNode->setModel(doorModel);
 		doorNode->setFrame(0);
 		doorNode->setAnchor(Vec2::ANCHOR_BOTTOM_CENTER);
-		doorNode->setScale(0.3f);
+		doorNode->setScale(DOOR_SCALE);
 		doorNode->setShipSize(ship->getSize());
 		doorNode->setDonutModel(ship->getDonuts().at(playerID));
 		doorsNode->addChild(doorNode);
 	}
 
-	for (int i = 0; i < 8; i++) {
+	// Initialize health bars
+	for (int i = 0; i < NUM_HEALTH_BAR; i++) {
 		std::shared_ptr<Texture> image = assets->get<Texture>("health_glow");
-		std::shared_ptr<HealthNode> healthNode = HealthNode::alloc(image, 1, 12);
+		std::shared_ptr<HealthNode> healthNode = HealthNode::alloc(image, 1, HEALTH_BAR_FRAMES);
 		healthNode->setModel(ship);
-		healthNode->setFrame(11);
+		healthNode->setFrame(HEALTH_BAR_FRAMES - 1);
 		healthNode->setSection(i);
 		healthNode->setAnchor(Vec2::ANCHOR_BOTTOM_CENTER);
-		healthNode->setScale(0.55f);
+		healthNode->setScale(HEALTH_NODE_SCALE);
 		nearSpace->addChild(healthNode);
 	}
 
@@ -207,10 +228,11 @@ void GameGraphRoot::update(float timestep) {
 	// Reanchor the node at the center of the screen and rotate about center.
 	Vec2 position = farSpace->getPosition();
 	farSpace->setAnchor(Vec2::ANCHOR_CENTER);
-	if (position.x == -256) {
+	if (position.x == -BG_SCROLL_LIMIT) {
 		farSpace->setPositionX(0);
 	} else {
-		farSpace->setPosition(position - Vec2(0.5, 0)); // Reseting the anchor changes the position
+		farSpace->setPosition(position -
+							  Vec2(BG_SCROLL_SPEED, 0)); // Reseting the anchor changes the position
 	}
 
 	// Rotate nearSpace about center.
@@ -222,7 +244,7 @@ void GameGraphRoot::update(float timestep) {
 	nearSpace->setAngle(wrapAngle(nearSpace->getAngle() + delta));
 	prevPlayerAngle = newPlayerAngle;
 
-	double radiusRatio = globals::RADIUS / (donutNode->getWidth() / 2.0);
+	double radiusRatio = (double)globals::RADIUS / (donutNode->getWidth() / 2);
 
 	float angle = (float)(donutNode->getAngle() - ship->getDonuts().at(playerID)->getVelocity() *
 													  globals::PI_180 * radiusRatio);
@@ -285,7 +307,7 @@ void GameGraphRoot::update(float timestep) {
  */
 std::string GameGraphRoot::positionText() {
 	stringstream ss;
-	if (ship->timerEnded() && ship->getHealth() > 10) {
+	if (ship->timerEnded() && ship->getHealth() > globals::SHIP_HEALTH_WIN_LIMIT) {
 		ss << "You Win!";
 	} else if (ship->timerEnded()) {
 		ss << "You Lose.";

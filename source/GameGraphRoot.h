@@ -43,9 +43,9 @@ class GameGraphRoot : public cugl::Scene {
 	/** Parent node of all external donuts, is child of nearSpace */
 	std::shared_ptr<cugl::Node> externalDonutsNode;
 	/** Tag of the left most ship segment */
-	int leftMostSeg;
+	unsigned int leftMostSeg;
 	/** Tag of the right most ship segment */
-	int rightMostSeg;
+	unsigned int rightMostSeg;
 
 	// MODEL
 	/** Id of the current client */

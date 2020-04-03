@@ -10,9 +10,6 @@
  */
 namespace globals {
 
-/** Width of the screen, used in windowed mode */
-constexpr unsigned int SCENE_WIDTH = 1024; // NOLINT
-
 /** Number of players needed for the game - will be replaced with a range in the future */
 constexpr unsigned int NUM_PLAYERS = 3; // NOLINT
 
@@ -22,8 +19,10 @@ constexpr unsigned int NETWORK_TICK = 12; // NOLINT
 /** Health of the ship to start */
 constexpr int INITIAL_SHIP_HEALTH = 11; // NOLINT
 
-/** Radius of the ship for the scene graph */
-constexpr unsigned int RADIUS = 550; // NOLINT
+/** Minimum of ship health for win condition */
+constexpr int SHIP_HEALTH_WIN_LIMIT = 10;
+
+#pragma mark Math
 
 /** Pi */
 constexpr float PI = 3.14159265358979323846264338327950288f; // NOLINT
@@ -34,7 +33,14 @@ constexpr float TWO_PI = 2 * PI; // NOLINT
 /** Pi divided by 180 for converting between degrees and radians */
 constexpr float PI_180 = PI / 180.0f; // NOLINT
 
+#pragma mark -
 #pragma mark Scenegraph
+/** Width of the screen, used in windowed mode */
+    constexpr unsigned int SCENE_WIDTH = 1024; // NOLINT
+
+/** Radius of the ship for the scene graph */
+    constexpr unsigned int RADIUS = 550; // NOLINT
+
 /** Maximum number of possibly visible ship segments at a time */
 constexpr unsigned int VISIBLE_SEGS = 6;
 
