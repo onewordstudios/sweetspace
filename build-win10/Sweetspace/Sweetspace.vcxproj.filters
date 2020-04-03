@@ -109,7 +109,7 @@
       <Filter>Header Files\Models</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\LevelConstants.h">
-      <Filter>Header Files\Models</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

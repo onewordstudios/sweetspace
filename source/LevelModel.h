@@ -30,6 +30,8 @@ class LevelModel : public Asset {
 	 * already. */
 	unsigned int spawnRate;
 	float minAngleDiff;
+	/** Size of the ship in degrees*/
+	float shipSize;
 
    public:
 #pragma mark Static Constructors
@@ -87,6 +89,14 @@ class LevelModel : public Asset {
 	 * @return the min angle diff
 	 */
 	const float getMinAngleDiff() const { return minAngleDiff; }
+
+	/**
+	 * Returns the ship size
+	 *
+	 * @return the ship size
+	 */
+	const float getShipSize() const { return shipSize; }
+
 #pragma mark -
 #pragma mark Asset Loading
 	/**
@@ -121,6 +131,7 @@ class LevelModel : public Asset {
 		maxDoors = json->get(MAX_DOOR_FIELD)->asInt();
 		spawnRate = json->get(SPAWN_RATE_FIELD)->asInt();
 		minAngleDiff = json->get(MIN_ANGLE_DIFF_FIELD)->asFloat();
+		shipSize = json->get(SHIP_SIZE_FIELD)->asInt();
 		return true;
 	}
 

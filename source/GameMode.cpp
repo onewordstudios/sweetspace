@@ -55,9 +55,8 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 
 	net = MagicInternetBox::getInstance();
 	playerID = net->getPlayerID();
-
-	float shipSize = 360; // TODO level size comes from level file
 	std::shared_ptr<LevelModel> level = assets->get<LevelModel>(LEVEL_ONE_KEY);
+	float shipSize = level->getShipSize();
 	ship = ShipModel::alloc(net->getNumPlayers(), level->getMaxBreaches(), level->getMaxDoors(),
 							playerID, shipSize);
 	gm.init(ship, level);
