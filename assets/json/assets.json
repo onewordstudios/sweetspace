@@ -63,6 +63,12 @@
 		"join_lobby": {
             "file":   "textures/main_menu/join_up.png"
         },
+        "create_lobby_down": {
+            "file":   "textures/main_menu/create_down.png"
+		},
+		"join_lobby_down": {
+            "file":   "textures/main_menu/join_down.png"
+        },
         "confirm_join": {
             "file":   "textures/confirm_join.png"
         },
@@ -250,6 +256,7 @@
 									},
 									"data": {
 										"upnode"   : "up",
+										"downnode" : "down",
 										"anchor"   : [1,0.5],
 										"scale" : 0.5
 									},
@@ -258,6 +265,12 @@
 											"type"   : "Image",
 											"data"   : {
 												"texture"  : "create_lobby"
+											}
+										},
+										"down" : {
+											"type"   : "Image",
+											"data"   : {
+												"texture"  : "create_lobby_down"
 											}
 										}
 									},
@@ -273,6 +286,7 @@
 									},
 									"data": {
 										"upnode"   : "up",
+										"downnode" : "down",
 										"anchor"   : [0,0.5],
 										"scale" : 0.5
 									},
@@ -281,6 +295,12 @@
 											"type"   : "Image",
 											"data"   : {
 												"texture"  : "join_lobby"
+											}
+										},
+										"down" : {
+											"type"   : "Image",
+											"data"   : {
+												"texture"  : "join_lobby_down"
 											}
 										}
 									},
@@ -293,7 +313,8 @@
 						}
 					}
 				},
-                "room" : {
+                
+				"room" : {
                 	"type": "Label",
                     "data": {
                        	"font"       : "felt32",
