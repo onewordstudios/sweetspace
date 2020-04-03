@@ -68,6 +68,9 @@
         },
 		"game_title": {
 			"file": "textures/main_menu/sweetspace.png"
+		},
+		"main_menu_bg": {
+			"file": "textures/main_menu/sweetspace_bg.png"
 		}
 	},
 	"sounds": {
@@ -176,6 +179,21 @@
                 "type" : "Anchored"
             },
             "children":  {
+				"mainmenubg" : {
+					"type" : "Image",
+					"format"    : {
+								"type" : "Anchored"
+							},
+							"data"   : {
+								"texture"  : "main_menu_bg",
+								"anchor"   : [0.5,0.5],
+								"scale"    : 0.5
+							},
+							"layout" : {
+								"x_anchor" : "center",
+								"y_anchor" : "middle"
+							}
+				},
 				"home" : {
 					"type" : "Node",
 					"format" : { "type" : "Anchored" },
