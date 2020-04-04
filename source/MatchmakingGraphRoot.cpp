@@ -9,13 +9,9 @@
 #include "Globals.h"
 
 using namespace cugl;
-using namespace std;
 
-#pragma mark -
-#pragma mark Level Layout
-
-#pragma mark -
-#pragma mark Constructors
+/** Number of buttons for room ID entry */
+constexpr unsigned int NUM_DIGITS = 10;
 
 /**
  * Initializes the controller contents, and starts the game
@@ -49,18 +45,31 @@ bool MatchmakingGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& asset
 	scene->doLayout(); // Repositions the HUD
 
 	// Get the scene components.
-	host = std::dynamic_pointer_cast<Button>(assets->get<Node>("matchmaking_home_btnwrap_hostbtn"));
-	client =
+	hostBtn =
+		std::dynamic_pointer_cast<Button>(assets->get<Node>("matchmaking_home_btnwrap_hostbtn"));
+	clientBtn =
 		std::dynamic_pointer_cast<Button>(assets->get<Node>("matchmaking_home_btnwrap_clientbtn"));
-	roomLabel =
+	hostLabel =
 		std::dynamic_pointer_cast<Label>(assets->get<Node>("matchmaking_host_wrap_plate_room"));
-	roomInput = std::dynamic_pointer_cast<TextField>(assets->get<Node>("matchmaking_input"));
-	textInput = std::dynamic_pointer_cast<Button>(assets->get<Node>("matchmaking_inputbutton"));
-	instrLabel = std::dynamic_pointer_cast<Label>(assets->get<Node>("matchmaking_instr"));
 
 	mainScreen = assets->get<Node>("matchmaking_home");
 	hostScreen = assets->get<Node>("matchmaking_host");
 	clientScreen = assets->get<Node>("matchmaking_client");
+
+	clientLabel =
+		std::dynamic_pointer_cast<Label>(assets->get<Node>("matchmaking_client_wrap_plate_room"));
+	clientJoinBtn =
+		std::dynamic_pointer_cast<Button>(assets->get<Node>("matchmaking_client_wrap_joinbtn"));
+
+	clientClearBtn =
+		std::dynamic_pointer_cast<Button>(assets->get<Node>("matchmaking_client_buttons_btnclear"));
+
+	for (unsigned int i = 0; i < NUM_DIGITS; i++) {
+		clientRoomBtns.push_back(std::dynamic_pointer_cast<Button>(
+			assets->get<Node>("matchmaking_client_buttons_btn" + std::to_string(i))));
+	}
+
+	updateClientLabel();
 
 	addChild(scene);
 	return true;
@@ -72,16 +81,12 @@ bool MatchmakingGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& asset
 void MatchmakingGraphRoot::dispose() {
 	if (_active) {
 		removeAllChildren();
-		host = nullptr;
-		client = nullptr;
-		roomInput = nullptr;
-		roomLabel = nullptr;
+		hostBtn = nullptr;
+		clientBtn = nullptr;
+		hostLabel = nullptr;
 		_active = false;
 	}
 }
-
-#pragma mark -
-#pragma mark Gameplay Handling
 
 /**
  * Resets the status of the game so that we can play again.
@@ -95,7 +100,7 @@ void MatchmakingGraphRoot::reset() {}
  *
  * @param timestep  The amount of time (in seconds) since the last frame
  */
-void MatchmakingGraphRoot::update(float timestep) { roomLabel->setText(positionText()); }
+void MatchmakingGraphRoot::update(float timestep) { hostLabel->setText(positionText()); }
 
 /**
  * Returns integers representing which button has been tapped if any
@@ -104,41 +109,61 @@ void MatchmakingGraphRoot::update(float timestep) { roomLabel->setText(positionT
  *
  * @return -1 if no button pressed 0 for host creation, 1 for client creation
  */
-int MatchmakingGraphRoot::checkButtons(const cugl::Vec2& position) {
+MatchmakingGraphRoot::PressedButton MatchmakingGraphRoot::checkButtons(const cugl::Vec2& position) {
 	if (position == Vec2::ZERO) {
-		return -1;
-	} else if (host->containsScreen(position)) {
-		playerId = 0;
-		hostScreen->setVisible(true);
-		mainScreen->setVisible(false);
-		return 0;
-	} else if (client->containsScreen(position)) {
-		roomInput->setVisible(true);
-		roomInput->activate(2);
-		roomLabel->setVisible(true);
-		textInput->setVisible(true);
-		instrLabel->setVisible(true);
-
-		mainScreen->setVisible(false);
-		clientScreen->setVisible(true);
-		return 1;
-	} else {
-		return -1;
+		return None;
 	}
-}
 
-/**
- * Returns the text from inside the input field
- *
- * @return a string for the text
- */
-std::string MatchmakingGraphRoot::getInput(const cugl::Vec2& position) {
-	if (position == Vec2::ZERO) {
-		return "";
-	} else if (textInput->containsScreen(position)) {
-		return roomInput->getText();
+	if (mainScreen->isVisible()) {
+		if (hostBtn->containsScreen(position)) {
+			playerID = 0;
+			hostScreen->setVisible(true);
+			mainScreen->setVisible(false);
+			return StartHost;
+		}
+		if (clientBtn->containsScreen(position)) {
+			hostLabel->setVisible(true);
+			clientJoinBtn->setVisible(true);
+
+			mainScreen->setVisible(false);
+			clientScreen->setVisible(true);
+			return StartClient;
+		}
+	} else if (clientScreen->isVisible()) {
+		if (clientJoinBtn->containsScreen(position)) {
+			if (clientEnteredRoom.size() != globals::ROOM_LENGTH) {
+				return None;
+			}
+
+			std::ostringstream room;
+			for (int i = 0; i < globals::ROOM_LENGTH; i++) {
+				room << clientEnteredRoom[i];
+			}
+
+			roomID = room.str();
+			CULog("Sending room %s", roomID.c_str());
+
+			return ClientConnect;
+		}
+
+		for (unsigned int i = 0; i < NUM_DIGITS; i++) {
+			if (clientRoomBtns[i]->containsScreen(position)) {
+				if (clientEnteredRoom.size() < globals::ROOM_LENGTH) {
+					clientEnteredRoom.push_back(i);
+					updateClientLabel();
+				}
+				return None;
+			}
+		}
+
+		if (clientClearBtn->containsScreen(position)) {
+			clientEnteredRoom.clear();
+			updateClientLabel();
+			return None;
+		}
 	}
-	return "";
+
+	return None;
 }
 
 /**
@@ -146,4 +171,26 @@ std::string MatchmakingGraphRoot::getInput(const cugl::Vec2& position) {
  *
  * @return an informative string for the room id
  */
-std::string MatchmakingGraphRoot::positionText() { return roomId; }
+std::string MatchmakingGraphRoot::positionText() { return roomID; }
+
+void MatchmakingGraphRoot::updateClientLabel() {
+	std::ostringstream disp;
+
+	std::vector<char> room;
+
+	for (unsigned int i = 0; i < clientEnteredRoom.size(); i++) {
+		room.push_back('0' + clientEnteredRoom[i]);
+	}
+	for (unsigned int i = clientEnteredRoom.size(); i < globals::ROOM_LENGTH; i++) {
+		room.push_back('_');
+	}
+
+	for (unsigned int i = 0; i < globals::ROOM_LENGTH; i++) {
+		disp << room[i];
+		if (i < globals::ROOM_LENGTH - 1) {
+			disp << ' ';
+		}
+	}
+
+	clientLabel->setText(disp.str());
+}
