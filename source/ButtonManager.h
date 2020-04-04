@@ -10,11 +10,14 @@ class ButtonManager {
    private:
 	/** Vector of all the buttons being managed */
 	std::vector<std::shared_ptr<cugl::Button>> buttons;
-	/** Vector of whether each button is currently down or not */
-	std::vector<boolean> down;
+
+	/** The buttons that were pressed down */
+	std::vector<std::shared_ptr<cugl::Button>> downBtns;
+	/** Whether the touch just started */
+	bool wasDown;
 
    public:
-	ButtonManager() {}
+	ButtonManager() { wasDown = false; }
 
 	/**
 	 * Register a button to be managed.
