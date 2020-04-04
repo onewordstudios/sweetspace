@@ -40,14 +40,12 @@ void DoorNode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch, const Mat4&
 			setPosition(doorPos);
 			isShown = true;
 			setAngle(relativeAngle);
-			CULog("Door coming into view at %f", onScreenAngle / globals::PI_180);
 		} else if (isShown && (onScreenAngle >= globals::SEG_CUTOFF_ANGLE ||
 							   onScreenAngle <= -globals::SEG_CUTOFF_ANGLE)) {
 			// Door is leaving visible range
 			doorPos = Vec2(OFF_SCREEN_POS, OFF_SCREEN_POS);
 			setPosition(doorPos);
 			isShown = false;
-			CULog("Door going out at %f", onScreenAngle / globals::PI_180);
 		}
 
 		frameCap = doorModel->getPlayersOn() < 2 ? doorModel->getPlayersOn() * ONE_PLAYER_FRAME

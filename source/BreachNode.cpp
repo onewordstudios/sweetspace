@@ -31,14 +31,12 @@ void BreachNode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch, const Mat
 			setPosition(breachPos);
 			setAngle(relativeAngle);
 			isShown = true;
-			CULog("Coming into view at %f", onScreenAngle / globals::PI_180);
 		} else if (isShown && (onScreenAngle >= globals::SEG_CUTOFF_ANGLE ||
 							   onScreenAngle <= -globals::SEG_CUTOFF_ANGLE)) {
 			// Breach is leaving visible range
 			breachPos = Vec2(OFF_SCREEN_POS, OFF_SCREEN_POS);
 			setPosition(breachPos);
 			isShown = false;
-			CULog("Going out at %f", onScreenAngle / globals::PI_180);
 		}
 		setScale(GameGraphRoot::BREACH_SCALE * (float)breachModel->getHealth() / BREACH_SCALE);
 	} else {
