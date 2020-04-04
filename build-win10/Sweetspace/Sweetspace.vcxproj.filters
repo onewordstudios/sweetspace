@@ -114,9 +114,6 @@
     <ClInclude Include="..\..\source\Globals.h">
       <Filter>Header Files\Helpers</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\source\ButtonManager.h">
-      <Filter>Header Files\Helpers</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\source\main.cpp">
@@ -183,9 +180,6 @@
       <Filter>Source Files\SceneGraph</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\Tween.cpp">
-      <Filter>Source Files\Helpers</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\ButtonManager.cpp">
       <Filter>Source Files\Helpers</Filter>
     </ClCompile>
   </ItemGroup>

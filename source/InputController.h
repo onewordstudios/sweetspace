@@ -32,8 +32,6 @@ class InputController {
 	cugl::Vec2 dtouch;
 	/** The timestamp for the beginning of the current gesture */
 	cugl::Timestamp timestamp;
-	/** The ID of the last touch event */
-	cugl::TouchID touchID;
 
 	// Input results
 	/** Whether the reset action was chosen. */
@@ -138,11 +136,6 @@ class InputController {
 			return cugl::Vec2::ZERO;
 		}
 	}
-
-	/**
-	 * Returns where the finger / mouse is currently pressed, or Vec2::ZERO if unpressed.
-	 */
-	const cugl::Vec2 getCurrTapLoc();
 
 #pragma mark -
 #pragma mark Touch Callbacks
