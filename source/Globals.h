@@ -55,3 +55,4 @@ constexpr float SEG_CUTOFF_ANGLE = 90 * PI_180; // NOLINT
 
 #pragma endregion
 } // namespace globals
+#endif
