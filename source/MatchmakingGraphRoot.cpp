@@ -59,6 +59,9 @@ bool MatchmakingGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& asset
 	clientLabel =
 		std::dynamic_pointer_cast<Label>(assets->get<Node>("matchmaking_client_wrap_plate_room"));
 
+	hostBeginBtn =
+		std::dynamic_pointer_cast<Button>(assets->get<Node>("matchmaking_host_wrap_startbtn"));
+
 	clientJoinBtn =
 		std::dynamic_pointer_cast<Button>(assets->get<Node>("matchmaking_client_wrap_joinbtn"));
 	clientClearBtn =
@@ -87,6 +90,7 @@ void MatchmakingGraphRoot::dispose() {
 		hostScreen = nullptr;
 		clientScreen = nullptr;
 		hostLabel = nullptr;
+		hostBeginBtn = nullptr;
 		clientLabel = nullptr;
 		clientJoinBtn = nullptr;
 		clientClearBtn = nullptr;
@@ -156,6 +160,14 @@ MatchmakingGraphRoot::PressedButton MatchmakingGraphRoot::checkButtons(const cug
 				return StartClient;
 			}
 		}
+		case HostScreen: {
+			if (hostBeginBtn->containsScreen(position)) {
+				hostBeginBtn->setDown(true);
+				return HostBegin;
+			} else {
+				return None;
+			}
+		}
 		case ClientScreen: {
 			if (clientJoinBtn->containsScreen(position)) {
 				if (clientEnteredRoom.size() != globals::ROOM_LENGTH) {
@@ -169,6 +181,7 @@ MatchmakingGraphRoot::PressedButton MatchmakingGraphRoot::checkButtons(const cug
 
 				roomID = room.str();
 				currState = ClientScreenDone;
+				clientJoinBtn->setDown(true);
 
 				return ClientConnect;
 			}

@@ -69,6 +69,8 @@ void MatchmakingMode::reset() { input.clear(); }
  */
 void MatchmakingMode::update(float timestep) {
 	input.update(timestep);
+	// Update Scene Graph
+	sgRoot.update(timestep);
 
 	switch (sgRoot.checkButtons(input.getTapLoc())) {
 		case MatchmakingGraphRoot::StartHost: {
@@ -94,8 +96,6 @@ void MatchmakingMode::update(float timestep) {
 			net->startGame();
 		}
 	}
-	// Update Scene Graph
-	sgRoot.update(timestep);
 }
 
 /**

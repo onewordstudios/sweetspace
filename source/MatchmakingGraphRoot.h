@@ -52,6 +52,9 @@ class MatchmakingGraphRoot : public cugl::Scene {
 
 	/** Label for room ID (host) */
 	std::shared_ptr<cugl::Label> hostLabel;
+	/** Button to begin game (host) */
+	std::shared_ptr<cugl::Button> hostBeginBtn;
+
 	/** Label for room ID (client) */
 	std::shared_ptr<cugl::Label> clientLabel;
 	/** Button to confirm room ID (client) */
