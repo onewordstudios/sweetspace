@@ -142,14 +142,14 @@ class MatchmakingGraphRoot : public cugl::Scene {
 	PressedButton checkButtons(const cugl::Vec2& position);
 
 	/**
-	 * Sets roomID
+	 * Sets roomID (for the host)
 	 *
 	 * @param roomID The host room id
 	 */
-	void setRoomID(std::string roomID) { this->roomID = roomID; }
+	void setRoomID(std::string roomID);
 
 	/**
-	 * Gets roomID
+	 * Gets roomID (from client connection)
 	 *
 	 * @param roomID The room id
 	 */

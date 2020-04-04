@@ -78,10 +78,7 @@ void MatchmakingMode::update(float timestep) {
 			break;
 		}
 		case MatchmakingGraphRoot::ClientConnect: {
-			string s = sgRoot.getRoomID();
-			if (s != "") {
-				net->initClient(s);
-			}
+			net->initClient(sgRoot.getRoomID());
 		}
 		default:
 			break;

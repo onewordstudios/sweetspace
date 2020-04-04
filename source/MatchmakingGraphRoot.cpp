@@ -104,34 +104,7 @@ void MatchmakingGraphRoot::dispose() {
  */
 void MatchmakingGraphRoot::reset() {}
 
-/**
- * The method called to update the game mode.
- *
- * This method contains any gameplay code that is not an OpenGL call.
- *
- * @param timestep  The amount of time (in seconds) since the last frame
- */
-void MatchmakingGraphRoot::update(float timestep) {
-	switch (currState) {
-		case HostScreen: {
-			if (roomID.length() == globals::ROOM_LENGTH &&
-				hostLabel->getText().length() != (2 * globals::ROOM_LENGTH - 1)) {
-				std::ostringstream disp;
-				for (unsigned int i = 0; i < globals::ROOM_LENGTH; i++) {
-					disp << roomID.at(i);
-					if (i < globals::ROOM_LENGTH - 1) {
-						disp << ' ';
-					}
-				}
-				hostLabel->setText(disp.str());
-			}
-			break;
-		}
-		default: {
-			break;
-		}
-	}
-}
+void MatchmakingGraphRoot::update(float timestep) {}
 
 /**
  * Returns integers representing which button has been tapped if any
@@ -210,6 +183,21 @@ MatchmakingGraphRoot::PressedButton MatchmakingGraphRoot::checkButtons(const cug
 	}
 
 	return None;
+}
+
+void MatchmakingGraphRoot::setRoomID(std::string roomID) {
+	if (this->roomID == roomID) {
+		return;
+	}
+	this->roomID = roomID;
+	std::ostringstream disp;
+	for (unsigned int i = 0; i < globals::ROOM_LENGTH; i++) {
+		disp << roomID.at(i);
+		if (i < globals::ROOM_LENGTH - 1) {
+			disp << ' ';
+		}
+	}
+	hostLabel->setText(disp.str());
 }
 
 void MatchmakingGraphRoot::updateClientLabel() {
