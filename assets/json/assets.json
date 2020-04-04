@@ -36,6 +36,9 @@
         "breach_cyan": {
             "file":   "textures/breaches/breach_cyan.png"
         },
+        "breach_spritesheet": {
+            "file":   "textures/breaches/breach_spritesheet.png"
+        },
 	    "door": {
             "file":   "textures/door.png"
         },
