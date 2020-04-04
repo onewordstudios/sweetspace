@@ -70,6 +70,19 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	donutPos = donutNode->getPosition();
 	coordHUD = std::dynamic_pointer_cast<Label>(assets->get<Node>("game_hud"));
 
+	challengePanelHanger = dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_challengePanelHanger"));
+	challengePanelHanger->setVisible(false);
+	challengePanel = dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_challengePanel"));
+	challengePanel->setVisible(false);
+	challengePanelText = dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_challengePanelText"));
+	challengePanelText->setVisible(false);
+
+	for(int i = 0; i < 10; i++) {
+		std::string s = std::to_string(i + 1);
+		std::shared_ptr<cugl::PolygonNode> arrow = dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_challengePanelArrow" + s));
+		challengePanelArrows.push_back(arrow);
+	}
+
 	// Initialize Players
 	for (int i = 0; i < ship->getDonuts().size(); i++) {
 		std::shared_ptr<DonutModel> donutModel = ship->getDonuts().at(i);
@@ -130,46 +143,6 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 		healthNode->setScale(0.55f);
 		nearSpace->addChild(healthNode);
 	}
-
-    std::shared_ptr<Texture> image = assets->get<Texture>("panel_hanger");
-    std::shared_ptr<ChallengeNode> cHangerNode = ChallengeNode::alloc(image, 1, 1);
-    cHangerNode->setScale(0.7f);
-    cHangerNode->setPart(0);
-    cHangerNode->setModel(ship);
-    cHangerNode->setXPos(donutNode->getPositionX() + 125);
-    cHangerNode->setYPos(donutNode->getPositionY() + 150);
-    nearSpace->addChild(cHangerNode);
-
-    std::shared_ptr<Texture> image2 = assets->get<Texture>("challenge_panel");
-    std::shared_ptr<ChallengeNode> cNode = ChallengeNode::alloc(image2, 1, 1);
-    cNode->setScale(0.7f, 0.3f);
-	cNode->setPart(1);
-	cNode->setModel(ship);
-	cNode->setXPos(donutNode->getPositionX() + 120);
-	cNode->setYPos(donutNode->getPositionY());
-    nearSpace->addChild(cNode);
-
-    std::shared_ptr<Texture> image3 = assets->get<Texture>("panel_text");
-    std::shared_ptr<ChallengeNode> panelTextNode = ChallengeNode::alloc(image3, 1, 1);
-    panelTextNode->setScale(0.7f);
-	panelTextNode->setPart(2);
-	panelTextNode->setModel(ship);
-	panelTextNode->setXPos(donutNode->getPositionX() + 120);
-	panelTextNode->setYPos(donutNode->getPositionY() + 35);
-	panelTextNode->setAngle(0);
-    nearSpace->addChild(panelTextNode);
-
-    for (int i = 0; i < 10; i++) {
-        std::shared_ptr<Texture> image4 = assets->get<Texture>("panel_progress_0");
-        std::shared_ptr<ChallengeNode> panelArrowNode = ChallengeNode::alloc(image4, 1, 1);
-        panelArrowNode->setScale(0.3f);
-        panelArrowNode->setArrowNum(i);
-		panelArrowNode->setPart(3);
-		panelArrowNode->setModel(ship);
-		panelArrowNode->setXPos(donutNode->getPositionX() - 20);
-		panelArrowNode->setYPos(donutNode->getPositionY());
-        nearSpace->addChild(panelArrowNode);
-    }
 
 	addChild(scene);
 	return true;
@@ -257,6 +230,26 @@ void GameGraphRoot::update(float timestep) {
             breachModel->setNeedSpriteUpdate(false);
         }
     }
+
+    if(ship->getChallenge()) {
+    	challengePanelHanger->setVisible(true);
+    	challengePanel->setVisible(true);
+    	challengePanelText->setVisible(true);
+		for(int i = 0; i < challengePanelArrows.size(); i++) {
+			if(ship->getRollDir() == -1) {
+				challengePanelArrows.at(i)->setAngle(180 * globals::PI_180);
+			}
+    		challengePanelArrows.at(i)->setVisible(true);
+    	}
+    } else {
+		challengePanelHanger->setVisible(false);
+		challengePanel->setVisible(false);
+		challengePanelText->setVisible(false);
+		for(int i = 0; i < challengePanelArrows.size(); i++) {
+			challengePanelArrows.at(i)->setVisible(false);
+		}
+    }
+
 }
 
 /**

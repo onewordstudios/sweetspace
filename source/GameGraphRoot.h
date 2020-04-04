@@ -12,7 +12,6 @@
 #include "HealthNode.h"
 #include "InputController.h"
 #include "ShipModel.h"
-#include "ChallengeNode.h"
 
 class GameGraphRoot : public cugl::Scene {
    protected:
@@ -36,6 +35,10 @@ class GameGraphRoot : public cugl::Scene {
 	std::shared_ptr<cugl::Node> nearSpace;
 	/** Parent node of all breaches, is child of nearSpace */
 	std::shared_ptr<cugl::Node> breachesNode;
+	std::shared_ptr<cugl::PolygonNode> challengePanelHanger;
+	std::shared_ptr<cugl::PolygonNode> challengePanel;
+	std::shared_ptr<cugl::PolygonNode> challengePanelText;
+	std::vector<std::shared_ptr<cugl::PolygonNode>> challengePanelArrows;
 
 	// MODEL
 	/** Id of the current client */

@@ -7,9 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		3CAB262D2437EC2D00A46C8C /* ChallengeNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3CAB26282437EC2D00A46C8C /* ChallengeNode.cpp */; };
-		3CAB262E2437EC2D00A46C8C /* ChallengeNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3CAB26282437EC2D00A46C8C /* ChallengeNode.cpp */; };
-		3CAB262F2437EC2D00A46C8C /* ChallengeNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3CAB26282437EC2D00A46C8C /* ChallengeNode.cpp */; };
 		3CDD11B1242D1DDF00FD21F8 /* HealthNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3CDD11AC242D1DDF00FD21F8 /* HealthNode.cpp */; };
 		3CDD11B2242D1DDF00FD21F8 /* HealthNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3CDD11AC242D1DDF00FD21F8 /* HealthNode.cpp */; };
 		3CDD11B3242D1DDF00FD21F8 /* HealthNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3CDD11AC242D1DDF00FD21F8 /* HealthNode.cpp */; };
@@ -175,8 +172,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		3CAB26282437EC2D00A46C8C /* ChallengeNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ChallengeNode.cpp; sourceTree = "<group>"; };
-		3CAB262C2437EC2D00A46C8C /* ChallengeNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChallengeNode.h; sourceTree = "<group>"; };
 		3CDD11AC242D1DDF00FD21F8 /* HealthNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HealthNode.cpp; sourceTree = "<group>"; };
 		3CDD11B0242D1DDF00FD21F8 /* HealthNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HealthNode.h; sourceTree = "<group>"; };
 		7B3270692425A569004A3B36 /* GLaDOS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLaDOS.h; sourceTree = "<group>"; };
@@ -470,8 +465,6 @@
 		EBBF18B11D749176008E2001 /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				3CAB26282437EC2D00A46C8C /* ChallengeNode.cpp */,
-				3CAB262C2437EC2D00A46C8C /* ChallengeNode.h */,
 				A577C9232422AA0D00B12ADE /* DoorNode.cpp */,
 				A577C9272422AA0D00B12ADE /* DoorNode.h */,
 				DF3B744B2403A46B0063552F /* BreachModel.cpp */,
@@ -719,7 +712,6 @@
 				C122202B76FF5A7E71E2DF7F /* MatchmakingMode.cpp in Sources */,
 				C1222A784AAFE1C7BC89BC94 /* GLaDOS.cpp in Sources */,
 				D152294B962A6F545D187713 /* BreachNode.cpp in Sources */,
-				3CAB262F2437EC2D00A46C8C /* ChallengeNode.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -749,7 +741,6 @@
 				C1222FC552DCE75362130E81 /* MatchmakingMode.cpp in Sources */,
 				C1222C87F6E3205CB0FD5628 /* GLaDOS.cpp in Sources */,
 				D1522FE380CFE13F14305356 /* BreachNode.cpp in Sources */,
-				3CAB262E2437EC2D00A46C8C /* ChallengeNode.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -779,7 +770,6 @@
 				C1222440665C00173B68F8B3 /* MatchmakingMode.cpp in Sources */,
 				C1222BA1DAB6BA55C0C6DEDA /* GLaDOS.cpp in Sources */,
 				D15220621F9C106302ACEBBB /* BreachNode.cpp in Sources */,
-				3CAB262D2437EC2D00A46C8C /* ChallengeNode.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
