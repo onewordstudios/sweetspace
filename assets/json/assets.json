@@ -57,6 +57,12 @@
         "ship": {
             "file":   "textures/ship.png"
         },
+        "shipseg0": {
+            "file":   "textures/ship1.png"
+        },
+        "shipseg1": {
+            "file":   "textures/ship2.png"
+        },
         "create_lobby": {
             "file":   "textures/main_menu/create_up.png"
 		},
@@ -176,16 +182,28 @@
                                 "position": [0,420]
                             },
                             "children": {
-                                "ship": {
-                                    "type": "Image",
+                                "shipsegments": {
+                                    "type": "Node",
                                     "data": {
-                                        "texture":  "ship",
-                                        "anchor":   [0.5,0.5],
-                                        "position": [0,0],
-                                        "scale":    1.35
+                                        "anchor":   [0,0],
+                                        "position": [0,0]
                                     }
                                 },
                                 "breaches": {
+                                    "type": "Node",
+                                    "data": {
+                                        "anchor":   [0,0],
+                                        "position": [0,0]
+                                    }
+                                },
+                                "doors": {
+                                    "type": "Node",
+                                    "data": {
+                                        "anchor":   [0,0],
+                                        "position": [0,0]
+                                    }
+                                },
+                                "externaldonuts": {
                                     "type": "Node",
                                     "data": {
                                         "anchor":   [0,0],

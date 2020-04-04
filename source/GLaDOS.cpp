@@ -112,9 +112,9 @@ void GLaDOS::update(float dt) {
 			float angle = (float)(rand() % (int)(ship->getSize()));
 			bool goodAngle = true;
 			for (int j = 0; j < ship->getDonuts().size(); j++) {
-				float diff = (float)DonutModel::HALF_CIRCLE -
-							 abs(abs(ship->getDonuts().at(j)->getAngle() - angle) -
-								 (float)DonutModel::HALF_CIRCLE);
+				float diff =
+					ship->getSize() / 2 -
+					abs(abs(ship->getDonuts().at(j)->getAngle() - angle) - ship->getSize() / 2);
 				if (diff < MIN_ANGLE_DIFF) {
 					goodAngle = false;
 					break;
@@ -127,8 +127,8 @@ void GLaDOS::update(float dt) {
 					continue;
 				}
 				float breachAngle = ship->getBreaches()[k]->getAngle();
-				float diff = (float)DonutModel::HALF_CIRCLE -
-							 abs(abs(breachAngle - angle) - (float)DonutModel::HALF_CIRCLE);
+				float diff =
+					ship->getSize() / 2 - abs(abs(breachAngle - angle) - ship->getSize() / 2);
 				if (breachAngle != -1 && diff < MIN_ANGLE_DIFF) {
 					goodAngle = false;
 					break;
@@ -150,9 +150,9 @@ void GLaDOS::update(float dt) {
 			float angle = (float)(rand() % (int)(ship->getSize()));
 			bool goodAngle = true;
 			for (int j = 0; j < ship->getDonuts().size(); j++) {
-				float diff = (float)DonutModel::HALF_CIRCLE -
-							 abs(abs(ship->getDonuts().at(j)->getAngle() - angle) -
-								 (float)DonutModel::HALF_CIRCLE);
+				float diff =
+					ship->getSize() / 2 -
+					abs(abs(ship->getDonuts().at(j)->getAngle() - angle) - ship->getSize() / 2);
 				if (diff < MIN_ANGLE_DIFF) {
 					goodAngle = false;
 					break;
