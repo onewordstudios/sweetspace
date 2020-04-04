@@ -33,6 +33,18 @@ class Tween {
 	static float linear(float start, float end, int currFrame, int maxFrame);
 
 	/**
+	 * Quartic ease in interpolation between start and end.
+	 *
+	 * @param start The starting position
+	 * @param end The ending position
+	 * @param currFrame The current frame of the animation, >=0 and <= maxFrame
+	 * @param maxFrame The last frame of the animation, >=0
+	 *
+	 * @return The interpolated position
+	 */
+	static float easeIn(float start, float end, int currFrame, int maxFrame);
+
+	/**
 	 * Quartic ease out interpolation between start and end.
 	 *
 	 * @param start The starting position

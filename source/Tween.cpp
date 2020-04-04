@@ -11,6 +11,11 @@ float Tween::linear(float start, float end, int currFrame, int maxFrame) {
 	return linInterp(start, end, (float)currFrame / (float)maxFrame);
 }
 
+float Tween::easeIn(float start, float end, int currFrame, int maxFrame) {
+	float t = (float)currFrame / (float)maxFrame;
+	return linInterp(start, end, t * t * t * t);
+}
+
 float Tween::easeOut(float start, float end, int currFrame, int maxFrame) {
 	float t = (float)currFrame / (float)maxFrame;
 	t--;
