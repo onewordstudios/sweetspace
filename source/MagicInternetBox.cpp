@@ -376,6 +376,7 @@ void MagicInternetBox::update(std::shared_ptr<ShipModel> state) {
 				CULog("HAS NOT RECEIVED SERVER MESSAGE IN TIMEOUT FRAMES; assuming disconnected");
 				status = Disconnected;
 				ws->close();
+				lastConnection = 0;
 				return;
 			}
 		}
