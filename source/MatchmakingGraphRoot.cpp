@@ -36,6 +36,8 @@ bool MatchmakingGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& asset
 		return false;
 	}
 
+	transitionFrame = -1;
+
 	// Start up the input handler
 	this->assets = assets;
 
@@ -105,11 +107,17 @@ void MatchmakingGraphRoot::dispose() {
 void MatchmakingGraphRoot::reset() {}
 
 void MatchmakingGraphRoot::update(float timestep) {
+	if (transitionState != NA) {
+		processTransition();
+		return;
+	}
+
 	switch (currState) {
 		case HostScreenWait: {
 			if (roomID != "") {
 				hostScreen->setVisible(true);
-				currState = HostScreen;
+				hostScreen->setPositionY(-screenHeight);
+				transitionState = HostScreen;
 			}
 		}
 		default: {
@@ -119,15 +127,16 @@ void MatchmakingGraphRoot::update(float timestep) {
 }
 
 MatchmakingGraphRoot::PressedButton MatchmakingGraphRoot::checkButtons(const cugl::Vec2& position) {
-	if (position == Vec2::ZERO) {
+	// Do not process inputs if a) nothing was pressed, or b) currently transitioning
+	if (position == Vec2::ZERO || transitionState != NA) {
 		return None;
 	}
 
 	switch (currState) {
 		case StartScreen: {
 			if (hostBtn->containsScreen(position)) {
-				mainScreen->setVisible(false);
-				currState = HostScreenWait;
+				transitionState = HostScreenWait;
+				hostBtn->setDown(true);
 				return StartHost;
 			}
 			if (clientBtn->containsScreen(position)) {
@@ -222,4 +231,50 @@ void MatchmakingGraphRoot::updateClientLabel() {
 	}
 
 	clientLabel->setText(disp.str());
+}
+
+#pragma region Animation Constants
+/** Duration of a standard transition */
+constexpr int TRANSITION_DURATION = 30;
+#pragma endregion
+
+void MatchmakingGraphRoot::processTransition() {
+	transitionFrame++;
+	switch (currState) {
+		case StartScreen: {
+			switch (transitionState) {
+				case HostScreenWait: {
+					if (transitionFrame >= TRANSITION_DURATION) {
+						currState = HostScreenWait;
+						transitionState = NA;
+						transitionFrame = -1;
+						mainScreen->setVisible(false);
+					} else {
+						float curr = (float)transitionFrame / (float)TRANSITION_DURATION;
+						mainScreen->setColor({255, 255, 255, (unsigned char)(255 * (1.0f - curr))});
+					}
+					break;
+				}
+				default:
+					break;
+			}
+			break;
+		}
+		case HostScreenWait: {
+			if (transitionState == HostScreen) {
+				if (transitionFrame >= TRANSITION_DURATION) {
+					currState = HostScreen;
+					transitionState = NA;
+					transitionFrame = -1;
+					hostScreen->setPositionY(0);
+				} else {
+					hostScreen->setPositionY(-screenHeight * (1.0f - ((float)transitionFrame /
+																	  (float)TRANSITION_DURATION)));
+				}
+			}
+			break;
+		}
+		default:
+			break;
+	}
 }

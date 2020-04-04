@@ -77,6 +77,16 @@ class MatchmakingGraphRoot : public cugl::Scene {
 	 */
 	void updateClientLabel();
 
+	/** The current frame of a transition; -1 if not transitioning */
+	int transitionFrame;
+
+	/**
+	 * Animate a transition between states.
+	 *
+	 * PRECONDITION: transitionState != NA
+	 */
+	void processTransition();
+
    public:
 #pragma mark -
 #pragma mark Constructors
@@ -87,7 +97,12 @@ class MatchmakingGraphRoot : public cugl::Scene {
 	 * This allows us to use the object without a heap pointer.
 	 */
 	MatchmakingGraphRoot()
-		: Scene(), currState(StartScreen), transitionState(NA), screenHeight(0), roomID("") {}
+		: Scene(),
+		  currState(StartScreen),
+		  transitionState(NA),
+		  screenHeight(0),
+		  roomID(""),
+		  transitionFrame(-1) {}
 
 	/**
 	 * Disposes of all (non-static) resources allocated to this mode.
