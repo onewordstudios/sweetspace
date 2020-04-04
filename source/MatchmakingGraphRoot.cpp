@@ -79,6 +79,7 @@ bool MatchmakingGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& asset
 	for (unsigned int i = 0; i < NUM_DIGITS; i++) {
 		clientRoomBtns.push_back(std::dynamic_pointer_cast<Button>(
 			assets->get<Node>("matchmaking_client_buttons_btn" + std::to_string(i))));
+		buttonManager.registerButton(clientRoomBtns[i]);
 	}
 
 	updateClientLabel();
