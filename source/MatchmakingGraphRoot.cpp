@@ -7,6 +7,7 @@
 #include <vector>
 
 #include "Globals.h"
+#include "Tween.h"
 
 using namespace cugl;
 
@@ -250,8 +251,8 @@ void MatchmakingGraphRoot::processTransition() {
 						transitionFrame = -1;
 						mainScreen->setVisible(false);
 					} else {
-						float curr = (float)transitionFrame / (float)TRANSITION_DURATION;
-						mainScreen->setColor({255, 255, 255, (unsigned char)(255 * (1.0f - curr))});
+						mainScreen->setColor(Tween::fade(
+							Tween::linear(1.0f, 0.0f, transitionFrame, TRANSITION_DURATION)));
 					}
 					break;
 				}
@@ -268,8 +269,8 @@ void MatchmakingGraphRoot::processTransition() {
 					transitionFrame = -1;
 					hostScreen->setPositionY(0);
 				} else {
-					hostScreen->setPositionY(-screenHeight * (1.0f - ((float)transitionFrame /
-																	  (float)TRANSITION_DURATION)));
+					hostScreen->setPositionY(
+						Tween::easeOut(-screenHeight, 0, transitionFrame, TRANSITION_DURATION));
 				}
 			}
 			break;
