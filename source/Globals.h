@@ -1,4 +1,4 @@
-#ifndef __GLOBALS_H__
+﻿#ifndef __GLOBALS_H__
 #define __GLOBALS_H__
 
 /**
@@ -18,9 +18,6 @@ constexpr unsigned int NETWORK_TICK = 12; // NOLINT
 
 /** Number of characters in a ship ID */
 constexpr unsigned int ROOM_LENGTH = 5; // NOLINT
-
-/** Health of the ship to start */
-constexpr int INITIAL_SHIP_HEALTH = 11; // NOLINT
 
 /** Minimum of ship health for win condition */
 constexpr int SHIP_HEALTH_WIN_LIMIT = 10; // NOLINT
@@ -58,4 +55,3 @@ constexpr float SEG_CUTOFF_ANGLE = 90 * PI_180; // NOLINT
 
 #pragma endregion
 } // namespace globals
-#endif /* __GLOBALS_H__ */

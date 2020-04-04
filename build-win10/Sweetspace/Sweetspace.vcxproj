@@ -201,6 +201,8 @@
     <ClInclude Include="..\..\source\Globals.h" />
     <ClInclude Include="..\..\source\HealthNode.h" />
     <ClInclude Include="..\..\source\InputController.h" />
+    <ClInclude Include="..\..\source\LevelConstants.h" />
+    <ClInclude Include="..\..\source\LevelModel.h" />
     <ClInclude Include="..\..\source\libraries\easywsclient.hpp" />
     <ClInclude Include="..\..\source\LoadingMode.h" />
     <ClInclude Include="..\..\source\MagicInternetBox.h" />

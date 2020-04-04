@@ -5,7 +5,7 @@
 #include "PlayerDonutModel.h"
 
 bool ShipModel::init(unsigned int numPlayers, unsigned int numBreaches, unsigned int numDoors,
-					 unsigned int playerID, float shipSize) {
+					 unsigned int playerID, float shipSize, int initHealth) {
 	// Instantiate donut models and assign colors
 	for (unsigned int i = 0; i < numPlayers; i++) {
 		donuts.push_back(playerID == i ? PlayerDonutModel::alloc(shipSize)
@@ -25,7 +25,7 @@ bool ShipModel::init(unsigned int numPlayers, unsigned int numBreaches, unsigned
 	}
 
 	// Instantiate health
-	health = globals::INITIAL_SHIP_HEALTH;
+	health = initHealth;
 
 	// Initialize size
 	this->shipSize = shipSize;
