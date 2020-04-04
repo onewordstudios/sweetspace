@@ -112,34 +112,31 @@ void GameMode::reset() {
  * @param timestep  The amount of time (in seconds) since the last frame
  */
 void GameMode::update(float timestep) {
-	input.update(timestep);
-
 	// Connection Status Checks
 	status = net->matchStatus();
 	switch (status) {
 		case MagicInternetBox::Disconnected:
-			if (net->reconnect(roomId)) {
-				net->update();
-			}
-			sgRoot.setStatus(MagicInternetBox::Disconnected);
-			break;
-		case MagicInternetBox::GameEnded:
-			// Insert Game Ended Screen
-			net->update(ship);
-			sgRoot.setStatus(MagicInternetBox::GameEnded);
-			break;
-		case MagicInternetBox::Reconnecting:
-			// Still Reconnecting
-			net->update();
-			sgRoot.setStatus(MagicInternetBox::Reconnecting);
-			break;
 		case MagicInternetBox::ClientRoomInvalid:
 		case MagicInternetBox::ReconnectError:
 			if (net->reconnect(roomId)) {
 				net->update();
 			}
-			sgRoot.setStatus(MagicInternetBox::ReconnectError);
-			break;
+			sgRoot.setStatus(MagicInternetBox::Disconnected);
+			sgRoot.update(timestep);
+			return;
+		case MagicInternetBox::Reconnecting:
+			// Still Reconnecting
+			net->update();
+			sgRoot.setStatus(MagicInternetBox::Reconnecting);
+			sgRoot.update(timestep);
+			return;
+		case MagicInternetBox::ClientRoomFull:
+		case MagicInternetBox::GameEnded:
+			// Insert Game End
+			net->update(ship);
+			sgRoot.setStatus(MagicInternetBox::GameEnded);
+			sgRoot.update(timestep);
+			return;
 		case MagicInternetBox::GameStart:
 			net->update(ship);
 			sgRoot.setStatus(MagicInternetBox::GameStart);
@@ -147,6 +144,9 @@ void GameMode::update(float timestep) {
 		default:
 			CULog("ERROR: Uncaught MatchmakingStatus Value Occurred");
 	}
+
+	// Only process game logic if properly connected to game
+	input.update(timestep);
 
 	if (!(ship->timerEnded())) {
 		ship->updateTimer(timestep);
@@ -216,15 +216,13 @@ void GameMode::update(float timestep) {
 
 	gm.update(timestep);
 
-	// Move the donut (MODEL ONLY) if client is connected
-	if (status == MagicInternetBox::GameStart) {
-		float thrust = input.getRoll();
-		donutModel->applyForce(thrust);
-		// Jump Logic
-		if (input.getTapLoc() != Vec2::ZERO && !donutModel->isJumping()) {
-			donutModel->startJump();
-			net->jump(playerID);
-		}
+	// Move the donut (MODEL ONLY)
+	float thrust = input.getRoll();
+	donutModel->applyForce(thrust);
+	// Jump Logic
+	if (input.getTapLoc() != Vec2::ZERO && !donutModel->isJumping()) {
+		donutModel->startJump();
+		net->jump(playerID);
 	}
 
 	for (unsigned int i = 0; i < ship->getDonuts().size(); i++) {

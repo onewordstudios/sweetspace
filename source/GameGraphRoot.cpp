@@ -232,6 +232,7 @@ void GameGraphRoot::update(float timestep) {
 		case MagicInternetBox::Disconnected:
 		case MagicInternetBox::ReconnectError:
 		case MagicInternetBox::Reconnecting:
+		case MagicInternetBox::ClientRoomInvalid:
 			// Still Reconnecting
 			reconnectDim->setVisible(true);
 			reconnectBg->setVisible(true);
