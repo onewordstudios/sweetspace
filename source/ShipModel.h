@@ -22,6 +22,8 @@ class ShipModel {
 	int rollDir;
 	/** If a all player challenge is in effect*/
 	bool challenge;
+	/** Challenge progress*/
+	int challengeProg;
 
    public:
 	/** Game timer*/
@@ -261,5 +263,24 @@ class ShipModel {
 	 * @return if in challenge
 	 */
 	bool getChallenge() { return challenge; }
+
+	/**
+	 * Set challenge progress.
+	 *
+	 * @param starting progress
+	 */
+	void setChallengeProg(int p) { challengeProg = p; }
+
+	/**
+	 * Get challenge progress
+	 *
+	 * @return challenge progress
+	 */
+	int getChallengeProg() { return challengeProg; }
+
+	/**
+	 * Update challenge progress
+	 */
+	void updateChallengeProg() { challengeProg = challengeProg + 1; }
 };
 #endif /* __SHIP_MODEL_H__ */

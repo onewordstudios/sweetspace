@@ -235,18 +235,27 @@ void GameGraphRoot::update(float timestep) {
     	challengePanelHanger->setVisible(true);
     	challengePanel->setVisible(true);
     	challengePanelText->setVisible(true);
+        std::shared_ptr<Texture> image = assets->get<Texture>("panel_progress_1");
 		for(int i = 0; i < challengePanelArrows.size(); i++) {
+            std::shared_ptr<cugl::PolygonNode> arrow = challengePanelArrows.at(i);
 			if(ship->getRollDir() == -1) {
-				challengePanelArrows.at(i)->setAngle(180 * globals::PI_180);
+				arrow->setAngle(180 * globals::PI_180);
 			}
-    		challengePanelArrows.at(i)->setVisible(true);
+
+			if(i < (ship->getChallengeProg())) {
+			    arrow->setTexture(image);
+			}
+    		arrow->setVisible(true);
     	}
     } else {
 		challengePanelHanger->setVisible(false);
 		challengePanel->setVisible(false);
 		challengePanelText->setVisible(false);
+		std::shared_ptr<Texture> image = assets->get<Texture>("panel_progress_0");
 		for(int i = 0; i < challengePanelArrows.size(); i++) {
 			challengePanelArrows.at(i)->setVisible(false);
+			challengePanelArrows.at(i)->setTexture(image);
+
 		}
     }
 

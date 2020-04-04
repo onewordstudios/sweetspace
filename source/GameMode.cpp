@@ -68,7 +68,6 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets,
 
 	donutModel = ship->getDonuts().at(static_cast<unsigned long>(playerID));
 	ship->initTimer(TIME);
-	challengeProg = 0;
 
 	// Scene graph setup
 	sgRoot.init(assets, ship, playerID);
@@ -192,47 +191,41 @@ void GameMode::update(float timestep) {
 		ship->getDonuts()[i]->update(timestep);
 	}
 
-	if (gm.allPlayerChallenge() && trunc(ship->timer) > 10) {
+	if(ship->getChallenge() && trunc(ship->timer) <= 6) {
+		ship->setChallenge(false);
+
+	}
+
+	if (gm.allPlayerChallenge() && trunc(ship->timer) > 6) {
 		if (!(ship->getChallenge())) {
 			rand() % 2 == 0 ? ship->setRollDir(-1) : ship->setRollDir(1);
-			startTime = 0;
+			ship->setChallengeProg(0);
 			endTime = trunc(ship->timer) - 6;
 			ship->setChallenge(true);
 
 		}
         for (unsigned int i = 0; i < ship->getDonuts().size(); i++) {
             if(ship->getRollDir() == -1){
-                if (ship->getDonuts()[i]->getVelocity() > 0) {
-                    startTime = 0;
-                } else {
-                    if(startTime != 0) {
-                        startTime -= timestep;
-                    } else {
-                        startTime = ship->timer;
-                    }
-                }
-
-            } else {
                 if (ship->getDonuts()[i]->getVelocity() < 0) {
-                    startTime = 0;
-                } else {
-                    if(startTime != 0) {
-                        startTime -= timestep;
-                    } else {
-                        startTime = ship->timer;
-                    }
+                	ship->updateChallengeProg();
+                }
+            } else {
+                if (ship->getDonuts()[i]->getVelocity() > 0) {
+                	ship->updateChallengeProg();
                 }
             }
         }
-		if (trunc(ship->timer) == endTime) {
+		if (ship->getChallengeProg() > 45 || trunc(ship->timer) == endTime) {
 			CULog("End Challenge");
-			if (trunc(startTime) >= 2) {
+			if (ship->getChallengeProg() > 10) {
 				CULog("Challenge Completed");
 			} else {
 				CULog("Challenge Failed");
+				// add health decrement once health calculation is updated!!!!
 			}
 			gm.setAllPlayerChallenge(false);
 			ship->setChallenge(false);
+			ship->setChallengeProg(0);
 		}
 	} else {
 		gm.setAllPlayerChallenge(false);
