@@ -11,7 +11,7 @@
 namespace globals {
 
 /** Number of players needed for the game - will be replaced with a range in the future */
-constexpr unsigned int NUM_PLAYERS = 1; // NOLINT
+constexpr unsigned int NUM_PLAYERS = 3; // NOLINT
 
 /** Network tick frequency */
 constexpr unsigned int NETWORK_TICK = 12; // NOLINT

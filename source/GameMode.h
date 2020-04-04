@@ -48,7 +48,7 @@ class GameMode {
 	 * This constructor does not allocate any objects or start the game.
 	 * This allows us to use the object without a heap pointer.
 	 */
-	GameMode() : playerID(-1), net(nullptr) {}
+	GameMode() : net(nullptr), playerID(-1) {}
 
 	/**
 	 * Disposes of all (non-static) resources allocated to this mode.

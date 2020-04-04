@@ -13,6 +13,15 @@ using namespace cugl;
 
 #pragma mark -
 #pragma mark Level Model
+
+const unsigned int DEFAULT_MAX_BREACHES = 3;
+const unsigned int DEFAULT_MAX_DOORS = 1;
+const unsigned int DEFAULT_SPAWN_RATE = 100;
+const float DEFAULT_MIN_ANGLE = 30;
+const int DEFAULT_INIT_HEALTH = 11;
+const float DEFAULT_TIME = 45;
+const float DEFAULT_SHIP_SIZE = 360;
+
 /**
  * Class that represents a dynamically loaded level in the game
  *
@@ -162,14 +171,22 @@ class LevelModel : public Asset {
 	 * unloaded in parallel, not in sequence.  If an asset (like a game level) has
 	 * references to other assets, then these should be disconnected earlier.
 	 */
-	void LevelModel::unload() {}
+	void unload() {}
 
 	//#pragma mark -
 	//#pragma mark Initializers
 	/**
 	 * Creates a new, empty level.
 	 */
-	LevelModel(void){};
+	LevelModel(void) {
+		maxBreaches = DEFAULT_MAX_BREACHES;
+		maxDoors = DEFAULT_MAX_DOORS;
+		spawnRate = DEFAULT_SPAWN_RATE;
+		minAngleDiff = DEFAULT_MIN_ANGLE;
+		shipSize = DEFAULT_SHIP_SIZE;
+		time = DEFAULT_TIME;
+		initHealth = DEFAULT_INIT_HEALTH;
+	};
 
 	/**
 	 * Destroys this level, releasing all resources.
