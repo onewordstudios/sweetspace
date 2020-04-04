@@ -18,9 +18,6 @@ constexpr unsigned int STATE_SYNC_FREQ = globals::NETWORK_TICK * 5;
 /** One byte */
 constexpr unsigned int ONE_BYTE = 256;
 
-/** Number of characters in a ship ID */
-constexpr unsigned int ROOM_LENGTH = 5;
-
 /** How close to consider floating point numbers identical */
 constexpr float FLOAT_EPSILON = 0.1f;
 
@@ -89,7 +86,7 @@ bool MagicInternetBox::initClient(std::string id) {
 
 	std::vector<uint8_t> data;
 	data.push_back((uint8_t)NetworkDataType::JoinRoom);
-	for (unsigned int i = 0; i < ROOM_LENGTH; i++) {
+	for (unsigned int i = 0; i < globals::ROOM_LENGTH; i++) {
 		data.push_back((uint8_t)id.at(i));
 	}
 	ws->sendBinary(data);
@@ -107,7 +104,7 @@ bool MagicInternetBox::reconnect(std::string id) {
 
 	std::vector<uint8_t> data;
 	data.push_back((uint8_t)NetworkDataType::JoinRoom);
-	for (unsigned int i = 0; i < ROOM_LENGTH; i++) {
+	for (unsigned int i = 0; i < globals::ROOM_LENGTH; i++) {
 		data.push_back((uint8_t)id.at(i));
 	}
 	ws->sendBinary(data);
@@ -287,7 +284,7 @@ void MagicInternetBox::update() {
 		switch (type) {
 			case AssignedRoom: {
 				std::stringstream newRoomId;
-				for (unsigned int i = 0; i < ROOM_LENGTH; i++) {
+				for (unsigned int i = 0; i < globals::ROOM_LENGTH; i++) {
 					newRoomId << (char)message[i + 1];
 				}
 				roomID = newRoomId.str();
