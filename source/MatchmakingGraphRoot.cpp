@@ -177,8 +177,10 @@ MatchmakingGraphRoot::PressedButton MatchmakingGraphRoot::checkButtons(const cug
 		}
 
 		if (clientClearBtn->containsScreen(position)) {
-			clientEnteredRoom.clear();
-			updateClientLabel();
+			if (clientEnteredRoom.size() > 0) {
+				clientEnteredRoom.pop_back();
+				updateClientLabel();
+			}
 			return None;
 		}
 	}
