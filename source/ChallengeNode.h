@@ -3,12 +3,23 @@
 
 #include <cugl/2d/CUAnimationNode.h>
 
-#include "DonutModel.h"
+#include "ShipModel.h"
 
 class ChallengeNode : public cugl::AnimationNode {
 #pragma mark Values
 protected:
-    std::shared_ptr<DonutModel> donut;
+    std::shared_ptr<ShipModel> ship;
+    float xPos;
+    float yPos;
+    bool challenge;
+    enum part {
+        hanger,
+        panel,
+        text,
+        arrows
+    };
+    part display;
+    int arrowNum;
 
 public:
 #pragma mark -
@@ -56,7 +67,23 @@ public:
 
 #pragma mark -
 
-    void setModel(std::shared_ptr<DonutModel> model) { donut = model; }
+    void setModel(std::shared_ptr<ShipModel> model) { ship = model; }
+
+    void setXPos(float x) { xPos = x; }
+    void setYPos(float y) { yPos = y; }
+    void setPart(int i) {
+        switch(i) {
+            case 0:
+                display = hanger;
+            case 1:
+                display = panel;
+            case 2:
+                display = text;
+            case 3:
+                display = arrows;
+        }
+    }
+    void setArrowNum(int i) { arrowNum = i; }
 
     void draw(const std::shared_ptr<cugl::SpriteBatch> &batch, const cugl::Mat4 &transform,
             cugl::Color4 tint) override;

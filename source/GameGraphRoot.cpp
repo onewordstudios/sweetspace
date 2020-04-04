@@ -131,6 +131,46 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 		nearSpace->addChild(healthNode);
 	}
 
+    std::shared_ptr<Texture> image = assets->get<Texture>("panel_hanger");
+    std::shared_ptr<ChallengeNode> cHangerNode = ChallengeNode::alloc(image, 1, 1);
+    cHangerNode->setScale(0.7f);
+    cHangerNode->setPart(0);
+    cHangerNode->setModel(ship);
+    cHangerNode->setXPos(donutNode->getPositionX() + 125);
+    cHangerNode->setYPos(donutNode->getPositionY() + 150);
+    nearSpace->addChild(cHangerNode);
+
+    std::shared_ptr<Texture> image2 = assets->get<Texture>("challenge_panel");
+    std::shared_ptr<ChallengeNode> cNode = ChallengeNode::alloc(image2, 1, 1);
+    cNode->setScale(0.7f, 0.3f);
+	cNode->setPart(1);
+	cNode->setModel(ship);
+	cNode->setXPos(donutNode->getPositionX() + 120);
+	cNode->setYPos(donutNode->getPositionY());
+    nearSpace->addChild(cNode);
+
+    std::shared_ptr<Texture> image3 = assets->get<Texture>("panel_text");
+    std::shared_ptr<ChallengeNode> panelTextNode = ChallengeNode::alloc(image3, 1, 1);
+    panelTextNode->setScale(0.7f);
+	panelTextNode->setPart(2);
+	panelTextNode->setModel(ship);
+	panelTextNode->setXPos(donutNode->getPositionX() + 120);
+	panelTextNode->setYPos(donutNode->getPositionY() + 35);
+	panelTextNode->setAngle(0);
+    nearSpace->addChild(panelTextNode);
+
+    for (int i = 0; i < 10; i++) {
+        std::shared_ptr<Texture> image4 = assets->get<Texture>("panel_progress_0");
+        std::shared_ptr<ChallengeNode> panelArrowNode = ChallengeNode::alloc(image4, 1, 1);
+        panelArrowNode->setScale(0.3f);
+        panelArrowNode->setArrowNum(i);
+		panelArrowNode->setPart(3);
+		panelArrowNode->setModel(ship);
+		panelArrowNode->setXPos(donutNode->getPositionX() - 20);
+		panelArrowNode->setYPos(donutNode->getPositionY());
+        nearSpace->addChild(panelArrowNode);
+    }
+
 	addChild(scene);
 	return true;
 }
@@ -175,83 +215,48 @@ void GameGraphRoot::reset() {
  * @param timestep  The amount of time (in seconds) since the last frame
  */
 void GameGraphRoot::update(float timestep) {
-	// "Drawing" code.  Move everything BUT the donut
-	// Update the HUD
-	coordHUD->setText(positionText());
+    // "Drawing" code.  Move everything BUT the donut
+    // Update the HUD
+    coordHUD->setText(positionText());
 
-	float angle = (float)(fmod(ship->getSize() - ship->getDonuts().at(playerID)->getAngle(), 360));
+    float angle = (float) (fmod(ship->getSize() - ship->getDonuts().at(playerID)->getAngle(), 360));
 
-	// Reanchor the node at the center of the screen and rotate about center.
-	Vec2 position = farSpace->getPosition();
-	farSpace->setAnchor(Vec2::ANCHOR_CENTER);
-	if (position.x == -256) {
-		farSpace->setPositionX(0);
-	} else {
-		farSpace->setPosition(position - Vec2(0.5, 0)); // Reseting the anchor changes the position
-	}
+    // Reanchor the node at the center of the screen and rotate about center.
+    Vec2 position = farSpace->getPosition();
+    farSpace->setAnchor(Vec2::ANCHOR_CENTER);
+    if (position.x == -256) {
+        farSpace->setPositionX(0);
+    } else {
+        farSpace->setPosition(position - Vec2(0.5, 0)); // Reseting the anchor changes the position
+    }
 
-	// Rotate about center.
-	nearSpace->setAngle(globals::PI_180 * angle);
+    // Rotate about center.
+    nearSpace->setAngle(globals::PI_180 * angle);
 
-	double radiusRatio = globals::RADIUS / (donutNode->getWidth() / 2.0);
+    double radiusRatio = globals::RADIUS / (donutNode->getWidth() / 2.0);
 
-	angle = (float)(donutNode->getAngle() -
-					ship->getDonuts().at(playerID)->getVelocity() * globals::PI_180 * radiusRatio);
-	donutNode->setAnchor(Vec2::ANCHOR_CENTER);
-	donutNode->setAngle(angle);
-	// Draw Jump Offset
-	float donutNewY = donutPos.y + ship->getDonuts().at(playerID)->getJumpOffset() * screenHeight;
-	donutNode->setPositionY(donutNewY);
+    angle = (float) (donutNode->getAngle() -
+            ship->getDonuts().at(playerID)->getVelocity() * globals::PI_180 * radiusRatio);
+    donutNode->setAnchor(Vec2::ANCHOR_CENTER);
+    donutNode->setAngle(angle);
+    // Draw Jump Offset
+    float donutNewY = donutPos.y + ship->getDonuts().at(playerID)->getJumpOffset() * screenHeight;
+    donutNode->setPositionY(donutNewY);
 
-	for (int i = 0; i < ship->getBreaches().size(); i++) {
-		std::shared_ptr<BreachModel> breachModel = ship->getBreaches().at(i);
-		if (breachModel->getHealth() > 0 && breachModel->getNeedSpriteUpdate()) {
-			string breachColor = playerColor.at(static_cast<unsigned long>(
-				ship->getDonuts()
-					.at(static_cast<unsigned long>(breachModel->getPlayer()))
-					->getColorId()));
-			std::shared_ptr<Texture> image = assets->get<Texture>("breach_" + breachColor);
-			shared_ptr<BreachNode> breachNode =
-				dynamic_pointer_cast<BreachNode>(breachesNode->getChildByTag(i + 1));
-			breachNode->setTexture(image);
-			breachModel->setNeedSpriteUpdate(false);
-		}
-	}
-
-//    std::shared_ptr<Texture> image = assets->get<Texture>("panel_hanger");
-//    std::shared_ptr<ChallengeNode> cHangerNode = ChallengeNode::alloc(image, 1, 1);
-//    std::shared_ptr<DonutModel> donutModel = ship->getDonuts().at(playerID);
-//    cHangerNode->setModel(donutModel);
-//    cHangerNode->setScale(0.7f);
-//    nearSpace->addChild(cHangerNode);
-//
-//    std::shared_ptr<Texture> image2 = assets->get<Texture>("challenge_panel");
-//    std::shared_ptr<ChallengeNode> cNode = ChallengeNode::alloc(image2, 1, 1);
-//    cNode->setModel(donutModel);
-//    cNode->setScale(0.7f, 0.3f);
-//    nearSpace->addChild(cNode);
-//
-//    std::shared_ptr<Texture> image3 = assets->get<Texture>("panel_text");
-//    std::shared_ptr<ChallengeNode> panelTextNode = ChallengeNode::alloc(image3, 1, 1);
-//    panelTextNode->setModel(donutModel);
-//    panelTextNode->setScale(0.7f);
-//    nearSpace->addChild(panelTextNode);
-//
-//    cHangerNode->setPosition(donutModel->getSceneGraphPosition().x, donutModel->getSceneGraphPosition().y - 200);
-//    cNode->setPosition(donutModel->getSceneGraphPosition().x, donutModel->getSceneGraphPosition().y - 275);
-//    panelTextNode->setPosition(donutModel->getSceneGraphPosition().x, donutModel->getSceneGraphPosition().y - 275);
-//
-//
-//    for(int i = 0; i < 10; i++) {
-//        std::shared_ptr<Texture> image4 = assets->get<Texture>("panel_progress_0");
-//        std::shared_ptr<ChallengeNode> panelArrowNode = ChallengeNode::alloc(image4, 1, 1);
-//        panelArrowNode->setModel(donutModel);
-//        panelArrowNode->setScale(0.3f);
-//        panelArrowNode->setPosition(donutModel->getSceneGraphPosition().x - 130 + (i * 30), donutModel->getSceneGraphPosition().y - 315);
-//        nearSpace->addChild(panelArrowNode);
-//    }
-
-
+    for (int i = 0; i < ship->getBreaches().size(); i++) {
+        std::shared_ptr<BreachModel> breachModel = ship->getBreaches().at(i);
+        if (breachModel->getHealth() > 0 && breachModel->getNeedSpriteUpdate()) {
+            string breachColor = playerColor.at(static_cast<unsigned long>(
+                    ship->getDonuts()
+                            .at(static_cast<unsigned long>(breachModel->getPlayer()))
+                            ->getColorId()));
+            std::shared_ptr<Texture> image = assets->get<Texture>("breach_" + breachColor);
+            shared_ptr<BreachNode> breachNode =
+                    dynamic_pointer_cast<BreachNode>(breachesNode->getChildByTag(i + 1));
+            breachNode->setTexture(image);
+            breachModel->setNeedSpriteUpdate(false);
+        }
+    }
 }
 
 /**
@@ -270,8 +275,6 @@ std::string GameGraphRoot::positionText() {
 		ss << "You Win!";
 	} else if (ship->timerEnded()) {
 		ss << "You Lose.";
-	} else if (ship->getChallenge()) {
-		ss << "STABILZER ERROR: ROLL " + dir;
 	} else {
 		ss << "Time Left: " << trunc(ship->timer);
 	}
