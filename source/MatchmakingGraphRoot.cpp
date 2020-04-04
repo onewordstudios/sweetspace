@@ -108,17 +108,23 @@ void MatchmakingGraphRoot::reset() {}
  * @param timestep  The amount of time (in seconds) since the last frame
  */
 void MatchmakingGraphRoot::update(float timestep) {
-	if (hostScreen->isVisible()) {
-		if (roomID.length() == globals::ROOM_LENGTH &&
-			hostLabel->getText().length() != (2 * globals::ROOM_LENGTH - 1)) {
-			std::ostringstream disp;
-			for (unsigned int i = 0; i < globals::ROOM_LENGTH; i++) {
-				disp << roomID.at(i);
-				if (i < globals::ROOM_LENGTH - 1) {
-					disp << ' ';
+	switch (currState) {
+		case HostScreen: {
+			if (roomID.length() == globals::ROOM_LENGTH &&
+				hostLabel->getText().length() != (2 * globals::ROOM_LENGTH - 1)) {
+				std::ostringstream disp;
+				for (unsigned int i = 0; i < globals::ROOM_LENGTH; i++) {
+					disp << roomID.at(i);
+					if (i < globals::ROOM_LENGTH - 1) {
+						disp << ' ';
+					}
 				}
+				hostLabel->setText(disp.str());
 			}
-			hostLabel->setText(disp.str());
+			break;
+		}
+		default: {
+			break;
 		}
 	}
 }
@@ -135,65 +141,63 @@ MatchmakingGraphRoot::PressedButton MatchmakingGraphRoot::checkButtons(const cug
 		return None;
 	}
 
-	if (mainScreen->isVisible()) {
-		if (hostBtn->containsScreen(position)) {
-			playerID = 0;
-			hostScreen->setVisible(true);
-			mainScreen->setVisible(false);
-			return StartHost;
+	switch (currState) {
+		case StartScreen: {
+			if (hostBtn->containsScreen(position)) {
+				hostScreen->setVisible(true);
+				mainScreen->setVisible(false);
+				currState = HostScreen;
+				return StartHost;
+			}
+			if (clientBtn->containsScreen(position)) {
+				mainScreen->setVisible(false);
+				clientScreen->setVisible(true);
+				currState = ClientScreen;
+				return StartClient;
+			}
 		}
-		if (clientBtn->containsScreen(position)) {
-			hostLabel->setVisible(true);
-			clientJoinBtn->setVisible(true);
+		case ClientScreen: {
+			if (clientJoinBtn->containsScreen(position)) {
+				if (clientEnteredRoom.size() != globals::ROOM_LENGTH) {
+					return None;
+				}
 
-			mainScreen->setVisible(false);
-			clientScreen->setVisible(true);
-			return StartClient;
-		}
-	} else if (clientScreen->isVisible()) {
-		if (clientJoinBtn->containsScreen(position)) {
-			if (clientEnteredRoom.size() != globals::ROOM_LENGTH) {
-				return None;
+				std::ostringstream room;
+				for (int i = 0; i < globals::ROOM_LENGTH; i++) {
+					room << clientEnteredRoom[i];
+				}
+
+				roomID = room.str();
+				currState = ClientScreenDone;
+
+				return ClientConnect;
 			}
 
-			std::ostringstream room;
-			for (int i = 0; i < globals::ROOM_LENGTH; i++) {
-				room << clientEnteredRoom[i];
+			for (unsigned int i = 0; i < NUM_DIGITS; i++) {
+				if (clientRoomBtns[i]->containsScreen(position)) {
+					if (clientEnteredRoom.size() < globals::ROOM_LENGTH) {
+						clientEnteredRoom.push_back(i);
+						updateClientLabel();
+					}
+					return None;
+				}
 			}
 
-			roomID = room.str();
-
-			return ClientConnect;
-		}
-
-		for (unsigned int i = 0; i < NUM_DIGITS; i++) {
-			if (clientRoomBtns[i]->containsScreen(position)) {
-				if (clientEnteredRoom.size() < globals::ROOM_LENGTH) {
-					clientEnteredRoom.push_back(i);
+			if (clientClearBtn->containsScreen(position)) {
+				if (clientEnteredRoom.size() > 0) {
+					clientEnteredRoom.pop_back();
 					updateClientLabel();
 				}
 				return None;
 			}
 		}
-
-		if (clientClearBtn->containsScreen(position)) {
-			if (clientEnteredRoom.size() > 0) {
-				clientEnteredRoom.pop_back();
-				updateClientLabel();
-			}
-			return None;
+		default: {
+			break;
 		}
 	}
 
 	return None;
 }
-
-/**
- * Returns an informative string for the room id
- *
- * @return an informative string for the room id
- */
-std::string MatchmakingGraphRoot::positionText() { return roomID; }
 
 void MatchmakingGraphRoot::updateClientLabel() {
 	std::vector<char> room;

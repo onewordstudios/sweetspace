@@ -26,8 +26,6 @@ class MatchmakingMode {
 
 	/** True if game is ready to start */
 	bool gameReady;
-	/** Current Player ID */
-	int playerId;
 
    public:
 #pragma mark -
@@ -38,7 +36,7 @@ class MatchmakingMode {
 	 * This constructor does not allocate any objects or start the game.
 	 * This allows us to use the object without a heap pointer.
 	 */
-	MatchmakingMode() : net(nullptr), gameReady(false), playerId(-1) {}
+	MatchmakingMode() : net(nullptr), gameReady(false) {}
 
 	/**
 	 * Disposes of all (non-static) resources allocated to this mode.

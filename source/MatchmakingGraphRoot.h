@@ -11,6 +11,27 @@
 
 class MatchmakingGraphRoot : public cugl::Scene {
    private:
+	/** An enum with the current state of the matchmaking mode */
+	enum MatchState {
+		/** Empty state; used for transitions only; the main state should NEVER be NA */
+		NA = -1,
+		/** Main menu splash screen */
+		StartScreen,
+		/** Hosting a game */
+		HostScreen,
+		/** Joining a game; not connected yet */
+		ClientScreen,
+		/** Joining a game; connected */
+		ClientScreenDone,
+		/** Matchmaking complete */
+		Done
+	};
+
+	/** The current state */
+	MatchState currState;
+	/** The state we are transitioning into, or NA (-1) if not transitioning */
+	MatchState transitionState;
+
 	/** The asset manager for this game mode. */
 	std::shared_ptr<cugl::AssetManager> assets;
 	/** The Screen's Height. */
@@ -43,20 +64,8 @@ class MatchmakingGraphRoot : public cugl::Scene {
 	std::vector<unsigned int> clientEnteredRoom;
 
 	// MODEL
-	int playerID;
 	/** RoomId for host display */
 	std::string roomID;
-
-	/**
-	 * Returns an informative string for the position
-	 *
-	 * This function is for writing the current donut position to the HUD.
-	 *
-	 * @param coords The current donut coordinates
-	 *
-	 * @return an informative string for the position
-	 */
-	std::string positionText();
 
 	/**
 	 * Update the client room display using the contents of {@link clientEnteredRoom}
@@ -72,7 +81,8 @@ class MatchmakingGraphRoot : public cugl::Scene {
 	 * This constructor does not allocate any objects or start the game.
 	 * This allows us to use the object without a heap pointer.
 	 */
-	MatchmakingGraphRoot() : Scene(), screenHeight(0), playerID(-1), roomID("") {}
+	MatchmakingGraphRoot()
+		: Scene(), currState(StartScreen), transitionState(NA), screenHeight(0), roomID("") {}
 
 	/**
 	 * Disposes of all (non-static) resources allocated to this mode.
@@ -116,6 +126,7 @@ class MatchmakingGraphRoot : public cugl::Scene {
 	 */
 	void reset() override;
 
+	/** An enum representing buttons that have been pressed */
 	enum PressedButton { None, StartHost, StartClient, HostBegin, ClientConnect };
 
 	/**
@@ -141,18 +152,16 @@ class MatchmakingGraphRoot : public cugl::Scene {
 	 */
 	std::string getRoomID() { return roomID; }
 
-	/**
-	 * Sets playerID
-	 *
-	 * @param playerID The new player id
-	 */
-	void setPlayerID(int playerID) { this->playerID = playerID; }
-
-	/**
-	 * Gets playerID
-	 *
-	 * @param roomID The player id
-	 */
-	int getPlayerID() { return playerID; }
+	/** Returns whether the graph is in a state where it is connected to the server (and thus mib
+	 * needs to be updated every frame) */
+	bool isConnected() {
+		switch (currState) {
+			case HostScreen:
+			case ClientScreenDone:
+				return true;
+			default:
+				return false;
+		}
+	}
 };
 #endif /* __MATCHMAKING_GRAPH_ROOT_H__ */

@@ -69,40 +69,25 @@ void MatchmakingMode::reset() { input.clear(); }
  */
 void MatchmakingMode::update(float timestep) {
 	input.update(timestep);
-	// Neither host nor client
-	if (sgRoot.getPlayerID() == -1) {
-		MatchmakingGraphRoot::PressedButton buttonPressed = sgRoot.checkButtons(input.getTapLoc());
-		if (buttonPressed == MatchmakingGraphRoot::StartHost) {
+
+	switch (sgRoot.checkButtons(input.getTapLoc())) {
+		case MatchmakingGraphRoot::StartHost: {
 			net->initHost();
-			sgRoot.setPlayerID(0);
-		} else if (buttonPressed == MatchmakingGraphRoot::StartClient) {
-			sgRoot.setPlayerID(-2);
+			break;
 		}
-	}
-	// Client, but needs room and id still
-	if (sgRoot.getPlayerID() == -2) {
-		// Check if input in TextField is a room and set roomID and set playerID
-		// Init client
-
-		MatchmakingGraphRoot::PressedButton buttonPressed = sgRoot.checkButtons(input.getTapLoc());
-
-		if (buttonPressed == MatchmakingGraphRoot::ClientConnect) {
+		case MatchmakingGraphRoot::ClientConnect: {
 			string s = sgRoot.getRoomID();
 			if (s != "") {
-				sgRoot.setRoomID(s);
-				if (net->initClient(s)) {
-					sgRoot.setPlayerID(1);
-				}
+				net->initClient(s);
 			}
 		}
+		default:
+			break;
 	}
-	// Only update network loop if inithost or initclient called
-	if (sgRoot.getPlayerID() > -1) {
+
+	if (sgRoot.isConnected()) {
 		net->update();
 		sgRoot.setRoomID(net->getRoomID());
-		if (net->getPlayerID() > -1) {
-			sgRoot.setPlayerID(net->getPlayerID());
-		}
 		// Check if room is ready for play (Replace with button for play later)
 		if (net->getNumPlayers() == globals::NUM_PLAYERS) {
 			gameReady = true;
