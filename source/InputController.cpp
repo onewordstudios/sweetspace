@@ -22,12 +22,9 @@ constexpr unsigned int LISTENER_KEY = 1;
  * object. This makes it safe to use this class without a pointer.
  */
 InputController::InputController()
-	: active(false),
-	  keyReset(false),
-	  touchID(-1),
-	  resetPressed(false),
-	  rollAmount(0.0f),
-	  tapped(false) {}
+	: active(false), keyReset(false), resetPressed(false), rollAmount(0.0f), tapped(false) {
+	touchID = -1;
+}
 
 /**
  * Deactivates this input controller, releasing all listeners.
@@ -73,6 +70,7 @@ bool InputController::init() {
 #ifndef CU_TOUCH_SCREEN
 
 	Mouse* mouse = Input::get<Mouse>();
+	mouse->setPointerAwareness(cugl::Mouse::PointerAwareness::ALWAYS);
 	mouse->addPressListener(LISTENER_KEY,
 							[=](const cugl::MouseEvent& event, Uint8 clicks, bool focus) {
 								this->clickBeganCB(event, clicks, focus);

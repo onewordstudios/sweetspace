@@ -134,12 +134,12 @@ void MatchmakingGraphRoot::update(float timestep) {
 }
 
 MatchmakingGraphRoot::PressedButton MatchmakingGraphRoot::checkButtons(const cugl::Vec2& position) {
+	buttonManager.process(position);
+
 	// Do not process inputs if a) nothing was pressed, or b) currently transitioning
 	if (position == Vec2::ZERO || transitionState != NA) {
 		return None;
 	}
-
-	buttonManager.process(position);
 
 	switch (currState) {
 		case StartScreen: {
