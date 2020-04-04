@@ -22,7 +22,12 @@ constexpr unsigned int LISTENER_KEY = 1;
  * object. This makes it safe to use this class without a pointer.
  */
 InputController::InputController()
-	: active(false), keyReset(false), resetPressed(false), rollAmount(0.0f), tapped(false) {}
+	: active(false),
+	  keyReset(false),
+	  touchID(-1),
+	  resetPressed(false),
+	  rollAmount(0.0f),
+	  tapped(false) {}
 
 /**
  * Deactivates this input controller, releasing all listeners.
@@ -137,6 +142,21 @@ void InputController::update(float dt) {
 #endif
 }
 
+const cugl::Vec2 InputController::getCurrTapLoc() {
+#ifndef CU_TOUCH_SCREEN
+	Mouse* mouse = Input::get<Mouse>();
+	if (mouse->buttonDown().hasLeft()) {
+		return mouse->pointerPosition();
+	}
+#else
+	Touchscreen* touch = Input::get<Touchscreen>();
+	if (touch->touchDown(touchID)) {
+		return touch->touchPosition(touchID);
+	}
+#endif
+	return cugl::Vec2::ZERO;
+}
+
 /**
  * Clears any buffered inputs so that we may start fresh.
  */
@@ -161,6 +181,7 @@ void InputController::clear() {
 void InputController::touchBeganCB(const cugl::TouchEvent& event, bool focus) {
 	// Update the tap location for jump
 	tapLoc.set(event.position);
+	touchID = event.touch;
 	tapped = true;
 }
 

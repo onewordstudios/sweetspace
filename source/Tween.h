@@ -61,4 +61,4 @@ class Tween {
 	 */
 	static cugl::Color4 fade(float a);
 };
-#endif
+#endif /* __TWEEN_H__ */

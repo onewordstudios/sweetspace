@@ -5,6 +5,7 @@
 #include <vector>
 
 #include "BreachModel.h"
+#include "ButtonManager.h"
 #include "DonutModel.h"
 #include "DonutNode.h"
 #include "InputController.h"
@@ -67,6 +68,9 @@ class MatchmakingGraphRoot : public cugl::Scene {
 	std::shared_ptr<cugl::Button> clientClearBtn;
 	/** The room ID the client is currently entering */
 	std::vector<unsigned int> clientEnteredRoom;
+
+	/** Helper object to make the buttons go up and down */
+	ButtonManager buttonManager;
 
 	// MODEL
 	/** RoomId for host display */

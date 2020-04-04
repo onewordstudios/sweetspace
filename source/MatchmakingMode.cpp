@@ -72,7 +72,7 @@ void MatchmakingMode::update(float timestep) {
 	// Update Scene Graph
 	sgRoot.update(timestep);
 
-	switch (sgRoot.checkButtons(input.getTapLoc())) {
+	switch (sgRoot.checkButtons(input.getCurrTapLoc())) {
 		case MatchmakingGraphRoot::StartHost: {
 			net->initHost();
 			break;
