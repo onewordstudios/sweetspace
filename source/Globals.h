@@ -16,6 +16,9 @@ constexpr unsigned int NUM_PLAYERS = 3; // NOLINT
 /** Network tick frequency */
 constexpr unsigned int NETWORK_TICK = 12; // NOLINT
 
+/** Number of characters in a ship ID */
+constexpr unsigned int ROOM_LENGTH = 5; // NOLINT
+
 /** Health of the ship to start */
 constexpr int INITIAL_SHIP_HEALTH = 11; // NOLINT
 
