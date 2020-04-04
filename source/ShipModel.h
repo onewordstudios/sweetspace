@@ -1,4 +1,4 @@
-#ifndef __SHIP_MODEL_H__
+﻿#ifndef __SHIP_MODEL_H__
 #define __SHIP_MODEL_H__
 #include <cugl/cugl.h>
 
@@ -194,6 +194,19 @@ class ShipModel {
 	 * @return health the health of the ship
 	 */
 	int getHealth() { return health; }
+
+	/**
+	 * Get the number of active players
+	 *
+	 * @return number of active players
+	 */
+	int getActivePlayers() {
+		int ctr = 0;
+		for (int i = 0; i < donuts.size(); i++) {
+			if (donuts.at(i)->getIsActive()) ctr++;
+		}
+		return ctr;
+	}
 
 	/**
 

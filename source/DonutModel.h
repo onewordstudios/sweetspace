@@ -49,6 +49,8 @@ class DonutModel {
 	float jumpTime;
 	/** Initial vertical velocity */
 	float jumpVelocity;
+	/** Whether or not this player is active */
+	bool isActive;
 
 	/**
 	 * Performs state and animation updates for a jumping donut.
@@ -185,6 +187,13 @@ class DonutModel {
 	 * @return the current velocity of the donut.
 	 */
 	float getVelocity() { return velocity; }
+
+	/**
+	 * Returns whether this donut is active.
+	 *
+	 * @return whether this donut is active.
+	 */
+	float getIsActive() { return isActive; }
 
 	void setColorId(int i) { colorId = i; }
 	int getColorId() { return colorId; }
