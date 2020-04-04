@@ -163,9 +163,9 @@ MatchmakingGraphRoot::PressedButton MatchmakingGraphRoot::checkButtons(InputCont
 				return StartHost;
 			}
 			if (tappedButton(clientBtn, tapData)) {
-				mainScreen->setVisible(false);
+				transitionState = ClientScreen;
+				clientScreen->setPositionY(-screenHeight);
 				clientScreen->setVisible(true);
-				currState = ClientScreen;
 				return StartClient;
 			}
 		}
@@ -265,21 +265,18 @@ void MatchmakingGraphRoot::processTransition() {
 	transitionFrame++;
 	switch (currState) {
 		case StartScreen: {
-			switch (transitionState) {
-				case HostScreenWait: {
-					if (transitionFrame >= TRANSITION_DURATION) {
-						currState = HostScreenWait;
-						transitionState = NA;
-						transitionFrame = -1;
-						mainScreen->setVisible(false);
-					} else {
-						mainScreen->setColor(Tween::fade(
-							Tween::linear(1.0f, 0.0f, transitionFrame, TRANSITION_DURATION)));
-					}
-					break;
+			if (transitionFrame >= TRANSITION_DURATION) {
+				currState = transitionState;
+				transitionState = NA;
+				transitionFrame = -1;
+				mainScreen->setVisible(false);
+			} else {
+				mainScreen->setColor(
+					Tween::fade(Tween::linear(1.0f, 0.0f, transitionFrame, TRANSITION_DURATION)));
+				if (transitionState == ClientScreen) {
+					clientScreen->setPositionY(
+						Tween::easeOut(-screenHeight, 0, transitionFrame, TRANSITION_DURATION));
 				}
-				default:
-					break;
 			}
 			break;
 		}
