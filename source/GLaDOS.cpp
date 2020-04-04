@@ -76,12 +76,15 @@ bool GLaDOS::init(std::shared_ptr<ShipModel> ship) {
  * This method is used to run the GM for generating and managing current ship events
  */
 void GLaDOS::update(float dt) {
-	// Removing breaches that have 0 health left
+	// Removing breaches that have 0 health left or are assigned to inactive players
 	for (int i = 0; i < MAX_EVENTS; i++) {
 		if (ship->getBreaches().at(i) == nullptr) {
 			continue;
 		}
-		if (ship->getBreaches().at(i)->getHealth() == 0) {
+		// check if health is zero or the assigned player is inactive
+		if (ship->getBreaches().at(i)->getHealth() == 0 ||
+			!ship->getDonuts().at(ship->getBreaches().at(i)->getPlayer())->getIsActive()) {
+			ship->getBreaches().at(i)->setHealth(0);
 			ship->getBreaches().at(i)->setAngle(-1);
 			breachFree.at(i) = true;
 		}
@@ -135,7 +138,8 @@ void GLaDOS::update(float dt) {
 				}
 			}
 
-			if (!goodAngle) {
+			if (!goodAngle ||
+				!ship->getDonuts().at(ship->getBreaches().at(i)->getPlayer())->getIsActive()) {
 				continue;
 			}
 			breachFree.at(i) = false;

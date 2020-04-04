@@ -193,7 +193,13 @@ class DonutModel {
 	 *
 	 * @return whether this donut is active.
 	 */
-	float getIsActive() { return isActive; }
+	bool getIsActive() { return isActive; }
+
+	/**
+	 * Sets whether this donut is active.
+	 *
+	 */
+	void setIsActive(bool active) { isActive = active; }
 
 	void setColorId(int i) { colorId = i; }
 	int getColorId() { return colorId; }
