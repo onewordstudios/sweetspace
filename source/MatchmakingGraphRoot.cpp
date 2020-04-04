@@ -49,18 +49,18 @@ bool MatchmakingGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& asset
 		std::dynamic_pointer_cast<Button>(assets->get<Node>("matchmaking_home_btnwrap_hostbtn"));
 	clientBtn =
 		std::dynamic_pointer_cast<Button>(assets->get<Node>("matchmaking_home_btnwrap_clientbtn"));
-	hostLabel =
-		std::dynamic_pointer_cast<Label>(assets->get<Node>("matchmaking_host_wrap_plate_room"));
 
 	mainScreen = assets->get<Node>("matchmaking_home");
 	hostScreen = assets->get<Node>("matchmaking_host");
 	clientScreen = assets->get<Node>("matchmaking_client");
 
+	hostLabel =
+		std::dynamic_pointer_cast<Label>(assets->get<Node>("matchmaking_host_wrap_plate_room"));
 	clientLabel =
 		std::dynamic_pointer_cast<Label>(assets->get<Node>("matchmaking_client_wrap_plate_room"));
+
 	clientJoinBtn =
 		std::dynamic_pointer_cast<Button>(assets->get<Node>("matchmaking_client_wrap_joinbtn"));
-
 	clientClearBtn =
 		std::dynamic_pointer_cast<Button>(assets->get<Node>("matchmaking_client_buttons_btnclear"));
 
@@ -83,7 +83,14 @@ void MatchmakingGraphRoot::dispose() {
 		removeAllChildren();
 		hostBtn = nullptr;
 		clientBtn = nullptr;
+		mainScreen = nullptr;
+		hostScreen = nullptr;
+		clientScreen = nullptr;
 		hostLabel = nullptr;
+		clientLabel = nullptr;
+		clientJoinBtn = nullptr;
+		clientClearBtn = nullptr;
+		clientRoomBtns.clear();
 		_active = false;
 	}
 }
