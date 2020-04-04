@@ -70,6 +70,12 @@ bool MatchmakingGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& asset
 	clientClearBtn =
 		std::dynamic_pointer_cast<Button>(assets->get<Node>("matchmaking_client_buttons_btnclear"));
 
+	buttonManager.registerButton(hostBtn);
+	buttonManager.registerButton(clientBtn);
+	buttonManager.registerButton(hostBeginBtn);
+	buttonManager.registerButton(clientJoinBtn);
+	buttonManager.registerButton(clientClearBtn);
+
 	for (unsigned int i = 0; i < NUM_DIGITS; i++) {
 		clientRoomBtns.push_back(std::dynamic_pointer_cast<Button>(
 			assets->get<Node>("matchmaking_client_buttons_btn" + std::to_string(i))));
@@ -132,6 +138,8 @@ MatchmakingGraphRoot::PressedButton MatchmakingGraphRoot::checkButtons(const cug
 	if (position == Vec2::ZERO || transitionState != NA) {
 		return None;
 	}
+
+	buttonManager.process(position);
 
 	switch (currState) {
 		case StartScreen: {
