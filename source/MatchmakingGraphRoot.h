@@ -17,9 +17,11 @@ class MatchmakingGraphRoot : public cugl::Scene {
 		NA = -1,
 		/** Main menu splash screen */
 		StartScreen,
-		/** Hosting a game */
+		/** Hosting a game; waiting on ship ID */
+		HostScreenWait,
+		/** Hosting a game; ship ID received */
 		HostScreen,
-		/** Joining a game; not connected yet */
+		/** Joining a game; waiting on ship ID */
 		ClientScreen,
 		/** Joining a game; connected */
 		ClientScreenDone,
@@ -133,7 +135,7 @@ class MatchmakingGraphRoot : public cugl::Scene {
 	enum PressedButton { None, StartHost, StartClient, HostBegin, ClientConnect };
 
 	/**
-	 * Returns integers representing which button has been tapped if any
+	 * Processes button presses. Should be called AFTER update() every frame.
 	 *
 	 * @param position The screen coordinates of the tap
 	 *
@@ -159,6 +161,7 @@ class MatchmakingGraphRoot : public cugl::Scene {
 	 * needs to be updated every frame) */
 	bool isConnected() {
 		switch (currState) {
+			case HostScreenWait:
 			case HostScreen:
 			case ClientScreenDone:
 				return true;

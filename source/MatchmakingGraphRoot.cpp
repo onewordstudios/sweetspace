@@ -104,15 +104,20 @@ void MatchmakingGraphRoot::dispose() {
  */
 void MatchmakingGraphRoot::reset() {}
 
-void MatchmakingGraphRoot::update(float timestep) {}
+void MatchmakingGraphRoot::update(float timestep) {
+	switch (currState) {
+		case HostScreenWait: {
+			if (roomID != "") {
+				hostScreen->setVisible(true);
+				currState = HostScreen;
+			}
+		}
+		default: {
+			break;
+		}
+	}
+}
 
-/**
- * Returns integers representing which button has been tapped if any
- *
- * @param position The screen coordinates of the tap
- *
- * @return -1 if no button pressed 0 for host creation, 1 for client creation
- */
 MatchmakingGraphRoot::PressedButton MatchmakingGraphRoot::checkButtons(const cugl::Vec2& position) {
 	if (position == Vec2::ZERO) {
 		return None;
@@ -121,9 +126,8 @@ MatchmakingGraphRoot::PressedButton MatchmakingGraphRoot::checkButtons(const cug
 	switch (currState) {
 		case StartScreen: {
 			if (hostBtn->containsScreen(position)) {
-				hostScreen->setVisible(true);
 				mainScreen->setVisible(false);
-				currState = HostScreen;
+				currState = HostScreenWait;
 				return StartHost;
 			}
 			if (clientBtn->containsScreen(position)) {
