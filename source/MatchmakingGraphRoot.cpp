@@ -133,22 +133,36 @@ void MatchmakingGraphRoot::update(float timestep) {
 	}
 }
 
-MatchmakingGraphRoot::PressedButton MatchmakingGraphRoot::checkButtons(const cugl::Vec2& position) {
-	buttonManager.process(position);
+/**
+ * Returns true iff a button was properly tapped (the tap event both started and ended on the
+ * button)
+ *
+ * @param button The button
+ * @param tapData The start and end locations provided by the input controller
+ */
+bool tappedButton(std::shared_ptr<cugl::Button> button,
+				  std::tuple<cugl::Vec2, cugl::Vec2> tapData) {
+	return button->containsScreen(std::get<0>(tapData)) &&
+		   button->containsScreen(std::get<1>(tapData));
+}
+
+MatchmakingGraphRoot::PressedButton MatchmakingGraphRoot::checkButtons(InputController& position) {
+	buttonManager.process(position.getCurrTapLoc());
 
 	// Do not process inputs if a) nothing was pressed, or b) currently transitioning
-	if (position == Vec2::ZERO || transitionState != NA) {
+	if (!position.isTapEndAvailable() || transitionState != NA) {
 		return None;
 	}
 
+	std::tuple<cugl::Vec2, cugl::Vec2> tapData = position.getTapEndLoc();
+
 	switch (currState) {
 		case StartScreen: {
-			if (hostBtn->containsScreen(position)) {
+			if (tappedButton(hostBtn, tapData)) {
 				transitionState = HostScreenWait;
-				hostBtn->setDown(true);
 				return StartHost;
 			}
-			if (clientBtn->containsScreen(position)) {
+			if (tappedButton(clientBtn, tapData)) {
 				mainScreen->setVisible(false);
 				clientScreen->setVisible(true);
 				currState = ClientScreen;
@@ -156,7 +170,7 @@ MatchmakingGraphRoot::PressedButton MatchmakingGraphRoot::checkButtons(const cug
 			}
 		}
 		case HostScreen: {
-			if (hostBeginBtn->containsScreen(position)) {
+			if (tappedButton(hostBeginBtn, tapData)) {
 				hostBeginBtn->setDown(true);
 				return HostBegin;
 			} else {
@@ -164,7 +178,7 @@ MatchmakingGraphRoot::PressedButton MatchmakingGraphRoot::checkButtons(const cug
 			}
 		}
 		case ClientScreen: {
-			if (clientJoinBtn->containsScreen(position)) {
+			if (tappedButton(clientJoinBtn, tapData)) {
 				if (clientEnteredRoom.size() != globals::ROOM_LENGTH) {
 					return None;
 				}
@@ -182,7 +196,7 @@ MatchmakingGraphRoot::PressedButton MatchmakingGraphRoot::checkButtons(const cug
 			}
 
 			for (unsigned int i = 0; i < NUM_DIGITS; i++) {
-				if (clientRoomBtns[i]->containsScreen(position)) {
+				if (tappedButton(clientRoomBtns[i], tapData)) {
 					if (clientEnteredRoom.size() < globals::ROOM_LENGTH) {
 						clientEnteredRoom.push_back(i);
 						updateClientLabel();
@@ -191,7 +205,7 @@ MatchmakingGraphRoot::PressedButton MatchmakingGraphRoot::checkButtons(const cug
 				}
 			}
 
-			if (clientClearBtn->containsScreen(position)) {
+			if (tappedButton(clientClearBtn, tapData)) {
 				if (clientEnteredRoom.size() > 0) {
 					clientEnteredRoom.pop_back();
 					updateClientLabel();

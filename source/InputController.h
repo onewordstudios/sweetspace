@@ -51,6 +51,14 @@ class InputController {
 	 * Whether a tap recently occurred
 	 */
 	bool tapped;
+	/**
+	 * Starting location of last tap.
+	 */
+	cugl::Vec2 tapStart;
+	/**
+	 * Ending location of last tap.
+	 */
+	cugl::Vec2 tapEnd;
 
    public:
 #pragma mark -
@@ -142,7 +150,19 @@ class InputController {
 	/**
 	 * Returns where the finger / mouse is currently pressed, or Vec2::ZERO if unpressed.
 	 */
-	const cugl::Vec2 getCurrTapLoc();
+	const cugl::Vec2 getCurrTapLoc() const;
+
+	/** Whether information about a new tap is available to read */
+	const bool isTapEndAvailable() const { return !tapEnd.isZero(); }
+
+	/** Returns the start and end locations of the last tap iff isTapEndAvailable is true, otherwise
+	 * undefined */
+	const std::tuple<cugl::Vec2, cugl::Vec2> getTapEndLoc() {
+		std::tuple<cugl::Vec2, cugl::Vec2> r = std::make_tuple(tapStart, tapEnd);
+		tapStart.setZero();
+		tapEnd.setZero();
+		return r;
+	}
 
 #pragma mark -
 #pragma mark Touch Callbacks

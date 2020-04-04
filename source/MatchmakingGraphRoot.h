@@ -160,7 +160,7 @@ class MatchmakingGraphRoot : public cugl::Scene {
 	 *
 	 * @return The button pressed
 	 */
-	PressedButton checkButtons(const cugl::Vec2& position);
+	PressedButton checkButtons(InputController& position);
 
 	/**
 	 * Sets roomID (for the host)

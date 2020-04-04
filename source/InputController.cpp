@@ -140,7 +140,7 @@ void InputController::update(float dt) {
 #endif
 }
 
-const cugl::Vec2 InputController::getCurrTapLoc() {
+const cugl::Vec2 InputController::getCurrTapLoc() const {
 #ifndef CU_TOUCH_SCREEN
 	Mouse* mouse = Input::get<Mouse>();
 	if (mouse->buttonDown().hasLeft()) {
@@ -179,6 +179,7 @@ void InputController::clear() {
 void InputController::touchBeganCB(const cugl::TouchEvent& event, bool focus) {
 	// Update the tap location for jump
 	tapLoc.set(event.position);
+	tapStart.set(event.position);
 	touchID = event.touch;
 	tapped = true;
 }
@@ -189,7 +190,9 @@ void InputController::touchBeganCB(const cugl::TouchEvent& event, bool focus) {
  * @param t     The touch information
  * @param event The associated event
  */
-void InputController::touchEndedCB(const cugl::TouchEvent& event, bool focus) {}
+void InputController::touchEndedCB(const cugl::TouchEvent& event, bool focus) {
+	tapEnd.set(event.position);
+}
 
 #pragma mark -
 #pragma mark Click Callbacks
@@ -202,6 +205,7 @@ void InputController::touchEndedCB(const cugl::TouchEvent& event, bool focus) {}
 void InputController::clickBeganCB(const cugl::MouseEvent& event, Uint8 clicks, bool focus) {
 	// Update the click location for jump
 	tapLoc.set(event.position);
+	tapStart.set(event.position);
 	tapped = true;
 }
 
@@ -211,4 +215,6 @@ void InputController::clickBeganCB(const cugl::MouseEvent& event, Uint8 clicks, 
  * @param t     The click information
  * @param event The associated event
  */
-void InputController::clickEndedCB(const cugl::MouseEvent& event, Uint8 clicks, bool focus) {}
+void InputController::clickEndedCB(const cugl::MouseEvent& event, Uint8 clicks, bool focus) {
+	tapEnd.set(event.position);
+}
