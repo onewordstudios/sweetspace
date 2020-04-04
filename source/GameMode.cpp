@@ -114,21 +114,35 @@ void GameMode::reset() {
 void GameMode::update(float timestep) {
 	input.update(timestep);
 
-	net->update(ship);
-
 	// Connection Status Checks
 	status = net->matchStatus();
 	switch (status) {
 		case MagicInternetBox::Disconnected:
-			net->reconnect(roomId);
+			if (net->reconnect(roomId)) {
+				net->update();
+			}
+			sgRoot.setStatus(MagicInternetBox::Disconnected);
 			break;
 		case MagicInternetBox::GameEnded:
 			// Insert Game Ended Screen
+			net->update(ship);
+			sgRoot.setStatus(MagicInternetBox::GameEnded);
 			break;
 		case MagicInternetBox::Reconnecting:
 			// Still Reconnecting
+			net->update();
+			sgRoot.setStatus(MagicInternetBox::Reconnecting);
+			break;
+		case MagicInternetBox::ClientRoomInvalid:
+		case MagicInternetBox::ReconnectError:
+			if (net->reconnect(roomId)) {
+				net->update();
+			}
+			sgRoot.setStatus(MagicInternetBox::ReconnectError);
 			break;
 		case MagicInternetBox::GameStart:
+			net->update(ship);
+			sgRoot.setStatus(MagicInternetBox::GameStart);
 			break;
 		default:
 			CULog("ERROR: Uncaught MatchmakingStatus Value Occurred");

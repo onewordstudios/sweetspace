@@ -229,6 +229,8 @@ void GameGraphRoot::update(float timestep) {
 		case MagicInternetBox::GameEnded:
 			// Insert Game Ended Screen
 			break;
+		case MagicInternetBox::Disconnected:
+		case MagicInternetBox::ReconnectError:
 		case MagicInternetBox::Reconnecting:
 			// Still Reconnecting
 			reconnectDim->setVisible(true);
