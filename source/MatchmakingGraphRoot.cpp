@@ -100,7 +100,21 @@ void MatchmakingGraphRoot::reset() {}
  *
  * @param timestep  The amount of time (in seconds) since the last frame
  */
-void MatchmakingGraphRoot::update(float timestep) { hostLabel->setText(positionText()); }
+void MatchmakingGraphRoot::update(float timestep) {
+	if (hostScreen->isVisible()) {
+		if (roomID.length() == globals::ROOM_LENGTH &&
+			hostLabel->getText().length() != (2 * globals::ROOM_LENGTH - 1)) {
+			std::ostringstream disp;
+			for (unsigned int i = 0; i < globals::ROOM_LENGTH; i++) {
+				disp << roomID.at(i);
+				if (i < globals::ROOM_LENGTH - 1) {
+					disp << ' ';
+				}
+			}
+			hostLabel->setText(disp.str());
+		}
+	}
+}
 
 /**
  * Returns integers representing which button has been tapped if any
@@ -141,7 +155,6 @@ MatchmakingGraphRoot::PressedButton MatchmakingGraphRoot::checkButtons(const cug
 			}
 
 			roomID = room.str();
-			CULog("Sending room %s", roomID.c_str());
 
 			return ClientConnect;
 		}
@@ -174,10 +187,7 @@ MatchmakingGraphRoot::PressedButton MatchmakingGraphRoot::checkButtons(const cug
 std::string MatchmakingGraphRoot::positionText() { return roomID; }
 
 void MatchmakingGraphRoot::updateClientLabel() {
-	std::ostringstream disp;
-
 	std::vector<char> room;
-
 	for (unsigned int i = 0; i < clientEnteredRoom.size(); i++) {
 		room.push_back('0' + clientEnteredRoom[i]);
 	}
@@ -185,6 +195,7 @@ void MatchmakingGraphRoot::updateClientLabel() {
 		room.push_back('_');
 	}
 
+	std::ostringstream disp;
 	for (unsigned int i = 0; i < globals::ROOM_LENGTH; i++) {
 		disp << room[i];
 		if (i < globals::ROOM_LENGTH - 1) {

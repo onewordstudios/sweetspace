@@ -438,7 +438,7 @@
 											"type": "Label",
 											"data": {
 												"font"       : "mont_black_italic_big",
-												"text"       : "4 4 4 4 4",
+												"text"       : " 4 4 4 4 4 ",
 												"foreground" : [248,231,78,255],
 												"anchor"	 : [0.5,0.5],
 												"valign"     : "middle",
