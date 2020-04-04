@@ -23,7 +23,7 @@ constexpr unsigned int ROOM_LENGTH = 5; // NOLINT
 constexpr int INITIAL_SHIP_HEALTH = 11; // NOLINT
 
 /** Minimum of ship health for win condition */
-constexpr int SHIP_HEALTH_WIN_LIMIT = 10;
+constexpr int SHIP_HEALTH_WIN_LIMIT = 10; // NOLINT
 
 #pragma mark Math
 
@@ -45,13 +45,13 @@ constexpr unsigned int SCENE_WIDTH = 1024; // NOLINT
 constexpr unsigned int RADIUS = 550; // NOLINT
 
 /** Maximum number of possibly visible ship segments at a time */
-constexpr unsigned int VISIBLE_SEGS = 6;
+constexpr unsigned int VISIBLE_SEGS = 6; // NOLINT
 
 /** The angle in degree of a single ship segment */
-constexpr float SEG_SIZE = 45 * PI_180;
+constexpr float SEG_SIZE = 45 * PI_180; // NOLINT
 
 /** The screen angle at which a ship segment is no longer visible */
-constexpr float SEG_CUTOFF_ANGLE = 90 * PI_180;
+constexpr float SEG_CUTOFF_ANGLE = 90 * PI_180; // NOLINT
 } // namespace globals
 
 #endif /* __GLOBALS_H__ */
