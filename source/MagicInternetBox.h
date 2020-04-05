@@ -87,6 +87,11 @@ class MagicInternetBox {
 	unsigned int numPlayers;
 
 	/**
+	 * Maximum number of players for this ship
+	 */
+	unsigned int maxPlayers;
+
+	/**
 	 * Number of frames since the last inbound server message
 	 */
 	unsigned int lastConnection;
@@ -107,6 +112,7 @@ class MagicInternetBox {
 		// Connection messages that can be received during gameplay
 		PlayerJoined = 50, // Doubles for both matchmaking and reconnect
 		PlayerDisconnect,  // Doubles for manually disconnecting
+		StartGame,
 
 		// Matchmaking messages only
 		AssignedRoom = 100, // Doubles for both creating and created
@@ -168,6 +174,7 @@ class MagicInternetBox {
 		currFrame = 0;
 		playerID = -1;
 		numPlayers = 0;
+		maxPlayers = 0;
 		lastConnection = 0;
 	};
 
@@ -237,9 +244,13 @@ class MagicInternetBox {
 	int getPlayerID();
 
 	/**
-	 * Returns the number of connected players, or -1 if uninitialized.
+	 * Returns the number of connected players, or 0 if uninitialized.
 	 */
 	unsigned int getNumPlayers();
+
+	/** Returns the total number of players in this ship (including disconnected players), or 0 if
+	 * uninitialized. */
+	unsigned int getMaxNumPlayers() { return maxPlayers; }
 
 	/**
 	 * Start the game with the current number of players.
