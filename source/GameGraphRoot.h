@@ -37,6 +37,13 @@ class GameGraphRoot : public cugl::Scene {
 	std::shared_ptr<cugl::Node> nearSpace;
 	/** Parent node of all breaches, is child of nearSpace */
 	std::shared_ptr<cugl::Node> breachesNode;
+	std::shared_ptr<cugl::PolygonNode> challengePanelHanger;
+	std::shared_ptr<cugl::PolygonNode> challengePanel;
+	std::shared_ptr<cugl::PolygonNode> challengePanelText;
+	std::vector<std::shared_ptr<cugl::PolygonNode>> challengePanelArrows;
+
+	/** Filmstrip representing the player's animated donut */
+	std::shared_ptr<cugl::PolygonNode> healthNode;
 
 	// Reconnection Textures
 	/** Node to hold all of the Reconnect Overlay.*/
@@ -91,6 +98,10 @@ class GameGraphRoot : public cugl::Scene {
 #pragma mark Public Consts
 	/** Possible colors for player representations */
 	const std::vector<string> playerColor{"yellow", "red", "purple", "green", "orange", "cyan"};
+	/** Possible colors for breach representations */
+	const std::vector<cugl::Color4> breachColor{
+		cugl::Color4(219, 197, 52), cugl::Color4(227, 100, 159), cugl::Color4(152, 95, 204),
+		cugl::Color4(158, 212, 87), cugl::Color4(244, 150, 40),	 cugl::Color4(47, 206, 197)};
 	/** number of possible player colors */
 	static constexpr int NUM_COLORS = 6;
 	/** The scale of the breach textures. */

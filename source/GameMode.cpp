@@ -24,6 +24,8 @@ constexpr float BREACH_WIDTH = 11.0f;
 constexpr float DOOR_ACTIVE_ANGLE = 15.0f;
 /** Force to push back during collision */
 constexpr float REBOUND_FORCE = -6;
+/** Starting time for the round */
+constexpr unsigned int TIME = 45;
 /** Initial health of the ship */
 int initHealth;
 
@@ -70,6 +72,7 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 
 	donutModel = ship->getDonuts().at(static_cast<unsigned long>(playerID));
 	ship->initTimer(level->getTime());
+	ship->setHealth(globals::INITIAL_SHIP_HEALTH);
 
 	// Scene graph Initialization
 	sgRoot.init(assets, ship, playerID);
@@ -198,14 +201,12 @@ void GameMode::update(float timestep) {
 		}
 	}
 
-	if ((ship->getBreaches().size()) == 0) {
-		ship->setHealth(initHealth);
-	} else {
-		int h = 0;
-		for (int i = 0; i < ship->getBreaches().size(); i++) {
-			h = h + ship->getBreaches().at(i)->getHealth();
+	for (int i = 0; i < ship->getBreaches().size(); i++) {
+		// this should be adjusted based on the level and number of players
+		if (ship->getBreaches().at(i) != nullptr &&
+			trunc(ship->getBreaches().at(i)->getTimeCreated()) - trunc(ship->timer) > 15) {
+			ship->decHealth(0.01);
 		}
-		ship->setHealth(initHealth + 1 - h);
 	}
 
 	gm.update(timestep);
@@ -221,6 +222,33 @@ void GameMode::update(float timestep) {
 
 	for (unsigned int i = 0; i < ship->getDonuts().size(); i++) {
 		ship->getDonuts()[i]->update(timestep);
+	}
+
+	if (ship->getChallenge() && trunc(ship->timer) <= 6) {
+		ship->setChallenge(false);
+	}
+
+	if (ship->getChallenge() && trunc(ship->timer) > 6) {
+		for (unsigned int i = 0; i < ship->getDonuts().size(); i++) {
+			if (ship->getRollDir() == 0) {
+				if (ship->getDonuts()[i]->getVelocity() < 0) {
+					ship->updateChallengeProg();
+				}
+			} else {
+				if (ship->getDonuts()[i]->getVelocity() > 0) {
+					ship->updateChallengeProg();
+				}
+			}
+		}
+		if (ship->getChallengeProg() > 30 || trunc(ship->timer) == trunc(ship->getEndTime())) {
+			if (ship->getChallengeProg() < 10) {
+				net->failAllTask();
+				int h = ship->getHealth();
+				ship->setHealth(h - 3);
+			}
+			ship->setChallenge(false);
+			ship->setChallengeProg(0);
+		}
 	}
 
 	sgRoot.update(timestep);

@@ -1,4 +1,4 @@
-﻿#include "GameGraphRoot.h"
+#include "GameGraphRoot.h"
 
 #include <cugl/cugl.h>
 
@@ -19,6 +19,9 @@ constexpr float DONUT_SCALE = 0.4f;
 
 /** Offset of donut sprites from the radius of the ship */
 constexpr int DONUT_OFFSET = 195;
+
+/** Offset of donut sprites from the radius of the ship */
+constexpr int CHALLENGE_OFFSET = 195;
 
 /** The scale of the ship segments. */
 constexpr float SEG_SCALE = 0.33f;
@@ -92,8 +95,25 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	doorsNode = assets->get<Node>("game_field_near_doors");
 	externalDonutsNode = assets->get<Node>("game_field_near_externaldonuts");
 	donutPos = donutNode->getPosition();
+	healthNode = dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_health"));
 	coordHUD = std::dynamic_pointer_cast<Label>(assets->get<Node>("game_hud"));
 
+	challengePanelHanger = dynamic_pointer_cast<cugl::PolygonNode>(
+		assets->get<Node>("game_field_challengePanelHanger"));
+	challengePanelHanger->setVisible(false);
+	challengePanel =
+		dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_challengePanel"));
+	challengePanel->setVisible(false);
+	challengePanelText =
+		dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_challengePanelText"));
+	challengePanelText->setVisible(false);
+
+	for (int i = 0; i < 10; i++) {
+		std::string s = std::to_string(i + 1);
+		std::shared_ptr<cugl::PolygonNode> arrow = dynamic_pointer_cast<cugl::PolygonNode>(
+			assets->get<Node>("game_field_challengePanelArrow" + s));
+		challengePanelArrows.push_back(arrow);
+	}
 	// Reconnect Overlay
 	reconnectOverlay = assets->get<Node>("game_field_reconnect");
 
@@ -137,21 +157,31 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	// Initialize Breaches
 	for (int i = 0; i < ship->getBreaches().size(); i++) {
 		std::shared_ptr<BreachModel> breachModel = ship->getBreaches().at((unsigned long)i);
-		string breachColor = playerColor.at((unsigned long)ship->getDonuts()
+		cugl::Color4 color = breachColor.at((unsigned long)ship->getDonuts()
 												.at((unsigned long)breachModel->getPlayer())
 												->getColorId());
-		std::shared_ptr<Texture> image = assets->get<Texture>("breach_" + breachColor);
+		std::shared_ptr<Texture> image = assets->get<Texture>("breach_filmstrip");
 		std::shared_ptr<BreachNode> breachNode = BreachNode::allocWithTexture(image);
+		breachNode->resetAnimation();
+		breachNode->setColor(color);
 		breachNode->setModel(breachModel);
 		breachNode->setTag((unsigned int)(i + 1));
 		breachNode->setScale(BREACH_SCALE);
 		breachNode->setShipSize(ship->getSize());
 		breachNode->setDonutModel(ship->getDonuts().at(playerID));
+		breachNode->setPrevHealth(breachModel->getHealth());
 		// Start position is off screen
 		Vec2 breachPos = Vec2(0, 0);
 		breachNode->setPosition(breachPos);
+		// Add pattern node
+		string breachColor = playerColor.at((unsigned long)ship->getDonuts()
+												.at((unsigned long)breachModel->getPlayer())
+												->getColorId());
+		image = assets->get<Texture>("breach_" + breachColor);
+		std::shared_ptr<PolygonNode> patternNode = PolygonNode::allocWithTexture(image);
 		// Add the breach node
 		breachesNode->addChild(breachNode);
+		breachNode->addChild(patternNode);
 	}
 
 	// Initialize Doors
@@ -166,18 +196,6 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 		doorNode->setShipSize(ship->getSize());
 		doorNode->setDonutModel(ship->getDonuts().at(playerID));
 		doorsNode->addChild(doorNode);
-	}
-
-	// Initialize health bars
-	for (int i = 0; i < NUM_HEALTH_BAR; i++) {
-		std::shared_ptr<Texture> image = assets->get<Texture>("health_glow");
-		std::shared_ptr<HealthNode> healthNode = HealthNode::alloc(image, 1, HEALTH_BAR_FRAMES);
-		healthNode->setModel(ship);
-		healthNode->setFrame(HEALTH_BAR_FRAMES - 1);
-		healthNode->setSection(i);
-		healthNode->setAnchor(Vec2::ANCHOR_BOTTOM_CENTER);
-		healthNode->setScale(HEALTH_NODE_SCALE);
-		nearSpace->addChild(healthNode);
 	}
 
 	addChild(scene);
@@ -227,6 +245,16 @@ void GameGraphRoot::update(float timestep) {
 	// "Drawing" code.  Move everything BUT the donut
 	// Update the HUD
 	coordHUD->setText(positionText());
+	if (ship->getHealth() < 1) {
+		std::shared_ptr<Texture> image = assets->get<Texture>("health_empty");
+		healthNode->setTexture(image);
+	} else if (ship->getHealth() < 5) {
+		std::shared_ptr<Texture> image = assets->get<Texture>("health_red");
+		healthNode->setTexture(image);
+	} else if (ship->getHealth() < 8) {
+		std::shared_ptr<Texture> image = assets->get<Texture>("health_yellow");
+		healthNode->setTexture(image);
+	}
 
 	// Reanchor the node at the center of the screen and rotate about center.
 	Vec2 position = farSpace->getPosition();
@@ -260,16 +288,49 @@ void GameGraphRoot::update(float timestep) {
 	// Update breaches textures if recycled
 	for (int i = 0; i < ship->getBreaches().size(); i++) {
 		std::shared_ptr<BreachModel> breachModel = ship->getBreaches().at((unsigned long)i);
-		if (breachModel->getHealth() > 0 && breachModel->getNeedSpriteUpdate()) {
-			string breachColor =
-				playerColor.at((unsigned long)(ship->getDonuts()
-												   .at((unsigned long)breachModel->getPlayer())
-												   ->getColorId()));
+		shared_ptr<BreachNode> breachNode =
+			dynamic_pointer_cast<BreachNode>(breachesNode->getChildByTag((unsigned int)(i + 1)));
+		if (!breachNode->getIsAnimatingShrink() && breachModel->getHealth() > 0 &&
+			breachModel->getNeedSpriteUpdate()) {
+			cugl::Color4 color = breachColor.at((unsigned long)ship->getDonuts()
+													.at((unsigned long)breachModel->getPlayer())
+													->getColorId());
+			breachNode->setColor(color);
+			breachNode->resetAnimation();
+			string breachColor = playerColor.at((unsigned long)ship->getDonuts()
+													.at((unsigned long)breachModel->getPlayer())
+													->getColorId());
 			std::shared_ptr<Texture> image = assets->get<Texture>("breach_" + breachColor);
-			shared_ptr<BreachNode> breachNode = dynamic_pointer_cast<BreachNode>(
-				breachesNode->getChildByTag((unsigned int)(i + 1)));
-			breachNode->setTexture(image);
+			shared_ptr<PolygonNode> patternNode =
+				dynamic_pointer_cast<PolygonNode>(breachNode->getChildByTag(0));
+			patternNode->setTexture(image);
 			breachModel->setNeedSpriteUpdate(false);
+		}
+	}
+
+	if (ship->getChallenge()) {
+		challengePanelHanger->setVisible(true);
+		challengePanel->setVisible(true);
+		challengePanelText->setVisible(true);
+		std::shared_ptr<Texture> image = assets->get<Texture>("panel_progress_1");
+		for (int i = 0; i < challengePanelArrows.size(); i++) {
+			std::shared_ptr<cugl::PolygonNode> arrow = challengePanelArrows.at(i);
+			if (ship->getRollDir() == 0) {
+				arrow->setAngle(180 * globals::PI_180);
+			}
+			if (i < (ship->getChallengeProg())) {
+				arrow->setTexture(image);
+			}
+			arrow->setVisible(true);
+		}
+	} else {
+		challengePanelHanger->setVisible(false);
+		challengePanel->setVisible(false);
+		challengePanelText->setVisible(false);
+		std::shared_ptr<Texture> image = assets->get<Texture>("panel_progress_0");
+		for (int i = 0; i < challengePanelArrows.size(); i++) {
+			challengePanelArrows.at(i)->setVisible(false);
+			challengePanelArrows.at(i)->setTexture(image);
 		}
 	}
 
@@ -329,10 +390,10 @@ void GameGraphRoot::update(float timestep) {
  */
 std::string GameGraphRoot::positionText() {
 	stringstream ss;
-	if (ship->timerEnded() && ship->getHealth() > globals::SHIP_HEALTH_WIN_LIMIT) {
-		ss << "You Win!";
-	} else if (ship->timerEnded()) {
+	if (ship->getHealth() < 1) {
 		ss << "You Lose.";
+	} else if (ship->timerEnded() && ship->getHealth() > 0) {
+		ss << "You Win!";
 	} else {
 		ss << "Time Left: " << trunc(ship->timer);
 	}

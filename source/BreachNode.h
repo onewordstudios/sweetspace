@@ -17,11 +17,25 @@ class BreachNode : public cugl::AnimationNode {
 	float shipSize;
 	/** Whether the breach is being shown right now */
 	bool isShown;
+	/** Whether the breach is playing idle animation */
+	bool isAnimatingShrink;
+	/** Health of the breach model from previous frame */
+	int prevHealth;
+	/** Current frame for idle animation */
+	int currentFrameIdle;
+
+	/** Helper function to calculate frame */
+	int getFrameFromHealth(int health) {
+		int currentHealth =
+			health > BreachModel::HEALTH_DEFAULT ? BreachModel::HEALTH_DEFAULT : health;
+		return (BreachModel::HEALTH_DEFAULT - currentHealth) *
+			   (getSize() / BreachModel::HEALTH_DEFAULT);
+	}
 
    public:
 #pragma mark -
-	static constexpr int BREACH_H = 1;
-	static constexpr int BREACH_W = 1;
+	static constexpr int BREACH_H = 9;
+	static constexpr int BREACH_W = 10;
 #pragma mark Constructor
 	/**
 	 * Creates an empty Breach with the degenerate texture.
@@ -67,9 +81,22 @@ class BreachNode : public cugl::AnimationNode {
 
 	void setShipSize(float f) { shipSize = f; }
 
+	void setPrevHealth(int i) { prevHealth = i; }
+
+	bool getIsAnimatingShrink() { return isAnimatingShrink; }
+
 	std::shared_ptr<BreachModel> getModel() { return breachModel; }
 
 #pragma mark -
+	/**
+	 * Reset flags for node animation.
+	 */
+	void resetAnimation() {
+		isAnimatingShrink = false;
+		prevHealth = BreachModel::HEALTH_DEFAULT;
+		setFrame(0);
+		currentFrameIdle = 0;
+	}
 #pragma mark Drawing
 
 	void draw(const shared_ptr<cugl::SpriteBatch> &batch, const cugl::Mat4 &transform,

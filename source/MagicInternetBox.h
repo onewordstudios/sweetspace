@@ -107,6 +107,8 @@ class MagicInternetBox {
 		BreachShrink,
 		DualCreate,
 		DualResolve,
+		AllCreate,
+		AllFail,
 		StateSync,
 
 		// Connection messages that can be received during gameplay
@@ -311,6 +313,22 @@ class MagicInternetBox {
 	 * @param flag Whether the player is on or off the door (1 or 0)
 	 */
 	void flagDualTask(int id, int player, int flag);
+
+	/**
+	 * Inform other players that a task requiring all members of the ship has been created (eg:
+	 * stabilizer malfunction)
+	 *
+	 * @param player The player whose screen this message will appear on
+	 * @param data Data representing the nature of this task. This data will be passed directly into
+	 *             ShipModel on the receiving player's end.
+	 */
+	void createAllTask(int player, int data);
+
+	/**
+	 * Inform the host that a task requiring all members of the ship has failed, and thus to deduct
+	 * appropriate health
+	 */
+	void failAllTask();
 
 	/**
 	 * Inform other players that a player has initiated a jump.

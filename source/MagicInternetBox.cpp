@@ -478,6 +478,16 @@ void MagicInternetBox::update(std::shared_ptr<ShipModel> state) {
 				state->flagDoor(taskID, player, flag);
 				break;
 			}
+			case AllCreate: {
+				if (playerID == id) {
+					state->createAllTask(data1);
+				}
+				break;
+			}
+			case AllFail: {
+				state->failAllTask();
+				break;
+			}
 			default:
 				break;
 		}
@@ -501,6 +511,12 @@ void MagicInternetBox::createDualTask(float angle, int player1, int player2, int
 void MagicInternetBox::flagDualTask(int id, int player, int flag) {
 	sendData(DualResolve, -1.0f, id, player, flag, -1.0f);
 }
+
+void MagicInternetBox::createAllTask(int player, int data) {
+	sendData(AllCreate, -1.0f, player, data, -1, -1.0f);
+}
+
+void MagicInternetBox::failAllTask() { sendData(AllFail, -1.0f, -1, -1, -1, -1.0f); }
 
 void MagicInternetBox::jump(int player) { sendData(Jump, -1.0f, player, -1, -1, -1.0f); }
 

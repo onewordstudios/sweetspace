@@ -20,7 +20,7 @@ constexpr unsigned int NETWORK_TICK = 12; // NOLINT
 constexpr unsigned int ROOM_LENGTH = 5; // NOLINT
 
 /** Minimum of ship health for win condition */
-constexpr int SHIP_HEALTH_WIN_LIMIT = 10; // NOLINT
+constexpr int INITIAL_SHIP_HEALTH = 10; // NOLINT
 
 /** Minimum number of players per game */
 constexpr unsigned int MIN_PLAYERS = 3; // NOLINT
