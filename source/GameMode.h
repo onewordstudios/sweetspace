@@ -38,7 +38,6 @@ class GameMode {
 
 	/** Local record of Player ID */
 	int playerID;
-	float endTime;
 	/** Local record of Room ID */
 	std::string roomId;
 

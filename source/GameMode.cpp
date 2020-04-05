@@ -225,43 +225,31 @@ void GameMode::update(float timestep) {
 		ship->getDonuts()[i]->update(timestep);
 	}
 
-	if(ship->getChallenge() && trunc(ship->timer) <= 6) {
+	if (ship->getChallenge() && trunc(ship->timer) <= 6) {
 		ship->setChallenge(false);
-
 	}
 
-	if (gm.allPlayerChallenge() && trunc(ship->timer) > 6) {
-		if (!(ship->getChallenge())) {
-			ship->setChallengeProg(0);
-			endTime = trunc(ship->timer) - 6;
-			ship->setChallenge(true);
-
-		}
-        for (unsigned int i = 0; i < ship->getDonuts().size(); i++) {
-            if(ship->getRollDir() == -1){
-                if (ship->getDonuts()[i]->getVelocity() < 0) {
-                	ship->updateChallengeProg();
-                }
-            } else {
-                if (ship->getDonuts()[i]->getVelocity() > 0) {
-                	ship->updateChallengeProg();
-                }
-            }
-        }
-		if (trunc(ship->timer) == endTime) {
-			CULog("End Challenge");
-			if (ship->getChallengeProg() > 10) {
-				CULog("Challenge Completed");
+	if (ship->getChallenge() && trunc(ship->timer) > 6) {
+		for (unsigned int i = 0; i < ship->getDonuts().size(); i++) {
+			if (ship->getRollDir() == 0) {
+				if (ship->getDonuts()[i]->getVelocity() < 0) {
+					ship->updateChallengeProg();
+				}
 			} else {
-				CULog("Challenge Failed");
-				net->failAllTask();
+				if (ship->getDonuts()[i]->getVelocity() > 0) {
+					ship->updateChallengeProg();
+				}
 			}
-			gm.setAllPlayerChallenge(false);
+		}
+		if (ship->getChallengeProg() > 30 || trunc(ship->timer) == trunc(ship->getEndTime())) {
+			if (ship->getChallengeProg() < 10) {
+				net->failAllTask();
+				int h = ship->getHealth();
+				ship->setHealth(h - 3);
+			}
 			ship->setChallenge(false);
 			ship->setChallengeProg(0);
 		}
-	} else {
-		gm.setAllPlayerChallenge(false);
 	}
 
 	sgRoot.update(timestep);

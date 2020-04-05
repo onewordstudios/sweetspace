@@ -24,6 +24,7 @@ class ShipModel {
 	bool challenge;
 	/** Challenge progress*/
 	int challengeProg;
+	float endTime;
 
    public:
 	/** Game timer*/
@@ -298,5 +299,15 @@ class ShipModel {
 	 * Set fail challenge
 	 */
 	bool failAllTask();
+
+	/**
+	 * Set end time for challenge
+	 */
+	void setEndTime(float time) { endTime = time; };
+
+	/**
+	 * Get end time for challenge
+	 */
+	float getEndTime() { return endTime; }
 };
 #endif /* __SHIP_MODEL_H__ */

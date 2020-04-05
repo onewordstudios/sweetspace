@@ -71,7 +71,7 @@ bool GLaDOS::init(std::shared_ptr<ShipModel> ship, std::shared_ptr<LevelModel> l
 	for (int i = 0; i < maxDoors; i++) {
 		doorFree.at(i) = true;
 	}
-	allChallenge = false;
+	challengeInProg = false;
 	// Set random seed based on time
 	srand((unsigned int)time(NULL));
 	active = success;
@@ -180,15 +180,17 @@ void GLaDOS::update(float dt) {
 			break;
 		}
 	}
-	if (rand() % 3 == 1 && !allChallenge) {
-		allChallenge = true;
-		((int)(rand() % 2 == 0)) ? ship->setRollDir(-1) : ship->setRollDir(1);
+
+	if (rand() % 15 == 1 && !ship->getChallenge()) {
+		((int)(rand() % 2 == 0)) ? ship->setRollDir(0) : ship->setRollDir(1);
 		int p = (int)(rand() % ship->getDonuts().size());
-		if(p != playerID) {
+		if (p != playerID) {
 			mib->createAllTask(p, ship->getRollDir());
+		} else {
+			ship->setChallengeProg(0);
+			ship->setEndTime((ship->timer) - 6);
+			ship->setChallenge(true);
 		}
-
-
 	}
 }
 

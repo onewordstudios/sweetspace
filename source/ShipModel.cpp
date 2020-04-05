@@ -31,6 +31,7 @@ bool ShipModel::init(unsigned int numPlayers, unsigned int numBreaches, unsigned
 	this->shipSize = shipSize;
 
 	challenge = false;
+	challengeProg = 0;
 
 	return true;
 }
@@ -69,6 +70,9 @@ bool ShipModel::closeDoor(int id) { return false; }
 
 bool ShipModel::createAllTask(int data) {
 	setRollDir(data);
+	challenge = true;
+	endTime = timer - 6;
+	challengeProg = 0;
 	return true;
 }
 

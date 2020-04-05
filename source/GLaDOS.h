@@ -31,7 +31,7 @@ class GLaDOS {
 	/** Network Controller for outbound calls */
 	shared_ptr<MagicInternetBox> mib;
 
-	bool allChallenge;
+	bool challengeInProg;
 
    public:
 #pragma mark -
@@ -106,10 +106,10 @@ class GLaDOS {
 	/**
 	 * Gets if all player challenge is in effect.
 	 */
-	bool allPlayerChallenge() { return allChallenge; }
+	bool allPlayerChallenge() { return challengeInProg; }
 	/**
 	 * Sets if all player challenge is in effect.
 	 */
-	void setAllPlayerChallenge(bool b) { allChallenge = b; }
+	void setAllPlayerChallenge(bool b) { challengeInProg = b; }
 };
 #endif /* __GM_CONTROLLER_H__ */
