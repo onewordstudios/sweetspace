@@ -14,12 +14,6 @@ using namespace std;
 
 #pragma mark -
 #pragma mark Level Layout
-/** The maximum number of events on ship at any one time. This will probably need to scale with the
- * number of players*/
-constexpr unsigned int MAX_EVENTS = 3;
-/** The maximum number of doors on ship at any one time. This will probably need to scale with the
- * number of players*/
-constexpr unsigned int MAX_DOORS = 1;
 /** The Angle in degrees for fixing a breach*/
 constexpr float EPSILON_ANGLE = 5.2f;
 /** The Angle in degrees for which a collision occurs*/
@@ -30,8 +24,8 @@ constexpr float BREACH_WIDTH = 11.0f;
 constexpr float DOOR_ACTIVE_ANGLE = 15.0f;
 /** Force to push back during collision */
 constexpr float REBOUND_FORCE = -6;
-/** Starting time for the round */
-constexpr unsigned int TIME = 30;
+/** Initial health of the ship */
+int initHealth;
 
 #pragma mark -
 #pragma mark Constructors
@@ -61,13 +55,15 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 
 	net = MagicInternetBox::getInstance();
 	playerID = net->getPlayerID();
-
-	float shipSize = 360; // TODO level size comes from level file
-	ship = ShipModel::alloc(net->getNumPlayers(), MAX_EVENTS, MAX_DOORS, playerID, shipSize);
-	gm.init(ship);
+	std::shared_ptr<LevelModel> level = assets->get<LevelModel>(LEVEL_ONE_KEY);
+	float shipSize = level->getShipSize();
+	initHealth = level->getInitHealth();
+	ship = ShipModel::alloc(net->getNumPlayers(), level->getMaxBreaches(), level->getMaxDoors(),
+							playerID, shipSize, initHealth);
+	gm.init(ship, level);
 
 	donutModel = ship->getDonuts().at(static_cast<unsigned long>(playerID));
-	ship->initTimer(TIME);
+	ship->initTimer(level->getTime());
 
 	// Scene graph setup
 	sgRoot.init(assets, ship, playerID);
@@ -115,7 +111,7 @@ void GameMode::update(float timestep) {
 	}
 
 	// Breach health depletion
-	for (int i = 0; i < MAX_EVENTS; i++) {
+	for (int i = 0; i < ship->getBreaches().size(); i++) {
 		std::shared_ptr<BreachModel> breach = ship->getBreaches().at(i);
 		if (breach == nullptr) {
 			continue;
@@ -141,7 +137,7 @@ void GameMode::update(float timestep) {
 		}
 	}
 
-	for (int i = 0; i < MAX_DOORS; i++) {
+	for (int i = 0; i < ship->getDoors().size(); i++) {
 		if (ship->getDoors().at(i) == nullptr || ship->getDoors().at(i)->halfOpen() ||
 			ship->getDoors().at(i)->getAngle() < 0) {
 			continue;
@@ -166,13 +162,13 @@ void GameMode::update(float timestep) {
 	}
 
 	if ((ship->getBreaches().size()) == 0) {
-		ship->setHealth(globals::INITIAL_SHIP_HEALTH);
+		ship->setHealth(initHealth);
 	} else {
 		int h = 0;
 		for (int i = 0; i < ship->getBreaches().size(); i++) {
 			h = h + ship->getBreaches().at(i)->getHealth();
 		}
-		ship->setHealth(globals::INITIAL_SHIP_HEALTH + 1 - h);
+		ship->setHealth(initHealth + 1 - h);
 	}
 
 	gm.update(timestep);

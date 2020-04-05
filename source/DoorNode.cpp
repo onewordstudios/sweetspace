@@ -17,12 +17,6 @@ constexpr int ONE_PLAYER_FRAME = 16;
 /** The frame of the animation strip to freeze on when two players are on the door */
 constexpr int TWO_PLAYER_FRAME = 31;
 
-/** The height of the door. */
-int height = 0;
-
-/** The max frame this door can have. */
-int frameCap = 0;
-
 void DoorNode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch, const Mat4& transform,
 					Color4 tint) {
 	Vec2 doorPos;
