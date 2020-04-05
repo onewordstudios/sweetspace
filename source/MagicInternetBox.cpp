@@ -31,6 +31,8 @@ bool MagicInternetBox::initConnection() {
 		case Disconnected:
 		case Uninitialized:
 		case HostError:
+		case ClientRoomInvalid:
+		case ClientRoomFull:
 		case ClientError:
 		case ReconnectError:
 			break;
@@ -269,6 +271,10 @@ void MagicInternetBox::update() {
 		case GameStart:
 			CULog("ERROR: Matchmaking update called on MIB after game start; aborting");
 			return;
+		case ClientRoomInvalid:
+		case ClientRoomFull:
+			CULog("Tried to call update() after failed client connection; aborting");
+			return;
 		default:
 			break;
 	}
@@ -304,11 +310,13 @@ void MagicInternetBox::update() {
 					case 1: {
 						CULog("Room Does Not Exist");
 						status = ClientRoomInvalid;
+						ws->close();
 						return;
 					}
 					case 2: {
 						CULog("Room Full");
 						status = ClientRoomFull;
+						ws->close();
 						return;
 					}
 					case 3: {

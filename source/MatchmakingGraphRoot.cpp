@@ -127,6 +127,14 @@ void MatchmakingGraphRoot::update(float timestep) {
 				hostScreen->setPositionY(-screenHeight);
 				transitionState = HostScreen;
 			}
+			break;
+		}
+		case ClientScreenDone: {
+			if (roomID == "") {
+				currState = ClientScreen;
+				clientJoinBtn->setDown(false);
+			}
+			break;
 		}
 		default: {
 			break;
@@ -148,7 +156,9 @@ bool tappedButton(std::shared_ptr<cugl::Button> button,
 }
 
 MatchmakingGraphRoot::PressedButton MatchmakingGraphRoot::checkButtons(InputController& position) {
-	buttonManager.process(position.getCurrTapLoc());
+	if (currState != ClientScreenDone) {
+		buttonManager.process(position.getCurrTapLoc());
+	}
 
 	// Do not process inputs if a) nothing was pressed, or b) currently transitioning
 	if (!position.isTapEndAvailable() || transitionState != NA) {
@@ -172,7 +182,6 @@ MatchmakingGraphRoot::PressedButton MatchmakingGraphRoot::checkButtons(InputCont
 		}
 		case HostScreen: {
 			if (tappedButton(hostBeginBtn, tapData)) {
-				hostBeginBtn->setDown(true);
 				return HostBegin;
 			} else {
 				return None;
@@ -227,6 +236,14 @@ void MatchmakingGraphRoot::setRoomID(std::string roomID) {
 		return;
 	}
 	this->roomID = roomID;
+
+	if (roomID == "") {
+		hostLabel->setText("_ _ _ _ _");
+		clientEnteredRoom.clear();
+		updateClientLabel();
+		return;
+	}
+
 	std::ostringstream disp;
 	for (unsigned int i = 0; i < globals::ROOM_LENGTH; i++) {
 		disp << roomID.at(i);
