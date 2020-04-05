@@ -94,6 +94,9 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	donutPos = donutNode->getPosition();
 	coordHUD = std::dynamic_pointer_cast<Label>(assets->get<Node>("game_hud"));
 
+	// Reconnect Overlay
+	reconnectOverlay = assets->get<Node>("game_field_reconnect");
+
 	// Initialize Ship Segments
 	leftMostSeg = 0;
 	rightMostSeg = globals::VISIBLE_SEGS - 1;
@@ -268,6 +271,25 @@ void GameGraphRoot::update(float timestep) {
 			breachNode->setTexture(image);
 			breachModel->setNeedSpriteUpdate(false);
 		}
+	}
+
+	// Draw Client Reconnection Overlay
+	switch (status) {
+		case MagicInternetBox::GameEnded:
+			// Insert Game Ended Screen
+			break;
+		case MagicInternetBox::Disconnected:
+		case MagicInternetBox::ReconnectError:
+		case MagicInternetBox::Reconnecting:
+		case MagicInternetBox::ClientRoomInvalid:
+			//// Still Reconnecting
+			reconnectOverlay->setVisible(true);
+			break;
+		case MagicInternetBox::GameStart:
+			reconnectOverlay->setVisible(false);
+			break;
+		default:
+			CULog("ERROR: Uncaught MatchmakingStatus Value Occurred");
 	}
 
 	// Update ship segments
