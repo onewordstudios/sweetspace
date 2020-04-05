@@ -198,7 +198,6 @@ void GameMode::update(float timestep) {
 
 	if (gm.allPlayerChallenge() && trunc(ship->timer) > 6) {
 		if (!(ship->getChallenge())) {
-			rand() % 2 == 0 ? ship->setRollDir(-1) : ship->setRollDir(1);
 			ship->setChallengeProg(0);
 			endTime = trunc(ship->timer) - 6;
 			ship->setChallenge(true);
@@ -221,7 +220,6 @@ void GameMode::update(float timestep) {
 				CULog("Challenge Completed");
 			} else {
 				CULog("Challenge Failed");
-				net->failAllTask();
 				// add health decrement once health calculation is updated!!!!
 			}
 			gm.setAllPlayerChallenge(false);

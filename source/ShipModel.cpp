@@ -67,9 +67,8 @@ bool ShipModel::flagDoor(int id, int player, int flag) {
 
 bool ShipModel::closeDoor(int id) { return false; }
 
-bool ShipModel::createAllTask(int player, int data) {
+bool ShipModel::createAllTask(int data) {
 	setRollDir(data);
-	challengePlayer = player;
 	return true;
 }
 
