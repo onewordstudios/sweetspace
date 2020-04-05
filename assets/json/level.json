@@ -2,7 +2,7 @@
 	"maxBreaches" : 5,
 	"maxDoors" : 2,
 	"spawnRate" : 100,
-	"minAngle" : 1,
+	"minAngle" : 30,
 	"shipSize" : 480,
 	"time" : 45,
 	"initHealth" : 12	
