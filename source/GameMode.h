@@ -40,8 +40,6 @@ class GameMode {
 	int playerID;
 	/** Local record of Room ID */
 	std::string roomId;
-	/** Local record of Network Status */
-	// MagicInternetBox::MatchmakingStatus status;
 
    public:
 #pragma mark -
