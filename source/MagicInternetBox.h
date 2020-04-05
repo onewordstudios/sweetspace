@@ -312,6 +312,12 @@ class MagicInternetBox {
 	void createAllTask(int player, int data);
 
 	/**
+	 * Inform the host that a task requiring all members of the ship has failed, and thus to deduct
+	 * appropriate health
+	 */
+	void failAllTask();
+
+	/**
 	 * Inform other players that a player has initiated a jump.
 	 *
 	 * @param player The player ID who is jumping

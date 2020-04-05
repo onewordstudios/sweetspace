@@ -481,6 +481,8 @@ void MagicInternetBox::flagDualTask(int id, int player, int flag) {
 	sendData(DualResolve, -1.0f, id, player, flag, -1.0f);
 }
 
-void MagicInternetBox::jump(int player) { sendData(Jump, -1.0f, player, -1, -1, -1.0f); }
-
 void MagicInternetBox::createAllTask(int player, int data) {}
+
+void MagicInternetBox::failAllTask() {}
+
+void MagicInternetBox::jump(int player) { sendData(Jump, -1.0f, player, -1, -1, -1.0f); }
