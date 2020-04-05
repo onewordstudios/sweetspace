@@ -109,8 +109,7 @@ void GameMode::reset() {
  */
 void GameMode::update(float timestep) {
 	// Connection Status Checks
-	status = net->matchStatus();
-	switch (status) {
+	switch (net->matchStatus()) {
 		case MagicInternetBox::Disconnected:
 		case MagicInternetBox::ClientRoomInvalid:
 		case MagicInternetBox::ReconnectError:
