@@ -169,7 +169,6 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 		doorsNode->addChild(doorNode);
 	}
 
-
 	addChild(scene);
 	return true;
 }
@@ -217,13 +216,13 @@ void GameGraphRoot::update(float timestep) {
 	// "Drawing" code.  Move everything BUT the donut
 	// Update the HUD
 	coordHUD->setText(positionText());
-	if(ship->getHealth() < 1) {
+	if (ship->getHealth() < 1) {
 		std::shared_ptr<Texture> image = assets->get<Texture>("health_empty");
 		healthNode->setTexture(image);
-	} else if(ship->getHealth() < 5) {
+	} else if (ship->getHealth() < 5) {
 		std::shared_ptr<Texture> image = assets->get<Texture>("health_red");
 		healthNode->setTexture(image);
-	} else if(ship->getHealth() < 8) {
+	} else if (ship->getHealth() < 8) {
 		std::shared_ptr<Texture> image = assets->get<Texture>("health_yellow");
 		healthNode->setTexture(image);
 	}
@@ -272,7 +271,7 @@ void GameGraphRoot::update(float timestep) {
 			breachModel->setNeedSpriteUpdate(false);
 		}
 	}
-	
+
 	// Draw Client Reconnection Overlay
 	switch (status) {
 		case MagicInternetBox::GameEnded:
