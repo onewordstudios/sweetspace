@@ -81,8 +81,10 @@ void MatchmakingMode::update(float timestep) {
 			net->initClient(sgRoot.getRoomID());
 		}
 		case MatchmakingGraphRoot::HostBegin: {
-			gameReady = true;
-			net->startGame();
+			if (net->getNumPlayers() >= globals::MIN_PLAYERS) {
+				gameReady = true;
+				net->startGame();
+			}
 			return;
 		}
 		default:
