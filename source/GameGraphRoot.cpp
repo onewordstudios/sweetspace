@@ -272,8 +272,7 @@ void GameGraphRoot::update(float timestep) {
 			breachModel->setNeedSpriteUpdate(false);
 		}
 	}
-
-
+	
 	// Draw Client Reconnection Overlay
 	switch (status) {
 		case MagicInternetBox::GameEnded:
