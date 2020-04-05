@@ -77,7 +77,7 @@ bool ShipModel::createAllTask(int data) {
 }
 
 bool ShipModel::failAllTask() {
-	setHealth(health - 3);
+	setHealth(health - 1);
 	return true;
 }
 
