@@ -239,6 +239,7 @@ void MatchmakingGraphRoot::setRoomID(std::string roomID) {
 
 	if (roomID == "") {
 		hostLabel->setText("_ _ _ _ _");
+		return;
 	}
 
 	std::ostringstream disp;
