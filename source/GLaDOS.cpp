@@ -31,7 +31,7 @@ array<bool, MAX_DOORS> doorFree;
  * This constructor does NOT do any initialzation.  It simply allocates the
  * object. This makes it safe to use this class without a pointer.
  */
-GLaDOS::GLaDOS() : active(false), numEvents(0), playerID(0) {}
+GLaDOS::GLaDOS() : active(false), numEvents(0), playerID(0), mib(nullptr) {}
 
 /**
  * Deactivates this input controller, releasing all listeners.
@@ -53,10 +53,10 @@ void GLaDOS::dispose() {
  *
  * @return true if the controller was initialized successfully
  */
-bool GLaDOS::init(std::shared_ptr<ShipModel> ship, std::shared_ptr<MagicInternetBox> mib) {
+bool GLaDOS::init(std::shared_ptr<ShipModel> ship) {
 	bool success = true;
 	this->ship = ship;
-	this->mib = mib;
+	this->mib = MagicInternetBox::getInstance();
 	this->playerID = mib->getPlayerID();
 	for (int i = 0; i < MAX_EVENTS; i++) {
 		breachFree.at(i) = true;

@@ -58,10 +58,16 @@
             "file":   "textures/ship.png"
         },
         "create_lobby": {
-            "file":   "textures/create_button.png"
+            "file":   "textures/main_menu/create_up.png"
 		},
 		"join_lobby": {
-            "file":   "textures/join_button.png"
+            "file":   "textures/main_menu/join_up.png"
+        },
+        "create_lobby_down": {
+            "file":   "textures/main_menu/create_down.png"
+		},
+		"join_lobby_down": {
+            "file":   "textures/main_menu/join_down.png"
         },
         "confirm_join": {
             "file":   "textures/confirm_join.png"
@@ -80,8 +86,55 @@
         },
         "panel_progress_1":   {
           "file":   "textures/text_self_instruction_1.png"
-        }
-
+        },
+		"game_title": {
+			"file": "textures/main_menu/sweetspace.png"
+		},
+		"main_menu_bg": {
+			"file": "textures/main_menu/sweetspace_bg.png"
+		},
+		"purple_panel" : {
+			"file": "textures/main_menu/purple_panel.png"
+		},
+		"blue_panel" : {
+			"file": "textures/main_menu/blue_panel.png"
+		},
+		"dial" : {
+			"file": "textures/main_menu/dial.png"
+		},
+		"dial_hand" : {
+			"file": "textures/main_menu/dial_hand.png"
+		},
+		"purple_plate" : {
+			"file": "textures/main_menu/purple_plate.png"
+		},
+		"blue_plate" : {
+			"file": "textures/main_menu/blue_plate.png"
+		},
+		"start_btn" : {
+			"file": "textures/main_menu/start_up.png"
+		},
+		"start_btn_down" : {
+			"file": "textures/main_menu/start_down.png"
+		},
+		"join_btn" : {
+			"file": "textures/main_menu/join_up.png"
+		},
+		"join_btn_down" : {
+			"file": "textures/main_menu/join_down.png"
+		},
+		"num_btn" : {
+			"file": "textures/main_menu/btn_up.png"
+		},
+		"num_btn_down" : {
+			"file": "textures/main_menu/btn_down.png"
+		},
+		"clear_btn" : {
+			"file": "textures/main_menu/clear_up.png"
+		},
+		"clear_btn_down" : {
+			"file": "textures/main_menu/clear_down.png"
+		}
 	},
 	"sounds": {
         "theme": {
@@ -94,6 +147,10 @@
 		"felt32": {
 			"file":     "fonts/Montserrat-Medium.ttf",
 			"size":     32
+		},
+		"mont_black_italic_big" : {
+			"file":     "fonts/Montserrat-BlackItalic.ttf",
+			"size":     96
 		}
 	},
     "scenes" : {
@@ -315,132 +372,373 @@
             "format"    : {
                 "type" : "Anchored"
             },
+			"data"   : {
+				"anchor"   : [0.5,0.5],
+				"scale"    : 1
+			},
+			"layout" : {
+				"x_anchor" : "center",
+				"y_anchor" : "middle"
+			},
             "children":  {
-                "host" : {
-				    "type": "Button",
-				    "format" : {
-				        "type" : "Anchored"
-				    },
-				    "data": {
-				        "upnode"   : "up",
-				        "position" : [0,0],
-				        "anchor"   : [0,1],
-				        "size"     : [0,0],
-				        "scale" : 0.5
-				    },
-				    "children" : {
-				    	"up" : {
-                            "type"   : "Image",
-                            "data"   : {
-                                "texture"  : "create_lobby"
-                            }
-                        }
-				    },
-				    "layout" : {
-				        "x_anchor" : "left",
-				        "y_anchor" : "top"
-				    }
+				"mainmenubg" : {
+					"type" : "Image",
+					"format"    : {
+						"type" : "Anchored"
+					},
+					"data"   : {
+						"texture"  : "main_menu_bg",
+						"anchor"   : [0.5,0.5],
+						"scale"    : 0.5
+					},
+					"layout" : {
+						"x_anchor" : "center",
+						"y_anchor" : "middle"
+					}
 				},
-                "client" : {
-                    "type": "Button",
-                    "format" : {
-				        "type" : "Anchored"
-				    },
-				    "data": {
-				        "upnode"   : "up",
-				        "position" : [0,0],
-				        "anchor"   : [0,1],
-				        "size"     : [0,0],
-				        "scale" : 0.5
-				    },
-				    "children" : {
-				    	"up" : {
-                            "type"   : "Image",
-                            "data"   : {
-                                "texture"  : "join_lobby"
-                            }
-                        }
-				    },
-                    "layout" : {
-                        "x_anchor" : "center",
-                        "y_anchor" : "top"
-                    }
-                },
-                "room" : {
-                	"type": "Label",
-                    "data": {
-                       	"font"       : "felt32",
-                       	"text"       : "Lobby ID:                ",
-                       	"visible"	 : false,
-                       	"foreground" : [255,0,0,255],
-                       	"anchor"	 : [0,0],
-                       	"valign"     : "left",
-                       	"halign"     : "center"
-                    },
-                    "layout" : {
-                        "x_anchor" : "left",
-                        "y_anchor" : "bottom"
-                    }
-                },
-                "instr" : {
-                    "type": "Label",
-                    "data": {
-                        "font"       : "felt32",
-                        "text"       : "Input Lobby ID Here:",
-                        "visible"    : false,
-                        "foreground" : [255,0,0,255],
-                        "anchor"     : [0,1],
-                        "valign"     : "middle",
-                        "halign"     : "center"
-                    },
-                    "layout" : {
-                        "x_anchor" : "left",
-                        "y_anchor" : "top"
-                    }
-                },
-                "input" : {
-                	"type": "TextField",
-                    "data": {
-                       	"font"       : "felt32",
-                       	"text"       : "sweet",
-                       	"visible"	 : false,
-                       	"foreground" : [255,0,0,255],
-                       	"anchor"	 : [0,1],
-                       	"valign"     : "middle",
-                       	"halign"     : "center"
-                    },
-                    "layout" : {
-                        "x_anchor" : "left",
-                        "y_anchor" : "top",
-                        "x_offset" : 0.4
-                    }
-                },
-                "inputbutton" : {
-                    "type": "Button",
-                    "format" : {
-				        "type" : "Anchored"
-				    },
-				    "data": {
-				        "upnode"   : "up",
-				        "position" : [0,0],
-				        "anchor"   : [1,1],
-				        "size"     : [0,0],
-				        "visible"  : false,
-				        "scale" : 0.5
-				    },
-				    "children" : {
-				    	"up" : {
-                            "type"   : "Image",
-                            "data"   : {
-                                "texture"  : "confirm_join"
-                            }
-                        }
-				    },
-                    "layout" : {
-                        "x_anchor" : "right",
-                        "y_anchor" : "top"
-                    }
-                }
+				"home" : {
+					"type" : "Node",
+					"format" : { "type" : "Anchored" },
+					"data"   : {
+						"anchor"   : [0.5,0.5],
+						"scale"    : 1,
+						"size" : [1600,500]
+					},
+					"layout" : {
+						"x_anchor" : "center",
+						"y_anchor" : "middle"
+					},
+					"children" : {
+						"splash" : {
+							"type" : "Image",
+							"format"    : {
+								"type" : "Anchored"
+							},
+							"data"   : {
+								"texture"  : "game_title",
+								"anchor"   : [0.5,0.5],
+								"scale"    : 0.5
+							},
+							"layout" : {
+								"x_anchor" : "center",
+								"y_anchor" : "middle"
+							}
+						},
+						"btnwrap" : {
+							"type" : "Node",
+							"format" : { "type" : "Anchored" },
+							"data"   : {
+								"anchor"   : [0.5,0],
+								"scale"    : 1,
+								"size" :[1200,200]
+							},
+							"layout" : {
+								"x_anchor" : "center",
+								"y_anchor" : "bottom"
+							},
+							"children" : {
+								"hostbtn" : {
+									"type": "Button",
+									"format" : {
+										"type" : "Anchored"
+									},
+									"data": {
+										"upnode"   : "up",
+										"downnode" : "down",
+										"anchor"   : [1,0.5],
+										"scale" : 0.5
+									},
+									"children" : {
+										"up" : {
+											"type"   : "Image",
+											"data"   : {
+												"texture"  : "create_lobby"
+											}
+										},
+										"down" : {
+											"type"   : "Image",
+											"data"   : {
+												"texture"  : "create_lobby_down"
+											}
+										}
+									},
+									"layout" : {
+										"x_anchor" : "center",
+										"y_anchor" : "middle"
+									}
+								},
+								"clientbtn" : {
+									"type": "Button",
+									"format" : {
+										"type" : "Anchored"
+									},
+									"data": {
+										"upnode"   : "up",
+										"downnode" : "down",
+										"anchor"   : [0,0.5],
+										"scale" : 0.5
+									},
+									"children" : {
+										"up" : {
+											"type"   : "Image",
+											"data"   : {
+												"texture"  : "join_lobby"
+											}
+										},
+										"down" : {
+											"type"   : "Image",
+											"data"   : {
+												"texture"  : "join_lobby_down"
+											}
+										}
+									},
+									"layout" : {
+										"x_anchor" : "center",
+										"y_anchor" : "middle"
+									}
+								}
+							}
+						}
+					}
+				},
+                "host" : {
+					"type" : "Image",
+					"format" : { "type" : "Anchored" },
+					"data"   : {
+						"texture"  : "purple_panel",
+						"anchor"   : [0.5,0],
+						"scale"    : 0.5,
+						"visible" : false
+					},
+					"layout" : {
+						"x_anchor" : "center",
+						"y_anchor" : "bottom"
+					},
+					"children" : {
+						"dial" : {
+							"type" : "Image",
+							"format" : {
+								"type" : "Anchored"
+							},
+							"data"   : {
+								"texture"  : "dial",
+								"anchor"   : [1,0.5],
+								"scale"    : 1
+							},
+							"layout" : {
+								"x_anchor" : "center",
+								"y_anchor" : "middle"
+							},
+							"children" : {
+								"hand" : {
+									"type" : "Image",
+									"format" : {
+										"type" : "Anchored"
+									},
+									"data"   : {
+										"texture"  : "dial_hand",
+										"anchor"   : [0.5,0.5],
+										"scale"    : 1
+									},
+									"layout" : {
+										"x_anchor" : "center",
+										"y_anchor" : "middle"
+									}
+								}
+							}
+						},
+						"wrap" : {
+							"type" : "Node",
+							"format" : { "type" : "Anchored" },
+							"data"   : {
+								"anchor"   : [0,0.5],
+								"scale"    : 1,
+								"size" : [600,560]
+							},
+							"layout" : {
+								"x_anchor" : "center",
+								"y_anchor" : "middle",
+								"x_offset" : 0.05
+							},
+							"children" : {
+								"plate" : {
+									"type" : "Image",
+									"format" : {
+										"type" : "Anchored"
+									},
+									"data"   : {
+										"texture"  : "purple_plate",
+										"anchor"   : [0.5,1],
+										"scale"    : 1
+									},
+									"layout" : {
+										"x_anchor" : "center",
+										"y_anchor" : "top"
+									},
+									"children" : {
+										"room" : {
+											"type": "Label",
+											"data": {
+												"font"       : "mont_black_italic_big",
+												"text"       : " 4 4 4 4 4 ",
+												"foreground" : [248,231,78,255],
+												"anchor"	 : [0.5,0.5],
+												"valign"     : "middle",
+												"halign"     : "center",
+												"scale" : 1
+											},
+											"layout" : {
+												"x_anchor" : "center",
+												"y_anchor" : "middle"
+											}
+										}
+									}
+								},
+								"startbtn" : {
+									"type": "Button",
+									"format" : {
+										"type" : "Anchored"
+									},
+									"data": {
+										"upnode"   : "up",
+										"downnode" : "down",
+										"anchor"   : [0.5,0],
+										"scale" : 1
+									},
+									"layout" : {
+										"x_anchor" : "center",
+										"y_anchor" : "bottom"
+									},
+									"children" : {
+										"up" : {
+											"type"   : "Image",
+											"data"   : {
+												"texture"  : "start_btn"
+											}
+										},
+										"down" : {
+											"type"   : "Image",
+											"data"   : {
+												"texture"  : "start_btn_down"
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				},
+				"client" : {
+					"type" : "Image",
+					"format" : { "type" : "Anchored" },
+					"data"   : {
+						"texture"  : "blue_panel",
+						"anchor"   : [0.5,0],
+						"scale"    : 0.5,
+						"visible" : false
+					},
+					"layout" : {
+						"x_anchor" : "center",
+						"y_anchor" : "bottom"
+					},
+					"children" : {
+						"wrap" : {
+							"type" : "Node",
+							"format" : { "type" : "Anchored" },
+							"data"   : {
+								"anchor"   : [1,0.5],
+								"scale"    : 1,
+								"size" : [600,560]
+							},
+							"layout" : {
+								"x_anchor" : "center",
+								"y_anchor" : "middle",
+								"x_offset" : -0.05
+							},
+							"children" : {
+								"plate" : {
+									"type" : "Image",
+									"format" : {
+										"type" : "Anchored"
+									},
+									"data"   : {
+										"texture"  : "blue_plate",
+										"anchor"   : [0.5,1],
+										"scale"    : 1
+									},
+									"layout" : {
+										"x_anchor" : "center",
+										"y_anchor" : "top"
+									},
+									"children" : {
+										"room" : {
+											"type": "Label",
+											"data": {
+												"font"       : "mont_black_italic_big",
+												"text"       : "4 4 4 4 4",
+												"foreground" : [248,231,78,255],
+												"anchor"	 : [0.5,0.5],
+												"valign"     : "middle",
+												"halign"     : "center",
+												"scale" : 1
+											},
+											"layout" : {
+												"x_anchor" : "center",
+												"y_anchor" : "middle"
+											}
+										}
+									}
+								},
+								"joinbtn" : {
+									"type": "Button",
+									"format" : {
+										"type" : "Anchored"
+									},
+									"data": {
+										"upnode"   : "up",
+										"downnode" : "down",
+										"anchor"   : [0.5,0],
+										"scale" : 1
+									},
+									"layout" : {
+										"x_anchor" : "center",
+										"y_anchor" : "bottom"
+									},
+									"children" : {
+										"up" : {
+											"type"   : "Image",
+											"data"   : {
+												"texture"  : "join_btn"
+											}
+										},
+										"down" : {
+											"type"   : "Image",
+											"data"   : {
+												"texture"  : "join_btn_down"
+											}
+										}
+									}
+								}
+							}
+						},
+						"buttons" : {
+							"type" : "Node",
+							"format" : { "type" : "Anchored" },
+							"data"   : {
+								"anchor"   : [0,0.5],
+								"scale"    : 0.9,
+								"size" : [600,800]
+							},
+							"layout" : {
+								"x_anchor" : "center",
+								"y_anchor" : "middle",
+								"x_offset" : 0.05
+							},
+							"children" :
+								{"btn0":{"type":"Button","format":{"type":"Anchored"},"data":{"anchor":[0,0],"scale":1,"upnode":"up","downnode":"down"},"layout":{"x_anchor":"left","y_anchor":"bottom","x_offset":0,"y_offset":0},"children":{"up":{"type":"Image","format":{"type":"Anchored"},"data":{"texture":"num_btn","anchor":[0.5,0.5]},"children":{"n":{"type":"Label","data":{"font":"mont_black_italic_big","text":"0","foreground":[255,248,161,255],"anchor":[0.5,0.5],"valign":"middle","halign":"center","scale":0.8},"layout":{"x_anchor":"center","y_anchor":"middle"}}}},"down":{"type":"Image","format":{"type":"Anchored"},"data":{"texture":"num_btn_down","anchor":[0.5,0.5]},"children":{"n":{"type":"Label","data":{"font":"mont_black_italic_big","text":"0","foreground":[52,127,239,255],"anchor":[0.5,0.5],"valign":"middle","halign":"center","scale":0.8},"layout":{"x_anchor":"center","y_anchor":"middle"}}}}}},"btn1":{"type":"Button","format":{"type":"Anchored"},"data":{"anchor":[0,0],"scale":1,"upnode":"up","downnode":"down"},"layout":{"x_anchor":"left","y_anchor":"bottom","x_offset":0,"y_offset":0.25},"children":{"up":{"type":"Image","format":{"type":"Anchored"},"data":{"texture":"num_btn","anchor":[0.5,0.5]},"children":{"n":{"type":"Label","data":{"font":"mont_black_italic_big","text":"1","foreground":[255,248,161,255],"anchor":[0.5,0.5],"valign":"middle","halign":"center","scale":0.8},"layout":{"x_anchor":"center","y_anchor":"middle"}}}},"down":{"type":"Image","format":{"type":"Anchored"},"data":{"texture":"num_btn_down","anchor":[0.5,0.5]},"children":{"n":{"type":"Label","data":{"font":"mont_black_italic_big","text":"1","foreground":[52,127,239,255],"anchor":[0.5,0.5],"valign":"middle","halign":"center","scale":0.8},"layout":{"x_anchor":"center","y_anchor":"middle"}}}}}},"btn2":{"type":"Button","format":{"type":"Anchored"},"data":{"anchor":[0,0],"scale":1,"upnode":"up","downnode":"down"},"layout":{"x_anchor":"left","y_anchor":"bottom","x_offset":0.3333333333333333,"y_offset":0.25},"children":{"up":{"type":"Image","format":{"type":"Anchored"},"data":{"texture":"num_btn","anchor":[0.5,0.5]},"children":{"n":{"type":"Label","data":{"font":"mont_black_italic_big","text":"2","foreground":[255,248,161,255],"anchor":[0.5,0.5],"valign":"middle","halign":"center","scale":0.8},"layout":{"x_anchor":"center","y_anchor":"middle"}}}},"down":{"type":"Image","format":{"type":"Anchored"},"data":{"texture":"num_btn_down","anchor":[0.5,0.5]},"children":{"n":{"type":"Label","data":{"font":"mont_black_italic_big","text":"2","foreground":[52,127,239,255],"anchor":[0.5,0.5],"valign":"middle","halign":"center","scale":0.8},"layout":{"x_anchor":"center","y_anchor":"middle"}}}}}},"btn3":{"type":"Button","format":{"type":"Anchored"},"data":{"anchor":[0,0],"scale":1,"upnode":"up","downnode":"down"},"layout":{"x_anchor":"left","y_anchor":"bottom","x_offset":0.6666666666666666,"y_offset":0.25},"children":{"up":{"type":"Image","format":{"type":"Anchored"},"data":{"texture":"num_btn","anchor":[0.5,0.5]},"children":{"n":{"type":"Label","data":{"font":"mont_black_italic_big","text":"3","foreground":[255,248,161,255],"anchor":[0.5,0.5],"valign":"middle","halign":"center","scale":0.8},"layout":{"x_anchor":"center","y_anchor":"middle"}}}},"down":{"type":"Image","format":{"type":"Anchored"},"data":{"texture":"num_btn_down","anchor":[0.5,0.5]},"children":{"n":{"type":"Label","data":{"font":"mont_black_italic_big","text":"3","foreground":[52,127,239,255],"anchor":[0.5,0.5],"valign":"middle","halign":"center","scale":0.8},"layout":{"x_anchor":"center","y_anchor":"middle"}}}}}},"btn4":{"type":"Button","format":{"type":"Anchored"},"data":{"anchor":[0,0],"scale":1,"upnode":"up","downnode":"down"},"layout":{"x_anchor":"left","y_anchor":"bottom","x_offset":0,"y_offset":0.5},"children":{"up":{"type":"Image","format":{"type":"Anchored"},"data":{"texture":"num_btn","anchor":[0.5,0.5]},"children":{"n":{"type":"Label","data":{"font":"mont_black_italic_big","text":"4","foreground":[255,248,161,255],"anchor":[0.5,0.5],"valign":"middle","halign":"center","scale":0.8},"layout":{"x_anchor":"center","y_anchor":"middle"}}}},"down":{"type":"Image","format":{"type":"Anchored"},"data":{"texture":"num_btn_down","anchor":[0.5,0.5]},"children":{"n":{"type":"Label","data":{"font":"mont_black_italic_big","text":"4","foreground":[52,127,239,255],"anchor":[0.5,0.5],"valign":"middle","halign":"center","scale":0.8},"layout":{"x_anchor":"center","y_anchor":"middle"}}}}}},"btn5":{"type":"Button","format":{"type":"Anchored"},"data":{"anchor":[0,0],"scale":1,"upnode":"up","downnode":"down"},"layout":{"x_anchor":"left","y_anchor":"bottom","x_offset":0.3333333333333333,"y_offset":0.5},"children":{"up":{"type":"Image","format":{"type":"Anchored"},"data":{"texture":"num_btn","anchor":[0.5,0.5]},"children":{"n":{"type":"Label","data":{"font":"mont_black_italic_big","text":"5","foreground":[255,248,161,255],"anchor":[0.5,0.5],"valign":"middle","halign":"center","scale":0.8},"layout":{"x_anchor":"center","y_anchor":"middle"}}}},"down":{"type":"Image","format":{"type":"Anchored"},"data":{"texture":"num_btn_down","anchor":[0.5,0.5]},"children":{"n":{"type":"Label","data":{"font":"mont_black_italic_big","text":"5","foreground":[52,127,239,255],"anchor":[0.5,0.5],"valign":"middle","halign":"center","scale":0.8},"layout":{"x_anchor":"center","y_anchor":"middle"}}}}}},"btn6":{"type":"Button","format":{"type":"Anchored"},"data":{"anchor":[0,0],"scale":1,"upnode":"up","downnode":"down"},"layout":{"x_anchor":"left","y_anchor":"bottom","x_offset":0.6666666666666666,"y_offset":0.5},"children":{"up":{"type":"Image","format":{"type":"Anchored"},"data":{"texture":"num_btn","anchor":[0.5,0.5]},"children":{"n":{"type":"Label","data":{"font":"mont_black_italic_big","text":"6","foreground":[255,248,161,255],"anchor":[0.5,0.5],"valign":"middle","halign":"center","scale":0.8},"layout":{"x_anchor":"center","y_anchor":"middle"}}}},"down":{"type":"Image","format":{"type":"Anchored"},"data":{"texture":"num_btn_down","anchor":[0.5,0.5]},"children":{"n":{"type":"Label","data":{"font":"mont_black_italic_big","text":"6","foreground":[52,127,239,255],"anchor":[0.5,0.5],"valign":"middle","halign":"center","scale":0.8},"layout":{"x_anchor":"center","y_anchor":"middle"}}}}}},"btn7":{"type":"Button","format":{"type":"Anchored"},"data":{"anchor":[0,0],"scale":1,"upnode":"up","downnode":"down"},"layout":{"x_anchor":"left","y_anchor":"bottom","x_offset":0,"y_offset":0.75},"children":{"up":{"type":"Image","format":{"type":"Anchored"},"data":{"texture":"num_btn","anchor":[0.5,0.5]},"children":{"n":{"type":"Label","data":{"font":"mont_black_italic_big","text":"7","foreground":[255,248,161,255],"anchor":[0.5,0.5],"valign":"middle","halign":"center","scale":0.8},"layout":{"x_anchor":"center","y_anchor":"middle"}}}},"down":{"type":"Image","format":{"type":"Anchored"},"data":{"texture":"num_btn_down","anchor":[0.5,0.5]},"children":{"n":{"type":"Label","data":{"font":"mont_black_italic_big","text":"7","foreground":[52,127,239,255],"anchor":[0.5,0.5],"valign":"middle","halign":"center","scale":0.8},"layout":{"x_anchor":"center","y_anchor":"middle"}}}}}},"btn8":{"type":"Button","format":{"type":"Anchored"},"data":{"anchor":[0,0],"scale":1,"upnode":"up","downnode":"down"},"layout":{"x_anchor":"left","y_anchor":"bottom","x_offset":0.3333333333333333,"y_offset":0.75},"children":{"up":{"type":"Image","format":{"type":"Anchored"},"data":{"texture":"num_btn","anchor":[0.5,0.5]},"children":{"n":{"type":"Label","data":{"font":"mont_black_italic_big","text":"8","foreground":[255,248,161,255],"anchor":[0.5,0.5],"valign":"middle","halign":"center","scale":0.8},"layout":{"x_anchor":"center","y_anchor":"middle"}}}},"down":{"type":"Image","format":{"type":"Anchored"},"data":{"texture":"num_btn_down","anchor":[0.5,0.5]},"children":{"n":{"type":"Label","data":{"font":"mont_black_italic_big","text":"8","foreground":[52,127,239,255],"anchor":[0.5,0.5],"valign":"middle","halign":"center","scale":0.8},"layout":{"x_anchor":"center","y_anchor":"middle"}}}}}},"btn9":{"type":"Button","format":{"type":"Anchored"},"data":{"anchor":[0,0],"scale":1,"upnode":"up","downnode":"down"},"layout":{"x_anchor":"left","y_anchor":"bottom","x_offset":0.6666666666666666,"y_offset":0.75},"children":{"up":{"type":"Image","format":{"type":"Anchored"},"data":{"texture":"num_btn","anchor":[0.5,0.5]},"children":{"n":{"type":"Label","data":{"font":"mont_black_italic_big","text":"9","foreground":[255,248,161,255],"anchor":[0.5,0.5],"valign":"middle","halign":"center","scale":0.8},"layout":{"x_anchor":"center","y_anchor":"middle"}}}},"down":{"type":"Image","format":{"type":"Anchored"},"data":{"texture":"num_btn_down","anchor":[0.5,0.5]},"children":{"n":{"type":"Label","data":{"font":"mont_black_italic_big","text":"9","foreground":[52,127,239,255],"anchor":[0.5,0.5],"valign":"middle","halign":"center","scale":0.8},"layout":{"x_anchor":"center","y_anchor":"middle"}}}}}},"btnclear":{"type":"Button","format":{"type":"Anchored"},"data":{"anchor":[0,0],"scale":1,"upnode":"up","downnode":"down"},"layout":{"x_anchor":"left","y_anchor":"bottom","x_offset":0.3333333333333333,"y_offset":0},"children":{"up":{"type":"Image","format":{"type":"Anchored"},"data":{"texture":"clear_btn","anchor":[0.5,0.5]}},"down":{"type":"Image","format":{"type":"Anchored"},"data":{"texture":"clear_btn_down","anchor":[0.5,0.5]}}}}}
+						}
+					}
+				}
             }
         }
     }

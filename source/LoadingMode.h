@@ -23,14 +23,10 @@ class LoadingMode : public cugl::Scene {
 	// VIEW
 	/** The animated progress bar */
 	std::shared_ptr<cugl::ProgressBar> bar;
-	/** The "play" button */
-	std::shared_ptr<cugl::Button> button;
 
 	// MODEL
 	/** The progress displayed on the screen */
 	float progress;
-	/** Whether or not the player has pressed play to continue */
-	bool completed;
 
    public:
 #pragma mark -
@@ -41,7 +37,7 @@ class LoadingMode : public cugl::Scene {
 	 * This constructor does not allocate any objects or start the game.
 	 * This allows us to use the object without a heap pointer.
 	 */
-	LoadingMode() : Scene(), progress(0.0f), completed(false) {}
+	LoadingMode() : Scene(), progress(0.0f) {}
 
 	/**
 	 * Disposes of all (non-static) resources allocated to this mode.
@@ -81,11 +77,11 @@ class LoadingMode : public cugl::Scene {
 	void update(float timestep) override;
 
 	/**
-	 * Returns true if loading is complete, but the player has not pressed play
+	 * Returns true if loading is complete
 	 *
-	 * @return true if loading is complete, but the player has not pressed play
+	 * @return true if loading is complete
 	 */
-	bool isPending() const;
+	bool isLoaded() const;
 };
 
 #endif /* __LOADING_MODE_H__ */

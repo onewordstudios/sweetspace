@@ -50,7 +50,7 @@ class GameMode {
 	 * This constructor does not allocate any objects or start the game.
 	 * This allows us to use the object without a heap pointer.
 	 */
-	GameMode() : playerID(-1) {}
+	GameMode() : playerID(-1), net(nullptr) {}
 
 	/**
 	 * Disposes of all (non-static) resources allocated to this mode.
@@ -76,8 +76,7 @@ class GameMode {
 	 *
 	 * @return true if the controller is initialized properly, false otherwise.
 	 */
-	bool init(const std::shared_ptr<cugl::AssetManager>& assets,
-			  std::shared_ptr<MagicInternetBox>& net);
+	bool init(const std::shared_ptr<cugl::AssetManager>& assets);
 
 #pragma mark -
 #pragma mark Gameplay Handling

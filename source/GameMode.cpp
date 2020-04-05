@@ -47,8 +47,7 @@ constexpr unsigned int TIME = 45;
  *
  * @return true if the controller is initialized properly, false otherwise.
  */
-bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets,
-					std::shared_ptr<MagicInternetBox>& mib) {
+bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 	auto source = assets->get<Sound>("theme");
 	AudioChannels::get()->playMusic(source, true, source->getVolume());
 	// Initialize the scene to a locked width
@@ -59,12 +58,13 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	}
 
 	input.init();
-	net = mib;
 
+	net = MagicInternetBox::getInstance();
 	playerID = net->getPlayerID();
+
 	float shipSize = 360; // TODO level size comes from level file
 	ship = ShipModel::alloc(net->getNumPlayers(), MAX_EVENTS, MAX_DOORS, playerID, shipSize);
-	gm.init(ship, net);
+	gm.init(ship);
 
 	donutModel = ship->getDonuts().at(static_cast<unsigned long>(playerID));
 	ship->initTimer(TIME);
