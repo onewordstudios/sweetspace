@@ -57,6 +57,8 @@ class MatchmakingGraphRoot : public cugl::Scene {
 	std::shared_ptr<cugl::Label> hostLabel;
 	/** Button to begin game (host) */
 	std::shared_ptr<cugl::Button> hostBeginBtn;
+	/** The node containing the player count needle for the host */
+	std::shared_ptr<cugl::Node> hostNeedle;
 
 	/** Label for room ID (client) */
 	std::shared_ptr<cugl::Label> clientLabel;
@@ -75,6 +77,8 @@ class MatchmakingGraphRoot : public cugl::Scene {
 	// MODEL
 	/** RoomId for host display */
 	std::string roomID;
+	/** Num players connected */
+	unsigned int numPlayers;
 
 	/**
 	 * Update the client room display using the contents of {@link clientEnteredRoom}
@@ -106,6 +110,7 @@ class MatchmakingGraphRoot : public cugl::Scene {
 		  transitionState(NA),
 		  screenHeight(0),
 		  roomID(""),
+		  numPlayers(0),
 		  transitionFrame(-1) {}
 
 	/**
@@ -175,6 +180,9 @@ class MatchmakingGraphRoot : public cugl::Scene {
 	 * @param roomID The room id
 	 */
 	std::string getRoomID() { return roomID; }
+
+	/** Sets the number of players currently connected */
+	void setNumPlayers(unsigned int num) { numPlayers = num; }
 
 	/** Returns whether the graph is in a state where it is connected to the server (and thus mib
 	 * needs to be updated every frame) */

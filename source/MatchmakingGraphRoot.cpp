@@ -64,6 +64,7 @@ bool MatchmakingGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& asset
 
 	hostBeginBtn =
 		std::dynamic_pointer_cast<Button>(assets->get<Node>("matchmaking_host_wrap_startbtn"));
+	hostNeedle = assets->get<Node>("matchmaking_host_dial_hand");
 
 	clientJoinBtn =
 		std::dynamic_pointer_cast<Button>(assets->get<Node>("matchmaking_client_wrap_joinbtn"));
@@ -101,6 +102,7 @@ void MatchmakingGraphRoot::dispose() {
 		clientScreen = nullptr;
 		hostLabel = nullptr;
 		hostBeginBtn = nullptr;
+		hostNeedle = nullptr;
 		clientLabel = nullptr;
 		clientJoinBtn = nullptr;
 		clientClearBtn = nullptr;
@@ -127,6 +129,11 @@ void MatchmakingGraphRoot::update(float timestep) {
 				hostScreen->setPositionY(-screenHeight);
 				transitionState = HostScreen;
 			}
+			break;
+		}
+		case HostScreen: {
+			float percentage = (float)(numPlayers - 1) / (float)globals::MAX_PLAYERS;
+			hostNeedle->setAngle(-percentage * globals::TWO_PI);
 			break;
 		}
 		case ClientScreenDone: {

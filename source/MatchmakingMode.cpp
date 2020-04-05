@@ -104,6 +104,7 @@ void MatchmakingMode::update(float timestep) {
 				return;
 			default:
 				sgRoot.setRoomID(net->getRoomID());
+				sgRoot.setNumPlayers(net->getNumPlayers());
 				break;
 		}
 	}
