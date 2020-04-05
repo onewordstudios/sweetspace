@@ -201,17 +201,8 @@ void GameMode::update(float timestep) {
 
 	for (int i = 0; i < ship->getBreaches().size(); i++) {
 		if(trunc(ship->getBreaches().at(i)->getTimeCreated()) - trunc(ship->timer) > 17) {
-			CULog("dec health");
-			ship->decHealth(0.25);
+			ship->decHealth(0.01);
 		}
-	if ((ship->getBreaches().size()) == 0) {
-		ship->setHealth(initHealth);
-	} else {
-		int h = 0;
-		for (int i = 0; i < ship->getBreaches().size(); i++) {
-			h = h + ship->getBreaches().at(i)->getHealth();
-		}
-		ship->setHealth(initHealth + 1 - h);
 	}
 
 	gm.update(timestep);
