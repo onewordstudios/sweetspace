@@ -22,6 +22,12 @@ constexpr unsigned int ROOM_LENGTH = 5; // NOLINT
 /** Minimum of ship health for win condition */
 constexpr int INITIAL_SHIP_HEALTH = 10; // NOLINT
 
+/** Minimum number of players per game */
+constexpr unsigned int MIN_PLAYERS = 3; // NOLINT
+
+/** Maximum number of players per game */
+constexpr unsigned int MAX_PLAYERS = 6; // NOLINT
+
 #pragma region Math
 #pragma mark Math
 

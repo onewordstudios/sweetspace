@@ -260,6 +260,11 @@ void MagicInternetBox::startGame() {
 			return;
 	}
 
+	std::vector<uint8_t> data;
+	data.push_back((uint8_t)StartGame);
+	ws->sendBinary(data);
+
+	maxPlayers = numPlayers;
 	status = GameStart;
 }
 
@@ -347,6 +352,11 @@ void MagicInternetBox::update() {
 			case PlayerJoined: {
 				CULog("Player Joined");
 				numPlayers++;
+				return;
+			}
+			case StartGame: {
+				status = GameStart;
+				maxPlayers = numPlayers;
 				return;
 			}
 			default:
