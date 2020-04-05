@@ -220,10 +220,10 @@ void GameGraphRoot::update(float timestep) {
 	if(ship->getHealth() < 1) {
 		std::shared_ptr<Texture> image = assets->get<Texture>("health_empty");
 		healthNode->setTexture(image);
-	} else if(ship->getHealth() < 3) {
+	} else if(ship->getHealth() < 5) {
 		std::shared_ptr<Texture> image = assets->get<Texture>("health_red");
 		healthNode->setTexture(image);
-	} else if(ship->getHealth() < 7) {
+	} else if(ship->getHealth() < 8) {
 		std::shared_ptr<Texture> image = assets->get<Texture>("health_yellow");
 		healthNode->setTexture(image);
 	}
