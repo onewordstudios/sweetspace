@@ -16,6 +16,9 @@ constexpr int NUM_IDLE_FRAMES = 22;
 /** Controls how fast idle animations proceed */
 constexpr int NUM_SKIP_FRAMES = 2;
 
+/** Minimum scale of pattern node */
+constexpr float PATTERN_SCALE = 0.1f;
+
 void BreachNode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch, const Mat4& transform,
 					  Color4 tint) {
 	Vec2 breachPos;
@@ -73,6 +76,9 @@ void BreachNode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch, const Mat
 								   : currentFrameIdle + 1;
 		}
 		prevHealth = breachModel->getHealth();
+		shared_ptr<PolygonNode> patternNode = dynamic_pointer_cast<PolygonNode>(getChildByTag(0));
+		patternNode->setScale(PATTERN_SCALE +
+							  (-PATTERN_SCALE + 1) * (getSize() - getFrame()) / getSize());
 	} else {
 		// Breach is currently inactive
 		breachPos = Vec2(OFF_SCREEN_POS, OFF_SCREEN_POS);
