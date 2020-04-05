@@ -14,6 +14,20 @@ Coming August 2020 to Android and iOS.
 
 ## Current Progress
 
+### Alpha Release
+
+The focus of this release was to get all the core gameplay features implemented, as well as getting some finalized UI elements into the game and further polishing the networking.
+
+On the gameplay end, the third and final type of challenge is now implemented. We're tentatively calling this a "stabilizer malfunction," and it requires all the players on a ship to roll in the same direction at the same time. However, only one player will get the notification, so they'll need to let everyone else know.
+
+Additionally, ship health has been tweaked and a rudimentary round timer now shows up in the lower left corner. With that said, the networking has not been fully adapted to work with this yet, so you'll notice players desync-ing on this data. There's not much gameplay purpose to these yet; that'll be a focus for next sprint.
+
+The main menu UI has been drastically improved and now resembles how we hope the final version to look. Lots of animations and assets have also been updated throughout the game. When connecting on the main menu, there's some better error handling (such as when entering an incorrect room ID, it'll just clear the ID), but it's not perfect yet.
+
+Most importantly, our game supports anywhere from 3 to 6 players now. The host can click the "Start" button once enough people have joined. The ship is also much bigger to accommodate.
+
+To play, our game still centers around rolling around the ship in a group. While doing so, you can fix breaches of your color by rolling over it back and forth three times. You can also open locked doors by having two players both touch the door. You cannot roll through or fix breaches of other colors - you'll need the correct colored player to come over and fix those. Instead, tap or click to jump over those breaches. Tilt or use the arrow keys to roll left and right. From time to time, one player will get a notification that everyone needs to roll in that direction. Do so. Apart from that, the game plays as it always has.
+
 ### Pre-Alpha Release
 
 This is kind of a grab-bag release, with a bunch of small, behind-the-scenes changes that aren't super visible. Some changes to the networking API that were unfortunately not backwards compatible mean that the technical prototype will no longer connect to our server.
