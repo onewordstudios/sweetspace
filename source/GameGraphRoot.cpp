@@ -93,15 +93,9 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	externalDonutsNode = assets->get<Node>("game_field_near_externaldonuts");
 	donutPos = donutNode->getPosition();
 	coordHUD = std::dynamic_pointer_cast<Label>(assets->get<Node>("game_hud"));
+
 	// Reconnect Overlay
-	reconnectDim =
-		dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_reconnect_dim"));
-	reconnectBg =
-		dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_reconnect_bg"));
-	reconnectText =
-		dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_reconnect_text"));
-	reconnectEllipses =
-		dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_reconnect_ellipses"));
+	reconnectOverlay = assets->get<Node>("game_field_reconnect");
 
 	// Initialize Ship Segments
 	leftMostSeg = 0;
@@ -288,17 +282,11 @@ void GameGraphRoot::update(float timestep) {
 		case MagicInternetBox::ReconnectError:
 		case MagicInternetBox::Reconnecting:
 		case MagicInternetBox::ClientRoomInvalid:
-			// Still Reconnecting
-			reconnectDim->setVisible(true);
-			reconnectBg->setVisible(true);
-			reconnectText->setVisible(true);
-			reconnectEllipses->setVisible(true);
+			//// Still Reconnecting
+			reconnectOverlay->setVisible(true);
 			break;
 		case MagicInternetBox::GameStart:
-			reconnectDim->setVisible(false);
-			reconnectBg->setVisible(false);
-			reconnectText->setVisible(false);
-			reconnectEllipses->setVisible(false);
+			reconnectOverlay->setVisible(false);
 			break;
 		default:
 			CULog("ERROR: Uncaught MatchmakingStatus Value Occurred");

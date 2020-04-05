@@ -39,14 +39,8 @@ class GameGraphRoot : public cugl::Scene {
 	std::shared_ptr<cugl::Node> breachesNode;
 
 	// Reconnection Textures
-	/** Reconnect Overlay Dim */
-	std::shared_ptr<cugl::PolygonNode> reconnectDim;
-	/** Reconnect Overlay Background */
-	std::shared_ptr<cugl::PolygonNode> reconnectBg;
-	/** Reconnect Overlay Text */
-	std::shared_ptr<cugl::PolygonNode> reconnectText;
-	/** Reconnect Overlay Ellipses */
-	std::shared_ptr<cugl::PolygonNode> reconnectEllipses;
+	/** Node to hold all of the Reconnect Overlay.*/
+	std::shared_ptr<cugl::Node> reconnectOverlay;
 
 	/** Parent node of all ship segments, is child of nearSpace */
 	std::shared_ptr<cugl::Node> shipSegsNode;

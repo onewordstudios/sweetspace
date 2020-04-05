@@ -238,6 +238,9 @@
 				            "format"    : {
 				                "type" : "Anchored"
 				            },
+				            "data": {
+				            	"visible": false
+				            },
 				            "children":  {
 				            	"dim" : {
 				            		"type": "Image",
@@ -245,8 +248,7 @@
 				                        "texture":  "reconnect_dim",
 				                        "position": [0,0],
 				                        "anchor":   [0.5,0.5],
-				                        "scale":    1,
-				                        "visible":  false
+				                        "scale":    1
 				                    }
 				            	},
 				            	"bg" : {
@@ -255,8 +257,7 @@
 				                        "texture":  "reconnect_bg",
 				                        "position": [0,0],
 				                        "anchor":   [0.5,0.5],
-				                        "scale":    0.6,
-				                        "visible":  false
+				                        "scale":    0.6
 				                    }
 				            	},
 				            	"text" : {
@@ -265,8 +266,7 @@
 				                        "texture":  "reconnect_text",
 				                        "position": [0,-75],
 				                        "anchor":   [0.5,0.5],
-				                        "scale":    0.6,
-				                        "visible":  false
+				                        "scale":    0.6
 				                    }
 				            	},
 				            	"ellipses" : {
@@ -275,8 +275,7 @@
 				                        "texture":  "reconnect_ellipses",
 				                        "position": [0,-125],
 				                        "anchor":   [0.5,0.5],
-				                        "scale":    0.6,
-				                        "visible":  false
+				                        "scale":    0.6
 				                    }
 				            	}
 				            }
