@@ -80,6 +80,11 @@ void MatchmakingMode::update(float timestep) {
 		case MatchmakingGraphRoot::ClientConnect: {
 			net->initClient(sgRoot.getRoomID());
 		}
+		case MatchmakingGraphRoot::HostBegin: {
+			gameReady = true;
+			net->startGame();
+			return;
+		}
 		default:
 			break;
 	}
@@ -92,14 +97,12 @@ void MatchmakingMode::update(float timestep) {
 			case MagicInternetBox::MatchmakingStatus::ClientError:
 				sgRoot.setRoomID("");
 				break;
+			case MagicInternetBox::MatchmakingStatus::GameStart:
+				gameReady = true;
+				return;
 			default:
 				sgRoot.setRoomID(net->getRoomID());
 				break;
-		}
-		// Check if room is ready for play (Replace with button for play later)
-		if (net->getNumPlayers() == globals::NUM_PLAYERS) {
-			gameReady = true;
-			net->startGame();
 		}
 	}
 }
