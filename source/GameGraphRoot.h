@@ -37,6 +37,8 @@ class GameGraphRoot : public cugl::Scene {
 	std::shared_ptr<cugl::Node> nearSpace;
 	/** Parent node of all breaches, is child of nearSpace */
 	std::shared_ptr<cugl::Node> breachesNode;
+	/** Filmstrip representing the player's animated donut */
+	std::shared_ptr<cugl::PolygonNode> healthNode;
 
 	// Reconnection Textures
 	/** Node to hold all of the Reconnect Overlay.*/

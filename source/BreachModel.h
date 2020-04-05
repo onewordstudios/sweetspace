@@ -14,6 +14,8 @@ class BreachModel {
 	int player;
 	/** Set to true if sprite needs to be updated */
 	bool needSpriteUpdate;
+	/** Time at which breach was created */
+	float timeCreated;
 
    public:
 	/** Default Max Health of a Breach*/
@@ -163,6 +165,18 @@ class BreachModel {
 	 * @param b
 	 */
 	void setNeedSpriteUpdate(bool b) { needSpriteUpdate = b; }
+
+	/**
+	 * Sets the time breach was created.
+	 * @param time	time at which breach was created
+	 */
+	void setTimeCreated(float time) { timeCreated = time; }
+
+	/**
+	 * Gets the time at which breach was created.
+	 * @return time at which breach was created
+	 */
+	float getTimeCreated() { return timeCreated; }
 
 	/**
 	 * Resets the breach upon recycling.

@@ -20,7 +20,7 @@ constexpr unsigned int NETWORK_TICK = 12; // NOLINT
 constexpr unsigned int ROOM_LENGTH = 5; // NOLINT
 
 /** Minimum of ship health for win condition */
-constexpr int SHIP_HEALTH_WIN_LIMIT = 10; // NOLINT
+constexpr int INITIAL_SHIP_HEALTH = 10; // NOLINT
 
 #pragma region Math
 #pragma mark Math
