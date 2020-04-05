@@ -86,7 +86,16 @@ void MatchmakingMode::update(float timestep) {
 
 	if (sgRoot.isConnected()) {
 		net->update();
-		sgRoot.setRoomID(net->getRoomID());
+		switch (net->matchStatus()) {
+			case MagicInternetBox::MatchmakingStatus::ClientRoomInvalid:
+			case MagicInternetBox::MatchmakingStatus::ClientRoomFull:
+			case MagicInternetBox::MatchmakingStatus::ClientError:
+				sgRoot.setRoomID("");
+				break;
+			default:
+				sgRoot.setRoomID(net->getRoomID());
+				break;
+		}
 		// Check if room is ready for play (Replace with button for play later)
 		if (net->getNumPlayers() == globals::NUM_PLAYERS) {
 			gameReady = true;
