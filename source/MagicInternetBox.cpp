@@ -7,7 +7,7 @@
 using namespace cugl;
 
 /** The networking server */
-constexpr auto GAME_SERVER = "ws://localhost:8080/";
+constexpr auto GAME_SERVER = "ws://sweetspace-server.herokuapp.com/";
 
 /** The precision to multiply floating point numbers by */
 constexpr float FLOAT_PRECISION = 10.0f;
