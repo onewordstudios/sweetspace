@@ -156,7 +156,9 @@ bool tappedButton(std::shared_ptr<cugl::Button> button,
 }
 
 MatchmakingGraphRoot::PressedButton MatchmakingGraphRoot::checkButtons(InputController& position) {
-	buttonManager.process(position.getCurrTapLoc());
+	if (currState != ClientScreenDone) {
+		buttonManager.process(position.getCurrTapLoc());
+	}
 
 	// Do not process inputs if a) nothing was pressed, or b) currently transitioning
 	if (!position.isTapEndAvailable() || transitionState != NA) {
