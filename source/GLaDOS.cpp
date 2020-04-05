@@ -185,7 +185,7 @@ void GLaDOS::update(float dt) {
 	if (rand() % 15 == 1 && !ship->getChallenge()) {
 		((int)(rand() % 2 == 0)) ? ship->setRollDir(0) : ship->setRollDir(1);
 		int p = (int)(rand() % ship->getDonuts().size());
-		if (p != playerID) {
+		if (p != playerID && ship->getDonuts().at(p)->getIsActive()) {
 			mib->createAllTask(p, ship->getRollDir());
 		} else {
 			ship->setChallengeProg(0);
