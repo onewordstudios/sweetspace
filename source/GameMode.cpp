@@ -24,6 +24,8 @@ constexpr float BREACH_WIDTH = 11.0f;
 constexpr float DOOR_ACTIVE_ANGLE = 15.0f;
 /** Force to push back during collision */
 constexpr float REBOUND_FORCE = -6;
+/** Starting time for the round */
+constexpr unsigned int TIME = 45;
 /** Initial health of the ship */
 int initHealth;
 
@@ -220,6 +222,33 @@ void GameMode::update(float timestep) {
 
 	for (unsigned int i = 0; i < ship->getDonuts().size(); i++) {
 		ship->getDonuts()[i]->update(timestep);
+	}
+
+	if (ship->getChallenge() && trunc(ship->timer) <= 6) {
+		ship->setChallenge(false);
+	}
+
+	if (ship->getChallenge() && trunc(ship->timer) > 6) {
+		for (unsigned int i = 0; i < ship->getDonuts().size(); i++) {
+			if (ship->getRollDir() == 0) {
+				if (ship->getDonuts()[i]->getVelocity() < 0) {
+					ship->updateChallengeProg();
+				}
+			} else {
+				if (ship->getDonuts()[i]->getVelocity() > 0) {
+					ship->updateChallengeProg();
+				}
+			}
+		}
+		if (ship->getChallengeProg() > 30 || trunc(ship->timer) == trunc(ship->getEndTime())) {
+			if (ship->getChallengeProg() < 10) {
+				net->failAllTask();
+				int h = ship->getHealth();
+				ship->setHealth(h - 3);
+			}
+			ship->setChallenge(false);
+			ship->setChallengeProg(0);
+		}
 	}
 
 	sgRoot.update(timestep);

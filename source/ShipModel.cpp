@@ -30,6 +30,9 @@ bool ShipModel::init(unsigned int numPlayers, unsigned int numBreaches, unsigned
 	// Initialize size
 	this->shipSize = shipSize;
 
+	challenge = false;
+	challengeProg = 0;
+
 	return true;
 }
 
@@ -64,6 +67,19 @@ bool ShipModel::flagDoor(int id, int player, int flag) {
 }
 
 bool ShipModel::closeDoor(int id) { return false; }
+
+bool ShipModel::createAllTask(int data) {
+	setRollDir(data);
+	challenge = true;
+	endTime = timer - 6;
+	challengeProg = 0;
+	return true;
+}
+
+bool ShipModel::failAllTask() {
+	setHealth(health - 1);
+	return true;
+}
 
 /**
  * Disposes all resources and assets of this breach.

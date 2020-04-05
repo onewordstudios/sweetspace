@@ -20,6 +20,9 @@ constexpr float DONUT_SCALE = 0.4f;
 /** Offset of donut sprites from the radius of the ship */
 constexpr int DONUT_OFFSET = 195;
 
+/** Offset of donut sprites from the radius of the ship */
+constexpr int CHALLENGE_OFFSET = 195;
+
 /** The scale of the ship segments. */
 constexpr float SEG_SCALE = 0.33f;
 
@@ -95,6 +98,22 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	healthNode = dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_health"));
 	coordHUD = std::dynamic_pointer_cast<Label>(assets->get<Node>("game_hud"));
 
+	challengePanelHanger = dynamic_pointer_cast<cugl::PolygonNode>(
+		assets->get<Node>("game_field_challengePanelHanger"));
+	challengePanelHanger->setVisible(false);
+	challengePanel =
+		dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_challengePanel"));
+	challengePanel->setVisible(false);
+	challengePanelText =
+		dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_challengePanelText"));
+	challengePanelText->setVisible(false);
+
+	for (int i = 0; i < 10; i++) {
+		std::string s = std::to_string(i + 1);
+		std::shared_ptr<cugl::PolygonNode> arrow = dynamic_pointer_cast<cugl::PolygonNode>(
+			assets->get<Node>("game_field_challengePanelArrow" + s));
+		challengePanelArrows.push_back(arrow);
+	}
 	// Reconnect Overlay
 	reconnectOverlay = assets->get<Node>("game_field_reconnect");
 
@@ -286,6 +305,32 @@ void GameGraphRoot::update(float timestep) {
 				dynamic_pointer_cast<PolygonNode>(breachNode->getChildByTag(0));
 			patternNode->setTexture(image);
 			breachModel->setNeedSpriteUpdate(false);
+		}
+	}
+
+	if (ship->getChallenge()) {
+		challengePanelHanger->setVisible(true);
+		challengePanel->setVisible(true);
+		challengePanelText->setVisible(true);
+		std::shared_ptr<Texture> image = assets->get<Texture>("panel_progress_1");
+		for (int i = 0; i < challengePanelArrows.size(); i++) {
+			std::shared_ptr<cugl::PolygonNode> arrow = challengePanelArrows.at(i);
+			if (ship->getRollDir() == 0) {
+				arrow->setAngle(180 * globals::PI_180);
+			}
+			if (i < (ship->getChallengeProg())) {
+				arrow->setTexture(image);
+			}
+			arrow->setVisible(true);
+		}
+	} else {
+		challengePanelHanger->setVisible(false);
+		challengePanel->setVisible(false);
+		challengePanelText->setVisible(false);
+		std::shared_ptr<Texture> image = assets->get<Texture>("panel_progress_0");
+		for (int i = 0; i < challengePanelArrows.size(); i++) {
+			challengePanelArrows.at(i)->setVisible(false);
+			challengePanelArrows.at(i)->setTexture(image);
 		}
 	}
 

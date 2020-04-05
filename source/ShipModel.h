@@ -18,9 +18,16 @@ class ShipModel {
 	float health;
 	/** Size of the ship. Minimum value should be 360. Default value 360 */
 	float shipSize;
+	/** Roll direction of all player challenge*/
+	int rollDir;
+	/** If a all player challenge is in effect*/
+	bool challenge;
+	/** Challenge progress*/
+	int challengeProg;
+	float endTime;
 
    public:
-	/** Current health of the ship*/
+	/** Game timer*/
 	float timer;
 #pragma mark Constructors
 	/*
@@ -243,5 +250,71 @@ class ShipModel {
 	 * @return the size of the ship
 	 */
 	float getSize() { return shipSize; }
+
+	/**
+	 * Set roll direction of challenge
+	 *
+	 * @param direction of roll
+	 */
+	void setRollDir(int dir) { rollDir = dir; }
+
+	/**
+	 * Get roll direction of challenge
+	 *
+	 * @return direction of roll
+	 */
+	int getRollDir() { return rollDir; }
+
+	/**
+	 * Set true if challenge.
+	 *
+	 * @param if challenge
+	 */
+	void setChallenge(bool c) { challenge = c; }
+
+	/**
+	 * Get if in challenge.
+	 *
+	 * @return if in challenge
+	 */
+	bool getChallenge() { return challenge; }
+
+	/**
+	 * Set challenge progress.
+	 *
+	 * @param starting progress
+	 */
+	void setChallengeProg(int p) { challengeProg = p; }
+
+	/**
+	 * Get challenge progress
+	 *
+	 * @return challenge progress
+	 */
+	int getChallengeProg() { return challengeProg; }
+
+	/**
+	 * Update challenge progress
+	 */
+	void updateChallengeProg() { challengeProg = challengeProg + 1; }
+	/**
+	 * Set data for challenge
+	 */
+	bool createAllTask(int data);
+
+	/**
+	 * Set fail challenge
+	 */
+	bool failAllTask();
+
+	/**
+	 * Set end time for challenge
+	 */
+	void setEndTime(float time) { endTime = time; };
+
+	/**
+	 * Get end time for challenge
+	 */
+	float getEndTime() { return endTime; }
 };
 #endif /* __SHIP_MODEL_H__ */

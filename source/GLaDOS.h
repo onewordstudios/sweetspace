@@ -31,6 +31,8 @@ class GLaDOS {
 	/** Network Controller for outbound calls */
 	shared_ptr<MagicInternetBox> mib;
 
+	bool challengeInProg;
+
    public:
 #pragma mark -
 #pragma mark Constructors
@@ -100,5 +102,14 @@ class GLaDOS {
 	 * Gets the current player id of this gm.
 	 */
 	int getPlayerId() { return (int)playerID; }
+
+	/**
+	 * Gets if all player challenge is in effect.
+	 */
+	bool allPlayerChallenge() { return challengeInProg; }
+	/**
+	 * Sets if all player challenge is in effect.
+	 */
+	void setAllPlayerChallenge(bool b) { challengeInProg = b; }
 };
 #endif /* __GM_CONTROLLER_H__ */
