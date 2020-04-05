@@ -17,6 +17,12 @@ class DoorNode : public cugl::AnimationNode {
 	/** Whether the breach is being shown right now */
 	bool isShown;
 
+	/** The height of the door. */
+	int height;
+
+	/** The max frame this door can have. */
+	int frameCap;
+
    public:
 #pragma mark -
 #pragma mark Constructor
@@ -28,7 +34,7 @@ class DoorNode : public cugl::AnimationNode {
 	 * NEVER USE A CONSTRUCTOR WITH NEW. If you want to allocate an object on
 	 * the heap, use one of the static constructors instead.
 	 */
-	DoorNode() : cugl::AnimationNode() {}
+	DoorNode() : cugl::AnimationNode(), height(0), frameCap(0) {}
 
 	/**
 	 * Releases all resources allocated with this node.
