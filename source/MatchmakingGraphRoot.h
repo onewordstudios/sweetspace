@@ -5,12 +5,36 @@
 #include <vector>
 
 #include "BreachModel.h"
+#include "ButtonManager.h"
 #include "DonutModel.h"
 #include "DonutNode.h"
 #include "InputController.h"
 
 class MatchmakingGraphRoot : public cugl::Scene {
    private:
+	/** An enum with the current state of the matchmaking mode */
+	enum MatchState {
+		/** Empty state; used for transitions only; the main state should NEVER be NA */
+		NA = -1,
+		/** Main menu splash screen */
+		StartScreen,
+		/** Hosting a game; waiting on ship ID */
+		HostScreenWait,
+		/** Hosting a game; ship ID received */
+		HostScreen,
+		/** Joining a game; waiting on ship ID */
+		ClientScreen,
+		/** Joining a game; connected */
+		ClientScreenDone,
+		/** Matchmaking complete */
+		Done
+	};
+
+	/** The current state */
+	MatchState currState;
+	/** The state we are transitioning into, or NA (-1) if not transitioning */
+	MatchState transitionState;
+
 	/** The asset manager for this game mode. */
 	std::shared_ptr<cugl::AssetManager> assets;
 	/** The Screen's Height. */
@@ -31,6 +55,9 @@ class MatchmakingGraphRoot : public cugl::Scene {
 
 	/** Label for room ID (host) */
 	std::shared_ptr<cugl::Label> hostLabel;
+	/** Button to begin game (host) */
+	std::shared_ptr<cugl::Button> hostBeginBtn;
+
 	/** Label for room ID (client) */
 	std::shared_ptr<cugl::Label> clientLabel;
 	/** Button to confirm room ID (client) */
@@ -42,26 +69,27 @@ class MatchmakingGraphRoot : public cugl::Scene {
 	/** The room ID the client is currently entering */
 	std::vector<unsigned int> clientEnteredRoom;
 
+	/** Helper object to make the buttons go up and down */
+	ButtonManager buttonManager;
+
 	// MODEL
-	int playerID;
 	/** RoomId for host display */
 	std::string roomID;
-
-	/**
-	 * Returns an informative string for the position
-	 *
-	 * This function is for writing the current donut position to the HUD.
-	 *
-	 * @param coords The current donut coordinates
-	 *
-	 * @return an informative string for the position
-	 */
-	std::string positionText();
 
 	/**
 	 * Update the client room display using the contents of {@link clientEnteredRoom}
 	 */
 	void updateClientLabel();
+
+	/** The current frame of a transition; -1 if not transitioning */
+	int transitionFrame;
+
+	/**
+	 * Animate a transition between states.
+	 *
+	 * PRECONDITION: transitionState != NA
+	 */
+	void processTransition();
 
    public:
 #pragma mark -
@@ -72,7 +100,13 @@ class MatchmakingGraphRoot : public cugl::Scene {
 	 * This constructor does not allocate any objects or start the game.
 	 * This allows us to use the object without a heap pointer.
 	 */
-	MatchmakingGraphRoot() : Scene(), screenHeight(0), playerID(-1), roomID("") {}
+	MatchmakingGraphRoot()
+		: Scene(),
+		  currState(StartScreen),
+		  transitionState(NA),
+		  screenHeight(0),
+		  roomID(""),
+		  transitionFrame(-1) {}
 
 	/**
 	 * Disposes of all (non-static) resources allocated to this mode.
@@ -116,43 +150,43 @@ class MatchmakingGraphRoot : public cugl::Scene {
 	 */
 	void reset() override;
 
+	/** An enum representing buttons that have been pressed */
 	enum PressedButton { None, StartHost, StartClient, HostBegin, ClientConnect };
 
 	/**
-	 * Returns integers representing which button has been tapped if any
+	 * Processes button presses. Should be called AFTER update() every frame.
 	 *
 	 * @param position The screen coordinates of the tap
 	 *
 	 * @return The button pressed
 	 */
-	PressedButton checkButtons(const cugl::Vec2& position);
+	PressedButton checkButtons(InputController& position);
 
 	/**
-	 * Sets roomID
+	 * Sets roomID (for the host)
 	 *
 	 * @param roomID The host room id
 	 */
-	void setRoomID(std::string roomID) { this->roomID = roomID; }
+	void setRoomID(std::string roomID);
 
 	/**
-	 * Gets roomID
+	 * Gets roomID (from client connection)
 	 *
 	 * @param roomID The room id
 	 */
 	std::string getRoomID() { return roomID; }
 
-	/**
-	 * Sets playerID
-	 *
-	 * @param playerID The new player id
-	 */
-	void setPlayerID(int playerID) { this->playerID = playerID; }
-
-	/**
-	 * Gets playerID
-	 *
-	 * @param roomID The player id
-	 */
-	int getPlayerID() { return playerID; }
+	/** Returns whether the graph is in a state where it is connected to the server (and thus mib
+	 * needs to be updated every frame) */
+	bool isConnected() {
+		switch (currState) {
+			case HostScreenWait:
+			case HostScreen:
+			case ClientScreenDone:
+				return true;
+			default:
+				return false;
+		}
+	}
 };
 #endif /* __MATCHMAKING_GRAPH_ROOT_H__ */

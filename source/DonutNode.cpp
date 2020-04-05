@@ -14,6 +14,7 @@ constexpr float OFF_SCREEN_POS = 1500;
 
 void DonutNode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch, const Mat4& transform,
 					 Color4 tint) {
+	if (!donutModel->getIsActive()) return;
 	const float jump = 1.0f - donutModel->getJumpOffset();
 	float vel = donutModel->getVelocity();
 	float radiusRatio = (globals::RADIUS + RADIUS_OFFSET) / (getWidth() / 2);

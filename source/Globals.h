@@ -1,4 +1,4 @@
-#ifndef __GLOBALS_H__
+﻿#ifndef __GLOBALS_H__
 #define __GLOBALS_H__
 
 /**
@@ -19,12 +19,10 @@ constexpr unsigned int NETWORK_TICK = 12; // NOLINT
 /** Number of characters in a ship ID */
 constexpr unsigned int ROOM_LENGTH = 5; // NOLINT
 
-/** Health of the ship to start */
-constexpr int INITIAL_SHIP_HEALTH = 11; // NOLINT
-
 /** Minimum of ship health for win condition */
 constexpr int SHIP_HEALTH_WIN_LIMIT = 10; // NOLINT
 
+#pragma region Math
 #pragma mark Math
 
 /** Pi */
@@ -37,6 +35,8 @@ constexpr float TWO_PI = 2 * PI; // NOLINT
 constexpr float PI_180 = PI / 180.0f; // NOLINT
 
 #pragma mark -
+#pragma endregion
+#pragma region Scene Graph
 #pragma mark Scenegraph
 /** Width of the screen, used in windowed mode */
 constexpr unsigned int SCENE_WIDTH = 1024; // NOLINT
@@ -52,6 +52,7 @@ constexpr float SEG_SIZE = 45 * PI_180; // NOLINT
 
 /** The screen angle at which a ship segment is no longer visible */
 constexpr float SEG_CUTOFF_ANGLE = 90 * PI_180; // NOLINT
-} // namespace globals
 
-#endif /* __GLOBALS_H__ */
+#pragma endregion
+} // namespace globals
+#endif
