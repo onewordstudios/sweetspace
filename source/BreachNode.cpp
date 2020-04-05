@@ -43,10 +43,6 @@ void BreachNode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch, const Mat
 				isShown = false;
 			}
 		}
-		//		const auto t1 = std::chrono::system_clock::now().time_since_epoch();
-		//		if (fmod(std::chrono::duration_cast<std::chrono::milliseconds>(t1).count(), 200) <
-		// 150) { 			AnimationNode::draw(batch, transform, tint); 			return;
-		//		}
 		if (prevHealth > breachModel->getHealth()) {
 			// Start breach shrinking animation
 			isAnimatingShrink = true;
