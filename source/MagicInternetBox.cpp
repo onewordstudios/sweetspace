@@ -371,8 +371,7 @@ void MagicInternetBox::update(std::shared_ptr<ShipModel> state) {
 			}
 			if (lastConnection > SERVER_TIMEOUT) {
 				CULog("HAS NOT RECEIVED SERVER MESSAGE IN TIMEOUT FRAMES; assuming disconnected");
-				status = Disconnected;
-				ws->close();
+				forceDisconnect();
 				return;
 			}
 		}
@@ -396,12 +395,16 @@ void MagicInternetBox::update(std::shared_ptr<ShipModel> state) {
 		switch (type) {
 			case PlayerJoined: {
 				numPlayers++;
-				CULog("Player has reconnected");
+				unsigned int playerID = message[1];
+				CULog("Player has reconnected, %d", playerID);
+				state->getDonuts()[playerID]->setIsActive(true);
 				return;
 			}
 			case PlayerDisconnect: {
 				numPlayers--;
-				CULog("Player has disconnected");
+				unsigned int playerID = message[1];
+				CULog("Player has disconnected, %d", playerID);
+				state->getDonuts()[playerID]->setIsActive(false);
 				return;
 			}
 			case StateSync: {
@@ -498,3 +501,16 @@ void MagicInternetBox::createAllTask(int player, int data) {
 void MagicInternetBox::failAllTask() { sendData(AllFail, -1.0f, -1, -1, -1, -1.0f); }
 
 void MagicInternetBox::jump(int player) { sendData(Jump, -1.0f, player, -1, -1, -1.0f); }
+
+void MagicInternetBox::forceDisconnect() {
+	CULog("Force disconnecting");
+
+	std::vector<uint8_t> data;
+	data.push_back((uint8_t)PlayerDisconnect);
+	ws->sendBinary(data);
+	ws->poll();
+
+	ws->close();
+	status = Disconnected;
+	lastConnection = 0;
+}

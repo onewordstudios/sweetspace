@@ -108,7 +108,7 @@ class MagicInternetBox {
 
 		// Connection messages that can be received during gameplay
 		PlayerJoined = 50, // Doubles for both matchmaking and reconnect
-		PlayerDisconnect,  //
+		PlayerDisconnect,  // Doubles for manually disconnecting
 
 		// Matchmaking messages only
 		AssignedRoom = 100, // Doubles for both creating and created
@@ -325,6 +325,11 @@ class MagicInternetBox {
 	 * @param player The player ID who is jumping
 	 */
 	void jump(int player);
+
+	/**
+	 * Disconnect this player from the server, by force.
+	 */
+	void forceDisconnect();
 };
 
 #endif /* __NETWORK_CONTROLLER_H__ */
