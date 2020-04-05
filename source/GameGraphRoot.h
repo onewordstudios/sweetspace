@@ -95,6 +95,10 @@ class GameGraphRoot : public cugl::Scene {
 #pragma mark Public Consts
 	/** Possible colors for player representations */
 	const std::vector<string> playerColor{"yellow", "red", "purple", "green", "orange", "cyan"};
+	/** Possible colors for breach representations */
+	const std::vector<cugl::Color4> breachColor{
+		cugl::Color4(219, 197, 52), cugl::Color4(227, 100, 159), cugl::Color4(152, 95, 204),
+		cugl::Color4(158, 212, 87), cugl::Color4(244, 150, 40),	 cugl::Color4(47, 206, 197)};
 	/** number of possible player colors */
 	static constexpr int NUM_COLORS = 6;
 	/** The scale of the breach textures. */
