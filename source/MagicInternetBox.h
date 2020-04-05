@@ -102,6 +102,8 @@ class MagicInternetBox {
 		BreachShrink,
 		DualCreate,
 		DualResolve,
+		AllCreate,
+		AllFail,
 		StateSync,
 
 		// Connection messages that can be received during gameplay
