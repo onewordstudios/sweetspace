@@ -40,8 +40,6 @@ class GameMode {
 	int playerID;
 	/** Local record of Room ID */
 	std::string roomId;
-	/** Local record of Network Status */
-	MagicInternetBox::MatchmakingStatus status;
 
    public:
 #pragma mark -
@@ -52,7 +50,7 @@ class GameMode {
 	 * This constructor does not allocate any objects or start the game.
 	 * This allows us to use the object without a heap pointer.
 	 */
-	GameMode() : net(nullptr), playerID(-1), roomId(""), status(MagicInternetBox::Uninitialized) {}
+	GameMode() : net(nullptr), playerID(-1), roomId("") {}
 
 	/**
 	 * Disposes of all (non-static) resources allocated to this mode.
