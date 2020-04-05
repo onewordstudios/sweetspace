@@ -7,7 +7,7 @@
 using namespace cugl;
 
 /** The networking server */
-constexpr auto GAME_SERVER = "ws://sweetspace-server.herokuapp.com/";
+constexpr auto GAME_SERVER = "ws://localhost:8080/";
 
 /** The precision to multiply floating point numbers by */
 constexpr float FLOAT_PRECISION = 10.0f;
@@ -371,9 +371,7 @@ void MagicInternetBox::update(std::shared_ptr<ShipModel> state) {
 			}
 			if (lastConnection > SERVER_TIMEOUT) {
 				CULog("HAS NOT RECEIVED SERVER MESSAGE IN TIMEOUT FRAMES; assuming disconnected");
-				status = Disconnected;
-				ws->close();
-				lastConnection = 0;
+				forceDisconnect();
 				return;
 			}
 		}
@@ -483,3 +481,16 @@ void MagicInternetBox::flagDualTask(int id, int player, int flag) {
 }
 
 void MagicInternetBox::jump(int player) { sendData(Jump, -1.0f, player, -1, -1, -1.0f); }
+
+void MagicInternetBox::forceDisconnect() {
+	CULog("Force disconnecting");
+
+	std::vector<uint8_t> data;
+	data.push_back((uint8_t)PlayerDisconnect);
+	ws->sendBinary(data);
+	ws->poll();
+
+	ws->close();
+	status = Disconnected;
+	lastConnection = 0;
+}
