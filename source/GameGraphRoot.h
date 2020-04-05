@@ -9,7 +9,6 @@
 #include "DonutModel.h"
 #include "DonutNode.h"
 #include "DoorNode.h"
-#include "HealthNode.h"
 #include "InputController.h"
 #include "ShipModel.h"
 
@@ -35,6 +34,8 @@ class GameGraphRoot : public cugl::Scene {
 	std::shared_ptr<cugl::Node> nearSpace;
 	/** Parent node of all breaches, is child of nearSpace */
 	std::shared_ptr<cugl::Node> breachesNode;
+	/** Filmstrip representing the player's animated donut */
+	std::shared_ptr<cugl::PolygonNode> healthNode;
 
 	// MODEL
 	/** Id of the current client */

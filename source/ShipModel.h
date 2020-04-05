@@ -15,7 +15,7 @@ class ShipModel {
 	/** Current list of doors on ship*/
 	std::vector<std::shared_ptr<DoorModel>> doors;
 	/** Current health of the ship*/
-	int health;
+	float health;
 	/** Size of the ship. Minimum value should be 360. Default value 360 */
 	float shipSize;
 
@@ -184,16 +184,23 @@ class ShipModel {
 	/**
 	 * Set health of the ship
 	 *
-	 * @param health the health of the ship
+	 * @param health   the health of the ship
 	 */
-	void setHealth(int health) { this->health = health; }
+	void setHealth(float health) { this->health = health; }
 
 	/**
 	 * Get health of the ship
 	 *
-	 * @return health the health of the ship
+	 * @return health  the health of the ship
 	 */
-	int getHealth() { return health; }
+	float getHealth() { return health; }
+
+    /**
+     * Decrement health of the ship
+     *
+     * @param health   the amount of health to be decremented
+     */
+    void decHealth(float h) { health = health - h; }
 
 	/**
 

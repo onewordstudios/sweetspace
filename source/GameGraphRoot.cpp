@@ -1,4 +1,4 @@
-﻿#include "GameGraphRoot.h"
+#include "GameGraphRoot.h"
 
 #include <cugl/cugl.h>
 
@@ -116,17 +116,8 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 		doorNode->setScale(0.3f);
 		nearSpace->addChild(doorNode);
 	}
+	healthNode = dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_health"));
 
-	for (int i = 0; i < 8; i++) {
-		std::shared_ptr<Texture> image = assets->get<Texture>("health_glow");
-		std::shared_ptr<HealthNode> healthNode = HealthNode::alloc(image, 1, 12);
-		healthNode->setModel(ship);
-		healthNode->setFrame(11);
-		healthNode->setSection(i);
-		healthNode->setAnchor(Vec2::ANCHOR_BOTTOM_CENTER);
-		healthNode->setScale(0.55f);
-		nearSpace->addChild(healthNode);
-	}
 
 	addChild(scene);
 	return true;
@@ -214,6 +205,17 @@ void GameGraphRoot::update(float timestep) {
 			breachModel->setNeedSpriteUpdate(false);
 		}
 	}
+
+	if(ship->getHealth() < 1) {
+		CULog("EMPTY");
+		healthNode->setTexture(assets->get<Texture>("health_empty"));
+	} else if(ship->getHealth() < 3) {
+		CULog("RED");
+		healthNode->setTexture(assets->get<Texture>("health_red"));
+	} else if(ship->getHealth() < 7) {
+		CULog("YELLOW");
+		healthNode->setTexture(assets->get<Texture>("health_yellow"));
+	}
 }
 
 /**
@@ -227,7 +229,7 @@ void GameGraphRoot::update(float timestep) {
  */
 std::string GameGraphRoot::positionText() {
 	stringstream ss;
-	if (ship->timerEnded() && ship->getHealth() > 10) {
+	if (ship->timerEnded() && ship->getHealth() > 0) {
 		ss << "You Win!";
 	} else if (ship->timerEnded()) {
 		ss << "You Lose.";
