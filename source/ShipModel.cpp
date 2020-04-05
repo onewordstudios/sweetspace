@@ -67,6 +67,17 @@ bool ShipModel::flagDoor(int id, int player, int flag) {
 
 bool ShipModel::closeDoor(int id) { return false; }
 
+bool ShipModel::createAllTask(int player, int data) {
+	setRollDir(data);
+	challengePlayer = player;
+	return true;
+}
+
+bool ShipModel::failAllTask() {
+	setHealth(health - 3);
+	return true;
+}
+
 /**
  * Disposes all resources and assets of this breach.
  *

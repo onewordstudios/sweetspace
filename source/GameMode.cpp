@@ -221,6 +221,7 @@ void GameMode::update(float timestep) {
 				CULog("Challenge Completed");
 			} else {
 				CULog("Challenge Failed");
+				net->failAllTask();
 				// add health decrement once health calculation is updated!!!!
 			}
 			gm.setAllPlayerChallenge(false);

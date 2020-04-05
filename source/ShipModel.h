@@ -24,6 +24,8 @@ class ShipModel {
 	bool challenge;
 	/** Challenge progress*/
 	int challengeProg;
+	/** Player responsible for the challenge*/
+	int challengePlayer;
 
    public:
 	/** Game timer*/
@@ -282,5 +284,28 @@ class ShipModel {
 	 * Update challenge progress
 	 */
 	void updateChallengeProg() { challengeProg = challengeProg + 1; }
+	/**
+	 * Get player in charge of challenge
+	 *
+	 * @return  player in charge of challenge
+	 */
+	int getChallengePlayer() { return challengePlayer; }
+
+	/**
+	 * Set player in charge of challenge
+	 *
+	 * @param p	player in charge of challenge
+	 */
+	void setChallengePlayer(p) { challengePlayer = p; }
+
+	/**
+	 * Set target player for challenge
+	 */
+	bool createAllTask(int player, int data);
+
+	/**
+	 * Set fail challenge
+	 */
+	bool failAllTask();
 };
 #endif /* __SHIP_MODEL_H__ */
