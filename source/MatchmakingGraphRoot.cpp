@@ -133,8 +133,6 @@ void MatchmakingGraphRoot::update(float timestep) {
 			if (roomID == "") {
 				currState = ClientScreen;
 				clientJoinBtn->setDown(false);
-				clientEnteredRoom.pop_back();
-				updateClientLabel();
 			}
 			break;
 		}
@@ -239,6 +237,8 @@ void MatchmakingGraphRoot::setRoomID(std::string roomID) {
 
 	if (roomID == "") {
 		hostLabel->setText("_ _ _ _ _");
+		clientEnteredRoom.clear();
+		updateClientLabel();
 		return;
 	}
 
