@@ -21,6 +21,16 @@ class BreachNode : public cugl::AnimationNode {
 	bool isAnimatingShrink;
 	/** Health of the breach model from previous frame */
 	int prevHealth;
+	/** Current frame for idle animation */
+	int currentFrameIdle;
+
+	/** Helper function to calculate frame */
+	int getFrameFromHealth(int health) {
+		int currentHealth =
+			health > BreachModel::HEALTH_DEFAULT ? BreachModel::HEALTH_DEFAULT : health;
+		return (BreachModel::HEALTH_DEFAULT - currentHealth) *
+			   (getSize() / BreachModel::HEALTH_DEFAULT);
+	}
 
    public:
 #pragma mark -
@@ -73,9 +83,20 @@ class BreachNode : public cugl::AnimationNode {
 
 	void setPrevHealth(int i) { prevHealth = i; }
 
+	bool getIsAnimatingShrink() { return isAnimatingShrink; }
+
 	std::shared_ptr<BreachModel> getModel() { return breachModel; }
 
 #pragma mark -
+	/**
+	 * Reset flags for node animation.
+	 */
+	void resetAnimation() {
+		isAnimatingShrink = false;
+		prevHealth = BreachModel::HEALTH_DEFAULT;
+		setFrame(0);
+		currentFrameIdle = 0;
+	}
 #pragma mark Drawing
 
 	void draw(const shared_ptr<cugl::SpriteBatch> &batch, const cugl::Mat4 &transform,

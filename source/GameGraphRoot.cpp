@@ -139,7 +139,7 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 												->getColorId());
 		std::shared_ptr<Texture> image = assets->get<Texture>("breach_filmstrip");
 		std::shared_ptr<BreachNode> breachNode = BreachNode::allocWithTexture(image);
-		breachNode->setFrame(0);
+		breachNode->resetAnimation();
 		breachNode->setColor(color);
 		breachNode->setModel(breachModel);
 		breachNode->setTag((unsigned int)(i + 1));
@@ -260,13 +260,15 @@ void GameGraphRoot::update(float timestep) {
 	// Update breaches textures if recycled
 	for (int i = 0; i < ship->getBreaches().size(); i++) {
 		std::shared_ptr<BreachModel> breachModel = ship->getBreaches().at((unsigned long)i);
-		if (breachModel->getHealth() > 0 && breachModel->getNeedSpriteUpdate()) {
+		shared_ptr<BreachNode> breachNode =
+			dynamic_pointer_cast<BreachNode>(breachesNode->getChildByTag((unsigned int)(i + 1)));
+		if (!breachNode->getIsAnimatingShrink() && breachModel->getHealth() > 0 &&
+			breachModel->getNeedSpriteUpdate()) {
 			cugl::Color4 color = breachColor.at((unsigned long)ship->getDonuts()
 													.at((unsigned long)breachModel->getPlayer())
 													->getColorId());
-			shared_ptr<BreachNode> breachNode = dynamic_pointer_cast<BreachNode>(
-				breachesNode->getChildByTag((unsigned int)(i + 1)));
 			breachNode->setColor(color);
+			breachNode->resetAnimation();
 			breachModel->setNeedSpriteUpdate(false);
 		}
 	}
