@@ -395,12 +395,16 @@ void MagicInternetBox::update(std::shared_ptr<ShipModel> state) {
 		switch (type) {
 			case PlayerJoined: {
 				numPlayers++;
-				CULog("Player has reconnected");
+				unsigned int playerID = message[1];
+				CULog("Player has reconnected, %d", playerID);
+				state->getDonuts()[playerID]->setIsActive(true);
 				return;
 			}
 			case PlayerDisconnect: {
 				numPlayers--;
-				CULog("Player has disconnected");
+				unsigned int playerID = message[1];
+				CULog("Player has disconnected, %d", playerID);
+				state->getDonuts()[playerID]->setIsActive(false);
 				return;
 			}
 			case StateSync: {
