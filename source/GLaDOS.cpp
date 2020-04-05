@@ -169,8 +169,15 @@ void GLaDOS::update(float dt) {
 			break;
 		}
 	}
-	if (rand() % 6 == 1 && !allChallenge) {
+	if (rand() % 3 == 1 && !allChallenge) {
 		allChallenge = true;
+		((int)(rand() % 2 == 0)) ? ship->setRollDir(-1) : ship->setRollDir(1);
+		int p = (int)(rand() % ship->getDonuts().size());
+		if(p != playerID) {
+			mib->createAllTask(p, ship->getRollDir());
+		}
+
+
 	}
 }
 

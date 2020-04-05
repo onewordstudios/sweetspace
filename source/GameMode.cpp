@@ -214,13 +214,13 @@ void GameMode::update(float timestep) {
                 }
             }
         }
-		if (ship->getChallengeProg() > 45 || trunc(ship->timer) == endTime) {
+		if (trunc(ship->timer) == endTime) {
 			CULog("End Challenge");
 			if (ship->getChallengeProg() > 10) {
 				CULog("Challenge Completed");
 			} else {
 				CULog("Challenge Failed");
-				// add health decrement once health calculation is updated!!!!
+				net->failAllTask();
 			}
 			gm.setAllPlayerChallenge(false);
 			ship->setChallenge(false);
