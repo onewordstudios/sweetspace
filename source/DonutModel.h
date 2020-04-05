@@ -197,7 +197,6 @@ class DonutModel {
 
 	/**
 	 * Sets whether this donut is active.
-	 *
 	 */
 	void setIsActive(bool active) { isActive = active; }
 
