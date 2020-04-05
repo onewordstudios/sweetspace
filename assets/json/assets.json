@@ -78,6 +78,18 @@
         "confirm_join": {
             "file":   "textures/confirm_join.png"
         },
+        "reconnect_dim": {
+            "file":   "textures/reconnect_dim.png"
+        },
+        "reconnect_bg": {
+            "file":   "textures/reconnect_bg.png"
+        },
+        "reconnect_text": {
+            "file":   "textures/reconnect_text.png"
+        },
+        "reconnect_ellipses": {
+            "file":   "textures/reconnect_ellipses.png"
+        },
 		"game_title": {
 			"file": "textures/main_menu/sweetspace.png"
 		},
@@ -220,7 +232,54 @@
                                 "anchor":   [0.5,0.5],
                                 "scale":    0.4
                             }
-                        }
+                        },
+                        "reconnect": {
+							"type"      : "Node",
+				            "format"    : {
+				                "type" : "Anchored"
+				            },
+				            "data": {
+				            	"visible": false
+				            },
+				            "children":  {
+				            	"dim" : {
+				            		"type": "Image",
+				                    "data": {
+				                        "texture":  "reconnect_dim",
+				                        "position": [0,0],
+				                        "anchor":   [0.5,0.5],
+				                        "scale":    1
+				                    }
+				            	},
+				            	"bg" : {
+				            		"type": "Image",
+				                    "data": {
+				                        "texture":  "reconnect_bg",
+				                        "position": [0,0],
+				                        "anchor":   [0.5,0.5],
+				                        "scale":    0.6
+				                    }
+				            	},
+				            	"text" : {
+				            		"type": "Image",
+				                    "data": {
+				                        "texture":  "reconnect_text",
+				                        "position": [0,-75],
+				                        "anchor":   [0.5,0.5],
+				                        "scale":    0.6
+				                    }
+				            	},
+				            	"ellipses" : {
+				            		"type": "Image",
+				                    "data": {
+				                        "texture":  "reconnect_ellipses",
+				                        "position": [0,-125],
+				                        "anchor":   [0.5,0.5],
+				                        "scale":    0.6
+				                    }
+				            	}
+				            }
+				        }
                     }
                 },
                 "hud" : {

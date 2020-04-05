@@ -36,8 +36,12 @@ class GameMode {
 	/** The Ship model */
 	std::shared_ptr<ShipModel> ship;
 
-	bool host = true;
+	/** Local record of Player ID */
 	int playerID;
+	/** Local record of Room ID */
+	std::string roomId;
+	/** Local record of Network Status */
+	MagicInternetBox::MatchmakingStatus status;
 
    public:
 #pragma mark -
@@ -48,7 +52,7 @@ class GameMode {
 	 * This constructor does not allocate any objects or start the game.
 	 * This allows us to use the object without a heap pointer.
 	 */
-	GameMode() : net(nullptr), playerID(-1) {}
+	GameMode() : net(nullptr), playerID(-1), roomId(""), status(MagicInternetBox::Uninitialized) {}
 
 	/**
 	 * Disposes of all (non-static) resources allocated to this mode.

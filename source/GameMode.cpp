@@ -42,8 +42,10 @@ int initHealth;
  * @return true if the controller is initialized properly, false otherwise.
  */
 bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
+	// Music Initialization
 	auto source = assets->get<Sound>("theme");
 	AudioChannels::get()->playMusic(source, true, source->getVolume());
+
 	// Initialize the scene to a locked width
 	Size dimen = Application::get()->getDisplaySize();
 	dimen *= globals::SCENE_WIDTH / dimen.width; // Lock the game to a reasonable resolution
@@ -51,10 +53,14 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 		return false;
 	}
 
+	// Input Initialization
 	input.init();
 
+	// Network Initialization
 	net = MagicInternetBox::getInstance();
 	playerID = net->getPlayerID();
+	roomId = net->getRoomID();
+
 	std::shared_ptr<LevelModel> level = assets->get<LevelModel>(LEVEL_ONE_KEY);
 	float shipSize = level->getShipSize();
 	initHealth = level->getInitHealth();
@@ -65,7 +71,7 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 	donutModel = ship->getDonuts().at(static_cast<unsigned long>(playerID));
 	ship->initTimer(level->getTime());
 
-	// Scene graph setup
+	// Scene graph Initialization
 	sgRoot.init(assets, ship, playerID);
 
 	return true;
@@ -102,9 +108,41 @@ void GameMode::reset() {
  * @param timestep  The amount of time (in seconds) since the last frame
  */
 void GameMode::update(float timestep) {
-	input.update(timestep);
+	// Connection Status Checks
+	status = net->matchStatus();
+	switch (status) {
+		case MagicInternetBox::Disconnected:
+		case MagicInternetBox::ClientRoomInvalid:
+		case MagicInternetBox::ReconnectError:
+			if (net->reconnect(roomId)) {
+				net->update();
+			}
+			sgRoot.setStatus(MagicInternetBox::Disconnected);
+			sgRoot.update(timestep);
+			return;
+		case MagicInternetBox::Reconnecting:
+			// Still Reconnecting
+			net->update();
+			sgRoot.setStatus(MagicInternetBox::Reconnecting);
+			sgRoot.update(timestep);
+			return;
+		case MagicInternetBox::ClientRoomFull:
+		case MagicInternetBox::GameEnded:
+			// Insert Game End
+			net->update(ship);
+			sgRoot.setStatus(MagicInternetBox::GameEnded);
+			sgRoot.update(timestep);
+			return;
+		case MagicInternetBox::GameStart:
+			net->update(ship);
+			sgRoot.setStatus(MagicInternetBox::GameStart);
+			break;
+		default:
+			CULog("ERROR: Uncaught MatchmakingStatus Value Occurred");
+	}
 
-	net->update(ship);
+	// Only process game logic if properly connected to game
+	input.update(timestep);
 
 	if (!(ship->timerEnded())) {
 		ship->updateTimer(timestep);
@@ -172,9 +210,9 @@ void GameMode::update(float timestep) {
 	}
 
 	gm.update(timestep);
-	float thrust = input.getRoll();
 
 	// Move the donut (MODEL ONLY)
+	float thrust = input.getRoll();
 	donutModel->applyForce(thrust);
 	// Jump Logic
 	if (input.getTapLoc() != Vec2::ZERO && !donutModel->isJumping()) {
