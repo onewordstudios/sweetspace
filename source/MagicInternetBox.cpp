@@ -31,6 +31,8 @@ bool MagicInternetBox::initConnection() {
 		case Disconnected:
 		case Uninitialized:
 		case HostError:
+		case ClientRoomInvalid:
+		case ClientRoomFull:
 		case ClientError:
 		case ReconnectError:
 			break;
@@ -269,6 +271,10 @@ void MagicInternetBox::update() {
 		case GameStart:
 			CULog("ERROR: Matchmaking update called on MIB after game start; aborting");
 			return;
+		case ClientRoomInvalid:
+		case ClientRoomFull:
+			CULog("Tried to call update() after failed client connection; aborting");
+			return;
 		default:
 			break;
 	}
@@ -304,11 +310,13 @@ void MagicInternetBox::update() {
 					case 1: {
 						CULog("Room Does Not Exist");
 						status = ClientRoomInvalid;
+						ws->close();
 						return;
 					}
 					case 2: {
 						CULog("Room Full");
 						status = ClientRoomFull;
+						ws->close();
 						return;
 					}
 					case 3: {
@@ -371,8 +379,7 @@ void MagicInternetBox::update(std::shared_ptr<ShipModel> state) {
 			}
 			if (lastConnection > SERVER_TIMEOUT) {
 				CULog("HAS NOT RECEIVED SERVER MESSAGE IN TIMEOUT FRAMES; assuming disconnected");
-				status = Disconnected;
-				ws->close();
+				forceDisconnect();
 				return;
 			}
 		}
@@ -396,12 +403,16 @@ void MagicInternetBox::update(std::shared_ptr<ShipModel> state) {
 		switch (type) {
 			case PlayerJoined: {
 				numPlayers++;
-				CULog("Player has reconnected");
+				unsigned int playerID = message[1];
+				CULog("Player has reconnected, %d", playerID);
+				state->getDonuts()[playerID]->setIsActive(true);
 				return;
 			}
 			case PlayerDisconnect: {
 				numPlayers--;
-				CULog("Player has disconnected");
+				unsigned int playerID = message[1];
+				CULog("Player has disconnected, %d", playerID);
+				state->getDonuts()[playerID]->setIsActive(false);
 				return;
 			}
 			case StateSync: {
@@ -482,3 +493,16 @@ void MagicInternetBox::flagDualTask(int id, int player, int flag) {
 }
 
 void MagicInternetBox::jump(int player) { sendData(Jump, -1.0f, player, -1, -1, -1.0f); }
+
+void MagicInternetBox::forceDisconnect() {
+	CULog("Force disconnecting");
+
+	std::vector<uint8_t> data;
+	data.push_back((uint8_t)PlayerDisconnect);
+	ws->sendBinary(data);
+	ws->poll();
+
+	ws->close();
+	status = Disconnected;
+	lastConnection = 0;
+}

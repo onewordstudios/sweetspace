@@ -32,6 +32,7 @@ void Sweetspace::onStartup() {
 	assets->attach<Texture>(TextureLoader::alloc()->getHook());
 	assets->attach<Sound>(SoundLoader::alloc()->getHook());
 	assets->attach<Node>(SceneLoader::alloc()->getHook());
+	assets->attach<LevelModel>(GenericLoader<LevelModel>::alloc()->getHook());
 
 	// Create a "loading" screen
 	loaded = false;
@@ -40,6 +41,7 @@ void Sweetspace::onStartup() {
 	// Queue up the other assets NOLINTNEXTLINE
 	AudioChannels::start(24);
 	assets->loadDirectoryAsync("json/assets.json", nullptr);
+	assets->loadAsync<LevelModel>(LEVEL_ONE_KEY, LEVEL_ONE_FILE, nullptr);
 
 	Application::onStartup(); // YOU MUST END with call to parent
 }

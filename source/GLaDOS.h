@@ -6,6 +6,7 @@
 #include "BreachModel.h"
 #include "DonutModel.h"
 #include "DoorModel.h"
+#include "LevelModel.h"
 #include "MagicInternetBox.h"
 #include "ShipModel.h"
 
@@ -62,7 +63,7 @@ class GLaDOS {
 	 *
 	 * @return true if the controller was initialized successfully
 	 */
-	bool init(std::shared_ptr<ShipModel> ship);
+	bool init(std::shared_ptr<ShipModel> ship, std::shared_ptr<LevelModel> level);
 
 #pragma mark -
 #pragma mark GM Handling

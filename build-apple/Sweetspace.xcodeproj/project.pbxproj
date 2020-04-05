@@ -13,14 +13,22 @@
 		7B2F9C822429960500283B4A /* DoorNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A577C9232422AA0D00B12ADE /* DoorNode.cpp */; };
 		A577C9282422AA0E00B12ADE /* DoorNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A577C9232422AA0D00B12ADE /* DoorNode.cpp */; };
 		A577C9292422AA0E00B12ADE /* DoorNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A577C9232422AA0D00B12ADE /* DoorNode.cpp */; };
+		A577C93E2438F7ED00B12ADE /* LevelModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A577C9372438F7ED00B12ADE /* LevelModel.cpp */; };
+		A577C93F2438F7ED00B12ADE /* LevelModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A577C9372438F7ED00B12ADE /* LevelModel.cpp */; };
+		A577C9402438F7ED00B12ADE /* LevelModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A577C9372438F7ED00B12ADE /* LevelModel.cpp */; };
+		C122201B849961CE6B05D3B3 /* ButtonManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C1222811A2870CE942755676 /* ButtonManager.cpp */; };
 		C122202B76FF5A7E71E2DF7F /* MatchmakingMode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C12225092193F10792C2D9D4 /* MatchmakingMode.cpp */; };
+		C122211BC4827F6D5229F659 /* Tween.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C1222CCE44B8D9EECD741BF0 /* Tween.cpp */; };
 		C122231BF74B6D2B4DFA3857 /* MatchmakingGraphRoot.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C1222700CC73840AA71C9800 /* MatchmakingGraphRoot.cpp */; };
 		C12223392F6704D2EE10713A /* ExternalDonutModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C1222F4322133A83016A4F48 /* ExternalDonutModel.cpp */; };
 		C12223F92AA43CCF674FE286 /* PlayerDonutModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C1222BBC1EB5E0874CCD2C2A /* PlayerDonutModel.cpp */; };
 		C1222440665C00173B68F8B3 /* MatchmakingMode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C12225092193F10792C2D9D4 /* MatchmakingMode.cpp */; };
 		C12224CE8F1354665ED3097E /* ExternalDonutModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C1222F4322133A83016A4F48 /* ExternalDonutModel.cpp */; };
+		C122252BBBA6A3A5A6FA965C /* Tween.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C1222CCE44B8D9EECD741BF0 /* Tween.cpp */; };
+		C1222594BF979D3CB3968897 /* ButtonManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C1222811A2870CE942755676 /* ButtonManager.cpp */; };
 		C122265ED47A5D2CFBAFDADF /* PlayerDonutModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C1222BBC1EB5E0874CCD2C2A /* PlayerDonutModel.cpp */; };
 		C12227559D5A695B3AD2A84C /* MatchmakingGraphRoot.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C1222700CC73840AA71C9800 /* MatchmakingGraphRoot.cpp */; };
+		C12227687FF20FC96584A686 /* Tween.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C1222CCE44B8D9EECD741BF0 /* Tween.cpp */; };
 		C12229A6FE0EE350C0B69408 /* MatchmakingGraphRoot.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C1222700CC73840AA71C9800 /* MatchmakingGraphRoot.cpp */; };
 		C1222A784AAFE1C7BC89BC94 /* GLaDOS.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C122229A6EDF1DAB4330F1B7 /* GLaDOS.cpp */; };
 		C1222BA1DAB6BA55C0C6DEDA /* GLaDOS.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C122229A6EDF1DAB4330F1B7 /* GLaDOS.cpp */; };
@@ -28,6 +36,7 @@
 		C1222CE9FCD72180B66462B2 /* PlayerDonutModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C1222BBC1EB5E0874CCD2C2A /* PlayerDonutModel.cpp */; };
 		C1222E686D1435B6446D0307 /* ExternalDonutModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C1222F4322133A83016A4F48 /* ExternalDonutModel.cpp */; };
 		C1222FC552DCE75362130E81 /* MatchmakingMode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C12225092193F10792C2D9D4 /* MatchmakingMode.cpp */; };
+		C1222FF1F85D4E3C0634F8F8 /* ButtonManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C1222811A2870CE942755676 /* ButtonManager.cpp */; };
 		C58C509B5D08FC65641A630E /* ShipModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C58C51549E90F0CA2D05EB7A /* ShipModel.cpp */; };
 		C58C5561B66760E8D1E3FC80 /* ShipModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C58C51549E90F0CA2D05EB7A /* ShipModel.cpp */; };
 		C58C5B82A24C809F0E12DEFF /* ShipModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C58C51549E90F0CA2D05EB7A /* ShipModel.cpp */; };
@@ -174,15 +183,23 @@
 /* Begin PBXFileReference section */
 		3CDD11AC242D1DDF00FD21F8 /* HealthNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HealthNode.cpp; sourceTree = "<group>"; };
 		3CDD11B0242D1DDF00FD21F8 /* HealthNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HealthNode.h; sourceTree = "<group>"; };
+		7B209DFA24395A8F00B657D2 /* Tween.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Tween.h; sourceTree = "<group>"; };
+		7B209DFE24395A9D00B657D2 /* ButtonManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ButtonManager.h; sourceTree = "<group>"; };
 		7B3270692425A569004A3B36 /* GLaDOS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLaDOS.h; sourceTree = "<group>"; };
 		7BDE1A3E243422EC0080F7CB /* Globals.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Globals.h; sourceTree = "<group>"; };
 		A577C9232422AA0D00B12ADE /* DoorNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DoorNode.cpp; sourceTree = "<group>"; };
 		A577C9272422AA0D00B12ADE /* DoorNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DoorNode.h; sourceTree = "<group>"; };
+		A577C9372438F7ED00B12ADE /* LevelModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LevelModel.cpp; sourceTree = "<group>"; };
+		A577C93B2438F7ED00B12ADE /* LevelConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LevelConstants.h; sourceTree = "<group>"; };
+		A577C93C2438F7ED00B12ADE /* LevelModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LevelModel.h; sourceTree = "<group>"; };
+		A577C93D2438F7ED00B12ADE /* MatchmakingMode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MatchmakingMode.h; sourceTree = "<group>"; };
 		C122229A6EDF1DAB4330F1B7 /* GLaDOS.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLaDOS.cpp; sourceTree = "<group>"; };
 		C12225092193F10792C2D9D4 /* MatchmakingMode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MatchmakingMode.cpp; sourceTree = "<group>"; };
 		C1222700CC73840AA71C9800 /* MatchmakingGraphRoot.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MatchmakingGraphRoot.cpp; sourceTree = "<group>"; };
 		C122270EE9BF22663C6BDB22 /* ExternalDonutModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExternalDonutModel.h; sourceTree = "<group>"; };
+		C1222811A2870CE942755676 /* ButtonManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ButtonManager.cpp; sourceTree = "<group>"; };
 		C1222BBC1EB5E0874CCD2C2A /* PlayerDonutModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PlayerDonutModel.cpp; sourceTree = "<group>"; };
+		C1222CCE44B8D9EECD741BF0 /* Tween.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Tween.cpp; sourceTree = "<group>"; };
 		C1222EECE0C31958EBE060C3 /* PlayerDonutModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayerDonutModel.h; sourceTree = "<group>"; };
 		C1222F4322133A83016A4F48 /* ExternalDonutModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ExternalDonutModel.cpp; sourceTree = "<group>"; };
 		C58C51549E90F0CA2D05EB7A /* ShipModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ShipModel.cpp; sourceTree = "<group>"; };
@@ -465,6 +482,10 @@
 		EBBF18B11D749176008E2001 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				A577C93B2438F7ED00B12ADE /* LevelConstants.h */,
+				A577C9372438F7ED00B12ADE /* LevelModel.cpp */,
+				A577C93C2438F7ED00B12ADE /* LevelModel.h */,
+				A577C93D2438F7ED00B12ADE /* MatchmakingMode.h */,
 				A577C9232422AA0D00B12ADE /* DoorNode.cpp */,
 				A577C9272422AA0D00B12ADE /* DoorNode.h */,
 				DF3B744B2403A46B0063552F /* BreachModel.cpp */,
@@ -505,6 +526,10 @@
 				D1522B5DE1BDF682A53D6F29 /* BreachNode.cpp */,
 				D15229D4A1FC5FE07FD97699 /* BreachNode.h */,
 				D15229D4EADCD12676DC1C03 /* MatchmakingGraphRoot.h */,
+				C1222811A2870CE942755676 /* ButtonManager.cpp */,
+				7B209DFE24395A9D00B657D2 /* ButtonManager.h */,
+				7B209DFA24395A8F00B657D2 /* Tween.h */,
+				C1222CCE44B8D9EECD741BF0 /* Tween.cpp */,
 			);
 			name = Source;
 			path = ../source;
@@ -701,6 +726,7 @@
 				C58C5B82A24C809F0E12DEFF /* ShipModel.cpp in Sources */,
 				D15225B5047A9F0742257B0F /* DonutNode.cpp in Sources */,
 				D1522B75CBE989BF3E62FFF0 /* MagicInternetBox.cpp in Sources */,
+				A577C9402438F7ED00B12ADE /* LevelModel.cpp in Sources */,
 				D15226A31B180B8600E8235E /* README.md in Sources */,
 				D152277E2A8E96B810AEB205 /* easywsclient.cpp in Sources */,
 				C12224CE8F1354665ED3097E /* ExternalDonutModel.cpp in Sources */,
@@ -712,6 +738,8 @@
 				C122202B76FF5A7E71E2DF7F /* MatchmakingMode.cpp in Sources */,
 				C1222A784AAFE1C7BC89BC94 /* GLaDOS.cpp in Sources */,
 				D152294B962A6F545D187713 /* BreachNode.cpp in Sources */,
+				C1222594BF979D3CB3968897 /* ButtonManager.cpp in Sources */,
+				C122211BC4827F6D5229F659 /* Tween.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -730,6 +758,7 @@
 				DF3B74532403A46B0063552F /* InputController.cpp in Sources */,
 				C58C5561B66760E8D1E3FC80 /* ShipModel.cpp in Sources */,
 				D152269FB9C3FBF14B624C33 /* DonutNode.cpp in Sources */,
+				A577C93F2438F7ED00B12ADE /* LevelModel.cpp in Sources */,
 				D15229CE017D5510C972C380 /* MagicInternetBox.cpp in Sources */,
 				D15224573606D56005192E3D /* README.md in Sources */,
 				D1522B1EDA7299CAAE55B21E /* easywsclient.cpp in Sources */,
@@ -741,6 +770,8 @@
 				C1222FC552DCE75362130E81 /* MatchmakingMode.cpp in Sources */,
 				C1222C87F6E3205CB0FD5628 /* GLaDOS.cpp in Sources */,
 				D1522FE380CFE13F14305356 /* BreachNode.cpp in Sources */,
+				C1222FF1F85D4E3C0634F8F8 /* ButtonManager.cpp in Sources */,
+				C122252BBBA6A3A5A6FA965C /* Tween.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -759,6 +790,7 @@
 				DF3B74522403A46B0063552F /* InputController.cpp in Sources */,
 				C58C509B5D08FC65641A630E /* ShipModel.cpp in Sources */,
 				D1522F66D7605010BF4DE624 /* DonutNode.cpp in Sources */,
+				A577C93E2438F7ED00B12ADE /* LevelModel.cpp in Sources */,
 				D15222477324B444CAE67673 /* MagicInternetBox.cpp in Sources */,
 				D152272F0C47BB34513BF98A /* README.md in Sources */,
 				D152210B21A0FDE6A6995456 /* easywsclient.cpp in Sources */,
@@ -770,6 +802,8 @@
 				C1222440665C00173B68F8B3 /* MatchmakingMode.cpp in Sources */,
 				C1222BA1DAB6BA55C0C6DEDA /* GLaDOS.cpp in Sources */,
 				D15220621F9C106302ACEBBB /* BreachNode.cpp in Sources */,
+				C122201B849961CE6B05D3B3 /* ButtonManager.cpp in Sources */,
+				C12227687FF20FC96584A686 /* Tween.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

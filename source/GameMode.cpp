@@ -14,12 +14,6 @@ using namespace std;
 
 #pragma mark -
 #pragma mark Level Layout
-/** The maximum number of events on ship at any one time. This will probably need to scale with the
- * number of players*/
-constexpr unsigned int MAX_EVENTS = 3;
-/** The maximum number of doors on ship at any one time. This will probably need to scale with the
- * number of players*/
-constexpr unsigned int MAX_DOORS = 1;
 /** The Angle in degrees for fixing a breach*/
 constexpr float EPSILON_ANGLE = 5.2f;
 /** The Angle in degrees for which a collision occurs*/
@@ -30,8 +24,8 @@ constexpr float BREACH_WIDTH = 11.0f;
 constexpr float DOOR_ACTIVE_ANGLE = 15.0f;
 /** Force to push back during collision */
 constexpr float REBOUND_FORCE = -6;
-/** Starting time for the round */
-constexpr unsigned int TIME = 30;
+/** Initial health of the ship */
+int initHealth;
 
 #pragma mark -
 #pragma mark Constructors
@@ -48,8 +42,10 @@ constexpr unsigned int TIME = 30;
  * @return true if the controller is initialized properly, false otherwise.
  */
 bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
+	// Music Initialization
 	auto source = assets->get<Sound>("theme");
 	AudioChannels::get()->playMusic(source, true, source->getVolume());
+
 	// Initialize the scene to a locked width
 	Size dimen = Application::get()->getDisplaySize();
 	dimen *= globals::SCENE_WIDTH / dimen.width; // Lock the game to a reasonable resolution
@@ -57,20 +53,26 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 		return false;
 	}
 
+	// Input Initialization
 	input.init();
 
+	// Network Initialization
 	net = MagicInternetBox::getInstance();
 	playerID = net->getPlayerID();
+	roomId = net->getRoomID();
 
-	float shipSize = 360; // TODO level size comes from level file
-	ship = ShipModel::alloc(net->getNumPlayers(), MAX_EVENTS, MAX_DOORS, playerID, shipSize);
-	gm.init(ship);
+	std::shared_ptr<LevelModel> level = assets->get<LevelModel>(LEVEL_ONE_KEY);
+	float shipSize = level->getShipSize();
+	initHealth = level->getInitHealth();
+	ship = ShipModel::alloc(net->getNumPlayers(), level->getMaxBreaches(), level->getMaxDoors(),
+							playerID, shipSize, initHealth);
+	gm.init(ship, level);
 
 	donutModel = ship->getDonuts().at(static_cast<unsigned long>(playerID));
-	ship->initTimer(TIME);
-	ship->setHealth(globals::INITIAL_SHIP_HEALTH);
+	ship->initTimer(level->getTime());
+    ship->setHealth(globals::INITIAL_SHIP_HEALTH);
 
-	// Scene graph setup
+	// Scene graph Initialization
 	sgRoot.init(assets, ship, playerID);
 
 	return true;
@@ -107,23 +109,53 @@ void GameMode::reset() {
  * @param timestep  The amount of time (in seconds) since the last frame
  */
 void GameMode::update(float timestep) {
-	input.update(timestep);
+	// Connection Status Checks
+	switch (net->matchStatus()) {
+		case MagicInternetBox::Disconnected:
+		case MagicInternetBox::ClientRoomInvalid:
+		case MagicInternetBox::ReconnectError:
+			if (net->reconnect(roomId)) {
+				net->update();
+			}
+			sgRoot.setStatus(MagicInternetBox::Disconnected);
+			sgRoot.update(timestep);
+			return;
+		case MagicInternetBox::Reconnecting:
+			// Still Reconnecting
+			net->update();
+			sgRoot.setStatus(MagicInternetBox::Reconnecting);
+			sgRoot.update(timestep);
+			return;
+		case MagicInternetBox::ClientRoomFull:
+		case MagicInternetBox::GameEnded:
+			// Insert Game End
+			net->update(ship);
+			sgRoot.setStatus(MagicInternetBox::GameEnded);
+			sgRoot.update(timestep);
+			return;
+		case MagicInternetBox::GameStart:
+			net->update(ship);
+			sgRoot.setStatus(MagicInternetBox::GameStart);
+			break;
+		default:
+			CULog("ERROR: Uncaught MatchmakingStatus Value Occurred");
+	}
 
-	net->update(ship);
+	// Only process game logic if properly connected to game
+	input.update(timestep);
 
 	if (!(ship->timerEnded())) {
 		ship->updateTimer(timestep);
 	}
 
 	// Breach health depletion
-	for (int i = 0; i < MAX_EVENTS; i++) {
+	for (int i = 0; i < ship->getBreaches().size(); i++) {
 		std::shared_ptr<BreachModel> breach = ship->getBreaches().at(i);
 		if (breach == nullptr) {
 			continue;
 		}
-		float diff =
-			(float)DonutModel::HALF_CIRCLE -
-			abs(abs(donutModel->getAngle() - breach->getAngle()) - (float)DonutModel::HALF_CIRCLE);
+		float diff = ship->getSize() / 2 -
+					 abs(abs(donutModel->getAngle() - breach->getAngle()) - ship->getSize() / 2);
 
 		if (!donutModel->isJumping() && playerID != breach->getPlayer() && diff < BREACH_WIDTH &&
 			breach->getHealth() != 0) {
@@ -143,14 +175,14 @@ void GameMode::update(float timestep) {
 		}
 	}
 
-	for (int i = 0; i < MAX_DOORS; i++) {
+	for (int i = 0; i < ship->getDoors().size(); i++) {
 		if (ship->getDoors().at(i) == nullptr || ship->getDoors().at(i)->halfOpen() ||
 			ship->getDoors().at(i)->getAngle() < 0) {
 			continue;
 		}
-		float diff = (float)DonutModel::HALF_CIRCLE -
+		float diff = ship->getSize() / 2 -
 					 abs(abs(donutModel->getAngle() - ship->getDoors().at(i)->getAngle()) -
-						 (float)DonutModel::HALF_CIRCLE);
+						 ship->getSize() / 2);
 
 		if (diff < DOOR_WIDTH) {
 			// TODO: Real physics...
@@ -167,19 +199,25 @@ void GameMode::update(float timestep) {
 		}
 	}
 
-
 	for (int i = 0; i < ship->getBreaches().size(); i++) {
 		if(trunc(ship->getBreaches().at(i)->getTimeCreated()) - trunc(ship->timer) > 17) {
 			CULog("dec health");
 			ship->decHealth(0.25);
 		}
+	if ((ship->getBreaches().size()) == 0) {
+		ship->setHealth(initHealth);
+	} else {
+		int h = 0;
+		for (int i = 0; i < ship->getBreaches().size(); i++) {
+			h = h + ship->getBreaches().at(i)->getHealth();
+		}
+		ship->setHealth(initHealth + 1 - h);
 	}
 
-
 	gm.update(timestep);
-	float thrust = input.getRoll();
 
 	// Move the donut (MODEL ONLY)
+	float thrust = input.getRoll();
 	donutModel->applyForce(thrust);
 	// Jump Logic
 	if (input.getTapLoc() != Vec2::ZERO && !donutModel->isJumping()) {

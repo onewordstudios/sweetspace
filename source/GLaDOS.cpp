@@ -1,27 +1,27 @@
 ﻿#include "GLaDOS.h"
 
-#include <array>
+#include <vector>
 
 using namespace cugl;
 using namespace std;
 
 #pragma mark -
-#pragma mark GM Constants
+#pragma mark GM Variables
 /** The maximum number of events on ship at any one time. This will probably need to scale with
  * the number of players*/
-const unsigned int MAX_EVENTS = 3;
+unsigned int maxEvents;
 /** The maximum number of events on ship at any one time. This will probably need to scale with
  * the number of players*/
-const unsigned int MAX_DOORS = 1;
-/** Spawn rate of breaches = 1/SPAWN_RATE for EVERY UPDATE FRAME. 100 is a very fast rate already.
+unsigned int maxDoors;
+/** Spawn rate of breaches = 1/spawnRate for EVERY UPDATE FRAME. 100 is a very fast rate already.
  */
-const unsigned int SPAWN_RATE = 100;
-constexpr float MIN_ANGLE_DIFF = 29.0f;
+unsigned int spawnRate;
+float minAngleDiff;
 /** Array recording which breaches are free or not. */
-array<bool, MAX_EVENTS> breachFree;
+vector<bool> breachFree;
 
 /** Array recording which doors are free or not. */
-array<bool, MAX_DOORS> doorFree;
+vector<bool> doorFree;
 
 #pragma mark -
 #pragma mark GM
@@ -53,19 +53,26 @@ void GLaDOS::dispose() {
  *
  * @return true if the controller was initialized successfully
  */
-bool GLaDOS::init(std::shared_ptr<ShipModel> ship) {
+bool GLaDOS::init(std::shared_ptr<ShipModel> ship, std::shared_ptr<LevelModel> level) {
 	bool success = true;
 	this->ship = ship;
 	this->mib = MagicInternetBox::getInstance();
 	this->playerID = mib->getPlayerID();
-	for (int i = 0; i < MAX_EVENTS; i++) {
+	maxEvents = level->getMaxBreaches();
+	maxDoors = level->getMaxDoors();
+	minAngleDiff = level->getMinAngleDiff();
+	spawnRate = level->getSpawnRate();
+	breachFree.resize(maxEvents);
+	doorFree.resize(maxDoors);
+
+	for (int i = 0; i < maxEvents; i++) {
 		breachFree.at(i) = true;
 	}
-	for (int i = 0; i < MAX_DOORS; i++) {
+	for (int i = 0; i < maxDoors; i++) {
 		doorFree.at(i) = true;
 	}
 	// Set random seed based on time
-	srand(time(NULL));
+	srand((unsigned int)time(NULL));
 	active = success;
 	return success;
 }
@@ -77,18 +84,21 @@ bool GLaDOS::init(std::shared_ptr<ShipModel> ship) {
  */
 void GLaDOS::update(float dt) {
 	// Removing breaches that have 0 health left
-	for (int i = 0; i < MAX_EVENTS; i++) {
+	for (int i = 0; i < maxEvents; i++) {
 		if (ship->getBreaches().at(i) == nullptr) {
 			continue;
 		}
-		if (ship->getBreaches().at(i)->getHealth() == 0) {
+		// check if health is zero or the assigned player is inactive
+		if (ship->getBreaches().at(i)->getHealth() == 0 ||
+			!ship->getDonuts().at(ship->getBreaches().at(i)->getPlayer())->getIsActive()) {
+			ship->getBreaches().at(i)->setHealth(0);
 			ship->getBreaches().at(i)->setAngle(-1);
 			breachFree.at(i) = true;
 		}
 	}
 
 	// Remove doors that have been resolved and opened. Also raise doors that are resolved.
-	for (int i = 0; i < MAX_DOORS; i++) {
+	for (int i = 0; i < maxDoors; i++) {
 		if (ship->getDoors().at(i) == nullptr) {
 			continue;
 		}
@@ -106,16 +116,16 @@ void GLaDOS::update(float dt) {
 	}
 	// Simple logic for adding a breach when under max and randomly, replace with actual logic
 	// later
-	if (rand() % SPAWN_RATE > 1) return;
-	for (int i = 0; i < MAX_EVENTS; i++) {
+	if (rand() % spawnRate > 1) return;
+	for (int i = 0; i < maxEvents; i++) {
 		if (breachFree.at(i)) {
 			float angle = (float)(rand() % (int)(ship->getSize()));
 			bool goodAngle = true;
 			for (int j = 0; j < ship->getDonuts().size(); j++) {
-				float diff = (float)DonutModel::HALF_CIRCLE -
-							 abs(abs(ship->getDonuts().at(j)->getAngle() - angle) -
-								 (float)DonutModel::HALF_CIRCLE);
-				if (diff < MIN_ANGLE_DIFF) {
+				float diff =
+					ship->getSize() / 2 -
+					abs(abs(ship->getDonuts().at(j)->getAngle() - angle) - ship->getSize() / 2);
+				if (diff < minAngleDiff) {
 					goodAngle = false;
 					break;
 				}
@@ -127,15 +137,16 @@ void GLaDOS::update(float dt) {
 					continue;
 				}
 				float breachAngle = ship->getBreaches()[k]->getAngle();
-				float diff = (float)DonutModel::HALF_CIRCLE -
-							 abs(abs(breachAngle - angle) - (float)DonutModel::HALF_CIRCLE);
-				if (breachAngle != -1 && diff < MIN_ANGLE_DIFF) {
+				float diff =
+					ship->getSize() / 2 - abs(abs(breachAngle - angle) - ship->getSize() / 2);
+				if (breachAngle != -1 && diff < minAngleDiff) {
 					goodAngle = false;
 					break;
 				}
 			}
 
-			if (!goodAngle) {
+			if (!goodAngle ||
+				!ship->getDonuts().at(ship->getBreaches().at(i)->getPlayer())->getIsActive()) {
 				continue;
 			}
 			breachFree.at(i) = false;
@@ -146,15 +157,15 @@ void GLaDOS::update(float dt) {
 			break;
 		}
 	}
-	for (int i = 0; i < MAX_DOORS; i++) {
+	for (int i = 0; i < maxDoors; i++) {
 		if (doorFree.at(i)) {
 			float angle = (float)(rand() % (int)(ship->getSize()));
 			bool goodAngle = true;
 			for (int j = 0; j < ship->getDonuts().size(); j++) {
-				float diff = (float)DonutModel::HALF_CIRCLE -
-							 abs(abs(ship->getDonuts().at(j)->getAngle() - angle) -
-								 (float)DonutModel::HALF_CIRCLE);
-				if (diff < MIN_ANGLE_DIFF) {
+				float diff =
+					ship->getSize() / 2 -
+					abs(abs(ship->getDonuts().at(j)->getAngle() - angle) - ship->getSize() / 2);
+				if (diff < minAngleDiff) {
 					goodAngle = false;
 					break;
 				}
@@ -175,7 +186,7 @@ void GLaDOS::update(float dt) {
  * Clears all events
  */
 void GLaDOS::clear() {
-	for (int i = 0; i < MAX_EVENTS; i++) {
+	for (int i = 0; i < maxEvents; i++) {
 		ship->getBreaches().at(i) = nullptr;
 		breachFree.at(i) = true;
 	}

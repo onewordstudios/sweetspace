@@ -9,7 +9,10 @@
 #include "DonutModel.h"
 #include "DonutNode.h"
 #include "DoorNode.h"
+#include "Globals.h"
+#include "HealthNode.h"
 #include "InputController.h"
+#include "MagicInternetBox.h"
 #include "ShipModel.h"
 
 class GameGraphRoot : public cugl::Scene {
@@ -37,11 +40,28 @@ class GameGraphRoot : public cugl::Scene {
 	/** Filmstrip representing the player's animated donut */
 	std::shared_ptr<cugl::PolygonNode> healthNode;
 
+	// Reconnection Textures
+	/** Node to hold all of the Reconnect Overlay.*/
+	std::shared_ptr<cugl::Node> reconnectOverlay;
+
+	/** Parent node of all ship segments, is child of nearSpace */
+	std::shared_ptr<cugl::Node> shipSegsNode;
+	/** Parent node of all doors, is child of nearSpace */
+	std::shared_ptr<cugl::Node> doorsNode;
+	/** Parent node of all external donuts, is child of nearSpace */
+	std::shared_ptr<cugl::Node> externalDonutsNode;
+	/** Tag of the left most ship segment */
+	unsigned int leftMostSeg;
+	/** Tag of the right most ship segment */
+	unsigned int rightMostSeg;
+
 	// MODEL
 	/** Id of the current client */
 	unsigned int playerID;
 	/** The ship */
 	std::shared_ptr<ShipModel> ship;
+	/** Angle of the player donut model from the last frame */
+	float prevPlayerAngle;
 
 	/**
 	 * Returns an informative string for the position
@@ -53,6 +73,20 @@ class GameGraphRoot : public cugl::Scene {
 	 * @return an informative string for the position
 	 */
 	std::string positionText();
+
+	/** Local record of Network Status */
+	MagicInternetBox::MatchmakingStatus status;
+
+	/**
+	 * Returns the wrapped value of input around the ship size.
+	 *
+	 * @param f degree in radians
+	 * @return Wrapped angle in radians
+	 */
+	float wrapAngle(float f) {
+		float mod = fmod(f, globals::TWO_PI);
+		return mod < 0 ? globals::TWO_PI + mod : mod;
+	};
 
    public:
 #pragma mark -
@@ -71,7 +105,7 @@ class GameGraphRoot : public cugl::Scene {
 	 * This constructor does not allocate any objects or start the game.
 	 * This allows us to use the object without a heap pointer.
 	 */
-	GameGraphRoot() : Scene() {}
+	GameGraphRoot() : Scene(), status(MagicInternetBox::Uninitialized) {}
 
 	/**
 	 * Disposes of all (non-static) resources allocated to this mode.
@@ -117,5 +151,21 @@ class GameGraphRoot : public cugl::Scene {
 	void reset() override;
 
 	std::shared_ptr<cugl::Node> getDonutNode();
+
+#pragma mark -
+#pragma mark Accessors
+	/**
+	 * Set connection status
+	 *
+	 * @param status the connection status of the ship
+	 */
+	void setStatus(MagicInternetBox::MatchmakingStatus status) { this->status = status; }
+
+	/**
+	 * Get health of the ship
+	 *
+	 * @return health the health of the ship
+	 */
+	MagicInternetBox::MatchmakingStatus getStatus() { return status; }
 };
 #endif /* __GAME_GRAPH_ROOT_H__ */
