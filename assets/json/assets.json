@@ -57,6 +57,18 @@
             "wrapS": "repeat",
             "wrapT": "repeat"
         },
+		"health_green": {
+			"file": "textures/health_green.png"
+		},
+		"health_yellow": {
+			"file": "textures/health_yellow.png"
+		},
+		"health_red": {
+			"file": "textures/health_red.png"
+		},
+		"health_empty": {
+			"file": "textures/health_empty.png"
+		},
         "ship": {
             "file":   "textures/ship.png"
         },
@@ -424,7 +436,16 @@
 				                    }
 				            	}
 				            }
-				        }
+				        },
+						"health": {
+							"type": "Image",
+							"data": {
+								"texture": "health_green",
+								"anchor":   [0.5,0.5],
+								"position": [0, 300],
+								"scale": 0.3
+							}
+						}
                     }
                 },
                 "hud" : {

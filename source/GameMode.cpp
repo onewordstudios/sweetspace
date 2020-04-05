@@ -72,6 +72,7 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 
 	donutModel = ship->getDonuts().at(static_cast<unsigned long>(playerID));
 	ship->initTimer(level->getTime());
+	ship->setHealth(globals::INITIAL_SHIP_HEALTH);
 
 	// Scene graph Initialization
 	sgRoot.init(assets, ship, playerID);
@@ -200,14 +201,12 @@ void GameMode::update(float timestep) {
 		}
 	}
 
-	if ((ship->getBreaches().size()) == 0) {
-		ship->setHealth(initHealth);
-	} else {
-		int h = 0;
-		for (int i = 0; i < ship->getBreaches().size(); i++) {
-			h = h + ship->getBreaches().at(i)->getHealth();
+	for (int i = 0; i < ship->getBreaches().size(); i++) {
+		// this should be adjusted based on the level and number of players
+		if (ship->getBreaches().at(i) != nullptr &&
+			trunc(ship->getBreaches().at(i)->getTimeCreated()) - trunc(ship->timer) > 15) {
+			ship->decHealth(0.01);
 		}
-		ship->setHealth(initHealth + 1 - h);
 	}
 
 	gm.update(timestep);

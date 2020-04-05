@@ -153,6 +153,7 @@ void GLaDOS::update(float dt) {
 			breachFree.at(i) = false;
 			int p = (int)(rand() % ship->getDonuts().size());
 			ship->getBreaches().at(i)->reset(angle, p);
+			ship->getBreaches().at(i)->setTimeCreated(ship->timer);
 			mib->createBreach(angle, p, i);
 			break;
 		}

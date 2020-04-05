@@ -1,4 +1,4 @@
-﻿#include "GameGraphRoot.h"
+#include "GameGraphRoot.h"
 
 #include <cugl/cugl.h>
 
@@ -95,6 +95,7 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	doorsNode = assets->get<Node>("game_field_near_doors");
 	externalDonutsNode = assets->get<Node>("game_field_near_externaldonuts");
 	donutPos = donutNode->getPosition();
+	healthNode = dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_health"));
 	coordHUD = std::dynamic_pointer_cast<Label>(assets->get<Node>("game_hud"));
 
 	challengePanelHanger = dynamic_pointer_cast<cugl::PolygonNode>(
@@ -197,18 +198,6 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 		doorsNode->addChild(doorNode);
 	}
 
-	// Initialize health bars
-	for (int i = 0; i < NUM_HEALTH_BAR; i++) {
-		std::shared_ptr<Texture> image = assets->get<Texture>("health_glow");
-		std::shared_ptr<HealthNode> healthNode = HealthNode::alloc(image, 1, HEALTH_BAR_FRAMES);
-		healthNode->setModel(ship);
-		healthNode->setFrame(HEALTH_BAR_FRAMES - 1);
-		healthNode->setSection(i);
-		healthNode->setAnchor(Vec2::ANCHOR_BOTTOM_CENTER);
-		healthNode->setScale(HEALTH_NODE_SCALE);
-		nearSpace->addChild(healthNode);
-	}
-
 	addChild(scene);
 	return true;
 }
@@ -256,6 +245,16 @@ void GameGraphRoot::update(float timestep) {
 	// "Drawing" code.  Move everything BUT the donut
 	// Update the HUD
 	coordHUD->setText(positionText());
+	if (ship->getHealth() < 1) {
+		std::shared_ptr<Texture> image = assets->get<Texture>("health_empty");
+		healthNode->setTexture(image);
+	} else if (ship->getHealth() < 5) {
+		std::shared_ptr<Texture> image = assets->get<Texture>("health_red");
+		healthNode->setTexture(image);
+	} else if (ship->getHealth() < 8) {
+		std::shared_ptr<Texture> image = assets->get<Texture>("health_yellow");
+		healthNode->setTexture(image);
+	}
 
 	// Reanchor the node at the center of the screen and rotate about center.
 	Vec2 position = farSpace->getPosition();
@@ -391,10 +390,10 @@ void GameGraphRoot::update(float timestep) {
  */
 std::string GameGraphRoot::positionText() {
 	stringstream ss;
-	if (ship->timerEnded() && ship->getHealth() > globals::SHIP_HEALTH_WIN_LIMIT) {
-		ss << "You Win!";
-	} else if (ship->timerEnded()) {
+	if (ship->getHealth() < 1) {
 		ss << "You Lose.";
+	} else if (ship->timerEnded() && ship->getHealth() > 0) {
+		ss << "You Win!";
 	} else {
 		ss << "Time Left: " << trunc(ship->timer);
 	}
