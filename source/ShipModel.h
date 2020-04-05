@@ -202,12 +202,12 @@ class ShipModel {
 	 */
 	float getHealth() { return health; }
 
-    /**
-     * Decrement health of the ship
-     *
-     * @param health   the amount of health to be decremented
-     */
-    void decHealth(float h) { health = health - h; }
+	/**
+	 * Decrement health of the ship
+	 *
+	 * @param health   the amount of health to be decremented
+	 */
+	void decHealth(float h) { health = health - h; }
 
 	/**
 

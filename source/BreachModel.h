@@ -178,7 +178,6 @@ class BreachModel {
 	 */
 	float getTimeCreated() { return timeCreated; }
 
-
 	/**
 	 * Resets the breach upon recycling.
 	 * @param an
