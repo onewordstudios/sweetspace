@@ -50,7 +50,7 @@ class DonutModel {
 	/** Initial vertical velocity */
 	float jumpVelocity;
 	/** Whether or not this player is active */
-	bool isActive;
+	bool isActive = true;
 
 	/**
 	 * Performs state and animation updates for a jumping donut.
