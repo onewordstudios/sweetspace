@@ -17,11 +17,15 @@ class BreachNode : public cugl::AnimationNode {
 	float shipSize;
 	/** Whether the breach is being shown right now */
 	bool isShown;
+	/** Whether the breach is playing idle animation */
+	bool isAnimatingShrink;
+	/** Health of the breach model from previous frame */
+	int prevHealth;
 
    public:
 #pragma mark -
-	static constexpr int BREACH_H = 1;
-	static constexpr int BREACH_W = 1;
+	static constexpr int BREACH_H = 9;
+	static constexpr int BREACH_W = 10;
 #pragma mark Constructor
 	/**
 	 * Creates an empty Breach with the degenerate texture.
@@ -66,6 +70,8 @@ class BreachNode : public cugl::AnimationNode {
 	void setDonutModel(std::shared_ptr<DonutModel> model) { playerDonutModel = model; }
 
 	void setShipSize(float f) { shipSize = f; }
+
+	void setPrevHealth(int i) { prevHealth = i; }
 
 	std::shared_ptr<BreachModel> getModel() { return breachModel; }
 

@@ -134,16 +134,19 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	// Initialize Breaches
 	for (int i = 0; i < ship->getBreaches().size(); i++) {
 		std::shared_ptr<BreachModel> breachModel = ship->getBreaches().at((unsigned long)i);
-		string breachColor = playerColor.at((unsigned long)ship->getDonuts()
+		cugl::Color4 color = breachColor.at((unsigned long)ship->getDonuts()
 												.at((unsigned long)breachModel->getPlayer())
 												->getColorId());
-		std::shared_ptr<Texture> image = assets->get<Texture>("breach_" + breachColor);
+		std::shared_ptr<Texture> image = assets->get<Texture>("breach_filmstrip");
 		std::shared_ptr<BreachNode> breachNode = BreachNode::allocWithTexture(image);
+		breachNode->setFrame(0);
+		breachNode->setColor(color);
 		breachNode->setModel(breachModel);
 		breachNode->setTag((unsigned int)(i + 1));
 		breachNode->setScale(BREACH_SCALE);
 		breachNode->setShipSize(ship->getSize());
 		breachNode->setDonutModel(ship->getDonuts().at(playerID));
+		breachNode->setPrevHealth(breachModel->getHealth());
 		// Start position is off screen
 		Vec2 breachPos = Vec2(0, 0);
 		breachNode->setPosition(breachPos);
@@ -258,14 +261,12 @@ void GameGraphRoot::update(float timestep) {
 	for (int i = 0; i < ship->getBreaches().size(); i++) {
 		std::shared_ptr<BreachModel> breachModel = ship->getBreaches().at((unsigned long)i);
 		if (breachModel->getHealth() > 0 && breachModel->getNeedSpriteUpdate()) {
-			string breachColor =
-				playerColor.at((unsigned long)(ship->getDonuts()
-												   .at((unsigned long)breachModel->getPlayer())
-												   ->getColorId()));
-			std::shared_ptr<Texture> image = assets->get<Texture>("breach_" + breachColor);
+			cugl::Color4 color = breachColor.at((unsigned long)ship->getDonuts()
+													.at((unsigned long)breachModel->getPlayer())
+													->getColorId());
 			shared_ptr<BreachNode> breachNode = dynamic_pointer_cast<BreachNode>(
 				breachesNode->getChildByTag((unsigned int)(i + 1)));
-			breachNode->setTexture(image);
+			breachNode->setColor(color);
 			breachModel->setNeedSpriteUpdate(false);
 		}
 	}
