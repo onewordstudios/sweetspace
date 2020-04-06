@@ -80,6 +80,7 @@ void MatchmakingMode::update(float timestep) {
 		}
 		case MatchmakingGraphRoot::ClientConnect: {
 			net->initClient(sgRoot.getRoomID());
+			break;
 		}
 		case MatchmakingGraphRoot::HostBegin: {
 			if (net->getNumPlayers() >= globals::MIN_PLAYERS) {

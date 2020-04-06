@@ -196,6 +196,9 @@ class MatchmakingGraphRoot : public cugl::Scene {
 	/** Returns whether the graph is in a state where it is connected to the server (and thus mib
 	 * needs to be updated every frame) */
 	bool isConnected() {
+		if (transitionState == HostScreenWait) {
+			return true;
+		}
 		switch (currState) {
 			case HostScreenWait:
 			case HostScreen:
