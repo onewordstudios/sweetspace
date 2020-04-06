@@ -24,10 +24,6 @@ constexpr float BREACH_WIDTH = 11.0f;
 constexpr float DOOR_ACTIVE_ANGLE = 15.0f;
 /** Force to push back during collision */
 constexpr float REBOUND_FORCE = -6;
-/** Starting time for the round */
-constexpr unsigned int TIME = 45;
-/** Initial health of the ship */
-int initHealth;
 
 #pragma mark -
 #pragma mark Constructors
@@ -64,10 +60,8 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 	roomId = net->getRoomID();
 
 	std::shared_ptr<LevelModel> level = assets->get<LevelModel>(LEVEL_ONE_KEY);
-	float shipSize = level->getShipSize();
-	initHealth = level->getInitHealth();
 	ship = ShipModel::alloc(net->getNumPlayers(), level->getMaxBreaches(), level->getMaxDoors(),
-							playerID, shipSize, initHealth);
+							playerID, level->getShipSize(), level->getInitHealth());
 	gm.init(ship, level);
 
 	donutModel = ship->getDonuts().at(static_cast<unsigned long>(playerID));
@@ -242,7 +236,7 @@ void GameMode::update(float timestep) {
 		if (ship->getChallengeProg() > 30 || trunc(ship->timer) == trunc(ship->getEndTime())) {
 			if (ship->getChallengeProg() < 10) {
 				net->failAllTask();
-				int h = ship->getHealth();
+				float h = ship->getHealth();
 				ship->setHealth(h - 3);
 			}
 			ship->setChallenge(false);
