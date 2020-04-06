@@ -214,7 +214,7 @@ void GameMode::update(float timestep) {
 	float thrust = input->getRoll();
 	donutModel->applyForce(thrust);
 	// Jump Logic
-	if (input->getTapLoc() != Vec2::ZERO && !donutModel->isJumping()) {
+	if (input->hasJumped() && !donutModel->isJumping()) {
 		donutModel->startJump();
 		net->jump(playerID);
 	}

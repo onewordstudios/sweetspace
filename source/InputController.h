@@ -10,13 +10,8 @@
  * to handle input, and the reason for hiding it behind an abstraction like
  * this class.
  *
- * Unlike CUGL input devices, this class is not a singleton.  It must be
- * allocated before use.  However, you will notice that we do not do any
- * input initialization in the constructor.  This allows us to allocate this
- * controller as a field without using pointers. We simply add the class to the
- * header file of its owner, and delay initialization (via the method init())
- * until later. This is one of the main reasons we like to avoid initialization
- * in the constructor.
+ * This class is a singleton, but requires initialization. The init method must be called before the
+ * instance can be used.
  */
 class InputController {
    private:
@@ -41,8 +36,6 @@ class InputController {
 	cugl::TouchID touchID;
 
 	// Input results
-	/** Whether the reset action was chosen. */
-	bool resetPressed;
 	/**
 	 * How much the player is trying to roll
 	 * -1 for way left, 0 for not rolling, 1 for way right
@@ -53,9 +46,9 @@ class InputController {
 	 */
 	cugl::Vec2 tapLoc;
 	/**
-	 * Whether a tap recently occurred
+	 * Whether a jump recently occurred
 	 */
-	bool tapped;
+	bool jumped;
 	/**
 	 * Starting location of last tap.
 	 */
@@ -149,19 +142,9 @@ class InputController {
 	const float getRoll() { return rollAmount; }
 
 	/**
-	 * Returns the most recent tap location if a tap recently happened.
-	 *
-	 * @return The tap location. cugl::Vec2 of x,y screen coordinates. Returns Vec2::ZERO if no
-	 * recent tap.
+	 * Return whether the player has jumped since the last time this method was queried
 	 */
-	const cugl::Vec2 getTapLoc() {
-		if (tapped) {
-			tapped = false;
-			return tapLoc;
-		} else {
-			return cugl::Vec2::ZERO;
-		}
-	}
+	bool hasJumped();
 
 	/**
 	 * Returns where the finger / mouse is currently pressed, or Vec2::ZERO if unpressed.

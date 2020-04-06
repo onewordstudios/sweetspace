@@ -8,7 +8,7 @@ constexpr float RANGE_CLAMP(float x, float y, float z) { return (x < y ? y : (x 
 #pragma mark Input Factors
 
 /** The key to use for reseting the game */
-constexpr KeyCode RESET_KEY = KeyCode::R;
+constexpr KeyCode JUMP_KEY = KeyCode::SPACE;
 
 /** The key for the event handlers */
 constexpr unsigned int LISTENER_KEY = 1;
@@ -24,7 +24,7 @@ std::shared_ptr<InputController> InputController::instance;
  * object. This makes it safe to use this class without a pointer.
  */
 InputController::InputController()
-	: active(false), keyReset(false), resetPressed(false), rollAmount(0.0f), tapped(false) {
+	: active(false), keyReset(false), rollAmount(0.0f), jumped(false) {
 	touchID = -1;
 }
 
@@ -49,7 +49,7 @@ void InputController::dispose() {
 		touch->removeEndListener(LISTENER_KEY);
 #endif
 		Input::deactivate<TextInput>();
-		tapped = false;
+		jumped = false;
 		active = false;
 	}
 }
@@ -101,7 +101,7 @@ bool InputController::init() {
 	});
 #endif
 	success = success && Input::activate<TextInput>();
-	tapped = false;
+	jumped = false;
 	active = success;
 	return success;
 }
@@ -120,7 +120,9 @@ void InputController::update(float dt) {
 // Only process keyboard on desktop
 #ifndef CU_TOUCH_SCREEN
 	Keyboard* keys = Input::get<Keyboard>();
-	keyReset = keys->keyPressed(RESET_KEY);
+	if (keys->keyPressed(JUMP_KEY)) {
+		jumped = true;
+	}
 
 	// Forces increase the longer you hold a key.
 	if (keys->keyDown(KeyCode::ARROW_LEFT)) {
@@ -138,15 +140,14 @@ void InputController::update(float dt) {
 	rollAmount = acc.x;
 
 #endif
+}
 
-	resetPressed = keyReset;
-	if (keyReset) {
-		rollAmount = 0;
+bool InputController::hasJumped() {
+	if (jumped) {
+		jumped = false;
+		return true;
 	}
-
-#ifdef CU_TOUCH_SCREEN
-	keyReset = false;
-#endif
+	return false;
 }
 
 const cugl::Vec2 InputController::getCurrTapLoc() const {
@@ -168,8 +169,7 @@ const cugl::Vec2 InputController::getCurrTapLoc() const {
  * Clears any buffered inputs so that we may start fresh.
  */
 void InputController::clear() {
-	resetPressed = false;
-	tapped = false;
+	jumped = false;
 	rollAmount = 0.0f;
 
 	dtouch = Vec2::ZERO;
@@ -190,7 +190,7 @@ void InputController::touchBeganCB(const cugl::TouchEvent& event, bool focus) {
 	tapLoc.set(event.position);
 	tapStart.set(event.position);
 	touchID = event.touch;
-	tapped = true;
+	jumped = true;
 }
 
 /**
@@ -212,10 +212,9 @@ void InputController::touchEndedCB(const cugl::TouchEvent& event, bool focus) {
  * @param event The associated event
  */
 void InputController::clickBeganCB(const cugl::MouseEvent& event, Uint8 clicks, bool focus) {
-	// Update the click location for jump
 	tapLoc.set(event.position);
 	tapStart.set(event.position);
-	tapped = true;
+	jumped = true;
 }
 
 /**
