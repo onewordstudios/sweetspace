@@ -10,8 +10,7 @@
  * to handle input, and the reason for hiding it behind an abstraction like
  * this class.
  *
- * This class is a singleton, but requires initialization. The init method must be called before the
- * instance can be used.
+ * This class is a singleton. It is initialized the first time the instance is acquired.
  */
 class InputController {
    private:
