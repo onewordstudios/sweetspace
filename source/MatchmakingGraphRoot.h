@@ -53,6 +53,9 @@ class MatchmakingGraphRoot : public cugl::Scene {
 	/** The node containing all UI for the client screen */
 	std::shared_ptr<cugl::Node> clientScreen;
 
+	/** Connection loading message */
+	std::shared_ptr<cugl::Node> connScreen;
+
 	/** Label for room ID (host) */
 	std::shared_ptr<cugl::Label> hostLabel;
 	/** Button to begin game (host) */
