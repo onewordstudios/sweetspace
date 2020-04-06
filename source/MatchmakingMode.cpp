@@ -69,7 +69,7 @@ void MatchmakingMode::update(float timestep) {
 	// Update Scene Graph
 	sgRoot.update(timestep);
 
-	switch (sgRoot.checkButtons(*input)) {
+	switch (sgRoot.checkButtons()) {
 		case MatchmakingGraphRoot::StartHost: {
 			startHostThread = std::unique_ptr<std::thread>(
 				new std::thread([]() { MagicInternetBox::getInstance()->initHost(); }));

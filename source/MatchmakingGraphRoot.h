@@ -167,11 +167,9 @@ class MatchmakingGraphRoot : public cugl::Scene {
 	/**
 	 * Processes button presses. Should be called AFTER update() every frame.
 	 *
-	 * @param position The screen coordinates of the tap
-	 *
 	 * @return The button pressed
 	 */
-	PressedButton checkButtons(InputController& position);
+	PressedButton checkButtons();
 
 	/**
 	 * Sets roomID (for the host)

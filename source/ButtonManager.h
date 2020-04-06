@@ -27,6 +27,6 @@ class ButtonManager {
 	/**
 	 * Process input for a frame and update the state of all the buttons.
 	 */
-	void process(const cugl::Vec2& position);
+	void process();
 };
 #endif /* __BUTTON_MANAGER_H__ */
