@@ -53,6 +53,9 @@ class MatchmakingGraphRoot : public cugl::Scene {
 	/** The node containing all UI for the client screen */
 	std::shared_ptr<cugl::Node> clientScreen;
 
+	/** Connection loading message */
+	std::shared_ptr<cugl::Label> connScreen;
+
 	/** Label for room ID (host) */
 	std::shared_ptr<cugl::Label> hostLabel;
 	/** Button to begin game (host) */
@@ -79,6 +82,8 @@ class MatchmakingGraphRoot : public cugl::Scene {
 	std::string roomID;
 	/** Num players connected */
 	unsigned int numPlayers;
+	/** Whether an error has occured */
+	bool isError;
 
 	/**
 	 * Update the client room display using the contents of {@link clientEnteredRoom}
@@ -111,6 +116,7 @@ class MatchmakingGraphRoot : public cugl::Scene {
 		  screenHeight(0),
 		  roomID(""),
 		  numPlayers(0),
+		  isError(false),
 		  transitionFrame(-1) {}
 
 	/**
@@ -184,9 +190,15 @@ class MatchmakingGraphRoot : public cugl::Scene {
 	/** Sets the number of players currently connected */
 	void setNumPlayers(unsigned int num) { numPlayers = num; }
 
+	/** Signal a catastrophic error has occured */
+	void signalError() { isError = true; }
+
 	/** Returns whether the graph is in a state where it is connected to the server (and thus mib
 	 * needs to be updated every frame) */
 	bool isConnected() {
+		if (transitionState == HostScreenWait) {
+			return true;
+		}
 		switch (currState) {
 			case HostScreenWait:
 			case HostScreen:

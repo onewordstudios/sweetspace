@@ -27,6 +27,8 @@ class MatchmakingMode {
 	/** True if game is ready to start */
 	bool gameReady;
 
+	std::unique_ptr<std::thread> startHostThread;
+
    public:
 #pragma mark -
 #pragma mark Constructors
@@ -36,7 +38,7 @@ class MatchmakingMode {
 	 * This constructor does not allocate any objects or start the game.
 	 * This allows us to use the object without a heap pointer.
 	 */
-	MatchmakingMode() : net(nullptr), gameReady(false) {}
+	MatchmakingMode() : net(nullptr), gameReady(false), startHostThread(nullptr) {}
 
 	/**
 	 * Disposes of all (non-static) resources allocated to this mode.

@@ -602,7 +602,25 @@
 						}
 					}
 				},
-                "host" : {
+                "connscreen" : {
+					"type": "Label",
+					"format" : { "type" : "Anchored" },
+					"data": {
+						"font"       : "mont_black_italic_big",
+						"text"       : "Connecting to Server...",
+						"foreground" : [248,231,78,255],
+						"anchor"	 : [0.5,0.5],
+						"valign"     : "middle",
+						"halign"     : "center",
+						"scale" : 0.2,
+						"visible" : false
+					},
+					"layout" : {
+						"x_anchor" : "center",
+						"y_anchor" : "middle"
+					}
+				},
+				"host" : {
 					"type" : "Image",
 					"format" : { "type" : "Anchored" },
 					"data"   : {

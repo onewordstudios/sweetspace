@@ -74,11 +74,13 @@ void MatchmakingMode::update(float timestep) {
 
 	switch (sgRoot.checkButtons(input)) {
 		case MatchmakingGraphRoot::StartHost: {
-			net->initHost();
+			startHostThread = std::unique_ptr<std::thread>(
+				new std::thread([]() { MagicInternetBox::getInstance()->initHost(); }));
 			break;
 		}
 		case MatchmakingGraphRoot::ClientConnect: {
 			net->initClient(sgRoot.getRoomID());
+			break;
 		}
 		case MatchmakingGraphRoot::HostBegin: {
 			if (net->getNumPlayers() >= globals::MIN_PLAYERS) {
@@ -87,6 +89,16 @@ void MatchmakingMode::update(float timestep) {
 			}
 			return;
 		}
+		default:
+			break;
+	}
+
+	switch (net->matchStatus()) {
+		case MagicInternetBox::MatchmakingStatus::Uninitialized:
+			return;
+		case MagicInternetBox::MatchmakingStatus::HostError:
+			sgRoot.signalError();
+			return;
 		default:
 			break;
 	}
@@ -102,6 +114,9 @@ void MatchmakingMode::update(float timestep) {
 			case MagicInternetBox::MatchmakingStatus::GameStart:
 				gameReady = true;
 				return;
+			case MagicInternetBox::MatchmakingStatus::Uninitialized:
+			case MagicInternetBox::MatchmakingStatus::HostError:
+				break;
 			default:
 				sgRoot.setRoomID(net->getRoomID());
 				sgRoot.setNumPlayers(net->getNumPlayers());
