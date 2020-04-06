@@ -24,18 +24,7 @@ constexpr unsigned int LISTENER_KEY = 1;
  */
 InputController::InputController() : active(false), rollAmount(0.0f), jumped(false) {
 	touchID = -1;
-}
 
-/**
- * Initializes the input control for the given drawing scale.
- *
- * This method works like a proper constructor, initializing the input
- * controller and allocating memory.  However, it still does not activate
- * the listeners.  You must call start() do that.
- *
- * @return true if the controller was initialized successfully
- */
-bool InputController::init() {
 #ifdef CU_TOUCH_SCREEN
 	Input::activate<Touchscreen>();
 #else
@@ -73,16 +62,9 @@ bool InputController::init() {
 	success = success && Input::activate<TextInput>();
 	jumped = false;
 	active = success;
-	return success;
 }
 
-/**
- * Deactivates this input controller, releasing all listeners.
- *
- * This method will not dispose of the input controller. It can be reused
- * once it is reinitialized.
- */
-void InputController::dispose() {
+InputController::~InputController() {
 	if (active) {
 		Input::deactivate<Keyboard>();
 #ifndef CU_TOUCH_SCREEN
@@ -98,6 +80,12 @@ void InputController::dispose() {
 #endif
 		Input::deactivate<TextInput>();
 		jumped = false;
+
+#ifdef CU_TOUCH_SCREEN
+		Input::deactivate<Touchscreen>();
+#else
+		Input::deactivate<Mouse>();
+#endif
 		active = false;
 	}
 }

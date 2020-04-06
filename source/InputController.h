@@ -54,11 +54,22 @@ class InputController {
 	 */
 	InputController();
 
+	/**
+	 * Deactivates this input controller, releasing all listeners.
+	 *
+	 * This method will not dispose of the input controller. It can be reused
+	 * once it is reinitialized.
+	 */
+	void dispose();
+
    public:
 #pragma region Constructors
 
 	/**
-	 * Grab a pointer to the singleton instance of this class
+	 * Grab a pointer to the singleton instance of this class.
+	 *
+	 * If this is the first time this is called, or if the class was previously disposed, this will
+	 * initialize all the input devices too.
 	 */
 	static std::shared_ptr<InputController> getInstance() {
 		if (instance == nullptr) {
@@ -68,27 +79,15 @@ class InputController {
 	}
 
 	/**
-	 * Disposes of this input controller, releasing all listeners.
+	 * Deactivates and disposes of this input controller, releasing all listeners.
 	 */
-	~InputController() { dispose(); }
+	~InputController();
 
 	/**
-	 * Deactivates this input controller, releasing all listeners.
-	 *
-	 * This method will not dispose of the input controller. It can be reused
-	 * once it is reinitialized.
+	 * Deactivates and disposes of the instance, if it exists. Note that subsequent calls to {@link
+	 * getInstance} will automatically reinitialize the class.
 	 */
-	void dispose();
-
-	/**
-	 * Initializes the input control
-	 *
-	 * This method works like a proper constructor, initializing the input
-	 * controller, allocating memory and attaching listeners.
-	 *
-	 * @return true if the controller was initialized successfully
-	 */
-	bool init();
+	static void cleanup() { instance = nullptr; }
 
 #pragma endregion
 #pragma region Input Detection
