@@ -53,6 +53,7 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 
 	// Input Initialization
 	input = InputController::getInstance();
+	input->clear();
 
 	// Network Initialization
 	net = MagicInternetBox::getInstance();
@@ -85,16 +86,6 @@ void GameMode::dispose() {
 
 #pragma mark -
 #pragma mark Gameplay Handling
-
-/**
- * Resets the status of the game so that we can play again.
- */
-void GameMode::reset() {
-	donutModel->reset();
-	sgRoot.reset();
-	input->clear();
-	gm.clear();
-}
 
 /**
  * The method called to update the game mode.

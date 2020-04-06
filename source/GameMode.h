@@ -90,11 +90,6 @@ class GameMode {
 	void update(float timestep);
 
 	/**
-	 * Resets the status of the game so that we can play again.
-	 */
-	void reset();
-
-	/**
 	 * Draws the game.
 	 */
 	void draw(const std::shared_ptr<cugl::SpriteBatch>& batch);
