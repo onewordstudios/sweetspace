@@ -20,7 +20,7 @@ class GameMode {
    protected:
 	// CONTROLLERS
 	/** Controller for abstracting out input across multiple platforms */
-	InputController input;
+	std::shared_ptr<InputController> input;
 	/** Controller for GM */
 	GLaDOS gm;
 	/** Networking controller*/
@@ -50,7 +50,7 @@ class GameMode {
 	 * This constructor does not allocate any objects or start the game.
 	 * This allows us to use the object without a heap pointer.
 	 */
-	GameMode() : net(nullptr), playerID(-1), roomId("") {}
+	GameMode() : input(nullptr), net(nullptr), playerID(-1), roomId("") {}
 
 	/**
 	 * Disposes of all (non-static) resources allocated to this mode.

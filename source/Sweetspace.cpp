@@ -21,12 +21,8 @@ void Sweetspace::onStartup() {
 	assets = AssetManager::alloc();
 	batch = SpriteBatch::alloc();
 
-	// Start-up basic input
-#ifdef CU_TOUCH_SCREEN
-	Input::activate<Touchscreen>();
-#else
-	Input::activate<Mouse>();
-#endif
+	// Start up input controller
+	InputController::getInstance()->init();
 
 	assets->attach<Font>(FontLoader::alloc()->getHook());
 	assets->attach<Texture>(TextureLoader::alloc()->getHook());
@@ -61,6 +57,7 @@ void Sweetspace::onShutdown() {
 	loading.dispose();
 	gameplay.dispose();
 	matchmaking.dispose();
+	InputController::getInstance()->dispose();
 	assets = nullptr;
 	batch = nullptr;
 

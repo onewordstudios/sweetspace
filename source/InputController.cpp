@@ -13,6 +13,8 @@ constexpr KeyCode RESET_KEY = KeyCode::R;
 /** The key for the event handlers */
 constexpr unsigned int LISTENER_KEY = 1;
 
+std::shared_ptr<InputController> InputController::instance;
+
 #pragma mark -
 #pragma mark Ship Input
 /**
@@ -63,6 +65,13 @@ void InputController::dispose() {
  */
 bool InputController::init() {
 	timestamp.mark();
+
+#ifdef CU_TOUCH_SCREEN
+	Input::activate<Touchscreen>();
+#else
+	Input::activate<Mouse>();
+#endif
+
 	bool success = true;
 	// Activate keyboard on all
 	success = Input::activate<Keyboard>();

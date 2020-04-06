@@ -56,7 +56,7 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 	}
 
 	// Input Initialization
-	input.init();
+	input = InputController::getInstance();
 
 	// Network Initialization
 	net = MagicInternetBox::getInstance();
@@ -84,7 +84,6 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
  * Disposes of all (non-static) resources allocated to this mode.
  */
 void GameMode::dispose() {
-	input.dispose();
 	gm.dispose();
 	sgRoot.dispose();
 	donutModel = nullptr;
@@ -99,7 +98,7 @@ void GameMode::dispose() {
 void GameMode::reset() {
 	donutModel->reset();
 	sgRoot.reset();
-	input.clear();
+	input->clear();
 	gm.clear();
 }
 
@@ -144,7 +143,7 @@ void GameMode::update(float timestep) {
 	}
 
 	// Only process game logic if properly connected to game
-	input.update(timestep);
+	input->update(timestep);
 
 	if (!(ship->timerEnded())) {
 		ship->updateTimer(timestep);
@@ -212,10 +211,10 @@ void GameMode::update(float timestep) {
 	gm.update(timestep);
 
 	// Move the donut (MODEL ONLY)
-	float thrust = input.getRoll();
+	float thrust = input->getRoll();
 	donutModel->applyForce(thrust);
 	// Jump Logic
-	if (input.getTapLoc() != Vec2::ZERO && !donutModel->isJumping()) {
+	if (input->getTapLoc() != Vec2::ZERO && !donutModel->isJumping()) {
 		donutModel->startJump();
 		net->jump(playerID);
 	}

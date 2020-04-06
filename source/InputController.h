@@ -20,6 +20,11 @@
  */
 class InputController {
    private:
+	/**
+	 * The singleton instance of this class.
+	 */
+	static std::shared_ptr<InputController> instance;
+
 	/** Whether or not this input is active */
 	bool active;
 
@@ -60,16 +65,27 @@ class InputController {
 	 */
 	cugl::Vec2 tapEnd;
 
-   public:
-#pragma mark -
-#pragma mark Constructors
 	/**
 	 * Creates a new input controller.
 	 *
 	 * This constructor does NOT do any initialzation.  It simply allocates the
 	 * object. This makes it safe to use this class without a pointer.
 	 */
-	InputController(); // Don't initialize.  Allow stack based
+	InputController();
+
+   public:
+#pragma mark -
+#pragma mark Constructors
+
+	/**
+	 * Grab a pointer to the singleton instance of this class
+	 */
+	static std::shared_ptr<InputController> getInstance() {
+		if (instance == nullptr) {
+			instance = std::shared_ptr<InputController>(new InputController());
+		}
+		return instance;
+	}
 
 	/**
 	 * Disposes of this input controller, releasing all listeners.
