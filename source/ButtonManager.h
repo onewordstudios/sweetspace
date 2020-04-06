@@ -5,6 +5,13 @@
 
 /**
  * This is a helper class whose job it is to switch buttons between being up and down.
+ *
+ * To initialize, call the {@link registerButton} method, passing it a smart pointer to each cugl
+ * button. Then, every frame, call {@link process}. The manager will automatically change the button
+ * state to up or down based on how the user is clicking / tapping.
+ *
+ * This class does NOT currently handle the actual dispatching of button clicks, just the visual
+ * update of the button's up or down state.
  */
 class ButtonManager {
    private:
