@@ -56,7 +56,7 @@ bool MatchmakingGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& asset
 	mainScreen = assets->get<Node>("matchmaking_home");
 	hostScreen = assets->get<Node>("matchmaking_host");
 	clientScreen = assets->get<Node>("matchmaking_client");
-	connScreen = assets->get<Node>("matchmaking_connscreen");
+	connScreen = std::dynamic_pointer_cast<Label>(assets->get<Node>("matchmaking_connscreen"));
 
 	hostLabel =
 		std::dynamic_pointer_cast<Label>(assets->get<Node>("matchmaking_host_wrap_plate_room"));
@@ -133,6 +133,9 @@ void MatchmakingGraphRoot::update(float timestep) {
 				connScreen->setVisible(false);
 			} else {
 				connScreen->setVisible(true);
+			}
+			if (isError) {
+				connScreen->setText("Error Connecting :(");
 			}
 			break;
 		}

@@ -94,7 +94,9 @@ void MatchmakingMode::update(float timestep) {
 
 	switch (net->matchStatus()) {
 		case MagicInternetBox::MatchmakingStatus::Uninitialized:
+			return;
 		case MagicInternetBox::MatchmakingStatus::HostError:
+			sgRoot.signalError();
 			return;
 		default:
 			break;
