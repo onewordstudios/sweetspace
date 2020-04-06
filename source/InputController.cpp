@@ -4,8 +4,9 @@ using namespace cugl;
 
 constexpr float RANGE_CLAMP(float x, float y, float z) { return (x < y ? y : (x > z ? z : x)); }
 
-#pragma mark -
-#pragma mark Input Factors
+std::shared_ptr<InputController> InputController::instance;
+
+#pragma region Input Factors
 
 /** The key to use for reseting the game */
 constexpr KeyCode JUMP_KEY = KeyCode::SPACE;
@@ -13,45 +14,16 @@ constexpr KeyCode JUMP_KEY = KeyCode::SPACE;
 /** The key for the event handlers */
 constexpr unsigned int LISTENER_KEY = 1;
 
-std::shared_ptr<InputController> InputController::instance;
-
-#pragma mark -
-#pragma mark Ship Input
+#pragma endregion
+#pragma region Class Setup
 /**
  * Creates a new input controller.
  *
  * This constructor does NOT do any initialzation.  It simply allocates the
  * object. This makes it safe to use this class without a pointer.
  */
-InputController::InputController()
-	: active(false), keyReset(false), rollAmount(0.0f), jumped(false) {
+InputController::InputController() : active(false), rollAmount(0.0f), jumped(false) {
 	touchID = -1;
-}
-
-/**
- * Deactivates this input controller, releasing all listeners.
- *
- * This method will not dispose of the input controller. It can be reused
- * once it is reinitialized.
- */
-void InputController::dispose() {
-	if (active) {
-		Input::deactivate<Keyboard>();
-#ifndef CU_TOUCH_SCREEN
-
-		Mouse* mouse = Input::get<Mouse>();
-		mouse->removePressListener(LISTENER_KEY);
-		mouse->removeReleaseListener(LISTENER_KEY);
-#else
-		Input::deactivate<Accelerometer>();
-		Touchscreen* touch = Input::get<Touchscreen>();
-		touch->removeBeginListener(LISTENER_KEY);
-		touch->removeEndListener(LISTENER_KEY);
-#endif
-		Input::deactivate<TextInput>();
-		jumped = false;
-		active = false;
-	}
 }
 
 /**
@@ -64,8 +36,6 @@ void InputController::dispose() {
  * @return true if the controller was initialized successfully
  */
 bool InputController::init() {
-	timestamp.mark();
-
 #ifdef CU_TOUCH_SCREEN
 	Input::activate<Touchscreen>();
 #else
@@ -107,6 +77,46 @@ bool InputController::init() {
 }
 
 /**
+ * Deactivates this input controller, releasing all listeners.
+ *
+ * This method will not dispose of the input controller. It can be reused
+ * once it is reinitialized.
+ */
+void InputController::dispose() {
+	if (active) {
+		Input::deactivate<Keyboard>();
+#ifndef CU_TOUCH_SCREEN
+
+		Mouse* mouse = Input::get<Mouse>();
+		mouse->removePressListener(LISTENER_KEY);
+		mouse->removeReleaseListener(LISTENER_KEY);
+#else
+		Input::deactivate<Accelerometer>();
+		Touchscreen* touch = Input::get<Touchscreen>();
+		touch->removeBeginListener(LISTENER_KEY);
+		touch->removeEndListener(LISTENER_KEY);
+#endif
+		Input::deactivate<TextInput>();
+		jumped = false;
+		active = false;
+	}
+}
+
+/**
+ * Clears any buffered inputs so that we may start fresh.
+ */
+void InputController::clear() {
+	jumped = false;
+	rollAmount = 0.0f;
+	tapStart.setZero();
+	tapEnd.setZero();
+	touchID = -1;
+}
+
+#pragma endregion
+#pragma region Update
+
+/**
  * Processes the currently cached inputs.
  *
  * This method is used to to poll the current input state.  This will poll the
@@ -142,6 +152,9 @@ void InputController::update(float dt) {
 #endif
 }
 
+#pragma endregion
+#pragma region Getters
+
 bool InputController::hasJumped() {
 	if (jumped) {
 		jumped = false;
@@ -165,20 +178,8 @@ const cugl::Vec2 InputController::getCurrTapLoc() const {
 	return cugl::Vec2::ZERO;
 }
 
-/**
- * Clears any buffered inputs so that we may start fresh.
- */
-void InputController::clear() {
-	jumped = false;
-	rollAmount = 0.0f;
-
-	dtouch = Vec2::ZERO;
-	tapLoc = Vec2::ZERO;
-	timestamp.mark();
-}
-
-#pragma mark -
-#pragma mark Touch Callbacks
+#pragma endregion
+#pragma region Callbacks
 /**
  * Callback for the beginning of a touch event
  *
@@ -186,8 +187,6 @@ void InputController::clear() {
  * @param event The associated event
  */
 void InputController::touchBeganCB(const cugl::TouchEvent& event, bool focus) {
-	// Update the tap location for jump
-	tapLoc.set(event.position);
 	tapStart.set(event.position);
 	touchID = event.touch;
 	jumped = true;
@@ -203,8 +202,6 @@ void InputController::touchEndedCB(const cugl::TouchEvent& event, bool focus) {
 	tapEnd.set(event.position);
 }
 
-#pragma mark -
-#pragma mark Click Callbacks
 /**
  * Callback for the beginning of a click event
  *
@@ -212,7 +209,6 @@ void InputController::touchEndedCB(const cugl::TouchEvent& event, bool focus) {
  * @param event The associated event
  */
 void InputController::clickBeganCB(const cugl::MouseEvent& event, Uint8 clicks, bool focus) {
-	tapLoc.set(event.position);
 	tapStart.set(event.position);
 	jumped = true;
 }
@@ -226,3 +222,4 @@ void InputController::clickBeganCB(const cugl::MouseEvent& event, Uint8 clicks, 
 void InputController::clickEndedCB(const cugl::MouseEvent& event, Uint8 clicks, bool focus) {
 	tapEnd.set(event.position);
 }
+#pragma endregion

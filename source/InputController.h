@@ -23,15 +23,7 @@ class InputController {
 	/** Whether or not this input is active */
 	bool active;
 
-	// KEYBOARD EMULATION
-	/** Whether the reset key is down */
-	bool keyReset;
-
 	// TOUCH SUPPORT
-	/** The initial touch location for the current gesture */
-	cugl::Vec2 dtouch;
-	/** The timestamp for the beginning of the current gesture */
-	cugl::Timestamp timestamp;
 	/** The ID of the last touch event */
 	cugl::TouchID touchID;
 
@@ -42,15 +34,11 @@ class InputController {
 	 */
 	float rollAmount;
 	/**
-	 * Most Recent Tap location to pass down the scenegraph
-	 */
-	cugl::Vec2 tapLoc;
-	/**
 	 * Whether a jump recently occurred
 	 */
 	bool jumped;
 	/**
-	 * Starting location of last tap.
+	 * Starting location of last tap, or zero if none occurred
 	 */
 	cugl::Vec2 tapStart;
 	/**
@@ -67,8 +55,7 @@ class InputController {
 	InputController();
 
    public:
-#pragma mark -
-#pragma mark Constructors
+#pragma region Constructors
 
 	/**
 	 * Grab a pointer to the singleton instance of this class
@@ -103,8 +90,8 @@ class InputController {
 	 */
 	bool init();
 
-#pragma mark -
-#pragma mark Input Detection
+#pragma endregion
+#pragma region Input Detection
 	/**
 	 * Returns true if the input handler is currently active
 	 *
@@ -129,22 +116,8 @@ class InputController {
 	 */
 	void clear();
 
-#pragma mark -
-#pragma mark Input Results
-	/**
-	 * Returns the current roll amount.
-	 *
-	 * On keyboard, this will be -1, 0, or 1. With accelerometer on mobile, this can take on any
-	 * value in the range [-1, 1].
-	 *
-	 * @return The roll amount. -1 is all left, 1 is all right, 0 is neutral.
-	 */
-	const float getRoll() { return rollAmount; }
-
-	/**
-	 * Return whether the player has jumped since the last time this method was queried
-	 */
-	bool hasJumped();
+#pragma endregion
+#pragma region Generic Input Results
 
 	/**
 	 * Returns where the finger / mouse is currently pressed, or Vec2::ZERO if unpressed.
@@ -163,8 +136,26 @@ class InputController {
 		return r;
 	}
 
-#pragma mark -
-#pragma mark Touch Callbacks
+#pragma endregion
+#pragma region Gameplay Input Results
+
+	/**
+	 * Returns the current roll amount.
+	 *
+	 * On keyboard, this will be -1, 0, or 1. With accelerometer on mobile, this can take on any
+	 * value in the range [-1, 1].
+	 *
+	 * @return The roll amount. -1 is all left, 1 is all right, 0 is neutral.
+	 */
+	const float getRoll() { return rollAmount; }
+
+	/**
+	 * Return whether the player has jumped since the last time this method was queried
+	 */
+	bool hasJumped();
+
+#pragma endregion
+#pragma region Callbacks
 	/**
 	 * Callback for the beginning of a touch event
 	 *
@@ -181,8 +172,6 @@ class InputController {
 	 */
 	void touchEndedCB(const cugl::TouchEvent& event, bool focus);
 
-#pragma mark -
-#pragma mark Click Callbacks
 	/**
 	 * Callback for the beginning of a click event
 	 *
@@ -198,6 +187,7 @@ class InputController {
 	 * @param event The associated event
 	 */
 	void clickEndedCB(const cugl::MouseEvent& event, Uint8 clicks, bool focus);
+#pragma endregion
 };
 
 #endif /* __INPUT_CONTROLLER_H__ */
