@@ -24,19 +24,12 @@ constexpr unsigned int LISTENER_KEY = 1;
  */
 InputController::InputController() : active(false), rollAmount(0.0f), jumped(false) {
 	touchID = -1;
-
-#ifdef CU_TOUCH_SCREEN
-	Input::activate<Touchscreen>();
-#else
-	Input::activate<Mouse>();
-#endif
-
-	bool success = true;
-	// Activate keyboard on all
-	success = Input::activate<Keyboard>();
+	bool success = false;
 
 #ifndef CU_TOUCH_SCREEN
+	success = Input::activate<Keyboard>();
 
+	Input::activate<Mouse>();
 	Mouse* mouse = Input::get<Mouse>();
 	mouse->setPointerAwareness(cugl::Mouse::PointerAwareness::ALWAYS);
 	mouse->addPressListener(LISTENER_KEY,
@@ -49,6 +42,8 @@ InputController::InputController() : active(false), rollAmount(0.0f), jumped(fal
 							  });
 
 #else
+	Input::activate<Touchscreen>();
+
 	success = Input::activate<Accelerometer>();
 	Touchscreen* touch = Input::get<Touchscreen>();
 
@@ -59,33 +54,29 @@ InputController::InputController() : active(false), rollAmount(0.0f), jumped(fal
 		this->touchEndedCB(event, focus);
 	});
 #endif
-	success = success && Input::activate<TextInput>();
 	jumped = false;
 	active = success;
 }
 
 InputController::~InputController() {
 	if (active) {
-		Input::deactivate<Keyboard>();
 #ifndef CU_TOUCH_SCREEN
+		Input::deactivate<Keyboard>();
 
 		Mouse* mouse = Input::get<Mouse>();
 		mouse->removePressListener(LISTENER_KEY);
 		mouse->removeReleaseListener(LISTENER_KEY);
+
+		Input::deactivate<Mouse>();
 #else
+		Input::deactivate<Touchscreen>();
+
 		Input::deactivate<Accelerometer>();
 		Touchscreen* touch = Input::get<Touchscreen>();
 		touch->removeBeginListener(LISTENER_KEY);
 		touch->removeEndListener(LISTENER_KEY);
 #endif
-		Input::deactivate<TextInput>();
 		jumped = false;
-
-#ifdef CU_TOUCH_SCREEN
-		Input::deactivate<Touchscreen>();
-#else
-		Input::deactivate<Mouse>();
-#endif
 		active = false;
 	}
 }
