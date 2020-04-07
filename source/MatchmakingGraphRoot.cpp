@@ -170,17 +170,17 @@ bool tappedButton(std::shared_ptr<cugl::Button> button,
 		   button->containsScreen(std::get<1>(tapData));
 }
 
-MatchmakingGraphRoot::PressedButton MatchmakingGraphRoot::checkButtons(InputController& position) {
+MatchmakingGraphRoot::PressedButton MatchmakingGraphRoot::checkButtons() {
 	if (currState != ClientScreenDone) {
-		buttonManager.process(position.getCurrTapLoc());
+		buttonManager.process();
 	}
 
 	// Do not process inputs if a) nothing was pressed, or b) currently transitioning
-	if (!position.isTapEndAvailable() || transitionState != NA) {
+	if (!InputController::getInstance()->isTapEndAvailable() || transitionState != NA) {
 		return None;
 	}
 
-	std::tuple<cugl::Vec2, cugl::Vec2> tapData = position.getTapEndLoc();
+	std::tuple<cugl::Vec2, cugl::Vec2> tapData = InputController::getInstance()->getTapEndLoc();
 
 	switch (currState) {
 		case StartScreen: {

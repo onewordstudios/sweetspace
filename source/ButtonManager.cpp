@@ -1,10 +1,14 @@
 #include "ButtonManager.h"
 
+#include "InputController.h"
+
 void ButtonManager::registerButton(std::shared_ptr<cugl::Button> button) {
 	buttons.push_back(button);
 }
 
-void ButtonManager::process(const cugl::Vec2& position) {
+void ButtonManager::process() {
+	cugl::Vec2 position = InputController::getInstance()->getCurrTapLoc();
+
 	if (position == cugl::Vec2::ZERO) {
 		if (wasDown) {
 			wasDown = false;
