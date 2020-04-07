@@ -10,49 +10,34 @@
  * to handle input, and the reason for hiding it behind an abstraction like
  * this class.
  *
- * Unlike CUGL input devices, this class is not a singleton.  It must be
- * allocated before use.  However, you will notice that we do not do any
- * input initialization in the constructor.  This allows us to allocate this
- * controller as a field without using pointers. We simply add the class to the
- * header file of its owner, and delay initialization (via the method init())
- * until later. This is one of the main reasons we like to avoid initialization
- * in the constructor.
+ * This class is a singleton. It is initialized the first time the instance is acquired.
  */
 class InputController {
    private:
+	/**
+	 * The singleton instance of this class.
+	 */
+	static std::shared_ptr<InputController> instance;
+
 	/** Whether or not this input is active */
 	bool active;
 
-	// KEYBOARD EMULATION
-	/** Whether the reset key is down */
-	bool keyReset;
-
 	// TOUCH SUPPORT
-	/** The initial touch location for the current gesture */
-	cugl::Vec2 dtouch;
-	/** The timestamp for the beginning of the current gesture */
-	cugl::Timestamp timestamp;
 	/** The ID of the last touch event */
 	cugl::TouchID touchID;
 
 	// Input results
-	/** Whether the reset action was chosen. */
-	bool resetPressed;
 	/**
 	 * How much the player is trying to roll
 	 * -1 for way left, 0 for not rolling, 1 for way right
 	 */
 	float rollAmount;
 	/**
-	 * Most Recent Tap location to pass down the scenegraph
+	 * Whether a jump recently occurred
 	 */
-	cugl::Vec2 tapLoc;
+	bool jumped;
 	/**
-	 * Whether a tap recently occurred
-	 */
-	bool tapped;
-	/**
-	 * Starting location of last tap.
+	 * Starting location of last tap, or zero if none occurred
 	 */
 	cugl::Vec2 tapStart;
 	/**
@@ -60,21 +45,13 @@ class InputController {
 	 */
 	cugl::Vec2 tapEnd;
 
-   public:
-#pragma mark -
-#pragma mark Constructors
 	/**
 	 * Creates a new input controller.
 	 *
 	 * This constructor does NOT do any initialzation.  It simply allocates the
 	 * object. This makes it safe to use this class without a pointer.
 	 */
-	InputController(); // Don't initialize.  Allow stack based
-
-	/**
-	 * Disposes of this input controller, releasing all listeners.
-	 */
-	~InputController() { dispose(); }
+	InputController();
 
 	/**
 	 * Deactivates this input controller, releasing all listeners.
@@ -84,18 +61,35 @@ class InputController {
 	 */
 	void dispose();
 
-	/**
-	 * Initializes the input control
-	 *
-	 * This method works like a proper constructor, initializing the input
-	 * controller, allocating memory and attaching listeners.
-	 *
-	 * @return true if the controller was initialized successfully
-	 */
-	bool init();
+   public:
+#pragma region Constructors
 
-#pragma mark -
-#pragma mark Input Detection
+	/**
+	 * Grab a pointer to the singleton instance of this class.
+	 *
+	 * If this is the first time this is called, or if the class was previously disposed, this will
+	 * initialize all the input devices too.
+	 */
+	static std::shared_ptr<InputController> getInstance() {
+		if (instance == nullptr) {
+			instance = std::shared_ptr<InputController>(new InputController());
+		}
+		return instance;
+	}
+
+	/**
+	 * Deactivates and disposes of this input controller, releasing all listeners.
+	 */
+	~InputController();
+
+	/**
+	 * Deactivates and disposes of the instance, if it exists. Note that subsequent calls to {@link
+	 * getInstance} will automatically reinitialize the class.
+	 */
+	static void cleanup() { instance = nullptr; }
+
+#pragma endregion
+#pragma region Input Detection
 	/**
 	 * Returns true if the input handler is currently active
 	 *
@@ -120,32 +114,8 @@ class InputController {
 	 */
 	void clear();
 
-#pragma mark -
-#pragma mark Input Results
-	/**
-	 * Returns the current roll amount.
-	 *
-	 * On keyboard, this will be -1, 0, or 1. With accelerometer on mobile, this can take on any
-	 * value in the range [-1, 1].
-	 *
-	 * @return The roll amount. -1 is all left, 1 is all right, 0 is neutral.
-	 */
-	const float getRoll() { return rollAmount; }
-
-	/**
-	 * Returns the most recent tap location if a tap recently happened.
-	 *
-	 * @return The tap location. cugl::Vec2 of x,y screen coordinates. Returns Vec2::ZERO if no
-	 * recent tap.
-	 */
-	const cugl::Vec2 getTapLoc() {
-		if (tapped) {
-			tapped = false;
-			return tapLoc;
-		} else {
-			return cugl::Vec2::ZERO;
-		}
-	}
+#pragma endregion
+#pragma region Generic Input Results
 
 	/**
 	 * Returns where the finger / mouse is currently pressed, or Vec2::ZERO if unpressed.
@@ -164,8 +134,26 @@ class InputController {
 		return r;
 	}
 
-#pragma mark -
-#pragma mark Touch Callbacks
+#pragma endregion
+#pragma region Gameplay Input Results
+
+	/**
+	 * Returns the current roll amount.
+	 *
+	 * On keyboard, this will be -1, 0, or 1. With accelerometer on mobile, this can take on any
+	 * value in the range [-1, 1].
+	 *
+	 * @return The roll amount. -1 is all left, 1 is all right, 0 is neutral.
+	 */
+	const float getRoll() { return rollAmount; }
+
+	/**
+	 * Return whether the player has jumped since the last time this method was queried
+	 */
+	bool hasJumped();
+
+#pragma endregion
+#pragma region Callbacks
 	/**
 	 * Callback for the beginning of a touch event
 	 *
@@ -182,8 +170,6 @@ class InputController {
 	 */
 	void touchEndedCB(const cugl::TouchEvent& event, bool focus);
 
-#pragma mark -
-#pragma mark Click Callbacks
 	/**
 	 * Callback for the beginning of a click event
 	 *
@@ -199,6 +185,7 @@ class InputController {
 	 * @param event The associated event
 	 */
 	void clickEndedCB(const cugl::MouseEvent& event, Uint8 clicks, bool focus);
+#pragma endregion
 };
 
 #endif /* __INPUT_CONTROLLER_H__ */

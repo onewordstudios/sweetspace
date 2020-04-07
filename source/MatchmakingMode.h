@@ -16,7 +16,7 @@ class MatchmakingMode {
    protected:
 	// CONTROLLERS
 	/** Controller for abstracting out input across multiple platforms */
-	InputController input;
+	std::shared_ptr<InputController> input;
 	/** Networking controller*/
 	std::shared_ptr<MagicInternetBox> net;
 

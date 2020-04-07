@@ -37,7 +37,7 @@ bool MatchmakingMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 	}
 	// Set network controller
 	net = MagicInternetBox::getInstance();
-	input.init();
+	input = InputController::getInstance();
 
 	sgRoot.init(assets);
 
@@ -47,10 +47,7 @@ bool MatchmakingMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 /**
  * Disposes of all (non-static) resources allocated to this mode.
  */
-void MatchmakingMode::dispose() {
-	input.dispose();
-	sgRoot.dispose();
-}
+void MatchmakingMode::dispose() { sgRoot.dispose(); }
 
 #pragma mark -
 #pragma mark Gameplay Handling
@@ -58,7 +55,7 @@ void MatchmakingMode::dispose() {
 /**
  * Resets the status of the game so that we can play again.
  */
-void MatchmakingMode::reset() { input.clear(); }
+void MatchmakingMode::reset() { input->clear(); }
 
 /**
  * The method called to update the game mode.
@@ -68,11 +65,11 @@ void MatchmakingMode::reset() { input.clear(); }
  * @param timestep  The amount of time (in seconds) since the last frame
  */
 void MatchmakingMode::update(float timestep) {
-	input.update(timestep);
+	input->update(timestep);
 	// Update Scene Graph
 	sgRoot.update(timestep);
 
-	switch (sgRoot.checkButtons(input)) {
+	switch (sgRoot.checkButtons(*input)) {
 		case MatchmakingGraphRoot::StartHost: {
 			startHostThread = std::unique_ptr<std::thread>(
 				new std::thread([]() { MagicInternetBox::getInstance()->initHost(); }));

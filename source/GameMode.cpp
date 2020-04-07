@@ -24,10 +24,6 @@ constexpr float BREACH_WIDTH = 11.0f;
 constexpr float DOOR_ACTIVE_ANGLE = 15.0f;
 /** Force to push back during collision */
 constexpr float REBOUND_FORCE = -6;
-/** Starting time for the round */
-constexpr unsigned int TIME = 45;
-/** Initial health of the ship */
-int initHealth;
 
 #pragma mark -
 #pragma mark Constructors
@@ -56,7 +52,8 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 	}
 
 	// Input Initialization
-	input.init();
+	input = InputController::getInstance();
+	input->clear();
 
 	// Network Initialization
 	net = MagicInternetBox::getInstance();
@@ -64,10 +61,8 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 	roomId = net->getRoomID();
 
 	std::shared_ptr<LevelModel> level = assets->get<LevelModel>(LEVEL_ONE_KEY);
-	float shipSize = level->getShipSize();
-	initHealth = level->getInitHealth();
 	ship = ShipModel::alloc(net->getNumPlayers(), level->getMaxBreaches(), level->getMaxDoors(),
-							playerID, shipSize, initHealth);
+							playerID, level->getShipSize(), level->getInitHealth());
 	gm.init(ship, level);
 
 	donutModel = ship->getDonuts().at(static_cast<unsigned long>(playerID));
@@ -84,7 +79,6 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
  * Disposes of all (non-static) resources allocated to this mode.
  */
 void GameMode::dispose() {
-	input.dispose();
 	gm.dispose();
 	sgRoot.dispose();
 	donutModel = nullptr;
@@ -92,16 +86,6 @@ void GameMode::dispose() {
 
 #pragma mark -
 #pragma mark Gameplay Handling
-
-/**
- * Resets the status of the game so that we can play again.
- */
-void GameMode::reset() {
-	donutModel->reset();
-	sgRoot.reset();
-	input.clear();
-	gm.clear();
-}
 
 /**
  * The method called to update the game mode.
@@ -144,7 +128,7 @@ void GameMode::update(float timestep) {
 	}
 
 	// Only process game logic if properly connected to game
-	input.update(timestep);
+	input->update(timestep);
 
 	if (!(ship->timerEnded())) {
 		ship->updateTimer(timestep);
@@ -212,10 +196,10 @@ void GameMode::update(float timestep) {
 	gm.update(timestep);
 
 	// Move the donut (MODEL ONLY)
-	float thrust = input.getRoll();
+	float thrust = input->getRoll();
 	donutModel->applyForce(thrust);
 	// Jump Logic
-	if (input.getTapLoc() != Vec2::ZERO && !donutModel->isJumping()) {
+	if (input->hasJumped() && !donutModel->isJumping()) {
 		donutModel->startJump();
 		net->jump(playerID);
 	}
@@ -243,7 +227,7 @@ void GameMode::update(float timestep) {
 		if (ship->getChallengeProg() > 30 || trunc(ship->timer) == trunc(ship->getEndTime())) {
 			if (ship->getChallengeProg() < 10) {
 				net->failAllTask();
-				int h = ship->getHealth();
+				float h = ship->getHealth();
 				ship->setHealth(h - 3);
 			}
 			ship->setChallenge(false);
