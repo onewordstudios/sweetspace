@@ -197,7 +197,7 @@ void GameMode::update(float timestep) {
 										 : donutModel->getAngle() + ANGLE_ADJUST);
 			}
 		}
-		if (diff < DOOR_ACTIVE_ANGLE) {
+		if (abs(diff) < DOOR_ACTIVE_ANGLE) {
 			ship->getDoors().at(i)->addPlayer(playerID);
 			net->flagDualTask(i, playerID, 1);
 		} else {
