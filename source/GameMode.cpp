@@ -27,6 +27,12 @@ constexpr float REBOUND_FORCE = -6;
 /** Angles to adjust per frame to prevent door tunneling */
 constexpr float ANGLE_ADJUST = 0.5f;
 
+// Friction
+/** The friction factor while fixing a breach */
+constexpr float FIX_BREACH_FRICTION = 0.7f;
+/** The friction factor applied when moving through other players breaches */
+constexpr float OTHER_BREACH_FRICTION = 0.4f;
+
 #pragma mark -
 #pragma mark Constructors
 
@@ -151,9 +157,14 @@ void GameMode::update(float timestep) {
 		} else if (playerID == breach->getPlayer() && diff < EPSILON_ANGLE &&
 				   !breach->isPlayerOn() && donutModel->getJumpOffset() == 0.0f &&
 				   breach->getHealth() > 0) {
+			// Decrement Health
 			breach->decHealth(1);
 			breach->setIsPlayerOn(true);
 
+			// Slow player by drag factor
+			// donutModel->setFriction(FIX_BREACH_FRICTION);
+
+			// Resolve Breach if health is 0
 			if (breach->getHealth() == 0) {
 				net->resolveBreach(i);
 			}
