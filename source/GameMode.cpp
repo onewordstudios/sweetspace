@@ -161,7 +161,7 @@ void GameMode::update(float timestep) {
 				breach->setIsPlayerOn(true);
 			}
 
-			// Slow player by drag factor if not already slowed more
+			// Slow player by friction factor if not already slowed more
 			if (donutModel->getFriction() > FIX_BREACH_FRICTION) {
 				donutModel->setFriction(FIX_BREACH_FRICTION);
 			}

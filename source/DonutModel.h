@@ -78,13 +78,13 @@ class DonutModel {
 	 */
 	DonutModel(void)
 		: angle(0),
+		  shipSize(DEFAULT_SHIP_SIZE),
 		  velocity(0),
 		  friction(DEFAULT_DONUT_FRICTION_FACTOR),
 		  jumpOffset(0),
 		  jumping(false),
 		  jumpTime(0),
 		  jumpVelocity(0),
-		  shipSize(DEFAULT_SHIP_SIZE),
 		  colorId(0) {}
 
 	/**
