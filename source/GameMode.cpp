@@ -17,13 +17,15 @@ using namespace std;
 /** The Angle in degrees for fixing a breach*/
 constexpr float EPSILON_ANGLE = 5.2f;
 /** The Angle in degrees for which a collision occurs*/
-constexpr float DOOR_WIDTH = 7.0f;
+constexpr float DOOR_WIDTH = 10.0f;
 /** The Angle in degrees for which a breach donut collision occurs*/
 constexpr float BREACH_WIDTH = 11.0f;
 /** The Angle in degrees for which a door can be activated*/
 constexpr float DOOR_ACTIVE_ANGLE = 15.0f;
 /** Force to push back during collision */
 constexpr float REBOUND_FORCE = -6;
+/** Angles to adjust per frame to prevent door tunneling */
+constexpr float ANGLE_ADJUST = 0.5f;
 
 #pragma mark -
 #pragma mark Constructors
@@ -166,13 +168,23 @@ void GameMode::update(float timestep) {
 			ship->getDoors().at(i)->getAngle() < 0) {
 			continue;
 		}
-		float diff = ship->getSize() / 2 -
-					 abs(abs(donutModel->getAngle() - ship->getDoors().at(i)->getAngle()) -
-						 ship->getSize() / 2);
 
-		if (diff < DOOR_WIDTH) {
-			// TODO: Real physics...
-			donutModel->applyForce(REBOUND_FORCE * donutModel->getVelocity());
+		float diff = donutModel->getAngle() - ship->getDoors().at(i)->getAngle();
+		float a = diff + ship->getSize() / 2;
+		diff = a - floor(a / ship->getSize()) * ship->getSize() - ship->getSize() / 2;
+
+		if (abs(diff) < DOOR_WIDTH) {
+			// Stop donut and push it out if inside
+			donutModel->setVelocity(0);
+			if (diff < 0) {
+				donutModel->setAngle(donutModel->getAngle() - ANGLE_ADJUST < 0.0f
+										 ? ship->getSize()
+										 : donutModel->getAngle() - ANGLE_ADJUST);
+			} else {
+				donutModel->setAngle(donutModel->getAngle() + ANGLE_ADJUST > ship->getSize()
+										 ? 0.0f
+										 : donutModel->getAngle() + ANGLE_ADJUST);
+			}
 		}
 		if (diff < DOOR_ACTIVE_ANGLE) {
 			ship->getDoors().at(i)->addPlayer(playerID);
