@@ -18,8 +18,8 @@ class DonutModel {
 	static constexpr float DONUT_MAX_FORCE = 0.5f;
 	/** The default amount the angular velocity decays by each frame */
 	static constexpr float DEFAULT_DONUT_FRICTION_FACTOR = 0.9f;
-	/** Restoration rate of friction each frame */
-	static constexpr float FRICTION_RESTORATION = 1.1f;
+	/** Restoration rate of friction each frame. Calculated based on wanted linger time. */
+	static constexpr float FRICTION_RESTORATION = 1.015f;
 	/** The threshold below which the donut has effectively stopped rolling */
 	static constexpr float DONUT_STOP_THRESHOLD = 0.01f;
 
