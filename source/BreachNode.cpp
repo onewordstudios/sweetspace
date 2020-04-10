@@ -60,6 +60,7 @@ void BreachNode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch, const Mat
 				isAnimatingShrink = false;
 				if (getFrame() == getSize() - 1) {
 					setPosition(OFF_SCREEN_POS, OFF_SCREEN_POS);
+					isShown = false;
 				}
 			} else {
 				// Continue shrink animation
