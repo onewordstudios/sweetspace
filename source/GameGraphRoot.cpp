@@ -414,14 +414,13 @@ void GameGraphRoot::update(float timestep) {
  */
 std::string GameGraphRoot::positionText() {
 	stringstream ss;
-	//	if (ship->getHealth() < 1) {
-	//		ss << "You Lose.";
-	//	} else if (ship->timerEnded() && ship->getHealth() > 0) {
-	//		ss << "You Win!";
-	//	} else {
-	//		ss << "Time Left: " << trunc(ship->timer);
-	//	}
-	ss << std::to_string(ship->getDonuts().at(playerID)->getAngle());
+	if (ship->getHealth() < 1) {
+		ss << "You Lose.";
+	} else if (ship->timerEnded() && ship->getHealth() > 0) {
+		ss << "You Win!";
+	} else {
+		ss << "Time Left: " << trunc(ship->timer);
+	}
 	return ss.str();
 }
 
