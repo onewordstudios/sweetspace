@@ -27,7 +27,7 @@ class BuildingBlockModel {
 
    private:
 	/**An ordered list of objects used in this building block*/
-	std::shared_ptr<vector<Object>> objects;
+	vector<Object> objects;
 
 	/**The type of player distance this building block uses*/
 	PlayerDistType type;
@@ -77,9 +77,10 @@ class BuildingBlockModel {
 		int numObjects = objectJson->size();
 		for (int i = 0; i < numObjects; i++) {
 			std::shared_ptr<cugl::JsonValue> object = objectJson->get(i);
-			objects->push_back({object->get(OBJECT_TYPE_FIELD)->asInt(),
-								object->get(OBJECT_ANGLE_FIELD)->asInt(),
-								object->get(OBJECT_PLAYER_FIELD)->asInt()});
+			Object obj = {object->get(OBJECT_TYPE_FIELD)->asInt(),
+						  object->get(OBJECT_ANGLE_FIELD)->asInt(),
+						  object->get(OBJECT_PLAYER_FIELD)->asInt()};
+			objects.push_back(obj);
 		}
 		return true;
 	}
