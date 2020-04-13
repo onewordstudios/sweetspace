@@ -204,7 +204,7 @@
                     },
                     "layout" : {
                         "x_anchor" : "center",
-                        "y_anchor" : "middle"
+                        "y_anchor" : "top"
                     },
                     "children" : {
                         "far": {
@@ -212,7 +212,7 @@
                             "data": {
                                 "texture":  "space",
                                 "anchor":   [0.5,0.5],
-                                "position": [0,0],
+                                "position": [0,-300],
                                 "polygon":  [0,0,0,2560,2560,2560,2560,2560,2560,0,0,0]
                             }
                         },
@@ -221,7 +221,7 @@
                             "data": {
                                 "size":     [2560,2560],
                                 "anchor":   [0,0],
-                                "position": [0,420]
+                                "position": [0,120]
                             },
                             "children": {
                                 "shipsegments": {
@@ -258,137 +258,146 @@
                             "type": "Image",
                             "data": {
                                 "texture":  "donut_yellow",
-                                "position": [0,-155],
+                                "position": [0,-455],
                                 "anchor":   [0.5,0.5],
                                 "scale":    0.4
                             }
                         },
-                        "challengePanelHanger": {
-                          "type": "Image",
-                          "data": {
-                            "texture": "panel_hanger",
-                            "position": [0, 300],
-                            "anchor":   [0.5,0.5],
-                            "scale": 0.7
-                          }
-                        },
-                        "challengePanel": {
-                          "type": "Image",
-                          "data": {
-                            "texture": "challenge_panel",
-                            "position": [0, 150],
-                            "anchor":   [0.5,0.5],
-                            "scale": [0.7, 0.3]
-                          }
-                        },
-                        "challengePanelText": {
-                          "type": "Image",
-                          "data": {
-                            "texture": "panel_text",
-                            "position": [0, 175],
-                            "anchor":   [0.5,0.5],
-                            "scale": 0.7
-                          }
-                        },
-                        "challengePanelArrow1": {
-                          "type": "Image",
-                          "data": {
-                            "texture": "panel_progress_0",
-                            "position": [-135, 125],
-                            "anchor":   [0.5,0.5],
-                            "scale": 0.3,
-                            "visible": false
-                          }
-                        },
-                        "challengePanelArrow2": {
-                          "type": "Image",
-                          "data": {
-                            "texture": "panel_progress_0",
-                            "position": [-105, 125],
-                            "anchor":   [0.5,0.5],
-                            "scale": 0.3,
-                            "visible": false
-                          }
-                        },
-                        "challengePanelArrow3": {
-                          "type": "Image",
-                          "data": {
-                            "texture": "panel_progress_0",
-                            "position": [-75, 125],
-                            "anchor":   [0.5,0.5],
-                            "scale": 0.3,
-                            "visible": false
-                          }
-                        },
-                        "challengePanelArrow4": {
-                          "type": "Image",
-                          "data": {
-                            "texture": "panel_progress_0",
-                            "position": [-45, 125],
-                            "anchor":   [0.5,0.5],
-                            "scale": 0.3,
-                            "visible": false
-                          }
-                        },
-                        "challengePanelArrow5": {
-                          "type": "Image",
-                          "data": {
-                            "texture": "panel_progress_0",
-                            "position": [-15, 125],
-                            "anchor":   [0.5,0.5],
-                            "scale": 0.3,
-                            "visible": false
-                          }
-                        },
-                        "challengePanelArrow6": {
-                          "type": "Image",
-                          "data": {
-                            "texture": "panel_progress_0",
-                            "position": [15, 125],
-                            "anchor":   [0.5,0.5],
-                            "scale": 0.3,
-                            "visible": false
-                          }
-                        },
-                        "challengePanelArrow7": {
-                          "type": "Image",
-                          "data": {
-                            "texture": "panel_progress_0",
-                            "position": [45, 125],
-                            "anchor":   [0.5,0.5],
-                            "scale": 0.3,
-                            "visible": false
-                          }
-                        },
-                        "challengePanelArrow8": {
-                          "type": "Image",
-                          "data": {
-                            "texture": "panel_progress_0",
-                            "position": [75, 125],
-                            "anchor":   [0.5,0.5],
-                            "scale": 0.3,
-                            "visible": false
-                          }
-                        },
-                        "challengePanelArrow9": {
-                          "type": "Image",
-                          "data": {
-                            "texture": "panel_progress_0",
-                            "position": [105, 125],
-                            "anchor":   [0.5,0.5],
-                            "scale": 0.3,
-                            "visible": false
-                          }
-                        },
-                        "challengePanelArrow10": {
-                          "type": "Image",
-                          "data": {
-                            "texture": "panel_progress_0",
-                            "position": [135, 125],
-                            "anchor":   [0.5,0.5],
-                            "scale": 0.3,
-                            "visible": false
-                          }
+                        "challengePanelParent": {
+                            "type": "Node",
+                            "data": {
+                                        "anchor":   [0,0],
+                                        "position": [0,-300]
+                            },
+                            "children": {
+                                "challengePanelHanger": {
+                                  "type": "Image",
+                                  "data": {
+                                    "texture": "panel_hanger",
+                                    "position": [0, 300],
+                                    "anchor":   [0.5,0.5],
+                                    "scale": 0.7
+                                  }
+                                },
+                                "challengePanel": {
+                                  "type": "Image",
+                                  "data": {
+                                    "texture": "challenge_panel",
+                                    "position": [0, 150],
+                                    "anchor":   [0.5,0.5],
+                                    "scale": [0.7, 0.3]
+                                  }
+                                },
+                                "challengePanelText": {
+                                  "type": "Image",
+                                  "data": {
+                                    "texture": "panel_text",
+                                    "position": [0, 175],
+                                    "anchor":   [0.5,0.5],
+                                    "scale": 0.7
+                                  }
+                                },
+                                "challengePanelArrow1": {
+                                  "type": "Image",
+                                  "data": {
+                                    "texture": "panel_progress_0",
+                                    "position": [-135, 125],
+                                    "anchor":   [0.5,0.5],
+                                    "scale": 0.3,
+                                    "visible": false
+                                  }
+                                },
+                                "challengePanelArrow2": {
+                                  "type": "Image",
+                                  "data": {
+                                    "texture": "panel_progress_0",
+                                    "position": [-105, 125],
+                                    "anchor":   [0.5,0.5],
+                                    "scale": 0.3,
+                                    "visible": false
+                                  }
+                                },
+                                "challengePanelArrow3": {
+                                  "type": "Image",
+                                  "data": {
+                                    "texture": "panel_progress_0",
+                                    "position": [-75, 125],
+                                    "anchor":   [0.5,0.5],
+                                    "scale": 0.3,
+                                    "visible": false
+                                  }
+                                },
+                                "challengePanelArrow4": {
+                                  "type": "Image",
+                                  "data": {
+                                    "texture": "panel_progress_0",
+                                    "position": [-45, 125],
+                                    "anchor":   [0.5,0.5],
+                                    "scale": 0.3,
+                                    "visible": false
+                                  }
+                                },
+                                "challengePanelArrow5": {
+                                  "type": "Image",
+                                  "data": {
+                                    "texture": "panel_progress_0",
+                                    "position": [-15, 125],
+                                    "anchor":   [0.5,0.5],
+                                    "scale": 0.3,
+                                    "visible": false
+                                  }
+                                },
+                                "challengePanelArrow6": {
+                                  "type": "Image",
+                                  "data": {
+                                    "texture": "panel_progress_0",
+                                    "position": [15, 125],
+                                    "anchor":   [0.5,0.5],
+                                    "scale": 0.3,
+                                    "visible": false
+                                  }
+                                },
+                                "challengePanelArrow7": {
+                                  "type": "Image",
+                                  "data": {
+                                    "texture": "panel_progress_0",
+                                    "position": [45, 125],
+                                    "anchor":   [0.5,0.5],
+                                    "scale": 0.3,
+                                    "visible": false
+                                  }
+                                },
+                                "challengePanelArrow8": {
+                                  "type": "Image",
+                                  "data": {
+                                    "texture": "panel_progress_0",
+                                    "position": [75, 125],
+                                    "anchor":   [0.5,0.5],
+                                    "scale": 0.3,
+                                    "visible": false
+                                  }
+                                },
+                                "challengePanelArrow9": {
+                                  "type": "Image",
+                                  "data": {
+                                    "texture": "panel_progress_0",
+                                    "position": [105, 125],
+                                    "anchor":   [0.5,0.5],
+                                    "scale": 0.3,
+                                    "visible": false
+                                  }
+                                },
+                                "challengePanelArrow10": {
+                                  "type": "Image",
+                                  "data": {
+                                    "texture": "panel_progress_0",
+                                    "position": [135, 125],
+                                    "anchor":   [0.5,0.5],
+                                    "scale": 0.3,
+                                    "visible": false
+                                  }
+                                }
+                            }
                         },
                         "reconnect": {
 							"type"      : "Node",
@@ -396,7 +405,8 @@
 				                "type" : "Anchored"
 				            },
 				            "data": {
-				            	"visible": false
+				            	"visible": false,
+                                "position": [0, -300]
 				            },
 				            "children":  {
 				            	"dim" : {
@@ -442,7 +452,7 @@
 							"data": {
 								"texture": "health_green",
 								"anchor":   [0.5,0.5],
-								"position": [0, 300],
+								"position": [0, 0],
 								"scale": 0.3
 							}
 						}
