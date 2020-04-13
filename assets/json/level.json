@@ -10,7 +10,7 @@
 		"name": "blockName",
 		"playerDist": {
 			"spawnRule": 0,
-			"distance": 30		
+			"distance": 100		
 		},
 		"objects": [
 			{

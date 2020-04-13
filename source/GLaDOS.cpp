@@ -175,6 +175,12 @@ void GLaDOS::update(float dt) {
 	}
 
 	for (int i = 0; i < readyQueue.size(); i++) {
+		// assign the relative player ids
+		vector<int> ids;
+		for (int j = 0; j < ship->getDonuts().size(); j++) {
+			ids.push_back(j);
+		}
+		random_shuffle(ids.begin(), ids.end());
 		CULog("nonempty ready queue!");
 		shared_ptr<EventModel> event = readyQueue.at(i);
 		shared_ptr<BuildingBlockModel> block = blocks.at(event->getBlock());
@@ -190,13 +196,38 @@ void GLaDOS::update(float dt) {
 
 		// If we don't have enough resources for this event, skip it
 		if (doorsNeeded > numDoorsFree || breachesNeeded > numBreachesFree) continue;
-		float angle = (float)(rand() % (int)(ship->getSize()));
+		// the ids we actually use
+		vector<int> neededIds;
+		for (int j = 0; j < objects.size(); j++) {
+			int id = objects.at(j).player;
+			if (id != -1) ids.push_back(id);
+		}
+		float angle;
+		int padding = 0;
+		switch (block->getType()) {
+			case BuildingBlockModel::MinDist: {
+				angle = (float)(rand() % (int)(ship->getSize()));
+				padding = block->getDistance();
+				break;
+			}
+			case BuildingBlockModel::SpecificPlayer: {
+				int id = ids.at(block->getPlayer());
+				angle = ship->getDonuts().at(id)->getAngle() + (float)block->getDistance();
+				break;
+			}
+			case BuildingBlockModel::Random: {
+				angle = (float)(rand() % (int)(ship->getSize()));
+				break;
+			}
+		}
 		bool goodAngle = true;
 		for (int j = 0; j < ship->getDonuts().size(); j++) {
 			float diff =
 				ship->getSize() / 2 -
 				abs(abs(ship->getDonuts().at(j)->getAngle() - angle) - ship->getSize() / 2);
-			if (diff < (float)block->getRange() / 2) {
+			float dist =
+				find(neededIds.begin(), neededIds.end(), j) != neededIds.end() ? 0 : (float)padding;
+			if (diff < dist + (float)block->getRange() / 2) {
 				goodAngle = false;
 				break;
 			}
@@ -213,12 +244,6 @@ void GLaDOS::update(float dt) {
 		if (!goodAngle) continue;
 		// set angle to where zero is
 		angle = angle - (float)block->getRange() / 2.0f - (float)block->getMin();
-		// assign the relative player ids
-		vector<int> ids;
-		for (int j = 0; j < ship->getDonuts().size(); j++) {
-			ids.push_back(j);
-		}
-		random_shuffle(ids.begin(), ids.end());
 		for (int j = 0; j < objects.size(); j++) {
 			CULog("placing objects...");
 			placeObject(objects.at(j), angle, ids);
