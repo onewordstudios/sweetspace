@@ -175,7 +175,7 @@ void GLaDOS::update(float dt) {
 	}
 
 	int numBreachesFree = count(breachFree.begin(), breachFree.end(), true);
-	int numDoorsFree = std::count(doorFree.begin(), doorFree.end(), true);
+	int numDoorsFree = count(doorFree.begin(), doorFree.end(), true);
 	for (int i = 0; i < readyQueue.size(); i++) {
 		// assign the relative player ids
 		vector<int> ids;
@@ -183,7 +183,6 @@ void GLaDOS::update(float dt) {
 			ids.push_back(j);
 		}
 		random_shuffle(ids.begin(), ids.end());
-		CULog("nonempty ready queue!");
 		shared_ptr<EventModel> event = readyQueue.at(i);
 		shared_ptr<BuildingBlockModel> block = blocks.at(event->getBlock());
 		vector<BuildingBlockModel::Object> objects = block->getObjects();
@@ -192,7 +191,6 @@ void GLaDOS::update(float dt) {
 
 		// If we don't have enough resources for this event, skip it
 		if (doorsNeeded > numDoorsFree || breachesNeeded > numBreachesFree) continue;
-		CULog("sufficient resources");
 		// the ids we actually use
 		vector<int> neededIds;
 		for (int j = 0; j < objects.size(); j++) {
