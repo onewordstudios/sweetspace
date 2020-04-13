@@ -84,16 +84,15 @@ bool GLaDOS::init(std::shared_ptr<ShipModel> ship, std::shared_ptr<LevelModel> l
  *
  * @param obj the object to place
  * @param zeroAngle the angle corresponding to the relative angle zero
- *
+ * @param ids a vector of relative ids, scrambled by the caller
  */
-void GLaDOS::placeObject(BuildingBlockModel::Object obj, float zeroAngle) {
+void GLaDOS::placeObject(BuildingBlockModel::Object obj, float zeroAngle, vector<int> ids) {
 	int i = 0;
-	int p = 0;
+	int p = obj.player == -1 ? (int)(rand() % ship->getDonuts().size()) : ids.at(obj.player);
 	switch (obj.type) {
 		case BuildingBlockModel::Breach:
 			i = distance(breachFree.begin(), find(breachFree.begin(), breachFree.end(), true));
 			breachFree.at(i) = false;
-			p = (int)(rand() % ship->getDonuts().size());
 			ship->getBreaches().at(i)->reset((float)obj.angle + zeroAngle, p);
 			ship->getBreaches().at(i)->setTimeCreated(ship->timer);
 			mib->createBreach((float)obj.angle + zeroAngle, p, i);
@@ -108,6 +107,15 @@ void GLaDOS::placeObject(BuildingBlockModel::Object obj, float zeroAngle) {
 		case BuildingBlockModel::Button:
 			break;
 		case BuildingBlockModel::Roll:
+			if (ship->getChallenge()) break;
+			((int)(rand() % 2 == 0)) ? ship->setRollDir(0) : ship->setRollDir(1);
+			if (p != playerID && ship->getDonuts().at(p)->getIsActive()) {
+				mib->createAllTask(p, ship->getRollDir());
+			} else {
+				ship->setChallengeProg(0);
+				ship->setEndTime((ship->timer) - globals::ROLL_CHALLENGE_LENGTH);
+				ship->setChallenge(true);
+			}
 			break;
 	}
 }
@@ -205,23 +213,18 @@ void GLaDOS::update(float dt) {
 		if (!goodAngle) continue;
 		// set angle to where zero is
 		angle = angle - (float)block->getRange() / 2.0f - (float)block->getMin();
+		// assign the relative player ids
+		vector<int> ids;
+		for (int j = 0; j < ship->getDonuts().size(); j++) {
+			ids.push_back(j);
+		}
+		random_shuffle(ids.begin(), ids.end());
 		for (int j = 0; j < objects.size(); j++) {
 			CULog("placing objects...");
-			placeObject(objects.at(j), angle);
+			placeObject(objects.at(j), angle, ids);
 		}
+		readyQueue.erase(readyQueue.begin() + i);
 		break;
-	}
-
-	if (2 == 1 && !ship->getChallenge()) {
-		((int)(rand() % 2 == 0)) ? ship->setRollDir(0) : ship->setRollDir(1);
-		int p = (int)(rand() % ship->getDonuts().size());
-		if (p != playerID && ship->getDonuts().at(p)->getIsActive()) {
-			mib->createAllTask(p, ship->getRollDir());
-		} else {
-			ship->setChallengeProg(0);
-			ship->setEndTime((ship->timer) - 6);
-			ship->setChallenge(true);
-		}
 	}
 }
 

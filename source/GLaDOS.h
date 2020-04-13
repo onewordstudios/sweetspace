@@ -81,9 +81,9 @@ class GLaDOS {
 	 *
 	 * @param obj the object to place
 	 * @param zeroAngle the angle corresponding to the relative angle zero
-	 *
+	 * @param ids a vector of relative ids, scrambled by the caller
 	 */
-	void placeObject(BuildingBlockModel::Object obj, float zeroAngle);
+	void placeObject(BuildingBlockModel::Object obj, float zeroAngle, vector<int> ids);
 
 	/**
 	 * Processes the GM.
