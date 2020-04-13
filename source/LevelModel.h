@@ -16,11 +16,10 @@ using namespace cugl;
 
 const unsigned int DEFAULT_MAX_BREACHES = 3;
 const unsigned int DEFAULT_MAX_DOORS = 1;
-const unsigned int DEFAULT_SPAWN_RATE = 100;
-const float DEFAULT_MIN_ANGLE = 30;
+const unsigned int DEFAULT_BASE_SIZE = 360;
+const int DEFAULT_PER_PLAYER = 45;
 const int DEFAULT_INIT_HEALTH = 11;
 const float DEFAULT_TIME = 45;
-const float DEFAULT_SHIP_SIZE = 360;
 
 /**
  * Class that represents a dynamically loaded level in the game
@@ -35,13 +34,10 @@ class LevelModel : public Asset {
 	/** The maximum number of events on ship at any one time. This will probably need to scale with
 	 * the number of players*/
 	unsigned int maxDoors;
-	/** Spawn rate of breaches = 1/SPAWN_RATE for EVERY UPDATE FRAME. 100 is a very fast rate
-	 * already. */
-	unsigned int spawnRate;
-	/** Min angle difference between a donut and an obstacle*/
-	float minAngleDiff;
-	/** Size of the ship in degrees*/
-	float shipSize;
+	/** Base size of the ship in degrees*/
+	int baseShipSize;
+	/** Incremental size of the ship in degrees*/
+	int perPlayer;
 	/** Starting time for the timer*/
 	float time;
 	/** Starting health for the ship*/
@@ -91,25 +87,12 @@ class LevelModel : public Asset {
 	const unsigned int getMaxDoors() const { return maxDoors; }
 
 	/**
-	 * Returns the spawn rate
+	 * Returns the ship size given a number of players
 	 *
-	 * @return the spawn rate
-	 */
-	const unsigned int getSpawnRate() const { return spawnRate; }
-
-	/**
-	 * Returns the min angle diff in which events can be generated near donuts
-	 *
-	 * @return the min angle diff
-	 */
-	const float getMinAngleDiff() const { return minAngleDiff; }
-
-	/**
-	 * Returns the ship size
-	 *
+	 * @param players the number of players
 	 * @return the ship size
 	 */
-	const float getShipSize() const { return shipSize; }
+	const int getShipSize(int players) const { return baseShipSize + players * perPlayer; }
 
 	/**
 	 * Returns the starting time
@@ -156,9 +139,8 @@ class LevelModel : public Asset {
 		}
 		maxBreaches = json->get(MAX_BREACH_FIELD)->asInt();
 		maxDoors = json->get(MAX_DOOR_FIELD)->asInt();
-		spawnRate = json->get(SPAWN_RATE_FIELD)->asInt();
-		minAngleDiff = json->get(MIN_ANGLE_DIFF_FIELD)->asFloat();
-		shipSize = json->get(SHIP_SIZE_FIELD)->asFloat();
+		baseShipSize = json->get(BASE_SHIP_FIELD)->asInt();
+		perPlayer = json->get(PER_PLAYER_FIELD)->asInt();
 		time = json->get(TIME_FIELD)->asFloat();
 		initHealth = json->get(INIT_HEALTH_FIELD)->asInt();
 		return true;
@@ -181,9 +163,8 @@ class LevelModel : public Asset {
 	LevelModel(void) {
 		maxBreaches = DEFAULT_MAX_BREACHES;
 		maxDoors = DEFAULT_MAX_DOORS;
-		spawnRate = DEFAULT_SPAWN_RATE;
-		minAngleDiff = DEFAULT_MIN_ANGLE;
-		shipSize = DEFAULT_SHIP_SIZE;
+		baseShipSize = DEFAULT_BASE_SIZE;
+		perPlayer = DEFAULT_PER_PLAYER;
 		time = DEFAULT_TIME;
 		initHealth = DEFAULT_INIT_HEALTH;
 	};

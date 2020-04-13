@@ -1,9 +1,58 @@
 {
-	"maxBreaches" : 5,
-	"maxDoors" : 2,
-	"spawnRate" : 100,
-	"minAngle" : 30,
-	"shipSize" : 480,
-	"time" : 45,
-	"initHealth" : 12	
+	"maxBreaches" : 5, 			//Maximum number of breaches at any given time
+	"maxDoors" : 2,				//Maximum number of doors at any given time
+	"baseShipSize" : 360,			//self explanatory
+	"perPlayerSize" : 45,			//Ship size = baseShipSize + perPlayerSize * (# of players)
+	"time" : 45,				//Amount of time for the level
+	"initHealth" : 12,			//Initial health of the ship
+	"blocks": [
+	{
+		name: "blockName",
+		playerDist: {
+			spawnRule: MIN_DIST,
+			distance: 30		// spawn at least 30 degrees from all players with tasks inside this pattern
+		},
+		UNION
+		playerDist: {
+			spawnRule: SPECIFIC_PLAYER,
+			player: 0,		// same player ID used inside objects
+			distance: 90		// guaranteed to spawn exactly 90 degrees away from referenced player
+		},
+		UNION
+		playerDist: {
+			spawnRule: RANDOM, 	// spawn wherever
+		},
+		objects: [
+			{
+				type: BREACH, 	// assuming I have an enum of types; you can just use integers
+				angle: 0, 	// first object at angle 0, remaining objects relative to this
+				player: 0 	// players randomly assigned at spawn time, but matching player IDs will match after generation
+			},
+			{
+				type: DOOR,
+				angle: 30, 	// 30 degrees to the right of the first breach
+				player: -1 	// unspecified
+			},
+			{
+				type: BREACH,
+				angle: 45, 	// 45 degrees to right of first breach, 15 degrees right of door
+				player: 0 	// guaranteed to be same player as first breach
+			},
+			{
+				type: BREACH,
+				angle: 90,
+				player: 1 	// guaranteed to be different player from other two breaches
+			}
+		]
+	}
+	],
+	events: [
+		{
+			"block" : "blockName",	// name of the block to place
+			"timeStart" : 10,	// the time to start generating this event
+			"timeStop" : 14, 	// the time to stop generating this event
+			"probability" : 0.001 	// the probability that this event is generated in any given update frame
+		}
+	]
+]
 }
