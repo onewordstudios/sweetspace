@@ -55,6 +55,8 @@ class GameGraphRoot : public cugl::Scene {
 	std::shared_ptr<cugl::Node> doorsNode;
 	/** Parent node of all external donuts, is child of nearSpace */
 	std::shared_ptr<cugl::Node> externalDonutsNode;
+	/** Ship red overlay node */
+	std::shared_ptr<cugl::PolygonNode> shipOverlay;
 	/** Tag of the left most ship segment */
 	unsigned int leftMostSeg;
 	/** Tag of the right most ship segment */
@@ -68,6 +70,8 @@ class GameGraphRoot : public cugl::Scene {
 	/** Angle of the player donut model from the last frame */
 	float prevPlayerAngle;
 
+	/** Current animation frame for ship flashing red */
+	int currentRedFlashFrame;
 	/**
 	 * Returns an informative string for the position
 	 *

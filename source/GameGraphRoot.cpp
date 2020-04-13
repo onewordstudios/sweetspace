@@ -46,6 +46,12 @@ constexpr int HEALTH_BAR_FRAMES = 12;
 
 /** Scaling factor of health nodes */
 constexpr float HEALTH_NODE_SCALE = 0.55f;
+
+/** Animation cycle length of ship red flash */
+constexpr int MAX_REDFLASH_FRAMES = 100;
+
+/** Value of ship health that triggers flashing */
+constexpr int HEALTH_WARNING_THRESHOLD = 4;
 #pragma mark -
 #pragma mark Constructors
 
@@ -97,6 +103,8 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	donutPos = donutNode->getPosition();
 	healthNode = dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_health"));
 	coordHUD = std::dynamic_pointer_cast<Label>(assets->get<Node>("game_hud"));
+	shipOverlay = dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_near_shipoverlay"));
+	shipOverlay->setColor(Color4(1, 1, 1, 0));
 
 	challengePanelHanger = dynamic_pointer_cast<cugl::PolygonNode>(
 		assets->get<Node>("game_field_challengePanelHanger"));
