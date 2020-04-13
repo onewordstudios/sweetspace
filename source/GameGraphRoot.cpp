@@ -96,6 +96,8 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	externalDonutsNode = assets->get<Node>("game_field_near_externaldonuts");
 	donutPos = donutNode->getPosition();
 	healthNode = dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_health"));
+	healthNodeOverlay =
+		dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_healthGreen"));
 	coordHUD = std::dynamic_pointer_cast<Label>(assets->get<Node>("game_hud"));
 
 	challengePanelHanger = dynamic_pointer_cast<cugl::PolygonNode>(
@@ -246,14 +248,20 @@ void GameGraphRoot::update(float timestep) {
 	// Update the HUD
 	coordHUD->setText(positionText());
 	if (ship->getHealth() < 1) {
-		std::shared_ptr<Texture> image = assets->get<Texture>("health_empty");
-		healthNode->setTexture(image);
-	} else if (ship->getHealth() < 5) {
+		healthNodeOverlay->setVisible(false);
+	} else if (ship->getHealth() < 3) {
 		std::shared_ptr<Texture> image = assets->get<Texture>("health_red");
-		healthNode->setTexture(image);
-	} else if (ship->getHealth() < 8) {
+		healthNodeOverlay->setTexture(image);
+		healthNodeOverlay->setPosition(-100, 476);
+		healthNodeOverlay->setAngle(240 * globals::PI_180);
+	} else if (ship->getHealth() < 5) {
 		std::shared_ptr<Texture> image = assets->get<Texture>("health_yellow");
-		healthNode->setTexture(image);
+		healthNodeOverlay->setTexture(image);
+		healthNodeOverlay->setPosition(-120, 418);
+		healthNodeOverlay->setAngle(270 * globals::PI_180);
+	} else if (ship->getHealth() < 8) {
+		healthNodeOverlay->setPosition(-100, 360);
+		healthNodeOverlay->setAngle(300 * globals::PI_180);
 	}
 
 	// Reanchor the node at the center of the screen and rotate about center.
