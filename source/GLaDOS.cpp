@@ -60,8 +60,6 @@ bool GLaDOS::init(std::shared_ptr<ShipModel> ship, std::shared_ptr<LevelModel> l
 	this->playerID = mib->getPlayerID();
 	maxEvents = level->getMaxBreaches();
 	maxDoors = level->getMaxDoors();
-	minAngleDiff = level->getMinAngleDiff();
-	spawnRate = level->getSpawnRate();
 	breachFree.resize(maxEvents);
 	doorFree.resize(maxDoors);
 

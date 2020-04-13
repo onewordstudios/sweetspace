@@ -7,6 +7,7 @@
 
 #include <vector>
 
+#include "BuildingBlockModel.h"
 #include "LevelConstants.h"
 
 using namespace cugl;

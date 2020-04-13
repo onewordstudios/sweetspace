@@ -62,7 +62,8 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 
 	std::shared_ptr<LevelModel> level = assets->get<LevelModel>(LEVEL_ONE_KEY);
 	ship = ShipModel::alloc(net->getNumPlayers(), level->getMaxBreaches(), level->getMaxDoors(),
-							playerID, level->getShipSize(), level->getInitHealth());
+							playerID, level->getShipSize(net->getNumPlayers()),
+							level->getInitHealth());
 	gm.init(ship, level);
 
 	donutModel = ship->getDonuts().at(static_cast<unsigned long>(playerID));
