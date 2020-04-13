@@ -71,7 +71,7 @@ class GameGraphRoot : public cugl::Scene {
 	float prevPlayerAngle;
 
 	/** Current animation frame for ship flashing red */
-	int currentRedFlashFrame;
+	int currentHealthWarningFrame;
 	/**
 	 * Returns an informative string for the position
 	 *

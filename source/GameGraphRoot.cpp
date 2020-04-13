@@ -48,7 +48,10 @@ constexpr int HEALTH_BAR_FRAMES = 12;
 constexpr float HEALTH_NODE_SCALE = 0.55f;
 
 /** Animation cycle length of ship red flash */
-constexpr int MAX_REDFLASH_FRAMES = 100;
+constexpr int MAX_HEALTH_WARNING_FRAMES = 150;
+
+/** Maximum alpha value for health warning overlay */
+constexpr int MAX_HEALTH_WARNING_ALPHA = 100;
 
 /** Value of ship health that triggers flashing */
 constexpr int HEALTH_WARNING_THRESHOLD = 4;
@@ -388,29 +391,33 @@ void GameGraphRoot::update(float timestep) {
 	}
 
 	// Animate health warning flashing
-	if (currentRedFlashFrame != 0) {
-		currentRedFlashFrame += 1;
-		if (currentRedFlashFrame == MAX_REDFLASH_FRAMES) {
+	if (currentHealthWarningFrame != 0) {
+		currentHealthWarningFrame += 1;
+		if (currentHealthWarningFrame == MAX_HEALTH_WARNING_FRAMES) {
 			if (ship->getHealth() > HEALTH_WARNING_THRESHOLD) {
-				currentRedFlashFrame = 0;
+				currentHealthWarningFrame = 0;
 				shipOverlay->setColor(Color4::CLEAR);
 			} else {
-				shipOverlay->setColor(Color4(1, 1, 1, 255 * 1 / MAX_REDFLASH_FRAMES * 2));
-				currentRedFlashFrame = 1;
+				shipOverlay->setColor(Color4(
+					255, 255, 255, MAX_HEALTH_WARNING_ALPHA / MAX_HEALTH_WARNING_FRAMES * 2));
+				currentHealthWarningFrame = 1;
 			}
 		} else {
 			int alpha;
-			if (currentRedFlashFrame < MAX_REDFLASH_FRAMES / 2) {
-				alpha = 255 * currentRedFlashFrame / MAX_REDFLASH_FRAMES * 2;
+			if (currentHealthWarningFrame < MAX_HEALTH_WARNING_FRAMES / 2) {
+				alpha = MAX_HEALTH_WARNING_ALPHA * currentHealthWarningFrame /
+						MAX_HEALTH_WARNING_FRAMES * 2;
 			} else {
-				alpha =
-					255 * (MAX_REDFLASH_FRAMES - currentRedFlashFrame) / MAX_REDFLASH_FRAMES * 2;
+				alpha = MAX_HEALTH_WARNING_ALPHA *
+						(MAX_HEALTH_WARNING_FRAMES - currentHealthWarningFrame) /
+						MAX_HEALTH_WARNING_FRAMES * 2;
 			}
-			shipOverlay->setColor(Color4(1, 1, 1, alpha));
+			shipOverlay->setColor(Color4(255, 255, 255, alpha));
 		}
 	} else if (ship->getHealth() <= HEALTH_WARNING_THRESHOLD) {
-		shipOverlay->setColor(Color4(1, 1, 1, 255 * 1 / MAX_REDFLASH_FRAMES * 2));
-		currentRedFlashFrame = 1;
+		shipOverlay->setColor(
+			Color4(255, 255, 255, MAX_HEALTH_WARNING_ALPHA / MAX_HEALTH_WARNING_FRAMES * 2));
+		currentHealthWarningFrame = 1;
 	}
 }
 
