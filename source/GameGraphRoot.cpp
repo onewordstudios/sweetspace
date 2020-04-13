@@ -103,7 +103,8 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	donutPos = donutNode->getPosition();
 	healthNode = dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_health"));
 	coordHUD = std::dynamic_pointer_cast<Label>(assets->get<Node>("game_hud"));
-	shipOverlay = dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_near_shipoverlay"));
+	shipOverlay =
+		dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_near_shipoverlay"));
 	shipOverlay->setColor(Color4(1, 1, 1, 0));
 
 	challengePanelHanger = dynamic_pointer_cast<cugl::PolygonNode>(
@@ -384,6 +385,32 @@ void GameGraphRoot::update(float timestep) {
 				shipSegsNode->getChildByTag((unsigned int)(leftMostSeg + 1)));
 			newLeftSegment->setAngle(wrapAngle(segment->getAngle() - globals::SEG_SIZE));
 		}
+	}
+
+	// Animate health warning flashing
+	if (currentRedFlashFrame != 0) {
+		currentRedFlashFrame += 1;
+		if (currentRedFlashFrame == MAX_REDFLASH_FRAMES) {
+			if (ship->getHealth() > HEALTH_WARNING_THRESHOLD) {
+				currentRedFlashFrame = 0;
+				shipOverlay->setColor(Color4::CLEAR);
+			} else {
+				shipOverlay->setColor(Color4(1, 1, 1, 255 * 1 / MAX_REDFLASH_FRAMES * 2));
+				currentRedFlashFrame = 1;
+			}
+		} else {
+			int alpha;
+			if (currentRedFlashFrame < MAX_REDFLASH_FRAMES / 2) {
+				alpha = 255 * currentRedFlashFrame / MAX_REDFLASH_FRAMES * 2;
+			} else {
+				alpha =
+					255 * (MAX_REDFLASH_FRAMES - currentRedFlashFrame) / MAX_REDFLASH_FRAMES * 2;
+			}
+			shipOverlay->setColor(Color4(1, 1, 1, alpha));
+		}
+	} else if (ship->getHealth() <= HEALTH_WARNING_THRESHOLD) {
+		shipOverlay->setColor(Color4(1, 1, 1, 255 * 1 / MAX_REDFLASH_FRAMES * 2));
+		currentRedFlashFrame = 1;
 	}
 }
 
