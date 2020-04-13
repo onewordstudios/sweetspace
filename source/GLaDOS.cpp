@@ -160,13 +160,13 @@ void GLaDOS::update(float dt) {
 
 	for (int i = 0; i < events.size(); i++) {
 		std::shared_ptr<EventModel> event = events.at(i);
-		int spawnRate = (int)(event->getProbability());
-		CULog("%d rate and time %f", spawnRate, ship->timePassed());
+		int spawnRate = (int)(1 / event->getProbability());
 		if (event->isActive((int)ship->timePassed()) && rand() % spawnRate <= 1) {
 			CULog("event queued");
 			// ready up the event
 			readyQueue.push_back(event);
 			if (event->isOneTime()) {
+				CULog("one time only");
 				// If it's a one time event, we don't want to add it again next frame
 				events.erase(events.begin() + i);
 				i--;
@@ -174,6 +174,8 @@ void GLaDOS::update(float dt) {
 		}
 	}
 
+	int numBreachesFree = count(breachFree.begin(), breachFree.end(), true);
+	int numDoorsFree = std::count(doorFree.begin(), doorFree.end(), true);
 	for (int i = 0; i < readyQueue.size(); i++) {
 		// assign the relative player ids
 		vector<int> ids;
@@ -184,18 +186,13 @@ void GLaDOS::update(float dt) {
 		CULog("nonempty ready queue!");
 		shared_ptr<EventModel> event = readyQueue.at(i);
 		shared_ptr<BuildingBlockModel> block = blocks.at(event->getBlock());
-		int numBreachesFree = count(breachFree.begin(), breachFree.end(), true);
-		int numDoorsFree = std::count(doorFree.begin(), doorFree.end(), true);
 		vector<BuildingBlockModel::Object> objects = block->getObjects();
-		int breachesNeeded = count_if(
-			objects.begin(), objects.end(),
-			[](BuildingBlockModel::Object o) { return o.type == BuildingBlockModel::Breach; });
-		int doorsNeeded = count_if(
-			objects.begin(), objects.end(),
-			[](BuildingBlockModel::Object o) { return o.type == BuildingBlockModel::Door; });
+		int breachesNeeded = block->getBreachesNeeded();
+		int doorsNeeded = block->getDoorsNeeded();
 
 		// If we don't have enough resources for this event, skip it
 		if (doorsNeeded > numDoorsFree || breachesNeeded > numBreachesFree) continue;
+		CULog("sufficient resources");
 		// the ids we actually use
 		vector<int> neededIds;
 		for (int j = 0; j < objects.size(); j++) {
@@ -242,6 +239,7 @@ void GLaDOS::update(float dt) {
 			}
 		}
 		if (!goodAngle) continue;
+		CULog("good angle");
 		// set angle to where zero is
 		angle = angle - (float)block->getRange() / 2.0f - (float)block->getMin();
 		for (int j = 0; j < objects.size(); j++) {

@@ -18,13 +18,13 @@ constexpr auto OBJECT_TYPE_FIELD = "type";		   // NOLINT
 constexpr auto OBJECT_ANGLE_FIELD = "angle";	   // NOLINT
 constexpr auto OBJECT_PLAYER_FIELD = "player";	   // NOLINT
 constexpr auto EVENTS_FIELD = "events";			   // NOLINT
-constexpr auto BLOCK_FIELD = "block";			   // NOLINT
+constexpr auto BLOCK_FIELD = "blockName";		   // NOLINT
 constexpr auto TIME_START_FIELD = "timeStart";	   // NOLINT
 constexpr auto TIME_STOP_FIELD = "timeStop";	   // NOLINT
 constexpr auto PROBABILITY_FIELD = "probability";  // NOLINT
 
 /** The source for our level file */
-constexpr auto LEVEL_ONE_FILE = "json/level.json"; // NOLINT
+constexpr auto LEVEL_ONE_FILE = "json/level2.owslevel"; // NOLINT
 /** The key for our loaded level */
 constexpr auto LEVEL_ONE_KEY = "level1"; // NOLINT
 

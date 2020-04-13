@@ -45,6 +45,12 @@ class BuildingBlockModel {
 	/** The minimum relative angle used */
 	int min = 0;
 
+	/** The number of breaches needed for this block*/
+	int breachesNeeded = 0;
+
+	/** The number of doors needed for this block*/
+	int doorsNeeded = 0;
+
    public:
 #pragma mark Static Constructors
 
@@ -101,6 +107,8 @@ class BuildingBlockModel {
 	 * @return min
 	 */
 	int getMin() { return min; }
+	int getBreachesNeeded() { return breachesNeeded; }
+	int getDoorsNeeded() { return doorsNeeded; }
 
 #pragma mark -
 #pragma mark Initializers
@@ -167,6 +175,12 @@ class BuildingBlockModel {
 			range = maxAngle + rightWidth - min;
 			objects.push_back(obj);
 		}
+		breachesNeeded = count_if(objects.begin(), objects.end(), [](BuildingBlockModel::Object o) {
+			return o.type == BuildingBlockModel::Breach;
+		});
+		doorsNeeded = count_if(objects.begin(), objects.end(), [](BuildingBlockModel::Object o) {
+			return o.type == BuildingBlockModel::Door;
+		});
 		return true;
 	}
 
