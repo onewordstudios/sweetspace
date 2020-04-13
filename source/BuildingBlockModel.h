@@ -81,6 +81,7 @@ class BuildingBlockModel {
 								object->get(OBJECT_ANGLE_FIELD)->asInt(),
 								object->get(OBJECT_PLAYER_FIELD)->asInt()});
 		}
+		return true;
 	}
 
 	/**
