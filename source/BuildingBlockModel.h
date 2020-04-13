@@ -52,6 +52,35 @@ class BuildingBlockModel {
 	}
 
 #pragma mark Building Block Attributes
+
+	/**
+	 * Returns the objects
+	 *
+	 * @return vector of objects
+	 */
+	vector<Object> getObjects() { return objects; }
+
+	/**
+	 * Returns the type of player distance used
+	 *
+	 * @return type
+	 */
+	PlayerDistType getType() { return type; }
+
+	/**
+	 * Returns the relative player used
+	 *
+	 * @return player
+	 */
+	int getPlayer() { return player; }
+
+	/**
+	 * Returns the distance at which this should be generated
+	 *
+	 * @return distance
+	 */
+	int getDistance() { return distance; }
+
 #pragma mark -
 #pragma mark Initializers
 	/**

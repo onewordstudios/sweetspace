@@ -40,7 +40,7 @@
 		{
 			"block" : "blockName",	
 			"timeStart" : 10,	
-			"timeStop" : 14, 	
+			"timeStop" : 10, 	
 			"probability" : 0.001 	
 		}
 	]

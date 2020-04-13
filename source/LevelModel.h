@@ -9,6 +9,7 @@
 #include <vector>
 
 #include "BuildingBlockModel.h"
+#include "EventModel.h"
 #include "LevelConstants.h"
 
 using namespace cugl;
@@ -46,6 +47,8 @@ class LevelModel : public Asset {
 	int initHealth;
 	/** List of building blocks for this level*/
 	map<std::string, std::shared_ptr<BuildingBlockModel>> blocks;
+	/** List of events for this level*/
+	vector<std::shared_ptr<EventModel>> events;
 
    public:
 #pragma mark Static Constructors
@@ -111,6 +114,21 @@ class LevelModel : public Asset {
 	 * @return the init health
 	 */
 	const int getInitHealth() const { return initHealth; }
+
+	/**
+	 * Returns the list of events in the level
+	 *
+	 * @return the list of events in the level
+	 */
+	vector<std::shared_ptr<EventModel>> getEvents() const { return events; }
+
+	/**
+	 * Returns the list of building blocks for this level
+	 *
+	 * @return list of building blocks for this level
+	 */
+	map<std::string, std::shared_ptr<BuildingBlockModel>> getBlocks() const { return blocks; }
+
 #pragma mark -
 #pragma mark Asset Loading
 	/**
@@ -152,6 +170,11 @@ class LevelModel : public Asset {
 			std::shared_ptr<cugl::JsonValue> block = blocksJson->get(i);
 			blocks.insert(pair<string, std::shared_ptr<BuildingBlockModel>>(
 				block->get(NAME_FIELD)->asString(), BuildingBlockModel::alloc(blocksJson->get(i))));
+		}
+		std::shared_ptr<cugl::JsonValue> eventsJson = json->get(EVENTS_FIELD);
+		for (int i = 0; i < eventsJson->size(); i++) {
+			std::shared_ptr<cugl::JsonValue> event = eventsJson->get(i);
+			events.push_back(EventModel::alloc(event));
 		}
 		return true;
 	}
