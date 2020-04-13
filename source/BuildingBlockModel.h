@@ -38,6 +38,7 @@ class BuildingBlockModel {
 	/**The distance used for placing this building block*/
 	int distance = -1;
 
+   public:
 #pragma mark Static Constructors
 
 	/**

@@ -5,6 +5,7 @@
 #include <cugl/cugl.h>
 #include <cugl/io/CUJsonReader.h>
 
+#include <map>
 #include <vector>
 
 #include "BuildingBlockModel.h"
@@ -43,6 +44,8 @@ class LevelModel : public Asset {
 	float time;
 	/** Starting health for the ship*/
 	int initHealth;
+	/** List of building blocks for this level*/
+	map<std::string, std::shared_ptr<BuildingBlockModel>> blocks;
 
    public:
 #pragma mark Static Constructors
@@ -144,6 +147,12 @@ class LevelModel : public Asset {
 		perPlayer = json->get(PER_PLAYER_FIELD)->asInt();
 		time = json->get(TIME_FIELD)->asFloat();
 		initHealth = json->get(INIT_HEALTH_FIELD)->asInt();
+		std::shared_ptr<cugl::JsonValue> blocksJson = json->get(BLOCKS_FIELD);
+		for (int i = 0; i < blocksJson->size(); i++) {
+			std::shared_ptr<cugl::JsonValue> block = blocksJson->get(i);
+			blocks.insert(pair<string, std::shared_ptr<BuildingBlockModel>>(
+				block->get(NAME_FIELD)->asString(), BuildingBlockModel::alloc(blocksJson->get(i))));
+		}
 		return true;
 	}
 
