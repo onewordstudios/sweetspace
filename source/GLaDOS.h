@@ -77,6 +77,15 @@ class GLaDOS {
 	bool isActive() const { return active; }
 
 	/**
+	 * Places an object in the game. Requires that enough resources are present.
+	 *
+	 * @param obj the object to place
+	 * @param zeroAngle the angle corresponding to the relative angle zero
+	 *
+	 */
+	void placeObject(BuildingBlockModel::Object obj, float zeroAngle);
+
+	/**
 	 * Processes the GM.
 	 *
 	 * This method is used to generate and manage current events

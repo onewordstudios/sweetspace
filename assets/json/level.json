@@ -41,7 +41,7 @@
 			"block" : "blockName",	
 			"timeStart" : 10,	
 			"timeStop" : 10, 	
-			"probability" : 0.001 	
+			"probability" : 1 	
 		}
 	]
 }

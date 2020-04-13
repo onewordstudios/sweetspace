@@ -6,6 +6,7 @@
 
 #include <vector>
 
+#include "Globals.h"
 #include "LevelConstants.h"
 
 using namespace cugl;
@@ -37,6 +38,12 @@ class BuildingBlockModel {
 
 	/**The distance used for placing this building block*/
 	int distance = -1;
+
+	/** The total amount of space used by this building block */
+	int range = 0;
+
+	/** The minimum relative angle used */
+	int min = 0;
 
    public:
 #pragma mark Static Constructors
@@ -81,6 +88,20 @@ class BuildingBlockModel {
 	 */
 	int getDistance() { return distance; }
 
+	/**
+	 * Returns the total width taken up by this building block
+	 *
+	 * @return range of building block
+	 */
+	int getRange() { return range; }
+
+	/**
+	 * Returns the min
+	 *
+	 * @return min
+	 */
+	int getMin() { return min; }
+
 #pragma mark -
 #pragma mark Initializers
 	/**
@@ -104,11 +125,46 @@ class BuildingBlockModel {
 		}
 		std::shared_ptr<cugl::JsonValue> objectJson = json->get(OBJECTS_FIELD);
 		int numObjects = objectJson->size();
+		int maxAngle = 0;
+		int minAngle = 0;
+		int leftWidth = 0;
+		int rightWidth = 0;
 		for (int i = 0; i < numObjects; i++) {
 			std::shared_ptr<cugl::JsonValue> object = objectJson->get(i);
 			Object obj = {object->get(OBJECT_TYPE_FIELD)->asInt(),
 						  object->get(OBJECT_ANGLE_FIELD)->asInt(),
 						  object->get(OBJECT_PLAYER_FIELD)->asInt()};
+			if (obj.type == Roll) continue;
+			if (obj.angle > maxAngle) {
+				maxAngle = obj.angle;
+				switch (obj.type) {
+					case Breach:
+						rightWidth = globals::BREACH_WIDTH;
+						break;
+					case Door:
+						rightWidth = globals::DOOR_WIDTH;
+						break;
+					case Button:
+						// TODO
+						break;
+				};
+			}
+			if (obj.angle < minAngle) {
+				minAngle = obj.angle;
+				switch (obj.type) {
+					case Breach:
+						leftWidth = globals::BREACH_WIDTH;
+						break;
+					case Door:
+						leftWidth = globals::DOOR_WIDTH;
+						break;
+					case Button:
+						// TODO
+						break;
+				};
+			}
+			min = minAngle - leftWidth;
+			range = maxAngle + rightWidth - min;
 			objects.push_back(obj);
 		}
 		return true;

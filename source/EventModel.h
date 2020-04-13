@@ -82,6 +82,13 @@ class EventModel {
 	 */
 	bool isActive(int time) { return time <= timeStop && time >= timeStart; }
 
+	/**
+	 * Returns whether this event is one time
+	 *
+	 * @return whether this event is one time
+	 */
+	bool isOneTime() { return timeStop == timeStart; }
+
 #pragma mark -
 #pragma mark Initializers
 	/**

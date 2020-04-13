@@ -25,6 +25,8 @@ class ShipModel {
 	/** Challenge progress*/
 	int challengeProg;
 	float endTime;
+	/** Total level time*/
+	float totalTime;
 
    public:
 	/** Game timer*/
@@ -218,11 +220,14 @@ class ShipModel {
 
 	/**
 
-	 * Get health of the ship
+	 * Initialize the timer for the ship
 	 *
-	 * @return health the health of the ship
+	 * @param startTime the initial time on the timer
 	 */
-	void initTimer(float startTime) { timer = startTime; }
+	void initTimer(float startTime) {
+		timer = startTime;
+		totalTime = startTime;
+	}
 
 	/**
 	 * Update timer of the ship
@@ -237,6 +242,14 @@ class ShipModel {
 	 * @return if timer has ended
 	 */
 	bool timerEnded() { return timer < 1; }
+
+	/**
+	 * Get the amount of time that has passed in the level
+	 *
+	 * @return the time that has passed
+	 */
+	float timePassed() { return totalTime - timer; }
+
 	/**
 	 * Set size of the ship
 	 *

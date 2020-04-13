@@ -16,10 +16,6 @@ using namespace std;
 #pragma mark Level Layout
 /** The Angle in degrees for fixing a breach*/
 constexpr float EPSILON_ANGLE = 5.2f;
-/** The Angle in degrees for which a collision occurs*/
-constexpr float DOOR_WIDTH = 7.0f;
-/** The Angle in degrees for which a breach donut collision occurs*/
-constexpr float BREACH_WIDTH = 11.0f;
 /** The Angle in degrees for which a door can be activated*/
 constexpr float DOOR_ACTIVE_ANGLE = 15.0f;
 /** Force to push back during collision */
@@ -144,8 +140,8 @@ void GameMode::update(float timestep) {
 		float diff = ship->getSize() / 2 -
 					 abs(abs(donutModel->getAngle() - breach->getAngle()) - ship->getSize() / 2);
 
-		if (!donutModel->isJumping() && playerID != breach->getPlayer() && diff < BREACH_WIDTH &&
-			breach->getHealth() != 0) {
+		if (!donutModel->isJumping() && playerID != breach->getPlayer() &&
+			diff < globals::BREACH_WIDTH && breach->getHealth() != 0) {
 			donutModel->applyForce(REBOUND_FORCE * donutModel->getVelocity());
 		} else if (playerID == breach->getPlayer() && diff < EPSILON_ANGLE &&
 				   !breach->isPlayerOn() && donutModel->getJumpOffset() == 0.0f &&
@@ -171,7 +167,7 @@ void GameMode::update(float timestep) {
 					 abs(abs(donutModel->getAngle() - ship->getDoors().at(i)->getAngle()) -
 						 ship->getSize() / 2);
 
-		if (diff < DOOR_WIDTH) {
+		if (diff < globals::DOOR_WIDTH) {
 			// TODO: Real physics...
 			donutModel->applyForce(REBOUND_FORCE * donutModel->getVelocity());
 		}

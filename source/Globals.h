@@ -28,6 +28,12 @@ constexpr unsigned int MIN_PLAYERS = 3; // NOLINT
 /** Maximum number of players per game */
 constexpr unsigned int MAX_PLAYERS = 6; // NOLINT
 
+/** The Angle in degrees for which a collision occurs*/
+constexpr float DOOR_WIDTH = 7.0f; // NOLINT
+/** The Angle in degrees for which a breach donut collision occurs*/
+
+constexpr float BREACH_WIDTH = 11.0f; // NOLINT
+
 #pragma region Math
 #pragma mark Math
 
