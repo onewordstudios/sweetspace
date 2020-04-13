@@ -72,6 +72,9 @@
         "ship": {
             "file":   "textures/ship.png"
         },
+        "ship_overlay_red": {
+            "file":   "textures/ship_overlay_red.png"
+        },
         "shipseg0": {
             "file":   "textures/ship1.png"
         },
