@@ -407,7 +407,7 @@ void GameGraphRoot::update(float timestep) {
 				currentHealthWarningFrame = 1;
 			}
 		} else {
-			int alpha;
+			int alpha = 0;
 			if (currentHealthWarningFrame < MAX_HEALTH_WARNING_FRAMES / 2) {
 				alpha = MAX_HEALTH_WARNING_ALPHA * currentHealthWarningFrame /
 						MAX_HEALTH_WARNING_FRAMES * 2;
