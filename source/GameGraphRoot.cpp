@@ -249,17 +249,17 @@ void GameGraphRoot::update(float timestep) {
 	coordHUD->setText(positionText());
 	if (ship->getHealth() < 1) {
 		healthNodeOverlay->setVisible(false);
-	} else if (ship->getHealth() < 3) {
+	} else if (ship->getHealth() < globals::INITIAL_SHIP_HEALTH * 0.3) {
 		std::shared_ptr<Texture> image = assets->get<Texture>("health_red");
 		healthNodeOverlay->setTexture(image);
 		healthNodeOverlay->setPosition(-100, 476);
 		healthNodeOverlay->setAngle(240 * globals::PI_180);
-	} else if (ship->getHealth() < 5) {
+	} else if (ship->getHealth() < globals::INITIAL_SHIP_HEALTH * 0.5) {
 		std::shared_ptr<Texture> image = assets->get<Texture>("health_yellow");
 		healthNodeOverlay->setTexture(image);
 		healthNodeOverlay->setPosition(-120, 418);
 		healthNodeOverlay->setAngle(270 * globals::PI_180);
-	} else if (ship->getHealth() < 8) {
+	} else if (ship->getHealth() < globals::INITIAL_SHIP_HEALTH * 0.8) {
 		healthNodeOverlay->setPosition(-100, 360);
 		healthNodeOverlay->setAngle(300 * globals::PI_180);
 	}
