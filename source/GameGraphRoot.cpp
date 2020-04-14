@@ -51,7 +51,7 @@ constexpr float HEALTH_NODE_SCALE = 0.55f;
 constexpr int MAX_HEALTH_WARNING_FRAMES = 150;
 
 /** Maximum alpha value for health warning overlay */
-constexpr int MAX_HEALTH_WARNING_ALPHA = 100;
+constexpr int MAX_HEALTH_WARNING_ALPHA = 50;
 
 /** Value of ship health that triggers flashing */
 constexpr int HEALTH_WARNING_THRESHOLD = 4;
@@ -416,31 +416,6 @@ void GameGraphRoot::update(float timestep) {
 			break;
 		default:
 			CULog("ERROR: Uncaught MatchmakingStatus Value Occurred");
-	}
-
-	// Update ship segments
-	std::shared_ptr<Texture> seg0 = assets->get<Texture>("shipseg0");
-	std::shared_ptr<Texture> seg1 = assets->get<Texture>("shipseg1");
-	std::shared_ptr<PolygonNode> segment;
-	for (int i = 0; i < globals::VISIBLE_SEGS; i++) {
-		segment = dynamic_pointer_cast<cugl::PolygonNode>(
-			shipSegsNode->getChildByTag((unsigned int)(i + 1)));
-		// If segments rotate too far left, move left-most segment to the right side
-		if (i == rightMostSeg &&
-			wrapAngle(nearSpace->getAngle() + segment->getAngle()) < globals::SEG_CUTOFF_ANGLE) {
-			rightMostSeg = (i + 1) % globals::VISIBLE_SEGS;
-			leftMostSeg = (i + 2) % globals::VISIBLE_SEGS;
-			std::shared_ptr<PolygonNode> newRightSegment = dynamic_pointer_cast<cugl::PolygonNode>(
-				shipSegsNode->getChildByTag((unsigned int)(rightMostSeg + 1)));
-			newRightSegment->setAngle(wrapAngle(segment->getAngle() + globals::SEG_SIZE));
-		} else if (i == leftMostSeg && wrapAngle(nearSpace->getAngle() + segment->getAngle()) >
-										   globals::TWO_PI - globals::SEG_CUTOFF_ANGLE) {
-			leftMostSeg = (i + globals::VISIBLE_SEGS - 1) % globals::VISIBLE_SEGS;
-			rightMostSeg = (i + globals::VISIBLE_SEGS - 2) % globals::VISIBLE_SEGS;
-			std::shared_ptr<PolygonNode> newLeftSegment = dynamic_pointer_cast<cugl::PolygonNode>(
-				shipSegsNode->getChildByTag((unsigned int)(leftMostSeg + 1)));
-			newLeftSegment->setAngle(wrapAngle(segment->getAngle() - globals::SEG_SIZE));
-		}
 	}
 
 	// Animate health warning flashing

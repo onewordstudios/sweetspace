@@ -52,13 +52,6 @@ class GameGraphRoot : public cugl::Scene {
 	// Reconnection Textures
 	/** Node to hold all of the Reconnect Overlay.*/
 	std::shared_ptr<cugl::Node> reconnectOverlay;
-
-	/** Parent node of all ship segments, is child of nearSpace */
-	std::shared_ptr<cugl::Node> shipSegsNode;
-	/** Parent node of all doors, is child of nearSpace */
-	std::shared_ptr<cugl::Node> doorsNode;
-	/** Parent node of all external donuts, is child of nearSpace */
-	std::shared_ptr<cugl::Node> externalDonutsNode;
 	/** Ship red overlay node */
 	std::shared_ptr<cugl::PolygonNode> shipOverlay;
 
