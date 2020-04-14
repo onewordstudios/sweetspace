@@ -114,19 +114,19 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	shipOverlay->setColor(Color4::CLEAR);
 
 	challengePanelHanger = dynamic_pointer_cast<cugl::PolygonNode>(
-		assets->get<Node>("game_field_challengePanelHanger"));
+		assets->get<Node>("game_field_challengePanelParent_challengePanelHanger"));
 	challengePanelHanger->setVisible(false);
-	challengePanel =
-		dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_challengePanel"));
+	challengePanel = dynamic_pointer_cast<cugl::PolygonNode>(
+		assets->get<Node>("game_field_challengePanelParent_challengePanel"));
 	challengePanel->setVisible(false);
-	challengePanelText =
-		dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_challengePanelText"));
+	challengePanelText = dynamic_pointer_cast<cugl::PolygonNode>(
+		assets->get<Node>("game_field_challengePanelParent_challengePanelText"));
 	challengePanelText->setVisible(false);
 
 	for (int i = 0; i < 10; i++) {
 		std::string s = std::to_string(i + 1);
 		std::shared_ptr<cugl::PolygonNode> arrow = dynamic_pointer_cast<cugl::PolygonNode>(
-			assets->get<Node>("game_field_challengePanelArrow" + s));
+			assets->get<Node>("game_field_challengePanelParent_challengePanelArrow" + s));
 		challengePanelArrows.push_back(arrow);
 	}
 	// Reconnect Overlay
