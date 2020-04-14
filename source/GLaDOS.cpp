@@ -189,8 +189,12 @@ void GLaDOS::update(float dt) {
 		int breachesNeeded = block->getBreachesNeeded();
 		int doorsNeeded = block->getDoorsNeeded();
 
-		// If we don't have enough resources for this event, skip it
-		if (doorsNeeded > numDoorsFree || breachesNeeded > numBreachesFree) continue;
+		// If we don't have enough resources for this event, they're probably already fucked
+		if (doorsNeeded > numDoorsFree || breachesNeeded > numBreachesFree) {
+			readyQueue.erase(readyQueue.begin() + i);
+			i--;
+			continue;
+		}
 		// the ids we actually use
 		vector<int> neededIds;
 		for (int j = 0; j < objects.size(); j++) {
