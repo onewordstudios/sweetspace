@@ -16,10 +16,15 @@ class DonutModel {
 	static constexpr float DONUT_MAX_TURN = 2.0f;
 	/** The max force to apply to the donut */
 	static constexpr float DONUT_MAX_FORCE = 0.5f;
-	/** The amount the angular velocity decays by each frame */
-	static constexpr float DONUT_FRICTION_FACTOR = 0.9f;
+	/** The default amount the angular velocity decays by each frame */
+	static constexpr float DEFAULT_DONUT_FRICTION_FACTOR = 0.9f;
+	/** Restoration rate of friction each frame. Calculated based on wanted linger time. */
+	static constexpr float FRICTION_RESTORATION = 1.015f;
 	/** The threshold below which the donut has effectively stopped rolling */
 	static constexpr float DONUT_STOP_THRESHOLD = 0.01f;
+
+	/** The Default Ship Size */
+	static constexpr float DEFAULT_SHIP_SIZE = 360;
 
 	/** The threshold which the donut will begin to fall back to the ground again */
 	static constexpr float JUMP_HEIGHT = 0.35f;
@@ -41,6 +46,8 @@ class DonutModel {
 	float shipSize;
 	/** Current turning thrust (stored to facilitate decay) */
 	float velocity;
+	/** Velocity Adjustment Factor. Not realistic Friction. */
+	float friction;
 	/** Offset from bottom of ship when Jumping based on proportion of hallway */
 	float jumpOffset;
 	/** Whether donut is currently jumping */
@@ -71,13 +78,14 @@ class DonutModel {
 	 */
 	DonutModel(void)
 		: angle(0),
+		  shipSize(DEFAULT_SHIP_SIZE),
 		  velocity(0),
+		  friction(DEFAULT_DONUT_FRICTION_FACTOR),
 		  jumpOffset(0),
 		  jumping(false),
 		  jumpTime(0),
 		  jumpVelocity(0),
-		  colorId(0),
-		  shipSize(360) {}
+		  colorId(0) {}
 
 	/**
 	 * Destroys this donut, releasing all resources.
@@ -187,6 +195,20 @@ class DonutModel {
 	 * @return the current velocity of the donut.
 	 */
 	float getVelocity() { return velocity; }
+
+	/**
+	 * Sets the friction applied to the donut directly.
+	 *
+	 * @param f The new friction applied to the donut.
+	 */
+	void setFriction(float f) { friction = f; }
+
+	/**
+	 * Returns the current friction applied to the donut.
+	 *
+	 * @return the current friction applied to the donut.
+	 */
+	float getFriction() { return friction; }
 
 	/**
 	 * Returns whether this donut is active.
