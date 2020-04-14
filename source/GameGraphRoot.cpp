@@ -55,6 +55,9 @@ constexpr int MAX_HEALTH_WARNING_ALPHA = 100;
 
 /** Value of ship health that triggers flashing */
 constexpr int HEALTH_WARNING_THRESHOLD = 4;
+
+/** Max value of a color4 channel */
+constexpr int COLOR_CHANNEL_MAX = 255;
 #pragma mark -
 #pragma mark Constructors
 
@@ -108,7 +111,7 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	coordHUD = std::dynamic_pointer_cast<Label>(assets->get<Node>("game_hud"));
 	shipOverlay =
 		dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_near_shipoverlay"));
-	shipOverlay->setColor(Color4(1, 1, 1, 0));
+	shipOverlay->setColor(Color4::CLEAR);
 
 	challengePanelHanger = dynamic_pointer_cast<cugl::PolygonNode>(
 		assets->get<Node>("game_field_challengePanelHanger"));
@@ -398,8 +401,9 @@ void GameGraphRoot::update(float timestep) {
 				currentHealthWarningFrame = 0;
 				shipOverlay->setColor(Color4::CLEAR);
 			} else {
-				shipOverlay->setColor(Color4(
-					255, 255, 255, MAX_HEALTH_WARNING_ALPHA / MAX_HEALTH_WARNING_FRAMES * 2));
+				shipOverlay->setColor(
+					Color4(COLOR_CHANNEL_MAX, COLOR_CHANNEL_MAX, COLOR_CHANNEL_MAX,
+						   MAX_HEALTH_WARNING_ALPHA / MAX_HEALTH_WARNING_FRAMES * 2));
 				currentHealthWarningFrame = 1;
 			}
 		} else {
@@ -412,11 +416,12 @@ void GameGraphRoot::update(float timestep) {
 						(MAX_HEALTH_WARNING_FRAMES - currentHealthWarningFrame) /
 						MAX_HEALTH_WARNING_FRAMES * 2;
 			}
-			shipOverlay->setColor(Color4(255, 255, 255, alpha));
+			shipOverlay->setColor(
+				Color4(COLOR_CHANNEL_MAX, COLOR_CHANNEL_MAX, COLOR_CHANNEL_MAX, alpha));
 		}
 	} else if (ship->getHealth() <= HEALTH_WARNING_THRESHOLD) {
-		shipOverlay->setColor(
-			Color4(255, 255, 255, MAX_HEALTH_WARNING_ALPHA / MAX_HEALTH_WARNING_FRAMES * 2));
+		shipOverlay->setColor(Color4(COLOR_CHANNEL_MAX, COLOR_CHANNEL_MAX, COLOR_CHANNEL_MAX,
+									 MAX_HEALTH_WARNING_ALPHA / MAX_HEALTH_WARNING_FRAMES * 2));
 		currentHealthWarningFrame = 1;
 	}
 }
