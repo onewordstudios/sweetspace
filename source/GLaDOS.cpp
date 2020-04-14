@@ -32,7 +32,7 @@ vector<std::shared_ptr<EventModel>> readyQueue;
  * This constructor does NOT do any initialzation.  It simply allocates the
  * object. This makes it safe to use this class without a pointer.
  */
-GLaDOS::GLaDOS() : active(false), numEvents(0), playerID(0), mib(nullptr) {}
+GLaDOS::GLaDOS() : active(false), numEvents(0), playerID(0), mib(nullptr), challengeInProg(false) {}
 
 /**
  * Deactivates this input controller, releasing all listeners.
@@ -91,14 +91,14 @@ void GLaDOS::placeObject(BuildingBlockModel::Object obj, float zeroAngle, vector
 	int p = obj.player == -1 ? (int)(rand() % ship->getDonuts().size()) : ids.at(obj.player);
 	switch (obj.type) {
 		case BuildingBlockModel::Breach:
-			i = distance(breachFree.begin(), find(breachFree.begin(), breachFree.end(), true));
+			i = (int)distance(breachFree.begin(), find(breachFree.begin(), breachFree.end(), true));
 			breachFree.at(i) = false;
 			ship->getBreaches().at(i)->reset((float)obj.angle + zeroAngle, p);
 			ship->getBreaches().at(i)->setTimeCreated(ship->timer);
 			mib->createBreach((float)obj.angle + zeroAngle, p, i);
 			break;
 		case BuildingBlockModel::Door:
-			i = distance(doorFree.begin(), find(doorFree.begin(), doorFree.end(), true));
+			i = (int)distance(doorFree.begin(), find(doorFree.begin(), doorFree.end(), true));
 			ship->getDoors().at(i)->setAngle((float)obj.angle + zeroAngle);
 			ship->getDoors().at(i)->clear();
 			doorFree.at(i) = false;
@@ -162,11 +162,9 @@ void GLaDOS::update(float dt) {
 		std::shared_ptr<EventModel> event = events.at(i);
 		int spawnRate = (int)(1 / event->getProbability());
 		if (event->isActive((int)ship->timePassed()) && rand() % spawnRate <= 1) {
-			CULog("event queued");
 			// ready up the event
 			readyQueue.push_back(event);
 			if (event->isOneTime()) {
-				CULog("one time only");
 				// If it's a one time event, we don't want to add it again next frame
 				events.erase(events.begin() + i);
 				i--;
@@ -174,8 +172,8 @@ void GLaDOS::update(float dt) {
 		}
 	}
 
-	int numBreachesFree = count(breachFree.begin(), breachFree.end(), true);
-	int numDoorsFree = count(doorFree.begin(), doorFree.end(), true);
+	int numBreachesFree = (int)count(breachFree.begin(), breachFree.end(), true);
+	int numDoorsFree = (int)count(doorFree.begin(), doorFree.end(), true);
 	for (int i = 0; i < readyQueue.size(); i++) {
 		// assign the relative player ids
 		vector<int> ids;
@@ -226,7 +224,6 @@ void GLaDOS::update(float dt) {
 				abs(abs(ship->getDonuts().at(j)->getAngle() - angle) - ship->getSize() / 2);
 			float dist =
 				find(neededIds.begin(), neededIds.end(), j) != neededIds.end() ? 0 : (float)padding;
-			CULog("half range %f", (float)block->getRange() / 2);
 			if (diff < dist + (float)block->getRange() / 2) {
 				goodAngle = false;
 				break;
@@ -236,17 +233,15 @@ void GLaDOS::update(float dt) {
 		for (unsigned int k = 0; k < ship->getBreaches().size(); k++) {
 			float breachAngle = ship->getBreaches()[k]->getAngle();
 			float diff = ship->getSize() / 2 - abs(abs(breachAngle - angle) - ship->getSize() / 2);
-			if (breachAngle != -1 && diff < (float)block->getRange() / 2.0f) {
+			if (breachAngle != -1 && diff < (float)block->getRange() / 2) {
 				goodAngle = false;
 				break;
 			}
 		}
 		if (!goodAngle) continue;
-		CULog("good angle");
 		// set angle to where zero is
-		angle = angle - (float)block->getRange() / 2.0f - (float)block->getMin();
+		angle = angle - (float)block->getRange() / 2 - (float)block->getMin();
 		for (int j = 0; j < objects.size(); j++) {
-			CULog("placing objects...");
 			placeObject(objects.at(j), angle, ids);
 		}
 		readyQueue.erase(readyQueue.begin() + i);

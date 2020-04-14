@@ -115,7 +115,14 @@ class BuildingBlockModel {
 	/**
 	 * Creates a new, empty level.
 	 */
-	BuildingBlockModel(void){};
+	BuildingBlockModel(void)
+		: type(Random),
+		  player(0),
+		  distance(-1),
+		  range(0),
+		  min(0),
+		  breachesNeeded(0),
+		  doorsNeeded(0){};
 
 	bool init(const std::shared_ptr<cugl::JsonValue>& json) {
 		std::shared_ptr<cugl::JsonValue> playerDist = json->get(PLAYER_DIST_FIELD);
@@ -132,7 +139,7 @@ class BuildingBlockModel {
 				break;
 		}
 		std::shared_ptr<cugl::JsonValue> objectJson = json->get(OBJECTS_FIELD);
-		int numObjects = objectJson->size();
+		int numObjects = (int)objectJson->size();
 		int maxAngle = 0;
 		int minAngle = 0;
 		int leftWidth = 0;
@@ -175,12 +182,12 @@ class BuildingBlockModel {
 			range = maxAngle + rightWidth - min;
 			objects.push_back(obj);
 		}
-		breachesNeeded = count_if(objects.begin(), objects.end(), [](BuildingBlockModel::Object o) {
-			return o.type == BuildingBlockModel::Breach;
-		});
-		doorsNeeded = count_if(objects.begin(), objects.end(), [](BuildingBlockModel::Object o) {
-			return o.type == BuildingBlockModel::Door;
-		});
+		breachesNeeded = (int)count_if(
+			objects.begin(), objects.end(),
+			[](BuildingBlockModel::Object o) { return o.type == BuildingBlockModel::Breach; });
+		doorsNeeded = (int)count_if(
+			objects.begin(), objects.end(),
+			[](BuildingBlockModel::Object o) { return o.type == BuildingBlockModel::Door; });
 		return true;
 	}
 

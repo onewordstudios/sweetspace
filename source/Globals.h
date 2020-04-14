@@ -30,8 +30,10 @@ constexpr unsigned int MAX_PLAYERS = 6; // NOLINT
 
 /** The Angle in degrees for which a collision occurs*/
 constexpr float DOOR_WIDTH = 7.0f; // NOLINT
+
 /** The Angle in degrees for which a breach donut collision occurs*/
 constexpr float BREACH_WIDTH = 11.0f; // NOLINT
+
 /** The duration in seconds of the everyone roll challenge*/
 constexpr int ROLL_CHALLENGE_LENGTH = 6; // NOLINT
 

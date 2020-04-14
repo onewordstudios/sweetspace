@@ -94,7 +94,7 @@ class EventModel {
 	/**
 	 * Creates a new, empty level.
 	 */
-	EventModel(void){};
+	EventModel(void) : block(""), timeStart(0), timeStop(0), probability(0){};
 
 	bool init(const std::shared_ptr<cugl::JsonValue>& json) {
 		block = json->get(BLOCK_FIELD)->asString();

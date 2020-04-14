@@ -58,7 +58,7 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 
 	std::shared_ptr<LevelModel> level = assets->get<LevelModel>(LEVEL_ONE_KEY);
 	ship = ShipModel::alloc(net->getNumPlayers(), level->getMaxBreaches(), level->getMaxDoors(),
-							playerID, level->getShipSize(net->getNumPlayers()),
+							playerID, (float)level->getShipSize((int)net->getNumPlayers()),
 							level->getInitHealth());
 	gm.init(ship, level);
 
@@ -205,11 +205,11 @@ void GameMode::update(float timestep) {
 		ship->getDonuts()[i]->update(timestep);
 	}
 
-	if (ship->getChallenge() && trunc(ship->timer) <= 6) {
+	if (ship->getChallenge() && trunc(ship->timer) <= globals::ROLL_CHALLENGE_LENGTH) {
 		ship->setChallenge(false);
 	}
 
-	if (ship->getChallenge() && trunc(ship->timer) > 6) {
+	if (ship->getChallenge() && trunc(ship->timer) > globals::ROLL_CHALLENGE_LENGTH) {
 		for (unsigned int i = 0; i < ship->getDonuts().size(); i++) {
 			if (ship->getRollDir() == 0) {
 				if (ship->getDonuts()[i]->getVelocity() < 0) {

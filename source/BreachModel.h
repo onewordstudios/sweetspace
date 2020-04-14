@@ -27,7 +27,13 @@ class BreachModel {
 	 * NEVER USE A CONSTRUCTOR WITH NEW. If you want to allocate a model on
 	 * the heap, use one of the static constructors instead.
 	 */
-	BreachModel(void) : angle(0), health(0), playerOn(false), player(0), needSpriteUpdate(false) {}
+	BreachModel(void)
+		: angle(0),
+		  health(0),
+		  playerOn(false),
+		  player(0),
+		  needSpriteUpdate(false),
+		  timeCreated(0) {}
 
 	/**
 	 * Destroys this breach, releasing all resources.
