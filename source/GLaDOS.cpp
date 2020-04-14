@@ -71,7 +71,7 @@ bool GLaDOS::init(std::shared_ptr<ShipModel> ship, std::shared_ptr<LevelModel> l
 	for (int i = 0; i < maxDoors; i++) {
 		doorFree.at(i) = true;
 	}
-	challengeInProg = false;
+	fail = false;
 	// Set random seed based on time
 	srand((unsigned int)time(NULL));
 	active = success;
@@ -182,7 +182,7 @@ void GLaDOS::update(float dt) {
 		}
 	}
 
-	if (rand() % 15 == 1 && !ship->getChallenge()) {
+	if (rand() % 10 == 1 && !ship->getChallenge()) {
 		((int)(rand() % 2 == 0)) ? ship->setRollDir(0) : ship->setRollDir(1);
 		int p = (int)(rand() % ship->getDonuts().size());
 		if (p != playerID && ship->getDonuts().at(p)->getIsActive()) {
@@ -192,6 +192,36 @@ void GLaDOS::update(float dt) {
 			ship->setEndTime((ship->timer) - 6);
 			ship->setChallenge(true);
 		}
+	}
+
+	if (fail) {
+		for (int i = 0; i < ship->getDonuts().size(); i++) {
+			bool goodAngle = true;
+			float angle = (float)(rand() % (int)(ship->getSize()));
+			for (unsigned int j = 0; j < ship->getBreaches().size(); j++) {
+				float breachAngle = ship->getBreaches()[j]->getAngle();
+				float breachDiff =
+					ship->getSize() / 2 - abs(abs(breachAngle - angle) - ship->getSize() / 2);
+				if (breachAngle != -1 && breachDiff < minAngleDiff) {
+					goodAngle = false;
+					break;
+				}
+				for (unsigned int k = 0; k < ship->getDoors().size(); k++) {
+					float doorAngle = ship->getDoors()[k]->getAngle();
+					float doorDiff =
+						ship->getSize() / 2 - abs(abs(doorAngle - angle) - ship->getSize() / 2);
+					if (doorAngle != -1 && doorDiff < minAngleDiff) {
+						goodAngle = false;
+						break;
+					}
+				}
+			}
+			if (!goodAngle) {
+				continue;
+			}
+			ship->getDonuts().at(i)->setAngle(angle);
+		}
+		fail = false;
 	}
 }
 
