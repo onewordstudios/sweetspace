@@ -222,6 +222,7 @@ void GLaDOS::update(float dt) {
 				abs(abs(ship->getDonuts().at(j)->getAngle() - angle) - ship->getSize() / 2);
 			float dist =
 				find(neededIds.begin(), neededIds.end(), j) != neededIds.end() ? 0 : (float)padding;
+			CULog("half range %f", (float)block->getRange() / 2);
 			if (diff < dist + (float)block->getRange() / 2) {
 				goodAngle = false;
 				break;

@@ -143,7 +143,7 @@ class BuildingBlockModel {
 						  object->get(OBJECT_ANGLE_FIELD)->asInt(),
 						  object->get(OBJECT_PLAYER_FIELD)->asInt()};
 			if (obj.type == Roll) continue;
-			if (obj.angle > maxAngle) {
+			if (obj.angle >= maxAngle) {
 				maxAngle = obj.angle;
 				switch (obj.type) {
 					case Breach:
@@ -157,7 +157,7 @@ class BuildingBlockModel {
 						break;
 				};
 			}
-			if (obj.angle < minAngle) {
+			if (obj.angle <= minAngle) {
 				minAngle = obj.angle;
 				switch (obj.type) {
 					case Breach:
