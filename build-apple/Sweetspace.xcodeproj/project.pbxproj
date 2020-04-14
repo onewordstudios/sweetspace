@@ -193,6 +193,8 @@
 		A577C93B2438F7ED00B12ADE /* LevelConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LevelConstants.h; sourceTree = "<group>"; };
 		A577C93C2438F7ED00B12ADE /* LevelModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LevelModel.h; sourceTree = "<group>"; };
 		A577C93D2438F7ED00B12ADE /* MatchmakingMode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MatchmakingMode.h; sourceTree = "<group>"; };
+		A577C9572446324C00B12ADE /* EventModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventModel.h; sourceTree = "<group>"; };
+		A577C95B2446324C00B12ADE /* BuildingBlockModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BuildingBlockModel.h; sourceTree = "<group>"; };
 		C122229A6EDF1DAB4330F1B7 /* GLaDOS.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLaDOS.cpp; sourceTree = "<group>"; };
 		C12225092193F10792C2D9D4 /* MatchmakingMode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MatchmakingMode.cpp; sourceTree = "<group>"; };
 		C1222700CC73840AA71C9800 /* MatchmakingGraphRoot.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MatchmakingGraphRoot.cpp; sourceTree = "<group>"; };
@@ -482,6 +484,8 @@
 		EBBF18B11D749176008E2001 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				A577C95B2446324C00B12ADE /* BuildingBlockModel.h */,
+				A577C9572446324C00B12ADE /* EventModel.h */,
 				A577C93B2438F7ED00B12ADE /* LevelConstants.h */,
 				A577C9372438F7ED00B12ADE /* LevelModel.cpp */,
 				A577C93C2438F7ED00B12ADE /* LevelModel.h */,
