@@ -97,6 +97,7 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	donutPos = donutNode->getPosition();
 	healthNode = dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_health"));
 	coordHUD = std::dynamic_pointer_cast<Label>(assets->get<Node>("game_hud"));
+	buttonNode = assets->get<Node>("game_field_near_button");
 
 	challengePanelHanger = dynamic_pointer_cast<cugl::PolygonNode>(
 		assets->get<Node>("game_field_challengePanelHanger"));
@@ -196,6 +197,37 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 		doorNode->setShipSize(ship->getSize());
 		doorNode->setDonutModel(ship->getDonuts().at(playerID));
 		doorsNode->addChild(doorNode);
+	}
+
+	// Initialize Buttons
+	for (int i = 0; i < ship->getButtons().size(); i++) {
+		std::shared_ptr<ButtonModel> buttonModel = ship->getButtons().at((unsigned long)i);
+		std::shared_ptr<Texture> image = assets->get<Texture>("challenge_btn_base_up");
+		std::shared_ptr<Texture> buttonImage = assets->get<Texture>("challenge_btn_up");
+		std::shared_ptr<ButtonNode> bNode = ButtonNode::alloc(image);
+		std::shared_ptr<ButtonNode> subNode = ButtonNode::alloc(buttonImage);
+		subNode->setModel(buttonModel);
+		subNode->setDonutModel(ship->getDonuts().at(playerID));
+		subNode->setAnchor(Vec2::ANCHOR_BOTTOM_CENTER);
+		subNode->setScale(DOOR_SCALE);
+		subNode->setShipSize(ship->getSize());
+		subNode->setButtonNodeType(1);
+		subNode->setButtonBaseDown(assets->get<Texture>("challenge_btn_base_down"));
+		subNode->setButtonBaseUp(assets->get<Texture>("challenge_btn_base_up"));
+		subNode->setButtonDown(assets->get<Texture>("challenge_btn_down"));
+		subNode->setButtonUp(assets->get<Texture>("challenge_btn_up"));
+		bNode->setModel(buttonModel);
+		bNode->setDonutModel(ship->getDonuts().at(playerID));
+		bNode->setAnchor(Vec2::ANCHOR_BOTTOM_CENTER);
+		bNode->setScale(DOOR_SCALE);
+		bNode->setShipSize(ship->getSize());
+		bNode->setButtonNodeType(0);
+		bNode->setButtonDown(assets->get<Texture>("challenge_btn_down"));
+		bNode->setButtonUp(assets->get<Texture>("challenge_btn_up"));
+		bNode->setButtonBaseDown(assets->get<Texture>("challenge_btn_base_down"));
+		bNode->setButtonBaseUp(assets->get<Texture>("challenge_btn_base_up"));
+		buttonNode->addChild(subNode);
+		buttonNode->addChild(bNode);
 	}
 
 	addChild(scene);

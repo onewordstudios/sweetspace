@@ -13,6 +13,9 @@ unsigned int maxEvents;
 /** The maximum number of events on ship at any one time. This will probably need to scale with
  * the number of players*/
 unsigned int maxDoors;
+/** The maximum number of buttons on ship at any one time. This will probably need to scale with
+ * the number of players*/
+unsigned int maxButtons;
 /** Spawn rate of breaches = 1/spawnRate for EVERY UPDATE FRAME. 100 is a very fast rate already.
  */
 unsigned int spawnRate;
@@ -22,6 +25,9 @@ vector<bool> breachFree;
 
 /** Array recording which doors are free or not. */
 vector<bool> doorFree;
+
+/** Array recording which doors are free or not. */
+vector<bool> buttonFree;
 
 #pragma mark -
 #pragma mark GM
@@ -60,16 +66,22 @@ bool GLaDOS::init(std::shared_ptr<ShipModel> ship, std::shared_ptr<LevelModel> l
 	this->playerID = mib->getPlayerID();
 	maxEvents = level->getMaxBreaches();
 	maxDoors = level->getMaxDoors();
+	maxButtons = 2; // add to level
 	minAngleDiff = level->getMinAngleDiff();
 	spawnRate = level->getSpawnRate();
 	breachFree.resize(maxEvents);
 	doorFree.resize(maxDoors);
+	buttonFree.resize(maxButtons);
 
 	for (int i = 0; i < maxEvents; i++) {
 		breachFree.at(i) = true;
 	}
 	for (int i = 0; i < maxDoors; i++) {
 		doorFree.at(i) = true;
+	}
+
+	for (int i = 0; i < maxButtons; i++) {
+		buttonFree.at(i) = true;
 	}
 	challengeInProg = false;
 	// Set random seed based on time
@@ -108,6 +120,16 @@ void GLaDOS::update(float dt) {
 			doorFree.at(i) = true;
 		} else if (ship->getDoors().at(i)->resolved()) {
 			ship->getDoors().at(i)->raiseDoor();
+		}
+	}
+
+	for (int i = 0; i < maxButtons; i++) {
+		if (ship->getButtons().at(i) == nullptr) {
+			continue;
+		}
+		if (ship->getButtons().at(i)->resolved()) {
+			ship->getButtons().at(i)->setAngle(-1);
+			buttonFree.at(i) = true;
 		}
 	}
 
@@ -179,6 +201,46 @@ void GLaDOS::update(float dt) {
 			doorFree.at(i) = false;
 			mib->createDualTask(angle, -1, -1, i);
 			break;
+		}
+	}
+
+	for (int i = 0; i < maxButtons; i++) {
+		if (buttonFree.at(i)) {
+			float angle = 30;
+			//(float)(rand() % (int)(ship->getSize()));
+			bool goodAngle = true;
+			for (int j = 0; j < ship->getDonuts().size(); j++) {
+				float diff =
+					ship->getSize() / 2 -
+					abs(abs(ship->getDonuts().at(j)->getAngle() - angle) - ship->getSize() / 2);
+				if (diff < minAngleDiff) {
+					goodAngle = false;
+					break;
+				}
+			}
+			if (!goodAngle) {
+				continue;
+			}
+
+			for (int j = 0; j < maxButtons; j++) {
+				if (i != j && buttonFree.at(j)) {
+					ship->getButtons().at(i)->setPair(ship->getButtons().at(j));
+					ship->getButtons().at(j)->setPair(ship->getButtons().at(i));
+					ship->getButtons().at(j)->setAngle(angle + 30);
+					ship->getButtons().at(j)->clear();
+					buttonFree.at(j) = false;
+					break;
+				}
+			}
+			if (ship->getButtons().at(i)->getPair() == nullptr) {
+				continue;
+			} else {
+				ship->getButtons().at(i)->setAngle(angle);
+				ship->getButtons().at(i)->clear();
+				buttonFree.at(i) = false;
+				//			mib->createDualTask(angle, -1, -1, i);
+				break;
+			}
 		}
 	}
 

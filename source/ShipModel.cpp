@@ -5,7 +5,8 @@
 #include "PlayerDonutModel.h"
 
 bool ShipModel::init(unsigned int numPlayers, unsigned int numBreaches, unsigned int numDoors,
-					 unsigned int playerID, float shipSize, int initHealth) {
+					 unsigned int playerID, float shipSize, int initHealth,
+					 unsigned int numButtons) {
 	// Instantiate donut models and assign colors
 	for (unsigned int i = 0; i < numPlayers; i++) {
 		donuts.push_back(playerID == i ? PlayerDonutModel::alloc(shipSize)
@@ -22,6 +23,11 @@ bool ShipModel::init(unsigned int numPlayers, unsigned int numBreaches, unsigned
 	// Instantiate door models
 	for (unsigned int i = 0; i < numDoors; i++) {
 		doors.push_back(DoorModel::alloc());
+	}
+
+	// Instantiate button models
+	for (unsigned int i = 0; i < numButtons; i++) {
+		buttons.push_back(ButtonModel::alloc());
 	}
 
 	// Instantiate health
@@ -79,6 +85,12 @@ bool ShipModel::createAllTask(int data) {
 bool ShipModel::failAllTask() {
 	setHealth(health - 1);
 	return true;
+}
+
+std::shared_ptr<ButtonModel> createPairButton(float angle) {
+	std::shared_ptr<ButtonModel> pair = ButtonModel::alloc();
+	pair->setAngle(angle = (160 * globals::PI_180));
+	return pair;
 }
 
 /**

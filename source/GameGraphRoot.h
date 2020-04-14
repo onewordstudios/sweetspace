@@ -6,6 +6,7 @@
 
 #include "BreachModel.h"
 #include "BreachNode.h"
+#include "ButtonNode.h"
 #include "DonutModel.h"
 #include "DonutNode.h"
 #include "DoorNode.h"
@@ -59,6 +60,8 @@ class GameGraphRoot : public cugl::Scene {
 	unsigned int leftMostSeg;
 	/** Tag of the right most ship segment */
 	unsigned int rightMostSeg;
+	/** Parent node of all buttons, is child of nearSpace */
+	std::shared_ptr<cugl::Node> buttonNode;
 
 	// MODEL
 	/** Id of the current client */

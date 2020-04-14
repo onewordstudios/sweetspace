@@ -6,6 +6,7 @@
 #include "BreachModel.h"
 #include "DonutModel.h"
 #include "DoorModel.h"
+#include "Globals.h"
 #include "LevelModel.h"
 #include "MagicInternetBox.h"
 #include "ShipModel.h"

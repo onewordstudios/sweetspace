@@ -24,6 +24,10 @@ constexpr float BREACH_WIDTH = 11.0f;
 constexpr float DOOR_ACTIVE_ANGLE = 15.0f;
 /** Force to push back during collision */
 constexpr float REBOUND_FORCE = -6;
+/** Max number of buttons */
+constexpr unsigned int NUM_BUTTONS = 2; // add to level
+/** The Angle in degrees for which a door can be activated*/
+constexpr float BUTTON_ACTIVE_ANGLE = 15.0f;
 
 #pragma mark -
 #pragma mark Constructors
@@ -62,7 +66,7 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 
 	std::shared_ptr<LevelModel> level = assets->get<LevelModel>(LEVEL_ONE_KEY);
 	ship = ShipModel::alloc(net->getNumPlayers(), level->getMaxBreaches(), level->getMaxDoors(),
-							playerID, level->getShipSize(), level->getInitHealth());
+							playerID, level->getShipSize(), level->getInitHealth(), NUM_BUTTONS);
 	gm.init(ship, level);
 
 	donutModel = ship->getDonuts().at(static_cast<unsigned long>(playerID));
@@ -181,6 +185,30 @@ void GameMode::update(float timestep) {
 			if (ship->getDoors().at(i)->isPlayerOn(playerID)) {
 				ship->getDoors().at(i)->removePlayer(playerID);
 				net->flagDualTask(i, playerID, 0);
+			}
+		}
+	}
+
+	for (int i = 0; i < ship->getButtons().size(); i++) {
+		if (ship->getButtons().at(i) == nullptr || ship->getButtons().at(i)->getAngle() < 0) {
+			continue;
+		}
+		float diff = ship->getSize() / 2 -
+					 abs(abs(donutModel->getAngle() - ship->getButtons().at(i)->getAngle()) -
+						 ship->getSize() / 2);
+
+		if (diff < BUTTON_ACTIVE_ANGLE) {
+			ship->getButtons().at(i)->addPlayer(playerID);
+			ship->getButtons().at(i)->setJumpedOn(input->hasJumped());
+			//			net->flagDualTask(i, playerID, 1);
+		} else {
+			if (ship->getButtons().at(i)->isPlayerOn(playerID) &&
+				ship->getButtons().at(i)->resolved()) {
+				if (ship->getButtons().at(i)->getPair()->resolved()) {
+					CULog("SUCCESS");
+					ship->getButtons().at(i)->removePlayer(playerID);
+				}
+				//				net->flagDualTask(i, playerID, 0);
 			}
 		}
 	}

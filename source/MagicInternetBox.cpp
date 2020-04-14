@@ -474,7 +474,7 @@ void MagicInternetBox::update(std::shared_ptr<ShipModel> state) {
 				int taskID = id;
 				int player = data1;
 				int flag = data2;
-				CULog("Flag door %d with player %d", id, player);
+//				CULog("Flag door %d with player %d", id, player);
 				state->flagDoor(taskID, player, flag);
 				break;
 			}
