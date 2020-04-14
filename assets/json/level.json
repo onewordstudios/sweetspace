@@ -3,7 +3,7 @@
 	"maxDoors" : 2,
 	"spawnRate" : 100,
 	"minAngle" : 30,
-	"shipSize" : 480,
+	"shipSize" : 495,
 	"time" : 45,
 	"initHealth" : 12	
 }
