@@ -1,4 +1,4 @@
-#include "GameGraphRoot.h"
+﻿#include "GameGraphRoot.h"
 
 #include <cugl/cugl.h>
 
@@ -46,7 +46,6 @@ constexpr int HEALTH_BAR_FRAMES = 12;
 
 /** Scaling factor of health nodes */
 constexpr float HEALTH_NODE_SCALE = 0.55f;
-
 
 /** Animation cycle length of ship red flash */
 constexpr int MAX_HEALTH_WARNING_FRAMES = 150;
@@ -418,7 +417,6 @@ void GameGraphRoot::update(float timestep) {
 		default:
 			CULog("ERROR: Uncaught MatchmakingStatus Value Occurred");
 	}
-
 
 	// Update ship segments
 	std::shared_ptr<Texture> seg0 = assets->get<Texture>("shipseg0");
