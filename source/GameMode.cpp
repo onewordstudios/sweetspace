@@ -19,7 +19,7 @@ constexpr float EPSILON_ANGLE = 5.2f;
 /** The Angle in degrees for which a collision occurs*/
 constexpr float DOOR_WIDTH = 10.0f;
 /** The Angle in degrees for which a breach donut collision occurs*/
-constexpr float BREACH_WIDTH = 11.0f;
+constexpr float BREACH_WIDTH = 6.0f;
 /** The Angle in degrees for which a door can be activated*/
 constexpr float DOOR_ACTIVE_ANGLE = 15.0f;
 /** Angles to adjust per frame to prevent door tunneling */
@@ -27,7 +27,7 @@ constexpr float ANGLE_ADJUST = 0.5f;
 
 // Friction
 /** The friction factor while fixing a breach */
-constexpr float FIX_BREACH_FRICTION = 0.5f;
+constexpr float FIX_BREACH_FRICTION = 0.65f;
 /** The friction factor applied when moving through other players breaches */
 constexpr float OTHER_BREACH_FRICTION = 0.2f;
 

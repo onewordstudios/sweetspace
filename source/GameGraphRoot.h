@@ -19,8 +19,6 @@ class GameGraphRoot : public cugl::Scene {
    protected:
 	/** The asset manager for this game mode. */
 	std::shared_ptr<cugl::AssetManager> assets;
-	/** The donut's base position. */
-	cugl::Vec2 donutPos;
 	/** The Screen's Height. */
 	float screenHeight;
 
