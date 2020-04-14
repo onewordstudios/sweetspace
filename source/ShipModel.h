@@ -336,20 +336,14 @@ class ShipModel {
 	float getEndTime() { return endTime; }
 
 	/**
-	 * Create pair button with given angle.
-	 *
-	 * @param angle	   the location to create the button.
-	 * @param id   	   the id of button to be created.
-	 */
-	std::shared_ptr<ButtonModel> createPairButton(float angle, int id);
-
-	/**
 	 * Create button with given id.
 	 *
-	 * @param angle	   the location to create the button.
-	 * @param id   	   the id of button to be created.
+	 * @param angle1	   the location to create the button.
+	 * @param id1  	       the id of button to be created.
+	 * @param angle2       the location to create the button's pair.
+	 * @param id2  	       the id of button's pair to be created.
 	 */
-	bool createButton(float angle, int id);
+	bool createButton(float angle1, int id1, float angle2, int id2);
 
 	/**
 	 * Flag button with given id.
