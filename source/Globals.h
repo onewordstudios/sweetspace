@@ -10,9 +10,6 @@
  */
 namespace globals {
 
-/** Number of players needed for the game - will be replaced with a range in the future */
-constexpr unsigned int NUM_PLAYERS = 3; // NOLINT
-
 /** Network tick frequency */
 constexpr unsigned int NETWORK_TICK = 12; // NOLINT
 
@@ -29,7 +26,7 @@ constexpr unsigned int MIN_PLAYERS = 3; // NOLINT
 constexpr unsigned int MAX_PLAYERS = 6; // NOLINT
 
 /** The Angle in degrees for which a collision occurs*/
-constexpr float DOOR_WIDTH = 7.0f; // NOLINT
+constexpr float DOOR_WIDTH = 10.0f; // NOLINT
 
 /** The Angle in degrees for which a breach donut collision occurs*/
 constexpr float BREACH_WIDTH = 11.0f; // NOLINT

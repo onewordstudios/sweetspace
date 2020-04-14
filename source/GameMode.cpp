@@ -18,8 +18,14 @@ using namespace std;
 constexpr float EPSILON_ANGLE = 5.2f;
 /** The Angle in degrees for which a door can be activated*/
 constexpr float DOOR_ACTIVE_ANGLE = 15.0f;
-/** Force to push back during collision */
-constexpr float REBOUND_FORCE = -6;
+/** Angles to adjust per frame to prevent door tunneling */
+constexpr float ANGLE_ADJUST = 0.5f;
+
+// Friction
+/** The friction factor while fixing a breach */
+constexpr float FIX_BREACH_FRICTION = 0.5f;
+/** The friction factor applied when moving through other players breaches */
+constexpr float OTHER_BREACH_FRICTION = 0.2f;
 
 #pragma mark -
 #pragma mark Constructors
@@ -131,7 +137,7 @@ void GameMode::update(float timestep) {
 		ship->updateTimer(timestep);
 	}
 
-	// Breach health depletion
+	// Breach Checks
 	for (int i = 0; i < ship->getBreaches().size(); i++) {
 		std::shared_ptr<BreachModel> breach = ship->getBreaches().at(i);
 		if (breach == nullptr) {
@@ -139,16 +145,24 @@ void GameMode::update(float timestep) {
 		}
 		float diff = ship->getSize() / 2 -
 					 abs(abs(donutModel->getAngle() - breach->getAngle()) - ship->getSize() / 2);
-
 		if (!donutModel->isJumping() && playerID != breach->getPlayer() &&
 			diff < globals::BREACH_WIDTH && breach->getHealth() != 0) {
-			donutModel->applyForce(REBOUND_FORCE * donutModel->getVelocity());
+			// Slow player by drag factor
+			donutModel->setFriction(OTHER_BREACH_FRICTION);
 		} else if (playerID == breach->getPlayer() && diff < EPSILON_ANGLE &&
-				   !breach->isPlayerOn() && donutModel->getJumpOffset() == 0.0f &&
-				   breach->getHealth() > 0) {
-			breach->decHealth(1);
-			breach->setIsPlayerOn(true);
+				   donutModel->getJumpOffset() == 0.0f && breach->getHealth() > 0) {
+			if (!breach->isPlayerOn()) {
+				// Decrement Health
+				breach->decHealth(1);
+				breach->setIsPlayerOn(true);
+			}
 
+			// Slow player by friction factor if not already slowed more
+			if (donutModel->getFriction() > FIX_BREACH_FRICTION) {
+				donutModel->setFriction(FIX_BREACH_FRICTION);
+			}
+
+			// Resolve Breach if health is 0
 			if (breach->getHealth() == 0) {
 				net->resolveBreach(i);
 			}
@@ -158,20 +172,30 @@ void GameMode::update(float timestep) {
 		}
 	}
 
+	// Door Checks
 	for (int i = 0; i < ship->getDoors().size(); i++) {
 		if (ship->getDoors().at(i) == nullptr || ship->getDoors().at(i)->halfOpen() ||
 			ship->getDoors().at(i)->getAngle() < 0) {
 			continue;
 		}
-		float diff = ship->getSize() / 2 -
-					 abs(abs(donutModel->getAngle() - ship->getDoors().at(i)->getAngle()) -
-						 ship->getSize() / 2);
+		float diff = donutModel->getAngle() - ship->getDoors().at(i)->getAngle();
+		float a = diff + ship->getSize() / 2;
+		diff = a - floor(a / ship->getSize()) * ship->getSize() - ship->getSize() / 2;
 
-		if (diff < globals::DOOR_WIDTH) {
-			// TODO: Real physics...
-			donutModel->applyForce(REBOUND_FORCE * donutModel->getVelocity());
+		if (abs(diff) < globals::DOOR_WIDTH) {
+			// Stop donut and push it out if inside
+			donutModel->setVelocity(0);
+			if (diff < 0) {
+				donutModel->setAngle(donutModel->getAngle() - ANGLE_ADJUST < 0.0f
+										 ? ship->getSize()
+										 : donutModel->getAngle() - ANGLE_ADJUST);
+			} else {
+				donutModel->setAngle(donutModel->getAngle() + ANGLE_ADJUST > ship->getSize()
+										 ? 0.0f
+										 : donutModel->getAngle() + ANGLE_ADJUST);
+			}
 		}
-		if (diff < DOOR_ACTIVE_ANGLE) {
+		if (abs(diff) < DOOR_ACTIVE_ANGLE) {
 			ship->getDoors().at(i)->addPlayer(playerID);
 			net->flagDualTask(i, playerID, 1);
 		} else {
