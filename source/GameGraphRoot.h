@@ -19,12 +19,10 @@ class GameGraphRoot : public cugl::Scene {
    protected:
 	/** The asset manager for this game mode. */
 	std::shared_ptr<cugl::AssetManager> assets;
-	/** The donut's base position. */
-	cugl::Vec2 donutPos;
 	/** The Screen's Height. */
 	float screenHeight;
 
-	// VIEW
+	// VIEW COMPONENTS
 	/** Filmstrip representing the player's animated donut */
 	std::shared_ptr<cugl::PolygonNode> donutNode;
 	/** Label for on-screen coordinate HUD */
@@ -37,11 +35,17 @@ class GameGraphRoot : public cugl::Scene {
 	std::shared_ptr<cugl::Node> nearSpace;
 	/** Parent node of all breaches, is child of nearSpace */
 	std::shared_ptr<cugl::Node> breachesNode;
+	/** Parent node of all ship segments, is child of nearSpace */
+	std::shared_ptr<cugl::Node> shipSegsNode;
+	/** Parent node of all doors, is child of nearSpace */
+	std::shared_ptr<cugl::Node> doorsNode;
+	/** Parent node of all external donuts, is child of nearSpace */
+	std::shared_ptr<cugl::Node> externalDonutsNode;
+
 	std::shared_ptr<cugl::PolygonNode> challengePanelHanger;
 	std::shared_ptr<cugl::PolygonNode> challengePanel;
 	std::shared_ptr<cugl::PolygonNode> challengePanelText;
 	std::vector<std::shared_ptr<cugl::PolygonNode>> challengePanelArrows;
-
 	/** Filmstrip representing the player's animated donut */
 	std::shared_ptr<cugl::PolygonNode> healthNode;
 
@@ -57,12 +61,17 @@ class GameGraphRoot : public cugl::Scene {
 	std::shared_ptr<cugl::Node> externalDonutsNode;
 	/** Ship red overlay node */
 	std::shared_ptr<cugl::PolygonNode> shipOverlay;
+
+	// DRAWING STATE VARIABLES
+	/** The donut's base position. */
+	cugl::Vec2 donutPos;
+
 	/** Tag of the left most ship segment */
 	unsigned int leftMostSeg;
 	/** Tag of the right most ship segment */
 	unsigned int rightMostSeg;
 
-	// MODEL
+	// MODEL INFORMATION
 	/** Id of the current client */
 	unsigned int playerID;
 	/** The ship */
@@ -106,7 +115,9 @@ class GameGraphRoot : public cugl::Scene {
 	const std::vector<cugl::Color4> breachColor{
 		cugl::Color4(219, 197, 52), cugl::Color4(227, 100, 159), cugl::Color4(152, 95, 204),
 		cugl::Color4(158, 212, 87), cugl::Color4(244, 150, 40),	 cugl::Color4(47, 206, 197)};
-	/** number of possible player colors */
+	/** Color of ship segment label text */
+	const cugl::Color4 SHIP_LABEL_COLOR{255, 248, 161};
+	/** Number of possible player colors */
 	static constexpr int NUM_COLORS = 6;
 	/** The scale of the breach textures. */
 	static constexpr float BREACH_SCALE = 0.25;
