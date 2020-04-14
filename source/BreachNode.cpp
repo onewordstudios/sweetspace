@@ -4,6 +4,7 @@
 
 #include "GameGraphRoot.h"
 #include "Globals.h"
+#include "Tween.h"
 
 using namespace cugl;
 
@@ -18,6 +19,9 @@ constexpr int NUM_SKIP_FRAMES = 2;
 
 /** Minimum scale of pattern node */
 constexpr float PATTERN_SCALE = 0.1f;
+
+/** Horizontal position offset for pattern animation */
+constexpr int PATTERN_OFFSET = -180;
 
 void BreachNode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch, const Mat4& transform,
 					  Color4 tint) {
@@ -86,5 +90,7 @@ void BreachNode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch, const Mat
 		setPosition(breachPos);
 		isShown = false;
 	}
+	patternNode->setPositionY(
+		Tween::linear(0, PATTERN_OFFSET, shapeNode->getFrame(), shapeNode->getSize()));
 	Node::draw(batch, transform, tint);
 }
