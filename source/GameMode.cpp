@@ -263,11 +263,11 @@ void GameMode::update(float timestep) {
 		}
 		if (ship->getChallengeProg() > 100 || trunc(ship->timer) == trunc(ship->getEndTime())) {
 			if (ship->getChallengeProg() < 10) {
-				net->failAllTask();
 				float h = ship->getHealth();
-				ship->setHealth(h - 3);
+				ship->setHealth(h - 1);
 				CULog("FAIL");
 				gm.setChallengeFail(true);
+				ship->failAllTask();
 			}
 			ship->setChallenge(false);
 			ship->setChallengeProg(0);

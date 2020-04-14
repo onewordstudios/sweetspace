@@ -195,32 +195,7 @@ void GLaDOS::update(float dt) {
 	}
 
 	if (fail) {
-		for (int i = 0; i < ship->getDonuts().size(); i++) {
-			bool goodAngle = true;
-			float angle = (float)(rand() % (int)(ship->getSize()));
-			for (unsigned int j = 0; j < ship->getBreaches().size(); j++) {
-				float breachAngle = ship->getBreaches()[j]->getAngle();
-				float breachDiff =
-					ship->getSize() / 2 - abs(abs(breachAngle - angle) - ship->getSize() / 2);
-				if (breachAngle != -1 && breachDiff < minAngleDiff) {
-					goodAngle = false;
-					break;
-				}
-				for (unsigned int k = 0; k < ship->getDoors().size(); k++) {
-					float doorAngle = ship->getDoors()[k]->getAngle();
-					float doorDiff =
-						ship->getSize() / 2 - abs(abs(doorAngle - angle) - ship->getSize() / 2);
-					if (doorAngle != -1 && doorDiff < minAngleDiff) {
-						goodAngle = false;
-						break;
-					}
-				}
-			}
-			if (!goodAngle) {
-				continue;
-			}
-			ship->getDonuts().at(i)->setAngle(angle);
-		}
+		mib->failAllTask();
 		fail = false;
 	}
 }
