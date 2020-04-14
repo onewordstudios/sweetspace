@@ -51,7 +51,7 @@ constexpr float HEALTH_NODE_SCALE = 0.55f;
 constexpr int MAX_HEALTH_WARNING_FRAMES = 150;
 
 /** Maximum alpha value for health warning overlay */
-constexpr int MAX_HEALTH_WARNING_ALPHA = 50;
+constexpr int MAX_HEALTH_WARNING_ALPHA = 100;
 
 /** Value of ship health that triggers flashing */
 constexpr int HEALTH_WARNING_THRESHOLD = 4;
