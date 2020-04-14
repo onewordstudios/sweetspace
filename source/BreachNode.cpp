@@ -77,14 +77,17 @@ void BreachNode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch, const Mat
 								   : currentFrameIdle + 1;
 		}
 		prevHealth = breachModel->getHealth();
-		shared_ptr<PolygonNode> patternNode = dynamic_pointer_cast<PolygonNode>(getChildByTag(0));
-		patternNode->setScale(PATTERN_SCALE +
-							  (-PATTERN_SCALE + 1) * (getSize() - getFrame()) / getSize());
+		patternNode->setScale(
+			getScale() *
+			(PATTERN_SCALE + (-PATTERN_SCALE + 1) * (getSize() - getFrame()) / getSize()));
 	} else {
 		// Breach is currently inactive
 		breachPos = Vec2(OFF_SCREEN_POS, OFF_SCREEN_POS);
 		setPosition(breachPos);
 		isShown = false;
 	}
+	// Move pattern node to position
+	patternNode->setPosition(getPosition());
+	patternNode->setAngle(getAngle());
 	AnimationNode::draw(batch, transform, tint);
 }

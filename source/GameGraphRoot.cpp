@@ -179,9 +179,11 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 												->getColorId());
 		image = assets->get<Texture>("breach_" + breachColor);
 		std::shared_ptr<PolygonNode> patternNode = PolygonNode::allocWithTexture(image);
+		patternNode->setAnchor(Vec2::ANCHOR_CENTER);
 		// Add the breach node
-		breachesNode->addChild(breachNode);
-		breachNode->addChild(patternNode);
+		breachesNode->addChildWithTag(breachNode, i + 1);
+		breachNode->setPatternNode(patternNode);
+		breachesNode->addChild(patternNode);
 	}
 
 	// Initialize Doors
@@ -301,8 +303,7 @@ void GameGraphRoot::update(float timestep) {
 													.at((unsigned long)breachModel->getPlayer())
 													->getColorId());
 			std::shared_ptr<Texture> image = assets->get<Texture>("breach_" + breachColor);
-			shared_ptr<PolygonNode> patternNode =
-				dynamic_pointer_cast<PolygonNode>(breachNode->getChildByTag(0));
+			shared_ptr<PolygonNode> patternNode = breachNode->getPatternNode();
 			patternNode->setTexture(image);
 			breachModel->setNeedSpriteUpdate(false);
 		}

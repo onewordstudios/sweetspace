@@ -13,6 +13,8 @@ class BreachNode : public cugl::AnimationNode {
 	std::shared_ptr<BreachModel> breachModel;
 	/** Reference to the player donut model */
 	std::shared_ptr<DonutModel> playerDonutModel;
+	/** Reference to the pattern node of this breach */
+	std::shared_ptr<PolygonNode> patternNode;
 	/** Size of the ship. Needed for visibility determination */
 	float shipSize;
 	/** Whether the breach is being shown right now */
@@ -83,7 +85,11 @@ class BreachNode : public cugl::AnimationNode {
 
 	void setPrevHealth(int i) { prevHealth = i; }
 
+	void setPatternNode(std::shared_ptr<PolygonNode> n) { patternNode = n; }
+
 	bool getIsAnimatingShrink() { return isAnimatingShrink; }
+
+	std::shared_ptr<PolygonNode> getPatternNode() { return patternNode; }
 
 	std::shared_ptr<BreachModel> getModel() { return breachModel; }
 
