@@ -1,4 +1,4 @@
-#include "PlayerDonutModel.h"
+﻿#include "PlayerDonutModel.h"
 
 using namespace cugl;
 
@@ -15,7 +15,14 @@ void PlayerDonutModel::update(float timestep) {
 		angle += shipSize;
 	}
 
-	velocity *= DONUT_FRICTION_FACTOR;
+	velocity *= friction;
+
+	// Restore Friction expoentially per frame if under default friction
+	if (friction < DEFAULT_DONUT_FRICTION_FACTOR) {
+		friction =
+			RANGE_CLAMP(friction * FRICTION_RESTORATION, 0.0f, DEFAULT_DONUT_FRICTION_FACTOR);
+	}
+
 	if (abs(velocity) < DONUT_STOP_THRESHOLD) {
 		velocity = 0;
 	}
