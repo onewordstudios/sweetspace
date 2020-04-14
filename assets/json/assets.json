@@ -133,6 +133,24 @@
                 "scale" : 0.4
               }
             },
+            "health" : {
+              "type" : "Image",
+              "data" : {
+                "texture" : "health_empty",
+                "anchor" : [ 0.5, 0.5 ],
+                "position" : [ 0, 300 ],
+                "scale" : 0.3
+              }
+            },
+            "healthGreen" : {
+              "type" : "Image",
+              "data" : {
+                "texture" : "health_green",
+                "anchor" : [ 0.5, 0.5 ],
+                "position" : [ 0, 300 ],
+                "scale" : 0.3
+              }
+            },
             "challengePanelHanger" : {
               "type" : "Image",
               "data" : {
@@ -301,24 +319,6 @@
                     "scale" : 0.6
                   }
                 }
-              }
-            },
-            "health" : {
-              "type" : "Image",
-              "data" : {
-                "texture" : "health_empty",
-                "anchor" : [ 0.5, 0.5 ],
-                "position" : [ 0, 300 ],
-                "scale" : 0.3
-              }
-            },
-            "healthGreen" : {
-              "type" : "Image",
-              "data" : {
-                "texture" : "health_green",
-                "anchor" : [ 0.5, 0.5 ],
-                "position" : [ 0, 300 ],
-                "scale" : 0.3
               }
             }
           }
