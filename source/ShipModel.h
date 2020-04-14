@@ -357,7 +357,7 @@ class ShipModel {
 	/**
 	 * Resolve button with given id.
 	 *
-	 * @param id   the id of door to be opened.
+	 * @param id   the id of button to be opened.
 	 */
 	bool resolveButton(int id);
 };

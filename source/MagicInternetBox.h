@@ -341,6 +341,29 @@ class MagicInternetBox {
 	 * Disconnect this player from the server, by force.
 	 */
 	void forceDisconnect();
+
+	/**
+	 * Inform other players that two buttons requiring two players has been created
+	 *
+	 * @param angle1 The angle of the ship to spawn the button
+	 * @param id1 The button ID
+	 * @param angle2 The angle of the ship to spawn the button's pair
+	 * @param id2 The ID for the button's pair
+	 */
+	void createButtonTask(float angle1, int id1, float angle2, int id2);
+
+	/**
+	 * Inform other players that one person is on the button.
+	 * This method does not keep track of whether one or both players are
+	 * resolving this task. It merely broadcasts to all other players that
+	 * one more person is now on this task; when both players are here, it
+	 * is the responsibility of the receivers of this message to resolve the task.
+	 *
+	 * @param id The button ID
+	 * @param player The player ID who is activating the button
+	 * @param flag Whether the player is on or off the door (1 or 0)
+	 */
+	void flagButton(int id, int player, int flag);
 };
 
 #endif /* __NETWORK_CONTROLLER_H__ */

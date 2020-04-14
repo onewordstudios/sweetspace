@@ -221,7 +221,8 @@ void GLaDOS::update(float dt) {
 			if (!goodAngle) {
 				continue;
 			}
-
+			int pairID;
+			float pairAngle;
 			for (int j = 0; j < maxButtons; j++) {
 				if (i != j && buttonFree.at(j)) {
 					ship->getButtons().at(i)->setPair(ship->getButtons().at(j));
@@ -229,6 +230,8 @@ void GLaDOS::update(float dt) {
 					ship->getButtons().at(j)->setAngle(angle + 30);
 					ship->getButtons().at(j)->clear();
 					buttonFree.at(j) = false;
+					pairID = j;
+					pairAngle = ship->getButtons().at(j)->getAngle();
 					break;
 				}
 			}
@@ -238,7 +241,7 @@ void GLaDOS::update(float dt) {
 				ship->getButtons().at(i)->setAngle(angle);
 				ship->getButtons().at(i)->clear();
 				buttonFree.at(i) = false;
-				//			mib->createDualTask(angle, -1, -1, i);
+				//				mib->createButtonTask(angle, i, pairAngle, pairID);
 				break;
 			}
 		}

@@ -200,15 +200,15 @@ void GameMode::update(float timestep) {
 		if (diff < BUTTON_ACTIVE_ANGLE) {
 			ship->getButtons().at(i)->addPlayer(playerID);
 			ship->getButtons().at(i)->setJumpedOn(input->hasJumped());
-			//			net->flagDualTask(i, playerID, 1);
+			//			net->flagButton(i, playerID, 1);
 		} else {
 			if (ship->getButtons().at(i)->isPlayerOn(playerID) &&
-				ship->getButtons().at(i)->resolved()) {
-				if (ship->getButtons().at(i)->getPair()->resolved()) {
+				ship->getButtons().at(i)->jumpedOn()) {
+				if (ship->getButtons().at(i)->getPair()->jumpedOn()) {
 					CULog("SUCCESS");
 					ship->getButtons().at(i)->removePlayer(playerID);
+					//                    net->flagButton(i, playerID, 0);
 				}
-				//				net->flagDualTask(i, playerID, 0);
 			}
 		}
 	}
