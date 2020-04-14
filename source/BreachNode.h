@@ -1,20 +1,24 @@
 #ifndef SWEETSPACE_BREACHNODE_H
 #define SWEETSPACE_BREACHNODE_H
 
-#include <cugl/2d/CUAnimationNode.h>
+#include <cugl/2d/CUNode.h>
 
 #include "BreachModel.h"
 #include "DonutModel.h"
+#include "cugl/2d/CUAnimationNode.h"
+#include "cugl/2d/CUPolygonNode.h"
 
-class BreachNode : public cugl::AnimationNode {
+class BreachNode : public cugl::Node {
 #pragma mark Values
    protected:
 	/** Reference to the model of this node. */
 	std::shared_ptr<BreachModel> breachModel;
 	/** Reference to the player donut model */
 	std::shared_ptr<DonutModel> playerDonutModel;
+	/** Reference to the shape node of this breach */
+	std::shared_ptr<cugl::AnimationNode> shapeNode;
 	/** Reference to the pattern node of this breach */
-	std::shared_ptr<PolygonNode> patternNode;
+	std::shared_ptr<cugl::PolygonNode> patternNode;
 	/** Size of the ship. Needed for visibility determination */
 	float shipSize;
 	/** Whether the breach is being shown right now */
@@ -31,7 +35,7 @@ class BreachNode : public cugl::AnimationNode {
 		int currentHealth =
 			health > BreachModel::HEALTH_DEFAULT ? BreachModel::HEALTH_DEFAULT : health;
 		return (BreachModel::HEALTH_DEFAULT - currentHealth) *
-			   (getSize() / BreachModel::HEALTH_DEFAULT);
+			   (shapeNode->getSize() / BreachModel::HEALTH_DEFAULT);
 	}
 
    public:
@@ -47,7 +51,7 @@ class BreachNode : public cugl::AnimationNode {
 	 * NEVER USE A CONSTRUCTOR WITH NEW. If you want to allocate an object on
 	 * the heap, use one of the static constructors instead.
 	 */
-	BreachNode() : cugl::AnimationNode() {}
+	BreachNode() : cugl::Node() {}
 
 	/**
 	 * Releases all resources allocated with this node.
@@ -59,19 +63,15 @@ class BreachNode : public cugl::AnimationNode {
 	~BreachNode() { dispose(); }
 
 	/**
-	 * Returns a textured breach from a Texture object.
+	 * Returns a newly allocated BreachNode at the world origin.
 	 *
-	 * After creation, the breach will be a rectangle. The vertices of this
-	 * breach will be the corners of the texture.
+	 * The node has both position and size (0,0).
 	 *
-	 * @param texture   A shared pointer to a Texture object.
-	 *
-	 * @return a textured breach from a Texture object.
+	 * @return a newly allocated node at the world origin.
 	 */
-	static std::shared_ptr<BreachNode> allocWithTexture(
-		const std::shared_ptr<cugl::Texture> &texture) {
-		std::shared_ptr<BreachNode> node = std::make_shared<BreachNode>();
-		return (node->initWithFilmstrip(texture, BREACH_H, BREACH_W) ? node : nullptr);
+	static std::shared_ptr<BreachNode> alloc() {
+		std::shared_ptr<BreachNode> result = std::make_shared<BreachNode>();
+		return (result->init() ? result : nullptr);
 	}
 
 #pragma mark -
@@ -85,11 +85,15 @@ class BreachNode : public cugl::AnimationNode {
 
 	void setPrevHealth(int i) { prevHealth = i; }
 
-	void setPatternNode(std::shared_ptr<PolygonNode> n) { patternNode = n; }
+	void setShapeNode(std::shared_ptr<cugl::AnimationNode> n) { shapeNode = n; }
+
+	void setPatternNode(std::shared_ptr<cugl::PolygonNode> n) { patternNode = n; }
 
 	bool getIsAnimatingShrink() { return isAnimatingShrink; }
 
-	std::shared_ptr<PolygonNode> getPatternNode() { return patternNode; }
+	std::shared_ptr<cugl::AnimationNode> getShapeNode() { return shapeNode; }
+
+	std::shared_ptr<cugl::PolygonNode> getPatternNode() { return patternNode; }
 
 	std::shared_ptr<BreachModel> getModel() { return breachModel; }
 
@@ -100,7 +104,7 @@ class BreachNode : public cugl::AnimationNode {
 	void resetAnimation() {
 		isAnimatingShrink = false;
 		prevHealth = BreachModel::HEALTH_DEFAULT;
-		setFrame(0);
+		shapeNode->setFrame(0);
 		currentFrameIdle = 0;
 	}
 #pragma mark Drawing
