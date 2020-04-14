@@ -4,6 +4,7 @@
 
 #include "GameGraphRoot.h"
 #include "Globals.h"
+#include "Tween.h"
 
 using namespace cugl;
 
@@ -18,6 +19,9 @@ constexpr int NUM_SKIP_FRAMES = 2;
 
 /** Minimum scale of pattern node */
 constexpr float PATTERN_SCALE = 0.1f;
+
+/** Horizontal position offset for pattern animation */
+constexpr int PATTERN_OFFSET = -180;
 
 void BreachNode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch, const Mat4& transform,
 					  Color4 tint) {
@@ -53,38 +57,40 @@ void BreachNode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch, const Mat
 		}
 		if (isAnimatingShrink) {
 			// Update animation frame to shrink
-			int framesPerHP = getSize() / BreachModel::HEALTH_DEFAULT;
-			if (getFrame() == getFrameFromHealth(breachModel->getHealth()) - 1 ||
-				getFrame() == getSize() - 1) {
+			int framesPerHP = shapeNode->getSize() / BreachModel::HEALTH_DEFAULT;
+			if (shapeNode->getFrame() == getFrameFromHealth(breachModel->getHealth()) - 1 ||
+				shapeNode->getFrame() == shapeNode->getSize() - 1) {
 				// End shrink animation
 				isAnimatingShrink = false;
-				if (getFrame() == getSize() - 1) {
+				if (shapeNode->getFrame() == shapeNode->getSize() - 1) {
 					setPosition(OFF_SCREEN_POS, OFF_SCREEN_POS);
 					isShown = false;
 				}
 			} else {
 				// Continue shrink animation
-				setFrame(getFrame() + 1);
+				shapeNode->setFrame(shapeNode->getFrame() + 1);
 			}
 		} else {
 			// Play idle animation
-			setFrame(getFrameFromHealth(breachModel->getHealth()) +
-					 (currentFrameIdle < NUM_IDLE_FRAMES / 2 * NUM_SKIP_FRAMES
-						  ? currentFrameIdle / NUM_SKIP_FRAMES
-						  : NUM_IDLE_FRAMES - currentFrameIdle / 2 - 1));
+			shapeNode->setFrame(getFrameFromHealth(breachModel->getHealth()) +
+								(currentFrameIdle < NUM_IDLE_FRAMES / 2 * NUM_SKIP_FRAMES
+									 ? currentFrameIdle / NUM_SKIP_FRAMES
+									 : NUM_IDLE_FRAMES - currentFrameIdle / 2 - 1));
 			currentFrameIdle = currentFrameIdle == NUM_IDLE_FRAMES * NUM_SKIP_FRAMES - 1
 								   ? 0
 								   : currentFrameIdle + 1;
 		}
 		prevHealth = breachModel->getHealth();
-		shared_ptr<PolygonNode> patternNode = dynamic_pointer_cast<PolygonNode>(getChildByTag(0));
-		patternNode->setScale(PATTERN_SCALE +
-							  (-PATTERN_SCALE + 1) * (getSize() - getFrame()) / getSize());
+		patternNode->setScale(
+			(PATTERN_SCALE + (-PATTERN_SCALE + 1) * (shapeNode->getSize() - shapeNode->getFrame()) /
+								 shapeNode->getSize()));
 	} else {
 		// Breach is currently inactive
 		breachPos = Vec2(OFF_SCREEN_POS, OFF_SCREEN_POS);
 		setPosition(breachPos);
 		isShown = false;
 	}
-	AnimationNode::draw(batch, transform, tint);
+	patternNode->setPositionY(
+		Tween::linear(0, PATTERN_OFFSET, shapeNode->getFrame(), shapeNode->getSize()));
+	Node::draw(batch, transform, tint);
 }
