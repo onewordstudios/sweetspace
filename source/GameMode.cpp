@@ -23,7 +23,7 @@ constexpr float ANGLE_ADJUST = 0.5f;
 
 // Friction
 /** The friction factor while fixing a breach */
-constexpr float FIX_BREACH_FRICTION = 0.5f;
+constexpr float FIX_BREACH_FRICTION = 0.65f;
 /** The friction factor applied when moving through other players breaches */
 constexpr float OTHER_BREACH_FRICTION = 0.2f;
 
