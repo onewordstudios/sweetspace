@@ -123,6 +123,12 @@
     <ClInclude Include="..\..\source\LevelConstants.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\source\BuildingBlockModel.h">
+      <Filter>Header Files\Models</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\EventModel.h">
+      <Filter>Header Files\Models</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\source\main.cpp">
@@ -176,9 +182,6 @@
     <ClCompile Include="..\..\source\MatchmakingMode.cpp">
       <Filter>Source Files\Modes</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\source\MatchmakingGraphRoot.cpp">
-      <Filter>Source Files\SceneGraph</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\source\GLaDOS.cpp">
       <Filter>Source Files\Controllers</Filter>
     </ClCompile>
@@ -193,6 +196,9 @@
     </ClCompile>
     <ClCompile Include="..\..\source\ButtonManager.cpp">
       <Filter>Source Files\Helpers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\MatchmakingGraphRoot.cpp">
+      <Filter>Source Files\SceneGraph</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

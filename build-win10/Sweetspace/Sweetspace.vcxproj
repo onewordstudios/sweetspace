@@ -189,9 +189,11 @@
   <ItemGroup>
     <ClInclude Include="..\..\source\BreachModel.h" />
     <ClInclude Include="..\..\source\BreachNode.h" />
+    <ClInclude Include="..\..\source\BuildingBlockModel.h" />
     <ClInclude Include="..\..\source\ButtonManager.h" />
     <ClInclude Include="..\..\source\DonutModel.h" />
     <ClInclude Include="..\..\source\DonutNode.h" />
+    <ClInclude Include="..\..\source\EventModel.h" />
     <ClInclude Include="..\..\source\ExternalDonutModel.h" />
     <ClInclude Include="..\..\source\DoorModel.h" />
     <ClInclude Include="..\..\source\DoorNode.h" />
