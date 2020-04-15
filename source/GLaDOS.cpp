@@ -32,7 +32,7 @@ vector<std::shared_ptr<EventModel>> readyQueue;
  * This constructor does NOT do any initialzation.  It simply allocates the
  * object. This makes it safe to use this class without a pointer.
  */
-GLaDOS::GLaDOS() : active(false), numEvents(0), playerID(0), mib(nullptr), challengeInProg(false) {}
+GLaDOS::GLaDOS() : active(false), numEvents(0), playerID(0), mib(nullptr), fail(false) {}
 
 /**
  * Deactivates this input controller, releasing all listeners.
