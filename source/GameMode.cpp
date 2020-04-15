@@ -242,30 +242,24 @@ void GameMode::update(float timestep) {
 		bool allRoll = true;
 		for (unsigned int i = 0; i < ship->getDonuts().size(); i++) {
 			if (ship->getRollDir() == 0) {
-				CULog("roll left");
 				if (ship->getDonuts()[i]->getVelocity() >= 0) {
-					CULog("not rolling");
 					allRoll = false;
 					break;
 				}
 			} else {
-				CULog("roll right");
 				if (ship->getDonuts()[i]->getVelocity() <= 0) {
-					CULog("not rolling");
 					allRoll = false;
 					break;
 				}
 			}
 		}
-		if(allRoll) {
-			CULog("All rolling");
+		if (allRoll) {
 			ship->updateChallengeProg();
 		}
 		if (ship->getChallengeProg() > 100 || trunc(ship->timer) == trunc(ship->getEndTime())) {
 			if (ship->getChallengeProg() < 10) {
 				float h = ship->getHealth();
 				ship->setHealth(h - 1);
-				CULog("FAIL");
 				gm.setChallengeFail(true);
 				ship->failAllTask();
 			}

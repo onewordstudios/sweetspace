@@ -182,7 +182,7 @@ void GLaDOS::update(float dt) {
 		}
 	}
 
-	if (rand() % 10 == 1 && !ship->getChallenge()) {
+	if (rand() % 15 == 1 && !ship->getChallenge()) {
 		((int)(rand() % 2 == 0)) ? ship->setRollDir(0) : ship->setRollDir(1);
 		int p = (int)(rand() % ship->getDonuts().size());
 		if (p != playerID && ship->getDonuts().at(p)->getIsActive()) {
