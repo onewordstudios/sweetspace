@@ -87,10 +87,24 @@ bool ShipModel::failAllTask() {
 	return true;
 }
 
-std::shared_ptr<ButtonModel> createPairButton(float angle) {
-	std::shared_ptr<ButtonModel> pair = ButtonModel::alloc();
-	pair->setAngle(angle = (160 * globals::PI_180));
-	return pair;
+bool ShipModel::createButton(float angle1, int id1, float angle2, int id2) {
+    buttons.at(id1)->setAngle(angle1);
+    buttons.at(id2)->setAngle(angle2);
+    buttons.at(id1)->setPair(buttons.at(id2), id2);
+    buttons.at(id2)->setPair(buttons.at(id1), id1);
+    CULog("Buttons created");
+    return true;
+}
+
+bool ShipModel::flagButton(int id, int player, int flag) {
+    if(flag == 0) {
+        buttons.at(id)->removePlayer(player);
+        buttons.at(id)->setJumpedOn(false);
+    } else {
+        buttons.at(id)->addPlayer(player);
+        buttons.at(id)->setJumpedOn(true);
+    }
+    return true;
 }
 
 /**

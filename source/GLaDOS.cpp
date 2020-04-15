@@ -127,9 +127,16 @@ void GLaDOS::update(float dt) {
 		if (ship->getButtons().at(i) == nullptr) {
 			continue;
 		}
-		if (ship->getButtons().at(i)->resolved()) {
+		if (ship->getButtons().at(i)->isResolved()) {
 			ship->getButtons().at(i)->setAngle(-1);
+			ship->getButtons().at(i)->getPair()->setAngle(-1);
+			buttonFree.at(ship->getButtons().at(i)->getPairID()) = true;
 			buttonFree.at(i) = true;
+			mib->flagButton(i, playerID, 0);
+			ship->getButtons().at(i)->setJumpedOn(false);
+			ship->getButtons().at(i)->getPair()->setJumpedOn(false);
+
+
 		}
 	}
 
@@ -206,8 +213,7 @@ void GLaDOS::update(float dt) {
 
 	for (int i = 0; i < maxButtons; i++) {
 		if (buttonFree.at(i)) {
-			float angle = 30;
-			//(float)(rand() % (int)(ship->getSize()));
+			float angle = (float)(rand() % (int)(ship->getSize()));
 			bool goodAngle = true;
 			for (int j = 0; j < ship->getDonuts().size(); j++) {
 				float diff =
@@ -221,16 +227,20 @@ void GLaDOS::update(float dt) {
 			if (!goodAngle) {
 				continue;
 			}
-			int pairID;
 			float pairAngle;
+			int pairID;
+			float minButtonDiff = 100;
 			for (int j = 0; j < maxButtons; j++) {
 				if (i != j && buttonFree.at(j)) {
-					ship->getButtons().at(i)->setPair(ship->getButtons().at(j));
-					ship->getButtons().at(j)->setPair(ship->getButtons().at(i));
-					ship->getButtons().at(j)->setAngle(angle + 30);
+					ship->getButtons().at(i)->setPair(ship->getButtons().at(j), j);
+					ship->getButtons().at(j)->setPair(ship->getButtons().at(i), i);
+					pairAngle = (float)(rand() % (int)(ship->getSize()));
+					while(abs(pairAngle - angle) < minButtonDiff) {
+						pairAngle = (float)(rand() % (int)(ship->getSize()));
+					}
+					ship->getButtons().at(j)->setAngle(pairAngle);
 					ship->getButtons().at(j)->clear();
 					buttonFree.at(j) = false;
-					pairID = j;
 					pairAngle = ship->getButtons().at(j)->getAngle();
 					break;
 				}
@@ -241,7 +251,8 @@ void GLaDOS::update(float dt) {
 				ship->getButtons().at(i)->setAngle(angle);
 				ship->getButtons().at(i)->clear();
 				buttonFree.at(i) = false;
-				//				mib->createButtonTask(angle, i, pairAngle, pairID);
+				pairID = ship->getButtons().at(i)->getPairID();
+				mib->createButtonTask(angle, i, pairAngle, pairID);
 				break;
 			}
 		}

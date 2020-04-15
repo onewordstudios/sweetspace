@@ -20,6 +20,8 @@ protected:
     unsigned char playersOn;
     bool jumped;
     std::shared_ptr<ButtonModel> pairButton;
+    int pairId;
+    bool resolved = false;
 
 public:
 #pragma mark Constructors
@@ -119,7 +121,7 @@ public:
      * Removes the given player's flag from the door. Requires that this player is on the door
      */
     void removePlayer(int id) {
-        if (!resolved()) {
+        if (!isResolved()) {
             playersOn = playersOn ^ (unsigned char)pow(2, id);
         }
     }
@@ -130,9 +132,14 @@ public:
     bool isPlayerOn(int id) { return (playersOn & (unsigned char)pow(2, id)) > 0; }
 
     /**
-     * Returns whether this door is resolved.
+     * Returns whether this button is resolved.
      */
-    bool resolved() { return jumpedOn() && pairButton->jumpedOn(); }
+    bool isResolved() { return resolved; }
+
+    /**
+     * Sets whether this button is resolved.
+     */
+    void setResolved(bool r) { resolved = r; }
     /**
      * Returns whether this door can be passed under.
      */
@@ -142,8 +149,9 @@ public:
      */
     bool jumpedOn() { return jumped && getPlayersOn() == 1; }
 
-    void setPair(std::shared_ptr<ButtonModel> b) { pairButton = b; }
+    void setPair(std::shared_ptr<ButtonModel> b, int id) { pairButton = b; pairId = id; }
     std::shared_ptr<ButtonModel> getPair() { return pairButton; }
+    int getPairID() { return pairId; }
 
     /**
      * Resets this door.
@@ -151,6 +159,7 @@ public:
     void clear() {
         playersOn = 0;
         height = 0;
+        resolved = false;
     }
 };
 #endif /* __BUTTON_MODEL_H__ */
