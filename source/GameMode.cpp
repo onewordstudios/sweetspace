@@ -41,7 +41,7 @@ constexpr float OTHER_BREACH_FRICTION = 0.2f;
  *
  * @return true if the controller is initialized properly, false otherwise.
  */
-bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets, const char* levelName) {
+bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 	// Music Initialization
 	auto source = assets->get<Sound>("theme");
 	AudioChannels::get()->playMusic(source, true, source->getVolume());
@@ -61,6 +61,23 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets, const cha
 	net = MagicInternetBox::getInstance();
 	playerID = net->getPlayerID();
 	roomId = net->getRoomID();
+
+	const char* levelName = nullptr;
+	switch (net->getLevelNum()) {
+		case 1:
+			levelName = LEVEL_ONE_KEY;
+			break;
+		case 2:
+			levelName = LEVEL_ONE_KEY;
+			break;
+		case 3:
+			levelName = LEVEL_ONE_KEY;
+			break;
+		default:
+			break;
+	}
+
+	CULog("Loading level %s b/c mib gave level num %d", levelName, net->getLevelNum());
 
 	std::shared_ptr<LevelModel> level = assets->get<LevelModel>(levelName);
 	ship = ShipModel::alloc(net->getNumPlayers(), level->getMaxBreaches(), level->getMaxDoors(),

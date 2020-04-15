@@ -90,11 +90,6 @@ class MatchmakingMode {
 	bool isGameReady() { return gameReady; }
 
 	/**
-	 * Return the name of the selected level to load, or null if isGameReady() is false.
-	 */
-	const char* getLevelName();
-
-	/**
 	 * Draws the game.
 	 */
 	void draw(const std::shared_ptr<cugl::SpriteBatch>& batch);

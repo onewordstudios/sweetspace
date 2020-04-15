@@ -82,9 +82,25 @@ void MatchmakingMode::update(float timestep) {
 		}
 		case MatchmakingGraphRoot::HostBegin: {
 			if (net->getNumPlayers() >= globals::MIN_PLAYERS) {
-				gameReady = true;
-				net->startGame();
+				// gameReady = true;
+				// net->startGame();
+				sgRoot.startLevelSelect();
 			}
+			return;
+		}
+		case MatchmakingGraphRoot::StartGame1: {
+			gameReady = true;
+			net->startGame(1);
+			return;
+		}
+		case MatchmakingGraphRoot::StartGame2: {
+			gameReady = true;
+			net->startGame(2);
+			return;
+		}
+		case MatchmakingGraphRoot::StartGame3: {
+			gameReady = true;
+			net->startGame(3);
 			return;
 		}
 		default:
@@ -122,8 +138,6 @@ void MatchmakingMode::update(float timestep) {
 		}
 	}
 }
-
-const char* MatchmakingMode::getLevelName() { return LEVEL_ONE_KEY; }
 
 /**
  * Draws the game.
