@@ -25,7 +25,7 @@ bool ShipModel::init(unsigned int numPlayers, unsigned int numBreaches, unsigned
 	}
 
 	// Instantiate health
-	health = initHealth;
+	health = (float)initHealth;
 
 	// Initialize size
 	this->shipSize = shipSize;
@@ -71,7 +71,7 @@ bool ShipModel::closeDoor(int id) { return false; }
 bool ShipModel::createAllTask(int data) {
 	setRollDir(data);
 	challenge = true;
-	endTime = timer - 6;
+	endTime = timer - globals::ROLL_CHALLENGE_LENGTH;
 	challengeProg = 0;
 	return true;
 }
