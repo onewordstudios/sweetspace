@@ -24,7 +24,7 @@ constexpr auto TIME_STOP_FIELD = "timeStop";	   // NOLINT
 constexpr auto PROBABILITY_FIELD = "probability";  // NOLINT
 
 /** The source for our level file */
-constexpr auto LEVEL_ONE_FILE = "json/level2.owslevel"; // NOLINT
+constexpr auto LEVEL_ONE_FILE = "json/level3.owslevel"; // NOLINT
 /** The key for our loaded level */
 constexpr auto LEVEL_ONE_KEY = "level1"; // NOLINT
 
