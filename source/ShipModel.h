@@ -28,6 +28,8 @@ class ShipModel {
 	/** Challenge progress*/
 	int challengeProg;
 	float endTime;
+	/** Total level time*/
+	float totalTime;
 
    public:
 	/** Game timer*/
@@ -39,7 +41,17 @@ class ShipModel {
 	 * NEVER USE A CONSTRUCTOR WITH NEW. If you want to allocate a model on
 	 * the heap, use one of the static constructors instead.
 	 */
-	ShipModel(void) : donuts(0), breaches(0), doors(0), health(0), buttons(0) {}
+	ShipModel(void)
+		: donuts(0),
+		  breaches(0),
+		  doors(0),
+		  health(0),
+		  shipSize(0),
+		  rollDir(0),
+		  challenge(false),
+		  challengeProg(0),
+		  endTime(0),
+		  totalTime(0) {}
 
 	/**
 	 * Destroys this breach, releasing all resources.
@@ -67,9 +79,8 @@ class ShipModel {
 	 * @return true if the model is initialized properly, false otherwise.
 	 */
 	bool init(unsigned int numPlayers, unsigned int numBreaches, unsigned int numDoors,
-			  unsigned int playerID, int initHealth, unsigned int numButtons) {
-		return init(numPlayers, numBreaches, numDoors, playerID, (float)360, initHealth,
-					numButtons);
+			  unsigned int playerID, int initHealth) {
+		return init(numPlayers, numBreaches, numDoors, playerID, (float)360, initHealth, numButtons);
 	}
 
 	/**
@@ -236,11 +247,14 @@ class ShipModel {
 
 	/**
 
-	 * Get health of the ship
+	 * Initialize the timer for the ship
 	 *
-	 * @return health the health of the ship
+	 * @param startTime the initial time on the timer
 	 */
-	void initTimer(float startTime) { timer = startTime; }
+	void initTimer(float startTime) {
+		timer = startTime;
+		totalTime = startTime;
+	}
 
 	/**
 	 * Update timer of the ship
@@ -255,6 +269,14 @@ class ShipModel {
 	 * @return if timer has ended
 	 */
 	bool timerEnded() { return timer < 1; }
+
+	/**
+	 * Get the amount of time that has passed in the level
+	 *
+	 * @return the time that has passed
+	 */
+	float timePassed() { return totalTime - timer; }
+
 	/**
 	 * Set size of the ship
 	 *

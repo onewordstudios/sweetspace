@@ -22,6 +22,8 @@ class MatchmakingGraphRoot : public cugl::Scene {
 		HostScreenWait,
 		/** Hosting a game; ship ID received */
 		HostScreen,
+		/** Host; level select screen */
+		HostLevelSelect,
 		/** Joining a game; waiting on ship ID */
 		ClientScreen,
 		/** Joining a game; connected */
@@ -55,6 +57,15 @@ class MatchmakingGraphRoot : public cugl::Scene {
 
 	/** Connection loading message */
 	std::shared_ptr<cugl::Label> connScreen;
+
+	/** Temporary level select */
+	std::shared_ptr<cugl::Node> levelSelect;
+	/** Temporary level select easy mode */
+	std::shared_ptr<cugl::Button> easyBtn;
+	/** Temporary level select med mode */
+	std::shared_ptr<cugl::Button> medBtn;
+	/** Temporary level select hard mode */
+	std::shared_ptr<cugl::Button> hardBtn;
 
 	/** Label for room ID (host) */
 	std::shared_ptr<cugl::Label> hostLabel;
@@ -156,13 +167,17 @@ class MatchmakingGraphRoot : public cugl::Scene {
 	 */
 	void update(float timestep) override;
 
-	/**
-	 * Resets the status of the game so that we can play again.
-	 */
-	void reset() override;
-
 	/** An enum representing buttons that have been pressed */
-	enum PressedButton { None, StartHost, StartClient, HostBegin, ClientConnect };
+	enum PressedButton {
+		None,
+		StartHost,
+		StartClient,
+		HostBegin,
+		StartGame1,
+		StartGame2,
+		StartGame3,
+		ClientConnect
+	};
 
 	/**
 	 * Processes button presses. Should be called AFTER update() every frame.
@@ -190,6 +205,9 @@ class MatchmakingGraphRoot : public cugl::Scene {
 
 	/** Signal a catastrophic error has occured */
 	void signalError() { isError = true; }
+
+	/** Force the level select screen to be shown. TODO remove after refactoring matchmaking */
+	void startLevelSelect();
 
 	/** Returns whether the graph is in a state where it is connected to the server (and thus mib
 	 * needs to be updated every frame) */

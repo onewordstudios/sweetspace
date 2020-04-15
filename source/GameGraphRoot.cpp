@@ -46,6 +46,12 @@ constexpr int HEALTH_BAR_FRAMES = 12;
 
 /** Scaling factor of health nodes */
 constexpr float HEALTH_NODE_SCALE = 0.55f;
+
+/** Size of ship segment label */
+constexpr int SEG_LABEL_SIZE = 100;
+
+/** Y position of ship segment label */
+constexpr int SEG_LABEL_Y = 1113;
 #pragma mark -
 #pragma mark Constructors
 
@@ -100,23 +106,22 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	buttonNode = assets->get<Node>("game_field_near_button");
 
 	challengePanelHanger = dynamic_pointer_cast<cugl::PolygonNode>(
-		assets->get<Node>("game_field_challengePanelHanger"));
+		assets->get<Node>("game_field_challengePanelParent_challengePanelHanger"));
 	challengePanelHanger->setVisible(false);
-	challengePanel =
-		dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_challengePanel"));
+	challengePanel = dynamic_pointer_cast<cugl::PolygonNode>(
+		assets->get<Node>("game_field_challengePanelParent_challengePanel"));
 	challengePanel->setVisible(false);
-	challengePanelText =
-		dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_challengePanelText"));
+	challengePanelText = dynamic_pointer_cast<cugl::PolygonNode>(
+		assets->get<Node>("game_field_challengePanelParent_challengePanelText"));
 	challengePanelText->setVisible(false);
+	reconnectOverlay = assets->get<Node>("game_field_reconnect");
 
 	for (int i = 0; i < 10; i++) {
 		std::string s = std::to_string(i + 1);
 		std::shared_ptr<cugl::PolygonNode> arrow = dynamic_pointer_cast<cugl::PolygonNode>(
-			assets->get<Node>("game_field_challengePanelArrow" + s));
+			assets->get<Node>("game_field_challengePanelParent_challengePanelArrow" + s));
 		challengePanelArrows.push_back(arrow);
 	}
-	// Reconnect Overlay
-	reconnectOverlay = assets->get<Node>("game_field_reconnect");
 
 	// Initialize Ship Segments
 	leftMostSeg = 0;
@@ -130,6 +135,13 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 		segment->setScale(SEG_SCALE);
 		segment->setPosition(Vec2(0, 0));
 		segment->setAngle(globals::SEG_SIZE * ((float)i - 2));
+		std::shared_ptr<cugl::Label> segLabel = cugl::Label::alloc(
+			Size(SEG_LABEL_SIZE, SEG_LABEL_SIZE), assets->get<Font>("mont_black_italic_big"));
+		segLabel->setAnchor(Vec2::ANCHOR_CENTER);
+		segLabel->setHorizontalAlignment(Label::HAlign::CENTER);
+		segLabel->setPosition(segment->getTexture()->getWidth() / 2, SEG_LABEL_Y);
+		segLabel->setForeground(SHIP_LABEL_COLOR);
+		segment->addChild(segLabel);
 		shipSegsNode->addChildWithTag(segment, (unsigned int)(i + 1));
 	}
 
@@ -158,13 +170,7 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	// Initialize Breaches
 	for (int i = 0; i < ship->getBreaches().size(); i++) {
 		std::shared_ptr<BreachModel> breachModel = ship->getBreaches().at((unsigned long)i);
-		cugl::Color4 color = breachColor.at((unsigned long)ship->getDonuts()
-												.at((unsigned long)breachModel->getPlayer())
-												->getColorId());
-		std::shared_ptr<Texture> image = assets->get<Texture>("breach_filmstrip");
-		std::shared_ptr<BreachNode> breachNode = BreachNode::allocWithTexture(image);
-		breachNode->resetAnimation();
-		breachNode->setColor(color);
+		std::shared_ptr<BreachNode> breachNode = BreachNode::alloc();
 		breachNode->setModel(breachModel);
 		breachNode->setTag((unsigned int)(i + 1));
 		breachNode->setScale(BREACH_SCALE);
@@ -174,15 +180,31 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 		// Start position is off screen
 		Vec2 breachPos = Vec2(0, 0);
 		breachNode->setPosition(breachPos);
+		// Add shape node
+		cugl::Color4 color = breachColor.at((unsigned long)ship->getDonuts()
+												.at((unsigned long)breachModel->getPlayer())
+												->getColorId());
+		std::shared_ptr<Texture> image = assets->get<Texture>("breach_filmstrip");
+		std::shared_ptr<AnimationNode> shapeNode =
+			AnimationNode::alloc(image, BreachNode::BREACH_H, BreachNode::BREACH_W);
+		shapeNode->setColor(color);
+		shapeNode->setAnchor(Vec2::ANCHOR_CENTER);
+		shapeNode->setPosition(0, 0);
+		breachNode->setShapeNode(shapeNode);
+		breachNode->addChildWithName(shapeNode, "shape");
 		// Add pattern node
 		string breachColor = playerColor.at((unsigned long)ship->getDonuts()
 												.at((unsigned long)breachModel->getPlayer())
 												->getColorId());
 		image = assets->get<Texture>("breach_" + breachColor);
 		std::shared_ptr<PolygonNode> patternNode = PolygonNode::allocWithTexture(image);
+		patternNode->setAnchor(Vec2::ANCHOR_CENTER);
+		patternNode->setPosition(0, 0);
+		breachNode->setPatternNode(patternNode);
+		breachNode->addChildWithName(patternNode, "pattern");
 		// Add the breach node
+		breachNode->resetAnimation();
 		breachesNode->addChild(breachNode);
-		breachNode->addChild(patternNode);
 	}
 
 	// Initialize Doors
@@ -319,6 +341,43 @@ void GameGraphRoot::update(float timestep) {
 	float donutNewY = donutPos.y + ship->getDonuts().at(playerID)->getJumpOffset() * screenHeight;
 	donutNode->setPositionY(donutNewY);
 
+	// Update ship segments
+	std::shared_ptr<Texture> seg0 = assets->get<Texture>("shipseg0");
+	std::shared_ptr<Texture> seg1 = assets->get<Texture>("shipseg1");
+	std::shared_ptr<PolygonNode> segment;
+	for (int i = 0; i < globals::VISIBLE_SEGS; i++) {
+		segment = dynamic_pointer_cast<cugl::PolygonNode>(
+			shipSegsNode->getChildByTag((unsigned int)(i + 1)));
+		// If segments rotate too far left, move left-most segment to the right side
+		if (i == rightMostSeg &&
+			wrapAngle(nearSpace->getAngle() + segment->getAngle()) < globals::SEG_CUTOFF_ANGLE) {
+			rightMostSeg = (i + 1) % globals::VISIBLE_SEGS;
+			leftMostSeg = (i + 2) % globals::VISIBLE_SEGS;
+			std::shared_ptr<PolygonNode> newRightSegment = dynamic_pointer_cast<cugl::PolygonNode>(
+				shipSegsNode->getChildByTag((unsigned int)(rightMostSeg + 1)));
+			newRightSegment->setAngle(wrapAngle(segment->getAngle() + globals::SEG_SIZE));
+		} else if (i == leftMostSeg && wrapAngle(nearSpace->getAngle() + segment->getAngle()) >
+										   globals::TWO_PI - globals::SEG_CUTOFF_ANGLE) {
+			leftMostSeg = (i + globals::VISIBLE_SEGS - 1) % globals::VISIBLE_SEGS;
+			rightMostSeg = (i + globals::VISIBLE_SEGS - 2) % globals::VISIBLE_SEGS;
+			std::shared_ptr<PolygonNode> newLeftSegment = dynamic_pointer_cast<cugl::PolygonNode>(
+				shipSegsNode->getChildByTag((unsigned int)(leftMostSeg + 1)));
+			newLeftSegment->setAngle(wrapAngle(segment->getAngle() - globals::SEG_SIZE));
+		}
+		// Update text label of segment
+		float relSegAngle = wrapAngle(segment->getAngle() + nearSpace->getAngle());
+		relSegAngle = relSegAngle >= 0 ? relSegAngle : globals::TWO_PI + relSegAngle;
+		relSegAngle = relSegAngle > globals::PI ? relSegAngle - globals::TWO_PI : relSegAngle;
+		float segAngle = (float)(ship->getDonuts().at(playerID)->getAngle() * globals::PI_180 +
+								 relSegAngle + SEG_SCALE * globals::PI_180);
+		segAngle = fmod(segAngle, ship->getSize() * globals::PI_180);
+		segAngle = segAngle < 0 ? segAngle + ship->getSize() * globals::PI_180 : segAngle;
+		unsigned int segNum = (unsigned int)(segAngle / globals::SEG_SIZE);
+		std::shared_ptr<cugl::Label> segLabel = dynamic_pointer_cast<cugl::Label>(
+			segment->getChild(static_cast<unsigned int>(segment->getChildCount() - 1)));
+		segLabel->setText(std::to_string(segNum));
+	}
+
 	// Update breaches textures if recycled
 	for (int i = 0; i < ship->getBreaches().size(); i++) {
 		std::shared_ptr<BreachModel> breachModel = ship->getBreaches().at((unsigned long)i);
@@ -329,15 +388,13 @@ void GameGraphRoot::update(float timestep) {
 			cugl::Color4 color = breachColor.at((unsigned long)ship->getDonuts()
 													.at((unsigned long)breachModel->getPlayer())
 													->getColorId());
-			breachNode->setColor(color);
+			breachNode->getShapeNode()->setColor(color);
 			breachNode->resetAnimation();
 			string breachColor = playerColor.at((unsigned long)ship->getDonuts()
 													.at((unsigned long)breachModel->getPlayer())
 													->getColorId());
 			std::shared_ptr<Texture> image = assets->get<Texture>("breach_" + breachColor);
-			shared_ptr<PolygonNode> patternNode =
-				dynamic_pointer_cast<PolygonNode>(breachNode->getChildByTag(0));
-			patternNode->setTexture(image);
+			breachNode->getPatternNode()->setTexture(image);
 			breachModel->setNeedSpriteUpdate(false);
 		}
 	}
@@ -385,31 +442,6 @@ void GameGraphRoot::update(float timestep) {
 			break;
 		default:
 			CULog("ERROR: Uncaught MatchmakingStatus Value Occurred");
-	}
-
-	// Update ship segments
-	std::shared_ptr<Texture> seg0 = assets->get<Texture>("shipseg0");
-	std::shared_ptr<Texture> seg1 = assets->get<Texture>("shipseg1");
-	std::shared_ptr<PolygonNode> segment;
-	for (int i = 0; i < globals::VISIBLE_SEGS; i++) {
-		segment = dynamic_pointer_cast<cugl::PolygonNode>(
-			shipSegsNode->getChildByTag((unsigned int)(i + 1)));
-		// If segments rotate too far left, move left-most segment to the right side
-		if (i == rightMostSeg &&
-			wrapAngle(nearSpace->getAngle() + segment->getAngle()) < globals::SEG_CUTOFF_ANGLE) {
-			rightMostSeg = (i + 1) % globals::VISIBLE_SEGS;
-			leftMostSeg = (i + 2) % globals::VISIBLE_SEGS;
-			std::shared_ptr<PolygonNode> newRightSegment = dynamic_pointer_cast<cugl::PolygonNode>(
-				shipSegsNode->getChildByTag((unsigned int)(rightMostSeg + 1)));
-			newRightSegment->setAngle(wrapAngle(segment->getAngle() + globals::SEG_SIZE));
-		} else if (i == leftMostSeg && wrapAngle(nearSpace->getAngle() + segment->getAngle()) >
-										   globals::TWO_PI - globals::SEG_CUTOFF_ANGLE) {
-			leftMostSeg = (i + globals::VISIBLE_SEGS - 1) % globals::VISIBLE_SEGS;
-			rightMostSeg = (i + globals::VISIBLE_SEGS - 2) % globals::VISIBLE_SEGS;
-			std::shared_ptr<PolygonNode> newLeftSegment = dynamic_pointer_cast<cugl::PolygonNode>(
-				shipSegsNode->getChildByTag((unsigned int)(leftMostSeg + 1)));
-			newLeftSegment->setAngle(wrapAngle(segment->getAngle() - globals::SEG_SIZE));
-		}
 	}
 }
 

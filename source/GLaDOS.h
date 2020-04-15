@@ -32,7 +32,7 @@ class GLaDOS {
 	/** Network Controller for outbound calls */
 	shared_ptr<MagicInternetBox> mib;
 
-	bool challengeInProg;
+	bool fail;
 
    public:
 #pragma mark -
@@ -78,6 +78,15 @@ class GLaDOS {
 	bool isActive() const { return active; }
 
 	/**
+	 * Places an object in the game. Requires that enough resources are present.
+	 *
+	 * @param obj the object to place
+	 * @param zeroAngle the angle corresponding to the relative angle zero
+	 * @param ids a vector of relative ids, scrambled by the caller
+	 */
+	void placeObject(BuildingBlockModel::Object obj, float zeroAngle, vector<int> ids);
+
+	/**
 	 * Processes the GM.
 	 *
 	 * This method is used to generate and manage current events
@@ -105,12 +114,12 @@ class GLaDOS {
 	int getPlayerId() { return (int)playerID; }
 
 	/**
-	 * Gets if all player challenge is in effect.
+	 * Gets if all player challenge failed.
 	 */
-	bool allPlayerChallenge() { return challengeInProg; }
+	bool challengeFail() { return fail; }
 	/**
-	 * Sets if all player challenge is in effect.
+	 * Sets if all player challenge failed.
 	 */
-	void setAllPlayerChallenge(bool b) { challengeInProg = b; }
+	void setChallengeFail(bool b) { fail = b; }
 };
 #endif /* __GM_CONTROLLER_H__ */

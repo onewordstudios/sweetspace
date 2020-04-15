@@ -81,6 +81,9 @@ class MagicInternetBox {
 	 */
 	std::string roomID;
 
+	/** Current level number, or -1 if unassigned */
+	int levelNum;
+
 	/**
 	 * Number of connected players
 	 */
@@ -175,6 +178,7 @@ class MagicInternetBox {
 	MagicInternetBox() {
 		ws = nullptr;
 		status = Uninitialized;
+		levelNum = -1;
 		currFrame = 0;
 		playerID = -1;
 		numPlayers = 0;
@@ -242,6 +246,11 @@ class MagicInternetBox {
 	std::string getRoomID();
 
 	/**
+	 * Returns the current level number, or -1 if uninitialized.
+	 */
+	int getLevelNum() { return levelNum; }
+
+	/**
 	 * Returns the current player ID, or -1 if uninitialized.
 	 * 0 is the host player.
 	 */
@@ -259,8 +268,10 @@ class MagicInternetBox {
 	/**
 	 * Start the game with the current number of players.
 	 * Should only be called when the matchmaking status is waiting on others
+	 *
+	 * @param levelNum The level number to start
 	 */
-	void startGame();
+	void startGame(int levelNum);
 
 	/**
 	 * Update method called every frame during matchmaking phase.
