@@ -98,8 +98,9 @@ void Sweetspace::update(float timestep) {
 			return;
 		}
 		case MainToGame: {
+			const char* levelName = matchmaking.getLevelName();
 			matchmaking.dispose();
-			gameplay.init(assets);
+			gameplay.init(assets, levelName);
 			status = Game;
 			return;
 		}

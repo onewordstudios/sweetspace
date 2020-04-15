@@ -41,7 +41,7 @@ constexpr float OTHER_BREACH_FRICTION = 0.2f;
  *
  * @return true if the controller is initialized properly, false otherwise.
  */
-bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
+bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets, const char* levelName) {
 	// Music Initialization
 	auto source = assets->get<Sound>("theme");
 	AudioChannels::get()->playMusic(source, true, source->getVolume());
@@ -62,7 +62,7 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 	playerID = net->getPlayerID();
 	roomId = net->getRoomID();
 
-	std::shared_ptr<LevelModel> level = assets->get<LevelModel>(LEVEL_ONE_KEY);
+	std::shared_ptr<LevelModel> level = assets->get<LevelModel>(levelName);
 	ship = ShipModel::alloc(net->getNumPlayers(), level->getMaxBreaches(), level->getMaxDoors(),
 							playerID, (float)level->getShipSize((int)net->getNumPlayers()),
 							level->getInitHealth());

@@ -7,6 +7,7 @@
 
 #include "ExternalDonutModel.h"
 #include "Globals.h"
+#include "LevelConstants.h"
 
 using namespace cugl;
 using namespace std;
@@ -121,6 +122,8 @@ void MatchmakingMode::update(float timestep) {
 		}
 	}
 }
+
+const char* MatchmakingMode::getLevelName() { return LEVEL_ONE_KEY; }
 
 /**
  * Draws the game.
