@@ -274,15 +274,15 @@ void GameGraphRoot::update(float timestep) {
 	} else if (ship->getHealth() < globals::INITIAL_SHIP_HEALTH * 0.3) {
 		std::shared_ptr<Texture> image = assets->get<Texture>("health_red");
 		healthNodeOverlay->setTexture(image);
-		healthNodeOverlay->setPosition(-100, 476);
+		healthNodeOverlay->setPosition(-100, 176);
 		healthNodeOverlay->setAngle(240 * globals::PI_180);
 	} else if (ship->getHealth() < globals::INITIAL_SHIP_HEALTH * 0.5) {
 		std::shared_ptr<Texture> image = assets->get<Texture>("health_yellow");
 		healthNodeOverlay->setTexture(image);
-		healthNodeOverlay->setPosition(-120, 418);
+		healthNodeOverlay->setPosition(-120, 118);
 		healthNodeOverlay->setAngle(270 * globals::PI_180);
 	} else if (ship->getHealth() < globals::INITIAL_SHIP_HEALTH * 0.8) {
-		healthNodeOverlay->setPosition(-100, 360);
+		healthNodeOverlay->setPosition(-100, 60);
 		healthNodeOverlay->setAngle(300 * globals::PI_180);
 	}
 
