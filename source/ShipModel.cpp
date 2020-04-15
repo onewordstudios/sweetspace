@@ -5,7 +5,8 @@
 #include "PlayerDonutModel.h"
 
 bool ShipModel::init(unsigned int numPlayers, unsigned int numBreaches, unsigned int numDoors,
-					 unsigned int playerID, float shipSize, int initHealth) {
+					 unsigned int playerID, float shipSize, int initHealth,
+					 unsigned int numButtons) {
 	// Instantiate donut models and assign colors
 	for (unsigned int i = 0; i < numPlayers; i++) {
 		donuts.push_back(playerID == i ? PlayerDonutModel::alloc(shipSize)
@@ -22,6 +23,11 @@ bool ShipModel::init(unsigned int numPlayers, unsigned int numBreaches, unsigned
 	// Instantiate door models
 	for (unsigned int i = 0; i < numDoors; i++) {
 		doors.push_back(DoorModel::alloc());
+	}
+
+	// Instantiate button models
+	for (unsigned int i = 0; i < numButtons; i++) {
+		buttons.push_back(ButtonModel::alloc());
 	}
 
 	// Instantiate health
@@ -81,6 +87,27 @@ bool ShipModel::failAllTask() {
 	for (int i = 0; i < donuts.size(); i++) {
 		float angle = (float)(rand() % (int)(getSize()));
 		donuts.at(i)->setAngle(angle);
+	}
+	return true;
+}
+
+bool ShipModel::createButton(float angle1, int id1, float angle2, int id2) {
+	buttons.at(id1)->setAngle(angle1);
+	buttons.at(id2)->setAngle(angle2);
+	buttons.at(id1)->setPair(buttons.at(id2), id2);
+	buttons.at(id2)->setPair(buttons.at(id1), id1);
+	CULog("Buttons created");
+	return true;
+}
+
+bool ShipModel::flagButton(int id, int player, int flag) {
+	if (flag == 0) {
+		buttons.at(id)->removePlayer(player);
+		buttons.at(id)->setJumpedOn(false);
+	} else {
+		buttons.at(id)->addPlayer(player);
+		buttons.at(id)->setJumpedOn(true);
+		CULog("JUmp button");
 	}
 	return true;
 }

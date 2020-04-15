@@ -167,7 +167,19 @@
 		},
 		"clear_btn_down" : {
 			"file": "textures/main_menu/clear_down.png"
-		}
+		},
+        "challenge_btn_up" : {
+          "file": "textures/button_up.png"
+        },
+        "challenge_btn_down" : {
+          "file": "textures/button_down.png"
+        },
+        "challenge_btn_base_up" : {
+            "file": "textures/buttonbase_up.png"
+        },
+        "challenge_btn_base_down" : {
+          "file": "textures/buttonbase_down.png"
+        }
 	},
 	"sounds": {
         "theme": {
@@ -251,6 +263,13 @@
                                         "anchor":   [0,0],
                                         "position": [0,0]
                                     }
+                                },
+                                "button": {
+                                  "type": "Node",
+                                  "data": {
+                                    "anchor":   [0,0],
+                                    "position": [0,0]
+                                  }
                                 }
                             }
                         },

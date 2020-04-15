@@ -13,6 +13,9 @@ unsigned int maxEvents;
 /** The maximum number of events on ship at any one time. This will probably need to scale with
  * the number of players*/
 unsigned int maxDoors;
+/** The maximum number of buttons on ship at any one time. This will probably need to scale with
+ * the number of players*/
+unsigned int maxButtons;
 /** Array recording which breaches are free or not. */
 vector<bool> breachFree;
 /** Array recording which doors are free or not. */
@@ -23,6 +26,9 @@ map<std::string, std::shared_ptr<BuildingBlockModel>> blocks;
 vector<std::shared_ptr<EventModel>> events;
 /** List of events that are ready to be executed*/
 vector<std::shared_ptr<EventModel>> readyQueue;
+
+/** Array recording which doors are free or not. */
+vector<bool> buttonFree;
 
 #pragma mark -
 #pragma mark GM
@@ -61,6 +67,8 @@ bool GLaDOS::init(std::shared_ptr<ShipModel> ship, std::shared_ptr<LevelModel> l
 	this->playerID = mib->getPlayerID();
 	maxEvents = level->getMaxBreaches();
 	maxDoors = level->getMaxDoors();
+	maxButtons = 2; // add to level
+	buttonFree.resize(maxButtons);
 	breachFree.resize(maxEvents);
 	doorFree.resize(maxDoors);
 	blocks = level->getBlocks();
@@ -71,6 +79,9 @@ bool GLaDOS::init(std::shared_ptr<ShipModel> ship, std::shared_ptr<LevelModel> l
 	}
 	for (int i = 0; i < maxDoors; i++) {
 		doorFree.at(i) = true;
+	}
+	for (int i = 0; i < maxButtons; i++) {
+		buttonFree.at(i) = true;
 	}
 	fail = false;
 	// Set random seed based on time
@@ -105,6 +116,28 @@ void GLaDOS::placeObject(BuildingBlockModel::Object obj, float zeroAngle, vector
 			mib->createDualTask((float)obj.angle + zeroAngle, -1, -1, i);
 			break;
 		case BuildingBlockModel::Button:
+			i = (int)distance(buttonFree.begin(), find(buttonFree.begin(), buttonFree.end(), true));
+			float pairAngle;
+			int pairID;
+			int j;
+			j = (int)distance(buttonFree.begin(), find(buttonFree.begin(), buttonFree.end(), true));
+			ship->getButtons().at(i)->setAngle((float)obj.angle + zeroAngle);
+			ship->getButtons().at(i)->clear();
+			buttonFree.at(i) = false;
+			ship->getButtons().at(i)->setJumpedOn(false);
+			ship->getButtons().at(i)->setPair(ship->getButtons().at(j), j);
+			ship->getButtons().at(j)->setPair(ship->getButtons().at(i), i);
+			pairAngle = (float)(rand() % (int)(ship->getSize()));
+			while (abs(pairAngle - ship->getButtons().at(i)->getAngle()) < globals::BUTTON_DIST) {
+				pairAngle = (float)(rand() % (int)(ship->getSize()));
+			}
+			ship->getButtons().at(j)->setAngle(pairAngle);
+			ship->getButtons().at(j)->clear();
+			buttonFree.at(j) = false;
+			ship->getButtons().at(j)->setJumpedOn(false);
+			pairAngle = ship->getButtons().at(j)->getAngle();
+			pairID = ship->getButtons().at(i)->getPairID();
+			mib->createButtonTask((float)obj.angle + zeroAngle, i, pairAngle, pairID);
 			break;
 		case BuildingBlockModel::Roll:
 			if (ship->getChallenge()) break;
@@ -150,6 +183,21 @@ void GLaDOS::update(float dt) {
 			doorFree.at(i) = true;
 		} else if (ship->getDoors().at(i)->resolved()) {
 			ship->getDoors().at(i)->raiseDoor();
+		}
+	}
+
+	for (int i = 0; i < maxButtons; i++) {
+		if (ship->getButtons().at(i) == nullptr) {
+			continue;
+		}
+		if (ship->getButtons().at(i)->isResolved()) {
+			ship->getButtons().at(i)->setAngle(-1);
+			ship->getButtons().at(i)->getPair()->setAngle(-1);
+			buttonFree.at(ship->getButtons().at(i)->getPairID()) = true;
+			buttonFree.at(i) = true;
+			mib->flagButton(i, (int)playerID, 0);
+			ship->getButtons().at(i)->setJumpedOn(false);
+			ship->getButtons().at(i)->getPair()->setJumpedOn(false);
 		}
 	}
 
