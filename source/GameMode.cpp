@@ -199,7 +199,7 @@ void GameMode::update(float timestep) {
 
 		if (diff < BUTTON_ACTIVE_ANGLE) {
 			ship->getButtons().at(i)->addPlayer(playerID);
-			ship->getButtons().at(i)->setJumpedOn(input->hasJumped());
+			ship->getButtons().at(i)->setJumpedOn(donutModel->isJumping());
 			//			net->flagButton(i, playerID, 1);
 		} else {
 			if (ship->getButtons().at(i)->isPlayerOn(playerID) &&

@@ -207,6 +207,7 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 		std::shared_ptr<ButtonNode> bNode = ButtonNode::alloc(image);
 		std::shared_ptr<ButtonNode> subNode = ButtonNode::alloc(buttonImage);
 		subNode->setModel(buttonModel);
+		subNode->setScale(0.7);
 		subNode->setDonutModel(ship->getDonuts().at(playerID));
 		subNode->setAnchor(Vec2::ANCHOR_BOTTOM_CENTER);
 		subNode->setScale(DOOR_SCALE);
@@ -217,6 +218,7 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 		subNode->setButtonDown(assets->get<Texture>("challenge_btn_down"));
 		subNode->setButtonUp(assets->get<Texture>("challenge_btn_up"));
 		bNode->setModel(buttonModel);
+		bNode->setScale(0.7);
 		bNode->setDonutModel(ship->getDonuts().at(playerID));
 		bNode->setAnchor(Vec2::ANCHOR_BOTTOM_CENTER);
 		bNode->setScale(DOOR_SCALE);
