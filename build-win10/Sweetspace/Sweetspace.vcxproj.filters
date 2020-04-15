@@ -123,10 +123,6 @@
     <ClInclude Include="..\..\source\LevelConstants.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\source\ButtonNode.h">
-      <Filter>Header Files\SceneGraph</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\source\ButtonModel.h">
     <ClInclude Include="..\..\source\BuildingBlockModel.h">
       <Filter>Header Files\Models</Filter>
     </ClInclude>
@@ -200,12 +196,6 @@
     </ClCompile>
     <ClCompile Include="..\..\source\ButtonManager.cpp">
       <Filter>Source Files\Helpers</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\ButtonNode.cpp">
-      <Filter>Source Files\SceneGraph</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\ButtonModel.cpp">
-      <Filter>Source Files\Models</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\MatchmakingGraphRoot.cpp">
       <Filter>Source Files\SceneGraph</Filter>

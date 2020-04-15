@@ -31,6 +31,9 @@ constexpr float DOOR_WIDTH = 10.0f; // NOLINT
 /** The Angle in degrees for which a breach donut collision occurs*/
 constexpr float BREACH_WIDTH = 6.0f; // NOLINT
 
+/** The min angle in degrees for which two buttons can be placed*/
+constexpr int BUTTON_DIST = 100; // NOLINT
+
 /** The duration in seconds of the everyone roll challenge*/
 constexpr int ROLL_CHALLENGE_LENGTH = 6; // NOLINT
 
