@@ -68,10 +68,10 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 			levelName = LEVEL_ONE_KEY;
 			break;
 		case 2:
-			levelName = LEVEL_ONE_KEY;
+			levelName = LEVEL_TWO_KEY;
 			break;
 		case 3:
-			levelName = LEVEL_ONE_KEY;
+			levelName = LEVEL_THREE_KEY;
 			break;
 		default:
 			break;
