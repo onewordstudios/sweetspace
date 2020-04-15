@@ -274,7 +274,8 @@
                                         "anchor":   [0.5,0.5],
                                         "position": [0,0],
                                         "scale": 1.35
-                                    },
+                                    }
+                                },
                                 "button": {
                                   "type": "Node",
                                   "data": {
