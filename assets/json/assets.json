@@ -58,7 +58,7 @@
             "wrapT": "repeat"
         },
 		"health_green": {
-			"file": "textures/health_green.png"
+			"file": "textures/health_green_seg.png"
 		},
 		"health_yellow": {
 			"file": "textures/health_yellow.png"
@@ -272,7 +272,7 @@
                             "scale": 0.3
                           }
                         },
-                        "healthGreen": {
+                        "healthSeg": {
                           "type": "Image",
                           "data": {
                             "texture": "health_green",

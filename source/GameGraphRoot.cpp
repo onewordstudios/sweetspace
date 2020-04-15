@@ -103,7 +103,7 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	donutPos = donutNode->getPosition();
 	healthNode = dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_health"));
 	healthNodeOverlay =
-		dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_healthGreen"));
+		dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_healthSeg"));
 	coordHUD = std::dynamic_pointer_cast<Label>(assets->get<Node>("game_hud"));
 
 	challengePanelHanger = dynamic_pointer_cast<cugl::PolygonNode>(
