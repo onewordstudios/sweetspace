@@ -38,8 +38,14 @@
 		C1222FC552DCE75362130E81 /* MatchmakingMode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C12225092193F10792C2D9D4 /* MatchmakingMode.cpp */; };
 		C1222FF1F85D4E3C0634F8F8 /* ButtonManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C1222811A2870CE942755676 /* ButtonManager.cpp */; };
 		C58C509B5D08FC65641A630E /* ShipModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C58C51549E90F0CA2D05EB7A /* ShipModel.cpp */; };
+		C58C520035DC61E2C2FDAFBE /* ButtonModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C58C59370F28300C621B05DD /* ButtonModel.cpp */; };
+		C58C52151163B8FEA7247F91 /* ButtonNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C58C5F587FFB8E623B5C9D7F /* ButtonNode.cpp */; };
+		C58C5216B68A5A2C01E445BD /* ButtonModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C58C59370F28300C621B05DD /* ButtonModel.cpp */; };
 		C58C5561B66760E8D1E3FC80 /* ShipModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C58C51549E90F0CA2D05EB7A /* ShipModel.cpp */; };
+		C58C587207BA3D72319C1412 /* ButtonNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C58C5F587FFB8E623B5C9D7F /* ButtonNode.cpp */; };
+		C58C59336C34E6B9948875A5 /* ButtonNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C58C5F587FFB8E623B5C9D7F /* ButtonNode.cpp */; };
 		C58C5B82A24C809F0E12DEFF /* ShipModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C58C51549E90F0CA2D05EB7A /* ShipModel.cpp */; };
+		C58C5DD0D57B8D381A72FFD5 /* ButtonModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C58C59370F28300C621B05DD /* ButtonModel.cpp */; };
 		D15220621F9C106302ACEBBB /* BreachNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D1522B5DE1BDF682A53D6F29 /* BreachNode.cpp */; };
 		D152210B21A0FDE6A6995456 /* easywsclient.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D152292423B890A105CFF1E1 /* easywsclient.cpp */; };
 		D15222477324B444CAE67673 /* MagicInternetBox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D15228511721431DE5C3F8BF /* MagicInternetBox.cpp */; };
@@ -193,6 +199,8 @@
 		A577C93B2438F7ED00B12ADE /* LevelConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LevelConstants.h; sourceTree = "<group>"; };
 		A577C93C2438F7ED00B12ADE /* LevelModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LevelModel.h; sourceTree = "<group>"; };
 		A577C93D2438F7ED00B12ADE /* MatchmakingMode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MatchmakingMode.h; sourceTree = "<group>"; };
+		A577C9572446324C00B12ADE /* EventModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventModel.h; sourceTree = "<group>"; };
+		A577C95B2446324C00B12ADE /* BuildingBlockModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BuildingBlockModel.h; sourceTree = "<group>"; };
 		C122229A6EDF1DAB4330F1B7 /* GLaDOS.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLaDOS.cpp; sourceTree = "<group>"; };
 		C12225092193F10792C2D9D4 /* MatchmakingMode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MatchmakingMode.cpp; sourceTree = "<group>"; };
 		C1222700CC73840AA71C9800 /* MatchmakingGraphRoot.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MatchmakingGraphRoot.cpp; sourceTree = "<group>"; };
@@ -204,6 +212,10 @@
 		C1222F4322133A83016A4F48 /* ExternalDonutModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ExternalDonutModel.cpp; sourceTree = "<group>"; };
 		C58C51549E90F0CA2D05EB7A /* ShipModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ShipModel.cpp; sourceTree = "<group>"; };
 		C58C531CA6998820E3FA7D86 /* ShipModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShipModel.h; sourceTree = "<group>"; };
+		C58C5490476458CA8CE02EAA /* ButtonNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ButtonNode.h; sourceTree = "<group>"; };
+		C58C59370F28300C621B05DD /* ButtonModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ButtonModel.cpp; sourceTree = "<group>"; };
+		C58C5D00FFFC42F97DEC65C0 /* ButtonModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ButtonModel.h; sourceTree = "<group>"; };
+		C58C5F587FFB8E623B5C9D7F /* ButtonNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ButtonNode.cpp; sourceTree = "<group>"; };
 		D15224B9EA517A2BFF54A6C2 /* easywsclient.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = easywsclient.hpp; sourceTree = "<group>"; };
 		D15227D97E11C33C1D22A5E2 /* DoorModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DoorModel.h; sourceTree = "<group>"; };
 		D15227FD0DE8BAD86857197F /* MagicInternetBox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MagicInternetBox.h; sourceTree = "<group>"; };
@@ -482,6 +494,8 @@
 		EBBF18B11D749176008E2001 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				A577C95B2446324C00B12ADE /* BuildingBlockModel.h */,
+				A577C9572446324C00B12ADE /* EventModel.h */,
 				A577C93B2438F7ED00B12ADE /* LevelConstants.h */,
 				A577C9372438F7ED00B12ADE /* LevelModel.cpp */,
 				A577C93C2438F7ED00B12ADE /* LevelModel.h */,
@@ -530,6 +544,10 @@
 				7B209DFE24395A9D00B657D2 /* ButtonManager.h */,
 				7B209DFA24395A8F00B657D2 /* Tween.h */,
 				C1222CCE44B8D9EECD741BF0 /* Tween.cpp */,
+				C58C59370F28300C621B05DD /* ButtonModel.cpp */,
+				C58C5D00FFFC42F97DEC65C0 /* ButtonModel.h */,
+				C58C5490476458CA8CE02EAA /* ButtonNode.h */,
+				C58C5F587FFB8E623B5C9D7F /* ButtonNode.cpp */,
 			);
 			name = Source;
 			path = ../source;
@@ -740,6 +758,8 @@
 				D152294B962A6F545D187713 /* BreachNode.cpp in Sources */,
 				C1222594BF979D3CB3968897 /* ButtonManager.cpp in Sources */,
 				C122211BC4827F6D5229F659 /* Tween.cpp in Sources */,
+				C58C5DD0D57B8D381A72FFD5 /* ButtonModel.cpp in Sources */,
+				C58C59336C34E6B9948875A5 /* ButtonNode.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -772,6 +792,8 @@
 				D1522FE380CFE13F14305356 /* BreachNode.cpp in Sources */,
 				C1222FF1F85D4E3C0634F8F8 /* ButtonManager.cpp in Sources */,
 				C122252BBBA6A3A5A6FA965C /* Tween.cpp in Sources */,
+				C58C520035DC61E2C2FDAFBE /* ButtonModel.cpp in Sources */,
+				C58C587207BA3D72319C1412 /* ButtonNode.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -804,6 +826,8 @@
 				D15220621F9C106302ACEBBB /* BreachNode.cpp in Sources */,
 				C122201B849961CE6B05D3B3 /* ButtonManager.cpp in Sources */,
 				C12227687FF20FC96584A686 /* Tween.cpp in Sources */,
+				C58C5216B68A5A2C01E445BD /* ButtonModel.cpp in Sources */,
+				C58C52151163B8FEA7247F91 /* ButtonNode.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -119,6 +119,7 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	shipOverlay =
 		dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_near_shipoverlay"));
 	shipOverlay->setColor(Color4::CLEAR);
+	buttonNode = assets->get<Node>("game_field_near_button");
 
 	challengePanelHanger = dynamic_pointer_cast<cugl::PolygonNode>(
 		assets->get<Node>("game_field_challengePanelParent_challengePanelHanger"));
@@ -185,13 +186,7 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	// Initialize Breaches
 	for (int i = 0; i < ship->getBreaches().size(); i++) {
 		std::shared_ptr<BreachModel> breachModel = ship->getBreaches().at((unsigned long)i);
-		cugl::Color4 color = breachColor.at((unsigned long)ship->getDonuts()
-												.at((unsigned long)breachModel->getPlayer())
-												->getColorId());
-		std::shared_ptr<Texture> image = assets->get<Texture>("breach_filmstrip");
-		std::shared_ptr<BreachNode> breachNode = BreachNode::allocWithTexture(image);
-		breachNode->resetAnimation();
-		breachNode->setColor(color);
+		std::shared_ptr<BreachNode> breachNode = BreachNode::alloc();
 		breachNode->setModel(breachModel);
 		breachNode->setTag((unsigned int)(i + 1));
 		breachNode->setScale(BREACH_SCALE);
@@ -201,15 +196,31 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 		// Start position is off screen
 		Vec2 breachPos = Vec2(0, 0);
 		breachNode->setPosition(breachPos);
+		// Add shape node
+		cugl::Color4 color = breachColor.at((unsigned long)ship->getDonuts()
+												.at((unsigned long)breachModel->getPlayer())
+												->getColorId());
+		std::shared_ptr<Texture> image = assets->get<Texture>("breach_filmstrip");
+		std::shared_ptr<AnimationNode> shapeNode =
+			AnimationNode::alloc(image, BreachNode::BREACH_H, BreachNode::BREACH_W);
+		shapeNode->setColor(color);
+		shapeNode->setAnchor(Vec2::ANCHOR_CENTER);
+		shapeNode->setPosition(0, 0);
+		breachNode->setShapeNode(shapeNode);
+		breachNode->addChildWithName(shapeNode, "shape");
 		// Add pattern node
 		string breachColor = playerColor.at((unsigned long)ship->getDonuts()
 												.at((unsigned long)breachModel->getPlayer())
 												->getColorId());
 		image = assets->get<Texture>("breach_" + breachColor);
 		std::shared_ptr<PolygonNode> patternNode = PolygonNode::allocWithTexture(image);
+		patternNode->setAnchor(Vec2::ANCHOR_CENTER);
+		patternNode->setPosition(0, 0);
+		breachNode->setPatternNode(patternNode);
+		breachNode->addChildWithName(patternNode, "pattern");
 		// Add the breach node
+		breachNode->resetAnimation();
 		breachesNode->addChild(breachNode);
-		breachNode->addChild(patternNode);
 	}
 
 	// Initialize Doors
@@ -224,6 +235,39 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 		doorNode->setShipSize(ship->getSize());
 		doorNode->setDonutModel(ship->getDonuts().at(playerID));
 		doorsNode->addChild(doorNode);
+	}
+
+	// Initialize Buttons
+	for (int i = 0; i < ship->getButtons().size(); i++) {
+		std::shared_ptr<ButtonModel> buttonModel = ship->getButtons().at((unsigned long)i);
+		std::shared_ptr<Texture> image = assets->get<Texture>("challenge_btn_base_up");
+		std::shared_ptr<Texture> buttonImage = assets->get<Texture>("challenge_btn_up");
+		std::shared_ptr<ButtonNode> bNode = ButtonNode::alloc(image);
+		std::shared_ptr<ButtonNode> subNode = ButtonNode::alloc(buttonImage);
+		subNode->setModel(buttonModel);
+		subNode->setScale(0.7);
+		subNode->setDonutModel(ship->getDonuts().at(playerID));
+		subNode->setAnchor(Vec2::ANCHOR_BOTTOM_CENTER);
+		subNode->setScale(DOOR_SCALE);
+		subNode->setShipSize(ship->getSize());
+		subNode->setButtonNodeType(1);
+		subNode->setButtonBaseDown(assets->get<Texture>("challenge_btn_base_down"));
+		subNode->setButtonBaseUp(assets->get<Texture>("challenge_btn_base_up"));
+		subNode->setButtonDown(assets->get<Texture>("challenge_btn_down"));
+		subNode->setButtonUp(assets->get<Texture>("challenge_btn_up"));
+		bNode->setModel(buttonModel);
+		bNode->setScale(0.7);
+		bNode->setDonutModel(ship->getDonuts().at(playerID));
+		bNode->setAnchor(Vec2::ANCHOR_BOTTOM_CENTER);
+		bNode->setScale(DOOR_SCALE);
+		bNode->setShipSize(ship->getSize());
+		bNode->setButtonNodeType(0);
+		bNode->setButtonDown(assets->get<Texture>("challenge_btn_down"));
+		bNode->setButtonUp(assets->get<Texture>("challenge_btn_up"));
+		bNode->setButtonBaseDown(assets->get<Texture>("challenge_btn_base_down"));
+		bNode->setButtonBaseUp(assets->get<Texture>("challenge_btn_base_up"));
+		buttonNode->addChild(subNode);
+		buttonNode->addChild(bNode);
 	}
 
 	addChild(scene);
@@ -300,6 +344,10 @@ void GameGraphRoot::update(float timestep) {
 	delta = delta < -globals::PI
 				? delta + ship->getSize() * globals::PI_180
 				: delta > globals::PI ? delta - ship->getSize() * globals::PI_180 : delta;
+	if (std::abs(delta) > globals::SEG_SIZE / globals::PI_180) {
+		delta = fmod(newPlayerAngle, globals::SEG_SIZE / globals::PI_180) -
+				fmod(prevPlayerAngle, globals::SEG_SIZE / globals::PI_180);
+	}
 	nearSpace->setAngle(wrapAngle(nearSpace->getAngle() + delta));
 	prevPlayerAngle = newPlayerAngle;
 
@@ -360,15 +408,13 @@ void GameGraphRoot::update(float timestep) {
 			cugl::Color4 color = breachColor.at((unsigned long)ship->getDonuts()
 													.at((unsigned long)breachModel->getPlayer())
 													->getColorId());
-			breachNode->setColor(color);
+			breachNode->getShapeNode()->setColor(color);
 			breachNode->resetAnimation();
 			string breachColor = playerColor.at((unsigned long)ship->getDonuts()
 													.at((unsigned long)breachModel->getPlayer())
 													->getColorId());
 			std::shared_ptr<Texture> image = assets->get<Texture>("breach_" + breachColor);
-			shared_ptr<PolygonNode> patternNode =
-				dynamic_pointer_cast<PolygonNode>(breachNode->getChildByTag(0));
-			patternNode->setTexture(image);
+			breachNode->getPatternNode()->setTexture(image);
 			breachModel->setNeedSpriteUpdate(false);
 		}
 	}

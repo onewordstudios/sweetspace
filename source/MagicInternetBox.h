@@ -81,6 +81,9 @@ class MagicInternetBox {
 	 */
 	std::string roomID;
 
+	/** Current level number, or -1 if unassigned */
+	int levelNum;
+
 	/**
 	 * Number of connected players
 	 */
@@ -107,6 +110,8 @@ class MagicInternetBox {
 		BreachShrink,
 		DualCreate,
 		DualResolve,
+		ButtonCreate,
+		ButtonResolve,
 		AllCreate,
 		AllFail,
 		StateSync,
@@ -173,6 +178,7 @@ class MagicInternetBox {
 	MagicInternetBox() {
 		ws = nullptr;
 		status = Uninitialized;
+		levelNum = -1;
 		currFrame = 0;
 		playerID = -1;
 		numPlayers = 0;
@@ -240,6 +246,11 @@ class MagicInternetBox {
 	std::string getRoomID();
 
 	/**
+	 * Returns the current level number, or -1 if uninitialized.
+	 */
+	int getLevelNum() { return levelNum; }
+
+	/**
 	 * Returns the current player ID, or -1 if uninitialized.
 	 * 0 is the host player.
 	 */
@@ -257,8 +268,10 @@ class MagicInternetBox {
 	/**
 	 * Start the game with the current number of players.
 	 * Should only be called when the matchmaking status is waiting on others
+	 *
+	 * @param levelNum The level number to start
 	 */
-	void startGame();
+	void startGame(int levelNum);
 
 	/**
 	 * Update method called every frame during matchmaking phase.
@@ -313,6 +326,29 @@ class MagicInternetBox {
 	 * @param flag Whether the player is on or off the door (1 or 0)
 	 */
 	void flagDualTask(int id, int player, int flag);
+
+	/**
+	 * Inform other players that two buttons requiring two players has been created
+	 *
+	 * @param angle1 The angle of the ship to spawn the button
+	 * @param id1 The button ID
+	 * @param angle2 The angle of the ship to spawn the button's pair
+	 * @param id2 The ID for the button's pair
+	 */
+	void createButtonTask(float angle1, int id1, float angle2, int id2);
+
+	/**
+	 * Inform other players that one person is on the button.
+	 * This method does not keep track of whether one or both players are
+	 * resolving this task. It merely broadcasts to all other players that
+	 * one more person is now on this task; when both players are here, it
+	 * is the responsibility of the receivers of this message to resolve the task.
+	 *
+	 * @param id The button ID
+	 * @param player The player ID who is activating the button
+	 * @param flag Whether the player is on or off the door (1 or 0)
+	 */
+	void flagButton(int id, int player, int flag);
 
 	/**
 	 * Inform other players that a task requiring all members of the ship has been created (eg:

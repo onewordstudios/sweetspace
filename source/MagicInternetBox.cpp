@@ -26,6 +26,8 @@ constexpr unsigned int SERVER_TIMEOUT = 300;
 
 std::shared_ptr<MagicInternetBox> MagicInternetBox::instance;
 
+#pragma region Initialization
+
 bool MagicInternetBox::initConnection() {
 	switch (status) {
 		case Disconnected:
@@ -116,6 +118,8 @@ bool MagicInternetBox::reconnect(std::string id) {
 	return true;
 }
 
+#pragma endregion
+
 /*
 
 DATA FORMAT
@@ -159,9 +163,19 @@ void MagicInternetBox::sendData(NetworkDataType type, float angle, int id, int d
 	ws->sendBinary(data);
 }
 
+#pragma region State Sync
+
 void MagicInternetBox::syncState(std::shared_ptr<ShipModel> state) {
 	std::vector<uint8_t> data;
 	data.push_back(StateSync);
+
+	// Adding health and timer
+	int health = (int)(FLOAT_PRECISION * state->getHealth());
+	data.push_back((uint8_t)(health % ONE_BYTE));
+	data.push_back((uint8_t)(health / ONE_BYTE));
+	int timer = (int)(FLOAT_PRECISION * state->timer);
+	data.push_back((uint8_t)(timer % ONE_BYTE));
+	data.push_back((uint8_t)(timer / ONE_BYTE));
 
 	const auto& doors = state->getDoors();
 	data.push_back((uint8_t)doors.size());
@@ -194,13 +208,23 @@ void MagicInternetBox::syncState(std::shared_ptr<ShipModel> state) {
 
 void MagicInternetBox::resolveState(std::shared_ptr<ShipModel> state,
 									const std::vector<uint8_t>& message) {
+	float health = (float)(message[1] + ONE_BYTE * message[2]) / FLOAT_PRECISION;
+	float timer = (float)(message[3] + ONE_BYTE * message[4]) / FLOAT_PRECISION;
+
+	if (abs(state->getHealth() - health) > 1.0f) {
+		state->setHealth(health);
+	}
+	if (abs(state->timer - timer) > 1.0f) {
+		state->timer = timer;
+	}
+
 	const auto& doors = state->getDoors();
-	if (doors.size() != message[1]) {
+	if (doors.size() != message[5]) {
 		CULog("ERROR: DOOR ARRAY SIZE DISCREPANCY; local %d but server %d", doors.size(),
-			  message[1]);
+			  message[5]);
 		return;
 	}
-	int doorIndex = 2;
+	int doorIndex = 6;
 	for (unsigned int i = 0; i < doors.size(); i++) {
 		if (message[doorIndex]) {
 			float angle = (float)(message[doorIndex + 1] + ONE_BYTE * message[doorIndex + 2]) /
@@ -240,6 +264,8 @@ void MagicInternetBox::resolveState(std::shared_ptr<ShipModel> state,
 	}
 }
 
+#pragma endregion
+
 MagicInternetBox::MatchmakingStatus MagicInternetBox::matchStatus() { return status; }
 
 void MagicInternetBox::leaveRoom() {}
@@ -250,7 +276,7 @@ int MagicInternetBox::getPlayerID() { return playerID; }
 
 unsigned int MagicInternetBox::getNumPlayers() { return numPlayers; }
 
-void MagicInternetBox::startGame() {
+void MagicInternetBox::startGame(int levelNum) {
 	switch (status) {
 		case HostWaitingOnOthers:
 		case ClientWaitingOnOthers:
@@ -262,6 +288,8 @@ void MagicInternetBox::startGame() {
 
 	std::vector<uint8_t> data;
 	data.push_back((uint8_t)StartGame);
+	data.push_back((uint8_t)levelNum);
+	this->levelNum = levelNum;
 	ws->sendBinary(data);
 
 	maxPlayers = numPlayers;
@@ -357,6 +385,7 @@ void MagicInternetBox::update() {
 			case StartGame: {
 				status = GameStart;
 				maxPlayers = numPlayers;
+				levelNum = message[1];
 				return;
 			}
 			default:
@@ -474,8 +503,19 @@ void MagicInternetBox::update(std::shared_ptr<ShipModel> state) {
 				int taskID = id;
 				int player = data1;
 				int flag = data2;
-				CULog("Flag door %d with player %d", id, player);
 				state->flagDoor(taskID, player, flag);
+				break;
+			}
+			case ButtonCreate: {
+				float angle1 = angle;
+				float angle2 = data3;
+				int id1 = id;
+				int id2 = data1;
+				state->createButton(angle1, id1, angle2, id2);
+				break;
+			}
+			case ButtonResolve: {
+				state->flagButton(id, data1, data2);
 				break;
 			}
 			case AllCreate: {
@@ -514,6 +554,14 @@ void MagicInternetBox::flagDualTask(int id, int player, int flag) {
 
 void MagicInternetBox::createAllTask(int player, int data) {
 	sendData(AllCreate, -1.0f, player, data, -1, -1.0f);
+}
+
+void MagicInternetBox::createButtonTask(float angle1, int id1, float angle2, int id2) {
+	sendData(ButtonCreate, angle1, id1, id2, -1, angle2);
+}
+
+void MagicInternetBox::flagButton(int id, int player, int flag) {
+	sendData(ButtonResolve, -1, id, player, flag, -1.0f);
 }
 
 void MagicInternetBox::failAllTask() { sendData(AllFail, -1.0f, -1, -1, -1, -1.0f); }

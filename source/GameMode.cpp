@@ -16,18 +16,18 @@ using namespace std;
 #pragma mark Level Layout
 /** The Angle in degrees for fixing a breach*/
 constexpr float EPSILON_ANGLE = 5.2f;
-/** The Angle in degrees for which a collision occurs*/
-constexpr float DOOR_WIDTH = 10.0f;
-/** The Angle in degrees for which a breach donut collision occurs*/
-constexpr float BREACH_WIDTH = 11.0f;
 /** The Angle in degrees for which a door can be activated*/
 constexpr float DOOR_ACTIVE_ANGLE = 15.0f;
+/** Max number of buttons */
+constexpr unsigned int NUM_BUTTONS = 2; // add to level
+/** The Angle in degrees for which a door can be activated*/
+constexpr float BUTTON_ACTIVE_ANGLE = 15.0f;
 /** Angles to adjust per frame to prevent door tunneling */
 constexpr float ANGLE_ADJUST = 0.5f;
 
 // Friction
 /** The friction factor while fixing a breach */
-constexpr float FIX_BREACH_FRICTION = 0.5f;
+constexpr float FIX_BREACH_FRICTION = 0.65f;
 /** The friction factor applied when moving through other players breaches */
 constexpr float OTHER_BREACH_FRICTION = 0.2f;
 
@@ -66,9 +66,27 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 	playerID = net->getPlayerID();
 	roomId = net->getRoomID();
 
-	std::shared_ptr<LevelModel> level = assets->get<LevelModel>(LEVEL_ONE_KEY);
+	const char* levelName = nullptr;
+	switch (net->getLevelNum()) {
+		case 1:
+			levelName = LEVEL_ONE_KEY;
+			break;
+		case 2:
+			levelName = LEVEL_TWO_KEY;
+			break;
+		case 3:
+			levelName = LEVEL_THREE_KEY;
+			break;
+		default:
+			break;
+	}
+
+	CULog("Loading level %s b/c mib gave level num %d", levelName, net->getLevelNum());
+
+	std::shared_ptr<LevelModel> level = assets->get<LevelModel>(levelName);
 	ship = ShipModel::alloc(net->getNumPlayers(), level->getMaxBreaches(), level->getMaxDoors(),
-							playerID, level->getShipSize(), level->getInitHealth());
+							playerID, (float)level->getShipSize((int)net->getNumPlayers()),
+							level->getInitHealth(), NUM_BUTTONS);
 	gm.init(ship, level);
 
 	donutModel = ship->getDonuts().at(static_cast<unsigned long>(playerID));
@@ -148,9 +166,8 @@ void GameMode::update(float timestep) {
 		}
 		float diff = ship->getSize() / 2 -
 					 abs(abs(donutModel->getAngle() - breach->getAngle()) - ship->getSize() / 2);
-
-		if (!donutModel->isJumping() && playerID != breach->getPlayer() && diff < BREACH_WIDTH &&
-			breach->getHealth() != 0) {
+		if (!donutModel->isJumping() && playerID != breach->getPlayer() &&
+			diff < globals::BREACH_WIDTH && breach->getHealth() != 0) {
 			// Slow player by drag factor
 			donutModel->setFriction(OTHER_BREACH_FRICTION);
 		} else if (playerID == breach->getPlayer() && diff < EPSILON_ANGLE &&
@@ -182,12 +199,11 @@ void GameMode::update(float timestep) {
 			ship->getDoors().at(i)->getAngle() < 0) {
 			continue;
 		}
-
 		float diff = donutModel->getAngle() - ship->getDoors().at(i)->getAngle();
 		float a = diff + ship->getSize() / 2;
 		diff = a - floor(a / ship->getSize()) * ship->getSize() - ship->getSize() / 2;
 
-		if (abs(diff) < DOOR_WIDTH) {
+		if (abs(diff) < globals::DOOR_WIDTH) {
 			// Stop donut and push it out if inside
 			donutModel->setVelocity(0);
 			if (diff < 0) {
@@ -207,6 +223,35 @@ void GameMode::update(float timestep) {
 			if (ship->getDoors().at(i)->isPlayerOn(playerID)) {
 				ship->getDoors().at(i)->removePlayer(playerID);
 				net->flagDualTask(i, playerID, 0);
+			}
+		}
+	}
+
+	for (int i = 0; i < ship->getButtons().size(); i++) {
+		if (ship->getButtons().at(i) == nullptr || ship->getButtons().at(i)->getAngle() < 0) {
+			continue;
+		}
+		float diff = donutModel->getAngle() - ship->getButtons().at(i)->getAngle();
+		float a = diff + ship->getSize() / 2;
+		diff = a - floor(a / ship->getSize()) * ship->getSize() - ship->getSize() / 2;
+
+		if (diff < BUTTON_ACTIVE_ANGLE) {
+			ship->getButtons().at(i)->addPlayer(playerID);
+			ship->getButtons().at(i)->setJumpedOn(donutModel->isJumping());
+			if (ship->getButtons().at(i)->jumpedOn()) {
+				net->flagButton(i, playerID, 1);
+				CULog("Jumped on game mode");
+			}
+		} else {
+			ship->getButtons().at(i)->removePlayer(playerID);
+			net->flagButton(i, playerID, 0);
+		}
+		if (ship->getButtons().at(i)->getPlayersOn() == 1 && ship->getButtons().at(i)->jumpedOn()) {
+			CULog("on button");
+			if (ship->getButtons().at(i)->getPair()->jumpedOn() &&
+				ship->getButtons().at(i)->getPair()->getPlayersOn() == 1) {
+				CULog("on second button");
+				ship->getButtons().at(i)->setResolved(true);
 			}
 		}
 	}
@@ -234,27 +279,34 @@ void GameMode::update(float timestep) {
 		ship->getDonuts()[i]->update(timestep);
 	}
 
-	if (ship->getChallenge() && trunc(ship->timer) <= 6) {
+	if (ship->getChallenge() && trunc(ship->timer) <= globals::ROLL_CHALLENGE_LENGTH) {
 		ship->setChallenge(false);
 	}
 
-	if (ship->getChallenge() && trunc(ship->timer) > 6) {
+	if (ship->getChallenge() && trunc(ship->timer) > globals::ROLL_CHALLENGE_LENGTH) {
+		bool allRoll = true;
 		for (unsigned int i = 0; i < ship->getDonuts().size(); i++) {
 			if (ship->getRollDir() == 0) {
-				if (ship->getDonuts()[i]->getVelocity() < 0) {
-					ship->updateChallengeProg();
+				if (ship->getDonuts()[i]->getVelocity() >= 0) {
+					allRoll = false;
+					break;
 				}
 			} else {
-				if (ship->getDonuts()[i]->getVelocity() > 0) {
-					ship->updateChallengeProg();
+				if (ship->getDonuts()[i]->getVelocity() <= 0) {
+					allRoll = false;
+					break;
 				}
 			}
 		}
-		if (ship->getChallengeProg() > 30 || trunc(ship->timer) == trunc(ship->getEndTime())) {
+		if (allRoll) {
+			ship->updateChallengeProg();
+		}
+		if (ship->getChallengeProg() > 100 || trunc(ship->timer) == trunc(ship->getEndTime())) {
 			if (ship->getChallengeProg() < 10) {
-				net->failAllTask();
 				float h = ship->getHealth();
-				ship->setHealth(h - 3);
+				ship->setHealth(h - 1);
+				gm.setChallengeFail(true);
+				ship->failAllTask();
 			}
 			ship->setChallenge(false);
 			ship->setChallengeProg(0);
