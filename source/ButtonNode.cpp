@@ -45,6 +45,7 @@ void ButtonNode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch, const Mat
         }
 
         if(buttonModel->jumpedOn()) {
+            CULog("jump in scenegraph");
             if(buttonType == 0) {
                 setTexture(getButtonBaseDown());
             } else {

@@ -85,9 +85,8 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 
 	std::shared_ptr<LevelModel> level = assets->get<LevelModel>(levelName);
 	ship = ShipModel::alloc(net->getNumPlayers(), level->getMaxBreaches(), level->getMaxDoors(),
-							playerID, level->getShipSize(), level->getInitHealth(), NUM_BUTTONS);
 							playerID, (float)level->getShipSize((int)net->getNumPlayers()),
-							level->getInitHealth());
+							level->getInitHealth(), NUM_BUTTONS);
 	gm.init(ship, level);
 
 	donutModel = ship->getDonuts().at(static_cast<unsigned long>(playerID));
@@ -232,9 +231,9 @@ void GameMode::update(float timestep) {
 		if (ship->getButtons().at(i) == nullptr || ship->getButtons().at(i)->getAngle() < 0) {
 			continue;
 		}
-		float diff = ship->getSize() / 2 -
-					 abs(abs(donutModel->getAngle() - ship->getButtons().at(i)->getAngle()) -
-						 ship->getSize() / 2);
+		float diff = donutModel->getAngle() - ship->getButtons().at(i)->getAngle();
+		float a = diff + ship->getSize() / 2;
+		diff = a - floor(a / ship->getSize()) * ship->getSize() - ship->getSize() / 2;
 
 		if (diff < BUTTON_ACTIVE_ANGLE) {
 			ship->getButtons().at(i)->addPlayer(playerID);
