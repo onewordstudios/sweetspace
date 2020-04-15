@@ -32,7 +32,7 @@ vector<std::shared_ptr<EventModel>> readyQueue;
  * This constructor does NOT do any initialzation.  It simply allocates the
  * object. This makes it safe to use this class without a pointer.
  */
-GLaDOS::GLaDOS() : active(false), numEvents(0), playerID(0), mib(nullptr), challengeInProg(false) {}
+GLaDOS::GLaDOS() : active(false), numEvents(0), playerID(0), mib(nullptr), fail(false) {}
 
 /**
  * Deactivates this input controller, releasing all listeners.
@@ -72,7 +72,7 @@ bool GLaDOS::init(std::shared_ptr<ShipModel> ship, std::shared_ptr<LevelModel> l
 	for (int i = 0; i < maxDoors; i++) {
 		doorFree.at(i) = true;
 	}
-	challengeInProg = false;
+	fail = false;
 	// Set random seed based on time
 	srand((unsigned int)time(NULL));
 	active = success;
@@ -246,6 +246,11 @@ void GLaDOS::update(float dt) {
 		}
 		readyQueue.erase(readyQueue.begin() + i);
 		break;
+	}
+
+	if (fail) {
+		mib->failAllTask();
+		fail = false;
 	}
 }
 
