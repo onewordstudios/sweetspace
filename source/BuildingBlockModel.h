@@ -149,6 +149,7 @@ class BuildingBlockModel {
 			Object obj = {object->get(OBJECT_TYPE_FIELD)->asInt(),
 						  object->get(OBJECT_ANGLE_FIELD)->asInt(),
 						  object->get(OBJECT_PLAYER_FIELD)->asInt()};
+			objects.push_back(obj);
 			if (obj.type == Roll) continue;
 			if (obj.angle >= maxAngle) {
 				maxAngle = obj.angle;
@@ -180,7 +181,6 @@ class BuildingBlockModel {
 			}
 			min = minAngle - leftWidth;
 			range = maxAngle + rightWidth - min;
-			objects.push_back(obj);
 		}
 		breachesNeeded = (int)count_if(
 			objects.begin(), objects.end(),
