@@ -16,10 +16,6 @@ using namespace std;
 #pragma mark Level Layout
 /** The Angle in degrees for fixing a breach*/
 constexpr float EPSILON_ANGLE = 5.2f;
-/** The Angle in degrees for which a collision occurs*/
-constexpr float DOOR_WIDTH = 10.0f;
-/** The Angle in degrees for which a breach donut collision occurs*/
-constexpr float BREACH_WIDTH = 6.0f;
 /** The Angle in degrees for which a door can be activated*/
 constexpr float DOOR_ACTIVE_ANGLE = 15.0f;
 /** Angles to adjust per frame to prevent door tunneling */
@@ -68,7 +64,8 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 
 	std::shared_ptr<LevelModel> level = assets->get<LevelModel>(LEVEL_ONE_KEY);
 	ship = ShipModel::alloc(net->getNumPlayers(), level->getMaxBreaches(), level->getMaxDoors(),
-							playerID, level->getShipSize(), level->getInitHealth());
+							playerID, (float)level->getShipSize((int)net->getNumPlayers()),
+							level->getInitHealth());
 	gm.init(ship, level);
 
 	donutModel = ship->getDonuts().at(static_cast<unsigned long>(playerID));
@@ -148,9 +145,8 @@ void GameMode::update(float timestep) {
 		}
 		float diff = ship->getSize() / 2 -
 					 abs(abs(donutModel->getAngle() - breach->getAngle()) - ship->getSize() / 2);
-
-		if (!donutModel->isJumping() && playerID != breach->getPlayer() && diff < BREACH_WIDTH &&
-			breach->getHealth() != 0) {
+		if (!donutModel->isJumping() && playerID != breach->getPlayer() &&
+			diff < globals::BREACH_WIDTH && breach->getHealth() != 0) {
 			// Slow player by drag factor
 			donutModel->setFriction(OTHER_BREACH_FRICTION);
 		} else if (playerID == breach->getPlayer() && diff < EPSILON_ANGLE &&
@@ -182,12 +178,11 @@ void GameMode::update(float timestep) {
 			ship->getDoors().at(i)->getAngle() < 0) {
 			continue;
 		}
-
 		float diff = donutModel->getAngle() - ship->getDoors().at(i)->getAngle();
 		float a = diff + ship->getSize() / 2;
 		diff = a - floor(a / ship->getSize()) * ship->getSize() - ship->getSize() / 2;
 
-		if (abs(diff) < DOOR_WIDTH) {
+		if (abs(diff) < globals::DOOR_WIDTH) {
 			// Stop donut and push it out if inside
 			donutModel->setVelocity(0);
 			if (diff < 0) {
@@ -234,11 +229,11 @@ void GameMode::update(float timestep) {
 		ship->getDonuts()[i]->update(timestep);
 	}
 
-	if (ship->getChallenge() && trunc(ship->timer) <= 6) {
+	if (ship->getChallenge() && trunc(ship->timer) <= globals::ROLL_CHALLENGE_LENGTH) {
 		ship->setChallenge(false);
 	}
 
-	if (ship->getChallenge() && trunc(ship->timer) > 6) {
+	if (ship->getChallenge() && trunc(ship->timer) > globals::ROLL_CHALLENGE_LENGTH) {
 		for (unsigned int i = 0; i < ship->getDonuts().size(); i++) {
 			if (ship->getRollDir() == 0) {
 				if (ship->getDonuts()[i]->getVelocity() < 0) {
