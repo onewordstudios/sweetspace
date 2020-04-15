@@ -276,7 +276,7 @@ int MagicInternetBox::getPlayerID() { return playerID; }
 
 unsigned int MagicInternetBox::getNumPlayers() { return numPlayers; }
 
-void MagicInternetBox::startGame() {
+void MagicInternetBox::startGame(int levelNum) {
 	switch (status) {
 		case HostWaitingOnOthers:
 		case ClientWaitingOnOthers:
@@ -288,6 +288,8 @@ void MagicInternetBox::startGame() {
 
 	std::vector<uint8_t> data;
 	data.push_back((uint8_t)StartGame);
+	data.push_back((uint8_t)levelNum);
+	this->levelNum = levelNum;
 	ws->sendBinary(data);
 
 	maxPlayers = numPlayers;
@@ -383,6 +385,7 @@ void MagicInternetBox::update() {
 			case StartGame: {
 				status = GameStart;
 				maxPlayers = numPlayers;
+				levelNum = message[1];
 				return;
 			}
 			default:

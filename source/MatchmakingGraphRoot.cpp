@@ -72,11 +72,21 @@ bool MatchmakingGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& asset
 	clientClearBtn =
 		std::dynamic_pointer_cast<Button>(assets->get<Node>("matchmaking_client_buttons_btnclear"));
 
+	levelSelect = assets->get<Node>("matchmaking_levelselect");
+	easyBtn =
+		std::dynamic_pointer_cast<Button>(assets->get<Node>("matchmaking_levelselect_easybtn"));
+	medBtn = std::dynamic_pointer_cast<Button>(assets->get<Node>("matchmaking_levelselect_medbtn"));
+	hardBtn =
+		std::dynamic_pointer_cast<Button>(assets->get<Node>("matchmaking_levelselect_hardbtn"));
+
 	buttonManager.registerButton(hostBtn);
 	buttonManager.registerButton(clientBtn);
 	buttonManager.registerButton(hostBeginBtn);
 	buttonManager.registerButton(clientJoinBtn);
 	buttonManager.registerButton(clientClearBtn);
+	buttonManager.registerButton(easyBtn);
+	buttonManager.registerButton(medBtn);
+	buttonManager.registerButton(hardBtn);
 
 	for (unsigned int i = 0; i < NUM_DIGITS; i++) {
 		clientRoomBtns.push_back(std::dynamic_pointer_cast<Button>(
@@ -108,15 +118,14 @@ void MatchmakingGraphRoot::dispose() {
 		clientLabel = nullptr;
 		clientJoinBtn = nullptr;
 		clientClearBtn = nullptr;
+		levelSelect = nullptr;
+		easyBtn = nullptr;
+		medBtn = nullptr;
+		hardBtn = nullptr;
 		clientRoomBtns.clear();
 		_active = false;
 	}
 }
-
-/**
- * Resets the status of the game so that we can play again.
- */
-void MatchmakingGraphRoot::reset() {}
 
 void MatchmakingGraphRoot::update(float timestep) {
 	if (transitionState != NA) {
@@ -201,6 +210,18 @@ MatchmakingGraphRoot::PressedButton MatchmakingGraphRoot::checkButtons() {
 			} else {
 				return None;
 			}
+		}
+		case HostLevelSelect: {
+			if (tappedButton(easyBtn, tapData)) {
+				return StartGame1;
+			}
+			if (tappedButton(medBtn, tapData)) {
+				return StartGame2;
+			}
+			if (tappedButton(hardBtn, tapData)) {
+				return StartGame3;
+			}
+			return None;
 		}
 		case ClientScreen: {
 			if (tappedButton(clientJoinBtn, tapData)) {
@@ -287,6 +308,12 @@ void MatchmakingGraphRoot::updateClientLabel() {
 	}
 
 	clientLabel->setText(disp.str());
+}
+
+void MatchmakingGraphRoot::startLevelSelect() {
+	currState = HostLevelSelect;
+	hostScreen->setVisible(false);
+	levelSelect->setVisible(true);
 }
 
 #pragma region Animation Constants

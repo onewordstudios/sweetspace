@@ -62,7 +62,24 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 	playerID = net->getPlayerID();
 	roomId = net->getRoomID();
 
-	std::shared_ptr<LevelModel> level = assets->get<LevelModel>(LEVEL_ONE_KEY);
+	const char* levelName = nullptr;
+	switch (net->getLevelNum()) {
+		case 1:
+			levelName = LEVEL_ONE_KEY;
+			break;
+		case 2:
+			levelName = LEVEL_TWO_KEY;
+			break;
+		case 3:
+			levelName = LEVEL_THREE_KEY;
+			break;
+		default:
+			break;
+	}
+
+	CULog("Loading level %s b/c mib gave level num %d", levelName, net->getLevelNum());
+
+	std::shared_ptr<LevelModel> level = assets->get<LevelModel>(levelName);
 	ship = ShipModel::alloc(net->getNumPlayers(), level->getMaxBreaches(), level->getMaxDoors(),
 							playerID, (float)level->getShipSize((int)net->getNumPlayers()),
 							level->getInitHealth());
