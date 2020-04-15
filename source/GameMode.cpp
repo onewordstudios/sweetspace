@@ -234,22 +234,29 @@ void GameMode::update(float timestep) {
 	}
 
 	if (ship->getChallenge() && trunc(ship->timer) > globals::ROLL_CHALLENGE_LENGTH) {
+		bool allRoll = true;
 		for (unsigned int i = 0; i < ship->getDonuts().size(); i++) {
 			if (ship->getRollDir() == 0) {
-				if (ship->getDonuts()[i]->getVelocity() < 0) {
-					ship->updateChallengeProg();
+				if (ship->getDonuts()[i]->getVelocity() >= 0) {
+					allRoll = false;
+					break;
 				}
 			} else {
-				if (ship->getDonuts()[i]->getVelocity() > 0) {
-					ship->updateChallengeProg();
+				if (ship->getDonuts()[i]->getVelocity() <= 0) {
+					allRoll = false;
+					break;
 				}
 			}
 		}
-		if (ship->getChallengeProg() > 30 || trunc(ship->timer) == trunc(ship->getEndTime())) {
+		if (allRoll) {
+			ship->updateChallengeProg();
+		}
+		if (ship->getChallengeProg() > 100 || trunc(ship->timer) == trunc(ship->getEndTime())) {
 			if (ship->getChallengeProg() < 10) {
-				net->failAllTask();
 				float h = ship->getHealth();
-				ship->setHealth(h - 3);
+				ship->setHealth(h - 1);
+				gm.setChallengeFail(true);
+				ship->failAllTask();
 			}
 			ship->setChallenge(false);
 			ship->setChallengeProg(0);
