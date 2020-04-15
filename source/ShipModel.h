@@ -80,7 +80,8 @@ class ShipModel {
 	 */
 	bool init(unsigned int numPlayers, unsigned int numBreaches, unsigned int numDoors,
 			  unsigned int playerID, int initHealth, unsigned int numButtons) {
-		return init(numPlayers, numBreaches, numDoors, playerID, (float)360, initHealth, numButtons);
+		return init(numPlayers, numBreaches, numDoors, playerID, (float)360, initHealth,
+					numButtons);
 	}
 
 	/**

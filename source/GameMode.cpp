@@ -238,18 +238,18 @@ void GameMode::update(float timestep) {
 		if (diff < BUTTON_ACTIVE_ANGLE) {
 			ship->getButtons().at(i)->addPlayer(playerID);
 			ship->getButtons().at(i)->setJumpedOn(donutModel->isJumping());
-			if(ship->getButtons().at(i)->jumpedOn()) {
+			if (ship->getButtons().at(i)->jumpedOn()) {
 				net->flagButton(i, playerID, 1);
-                CULog("Jumped on game mode");
+				CULog("Jumped on game mode");
 			}
 		} else {
 			ship->getButtons().at(i)->removePlayer(playerID);
 			net->flagButton(i, playerID, 0);
 		}
-		if (ship->getButtons().at(i)->getPlayersOn() == 1 &&
-				ship->getButtons().at(i)->jumpedOn()) {
+		if (ship->getButtons().at(i)->getPlayersOn() == 1 && ship->getButtons().at(i)->jumpedOn()) {
 			CULog("on button");
-			if (ship->getButtons().at(i)->getPair()->jumpedOn() && ship->getButtons().at(i)->getPair()->getPlayersOn() == 1) {
+			if (ship->getButtons().at(i)->getPair()->jumpedOn() &&
+				ship->getButtons().at(i)->getPair()->getPlayersOn() == 1) {
 				CULog("on second button");
 				ship->getButtons().at(i)->setResolved(true);
 			}

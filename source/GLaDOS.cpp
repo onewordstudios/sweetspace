@@ -128,7 +128,7 @@ void GLaDOS::placeObject(BuildingBlockModel::Object obj, float zeroAngle, vector
 			ship->getButtons().at(i)->setPair(ship->getButtons().at(j), j);
 			ship->getButtons().at(j)->setPair(ship->getButtons().at(i), i);
 			pairAngle = (float)(rand() % (int)(ship->getSize()));
-			while(abs(pairAngle - ship->getButtons().at(i)->getAngle()) < 100) {
+			while (abs(pairAngle - ship->getButtons().at(i)->getAngle()) < 100) {
 				pairAngle = (float)(rand() % (int)(ship->getSize()));
 			}
 			ship->getButtons().at(j)->setAngle(pairAngle);
@@ -198,8 +198,6 @@ void GLaDOS::update(float dt) {
 			mib->flagButton(i, playerID, 0);
 			ship->getButtons().at(i)->setJumpedOn(false);
 			ship->getButtons().at(i)->getPair()->setJumpedOn(false);
-
-
 		}
 	}
 
@@ -298,52 +296,52 @@ void GLaDOS::update(float dt) {
 		break;
 	}
 
-//	for (int i = 0; i < maxButtons; i++) {
-//		if (buttonFree.at(i)) {
-//			float angle = (float)(rand() % (int)(ship->getSize()));
-//			bool goodAngle = true;
-//			for (int j = 0; j < ship->getDonuts().size(); j++) {
-//				float diff =
-//					ship->getSize() / 2 -
-//					abs(abs(ship->getDonuts().at(j)->getAngle() - angle) - ship->getSize() / 2);
-//				if (diff < 40) {
-//					goodAngle = false;
-//					break;
-//				}
-//			}
-//			if (!goodAngle) {
-//				continue;
-//			}
-//			float pairAngle;
-//			int pairID;
-//			float minButtonDiff = 100;
-//			for (int j = 0; j < maxButtons; j++) {
-//				if (i != j && buttonFree.at(j)) {
-//					ship->getButtons().at(i)->setPair(ship->getButtons().at(j), j);
-//					ship->getButtons().at(j)->setPair(ship->getButtons().at(i), i);
-//					pairAngle = (float)(rand() % (int)(ship->getSize()));
-//					while(abs(pairAngle - angle) < minButtonDiff) {
-//						pairAngle = (float)(rand() % (int)(ship->getSize()));
-//					}
-//					ship->getButtons().at(j)->setAngle(pairAngle);
-//					ship->getButtons().at(j)->clear();
-//					buttonFree.at(j) = false;
-//					pairAngle = ship->getButtons().at(j)->getAngle();
-//					break;
-//				}
-//			}
-//			if (ship->getButtons().at(i)->getPair() == nullptr) {
-//				continue;
-//			} else {
-//				ship->getButtons().at(i)->setAngle(angle);
-//				ship->getButtons().at(i)->clear();
-//				buttonFree.at(i) = false;
-//				pairID = ship->getButtons().at(i)->getPairID();
-//				mib->createButtonTask(angle, i, pairAngle, pairID);
-//				break;
-//			}
-//		}
-//	}
+	//	for (int i = 0; i < maxButtons; i++) {
+	//		if (buttonFree.at(i)) {
+	//			float angle = (float)(rand() % (int)(ship->getSize()));
+	//			bool goodAngle = true;
+	//			for (int j = 0; j < ship->getDonuts().size(); j++) {
+	//				float diff =
+	//					ship->getSize() / 2 -
+	//					abs(abs(ship->getDonuts().at(j)->getAngle() - angle) - ship->getSize() / 2);
+	//				if (diff < 40) {
+	//					goodAngle = false;
+	//					break;
+	//				}
+	//			}
+	//			if (!goodAngle) {
+	//				continue;
+	//			}
+	//			float pairAngle;
+	//			int pairID;
+	//			float minButtonDiff = 100;
+	//			for (int j = 0; j < maxButtons; j++) {
+	//				if (i != j && buttonFree.at(j)) {
+	//					ship->getButtons().at(i)->setPair(ship->getButtons().at(j), j);
+	//					ship->getButtons().at(j)->setPair(ship->getButtons().at(i), i);
+	//					pairAngle = (float)(rand() % (int)(ship->getSize()));
+	//					while(abs(pairAngle - angle) < minButtonDiff) {
+	//						pairAngle = (float)(rand() % (int)(ship->getSize()));
+	//					}
+	//					ship->getButtons().at(j)->setAngle(pairAngle);
+	//					ship->getButtons().at(j)->clear();
+	//					buttonFree.at(j) = false;
+	//					pairAngle = ship->getButtons().at(j)->getAngle();
+	//					break;
+	//				}
+	//			}
+	//			if (ship->getButtons().at(i)->getPair() == nullptr) {
+	//				continue;
+	//			} else {
+	//				ship->getButtons().at(i)->setAngle(angle);
+	//				ship->getButtons().at(i)->clear();
+	//				buttonFree.at(i) = false;
+	//				pairID = ship->getButtons().at(i)->getPairID();
+	//				mib->createButtonTask(angle, i, pairAngle, pairID);
+	//				break;
+	//			}
+	//		}
+	//	}
 
 	if (fail) {
 		mib->failAllTask();

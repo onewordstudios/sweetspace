@@ -156,10 +156,10 @@ public:
     /**
      * Resets this door.
      */
-    void clear() {
-        playersOn = 0;
+	void clear() {
+		playersOn = 0;
         height = 0;
         resolved = false;
-    }
+	}
 };
 #endif /* __BUTTON_MODEL_H__ */
