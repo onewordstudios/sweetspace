@@ -119,6 +119,7 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	shipOverlay =
 		dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_near_shipoverlay"));
 	shipOverlay->setColor(Color4::CLEAR);
+	currentHealthWarningFrame = 0;
 	buttonNode = assets->get<Node>("game_field_near_button");
 
 	challengePanelHanger = dynamic_pointer_cast<cugl::PolygonNode>(
