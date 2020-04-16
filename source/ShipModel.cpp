@@ -83,7 +83,6 @@ bool ShipModel::createAllTask(int data) {
 }
 
 bool ShipModel::failAllTask() {
-	setHealth(health - 1);
 	for (int i = 0; i < donuts.size(); i++) {
 		float angle = (float)(rand() % (int)(getSize()));
 		donuts.at(i)->setAngle(angle);
