@@ -1,4 +1,4 @@
-#include "GameGraphRoot.h"
+﻿#include "GameGraphRoot.h"
 
 #include <cugl/cugl.h>
 
@@ -47,11 +47,24 @@ constexpr int HEALTH_BAR_FRAMES = 12;
 /** Scaling factor of health nodes */
 constexpr float HEALTH_NODE_SCALE = 0.55f;
 
+/** Animation cycle length of ship red flash */
+constexpr int MAX_HEALTH_WARNING_FRAMES = 150;
+
+/** Maximum alpha value for health warning overlay */
+constexpr int MAX_HEALTH_WARNING_ALPHA = 100;
+
+/** Value of ship health that triggers flashing */
+constexpr int HEALTH_WARNING_THRESHOLD = 4;
+
+/** Max value of a color4 channel */
+constexpr int COLOR_CHANNEL_MAX = 255;
+
 /** Size of ship segment label */
 constexpr int SEG_LABEL_SIZE = 100;
 
 /** Y position of ship segment label */
 constexpr int SEG_LABEL_Y = 1113;
+
 #pragma mark -
 #pragma mark Constructors
 
@@ -103,6 +116,10 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	donutPos = donutNode->getPosition();
 	healthNode = dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_health"));
 	coordHUD = std::dynamic_pointer_cast<Label>(assets->get<Node>("game_hud"));
+	shipOverlay =
+		dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_near_shipoverlay"));
+	shipOverlay->setColor(Color4::CLEAR);
+	currentHealthWarningFrame = 0;
 	buttonNode = assets->get<Node>("game_field_near_button");
 
 	challengePanelHanger = dynamic_pointer_cast<cugl::PolygonNode>(
@@ -446,6 +463,38 @@ void GameGraphRoot::update(float timestep) {
 			break;
 		default:
 			CULog("ERROR: Uncaught MatchmakingStatus Value Occurred");
+	}
+
+	// Animate health warning flashing
+	if (currentHealthWarningFrame != 0) {
+		currentHealthWarningFrame += 1;
+		if (currentHealthWarningFrame == MAX_HEALTH_WARNING_FRAMES) {
+			if (ship->getHealth() > HEALTH_WARNING_THRESHOLD) {
+				currentHealthWarningFrame = 0;
+				shipOverlay->setColor(Color4::CLEAR);
+			} else {
+				shipOverlay->setColor(
+					Color4(COLOR_CHANNEL_MAX, COLOR_CHANNEL_MAX, COLOR_CHANNEL_MAX,
+						   MAX_HEALTH_WARNING_ALPHA / MAX_HEALTH_WARNING_FRAMES * 2));
+				currentHealthWarningFrame = 1;
+			}
+		} else {
+			int alpha = 0;
+			if (currentHealthWarningFrame < MAX_HEALTH_WARNING_FRAMES / 2) {
+				alpha = MAX_HEALTH_WARNING_ALPHA * currentHealthWarningFrame /
+						MAX_HEALTH_WARNING_FRAMES * 2;
+			} else {
+				alpha = MAX_HEALTH_WARNING_ALPHA *
+						(MAX_HEALTH_WARNING_FRAMES - currentHealthWarningFrame) /
+						MAX_HEALTH_WARNING_FRAMES * 2;
+			}
+			shipOverlay->setColor(
+				Color4(COLOR_CHANNEL_MAX, COLOR_CHANNEL_MAX, COLOR_CHANNEL_MAX, alpha));
+		}
+	} else if (ship->getHealth() <= HEALTH_WARNING_THRESHOLD) {
+		shipOverlay->setColor(Color4(COLOR_CHANNEL_MAX, COLOR_CHANNEL_MAX, COLOR_CHANNEL_MAX,
+									 MAX_HEALTH_WARNING_ALPHA / MAX_HEALTH_WARNING_FRAMES * 2));
+		currentHealthWarningFrame = 1;
 	}
 }
 

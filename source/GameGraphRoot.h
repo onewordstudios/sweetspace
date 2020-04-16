@@ -53,10 +53,13 @@ class GameGraphRoot : public cugl::Scene {
 	// Reconnection Textures
 	/** Node to hold all of the Reconnect Overlay.*/
 	std::shared_ptr<cugl::Node> reconnectOverlay;
+	/** Ship red overlay node */
+	std::shared_ptr<cugl::PolygonNode> shipOverlay;
 
 	// DRAWING STATE VARIABLES
 	/** The donut's base position. */
 	cugl::Vec2 donutPos;
+
 	/** Tag of the left most ship segment */
 	unsigned int leftMostSeg;
 	/** Tag of the right most ship segment */
@@ -72,6 +75,8 @@ class GameGraphRoot : public cugl::Scene {
 	/** Angle of the player donut model from the last frame */
 	float prevPlayerAngle;
 
+	/** Current animation frame for ship flashing red */
+	int currentHealthWarningFrame;
 	/**
 	 * Returns an informative string for the position
 	 *
