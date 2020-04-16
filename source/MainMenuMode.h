@@ -130,6 +130,11 @@ class MainMenuMode : public cugl::Scene {
 	void processTransition();
 
 	/**
+	 * Process state updates that happene each frame
+	 */
+	void processUpdate();
+
+	/**
 	 * Update button states and handle when buttons are clicked.
 	 */
 	void processButtons();

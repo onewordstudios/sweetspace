@@ -206,6 +206,41 @@ void MainMenuMode::processTransition() {
 	}
 }
 
+void MainMenuMode::processUpdate() {
+	switch (currState) {
+		case HostScreenWait: {
+			if (net->getRoomID() != "") {
+				setRoomID();
+				hostScreen->setVisible(true);
+				hostScreen->setPositionY(-screenHeight);
+				transitionState = HostScreen;
+				connScreen->setVisible(false);
+			} else {
+				connScreen->setVisible(true);
+			}
+			if (net->matchStatus() == MagicInternetBox::MatchmakingStatus::HostError) {
+				connScreen->setText("Error Connecting :(");
+			}
+			break;
+		}
+		case HostScreen: {
+			float percentage = (float)(net->getNumPlayers() - 1) / (float)globals::MAX_PLAYERS;
+			hostNeedle->setAngle(-percentage * globals::TWO_PI);
+			break;
+		}
+		case ClientScreenDone: {
+			if (net->getRoomID() == "") {
+				currState = ClientScreen;
+				clientJoinBtn->setDown(false);
+			}
+			break;
+		}
+		default: {
+			break;
+		}
+	}
+}
+
 /**
  * Returns true iff a button was properly tapped (the tap event both started and ended on the
  * button)
@@ -325,45 +360,11 @@ void MainMenuMode::processButtons() {
  */
 void MainMenuMode::update(float timestep) {
 	input->update(timestep);
-	// Update Scene Graph
+
 	if (transitionState != NA) {
 		processTransition();
 	} else {
-#pragma region Update Scene Graph
-		switch (currState) {
-			case HostScreenWait: {
-				if (net->getRoomID() != "") {
-					setRoomID();
-					hostScreen->setVisible(true);
-					hostScreen->setPositionY(-screenHeight);
-					transitionState = HostScreen;
-					connScreen->setVisible(false);
-				} else {
-					connScreen->setVisible(true);
-				}
-				if (net->matchStatus() == MagicInternetBox::MatchmakingStatus::HostError) {
-					connScreen->setText("Error Connecting :(");
-				}
-				break;
-			}
-			case HostScreen: {
-				float percentage = (float)(net->getNumPlayers() - 1) / (float)globals::MAX_PLAYERS;
-				hostNeedle->setAngle(-percentage * globals::TWO_PI);
-				break;
-			}
-			case ClientScreenDone: {
-				if (net->getRoomID() == "") {
-					currState = ClientScreen;
-					clientJoinBtn->setDown(false);
-				}
-				break;
-			}
-			default: {
-				break;
-			}
-		}
-#pragma endregion
-
+		processUpdate();
 		processButtons();
 	}
 
