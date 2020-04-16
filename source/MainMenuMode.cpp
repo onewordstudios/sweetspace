@@ -303,7 +303,7 @@ void MainMenuMode::processButtons() {
 			}
 			if (tappedButton(hardBtn, tapData)) {
 				gameReady = true;
-				net->startGame(1);
+				net->startGame(3);
 				return;
 			}
 			break;
