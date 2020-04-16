@@ -333,7 +333,6 @@ void MainMenuMode::update(float timestep) {
 		switch (currState) {
 			case HostScreenWait: {
 				if (net->getRoomID() != "") {
-					CULog("ROOM ID GOT; HIDING");
 					setRoomID();
 					hostScreen->setVisible(true);
 					hostScreen->setPositionY(-screenHeight);
@@ -341,7 +340,6 @@ void MainMenuMode::update(float timestep) {
 					connScreen->setVisible(false);
 				} else {
 					connScreen->setVisible(true);
-					CULog("ROOM ID EMPTY");
 				}
 				if (net->matchStatus() == MagicInternetBox::MatchmakingStatus::HostError) {
 					connScreen->setText("Error Connecting :(");
