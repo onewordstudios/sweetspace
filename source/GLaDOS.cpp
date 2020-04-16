@@ -66,7 +66,7 @@ bool GLaDOS::init(std::shared_ptr<ShipModel> ship, std::shared_ptr<LevelModel> l
 	this->mib = MagicInternetBox::getInstance();
 	this->playerID = mib->getPlayerID();
 	maxEvents = level->getMaxBreaches();
-	maxDoors = level->getMaxDoors();
+	maxDoors = min(level->getMaxDoors(), mib->getNumPlayers() * 2 - 1);
 	maxButtons = 2; // add to level
 	buttonFree.resize(maxButtons);
 	breachFree.resize(maxEvents);
