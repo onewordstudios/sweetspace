@@ -49,6 +49,9 @@ void ButtonNode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch, const Mat
 			// Door is leaving visible range
 			buttonPos = Vec2(OFF_SCREEN_POS, OFF_SCREEN_POS);
 			setPosition(buttonPos);
+            if(buttonType == 0) {
+                label->setVisible(false);
+            }
 			isShown = false;
 		}
 
@@ -65,11 +68,14 @@ void ButtonNode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch, const Mat
 			setPosition(BUTTON_POS * sin(getAngle()), -BUTTON_POS * cos(getAngle()));
 		}
 	} else {
-		// Button is currently inactive
-		buttonPos = Vec2(OFF_SCREEN_POS, OFF_SCREEN_POS);
-		setPosition(buttonPos);
-		isShown = false;
-		buttonType == 0 ? setTexture(getButtonBaseUp()) : setTexture(getButtonUp());
+        // Button is currently inactive
+        buttonPos = Vec2(OFF_SCREEN_POS, OFF_SCREEN_POS);
+        setPosition(buttonPos);
+        isShown = false;
+        buttonType == 0 ? setTexture(getButtonBaseUp()) : setTexture(getButtonUp());
+		if(buttonType == 0) {
+            label->setVisible(false);
+        }
 	}
 	AnimationNode::draw(batch, transform, tint);
 }
