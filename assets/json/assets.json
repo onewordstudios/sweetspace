@@ -72,6 +72,9 @@
         "ship": {
             "file":   "textures/ship.png"
         },
+        "ship_overlay_red": {
+            "file":   "textures/ship_overlay_red.png"
+        },
         "shipseg0": {
             "file":   "textures/ship1.png"
         },
@@ -262,6 +265,15 @@
                                     "data": {
                                         "anchor":   [0,0],
                                         "position": [0,0]
+                                    }
+                                },
+                                "shipoverlay": {
+                                    "type": "Image",
+                                    "data": {
+                                        "texture": "ship_overlay_red",
+                                        "anchor":   [0.5,0.5],
+                                        "position": [0,0],
+                                        "scale": 1.35
                                     }
                                 },
                                 "button": {
