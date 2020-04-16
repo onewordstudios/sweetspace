@@ -1,17 +1,48 @@
-﻿#ifndef __MATCHMAKING_GRAPH_ROOT_H__
-#define __MATCHMAKING_GRAPH_ROOT_H__
+#ifndef __MAIN_MENU_MODE_H__
+#define __MAIN_MENU_MODE_H__
 #include <cugl/cugl.h>
 
 #include <vector>
 
-#include "BreachModel.h"
 #include "ButtonManager.h"
-#include "DonutModel.h"
-#include "DonutNode.h"
 #include "InputController.h"
+#include "MagicInternetBox.h"
+#include "ShipModel.h"
 
-class MatchmakingGraphRoot : public cugl::Scene {
+/**
+ * The primary controller for the main menu / matchmaking mode
+ */
+class MainMenuMode : public cugl::Scene {
    private:
+#pragma region Controllers
+	/** Controller for abstracting out input across multiple platforms */
+	std::shared_ptr<InputController> input;
+	/** Networking controller*/
+	std::shared_ptr<MagicInternetBox> net;
+#pragma endregion
+
+	/** An extra thread used to connect to the server from the host, in case the server is down. */
+	std::unique_ptr<std::thread> startHostThread;
+
+	/** Helper object to make the buttons go up and down */
+	ButtonManager buttonManager;
+
+	/** The Screen's Height. */
+	float screenHeight;
+
+#pragma region State Variables
+	/** True if game is ready to start */
+	bool gameReady;
+
+	/** The room ID the client is currently entering */
+	std::vector<unsigned int> clientEnteredRoom;
+
+	/** Current room ID */
+	std::string roomID;
+
+	/** The current frame of a transition; -1 if not transitioning */
+	int transitionFrame;
+
 	/** An enum with the current state of the matchmaking mode */
 	enum MatchState {
 		/** Empty state; used for transitions only; the main state should NEVER be NA */
@@ -36,13 +67,9 @@ class MatchmakingGraphRoot : public cugl::Scene {
 	MatchState currState;
 	/** The state we are transitioning into, or NA (-1) if not transitioning */
 	MatchState transitionState;
+#pragma endregion
 
-	/** The asset manager for this game mode. */
-	std::shared_ptr<cugl::AssetManager> assets;
-	/** The Screen's Height. */
-	float screenHeight;
-
-	// VIEW
+#pragma region Scene Graph Nodes
 	/** Button to create host */
 	std::shared_ptr<cugl::Button> hostBtn;
 	/** Button to create client */
@@ -82,27 +109,18 @@ class MatchmakingGraphRoot : public cugl::Scene {
 	std::vector<std::shared_ptr<cugl::Button>> clientRoomBtns;
 	/** Clear button from client */
 	std::shared_ptr<cugl::Button> clientClearBtn;
-	/** The room ID the client is currently entering */
-	std::vector<unsigned int> clientEnteredRoom;
 
-	/** Helper object to make the buttons go up and down */
-	ButtonManager buttonManager;
-
-	// MODEL
-	/** RoomId for host display */
-	std::string roomID;
-	/** Num players connected */
-	unsigned int numPlayers;
-	/** Whether an error has occured */
-	bool isError;
+#pragma endregion
 
 	/**
 	 * Update the client room display using the contents of {@link clientEnteredRoom}
 	 */
 	void updateClientLabel();
 
-	/** The current frame of a transition; -1 if not transitioning */
-	int transitionFrame;
+	/**
+	 * Query mib and update the room ID for the host accordingly
+	 */
+	void setRoomID();
 
 	/**
 	 * Animate a transition between states.
@@ -111,32 +129,38 @@ class MatchmakingGraphRoot : public cugl::Scene {
 	 */
 	void processTransition();
 
+	/**
+	 * Process state updates that happene each frame
+	 */
+	void processUpdate();
+
+	/**
+	 * Update button states and handle when buttons are clicked.
+	 */
+	void processButtons();
+
    public:
-#pragma mark -
-#pragma mark Constructors
+#pragma region Instantiation Logic
 	/**
 	 * Creates a new game mode with the default values.
 	 *
 	 * This constructor does not allocate any objects or start the game.
 	 * This allows us to use the object without a heap pointer.
 	 */
-	MatchmakingGraphRoot()
+	MainMenuMode()
 		: Scene(),
-		  currState(StartScreen),
-		  transitionState(NA),
+		  net(nullptr),
+		  startHostThread(nullptr),
 		  screenHeight(0),
-		  roomID(""),
-		  numPlayers(0),
-		  isError(false),
-		  transitionFrame(-1) {}
+		  gameReady(false),
+		  transitionFrame(-1),
+		  currState(StartScreen),
+		  transitionState(NA) {}
 
 	/**
 	 * Disposes of all (non-static) resources allocated to this mode.
-	 *
-	 * This method is different from dispose() in that it ALSO shuts off any
-	 * static resources, like the input controller.
 	 */
-	~MatchmakingGraphRoot() { dispose(); }
+	~MainMenuMode() { dispose(); }
 
 	/**
 	 * Disposes of all (non-static) resources allocated to this mode.
@@ -156,8 +180,8 @@ class MatchmakingGraphRoot : public cugl::Scene {
 	 */
 	bool init(const std::shared_ptr<cugl::AssetManager>& assets);
 
-#pragma mark -
-#pragma mark Matchmaking Handling
+#pragma endregion
+
 	/**
 	 * The method called to update the game mode.
 	 *
@@ -167,62 +191,19 @@ class MatchmakingGraphRoot : public cugl::Scene {
 	 */
 	void update(float timestep) override;
 
-	/** An enum representing buttons that have been pressed */
-	enum PressedButton {
-		None,
-		StartHost,
-		StartClient,
-		HostBegin,
-		StartGame1,
-		StartGame2,
-		StartGame3,
-		ClientConnect
-	};
+	/**
+	 * Draws the game.
+	 *
+	 * @param batch The sprite batch.
+	 */
+	void draw(const std::shared_ptr<cugl::SpriteBatch>& batch);
 
 	/**
-	 * Processes button presses. Should be called AFTER update() every frame.
+	 * Checks if game is ready to start
 	 *
-	 * @return The button pressed
+	 * @return True if game is ready to start, false otherwise
 	 */
-	PressedButton checkButtons();
-
-	/**
-	 * Sets roomID (for the host)
-	 *
-	 * @param roomID The host room id
-	 */
-	void setRoomID(std::string roomID);
-
-	/**
-	 * Gets roomID (from client connection)
-	 *
-	 * @param roomID The room id
-	 */
-	std::string getRoomID() { return roomID; }
-
-	/** Sets the number of players currently connected */
-	void setNumPlayers(unsigned int num) { numPlayers = num; }
-
-	/** Signal a catastrophic error has occured */
-	void signalError() { isError = true; }
-
-	/** Force the level select screen to be shown. TODO remove after refactoring matchmaking */
-	void startLevelSelect();
-
-	/** Returns whether the graph is in a state where it is connected to the server (and thus mib
-	 * needs to be updated every frame) */
-	bool isConnected() {
-		if (transitionState == HostScreenWait) {
-			return true;
-		}
-		switch (currState) {
-			case HostScreenWait:
-			case HostScreen:
-			case ClientScreenDone:
-				return true;
-			default:
-				return false;
-		}
-	}
+	bool isGameReady() { return gameReady; }
 };
-#endif /* __MATCHMAKING_GRAPH_ROOT_H__ */
+
+#endif /* __MAIN_MENU_MODE_H__ */
