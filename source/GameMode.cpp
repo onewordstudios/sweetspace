@@ -227,35 +227,6 @@ void GameMode::update(float timestep) {
 		}
 	}
 
-	for (int i = 0; i < ship->getButtons().size(); i++) {
-		if (ship->getButtons().at(i) == nullptr || ship->getButtons().at(i)->getAngle() < 0) {
-			continue;
-		}
-		float diff = donutModel->getAngle() - ship->getButtons().at(i)->getAngle();
-		float a = diff + ship->getSize() / 2;
-		diff = a - floor(a / ship->getSize()) * ship->getSize() - ship->getSize() / 2;
-
-		if (diff < BUTTON_ACTIVE_ANGLE) {
-			ship->getButtons().at(i)->addPlayer(playerID);
-			ship->getButtons().at(i)->setJumpedOn(donutModel->isJumping());
-			if (ship->getButtons().at(i)->jumpedOn()) {
-				net->flagButton(i, playerID, 1);
-				CULog("Jumped on game mode");
-			}
-		} else {
-			ship->getButtons().at(i)->removePlayer(playerID);
-			net->flagButton(i, playerID, 0);
-		}
-		if (ship->getButtons().at(i)->getPlayersOn() == 1 && ship->getButtons().at(i)->jumpedOn()) {
-			CULog("on button");
-			if (ship->getButtons().at(i)->getPair()->jumpedOn() &&
-				ship->getButtons().at(i)->getPair()->getPlayersOn() == 1) {
-				CULog("on second button");
-				ship->getButtons().at(i)->setResolved(true);
-			}
-		}
-	}
-
 	for (int i = 0; i < ship->getBreaches().size(); i++) {
 		// this should be adjusted based on the level and number of players
 		if (ship->getBreaches().at(i) != nullptr &&
@@ -310,6 +281,35 @@ void GameMode::update(float timestep) {
 			}
 			ship->setChallenge(false);
 			ship->setChallengeProg(0);
+		}
+	}
+
+	for (int i = 0; i < ship->getButtons().size(); i++) {
+		if (ship->getButtons().at(i) == nullptr || ship->getButtons().at(i)->getAngle() < 0) {
+			continue;
+		}
+		float diff = donutModel->getAngle() - ship->getButtons().at(i)->getAngle();
+		float a = diff + ship->getSize() / 2;
+		diff = a - floor(a / ship->getSize()) * ship->getSize() - ship->getSize() / 2;
+
+		if (diff < BUTTON_ACTIVE_ANGLE) {
+			ship->getButtons().at(i)->addPlayer(playerID);
+			ship->getButtons().at(i)->setJumpedOn(donutModel->isJumping());
+			if (ship->getButtons().at(i)->jumpedOn()) {
+				net->flagButton(i, playerID, 1);
+				CULog("Jumped on game mode");
+			}
+		} else {
+			ship->getButtons().at(i)->removePlayer(playerID);
+			net->flagButton(i, playerID, 0);
+		}
+		if (ship->getButtons().at(i)->getPlayersOn() == 1 && ship->getButtons().at(i)->jumpedOn()) {
+			CULog("on button");
+			if (ship->getButtons().at(i)->getPair()->jumpedOn() &&
+				ship->getButtons().at(i)->getPair()->getPlayersOn() == 1) {
+				CULog("on second button");
+				ship->getButtons().at(i)->setResolved(true);
+			}
 		}
 	}
 

@@ -28,7 +28,7 @@ void ButtonNode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch, const Mat
 		onScreenAngle *= globals::PI_180;
 		if (!isShown && onScreenAngle < globals::SEG_CUTOFF_ANGLE &&
 			onScreenAngle > -globals::SEG_CUTOFF_ANGLE) {
-			// Door is coming into visible range
+			// Button is coming into visible range
 			float relativeAngle = onScreenAngle - getParent()->getParent()->getAngle();
 
 			buttonPos = Vec2(BUTTON_POS * sin(relativeAngle), -BUTTON_POS * cos(relativeAngle));
@@ -57,7 +57,7 @@ void ButtonNode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch, const Mat
 			setPosition(BUTTON_POS * sin(getAngle()), -BUTTON_POS * cos(getAngle()));
 		}
 	} else {
-		// Door is currently inactive
+		// Button is currently inactive
 		buttonPos = Vec2(OFF_SCREEN_POS, OFF_SCREEN_POS);
 		setPosition(buttonPos);
 		isShown = false;
