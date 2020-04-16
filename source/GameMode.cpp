@@ -91,7 +91,6 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 
 	donutModel = ship->getDonuts().at(static_cast<unsigned long>(playerID));
 	ship->initTimer(level->getTime());
-	ship->setHealth(globals::INITIAL_SHIP_HEALTH);
 
 	// Scene graph Initialization
 	sgRoot.init(assets, ship, playerID);
