@@ -58,7 +58,7 @@ void Sweetspace::onStartup() {
 void Sweetspace::onShutdown() {
 	loading.dispose();
 	gameplay.dispose();
-	matchmaking.dispose();
+	mainmenu.dispose();
 	InputController::cleanup();
 	assets = nullptr;
 	batch = nullptr;
@@ -88,19 +88,19 @@ void Sweetspace::update(float timestep) {
 		}
 		case LoadToMain: {
 			loading.dispose(); // Disables the input listeners in this mode
-			matchmaking.init(assets);
+			mainmenu.init(assets);
 			status = MainMenu;
 			return;
 		}
 		case MainMenu: {
-			matchmaking.update(timestep);
-			if (matchmaking.isGameReady()) {
+			mainmenu.update(timestep);
+			if (mainmenu.isGameReady()) {
 				status = MainToGame;
 			}
 			return;
 		}
 		case MainToGame: {
-			matchmaking.dispose();
+			mainmenu.dispose();
 			gameplay.init(assets);
 			status = Game;
 			return;
@@ -126,7 +126,7 @@ void Sweetspace::draw() {
 			return;
 		}
 		case MainMenu / MODE_ENUM_STEP: {
-			matchmaking.draw(batch);
+			mainmenu.draw(batch);
 			return;
 		}
 		case Game / MODE_ENUM_STEP: {
