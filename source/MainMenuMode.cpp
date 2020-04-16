@@ -328,47 +328,46 @@ void MainMenuMode::update(float timestep) {
 	// Update Scene Graph
 	if (transitionState != NA) {
 		processTransition();
-		return;
-	}
-
+	} else {
 #pragma region Update Scene Graph
-	switch (currState) {
-		case HostScreenWait: {
-			if (net->getRoomID() != "") {
-				CULog("ROOM ID GOT; HIDING");
-				setRoomID();
-				hostScreen->setVisible(true);
-				hostScreen->setPositionY(-screenHeight);
-				transitionState = HostScreen;
-				connScreen->setVisible(false);
-			} else {
-				connScreen->setVisible(true);
-				CULog("ROOM ID EMPTY");
+		switch (currState) {
+			case HostScreenWait: {
+				if (net->getRoomID() != "") {
+					CULog("ROOM ID GOT; HIDING");
+					setRoomID();
+					hostScreen->setVisible(true);
+					hostScreen->setPositionY(-screenHeight);
+					transitionState = HostScreen;
+					connScreen->setVisible(false);
+				} else {
+					connScreen->setVisible(true);
+					CULog("ROOM ID EMPTY");
+				}
+				if (net->matchStatus() == MagicInternetBox::MatchmakingStatus::HostError) {
+					connScreen->setText("Error Connecting :(");
+				}
+				break;
 			}
-			if (net->matchStatus() == MagicInternetBox::MatchmakingStatus::HostError) {
-				connScreen->setText("Error Connecting :(");
+			case HostScreen: {
+				float percentage = (float)(net->getNumPlayers() - 1) / (float)globals::MAX_PLAYERS;
+				hostNeedle->setAngle(-percentage * globals::TWO_PI);
+				break;
 			}
-			break;
-		}
-		case HostScreen: {
-			float percentage = (float)(net->getNumPlayers() - 1) / (float)globals::MAX_PLAYERS;
-			hostNeedle->setAngle(-percentage * globals::TWO_PI);
-			break;
-		}
-		case ClientScreenDone: {
-			if (net->getRoomID() == "") {
-				currState = ClientScreen;
-				clientJoinBtn->setDown(false);
+			case ClientScreenDone: {
+				if (net->getRoomID() == "") {
+					currState = ClientScreen;
+					clientJoinBtn->setDown(false);
+				}
+				break;
 			}
-			break;
+			default: {
+				break;
+			}
 		}
-		default: {
-			break;
-		}
-	}
 #pragma endregion
 
-	processButtons();
+		processButtons();
+	}
 
 	switch (net->matchStatus()) {
 		case MagicInternetBox::MatchmakingStatus::Uninitialized:
