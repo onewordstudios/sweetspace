@@ -171,6 +171,9 @@ void MagicInternetBox::syncState(std::shared_ptr<ShipModel> state) {
 
 	// Adding health and timer
 	int health = (int)(FLOAT_PRECISION * state->getHealth());
+	if (health < 0) {
+		health = 0;
+	}
 	data.push_back((uint8_t)(health % ONE_BYTE));
 	data.push_back((uint8_t)(health / ONE_BYTE));
 	int timer = (int)(FLOAT_PRECISION * state->timer);

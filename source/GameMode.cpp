@@ -118,6 +118,7 @@ void GameMode::dispose() {
  * @param timestep  The amount of time (in seconds) since the last frame
  */
 void GameMode::update(float timestep) {
+	CULog("HEALTH: %f", ship->getHealth());
 	// Connection Status Checks
 	switch (net->matchStatus()) {
 		case MagicInternetBox::Disconnected:
