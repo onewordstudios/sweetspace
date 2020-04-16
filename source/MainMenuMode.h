@@ -141,9 +141,9 @@ class MainMenuMode : public cugl::Scene {
 		: Scene(),
 		  net(nullptr),
 		  screenHeight(0),
-		  transitionFrame(-1),
 		  gameReady(false),
 		  startHostThread(nullptr),
+		  transitionFrame(-1),
 		  currState(StartScreen),
 		  transitionState(NA) {}
 
