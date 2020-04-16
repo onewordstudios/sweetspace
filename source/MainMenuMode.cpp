@@ -11,23 +11,17 @@
 #include "Tween.h"
 
 using namespace cugl;
-using namespace std;
 
 /** Number of buttons for room ID entry */
 constexpr unsigned int NUM_DIGITS = 10;
 
-/**
- * Initializes the controller contents, and starts the game
- *
- * The constructor does not allocate any objects or memory.  This allows
- * us to have a non-pointer reference to this controller, reducing our
- * memory allocation.  Instead, allocation happens in this method.
- *
- * @param assets    The (loaded) assets for this game mode
- *
- * @return true if the controller is initialized properly, false otherwise.
- */
-bool MainMenuMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
+#pragma region Animation Constants
+/** Duration of a standard transition */
+constexpr int TRANSITION_DURATION = 30;
+#pragma endregion
+
+#pragma region Initialization Logic
+bool MainMenuMode::init(const std::shared_ptr<AssetManager>& assets) {
 	// Initialize the scene to a locked width
 	Size dimen = Application::get()->getDisplaySize();
 	dimen *= globals::SCENE_WIDTH / dimen.width; // Lock the game to a reasonable resolution
@@ -37,8 +31,6 @@ bool MainMenuMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 	// Set network controller
 	net = MagicInternetBox::getInstance();
 	input = InputController::getInstance();
-
-#pragma region Scene Graph Init
 
 	screenHeight = dimen.height;
 	// Initialize the scene to a locked width
@@ -51,7 +43,7 @@ bool MainMenuMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 	scene->setContentSize(dimen);
 	scene->doLayout(); // Repositions the HUD
 
-	// Get the scene components.
+#pragma region Scene Graph Components
 	hostBtn =
 		std::dynamic_pointer_cast<Button>(assets->get<Node>("matchmaking_home_btnwrap_hostbtn"));
 	clientBtn =
@@ -96,22 +88,43 @@ bool MainMenuMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 			assets->get<Node>("matchmaking_client_buttons_btn" + std::to_string(i))));
 		buttonManager.registerButton(clientRoomBtns[i]);
 	}
+#pragma endregion
 
 	transitionFrame = -1;
 
 	updateClientLabel();
 
 	addChild(scene);
-#pragma endregion
 
 	return true;
 }
 
-#pragma region Animation Constants
-/** Duration of a standard transition */
-constexpr int TRANSITION_DURATION = 30;
+/**
+ * Disposes of all (non-static) resources allocated to this mode.
+ */
+void MainMenuMode::dispose() {
+	removeAllChildren();
+	hostBtn = nullptr;
+	clientBtn = nullptr;
+	mainScreen = nullptr;
+	hostScreen = nullptr;
+	clientScreen = nullptr;
+	connScreen = nullptr;
+	hostLabel = nullptr;
+	hostBeginBtn = nullptr;
+	hostNeedle = nullptr;
+	clientLabel = nullptr;
+	clientJoinBtn = nullptr;
+	clientClearBtn = nullptr;
+	levelSelect = nullptr;
+	easyBtn = nullptr;
+	medBtn = nullptr;
+	hardBtn = nullptr;
+	clientRoomBtns.clear();
+}
 #pragma endregion
 
+#pragma region Internal Helpers
 void MainMenuMode::updateClientLabel() {
 	std::vector<char> room;
 	for (unsigned int i = 0; i < clientEnteredRoom.size(); i++) {
@@ -194,41 +207,13 @@ void MainMenuMode::processTransition() {
 }
 
 /**
- * Disposes of all (non-static) resources allocated to this mode.
- */
-void MainMenuMode::dispose() {
-	removeAllChildren();
-	hostBtn = nullptr;
-	clientBtn = nullptr;
-	mainScreen = nullptr;
-	hostScreen = nullptr;
-	clientScreen = nullptr;
-	connScreen = nullptr;
-	hostLabel = nullptr;
-	hostBeginBtn = nullptr;
-	hostNeedle = nullptr;
-	clientLabel = nullptr;
-	clientJoinBtn = nullptr;
-	clientClearBtn = nullptr;
-	levelSelect = nullptr;
-	easyBtn = nullptr;
-	medBtn = nullptr;
-	hardBtn = nullptr;
-	clientRoomBtns.clear();
-}
-
-#pragma mark -
-#pragma mark Gameplay Handling
-
-/**
  * Returns true iff a button was properly tapped (the tap event both started and ended on the
  * button)
  *
  * @param button The button
  * @param tapData The start and end locations provided by the input controller
  */
-bool tappedButton(std::shared_ptr<cugl::Button> button,
-				  std::tuple<cugl::Vec2, cugl::Vec2> tapData) {
+bool tappedButton(std::shared_ptr<Button> button, std::tuple<Vec2, Vec2> tapData) {
 	return button->containsScreen(std::get<0>(tapData)) &&
 		   button->containsScreen(std::get<1>(tapData));
 }
@@ -243,7 +228,7 @@ void MainMenuMode::processButtons() {
 		return;
 	}
 
-	std::tuple<cugl::Vec2, cugl::Vec2> tapData = InputController::getInstance()->getTapEndLoc();
+	std::tuple<Vec2, Vec2> tapData = InputController::getInstance()->getTapEndLoc();
 
 	switch (currState) {
 		case StartScreen: {
@@ -329,6 +314,7 @@ void MainMenuMode::processButtons() {
 		}
 	}
 }
+#pragma endregion
 
 /**
  * The method called to update the game mode.
@@ -400,4 +386,4 @@ void MainMenuMode::update(float timestep) {
 /**
  * Draws the game.
  */
-void MainMenuMode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch) { render(batch); }
+void MainMenuMode::draw(const std::shared_ptr<SpriteBatch>& batch) { render(batch); }

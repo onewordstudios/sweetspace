@@ -118,9 +118,7 @@ class MainMenuMode : public cugl::Scene {
 	void updateClientLabel();
 
 	/**
-	 * Sets roomID (for the host)
-	 *
-	 * @param roomID The host room id
+	 * Query mib and update the room ID for the host accordingly
 	 */
 	void setRoomID();
 
@@ -190,6 +188,8 @@ class MainMenuMode : public cugl::Scene {
 
 	/**
 	 * Draws the game.
+	 *
+	 * @param batch The sprite batch.
 	 */
 	void draw(const std::shared_ptr<cugl::SpriteBatch>& batch);
 
