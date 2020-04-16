@@ -128,20 +128,6 @@ class MainMenuMode : public cugl::Scene {
 
 #pragma endregion
 
-	bool isConnected() {
-		if (transitionState == HostScreenWait) {
-			return true;
-		}
-		switch (currState) {
-			case HostScreenWait:
-			case HostScreen:
-			case ClientScreenDone:
-				return true;
-			default:
-				return false;
-		}
-	}
-
    public:
 #pragma mark -
 #pragma mark Constructors
@@ -153,13 +139,13 @@ class MainMenuMode : public cugl::Scene {
 	 */
 	MainMenuMode()
 		: Scene(),
+		  net(nullptr),
 		  screenHeight(0),
 		  transitionFrame(-1),
-		  currState(StartScreen),
-		  transitionState(NA),
-		  net(nullptr),
 		  gameReady(false),
-		  startHostThread(nullptr) {}
+		  startHostThread(nullptr),
+		  currState(StartScreen),
+		  transitionState(NA) {}
 
 	/**
 	 * Disposes of all (non-static) resources allocated to this mode.

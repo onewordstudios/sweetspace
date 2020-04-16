@@ -252,6 +252,7 @@ void MainMenuMode::update(float timestep) {
 	switch (currState) {
 		case HostScreenWait: {
 			if (net->getRoomID() != "") {
+				CULog("ROOM ID GOT; HIDING");
 				setRoomID();
 				hostScreen->setVisible(true);
 				hostScreen->setPositionY(-screenHeight);
@@ -259,6 +260,7 @@ void MainMenuMode::update(float timestep) {
 				connScreen->setVisible(false);
 			} else {
 				connScreen->setVisible(true);
+				CULog("ROOM ID EMPTY");
 			}
 			if (net->matchStatus() == MagicInternetBox::MatchmakingStatus::HostError) {
 				connScreen->setText("Error Connecting :(");
@@ -295,8 +297,10 @@ void MainMenuMode::update(float timestep) {
 		switch (currState) {
 			case StartScreen: {
 				if (tappedButton(hostBtn, tapData)) {
-					startHostThread = std::unique_ptr<std::thread>(
-						new std::thread([]() { MagicInternetBox::getInstance()->initHost(); }));
+					startHostThread = std::unique_ptr<std::thread>(new std::thread([]() {
+						MagicInternetBox::getInstance()->initHost();
+						CULog("SEPARATE THREAD FINISHED INIT HOST");
+					}));
 					transitionState = HostScreenWait;
 				} else if (tappedButton(clientBtn, tapData)) {
 					transitionState = ClientScreen;
@@ -380,15 +384,12 @@ void MainMenuMode::update(float timestep) {
 		case MagicInternetBox::MatchmakingStatus::Uninitialized:
 		case MagicInternetBox::MatchmakingStatus::HostError:
 			return;
-		default:
-			break;
-	}
-
-	if (isConnected()) {
-		net->update();
-		if (net->matchStatus() == MagicInternetBox::MatchmakingStatus::GameStart) {
+		case MagicInternetBox::MatchmakingStatus::GameStart:
 			gameReady = true;
-		}
+			return;
+		default:
+			net->update();
+			break;
 	}
 }
 
