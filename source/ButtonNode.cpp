@@ -36,6 +36,14 @@ void ButtonNode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch, const Mat
 			setPosition(buttonPos);
 			isShown = true;
 			setAngle(relativeAngle);
+			if(buttonType == 0) {
+                label->setPosition(Vec2((BUTTON_POS - 15) * sin(relativeAngle), (-BUTTON_POS) * cos(relativeAngle)));
+                label->setAngle(relativeAngle);
+				std::string s = std::to_string(buttonModel->getPair()->getSection());
+				CULog("Section Label %d", buttonModel->getPair()->getSection());
+				label->setText(s);
+				label->setVisible(true);
+			}
 		} else if (isShown && (onScreenAngle >= globals::SEG_CUTOFF_ANGLE ||
 							   onScreenAngle <= -globals::SEG_CUTOFF_ANGLE)) {
 			// Door is leaving visible range

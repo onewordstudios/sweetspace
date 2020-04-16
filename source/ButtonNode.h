@@ -27,6 +27,7 @@ class ButtonNode : public cugl::AnimationNode {
 	std::shared_ptr<cugl::Texture> btnBaseUp;
 	std::shared_ptr<cugl::Texture> btnDown;
 	std::shared_ptr<cugl::Texture> btnUp;
+	std::shared_ptr<cugl::Label> label;
 
 	int buttonType;
 
@@ -90,6 +91,8 @@ class ButtonNode : public cugl::AnimationNode {
 	void setButtonDown(std::shared_ptr<cugl::Texture> texture) { btnDown = texture; }
 
 	void setButtonUp(std::shared_ptr<cugl::Texture> texture) { btnUp = texture; }
+
+	void setButtonLabel(std::shared_ptr<cugl::Label> l) { label = l; }
 
 	std::shared_ptr<cugl::Texture> getButtonBaseDown() { return btnBaseDown; }
 	std::shared_ptr<cugl::Texture> getButtonBaseUp() { return btnBaseUp; }

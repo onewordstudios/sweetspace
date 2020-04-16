@@ -88,6 +88,13 @@ class ButtonModel {
 	float getAngle() { return angle; }
 
 	/**
+	 * Returns the current section of the button.
+	 *
+	 * @return the current section of the button.
+	 */
+	int getSection();
+
+	/**
 	 * Returns the current height of the door.
 	 *
 	 * @return the current height of the door.
