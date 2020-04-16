@@ -21,11 +21,7 @@ class MainMenuMode : public cugl::Scene {
 	std::shared_ptr<MagicInternetBox> net;
 #pragma endregion
 
-	// VIEW
-
-	/** True if game is ready to start */
-	bool gameReady;
-
+	/** An extra thread used to connect to the server from the host, in case the server is down. */
 	std::unique_ptr<std::thread> startHostThread;
 
 	/** Helper object to make the buttons go up and down */
@@ -34,29 +30,18 @@ class MainMenuMode : public cugl::Scene {
 	/** The Screen's Height. */
 	float screenHeight;
 
-	/**
-	 * Update the client room display using the contents of {@link clientEnteredRoom}
-	 */
-	void updateClientLabel();
+#pragma region State Variables
+	/** True if game is ready to start */
+	bool gameReady;
 
-	/**
-	 * Sets roomID (for the host)
-	 *
-	 * @param roomID The host room id
-	 */
-	void setRoomID();
+	/** The room ID the client is currently entering */
+	std::vector<unsigned int> clientEnteredRoom;
 
+	/** Current room ID */
 	std::string roomID;
 
 	/** The current frame of a transition; -1 if not transitioning */
 	int transitionFrame;
-
-	/**
-	 * Animate a transition between states.
-	 *
-	 * PRECONDITION: transitionState != NA
-	 */
-	void processTransition();
 
 	/** An enum with the current state of the matchmaking mode */
 	enum MatchState {
@@ -82,6 +67,7 @@ class MainMenuMode : public cugl::Scene {
 	MatchState currState;
 	/** The state we are transitioning into, or NA (-1) if not transitioning */
 	MatchState transitionState;
+#pragma endregion
 
 #pragma region Scene Graph Nodes
 	/** Button to create host */
@@ -123,14 +109,35 @@ class MainMenuMode : public cugl::Scene {
 	std::vector<std::shared_ptr<cugl::Button>> clientRoomBtns;
 	/** Clear button from client */
 	std::shared_ptr<cugl::Button> clientClearBtn;
-	/** The room ID the client is currently entering */
-	std::vector<unsigned int> clientEnteredRoom;
 
 #pragma endregion
 
+	/**
+	 * Update the client room display using the contents of {@link clientEnteredRoom}
+	 */
+	void updateClientLabel();
+
+	/**
+	 * Sets roomID (for the host)
+	 *
+	 * @param roomID The host room id
+	 */
+	void setRoomID();
+
+	/**
+	 * Animate a transition between states.
+	 *
+	 * PRECONDITION: transitionState != NA
+	 */
+	void processTransition();
+
+	/**
+	 * Update button states and handle when buttons are clicked.
+	 */
+	void processButtons();
+
    public:
-#pragma mark -
-#pragma mark Constructors
+#pragma region Instantiation Logic
 	/**
 	 * Creates a new game mode with the default values.
 	 *
@@ -140,18 +147,15 @@ class MainMenuMode : public cugl::Scene {
 	MainMenuMode()
 		: Scene(),
 		  net(nullptr),
+		  startHostThread(nullptr),
 		  screenHeight(0),
 		  gameReady(false),
-		  startHostThread(nullptr),
 		  transitionFrame(-1),
 		  currState(StartScreen),
 		  transitionState(NA) {}
 
 	/**
 	 * Disposes of all (non-static) resources allocated to this mode.
-	 *
-	 * This method is different from dispose() in that it ALSO shuts off any
-	 * static resources, like the input controller.
 	 */
 	~MainMenuMode() { dispose(); }
 
@@ -173,13 +177,8 @@ class MainMenuMode : public cugl::Scene {
 	 */
 	bool init(const std::shared_ptr<cugl::AssetManager>& assets);
 
-	/**
-	 * Update button states and handle when buttons are clicked.
-	 */
-	void handleButtons();
+#pragma endregion
 
-#pragma mark -
-#pragma mark Matchmaking Handling
 	/**
 	 * The method called to update the game mode.
 	 *
@@ -190,16 +189,16 @@ class MainMenuMode : public cugl::Scene {
 	void update(float timestep) override;
 
 	/**
+	 * Draws the game.
+	 */
+	void draw(const std::shared_ptr<cugl::SpriteBatch>& batch);
+
+	/**
 	 * Checks if game is ready to start
 	 *
 	 * @return True if game is ready to start, false otherwise
 	 */
 	bool isGameReady() { return gameReady; }
-
-	/**
-	 * Draws the game.
-	 */
-	void draw(const std::shared_ptr<cugl::SpriteBatch>& batch);
 };
 
 #endif /* __MAIN_MENU_MODE_H__ */

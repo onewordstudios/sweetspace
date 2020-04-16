@@ -233,7 +233,7 @@ bool tappedButton(std::shared_ptr<cugl::Button> button,
 		   button->containsScreen(std::get<1>(tapData));
 }
 
-void MainMenuMode::handleButtons() {
+void MainMenuMode::processButtons() {
 	if (currState != ClientScreenDone) {
 		buttonManager.process();
 	}
@@ -382,7 +382,7 @@ void MainMenuMode::update(float timestep) {
 	}
 #pragma endregion
 
-	handleButtons();
+	processButtons();
 
 	switch (net->matchStatus()) {
 		case MagicInternetBox::MatchmakingStatus::Uninitialized:
