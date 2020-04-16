@@ -4,6 +4,7 @@
 
 #include <vector>
 
+#include "ButtonManager.h"
 #include "InputController.h"
 #include "MagicInternetBox.h"
 #include "ShipModel.h"
