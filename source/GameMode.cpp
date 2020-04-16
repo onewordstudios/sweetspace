@@ -229,7 +229,7 @@ void GameMode::update(float timestep) {
 
 	for (int i = 0; i < ship->getBreaches().size(); i++) {
 		// this should be adjusted based on the level and number of players
-		if (ship->getBreaches().at(i) != nullptr &&
+		if (ship->getBreaches().at(i)->getAngle() >= 0 &&
 			trunc(ship->getBreaches().at(i)->getTimeCreated()) - trunc(ship->timer) > 15) {
 			ship->decHealth(0.01);
 		}
