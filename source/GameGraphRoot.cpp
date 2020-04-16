@@ -245,7 +245,8 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 		std::shared_ptr<Texture> buttonImage = assets->get<Texture>("challenge_btn_up");
 		std::shared_ptr<ButtonNode> bNode = ButtonNode::alloc(image);
 		std::shared_ptr<ButtonNode> subNode = ButtonNode::alloc(buttonImage);
-        std::shared_ptr<cugl::Label> buttonLabel = std::dynamic_pointer_cast<Label>(assets->get<Node>("game_field_near_buttonText"));
+		std::shared_ptr<cugl::Label> buttonLabel =
+			std::dynamic_pointer_cast<Label>(assets->get<Node>("game_field_near_buttonText"));
 		subNode->setModel(buttonModel);
 		subNode->setScale(0.7);
 		subNode->setDonutModel(ship->getDonuts().at(playerID));

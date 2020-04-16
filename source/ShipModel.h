@@ -230,7 +230,7 @@ class ShipModel {
 	 *
 	 * @param health   the health of the ship
 	 */
-	void setHealth(float health) { this->health = health; }
+	void setHealth(float health) { this->health = health < 0 ? 0 : health; }
 
 	/**
 	 * Get health of the ship
@@ -244,7 +244,7 @@ class ShipModel {
 	 *
 	 * @param health   the amount of health to be decremented
 	 */
-	void decHealth(float h) { health = health - h; }
+	void decHealth(float h) { setHealth(health - h); }
 
 	/**
 
