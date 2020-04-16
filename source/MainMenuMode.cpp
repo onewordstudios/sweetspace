@@ -233,6 +233,103 @@ bool tappedButton(std::shared_ptr<cugl::Button> button,
 		   button->containsScreen(std::get<1>(tapData));
 }
 
+void MainMenuMode::handleButtons() {
+	if (currState != ClientScreenDone) {
+		buttonManager.process();
+	}
+
+	// Do not process inputs if a) nothing was pressed, or b) currently transitioning
+	if (!InputController::getInstance()->isTapEndAvailable() || transitionState != NA) {
+		return;
+	}
+
+	std::tuple<cugl::Vec2, cugl::Vec2> tapData = InputController::getInstance()->getTapEndLoc();
+
+	switch (currState) {
+		case StartScreen: {
+			if (tappedButton(hostBtn, tapData)) {
+				startHostThread = std::unique_ptr<std::thread>(new std::thread([]() {
+					MagicInternetBox::getInstance()->initHost();
+					CULog("SEPARATE THREAD FINISHED INIT HOST");
+				}));
+				transitionState = HostScreenWait;
+			} else if (tappedButton(clientBtn, tapData)) {
+				transitionState = ClientScreen;
+				clientScreen->setPositionY(-screenHeight);
+				clientScreen->setVisible(true);
+			}
+			break;
+		}
+		case HostScreen: {
+			if (tappedButton(hostBeginBtn, tapData)) {
+				if (net->getNumPlayers() >= globals::MIN_PLAYERS) {
+					currState = HostLevelSelect;
+					hostScreen->setVisible(false);
+					levelSelect->setVisible(true);
+				}
+			}
+			break;
+		}
+		case HostLevelSelect: {
+			if (tappedButton(easyBtn, tapData)) {
+				gameReady = true;
+				net->startGame(1);
+				return;
+			}
+			if (tappedButton(medBtn, tapData)) {
+				gameReady = true;
+				net->startGame(2);
+				return;
+			}
+			if (tappedButton(hardBtn, tapData)) {
+				gameReady = true;
+				net->startGame(1);
+				return;
+			}
+			break;
+		}
+		case ClientScreen: {
+			if (tappedButton(clientJoinBtn, tapData)) {
+				if (clientEnteredRoom.size() != globals::ROOM_LENGTH) {
+					break;
+				}
+
+				std::ostringstream room;
+				for (int i = 0; i < globals::ROOM_LENGTH; i++) {
+					room << clientEnteredRoom[i];
+				}
+
+				currState = ClientScreenDone;
+				clientJoinBtn->setDown(true);
+				net->initClient(room.str());
+
+				break;
+			}
+
+			for (unsigned int i = 0; i < NUM_DIGITS; i++) {
+				if (tappedButton(clientRoomBtns[i], tapData)) {
+					if (clientEnteredRoom.size() < globals::ROOM_LENGTH) {
+						clientEnteredRoom.push_back(i);
+						updateClientLabel();
+					}
+					break;
+				}
+			}
+
+			if (tappedButton(clientClearBtn, tapData)) {
+				if (clientEnteredRoom.size() > 0) {
+					clientEnteredRoom.pop_back();
+					updateClientLabel();
+				}
+				break;
+			}
+		}
+		default: {
+			break;
+		}
+	}
+}
+
 /**
  * The method called to update the game mode.
  *
@@ -242,13 +339,13 @@ bool tappedButton(std::shared_ptr<cugl::Button> button,
  */
 void MainMenuMode::update(float timestep) {
 	input->update(timestep);
-// Update Scene Graph
-#pragma region Update Scene Graph
+	// Update Scene Graph
 	if (transitionState != NA) {
 		processTransition();
 		return;
 	}
 
+#pragma region Update Scene Graph
 	switch (currState) {
 		case HostScreenWait: {
 			if (net->getRoomID() != "") {
@@ -285,100 +382,7 @@ void MainMenuMode::update(float timestep) {
 	}
 #pragma endregion
 
-#pragma region Button Handling
-	if (currState != ClientScreenDone) {
-		buttonManager.process();
-	}
-
-	// Do not process inputs if a) nothing was pressed, or b) currently transitioning
-	if (InputController::getInstance()->isTapEndAvailable() && transitionState == NA) {
-		std::tuple<cugl::Vec2, cugl::Vec2> tapData = InputController::getInstance()->getTapEndLoc();
-
-		switch (currState) {
-			case StartScreen: {
-				if (tappedButton(hostBtn, tapData)) {
-					startHostThread = std::unique_ptr<std::thread>(new std::thread([]() {
-						MagicInternetBox::getInstance()->initHost();
-						CULog("SEPARATE THREAD FINISHED INIT HOST");
-					}));
-					transitionState = HostScreenWait;
-				} else if (tappedButton(clientBtn, tapData)) {
-					transitionState = ClientScreen;
-					clientScreen->setPositionY(-screenHeight);
-					clientScreen->setVisible(true);
-				}
-				break;
-			}
-			case HostScreen: {
-				if (tappedButton(hostBeginBtn, tapData)) {
-					if (net->getNumPlayers() >= globals::MIN_PLAYERS) {
-						currState = HostLevelSelect;
-						hostScreen->setVisible(false);
-						levelSelect->setVisible(true);
-					}
-				}
-				break;
-			}
-			case HostLevelSelect: {
-				if (tappedButton(easyBtn, tapData)) {
-					gameReady = true;
-					net->startGame(1);
-					return;
-				}
-				if (tappedButton(medBtn, tapData)) {
-					gameReady = true;
-					net->startGame(2);
-					return;
-				}
-				if (tappedButton(hardBtn, tapData)) {
-					gameReady = true;
-					net->startGame(1);
-					return;
-				}
-				break;
-			}
-			case ClientScreen: {
-				if (tappedButton(clientJoinBtn, tapData)) {
-					if (clientEnteredRoom.size() != globals::ROOM_LENGTH) {
-						break;
-					}
-
-					std::ostringstream room;
-					for (int i = 0; i < globals::ROOM_LENGTH; i++) {
-						room << clientEnteredRoom[i];
-					}
-
-					currState = ClientScreenDone;
-					clientJoinBtn->setDown(true);
-					net->initClient(room.str());
-
-					break;
-				}
-
-				for (unsigned int i = 0; i < NUM_DIGITS; i++) {
-					if (tappedButton(clientRoomBtns[i], tapData)) {
-						if (clientEnteredRoom.size() < globals::ROOM_LENGTH) {
-							clientEnteredRoom.push_back(i);
-							updateClientLabel();
-						}
-						break;
-					}
-				}
-
-				if (tappedButton(clientClearBtn, tapData)) {
-					if (clientEnteredRoom.size() > 0) {
-						clientEnteredRoom.pop_back();
-						updateClientLabel();
-					}
-					break;
-				}
-			}
-			default: {
-				break;
-			}
-		}
-	}
-#pragma endregion
+	handleButtons();
 
 	switch (net->matchStatus()) {
 		case MagicInternetBox::MatchmakingStatus::Uninitialized:

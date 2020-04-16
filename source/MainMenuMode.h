@@ -173,6 +173,11 @@ class MainMenuMode : public cugl::Scene {
 	 */
 	bool init(const std::shared_ptr<cugl::AssetManager>& assets);
 
+	/**
+	 * Update button states and handle when buttons are clicked.
+	 */
+	void handleButtons();
+
 #pragma mark -
 #pragma mark Matchmaking Handling
 	/**
