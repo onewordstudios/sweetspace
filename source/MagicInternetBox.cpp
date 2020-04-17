@@ -208,10 +208,9 @@ void MagicInternetBox::syncState(std::shared_ptr<ShipModel> state) {
 
 void MagicInternetBox::resolveState(std::shared_ptr<ShipModel> state,
 									const std::vector<uint8_t>& message) {
-	int index = 1;
-
-	float health = (float)(message[index++] + ONE_BYTE * message[index++]) / FLOAT_PRECISION;
-	float timer = (float)(message[index++] + ONE_BYTE * message[index++]) / FLOAT_PRECISION;
+	float health = (float)(message[1] + ONE_BYTE * message[2]) / FLOAT_PRECISION;
+	float timer = (float)(message[3] + ONE_BYTE * message[4]) / FLOAT_PRECISION;
+	int index = 5; // NOLINT
 
 	if (abs(state->getHealth() - health) > 1.0f) {
 		state->setHealth(health);
