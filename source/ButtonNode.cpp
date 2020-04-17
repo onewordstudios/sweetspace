@@ -12,11 +12,6 @@ constexpr float BUTTON_POS = 660;
 /** Position to place DoorNode offscreen. */
 constexpr float OFF_SCREEN_POS = 1500;
 
-/** The frame of the animation strip to freeze on when one player is on the door */
-constexpr int ONE_PLAYER_FRAME = 16;
-/** The frame of the animation strip to freeze on when two players are on the door */
-constexpr int TWO_PLAYER_FRAME = 31;
-
 void ButtonNode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch, const Mat4& transform,
 					  Color4 tint) {
 	Vec2 buttonPos;
@@ -26,16 +21,22 @@ void ButtonNode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch, const Mat
 		onScreenAngle = onScreenAngle >= 0 ? onScreenAngle : shipSize + onScreenAngle;
 		onScreenAngle = onScreenAngle > shipSize / 2 ? onScreenAngle - shipSize : onScreenAngle;
 		onScreenAngle *= globals::PI_180;
+		float relativeAngle = onScreenAngle - getParent()->getParent()->getAngle();
 		if (!isShown && onScreenAngle < globals::SEG_CUTOFF_ANGLE &&
 			onScreenAngle > -globals::SEG_CUTOFF_ANGLE) {
-			// Door is coming into visible range
-			float relativeAngle = onScreenAngle - getParent()->getParent()->getAngle();
+			// Button is coming into visible range
+			relativeAngle = onScreenAngle - getParent()->getParent()->getAngle();
 
 			buttonPos = Vec2(BUTTON_POS * sin(relativeAngle), -BUTTON_POS * cos(relativeAngle));
 
 			setPosition(buttonPos);
 			isShown = true;
 			setAngle(relativeAngle);
+			if (buttonType == 0) {
+				std::string s = std::to_string(buttonModel->getPair()->getSection());
+				CULog("Section Label %d", buttonModel->getPair()->getSection());
+				label->setText(s);
+			}
 		} else if (isShown && (onScreenAngle >= globals::SEG_CUTOFF_ANGLE ||
 							   onScreenAngle <= -globals::SEG_CUTOFF_ANGLE)) {
 			// Door is leaving visible range
@@ -50,14 +51,14 @@ void ButtonNode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch, const Mat
 				setTexture(getButtonBaseDown());
 			} else {
 				setTexture(getButtonDown());
-				setPosition((BUTTON_POS + 10) * sin(getAngle()),
-							(-BUTTON_POS - 10) * cos(getAngle()));
+				setPosition((BUTTON_POS + 10) * sin(relativeAngle),
+							(-BUTTON_POS - 10) * cos(relativeAngle));
 			}
-		} else {
-			setPosition(BUTTON_POS * sin(getAngle()), -BUTTON_POS * cos(getAngle()));
+		} else if (isShown) {
+			setPosition(BUTTON_POS * sin(relativeAngle), -BUTTON_POS * cos(relativeAngle));
 		}
 	} else {
-		// Door is currently inactive
+		// Button is currently inactive
 		buttonPos = Vec2(OFF_SCREEN_POS, OFF_SCREEN_POS);
 		setPosition(buttonPos);
 		isShown = false;

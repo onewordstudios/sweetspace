@@ -65,6 +65,11 @@ constexpr int SEG_LABEL_SIZE = 100;
 /** Y position of ship segment label */
 constexpr int SEG_LABEL_Y = 1113;
 
+/** Scale of button label text */
+constexpr float BUTTON_LABEL_SCALE = 1;
+
+/** Determines vertical positino of button label */
+constexpr float BUTTON_LABEL_Y = 0.25;
 #pragma mark -
 #pragma mark Constructors
 
@@ -239,12 +244,22 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	}
 
 	// Initialize Buttons
+	CULog("Initing buttons %d", ship->getButtons().size());
 	for (int i = 0; i < ship->getButtons().size(); i++) {
 		std::shared_ptr<ButtonModel> buttonModel = ship->getButtons().at((unsigned long)i);
 		std::shared_ptr<Texture> image = assets->get<Texture>("challenge_btn_base_up");
 		std::shared_ptr<Texture> buttonImage = assets->get<Texture>("challenge_btn_up");
 		std::shared_ptr<ButtonNode> bNode = ButtonNode::alloc(image);
 		std::shared_ptr<ButtonNode> subNode = ButtonNode::alloc(buttonImage);
+		// Initialize Label
+		std::shared_ptr<cugl::Label> buttonLabel =
+			cugl::Label::alloc("null", assets->get<Font>("mont_black_italic_big"));
+		buttonLabel->setScale(BUTTON_LABEL_SCALE);
+		buttonLabel->setHorizontalAlignment(Label::HAlign::CENTER);
+		buttonLabel->setForeground(Color4::WHITE);
+		buttonLabel->setAnchor(Vec2::ANCHOR_CENTER);
+		buttonLabel->setPosition(image->getWidth() / 2, image->getHeight() * BUTTON_LABEL_Y);
+		// Initialize Button Node
 		subNode->setModel(buttonModel);
 		subNode->setScale(0.7);
 		subNode->setDonutModel(ship->getDonuts().at(playerID));
@@ -267,8 +282,12 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 		bNode->setButtonUp(assets->get<Texture>("challenge_btn_up"));
 		bNode->setButtonBaseDown(assets->get<Texture>("challenge_btn_base_down"));
 		bNode->setButtonBaseUp(assets->get<Texture>("challenge_btn_base_up"));
+		bNode->setButtonLabel(buttonLabel);
+		bNode->setShipSize(ship->getSize());
+
 		buttonNode->addChild(subNode);
 		buttonNode->addChild(bNode);
+		bNode->addChild(buttonLabel);
 	}
 
 	addChild(scene);
@@ -321,10 +340,10 @@ void GameGraphRoot::update(float timestep) {
 	if (ship->getHealth() < 1) {
 		std::shared_ptr<Texture> image = assets->get<Texture>("health_empty");
 		healthNode->setTexture(image);
-	} else if (ship->getHealth() < 5) {
+	} else if (ship->getHealth() < globals::INITIAL_SHIP_HEALTH * 0.5) {
 		std::shared_ptr<Texture> image = assets->get<Texture>("health_red");
 		healthNode->setTexture(image);
-	} else if (ship->getHealth() < 8) {
+	} else if (ship->getHealth() < globals::INITIAL_SHIP_HEALTH * 0.8) {
 		std::shared_ptr<Texture> image = assets->get<Texture>("health_yellow");
 		healthNode->setTexture(image);
 	}
@@ -517,6 +536,7 @@ std::string GameGraphRoot::positionText() {
 	} else {
 		ss << "Time Left: " << trunc(ship->timer);
 	}
+	ss << " Position: " << ship->getDonuts().at(playerID)->getAngle();
 	return ss.str();
 }
 

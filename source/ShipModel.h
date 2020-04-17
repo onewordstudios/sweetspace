@@ -231,7 +231,7 @@ class ShipModel {
 	 *
 	 * @param health   the health of the ship
 	 */
-	void setHealth(float health) { this->health = health; }
+	void setHealth(float health) { this->health = health < 0 ? 0 : health; }
 
 	/**
 	 * Get health of the ship
@@ -245,7 +245,7 @@ class ShipModel {
 	 *
 	 * @param health   the amount of health to be decremented
 	 */
-	void decHealth(float h) { health = health - h; }
+	void decHealth(float h) { setHealth(health - h); }
 
 	/**
 
@@ -377,12 +377,5 @@ class ShipModel {
 	 * @param flag   the flag to set (on or off, 1 or 0)
 	 */
 	bool flagButton(int id, int player, int flag);
-
-	/**
-	 * Resolve button with given id.
-	 *
-	 * @param id   the id of button to be opened.
-	 */
-	bool resolveButton(int id);
 };
 #endif /* __SHIP_MODEL_H__ */
