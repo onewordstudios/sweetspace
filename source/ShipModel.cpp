@@ -101,8 +101,8 @@ bool ShipModel::createButton(float angle1, int id1, float angle2, int id2) {
 
 bool ShipModel::flagButton(int id, int player, int flag) {
 	if (flag == 0) {
-		buttons.at(id)->removePlayer(player);
-		buttons.at(id)->setJumpedOn(false);
+		// buttons.at(id)->removePlayer(player);
+		// buttons.at(id)->setJumpedOn(false);
 	} else {
 		buttons.at(id)->addPlayer(player);
 		buttons.at(id)->setJumpedOn(true);

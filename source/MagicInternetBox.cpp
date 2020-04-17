@@ -518,6 +518,7 @@ void MagicInternetBox::update(std::shared_ptr<ShipModel> state) {
 				break;
 			}
 			case ButtonResolve: {
+				CULog("Flagging button %d", id);
 				state->flagButton(id, data1, data2);
 				break;
 			}
