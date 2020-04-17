@@ -171,6 +171,9 @@ void MagicInternetBox::syncState(std::shared_ptr<ShipModel> state) {
 
 	// Adding health and timer
 	int health = (int)(FLOAT_PRECISION * state->getHealth());
+	if (health < 0) {
+		health = 0;
+	}
 	data.push_back((uint8_t)(health % ONE_BYTE));
 	data.push_back((uint8_t)(health / ONE_BYTE));
 	int timer = (int)(FLOAT_PRECISION * state->timer);
@@ -210,6 +213,7 @@ void MagicInternetBox::resolveState(std::shared_ptr<ShipModel> state,
 									const std::vector<uint8_t>& message) {
 	float health = (float)(message[1] + ONE_BYTE * message[2]) / FLOAT_PRECISION;
 	float timer = (float)(message[3] + ONE_BYTE * message[4]) / FLOAT_PRECISION;
+	int index = 5; // NOLINT
 
 	if (abs(state->getHealth() - health) > 1.0f) {
 		state->setHealth(health);
@@ -219,16 +223,15 @@ void MagicInternetBox::resolveState(std::shared_ptr<ShipModel> state,
 	}
 
 	const auto& doors = state->getDoors();
-	if (doors.size() != message[5]) {
+	if (doors.size() != message[index++]) {
 		CULog("ERROR: DOOR ARRAY SIZE DISCREPANCY; local %d but server %d", doors.size(),
-			  message[5]);
+			  message[index - 1]);
 		return;
 	}
-	int doorIndex = 6;
 	for (unsigned int i = 0; i < doors.size(); i++) {
-		if (message[doorIndex]) {
-			float angle = (float)(message[doorIndex + 1] + ONE_BYTE * message[doorIndex + 2]) /
-						  FLOAT_PRECISION;
+		if (message[index]) {
+			float angle =
+				(float)(message[index + 1] + ONE_BYTE * message[index + 2]) / FLOAT_PRECISION;
 			if (abs(doors[i]->getAngle() - angle) > FLOAT_EPSILON) {
 				CULog("Found open door that should be closed, id %d", i);
 				state->createDoor(angle, (int)i);
@@ -241,26 +244,26 @@ void MagicInternetBox::resolveState(std::shared_ptr<ShipModel> state,
 			}
 		}
 
-		doorIndex += 3;
+		index += 3;
 	}
 
 	const auto& breaches = state->getBreaches();
-	if (breaches.size() != message[doorIndex++]) {
+	if (breaches.size() != message[index++]) {
 		CULog("ERROR: BREACH ARRAY SIZE DISCREPANCY; local %d but server %d", breaches.size(),
-			  message[doorIndex - 1]);
+			  message[index - 1]);
 		return;
 	}
 	for (unsigned int i = 0; i < breaches.size(); i++) {
-		if (breaches[i]->getHealth() == 0 && message[doorIndex] > 0) {
-			float angle = (float)(message[doorIndex + 2] + ONE_BYTE * message[doorIndex + 3]) /
-						  FLOAT_PRECISION;
+		if (breaches[i]->getHealth() == 0 && message[index] > 0) {
+			float angle =
+				(float)(message[index + 2] + ONE_BYTE * message[index + 3]) / FLOAT_PRECISION;
 			CULog("Found resolved breach that should be unresolved, id %d", i);
-			state->createBreach(angle, message[doorIndex], message[doorIndex + 1], (int)i);
-		} else if (breaches[i]->getHealth() > 0 && message[doorIndex] == 0) {
+			state->createBreach(angle, message[index], message[index + 1], (int)i);
+		} else if (breaches[i]->getHealth() > 0 && message[index] == 0) {
 			CULog("Found unresolved breach that should be resolved, id %d", i);
 			state->resolveBreach((int)i);
 		}
-		doorIndex += 4;
+		index += 4;
 	}
 }
 
