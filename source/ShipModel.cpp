@@ -59,7 +59,7 @@ bool ShipModel::createDoor(float angle, int id) {
 }
 
 bool ShipModel::resolveBreach(int id) {
-	breaches.at(id)->setHealth(0);
+	breaches.at(id)->decHealth(1);
 	return true;
 }
 

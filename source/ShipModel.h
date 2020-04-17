@@ -51,7 +51,8 @@ class ShipModel {
 		  challenge(false),
 		  challengeProg(0),
 		  endTime(0),
-		  totalTime(0) {}
+		  totalTime(0),
+		  timer(0) {}
 
 	/**
 	 * Destroys this breach, releasing all resources.
@@ -195,7 +196,7 @@ class ShipModel {
 	bool createBreach(float angle, int health, int player, int id);
 
 	/**
-	 * Resolve breach with given id.
+	 * Decrement the health of a breach with given id.
 	 *
 	 * @param id   the id of breach to be resolved.
 	 */

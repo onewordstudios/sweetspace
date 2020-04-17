@@ -228,13 +228,6 @@ void MainMenuMode::processUpdate() {
 			hostNeedle->setAngle(-percentage * globals::TWO_PI);
 			break;
 		}
-		case ClientScreenDone: {
-			if (net->getRoomID() == "") {
-				currState = ClientScreen;
-				clientJoinBtn->setDown(false);
-			}
-			break;
-		}
 		default: {
 			break;
 		}
@@ -339,6 +332,7 @@ void MainMenuMode::processButtons() {
 			if (tappedButton(clientClearBtn, tapData)) {
 				if (clientEnteredRoom.size() > 0) {
 					clientEnteredRoom.pop_back();
+					clientJoinBtn->setDown(false);
 					updateClientLabel();
 				}
 				break;
@@ -369,6 +363,15 @@ void MainMenuMode::update(float timestep) {
 	}
 
 	switch (net->matchStatus()) {
+		case MagicInternetBox::MatchmakingStatus::ClientRoomInvalid:
+		case MagicInternetBox::MatchmakingStatus::ClientRoomFull:
+			if (currState == ClientScreenDone) {
+				clientEnteredRoom.clear();
+				updateClientLabel();
+				currState = ClientScreen;
+				clientJoinBtn->setDown(false);
+			}
+			return;
 		case MagicInternetBox::MatchmakingStatus::Uninitialized:
 		case MagicInternetBox::MatchmakingStatus::HostError:
 			return;
