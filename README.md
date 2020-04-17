@@ -14,6 +14,16 @@ Coming August 2020 to Android and iOS.
 
 ## Current Progress
 
+### Pre-Beta Release
+
+We said we got all core gameplay features implemented last release. We lied.
+
+There are now four main gameplay elements in our game, all implemented with varying levels of polish at the moment. The breaches and doors work as they always have. The new type of challenge is called an "engine malfunction" and manifests as two buttons that show up on the ship. Each button displays the location of the other. Two players will need to go to both buttons and jump on them together to clear the task, forcing players to stop clumping into one large group. Finally, the renamed "stabilizer failure" makes a return, where all players must roll in the same direction for a few seconds to clear the task. If players fail, the broken ship stabilizer spins out of control and flings players all over the ship. In gameplay terms, everyone's position gets randomized.
+
+There are now three levels of difficulty, chosen by the host at the start of the game. Many bugs regarding ship health and the timer have been fixed, such that they actually sync up correctly across players. The team can now actually win and lose levels in a meaningful sense.
+
+Controls are the same as before. Tilt (or use arrow keys) to move left and right. Tap (or click / press space) to jump. Roll over breaches of your own color repeatedly to fix them, get two players onto a door to open them, get two players to both jump on buttons to fix them, and when told to roll in a direction, get everyone doing that. Keep the ship health out of the red until the end of the level to win.
+
 ### Alpha Release
 
 The focus of this release was to get all the core gameplay features implemented, as well as getting some finalized UI elements into the game and further polishing the networking.
