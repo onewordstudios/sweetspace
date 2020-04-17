@@ -70,9 +70,6 @@ void ButtonNode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch, const Mat
         setPosition(buttonPos);
         isShown = false;
         buttonType == 0 ? setTexture(getButtonBaseUp()) : setTexture(getButtonUp());
-		if(buttonType == 0) {
-            label->setVisible(false);
-        }
 	}
 	AnimationNode::draw(batch, transform, tint);
 }
