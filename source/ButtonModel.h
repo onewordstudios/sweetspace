@@ -114,10 +114,7 @@ class ButtonModel {
 	 *
 	 * @param value The button angle in degrees
 	 */
-	void setAngle(float value) {
-		CULog("Setting angle %f", value);
-		angle = value;
-	}
+	void setAngle(float value) { angle = value; }
 
 	/**
 	 * Adds the given player's flag from the button.
