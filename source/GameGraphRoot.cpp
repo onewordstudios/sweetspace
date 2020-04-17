@@ -65,6 +65,11 @@ constexpr int SEG_LABEL_SIZE = 100;
 /** Y position of ship segment label */
 constexpr int SEG_LABEL_Y = 1113;
 
+/** Scale of button label text */
+constexpr float BUTTON_LABEL_SCALE = 1;
+
+/** Determines vertical positino of button label */
+constexpr float BUTTON_LABEL_Y = 0.25;
 #pragma mark -
 #pragma mark Constructors
 
@@ -246,8 +251,15 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 		std::shared_ptr<Texture> buttonImage = assets->get<Texture>("challenge_btn_up");
 		std::shared_ptr<ButtonNode> bNode = ButtonNode::alloc(image);
 		std::shared_ptr<ButtonNode> subNode = ButtonNode::alloc(buttonImage);
+		// Initialize Label
 		std::shared_ptr<cugl::Label> buttonLabel =
-			std::dynamic_pointer_cast<Label>(assets->get<Node>("game_field_near_buttonText"));
+			cugl::Label::alloc("null", assets->get<Font>("mont_black_italic_big"));
+		buttonLabel->setScale(BUTTON_LABEL_SCALE);
+		buttonLabel->setHorizontalAlignment(Label::HAlign::CENTER);
+		buttonLabel->setForeground(Color4::WHITE);
+		buttonLabel->setAnchor(Vec2::ANCHOR_CENTER);
+		buttonLabel->setPosition(image->getWidth() / 2, image->getHeight() * BUTTON_LABEL_Y);
+		// Initialize Button Node
 		subNode->setModel(buttonModel);
 		subNode->setScale(0.7);
 		subNode->setDonutModel(ship->getDonuts().at(playerID));
@@ -271,8 +283,10 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 		bNode->setButtonBaseDown(assets->get<Texture>("challenge_btn_base_down"));
 		bNode->setButtonBaseUp(assets->get<Texture>("challenge_btn_base_up"));
 		bNode->setButtonLabel(buttonLabel);
+
 		buttonNode->addChild(subNode);
 		buttonNode->addChild(bNode);
+        bNode->addChild(buttonLabel);
 	}
 
 	addChild(scene);
