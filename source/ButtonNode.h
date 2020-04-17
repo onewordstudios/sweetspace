@@ -17,12 +17,6 @@ class ButtonNode : public cugl::AnimationNode {
 	/** Whether the breach is being shown right now */
 	bool isShown;
 
-	/** The height of the door. */
-	int height;
-
-	/** The max frame this door can have. */
-	int frameCap;
-
 	std::shared_ptr<cugl::Texture> btnBaseDown;
 	std::shared_ptr<cugl::Texture> btnBaseUp;
 	std::shared_ptr<cugl::Texture> btnDown;
@@ -42,7 +36,7 @@ class ButtonNode : public cugl::AnimationNode {
 	 * NEVER USE A CONSTRUCTOR WITH NEW. If you want to allocate an object on
 	 * the heap, use one of the static constructors instead.
 	 */
-	ButtonNode() : cugl::AnimationNode(), height(0), frameCap(0) {}
+	ButtonNode() : cugl::AnimationNode(), shipSize(0), isShown(false) {}
 
 	/**
 	 * Releases all resources allocated with this node.

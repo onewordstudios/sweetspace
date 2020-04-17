@@ -115,30 +115,34 @@ void GLaDOS::placeObject(BuildingBlockModel::Object obj, float zeroAngle, vector
 			doorFree.at(i) = false;
 			mib->createDualTask((float)obj.angle + zeroAngle, -1, -1, i);
 			break;
-		case BuildingBlockModel::Button:
+		case BuildingBlockModel::Button: {
 			i = (int)distance(buttonFree.begin(), find(buttonFree.begin(), buttonFree.end(), true));
+			int j =
+				(int)distance(buttonFree.begin(), find(buttonFree.begin(), buttonFree.end(), true));
+
+			std::shared_ptr<ButtonModel> btn1 = ship->getButtons().at(i);
+			std::shared_ptr<ButtonModel> btn2 = ship->getButtons().at(j);
+
 			float pairAngle;
-			int pairID;
-			int j;
-			j = (int)distance(buttonFree.begin(), find(buttonFree.begin(), buttonFree.end(), true));
-			ship->getButtons().at(i)->setAngle((float)obj.angle + zeroAngle);
-			ship->getButtons().at(i)->clear();
-			buttonFree.at(i) = false;
-			ship->getButtons().at(i)->setJumpedOn(false);
-			ship->getButtons().at(i)->setPair(ship->getButtons().at(j), j);
-			ship->getButtons().at(j)->setPair(ship->getButtons().at(i), i);
-			pairAngle = (float)(rand() % (int)(ship->getSize()));
-			while (abs(pairAngle - ship->getButtons().at(i)->getAngle()) < globals::BUTTON_DIST) {
+			do {
 				pairAngle = (float)(rand() % (int)(ship->getSize()));
-			}
-			ship->getButtons().at(j)->setAngle(pairAngle);
-			ship->getButtons().at(j)->clear();
+			} while (abs(pairAngle - ship->getButtons().at(i)->getAngle()) < globals::BUTTON_DIST);
+
+			buttonFree.at(i) = false;
+			btn1->clear();
+			btn1->setAngle((float)obj.angle + zeroAngle);
+			btn1->setJumpedOn(false);
+			btn1->setPair(btn2, j);
+
 			buttonFree.at(j) = false;
-			ship->getButtons().at(j)->setJumpedOn(false);
-			pairAngle = ship->getButtons().at(j)->getAngle();
-			pairID = ship->getButtons().at(i)->getPairID();
-			mib->createButtonTask((float)obj.angle + zeroAngle, i, pairAngle, pairID);
+			btn2->clear();
+			btn2->setAngle(pairAngle);
+			btn2->setJumpedOn(false);
+			btn2->setPair(btn1, i);
+
+			mib->createButtonTask((float)obj.angle + zeroAngle, i, pairAngle, j);
 			break;
+		}
 		case BuildingBlockModel::Roll:
 			if (ship->getChallenge()) break;
 			((int)(rand() % 2 == 0)) ? ship->setRollDir(0) : ship->setRollDir(1);
