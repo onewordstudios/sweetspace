@@ -302,6 +302,7 @@ void GameMode::update(float timestep) {
 				ship->getButtons().at(i)->getPair()->getPlayersOn() == 1) {
 				CULog("on second button");
 				ship->getButtons().at(i)->setResolved(true);
+				ship->getButtons().at(i)->getPair()->setResolved(true);
 			}
 		}
 	}
