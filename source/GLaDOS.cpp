@@ -202,7 +202,7 @@ void GLaDOS::update(float dt) {
 			ship->getButtons().at(i)->getPair()->setAngle(-1);
 			buttonFree.at(ship->getButtons().at(i)->getPairID()) = true;
 			buttonFree.at(i) = true;
-			mib->flagButton(i, (int)playerID, 0);
+			// mib->flagButton(i, (int)playerID, 0);
 			ship->getButtons().at(i)->setJumpedOn(false);
 			ship->getButtons().at(i)->getPair()->setJumpedOn(false);
 		}

@@ -285,13 +285,13 @@ void GameMode::update(float timestep) {
 		float a = diff + ship->getSize() / 2;
 		diff = a - floor(a / ship->getSize()) * ship->getSize() - ship->getSize() / 2;
 
-		if (abs(diff) < BUTTON_ACTIVE_ANGLE) {
+		if (abs(diff) < BUTTON_ACTIVE_ANGLE && donutModel->isJumping()) {
 			ship->getButtons().at(i)->addPlayer(playerID);
-			ship->getButtons().at(i)->setJumpedOn(donutModel->isJumping());
-			if (ship->getButtons().at(i)->jumpedOn()) {
-				net->flagButton(i, playerID, 1);
-				CULog("Jumped on game mode");
-			}
+			ship->getButtons().at(i)->setJumpedOn(true);
+
+			net->flagButton(i, playerID, 1);
+			CULog("Jumped on game mode");
+
 		} else {
 			// ship->getButtons().at(i)->removePlayer(playerID);
 			// net->flagButton(i, playerID, 0);
