@@ -293,6 +293,15 @@ void GLaDOS::update(float dt) {
 				break;
 			}
 		}
+
+		for (unsigned int k = 0; k < ship->getDoors().size(); k++) {
+			float doorAngle = ship->getDoors()[k]->getAngle();
+			float diff = ship->getSize() / 2 - abs(abs(doorAngle - angle) - ship->getSize() / 2);
+			if (doorAngle != -1 && diff < (float)block->getRange() / 2) {
+				goodAngle = false;
+				break;
+			}
+		}
 		if (!goodAngle) continue;
 		// set angle to where zero is
 		angle = angle - (float)block->getRange() / 2 - (float)block->getMin();

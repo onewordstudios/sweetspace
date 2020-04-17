@@ -282,22 +282,20 @@
                                     "anchor":   [0,0],
                                     "position": [0,0]
                                   },
-                                    "layout" : {
-                                      "x_anchor" : "center",
-                                      "y_anchor" : "middle"
+                                    "children"  : {
+                                      "text" : {
+                                        "type": "Label",
+                                        "format" : { "type" : "Anchored" },
+                                        "data": {
+                                          "font"       : "mont_black_italic_big",
+                                          "text"       : "0",
+                                          "position"   : [0,0],
+                                          "anchor"	 : [0,0],
+                                          "scale"      : 0.2
+                                        }
+                                      }
                                     }
-                                  },
-                                "buttonText" : {
-                                  "type": "Label",
-                                  "format" : { "type" : "Anchored" },
-                                  "data": {
-                                    "font"       : "mont_black_italic_big",
-                                    "text"       : "0",
-                                    "position"   : [0,0],
-                                    "anchor"	 : [0,0],
-                                    "scale"      : 0.2
                                   }
-                                }
                             }
                         },
                         "player1": {
