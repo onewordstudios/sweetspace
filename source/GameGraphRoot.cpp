@@ -345,9 +345,10 @@ void GameGraphRoot::update(float timestep) {
 	delta = delta < -globals::PI
 				? delta + ship->getSize() * globals::PI_180
 				: delta > globals::PI ? delta - ship->getSize() * globals::PI_180 : delta;
-	if (std::abs(delta) > globals::SEG_SIZE / globals::PI_180) {
-		delta = fmod(newPlayerAngle, globals::SEG_SIZE / globals::PI_180) -
-				fmod(prevPlayerAngle, globals::SEG_SIZE / globals::PI_180);
+	if (std::abs(delta) > globals::SEG_SIZE) {
+		delta = fmod(prevPlayerAngle, globals::SEG_SIZE / globals::PI_180) -
+				fmod(newPlayerAngle, globals::SEG_SIZE / globals::PI_180);
+		delta = delta * globals::PI_180;
 	}
 	nearSpace->setAngle(wrapAngle(nearSpace->getAngle() + delta));
 	prevPlayerAngle = newPlayerAngle;
