@@ -49,9 +49,6 @@ void ButtonNode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch, const Mat
 			// Door is leaving visible range
 			buttonPos = Vec2(OFF_SCREEN_POS, OFF_SCREEN_POS);
 			setPosition(buttonPos);
-            if(buttonType == 0) {
-                label->setVisible(false);
-            }
 			isShown = false;
 		}
 
