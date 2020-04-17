@@ -176,16 +176,12 @@ void GameMode::update(float timestep) {
 				// Decrement Health
 				breach->decHealth(1);
 				breach->setIsPlayerOn(true);
+				net->resolveBreach(i);
 			}
 
 			// Slow player by friction factor if not already slowed more
 			if (donutModel->getFriction() > FIX_BREACH_FRICTION) {
 				donutModel->setFriction(FIX_BREACH_FRICTION);
-			}
-
-			// Resolve Breach if health is 0
-			if (breach->getHealth() == 0) {
-				net->resolveBreach(i);
 			}
 
 		} else if (diff > EPSILON_ANGLE && breach->isPlayerOn()) {

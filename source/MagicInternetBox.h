@@ -296,7 +296,7 @@ class MagicInternetBox {
 	void createBreach(float angle, int player, int id);
 
 	/**
-	 * Inform other players that a breach has been reseolved
+	 * Inform other players that a breach has shrunk in size by 1.
 	 *
 	 * @param id The breach ID
 	 */
