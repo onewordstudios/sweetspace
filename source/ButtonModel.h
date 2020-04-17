@@ -152,7 +152,10 @@ class ButtonModel {
 	/**
 	 * Returns whether this button can be passed under.
 	 */
-	bool jumpedOn() { return jumped && getPlayersOn() == 1; }
+	bool jumpedOn() {
+		return jumped;
+		// &&getPlayersOn() == 1;
+	}
 
 	void setPair(std::shared_ptr<ButtonModel> b, int id) {
 		pairButton = b;
