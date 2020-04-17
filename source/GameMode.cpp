@@ -293,14 +293,13 @@ void GameMode::update(float timestep) {
 				CULog("Jumped on game mode");
 			}
 		} else {
-			// ship->getButtons().at(i)->removePlayer(playerID);
-			// net->flagButton(i, playerID, 0);
+			ship->getButtons().at(i)->removePlayer(playerID);
+			net->flagButton(i, playerID, 0);
 		}
-		if (ship->getButtons().at(i)->jumpedOn()) { // ship->getButtons().at(i)->getPlayersOn() == 1
-													// && ship->getButtons().at(i)->jumpedOn()) {
+		if (ship->getButtons().at(i)->getPlayersOn() == 1 && ship->getButtons().at(i)->jumpedOn()) {
 			CULog("on button");
-			if (ship->getButtons().at(i)->getPair()->jumpedOn()) { // &&
-				// ship->getButtons().at(i)->getPair()->getPlayersOn() == 1) {
+			if (ship->getButtons().at(i)->getPair()->jumpedOn() &&
+				ship->getButtons().at(i)->getPair()->getPlayersOn() == 1) {
 				CULog("on second button");
 				ship->getButtons().at(i)->setResolved(true);
 				ship->getButtons().at(i)->getPair()->setResolved(true);
