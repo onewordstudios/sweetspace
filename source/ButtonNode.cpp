@@ -12,11 +12,6 @@ constexpr float BUTTON_POS = 660;
 /** Position to place DoorNode offscreen. */
 constexpr float OFF_SCREEN_POS = 1500;
 
-/** The frame of the animation strip to freeze on when one player is on the door */
-constexpr int ONE_PLAYER_FRAME = 16;
-/** The frame of the animation strip to freeze on when two players are on the door */
-constexpr int TWO_PLAYER_FRAME = 31;
-
 void ButtonNode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch, const Mat4& transform,
 					  Color4 tint) {
 	Vec2 buttonPos;
@@ -36,9 +31,10 @@ void ButtonNode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch, const Mat
 			setPosition(buttonPos);
 			isShown = true;
 			setAngle(relativeAngle);
-			if(buttonType == 0) {
-                label->setPosition(Vec2((BUTTON_POS - 15) * sin(relativeAngle), (-BUTTON_POS) * cos(relativeAngle)));
-                label->setAngle(relativeAngle);
+			if (buttonType == 0) {
+				label->setPosition(Vec2((BUTTON_POS - 15) * sin(relativeAngle),
+										(-BUTTON_POS) * cos(relativeAngle)));
+				label->setAngle(relativeAngle);
 				std::string s = std::to_string(buttonModel->getPair()->getSection());
 				CULog("Section Label %d", buttonModel->getPair()->getSection());
 				label->setText(s);
@@ -65,11 +61,11 @@ void ButtonNode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch, const Mat
 			setPosition(BUTTON_POS * sin(getAngle()), -BUTTON_POS * cos(getAngle()));
 		}
 	} else {
-        // Button is currently inactive
-        buttonPos = Vec2(OFF_SCREEN_POS, OFF_SCREEN_POS);
-        setPosition(buttonPos);
-        isShown = false;
-        buttonType == 0 ? setTexture(getButtonBaseUp()) : setTexture(getButtonUp());
+		// Button is currently inactive
+		buttonPos = Vec2(OFF_SCREEN_POS, OFF_SCREEN_POS);
+		setPosition(buttonPos);
+		isShown = false;
+		buttonType == 0 ? setTexture(getButtonBaseUp()) : setTexture(getButtonUp());
 	}
 	AnimationNode::draw(batch, transform, tint);
 }
