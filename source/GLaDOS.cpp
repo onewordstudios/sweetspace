@@ -117,8 +117,10 @@ void GLaDOS::placeObject(BuildingBlockModel::Object obj, float zeroAngle, vector
 			break;
 		case BuildingBlockModel::Button: {
 			i = (int)distance(buttonFree.begin(), find(buttonFree.begin(), buttonFree.end(), true));
+			buttonFree.at(i) = false;
 			int j =
 				(int)distance(buttonFree.begin(), find(buttonFree.begin(), buttonFree.end(), true));
+			buttonFree.at(j) = false;
 
 			std::shared_ptr<ButtonModel> btn1 = ship->getButtons().at(i);
 			std::shared_ptr<ButtonModel> btn2 = ship->getButtons().at(j);
@@ -128,13 +130,14 @@ void GLaDOS::placeObject(BuildingBlockModel::Object obj, float zeroAngle, vector
 				pairAngle = (float)(rand() % (int)(ship->getSize()));
 			} while (abs(pairAngle - ship->getButtons().at(i)->getAngle()) < globals::BUTTON_DIST);
 
-			buttonFree.at(i) = false;
+			CULog("Generating buttons with IDs %d and %d, at angles %f and %f", i, j,
+				  obj.angle + zeroAngle, pairAngle);
+
 			btn1->clear();
 			btn1->setAngle((float)obj.angle + zeroAngle);
 			btn1->setJumpedOn(false);
 			btn1->setPair(btn2, j);
 
-			buttonFree.at(j) = false;
 			btn2->clear();
 			btn2->setAngle(pairAngle);
 			btn2->setJumpedOn(false);
