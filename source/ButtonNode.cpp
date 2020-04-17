@@ -21,10 +21,11 @@ void ButtonNode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch, const Mat
 		onScreenAngle = onScreenAngle >= 0 ? onScreenAngle : shipSize + onScreenAngle;
 		onScreenAngle = onScreenAngle > shipSize / 2 ? onScreenAngle - shipSize : onScreenAngle;
 		onScreenAngle *= globals::PI_180;
+		float relativeAngle = onScreenAngle - getParent()->getParent()->getAngle();
 		if (!isShown && onScreenAngle < globals::SEG_CUTOFF_ANGLE &&
 			onScreenAngle > -globals::SEG_CUTOFF_ANGLE) {
 			// Button is coming into visible range
-			float relativeAngle = onScreenAngle - getParent()->getParent()->getAngle();
+			relativeAngle = onScreenAngle - getParent()->getParent()->getAngle();
 
 			buttonPos = Vec2(BUTTON_POS * sin(relativeAngle), -BUTTON_POS * cos(relativeAngle));
 
@@ -50,11 +51,11 @@ void ButtonNode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch, const Mat
 				setTexture(getButtonBaseDown());
 			} else {
 				setTexture(getButtonDown());
-				setPosition((BUTTON_POS + 10) * sin(getAngle()),
-							(-BUTTON_POS - 10) * cos(getAngle()));
+				setPosition((BUTTON_POS + 10) * sin(relativeAngle),
+							(-BUTTON_POS - 10) * cos(relativeAngle));
 			}
 		} else if (isShown) {
-			setPosition(BUTTON_POS * sin(getAngle()), -BUTTON_POS * cos(getAngle()));
+			setPosition(BUTTON_POS * sin(relativeAngle), -BUTTON_POS * cos(relativeAngle));
 		}
 	} else {
 		// Button is currently inactive

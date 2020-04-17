@@ -22,7 +22,10 @@ class ButtonNode : public cugl::AnimationNode {
 	std::shared_ptr<cugl::Texture> btnDown;
 	std::shared_ptr<cugl::Texture> btnUp;
 	std::shared_ptr<cugl::Label> label;
-
+	/** Button node can either be a button base, or the button itself.
+	 * 0 = button base
+	 * 1 = button
+	 */
 	int buttonType;
 
    public:

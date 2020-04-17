@@ -283,6 +283,7 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 		bNode->setButtonBaseDown(assets->get<Texture>("challenge_btn_base_down"));
 		bNode->setButtonBaseUp(assets->get<Texture>("challenge_btn_base_up"));
 		bNode->setButtonLabel(buttonLabel);
+		bNode->setShipSize(ship->getSize());
 
 		buttonNode->addChild(subNode);
 		buttonNode->addChild(bNode);
