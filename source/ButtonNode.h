@@ -36,7 +36,7 @@ class ButtonNode : public cugl::AnimationNode {
 	 * NEVER USE A CONSTRUCTOR WITH NEW. If you want to allocate an object on
 	 * the heap, use one of the static constructors instead.
 	 */
-	ButtonNode() : cugl::AnimationNode(), shipSize(0), isShown(false) {}
+	ButtonNode() : cugl::AnimationNode(), shipSize(0), isShown(false), buttonType(0) {}
 
 	/**
 	 * Releases all resources allocated with this node.

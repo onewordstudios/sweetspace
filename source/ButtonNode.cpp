@@ -57,7 +57,7 @@ void ButtonNode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch, const Mat
 				setPosition((BUTTON_POS + 10) * sin(getAngle()),
 							(-BUTTON_POS - 10) * cos(getAngle()));
 			}
-		} else {
+		} else if (isShown) {
 			setPosition(BUTTON_POS * sin(getAngle()), -BUTTON_POS * cos(getAngle()));
 		}
 	} else {
