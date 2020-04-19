@@ -12,6 +12,9 @@ constexpr float BUTTON_POS = 660;
 /** Position to place DoorNode offscreen. */
 constexpr float OFF_SCREEN_POS = 1500;
 
+/** Amount to offset button */
+constexpr float BUTTON_OFFSET = 10.0f;
+
 void ButtonNode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch, const Mat4& transform,
 					  Color4 tint) {
 	Vec2 buttonPos;
@@ -51,8 +54,8 @@ void ButtonNode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch, const Mat
 				setTexture(getButtonBaseDown());
 			} else {
 				setTexture(getButtonDown());
-				setPosition((BUTTON_POS + 10) * sin(relativeAngle),
-							(-BUTTON_POS - 10) * cos(relativeAngle));
+				setPosition((BUTTON_POS + BUTTON_OFFSET) * sin(relativeAngle),
+							(-BUTTON_POS - BUTTON_OFFSET) * cos(relativeAngle));
 			}
 		} else if (isShown) {
 			setPosition(BUTTON_POS * sin(relativeAngle), -BUTTON_POS * cos(relativeAngle));
