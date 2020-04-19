@@ -13,7 +13,7 @@ then
     clang-tidy ../source/*.cpp -- -I../cugl/include
 elif [ $1 == '-ci' ]
 then
-	clang-tidy ../source/*.cpp -- -I../cugl/include | grep -v "warnings generated."
+	clang-tidy ../source/*.cpp -- -I../cugl/include 2>&1 >/dev/null | grep -v "warnings generated."
 else
     clang-tidy ../source/$1.cpp -- -I../cugl/include
 fi
