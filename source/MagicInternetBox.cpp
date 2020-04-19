@@ -224,7 +224,7 @@ void MagicInternetBox::resolveState(std::shared_ptr<ShipModel> state,
 
 	const auto& doors = state->getDoors();
 	if (doors.size() != message[index++]) {
-		CULog("ERROR: DOOR ARRAY SIZE DISCREPANCY; local %d but server %d", doors.size(),
+		CULog("ERROR: DOOR ARRAY SIZE DISCREPANCY; local %lu but server %d", doors.size(),
 			  message[index - 1]);
 		return;
 	}
@@ -249,7 +249,7 @@ void MagicInternetBox::resolveState(std::shared_ptr<ShipModel> state,
 
 	const auto& breaches = state->getBreaches();
 	if (breaches.size() != message[index++]) {
-		CULog("ERROR: BREACH ARRAY SIZE DISCREPANCY; local %d but server %d", breaches.size(),
+		CULog("ERROR: BREACH ARRAY SIZE DISCREPANCY; local %lu but server %d", breaches.size(),
 			  message[index - 1]);
 		return;
 	}
