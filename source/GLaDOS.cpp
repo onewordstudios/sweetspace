@@ -218,6 +218,7 @@ void GLaDOS::update(float dt) {
 		for (int j = 0; j < ship->getDonuts().size(); j++) {
 			ids.push_back(j);
 		}
+		// NOLINTNEXTLINE It's fine that this shuffle algorithm isn't perfect
 		random_shuffle(ids.begin(), ids.end());
 		shared_ptr<EventModel> event = readyQueue.at(i);
 		shared_ptr<BuildingBlockModel> block = blocks.at(event->getBlock());
