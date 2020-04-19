@@ -20,9 +20,6 @@ constexpr float DONUT_SCALE = 0.4f;
 /** Offset of donut sprites from the radius of the ship */
 constexpr int DONUT_OFFSET = 195;
 
-/** Offset of donut sprites from the radius of the ship */
-constexpr int CHALLENGE_OFFSET = 195;
-
 /** The scale of the ship segments. */
 constexpr float SEG_SCALE = 0.33f;
 
@@ -37,15 +34,6 @@ constexpr int BG_SCROLL_LIMIT = 256;
 
 /** Parallax speed of background image */
 constexpr float BG_SCROLL_SPEED = 0.5;
-
-/** Number of health bar nodes */
-constexpr int NUM_HEALTH_BAR = 8;
-
-/** Number of health bar frames */
-constexpr int HEALTH_BAR_FRAMES = 12;
-
-/** Scaling factor of health nodes */
-constexpr float HEALTH_NODE_SCALE = 0.55f;
 
 /** Animation cycle length of ship red flash */
 constexpr int MAX_HEALTH_WARNING_FRAMES = 150;
@@ -68,8 +56,18 @@ constexpr int SEG_LABEL_Y = 1113;
 /** Scale of button label text */
 constexpr float BUTTON_LABEL_SCALE = 1;
 
+/** Scale of the button */
+constexpr float BUTTON_SCALE = 0.7f;
+
 /** Determines vertical positino of button label */
 constexpr float BUTTON_LABEL_Y = 0.25;
+
+/** Maximum number of health labels */
+constexpr int MAX_HEALTH_LABELS = 10;
+
+/** Percentage of ship health to start showing yellow */
+constexpr float SHIP_HEALTH_YELLOW_CUTOFF = 0.8f;
+
 #pragma mark -
 #pragma mark Constructors
 
@@ -138,7 +136,7 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	challengePanelText->setVisible(false);
 	reconnectOverlay = assets->get<Node>("game_field_reconnect");
 
-	for (int i = 0; i < 10; i++) {
+	for (int i = 0; i < MAX_HEALTH_LABELS; i++) {
 		std::string s = std::to_string(i + 1);
 		std::shared_ptr<cugl::PolygonNode> arrow = dynamic_pointer_cast<cugl::PolygonNode>(
 			assets->get<Node>("game_field_challengePanelParent_challengePanelArrow" + s));
@@ -161,7 +159,7 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 			Size(SEG_LABEL_SIZE, SEG_LABEL_SIZE), assets->get<Font>("mont_black_italic_big"));
 		segLabel->setAnchor(Vec2::ANCHOR_CENTER);
 		segLabel->setHorizontalAlignment(Label::HAlign::CENTER);
-		segLabel->setPosition(segment->getTexture()->getWidth() / 2, SEG_LABEL_Y);
+		segLabel->setPosition((float)segment->getTexture()->getWidth() / 2, SEG_LABEL_Y);
 		segLabel->setForeground(SHIP_LABEL_COLOR);
 		segment->addChild(segLabel);
 		shipSegsNode->addChildWithTag(segment, (unsigned int)(i + 1));
@@ -258,10 +256,11 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 		buttonLabel->setHorizontalAlignment(Label::HAlign::CENTER);
 		buttonLabel->setForeground(Color4::WHITE);
 		buttonLabel->setAnchor(Vec2::ANCHOR_CENTER);
-		buttonLabel->setPosition(image->getWidth() / 2, image->getHeight() * BUTTON_LABEL_Y);
+		buttonLabel->setPosition((float)image->getWidth() / 2,
+								 (float)image->getHeight() * BUTTON_LABEL_Y);
 		// Initialize Button Node
 		subNode->setModel(buttonModel);
-		subNode->setScale(0.7);
+		subNode->setScale(BUTTON_SCALE);
 		subNode->setDonutModel(ship->getDonuts().at(playerID));
 		subNode->setAnchor(Vec2::ANCHOR_BOTTOM_CENTER);
 		subNode->setScale(DOOR_SCALE);
@@ -272,7 +271,7 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 		subNode->setButtonDown(assets->get<Texture>("challenge_btn_down"));
 		subNode->setButtonUp(assets->get<Texture>("challenge_btn_up"));
 		bNode->setModel(buttonModel);
-		bNode->setScale(0.7);
+		bNode->setScale(BUTTON_SCALE);
 		bNode->setDonutModel(ship->getDonuts().at(playerID));
 		bNode->setAnchor(Vec2::ANCHOR_BOTTOM_CENTER);
 		bNode->setScale(DOOR_SCALE);
@@ -340,10 +339,10 @@ void GameGraphRoot::update(float timestep) {
 	if (ship->getHealth() < 1) {
 		std::shared_ptr<Texture> image = assets->get<Texture>("health_empty");
 		healthNode->setTexture(image);
-	} else if (ship->getHealth() < globals::INITIAL_SHIP_HEALTH * 0.5) {
+	} else if (ship->getHealth() < globals::INITIAL_SHIP_HEALTH / (float)2) {
 		std::shared_ptr<Texture> image = assets->get<Texture>("health_red");
 		healthNode->setTexture(image);
-	} else if (ship->getHealth() < globals::INITIAL_SHIP_HEALTH * 0.8) {
+	} else if (ship->getHealth() < globals::INITIAL_SHIP_HEALTH * SHIP_HEALTH_YELLOW_CUTOFF) {
 		std::shared_ptr<Texture> image = assets->get<Texture>("health_yellow");
 		healthNode->setTexture(image);
 	}
@@ -448,7 +447,7 @@ void GameGraphRoot::update(float timestep) {
 		for (int i = 0; i < challengePanelArrows.size(); i++) {
 			std::shared_ptr<cugl::PolygonNode> arrow = challengePanelArrows.at(i);
 			if (ship->getRollDir() == 0) {
-				arrow->setAngle(180 * globals::PI_180);
+				arrow->setAngle(globals::PI);
 			}
 			if (i < (ship->getChallengeProg())) {
 				arrow->setTexture(image);
