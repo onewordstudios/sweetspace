@@ -31,6 +31,16 @@ constexpr float FIX_BREACH_FRICTION = 0.65f;
 /** The friction factor applied when moving through other players breaches */
 constexpr float OTHER_BREACH_FRICTION = 0.2f;
 
+// Health
+/** Grace period for a breach before it starts deducting health */
+constexpr float BREACH_HEALTH_GRACE_PERIOD = 15.0f;
+/** Amount of health to decrement each frame per breach */
+constexpr float BREACH_HEALTH_PENALTY = 0.01f;
+/** Some undocumented upper bound for challenge progress */
+constexpr int CHALLENGE_PROGRESS_HIGH = 100;
+/** Some undocumented lower bound for challenge progress */
+constexpr int CHALLENGE_PROGRESS_LOW = 10;
+
 #pragma mark -
 #pragma mark Constructors
 
@@ -225,8 +235,9 @@ void GameMode::update(float timestep) {
 	for (int i = 0; i < ship->getBreaches().size(); i++) {
 		// this should be adjusted based on the level and number of players
 		if (ship->getBreaches().at(i)->getAngle() >= 0 &&
-			trunc(ship->getBreaches().at(i)->getTimeCreated()) - trunc(ship->timer) > 15) {
-			ship->decHealth(0.01);
+			trunc(ship->getBreaches().at(i)->getTimeCreated()) - trunc(ship->timer) >
+				BREACH_HEALTH_GRACE_PERIOD) {
+			ship->decHealth(BREACH_HEALTH_PENALTY);
 		}
 	}
 
@@ -267,8 +278,9 @@ void GameMode::update(float timestep) {
 		if (allRoll) {
 			ship->updateChallengeProg();
 		}
-		if (ship->getChallengeProg() > 100 || trunc(ship->timer) == trunc(ship->getEndTime())) {
-			if (ship->getChallengeProg() < 10) {
+		if (ship->getChallengeProg() > CHALLENGE_PROGRESS_HIGH ||
+			trunc(ship->timer) == trunc(ship->getEndTime())) {
+			if (ship->getChallengeProg() < CHALLENGE_PROGRESS_LOW) {
 				gm.setChallengeFail(true);
 				ship->failAllTask();
 			}

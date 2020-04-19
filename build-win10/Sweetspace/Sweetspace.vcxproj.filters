@@ -114,9 +114,6 @@
     <ClInclude Include="..\..\source\LevelModel.h">
       <Filter>Header Files\Models</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\source\LevelConstants.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\source\BuildingBlockModel.h">
       <Filter>Header Files\Models</Filter>
     </ClInclude>
@@ -131,6 +128,9 @@
     </ClInclude>
     <ClInclude Include="..\..\source\MainMenuMode.h">
       <Filter>Header Files\Modes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\LevelConstants.h">
+      <Filter>Header Files\Helpers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

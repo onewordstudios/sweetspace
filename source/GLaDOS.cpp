@@ -6,31 +6,6 @@ using namespace cugl;
 using namespace std;
 
 #pragma mark -
-#pragma mark GM Variables
-/** The maximum number of events on ship at any one time. This will probably need to scale with
- * the number of players*/
-unsigned int maxEvents;
-/** The maximum number of events on ship at any one time. This will probably need to scale with
- * the number of players*/
-unsigned int maxDoors;
-/** The maximum number of buttons on ship at any one time. This will probably need to scale with
- * the number of players*/
-unsigned int maxButtons;
-/** Array recording which breaches are free or not. */
-vector<bool> breachFree;
-/** Array recording which doors are free or not. */
-vector<bool> doorFree;
-/** List of building blocks for this level*/
-map<std::string, std::shared_ptr<BuildingBlockModel>> blocks;
-/** List of events for this level*/
-vector<std::shared_ptr<EventModel>> events;
-/** List of events that are ready to be executed*/
-vector<std::shared_ptr<EventModel>> readyQueue;
-
-/** Array recording which doors are free or not. */
-vector<bool> buttonFree;
-
-#pragma mark -
 #pragma mark GM
 /**
  * Creates a new GM controller.
@@ -38,7 +13,15 @@ vector<bool> buttonFree;
  * This constructor does NOT do any initialzation.  It simply allocates the
  * object. This makes it safe to use this class without a pointer.
  */
-GLaDOS::GLaDOS() : active(false), numEvents(0), playerID(0), mib(nullptr), fail(false) {}
+GLaDOS::GLaDOS()
+	: active(false),
+	  numEvents(0),
+	  playerID(0),
+	  mib(nullptr),
+	  fail(false),
+	  maxEvents(0),
+	  maxDoors(0),
+	  maxButtons(0) {}
 
 /**
  * Deactivates this input controller, releasing all listeners.
@@ -235,6 +218,7 @@ void GLaDOS::update(float dt) {
 		for (int j = 0; j < ship->getDonuts().size(); j++) {
 			ids.push_back(j);
 		}
+		// NOLINTNEXTLINE It's fine that this shuffle algorithm isn't perfect
 		random_shuffle(ids.begin(), ids.end());
 		shared_ptr<EventModel> event = readyQueue.at(i);
 		shared_ptr<BuildingBlockModel> block = blocks.at(event->getBlock());
