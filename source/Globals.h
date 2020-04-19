@@ -62,7 +62,10 @@ constexpr unsigned int RADIUS = 550; // NOLINT
 /** Maximum number of possibly visible ship segments at a time */
 constexpr unsigned int VISIBLE_SEGS = 6; // NOLINT
 
-/** The angle in degree of a single ship segment */
+/** The angle in degrees of a single ship segment */
+constexpr unsigned int SEG_DEG = 45; // NOLINT
+
+/** The angle in radians of a single ship segment */
 constexpr float SEG_SIZE = 45 * PI_180; // NOLINT
 
 /** The screen angle at which a ship segment is no longer visible */

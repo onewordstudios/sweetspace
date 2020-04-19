@@ -1,5 +1,7 @@
 #include "ButtonModel.h"
 
+#include "Globals.h"
+
 /**
  * Disposes all resources and assets of this door.
  *
@@ -9,7 +11,8 @@
 void ButtonModel::dispose() {}
 
 int ButtonModel::getSection() {
-	float mod = fmod(getAngle(), (float)45);
-	int section = (int)(mod < 22.5 ? ceilf(getAngle() / 45) : floorf(getAngle() / 45));
+	float mod = fmod(getAngle(), (float)globals::SEG_DEG);
+	int section = (int)(mod < (globals::SEG_DEG / 2.0f) ? ceilf(getAngle() / globals::SEG_DEG)
+														: floorf(getAngle() / globals::SEG_DEG));
 	return section;
 }
