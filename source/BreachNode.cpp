@@ -91,6 +91,6 @@ void BreachNode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch, const Mat
 		isShown = false;
 	}
 	patternNode->setPositionY(
-		Tween::linear(0, PATTERN_OFFSET, (float)shapeNode->getFrame(), shapeNode->getSize()));
+		Tween::linear(0, PATTERN_OFFSET, (int)shapeNode->getFrame(), shapeNode->getSize()));
 	Node::draw(batch, transform, tint);
 }
