@@ -57,7 +57,6 @@ void BreachNode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch, const Mat
 		}
 		if (isAnimatingShrink) {
 			// Update animation frame to shrink
-			int framesPerHP = shapeNode->getSize() / BreachModel::HEALTH_DEFAULT;
 			if (shapeNode->getFrame() == getFrameFromHealth(breachModel->getHealth()) - 1 ||
 				shapeNode->getFrame() == shapeNode->getSize() - 1) {
 				// End shrink animation
@@ -68,7 +67,7 @@ void BreachNode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch, const Mat
 				}
 			} else {
 				// Continue shrink animation
-				shapeNode->setFrame(shapeNode->getFrame() + 1);
+				shapeNode->setFrame((int)shapeNode->getFrame() + 1);
 			}
 		} else {
 			// Play idle animation
@@ -82,8 +81,9 @@ void BreachNode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch, const Mat
 		}
 		prevHealth = breachModel->getHealth();
 		patternNode->setScale(
-			(PATTERN_SCALE + (-PATTERN_SCALE + 1) * (shapeNode->getSize() - shapeNode->getFrame()) /
-								 shapeNode->getSize()));
+			(PATTERN_SCALE + (-PATTERN_SCALE + 1) *
+								 (float)(shapeNode->getSize() - shapeNode->getFrame()) /
+								 (float)shapeNode->getSize()));
 	} else {
 		// Breach is currently inactive
 		breachPos = Vec2(OFF_SCREEN_POS, OFF_SCREEN_POS);
@@ -91,6 +91,6 @@ void BreachNode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch, const Mat
 		isShown = false;
 	}
 	patternNode->setPositionY(
-		Tween::linear(0, PATTERN_OFFSET, shapeNode->getFrame(), shapeNode->getSize()));
+		Tween::linear(0, PATTERN_OFFSET, (float)shapeNode->getFrame(), shapeNode->getSize()));
 	Node::draw(batch, transform, tint);
 }
