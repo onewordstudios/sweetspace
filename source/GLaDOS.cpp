@@ -113,9 +113,6 @@ void GLaDOS::placeObject(BuildingBlockModel::Object obj, float zeroAngle, vector
 				pairAngle = (float)(rand() % (int)(ship->getSize()));
 			} while (abs(pairAngle - ship->getButtons().at(i)->getAngle()) < globals::BUTTON_DIST);
 
-			CULog("Generating buttons with IDs %d and %d, at angles %f and %f", i, j,
-				  obj.angle + zeroAngle, pairAngle);
-
 			btn1->clear();
 			btn1->setAngle((float)obj.angle + zeroAngle);
 			btn1->setJumpedOn(false);
