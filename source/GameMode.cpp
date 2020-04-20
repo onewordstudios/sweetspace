@@ -20,8 +20,6 @@ constexpr float EPSILON_ANGLE = 5.2f;
 constexpr float DOOR_ACTIVE_ANGLE = 15.0f;
 /** Max number of buttons */
 constexpr unsigned int NUM_BUTTONS = 2; // add to level
-/** The Angle in degrees for which a door can be activated*/
-constexpr float BUTTON_ACTIVE_ANGLE = 15.0f;
 /** Angles to adjust per frame to prevent door tunneling */
 constexpr float ANGLE_ADJUST = 0.5f;
 
@@ -297,7 +295,7 @@ void GameMode::update(float timestep) {
 		float a = diff + ship->getSize() / 2;
 		diff = a - floor(a / ship->getSize()) * ship->getSize() - ship->getSize() / 2;
 
-		if (abs(diff) < BUTTON_ACTIVE_ANGLE && donutModel->isJumping()) {
+		if (abs(diff) < globals::BUTTON_ACTIVE_ANGLE && donutModel->isJumping()) {
 			ship->getButtons().at(i)->addPlayer(playerID);
 			ship->getButtons().at(i)->setJumpedOn(true);
 
