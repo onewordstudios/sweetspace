@@ -83,7 +83,7 @@ class ShipModel {
 	 */
 	bool init(unsigned int numPlayers, unsigned int numBreaches, unsigned int numDoors,
 			  unsigned int playerID, int initHealth, unsigned int numButtons) {
-		return init(numPlayers, numBreaches, numDoors, playerID, (float)globals::DEG_ORIG_CIRCLE,
+		return init(numPlayers, numBreaches, numDoors, playerID, globals::DEG_ORIG_CIRCLE,
 					initHealth, numButtons);
 	}
 
