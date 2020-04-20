@@ -89,7 +89,7 @@ void GLaDOS::placeObject(BuildingBlockModel::Object obj, float zeroAngle, vector
 			breachFree.at(i) = false;
 			ship->getBreaches().at(i)->reset((float)obj.angle + zeroAngle, p);
 			ship->getBreaches().at(i)->setTimeCreated(ship->timer);
-			mib->createBreach((float)obj.angle + zeroAngle, p, i);
+			mib->createBreach((float)obj.angle + zeroAngle, p, i, ship->timer);
 			break;
 		case BuildingBlockModel::Door:
 			i = (int)distance(doorFree.begin(), find(doorFree.begin(), doorFree.end(), true));

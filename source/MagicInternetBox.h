@@ -292,8 +292,9 @@ class MagicInternetBox {
 	 * @param angle The angle of the ship to spawn the breach
 	 * @param player The player ID that can resolve this breach
 	 * @param id The breach ID used to identify this breach in the future
+	 * @param timeCreated The time this breach was created.
 	 */
-	void createBreach(float angle, int player, int id);
+	void createBreach(float angle, int player, int id, float timeCreated);
 
 	/**
 	 * Inform other players that a breach has shrunk in size by 1.
