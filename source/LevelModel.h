@@ -31,12 +31,15 @@ const float DEFAULT_TIME = 45;
  */
 class LevelModel : public Asset {
    private:
-	/** The maximum number of events on ship at any one time. This will probably need to scale with
-	 * the number of players*/
+	/** The maximum number of breaches on ship at any one time. This will probably need to scale
+	 * with the number of players*/
 	unsigned int maxBreaches;
-	/** The maximum number of events on ship at any one time. This will probably need to scale with
+	/** The maximum number of doors on ship at any one time. This will probably need to scale with
 	 * the number of players*/
 	unsigned int maxDoors;
+	/** The maximum number of buttons on ship at any one time. This will probably need to scale with
+	 * the number of players*/
+	unsigned int maxButtons;
 	/** Base size of the ship in degrees*/
 	int baseShipSize;
 	/** Incremental size of the ship in degrees*/
@@ -92,6 +95,13 @@ class LevelModel : public Asset {
 	 * @return the max doors
 	 */
 	const unsigned int getMaxDoors() const { return maxDoors; }
+
+	/**
+	 * Returns the max buttons
+	 *
+	 * @return the max buttons
+	 */
+	const unsigned int getMaxButtons() const { return maxButtons; }
 
 	/**
 	 * Returns the ship size given a number of players
@@ -161,6 +171,7 @@ class LevelModel : public Asset {
 		}
 		maxBreaches = json->get(MAX_BREACH_FIELD)->asInt();
 		maxDoors = json->get(MAX_DOOR_FIELD)->asInt();
+		maxButtons = json->get(MAX_BUTTON_FIELD)->asInt();
 		baseShipSize = json->get(BASE_SHIP_FIELD)->asInt();
 		perPlayer = json->get(PER_PLAYER_FIELD)->asInt();
 		time = json->get(TIME_FIELD)->asFloat();
