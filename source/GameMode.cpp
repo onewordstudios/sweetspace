@@ -18,8 +18,6 @@ using namespace std;
 constexpr float EPSILON_ANGLE = 5.2f;
 /** The Angle in degrees for which a door can be activated*/
 constexpr float DOOR_ACTIVE_ANGLE = 15.0f;
-/** Max number of buttons */
-constexpr unsigned int NUM_BUTTONS = 2; // add to level
 /** Angles to adjust per frame to prevent door tunneling */
 constexpr float ANGLE_ADJUST = 0.5f;
 
@@ -94,7 +92,7 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 	std::shared_ptr<LevelModel> level = assets->get<LevelModel>(levelName);
 	ship = ShipModel::alloc(net->getNumPlayers(), level->getMaxBreaches(), level->getMaxDoors(),
 							playerID, (float)level->getShipSize((int)net->getNumPlayers()),
-							level->getInitHealth(), NUM_BUTTONS);
+							level->getInitHealth(), level->getMaxButtons());
 	gm.init(ship, level);
 
 	donutModel = ship->getDonuts().at(static_cast<unsigned long>(playerID));
