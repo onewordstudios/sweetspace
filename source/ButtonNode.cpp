@@ -1,6 +1,6 @@
 #include "ButtonNode.h"
 
-#include <cugl/2d/CUAnimationNode.h>
+#include <cugl/2d/CUNode.h>
 
 #include "Globals.h"
 
@@ -24,48 +24,38 @@ void ButtonNode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch, const Mat
 		onScreenAngle = onScreenAngle >= 0 ? onScreenAngle : shipSize + onScreenAngle;
 		onScreenAngle = onScreenAngle > shipSize / 2 ? onScreenAngle - shipSize : onScreenAngle;
 		onScreenAngle *= globals::PI_180;
-		float relativeAngle = onScreenAngle - getParent()->getParent()->getAngle();
 		if (!isShown && onScreenAngle < globals::SEG_CUTOFF_ANGLE &&
 			onScreenAngle > -globals::SEG_CUTOFF_ANGLE) {
-			// Button is coming into visible range
-			relativeAngle = onScreenAngle - getParent()->getParent()->getAngle();
-
+			// Coming into visible range
+			float relativeAngle = onScreenAngle - getParent()->getParent()->getAngle();
 			buttonPos = Vec2(BUTTON_POS * sin(relativeAngle), -BUTTON_POS * cos(relativeAngle));
-
 			setPosition(buttonPos);
 			isShown = true;
 			setAngle(relativeAngle);
-			if (buttonType == 0) {
-				std::string s = std::to_string(buttonModel->getPair()->getSection());
-				CULog("Section Label %d", buttonModel->getPair()->getSection());
-				label->setText(s);
-			}
+			std::string s = std::to_string(buttonModel->getPair()->getSection());
+			label->setText(s);
 		} else if (isShown && (onScreenAngle >= globals::SEG_CUTOFF_ANGLE ||
 							   onScreenAngle <= -globals::SEG_CUTOFF_ANGLE)) {
-			// Door is leaving visible range
+			// Leaving visible range
 			buttonPos = Vec2(OFF_SCREEN_POS, OFF_SCREEN_POS);
 			setPosition(buttonPos);
 			isShown = false;
 		}
 
 		if (buttonModel->jumpedOn()) {
-			CULog("jump in scenegraph");
-			if (buttonType == 0) {
-				setTexture(getButtonBaseDown());
-			} else {
-				setTexture(getButtonDown());
-				setPosition((BUTTON_POS + BUTTON_OFFSET) * sin(relativeAngle),
-							(-BUTTON_POS - BUTTON_OFFSET) * cos(relativeAngle));
-			}
+			baseNode->setTexture(btnBaseDown);
+			bodyNode->setTexture(btnDown);
+			bodyNode->setPositionY(-BUTTON_OFFSET);
 		} else if (isShown) {
-			setPosition(BUTTON_POS * sin(relativeAngle), -BUTTON_POS * cos(relativeAngle));
+			bodyNode->setPositionY(0);
 		}
 	} else {
 		// Button is currently inactive
 		buttonPos = Vec2(OFF_SCREEN_POS, OFF_SCREEN_POS);
 		setPosition(buttonPos);
 		isShown = false;
-		buttonType == 0 ? setTexture(getButtonBaseUp()) : setTexture(getButtonUp());
+		baseNode->setTexture(btnBaseUp);
+		bodyNode->setTexture(btnUp);
 	}
-	AnimationNode::draw(batch, transform, tint);
+	Node::draw(batch, transform, tint);
 }
