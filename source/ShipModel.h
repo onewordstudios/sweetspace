@@ -6,6 +6,8 @@
 #include "ButtonModel.h"
 #include "DonutModel.h"
 #include "DoorModel.h"
+#include "Globals.h"
+
 class ShipModel {
    private:
    protected:
@@ -81,8 +83,8 @@ class ShipModel {
 	 */
 	bool init(unsigned int numPlayers, unsigned int numBreaches, unsigned int numDoors,
 			  unsigned int playerID, int initHealth, unsigned int numButtons) {
-		return init(numPlayers, numBreaches, numDoors, playerID, (float)360, initHealth,
-					numButtons);
+		return init(numPlayers, numBreaches, numDoors, playerID, (float)globals::DEG_ORIG_CIRCLE,
+					initHealth, numButtons);
 	}
 
 	/**

@@ -40,6 +40,9 @@ constexpr int ROLL_CHALLENGE_LENGTH = 6; // NOLINT
 #pragma region Math
 #pragma mark Math
 
+/** Size of generic ship, in degrees */
+constexpr float DEG_ORIG_CIRCLE = 360.0f; // NOLINT
+
 /** Pi */
 constexpr float PI = 3.14159265358979323846264338327950288f; // NOLINT
 
