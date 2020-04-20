@@ -1,4 +1,4 @@
-#include "ButtonNode.h"
+﻿#include "ButtonNode.h"
 
 #include <cugl/2d/CUAnimationNode.h>
 
@@ -37,7 +37,6 @@ void ButtonNode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch, const Mat
 			setAngle(relativeAngle);
 			if (buttonType == 0) {
 				std::string s = std::to_string(buttonModel->getPair()->getSection());
-				CULog("Section Label %d", buttonModel->getPair()->getSection());
 				label->setText(s);
 			}
 		} else if (isShown && (onScreenAngle >= globals::SEG_CUTOFF_ANGLE ||
@@ -49,7 +48,6 @@ void ButtonNode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch, const Mat
 		}
 
 		if (buttonModel->jumpedOn()) {
-			CULog("jump in scenegraph");
 			if (buttonType == 0) {
 				setTexture(getButtonBaseDown());
 			} else {
