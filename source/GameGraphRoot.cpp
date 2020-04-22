@@ -60,7 +60,7 @@ constexpr float BUTTON_LABEL_SCALE = 1;
 constexpr float BUTTON_SCALE = 0.3f;
 
 /** Determines vertical positino of button label */
-constexpr float BUTTON_LABEL_Y = 0.25;
+constexpr float BUTTON_LABEL_Y = -0.28f;
 
 /** Maximum number of health labels */
 constexpr int MAX_HEALTH_LABELS = 10;
@@ -258,12 +258,9 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 		buttonLabel->setHorizontalAlignment(Label::HAlign::CENTER);
 		buttonLabel->setForeground(Color4::WHITE);
 		buttonLabel->setAnchor(Vec2::ANCHOR_CENTER);
-		buttonLabel->setPosition((float)baseTexture->getWidth() / 2,
-								 (float)baseTexture->getHeight() * BUTTON_LABEL_Y);
+		buttonLabel->setPosition(0, (float)baseTexture->getHeight() * BUTTON_LABEL_Y);
 		// Initialize fields
 		buttonNode->setModel(buttonModel);
-		buttonNode->setAnchor(Vec2::ANCHOR_CENTER);
-		buttonNode->setPosition(0, 0);
 		buttonNode->setScale(BUTTON_SCALE);
 		buttonNode->setDonutModel(ship->getDonuts().at(playerID));
 		buttonNode->setAnchor(Vec2::ANCHOR_BOTTOM_CENTER);

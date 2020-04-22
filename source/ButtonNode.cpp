@@ -7,7 +7,7 @@
 using namespace cugl;
 
 /** The radius used for placement of the doors. */
-constexpr float BUTTON_POS = 660;
+constexpr float BUTTON_POS = 600;
 
 /** Position to place DoorNode offscreen. */
 constexpr float OFF_SCREEN_POS = 1500;

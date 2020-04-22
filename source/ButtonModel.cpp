@@ -12,8 +12,7 @@ void ButtonModel::dispose() {}
 
 int ButtonModel::getSection() {
 	float mod = fmod(getAngle(), (float)globals::SEG_DEG);
-	int section =
-		(int)(mod < ((float)globals::SEG_DEG / 2) ? ceilf(getAngle() / globals::SEG_DEG)
-												  : floorf(getAngle() / globals::SEG_DEG));
+	int section = (int)(mod < ((float)globals::SEG_DEG / 2) ? floorf(getAngle() / globals::SEG_DEG)
+															: ceilf(getAngle() / globals::SEG_DEG));
 	return section;
 }
