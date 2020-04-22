@@ -95,7 +95,6 @@ bool ShipModel::createButton(float angle1, int id1, float angle2, int id2) {
 	buttons.at(id2)->setAngle(angle2);
 	buttons.at(id1)->setPair(buttons.at(id2), id2);
 	buttons.at(id2)->setPair(buttons.at(id1), id1);
-	CULog("Buttons created");
 	return true;
 }
 

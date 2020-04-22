@@ -3,6 +3,7 @@
 
 constexpr auto MAX_BREACH_FIELD = "maxBreaches";   // NOLINT
 constexpr auto MAX_DOOR_FIELD = "maxDoors";		   // NOLINT
+constexpr auto MAX_BUTTON_FIELD = "maxButtons";	   // NOLINT
 constexpr auto BASE_SHIP_FIELD = "baseShipSize";   // NOLINT
 constexpr auto PER_PLAYER_FIELD = "perPlayerSize"; // NOLINT
 constexpr auto TIME_FIELD = "time";				   // NOLINT

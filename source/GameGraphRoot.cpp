@@ -242,7 +242,6 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	}
 
 	// Initialize Buttons
-	CULog("Initing buttons %lu", ship->getButtons().size());
 	for (int i = 0; i < ship->getButtons().size(); i++) {
 		// Initialize nodes
 		std::shared_ptr<ButtonModel> buttonModel = ship->getButtons().at((unsigned long)i);
