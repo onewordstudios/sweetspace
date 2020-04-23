@@ -53,9 +53,6 @@ void ButtonNode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch, const Mat
 		}
 
 		if (justJumpedOn) {
-			CULog("HELLO????? %d", getTag());
-			CULog(prevJumpedOn ? "prevJump true" : "prevJump false");
-			CULog("Curr frame %d \n", currentFrame);
 			currentFrame = 1;
 			baseNode->setTexture(btnBaseDown);
 			bodyNode->setTexture(btnDown);
@@ -63,7 +60,6 @@ void ButtonNode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch, const Mat
 		if (currentFrame != 0) {
 			if (currentFrame == MAX_FRAMES) {
 				currentFrame = 0;
-				CULog("RESET FRAME %d", getTag());
 			} else {
 				if (currentFrame >= BEGIN_FRAME) {
 					bodyNode->setPositionY(Tween::linear(0, DEPRESSION_AMOUNT,
@@ -78,8 +74,7 @@ void ButtonNode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch, const Mat
 		buttonPos = Vec2(OFF_SCREEN_POS, OFF_SCREEN_POS);
 		setPosition(buttonPos);
 		isShown = false;
-		baseNode->setTexture(btnBaseUp);
-		bodyNode->setTexture(btnUp);
+		resetAnimation();
 	}
 	prevJumpedOn = buttonModel->jumpedOn();
 	prevResolved = buttonModel->getResolved();

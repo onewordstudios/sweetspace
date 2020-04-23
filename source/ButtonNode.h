@@ -81,6 +81,16 @@ class ButtonNode : public cugl::Node {
 		return (node->init() ? node : nullptr);
 	}
 
+	/**
+	 * Resets animation.
+	 */
+	void resetAnimation() {
+		baseNode->setTexture(btnBaseUp);
+		bodyNode->setTexture(btnUp);
+		bodyNode->setPositionY(0);
+		currentFrame = 0;
+	}
+
 #pragma mark -
 
 	void setModel(std::shared_ptr<ButtonModel> model) { buttonModel = model; }
