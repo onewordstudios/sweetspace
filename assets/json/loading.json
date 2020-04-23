@@ -1,7 +1,7 @@
 {
 	"textures": {
         "progress": {
-            "file":      "textures/progressbar.png",
+            "file":      "textures/loading/progressbar.png",
             "wrapS":     "clamp",
             "wrapT":     "clamp",
             "minfilter": "linear",
@@ -12,6 +12,9 @@
                 "leftcap"    : [0,   40,  30, 80],
                 "rightcap"   : [370, 40, 400, 80]
             }
+        },
+        "bg": {
+            "file": "textures/loading/bg.png"
         }
 	},
     "scenes" : {
@@ -21,6 +24,21 @@
                 "type" : "Anchored"
             },
             "children"  : {
+                "bg"   : {
+                    "type": "image",
+                    "format"    : {
+                        "type" : "Anchored"
+                    },
+                    "data" : {
+                        "texture" : "bg",
+                        "anchor"   : [0.5,0.5],
+                        "scale"    : 0.15
+                    },
+                    "layout" : {
+                        "x_anchor" : "center",
+                        "y_anchor" : "middle"
+                    }
+                },
                 "bar"  : {
                     "type"   : "Progress",
                     "data"   : {
