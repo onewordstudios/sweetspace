@@ -282,6 +282,7 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 		buttonNode->addChild(baseNode);
 		buttonNode->addChild(buttonLabel);
 		buttonsNode->addChild(buttonNode);
+		buttonNode->setTag(i+1);
 	}
 
 	addChild(scene);

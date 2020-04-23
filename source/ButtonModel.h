@@ -126,7 +126,7 @@ class ButtonModel {
 	 * Removes the given player's flag from the button. Requires that this player is on the button
 	 */
 	void removePlayer(int id) {
-		if (!isResolved()) {
+		if (!getResolved()) {
 			playersOn = playersOn ^ (unsigned char)pow(2, id);
 		}
 	}
@@ -139,7 +139,7 @@ class ButtonModel {
 	/**
 	 * Returns whether this button is resolved.
 	 */
-	bool isResolved() { return resolved; }
+	bool getResolved() { return resolved; }
 
 	/**
 	 * Sets whether this button is resolved.

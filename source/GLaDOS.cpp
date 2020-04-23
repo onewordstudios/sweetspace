@@ -177,7 +177,7 @@ void GLaDOS::update(float dt) {
 		if (ship->getButtons().at(i) == nullptr) {
 			continue;
 		}
-		if (ship->getButtons().at(i)->isResolved()) {
+		if (ship->getButtons().at(i)->getResolved()) {
 			ship->getButtons().at(i)->setAngle(-1);
 			ship->getButtons().at(i)->getPair()->setAngle(-1);
 			buttonFree.at(ship->getButtons().at(i)->getPairID()) = true;

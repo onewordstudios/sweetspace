@@ -16,6 +16,12 @@ class ButtonNode : public cugl::Node {
 	float shipSize;
 	/** Whether the breach is being shown right now */
 	bool isShown;
+	/** Current animation frame of button */
+	int currentFrame;
+	/** Value of jumped on from previous frame */
+	bool prevJumpedOn;
+	/** Value of resolved from previous frame */
+	bool prevResolved;
 
 	/** Texture for activated button base */
 	std::shared_ptr<cugl::Texture> btnBaseDown;
@@ -43,7 +49,7 @@ class ButtonNode : public cugl::Node {
 	 * NEVER USE A CONSTRUCTOR WITH NEW. If you want to allocate an object on
 	 * the heap, use one of the static constructors instead.
 	 */
-	ButtonNode() : cugl::Node(), shipSize(0), isShown(false) {}
+	ButtonNode() : cugl::Node(), shipSize(0), isShown(false), currentFrame(0) {}
 
 	/**
 	 * Releases all resources allocated with this node.
