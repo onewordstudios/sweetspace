@@ -18,7 +18,7 @@ class BreachNode : public cugl::Node {
 	/** Reference to the shape node of this breach */
 	std::shared_ptr<cugl::AnimationNode> shapeNode;
 	/** Reference to the pattern node of this breach */
-	std::shared_ptr<cugl::PolygonNode> patternNode;
+	std::shared_ptr<cugl::AnimationNode> patternNode;
 	/** Size of the ship. Needed for visibility determination */
 	float shipSize;
 	/** Whether the breach is being shown right now */
@@ -87,13 +87,13 @@ class BreachNode : public cugl::Node {
 
 	void setShapeNode(std::shared_ptr<cugl::AnimationNode> n) { shapeNode = n; }
 
-	void setPatternNode(std::shared_ptr<cugl::PolygonNode> n) { patternNode = n; }
+	void setPatternNode(std::shared_ptr<cugl::AnimationNode> n) { patternNode = n; }
 
 	bool getIsAnimatingShrink() { return isAnimatingShrink; }
 
 	std::shared_ptr<cugl::AnimationNode> getShapeNode() { return shapeNode; }
 
-	std::shared_ptr<cugl::PolygonNode> getPatternNode() { return patternNode; }
+	std::shared_ptr<cugl::AnimationNode> getPatternNode() { return patternNode; }
 
 	std::shared_ptr<BreachModel> getModel() { return breachModel; }
 
@@ -105,6 +105,7 @@ class BreachNode : public cugl::Node {
 		isAnimatingShrink = false;
 		prevHealth = BreachModel::HEALTH_DEFAULT;
 		shapeNode->setFrame(0);
+		patternNode->setFrame(0);
 		currentFrameIdle = 0;
 	}
 #pragma mark Drawing
