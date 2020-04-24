@@ -8,7 +8,7 @@
 #include "BreachNode.h"
 #include "ButtonNode.h"
 #include "DonutModel.h"
-#include "DonutNode.h"
+#include "ExternalDonutNode.h"
 #include "DoorNode.h"
 #include "Globals.h"
 #include "HealthNode.h"

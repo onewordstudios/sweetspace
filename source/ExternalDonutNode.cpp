@@ -1,4 +1,4 @@
-﻿#include "DonutNode.h"
+﻿#include "ExternalDonutNode.h"
 
 #include <cugl/2d/CUPolygonNode.h>
 
@@ -12,7 +12,7 @@ constexpr unsigned int RADIUS_OFFSET = 30;
 /** Position to place node offscreen. */
 constexpr float OFF_SCREEN_POS = 1500;
 
-void DonutNode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch, const Mat4& transform,
+void ExternalDonutNode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch, const Mat4& transform,
 					 Color4 tint) {
 	if (!donutModel->getIsActive()) return;
 	const float jump = 1.0f - donutModel->getJumpOffset();

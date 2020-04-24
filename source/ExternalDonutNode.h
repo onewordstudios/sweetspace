@@ -1,11 +1,11 @@
-#ifndef SWEETSPACE_DONUTNODE_H
-#define SWEETSPACE_DONUTNODE_H
+#ifndef SWEETSPACE_EXTERNALDONUTNODE_H
+#define SWEETSPACE_EXTERNALDONUTNODE_H
 
 #include <cugl/2d/CUPolygonNode.h>
 
 #include "DonutModel.h"
 
-class DonutNode : public cugl::PolygonNode {
+class ExternalDonutNode : public cugl::PolygonNode {
 #pragma mark Values
    protected:
 	std::shared_ptr<DonutModel> donutModel;
@@ -27,7 +27,7 @@ class DonutNode : public cugl::PolygonNode {
 	 * NEVER USE A CONSTRUCTOR WITH NEW. If you want to allocate an object on
 	 * the heap, use one of the static constructors instead.
 	 */
-	DonutNode() : cugl::PolygonNode() {}
+	ExternalDonutNode() : cugl::PolygonNode() {}
 
 	/**
 	 * Releases all resources allocated with this node.
@@ -36,7 +36,7 @@ class DonutNode : public cugl::PolygonNode {
 	 * However, the polygon and drawing commands will be deleted and no
 	 * longer safe to use.
 	 */
-	~DonutNode() { dispose(); }
+	~ExternalDonutNode() { dispose(); }
 
 #pragma mark -
 	/**
@@ -49,9 +49,9 @@ class DonutNode : public cugl::PolygonNode {
 	 *
 	 * @return a textured polygon from a Texture object.
 	 */
-	static std::shared_ptr<DonutNode> allocWithTexture(
+	static std::shared_ptr<ExternalDonutNode> allocWithTexture(
 		const std::shared_ptr<cugl::Texture> &texture) {
-		std::shared_ptr<DonutNode> node = std::make_shared<DonutNode>();
+		std::shared_ptr<ExternalDonutNode> node = std::make_shared<ExternalDonutNode>();
 		return (node->initWithTexture(texture) ? node : nullptr);
 	}
 
@@ -67,4 +67,4 @@ class DonutNode : public cugl::PolygonNode {
 			  cugl::Color4 tint) override;
 };
 
-#endif // SWEETSPACE_DONUTNODE_H
+#endif //SWEETSPACE_EXTERNALDONUTNODE_H
