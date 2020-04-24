@@ -1,6 +1,6 @@
 ﻿#include "ExternalDonutNode.h"
 
-#include <cugl/2d/CUPolygonNode.h>
+#include <cugl/2d/CUNode.h>
 
 #include "Globals.h"
 
@@ -13,11 +13,11 @@ constexpr unsigned int RADIUS_OFFSET = 30;
 constexpr float OFF_SCREEN_POS = 1500;
 
 void ExternalDonutNode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch, const Mat4& transform,
-					 Color4 tint) {
+							 Color4 tint) {
 	if (!donutModel->getIsActive()) return;
 	const float jump = 1.0f - donutModel->getJumpOffset();
 	float vel = donutModel->getVelocity();
-	float radiusRatio = (globals::RADIUS + RADIUS_OFFSET) / (getWidth() / 2);
+	float radiusRatio = (globals::RADIUS + RADIUS_OFFSET) / (bodyNode->getWidth() / 2);
 	Vec2 donutPos;
 	if (donutModel->getAngle() >= 0) {
 		// Donut is currently active
@@ -51,5 +51,5 @@ void ExternalDonutNode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch, co
 		setPosition(donutPos);
 		isShown = false;
 	}
-	PolygonNode::draw(batch, transform, tint);
+	Node::draw(batch, transform, tint);
 }

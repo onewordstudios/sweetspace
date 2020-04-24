@@ -174,7 +174,8 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 		if (i == playerID) {
 			donutNode->setTexture(image);
 		} else {
-			std::shared_ptr<ExternalDonutNode> newDonutNode = ExternalDonutNode::allocWithTexture(image);
+			std::shared_ptr<ExternalDonutNode> newDonutNode =
+				ExternalDonutNode::allocWithTextures(image);
 			newDonutNode->setModel(donutModel);
 			newDonutNode->setScale(DONUT_SCALE);
 			newDonutNode->setShipSize(ship->getSize());

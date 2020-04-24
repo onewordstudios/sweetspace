@@ -4,30 +4,16 @@
 #include <cugl/2d/CUPolygonNode.h>
 
 #include "DonutModel.h"
+#include "DonutNode.h"
 
-class ExternalDonutNode : public cugl::PolygonNode {
-#pragma mark Values
-   protected:
-	std::shared_ptr<DonutModel> donutModel;
-	/** Reference to the player donut model */
-	std::shared_ptr<DonutModel> playerDonutModel;
-	/** Size of the ship. Needed for visibility determination */
-	float shipSize;
-	/** Whether the breach is being shown right now */
-	bool isShown;
-
+class ExternalDonutNode : public DonutNode {
    public:
 #pragma mark -
 #pragma mark Constructor
 	/**
-	 * Creates an empty polygon with the degenerate texture.
-	 *
-	 * You must initialize this PolygonNode before use.
-	 *
-	 * NEVER USE A CONSTRUCTOR WITH NEW. If you want to allocate an object on
-	 * the heap, use one of the static constructors instead.
+	 * Creates an node.
 	 */
-	ExternalDonutNode() : cugl::PolygonNode() {}
+	ExternalDonutNode() : DonutNode() {}
 
 	/**
 	 * Releases all resources allocated with this node.
@@ -38,33 +24,30 @@ class ExternalDonutNode : public cugl::PolygonNode {
 	 */
 	~ExternalDonutNode() { dispose(); }
 
-#pragma mark -
 	/**
-	 * Returns a textured polygon from a Texture object.
+	 * Returns an ExternalDonutNode
 	 *
-	 * After creation, the polygon will be a rectangle. The vertices of this
-	 * polygon will be the corners of the texture.
-	 *
-	 * @param texture   A shared pointer to a Texture object.
+	 * @param bodyTexture   A shared pointer to the body Texture object.
 	 *
 	 * @return a textured polygon from a Texture object.
 	 */
-	static std::shared_ptr<ExternalDonutNode> allocWithTexture(
-		const std::shared_ptr<cugl::Texture> &texture) {
+	static std::shared_ptr<ExternalDonutNode> allocWithTextures(
+		const std::shared_ptr<cugl::Texture> &bodyTexture) {
 		std::shared_ptr<ExternalDonutNode> node = std::make_shared<ExternalDonutNode>();
-		return (node->initWithTexture(texture) ? node : nullptr);
+		if (node->init()) {
+			node->bodyNode = cugl::PolygonNode::allocWithTexture(bodyTexture);
+			node->bodyNode->setAnchor(cugl::Vec2::ANCHOR_CENTER);
+			node->bodyNode->setPosition(0, 0);
+			node->addChildWithName(node->bodyNode, "body");
+			return node;
+		} else {
+			return nullptr;
+		}
 	}
 
-	void setModel(std::shared_ptr<DonutModel> model) { donutModel = model; }
-
-	void setDonutModel(std::shared_ptr<DonutModel> model) { playerDonutModel = model; }
-
-	void setShipSize(float f) { shipSize = f; }
-
-	std::shared_ptr<DonutModel> getModel() { return donutModel; }
-
+#pragma mark -
 	void draw(const shared_ptr<cugl::SpriteBatch> &batch, const cugl::Mat4 &transform,
 			  cugl::Color4 tint) override;
 };
 
-#endif //SWEETSPACE_EXTERNALDONUTNODE_H
+#endif // SWEETSPACE_EXTERNALDONUTNODE_H
