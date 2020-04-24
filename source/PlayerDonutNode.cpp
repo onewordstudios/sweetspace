@@ -10,13 +10,13 @@ void PlayerDonutNode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch, cons
 						   Color4 tint) {
 	double radiusRatio = (double)globals::RADIUS / (bodyNode->getWidth() / 2);
 
-	float angle =
-		(float)(getAngle() - playerDonutModel->getVelocity() * globals::PI_180 * radiusRatio);
+	float angle = (float)(rotationNode->getAngle() -
+						  playerDonutModel->getVelocity() * globals::PI_180 * radiusRatio);
 	setAnchor(Vec2::ANCHOR_CENTER);
-	setAngle(angle);
+	rotationNode->setAngle(angle);
 	// Draw Jump Offset
 	float donutNewY = initPos.y + playerDonutModel->getJumpOffset() * screenHeight;
 	setPositionY(donutNewY);
-
+	animateJumping();
 	Node::draw(batch, transform, tint);
 }

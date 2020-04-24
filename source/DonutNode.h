@@ -25,6 +25,8 @@ class DonutNode : public cugl::Node {
 	/** Whether the breach is being shown right now */
 	bool isShown;
 
+	/** Reference to child node which is responsible for rotation */
+	std::shared_ptr<cugl::Node> rotationNode;
 	/** Reference to node of donut body */
 	std::shared_ptr<cugl::PolygonNode> bodyNode;
 

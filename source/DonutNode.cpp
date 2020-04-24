@@ -2,16 +2,19 @@
 
 #include <cugl/2d/CUNode.h>
 
+#include "GameGraphRoot.h"
 #include "Globals.h"
+#include "Tween.h"
 
 using namespace cugl;
 
-/** The radius of the ship. Also the y coordinate of the center of the ship */
-constexpr unsigned int RADIUS_OFFSET = 30;
+/** The scale by which donut stretches when jumping */
+constexpr float JUMP_SCALE = 1.6f;
 
-/** Position to place node offscreen. */
-constexpr float OFF_SCREEN_POS = 1500;
-
-void DonutNode::animateJumping() {}
+void DonutNode::animateJumping() {
+	setScale(GameGraphRoot::DONUT_SCALE,
+			 Tween::linear(GameGraphRoot::DONUT_SCALE, GameGraphRoot::DONUT_SCALE * JUMP_SCALE,
+						   (int)(donutModel->getJumpOffset() * 100), 35));
+}
 
 void DonutNode::animateFacialExpression() {}

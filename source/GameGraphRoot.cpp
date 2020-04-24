@@ -14,9 +14,6 @@ using namespace std;
 #pragma mark -
 #pragma mark Level Layout
 
-/** The scale of the donut textures. */
-constexpr float DONUT_SCALE = 0.4f;
-
 /** Offset of donut sprites from the radius of the ship */
 constexpr int DONUT_OFFSET = 195;
 
