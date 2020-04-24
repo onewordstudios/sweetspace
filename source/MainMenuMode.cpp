@@ -16,8 +16,17 @@ using namespace cugl;
 constexpr unsigned int NUM_DIGITS = 10;
 
 #pragma region Animation Constants
+/** Maximum rotation */
+constexpr int ROTATION_MAX = 360 * 100;
+
 /** Duration of a standard transition */
 constexpr int TRANSITION_DURATION = 30;
+
+/** Duration of opening transition */
+constexpr int OPEN_TRANSITION = 120;
+
+/** When during opening transition to fade in stuff */
+constexpr int OPEN_TRANSITION_FADE = 90;
 #pragma endregion
 
 #pragma region Initialization Logic
@@ -95,7 +104,9 @@ bool MainMenuMode::init(const std::shared_ptr<AssetManager>& assets) {
 	}
 #pragma endregion
 
-	transitionFrame = -1;
+	transitionFrame = 0;
+	currState = NA;
+	transitionState = StartScreen;
 
 	updateClientLabel();
 
@@ -176,6 +187,42 @@ void MainMenuMode::setRoomID() {
 void MainMenuMode::processTransition() {
 	transitionFrame++;
 	switch (currState) {
+		case NA: {
+			if (transitionFrame == 1) {
+				bg1land->setVisible(true);
+				bg2ship->setVisible(true);
+			}
+			if (transitionFrame > OPEN_TRANSITION) {
+				currState = StartScreen;
+				transitionState = NA;
+				transitionFrame = -1;
+				bg9studio->setVisible(false);
+				mainScreen->setColor(Color4::WHITE);
+				return;
+			}
+
+			// Fade out studio logo from loading screen
+			if (transitionFrame <= TRANSITION_DURATION * 2) {
+				bg9studio->setColor(Tween::fade(
+					Tween::linear(1.0f, 0.0f, transitionFrame, TRANSITION_DURATION * 2)));
+			}
+
+			// Fade in main menu at end
+			if (transitionFrame > OPEN_TRANSITION_FADE) {
+				mainScreen->setVisible(true);
+				int i = transitionFrame - OPEN_TRANSITION_FADE;
+				mainScreen->setColor(Tween::fade(
+					Tween::linear(0.0f, 1.0f, i, OPEN_TRANSITION - OPEN_TRANSITION_FADE)));
+			}
+
+			// Background pans up into view
+			bg1land->setPositionY(
+				Tween::easeOut(-screenHeight, screenHeight / 2, transitionFrame, OPEN_TRANSITION));
+			bg2ship->setPositionY(
+				Tween::easeOut(-screenHeight, screenHeight / 2, transitionFrame, OPEN_TRANSITION));
+
+			return;
+		}
 		case StartScreen: {
 			if (transitionFrame >= TRANSITION_DURATION) {
 				currState = transitionState;
@@ -359,6 +406,9 @@ void MainMenuMode::processButtons() {
  */
 void MainMenuMode::update(float timestep) {
 	input->update(timestep);
+
+	rotationFrame = (rotationFrame + 1) % ROTATION_MAX;
+	bg0stars->setAngle(globals::TWO_PI * rotationFrame / ROTATION_MAX);
 
 	if (transitionState != NA) {
 		processTransition();

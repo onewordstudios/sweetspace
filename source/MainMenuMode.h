@@ -43,9 +43,13 @@ class MainMenuMode : public cugl::Scene {
 	/** The current frame of a transition; -1 if not transitioning */
 	int transitionFrame;
 
+	/** Current frame of the rotating stars */
+	int rotationFrame;
+
 	/** An enum with the current state of the matchmaking mode */
 	enum MatchState {
-		/** Empty state; used for transitions only; the main state should NEVER be NA */
+		/** Empty state; used mainly for transitions only; the main state should only be NA when
+		   uninitialized */
 		NA = -1,
 		/** Main menu splash screen */
 		StartScreen,
@@ -164,8 +168,9 @@ class MainMenuMode : public cugl::Scene {
 		  screenHeight(0),
 		  gameReady(false),
 		  transitionFrame(-1),
-		  currState(StartScreen),
-		  transitionState(NA) {}
+		  rotationFrame(0),
+		  currState(NA),
+		  transitionState(StartScreen) {}
 
 	/**
 	 * Disposes of all (non-static) resources allocated to this mode.

@@ -573,12 +573,12 @@
 					"data"   : {
 						"texture"  : "main_menu_bg3",
 						"anchor"   : [0.5,0.5],
-						"scale"    : 0.4
+						"scale"    : 0.4,
+						"visible" :false
 					},
 					"layout" : {
 						"x_anchor" : "center",
-						"y_anchor" : "middle",
-						"y_offset" : -1.5
+						"y_anchor" : "middle"
 					}
 				},
 				"mainmenubg4" : {
@@ -589,7 +589,8 @@
 					"data"   : {
 						"texture"  : "main_menu_bg4",
 						"anchor"   : [0.5,0.5],
-						"scale"    : 0.4
+						"scale"    : 0.4,
+						"visible" :false
 					},
 					"layout" : {
 						"x_anchor" : "center",
@@ -618,7 +619,8 @@
 					"data"   : {
 						"anchor"   : [0.5,0.5],
 						"scale"    : 1,
-						"size" : [1600,500]
+						"size" : [1600,500],
+						"visible" : false
 					},
 					"layout" : {
 						"x_anchor" : "center",
