@@ -195,6 +195,12 @@
         "restart_btn_down" : {
         	"file" : "textures/wl_screens/restart_down.png"
         },
+        "next_btn_up" : {
+        	"file" : "textures/wl_screens/next_up.png"
+        },
+        "next_btn_down" : {
+        	"file" : "textures/wl_screens/next_down.png"
+        },
         "wl_bg" : {
         	"file" : "textures/wl_screens/win_loss_bg.png"
         }
@@ -613,6 +619,122 @@
 											"type"   : "Image",
 											"data"   : {
 												"texture"  : "levels_btn_down"
+											}
+										}
+									}
+				            	}
+				            }
+						},
+						"win": {
+							"type"      : "Node",
+				            "format"    : {
+				                "type" : "Anchored"
+				            },
+				            "data": {
+				            	"visible": false,
+				            	"anchor" : [0.5,0.5]
+				            },
+				            "layout" : {
+								"x_anchor" : "left",
+                				"y_anchor" : "bottom"
+							},
+				            "children":  {
+				            	"dim" : {
+				            		"type": "Image",
+									"format" : {
+										"type" : "Anchored"
+									},
+				                    "data": {
+				                        "texture":  "overlay_dim",
+				                        "anchor":   [0.5,0.5],
+				                        "scale":    1
+				                    },
+				                    "layout" : {
+				                    	"x_anchor" : "center",
+                        				"y_anchor" : "middle"
+				                    }
+				            	},
+				            	"bg" : {
+				            		"type": "Image",
+									"format" : {
+										"type" : "Anchored"
+									},
+				                    "data": {
+				                        "texture":  "wl_bg",
+				                        "anchor":   [0.5,0.5],
+				                        "scale":    0.5
+				                    },
+				                    "layout" : {
+				                    	"x_anchor" : "center",
+                        				"y_anchor" : "middle",
+                        				"y_offset" : 75,
+                        				"absolute" : true
+				                    }
+				            	},
+				            	"txt_up" : {
+				            		"type": "Label",
+									"data": {
+										"font"       : "mont_black_italic_big",
+										"text"       : "Congratulations!",
+										"foreground" : [255,255,255,255],
+										"anchor"	 : [0.5,0.5],
+										"valign"     : "middle",
+										"halign"     : "center",
+										"scale" : 0.5
+									},
+									"layout" : {
+										"x_anchor" : "center",
+                        				"y_anchor" : "middle",
+                        				"y_offset" : 100,
+                        				"absolute" : true
+									}
+				            	},
+				            	"txt_down" : {
+				            		"type": "Label",
+									"data": {
+										"font"       : "mont_black_italic_big",
+										"text"       : "You Survived the Journey!",
+										"foreground" : [255,255,255,255],
+										"anchor"	 : [0.5,0.5],
+										"valign"     : "middle",
+										"halign"     : "center",
+										"scale" : 0.5
+									},
+									"layout" : {
+										"x_anchor" : "center",
+                        				"y_anchor" : "middle",
+                        				"y_offset" : 50,
+                        				"absolute" : true
+									}
+				            	},
+				            	"nextBtn" : {
+				            		"type": "Button",
+									"format" : {
+										"type" : "Anchored"
+									},
+									"data": {
+										"upnode"   : "up",
+										"downnode" : "down",
+										"anchor"   : [0.5,0],
+										"scale" : 0.5
+									},
+									"layout" : {
+										"x_anchor" : "center",
+                        				"y_anchor" : "bottom",
+                        				"y_offset" : 25,
+                        				"absolute" : true
+									},
+									"children" : {
+										"up" : {
+											"type"   : "Image",
+											"data"   : {
+												"texture"  : "next_btn_up"
+											}
+										},
+										"down" : {
+											"type"   : "Image",
+											"data"   : {
+												"texture"  : "next_btn_down"
 											}
 										}
 									}

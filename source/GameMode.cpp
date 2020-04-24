@@ -156,22 +156,36 @@ void GameMode::update(float timestep) {
 			CULog("ERROR: Uncaught MatchmakingStatus Value Occurred");
 	}
 
-	// Check for win or loss
-	if (ship->getHealth() < 0.0f) {
+	// Only process game logic if game is running
+	input->update(timestep);
+
+	// Check for loss
+	if (ship->getHealth() < 1) {
 		sgRoot.setStatus(GameGraphRoot::Loss);
 		sgRoot.update(timestep);
 		return;
-	} else if (ship->timerEnded() && ship->getHealth() > 0) {
+	}
+
+	// Jump Logic. Moved here for Later Win Screen Jump support (Demi's Request)
+	if (input->hasJumped() && !donutModel->isJumping()) {
+		donutModel->startJump();
+		net->jump(playerID);
+	}
+
+	// Check for Win
+	if (ship->timerEnded() && ship->getHealth() > 0) {
 		sgRoot.setStatus(GameGraphRoot::Win);
 		sgRoot.update(timestep);
 		return;
 	}
-	// Only process game logic if properly connected to game
-	input->update(timestep);
 
 	if (!(ship->timerEnded())) {
 		ship->updateTimer(timestep);
 	}
+
+	// Move the donut (MODEL ONLY)
+	float thrust = input->getRoll();
+	donutModel->applyForce(thrust);
 
 	// Breach Checks
 	for (int i = 0; i < ship->getBreaches().size(); i++) {
@@ -248,15 +262,6 @@ void GameMode::update(float timestep) {
 	}
 
 	gm.update(timestep);
-
-	// Move the donut (MODEL ONLY)
-	float thrust = input->getRoll();
-	donutModel->applyForce(thrust);
-	// Jump Logic
-	if (input->hasJumped() && !donutModel->isJumping()) {
-		donutModel->startJump();
-		net->jump(playerID);
-	}
 
 	for (unsigned int i = 0; i < ship->getDonuts().size(); i++) {
 		ship->getDonuts()[i]->update(timestep);

@@ -107,7 +107,7 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	scene->setContentSize(dimen);
 	scene->doLayout(); // Repositions the HUD
 
-	// Get the scene components.
+	// Game Scene Components.
 	allSpace = assets->get<Node>("game_field");
 	farSpace = assets->get<Node>("game_field_far");
 	nearSpace = assets->get<Node>("game_field_near");
@@ -142,17 +142,6 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 			assets->get<Node>("game_field_challengePanelParent_challengePanelArrow" + s));
 		challengePanelArrows.push_back(arrow);
 	}
-
-	// Initialize Reconnect Overlay
-	reconnectOverlay = assets->get<Node>("game_overlay_reconnect");
-
-	// Initialize Loss Screen Componenets
-	lossScreen = assets->get<Node>("game_overlay_loss");
-	restartBtn =
-		std::dynamic_pointer_cast<Button>(assets->get<Node>("game_overlay_loss_restartBtn"));
-	levelsBtn = std::dynamic_pointer_cast<Button>(assets->get<Node>("game_overlay_loss_levelsBtn"));
-	buttonManager.registerButton(restartBtn);
-	buttonManager.registerButton(levelsBtn);
 
 	// Initialize Ship Segments
 	leftMostSeg = 0;
@@ -299,6 +288,25 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 		bNode->addChild(buttonLabel);
 	}
 
+	// Overlay Components
+	// Initialize Reconnect Overlay
+	reconnectOverlay = assets->get<Node>("game_overlay_reconnect");
+
+	// Initialize Loss Screen Componenets
+	lossScreen = assets->get<Node>("game_overlay_loss");
+	restartBtn =
+		std::dynamic_pointer_cast<Button>(assets->get<Node>("game_overlay_loss_restartBtn"));
+	levelsBtn = std::dynamic_pointer_cast<Button>(assets->get<Node>("game_overlay_loss_levelsBtn"));
+
+	// Initialize Win Screen Componenets
+	winScreen = assets->get<Node>("game_overlay_win");
+	nextBtn = std::dynamic_pointer_cast<Button>(assets->get<Node>("game_overlay_win_nextBtn"));
+
+	// Register Buttons
+	buttonManager.registerButton(restartBtn);
+	buttonManager.registerButton(levelsBtn);
+	buttonManager.registerButton(nextBtn);
+
 	addChild(scene);
 	return true;
 }
@@ -352,6 +360,7 @@ void GameGraphRoot::update(float timestep) {
 		case Normal:
 			// Hide Unnecessary Overlays
 			lossScreen->setVisible(false);
+			winScreen->setVisible(false);
 			reconnectOverlay->setVisible(false);
 			break;
 		case Loss:
@@ -360,6 +369,9 @@ void GameGraphRoot::update(float timestep) {
 			break;
 		case Win:
 			// Show Win Screen
+			winScreen->setVisible(true);
+			nearSpace->setVisible(false);
+			healthNode->setVisible(false);
 			break;
 		case Reconnecting:
 			// Still Reconnecting
@@ -542,13 +554,7 @@ void GameGraphRoot::update(float timestep) {
  */
 std::string GameGraphRoot::positionText() {
 	stringstream ss;
-	if (ship->getHealth() < 1) {
-		ss << "You Lose.";
-	} else if (ship->timerEnded() && ship->getHealth() > 0) {
-		ss << "You Win!";
-	} else {
-		ss << "Time Left: " << trunc(ship->timer);
-	}
+	ss << "Time Left: " << trunc(ship->timer);
 	ss << " Position: " << ship->getDonuts().at(playerID)->getAngle();
 	return ss.str();
 }

@@ -83,6 +83,12 @@ class GameGraphRoot : public cugl::Scene {
 	/** Button to levels */
 	std::shared_ptr<cugl::Button> levelsBtn;
 
+	// Win Screen Textures
+	/** Node to hold all of the Win Screen.*/
+	std::shared_ptr<cugl::Node> winScreen;
+	/** Button to next game */
+	std::shared_ptr<cugl::Button> nextBtn;
+
 	// DRAWING STATE VARIABLES
 	/** The donut's base position. */
 	cugl::Vec2 donutPos;
