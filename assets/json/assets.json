@@ -40,46 +40,43 @@
             "file":   "textures/breaches/breach_filmstrip.png"
         },
 	    "door": {
-            "file":   "textures/door.png"
+            "file":   "textures/doors/door.png"
         },
         "space": {
-            "file":  "textures/sprinkle_sky256.png",
+            "file":  "textures/misc_use/sprinkle_sky256.png",
             "wrapS": "repeat",
             "wrapT": "repeat"
         },
         "health": {
-            "file":  "textures/health.png",
+            "file":  "textures/health/health.png",
             "wrapS": "repeat",
             "wrapT": "repeat"
         },
         "health_glow": {
-            "file":  "textures/health_glow.png",
+            "file":  "textures/health/glow.png",
             "wrapS": "repeat",
             "wrapT": "repeat"
         },
 		"health_green": {
-			"file": "textures/health_green.png"
+			"file": "textures/health/green.png"
 		},
 		"health_yellow": {
-			"file": "textures/health_yellow.png"
+			"file": "textures/health/yellow.png"
 		},
 		"health_red": {
-			"file": "textures/health_red.png"
+			"file": "textures/health/red.png"
 		},
 		"health_empty": {
-			"file": "textures/health_empty.png"
+			"file": "textures/health/empty.png"
 		},
-        "ship": {
-            "file":   "textures/ship.png"
-        },
         "ship_overlay_red": {
-            "file":   "textures/ship_overlay_red.png"
+            "file":   "textures/ship/overlay_red.png"
         },
         "shipseg0": {
-            "file":   "textures/ship1.png"
+            "file":   "textures/ship/seg1.png"
         },
         "shipseg1": {
-            "file":   "textures/ship2.png"
+            "file":   "textures/ship/seg2.png"
         },
         "create_lobby": {
             "file":   "textures/main_menu/create_up.png"
@@ -93,35 +90,32 @@
 		"join_lobby_down": {
             "file":   "textures/main_menu/join_down.png"
         },
-        "confirm_join": {
-            "file":   "textures/confirm_join.png"
-        },
         "challenge_panel": {
-            "file":   "textures/pannel_pink.png"
+            "file":   "textures/roll/panel_pink.png"
         },
         "panel_hanger":   {
-            "file":   "textures/pannel_hanger_pink.png"
+            "file":   "textures/roll/panel_hanger_pink.png"
         },
         "panel_text":   {
-          "file":   "textures/text_self_instruction.png"
+          "file":   "textures/roll/text_self_instruction.png"
         },
         "panel_progress_0":   {
-          "file":   "textures/text_self_instruction_0.png"
+          "file":   "textures/roll/text_self_instruction_0.png"
         },
         "panel_progress_1": {
-          "file": "textures/text_self_instruction_1.png"
+          "file": "textures/roll/text_self_instruction_1.png"
         },
         "reconnect_dim": {
-            "file":   "textures/reconnect_dim.png"
+            "file":   "textures/misc_use/overlay_dim.png"
         },
         "reconnect_bg": {
-            "file":   "textures/reconnect_bg.png"
+            "file":   "textures/reconnect/bg.png"
         },
         "reconnect_text": {
-            "file":   "textures/reconnect_text.png"
+            "file":   "textures/reconnect/text.png"
         },
         "reconnect_ellipses": {
-            "file":   "textures/reconnect_ellipses.png"
+            "file":   "textures/reconnect/ellipses.png"
         },
 		"game_title": {
 			"file": "textures/main_menu/sweetspace.png"
@@ -184,16 +178,16 @@
 			"file": "textures/main_menu/clear_down.png"
 		},
         "challenge_btn_up" : {
-          "file": "textures/button_up.png"
+          "file": "textures/buttons/up.png"
         },
         "challenge_btn_down" : {
-          "file": "textures/button_down.png"
+          "file": "textures/buttons/down.png"
         },
         "challenge_btn_base_up" : {
-            "file": "textures/buttonbase_up.png"
+            "file": "textures/buttons/base_up.png"
         },
         "challenge_btn_base_down" : {
-          "file": "textures/buttonbase_down.png"
+          "file": "textures/buttons/base_down.png"
         }
 	},
 	"sounds": {
