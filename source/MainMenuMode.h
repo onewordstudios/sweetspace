@@ -70,6 +70,16 @@ class MainMenuMode : public cugl::Scene {
 #pragma endregion
 
 #pragma region Scene Graph Nodes
+
+	/** Background asset with stars */
+	std::shared_ptr<cugl::Node> bg0stars;
+	/** Background asset with landscape */
+	std::shared_ptr<cugl::Node> bg1land;
+	/** Background asset with donut ship */
+	std::shared_ptr<cugl::Node> bg2ship;
+	/** Background asset with studio name */
+	std::shared_ptr<cugl::Node> bg9studio;
+
 	/** Button to create host */
 	std::shared_ptr<cugl::Button> hostBtn;
 	/** Button to create client */

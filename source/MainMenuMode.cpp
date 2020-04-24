@@ -44,6 +44,11 @@ bool MainMenuMode::init(const std::shared_ptr<AssetManager>& assets) {
 	scene->doLayout(); // Repositions the HUD
 
 #pragma region Scene Graph Components
+	bg0stars = assets->get<Node>("matchmaking_mainmenubg2");
+	bg1land = assets->get<Node>("matchmaking_mainmenubg3");
+	bg2ship = assets->get<Node>("matchmaking_mainmenubg4");
+	bg9studio = assets->get<Node>("matchmaking_studiologo");
+
 	hostBtn =
 		std::dynamic_pointer_cast<Button>(assets->get<Node>("matchmaking_home_btnwrap_hostbtn"));
 	clientBtn =

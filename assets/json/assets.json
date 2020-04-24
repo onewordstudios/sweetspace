@@ -577,7 +577,8 @@
 					},
 					"layout" : {
 						"x_anchor" : "center",
-						"y_anchor" : "middle"
+						"y_anchor" : "middle",
+						"y_offset" : -1.5
 					}
 				},
 				"mainmenubg4" : {
@@ -592,7 +593,8 @@
 					},
 					"layout" : {
 						"x_anchor" : "center",
-						"y_anchor" : "middle"
+						"y_anchor" : "middle",
+						"y_offset" : -1.5
 					}
 				},
 				"studiologo" : {
