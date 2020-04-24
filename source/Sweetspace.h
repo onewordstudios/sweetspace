@@ -5,7 +5,7 @@
 #include "GameMode.h"
 #include "LoadingMode.h"
 #include "MagicInternetBox.h"
-#include "MatchmakingMode.h"
+#include "MainMenuMode.h"
 
 /**
  * The application root.
@@ -44,7 +44,7 @@ class Sweetspace : public cugl::Application {
 	/** The controller for the loading screen */
 	LoadingMode loading;
 	/** The controller for matchmaking */
-	MatchmakingMode matchmaking;
+	MainMenuMode mainmenu;
 
 	/** Whether or not we have finished loading all assets */
 	bool loaded;
@@ -68,7 +68,7 @@ class Sweetspace : public cugl::Application {
 		  status(Loading),
 		  gameplay(),
 		  loading(),
-		  matchmaking(),
+		  mainmenu(),
 		  loaded(false),
 		  matched(false),
 		  gameStarted(false) {}

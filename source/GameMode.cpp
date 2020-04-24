@@ -27,6 +27,16 @@ constexpr float FIX_BREACH_FRICTION = 0.65f;
 /** The friction factor applied when moving through other players breaches */
 constexpr float OTHER_BREACH_FRICTION = 0.2f;
 
+// Health
+/** Grace period for a breach before it starts deducting health */
+constexpr float BREACH_HEALTH_GRACE_PERIOD = 15.0f;
+/** Amount of health to decrement each frame per breach */
+constexpr float BREACH_HEALTH_PENALTY = 0.01f;
+/** Some undocumented upper bound for challenge progress */
+constexpr int CHALLENGE_PROGRESS_HIGH = 100;
+/** Some undocumented lower bound for challenge progress */
+constexpr int CHALLENGE_PROGRESS_LOW = 10;
+
 #pragma mark -
 #pragma mark Constructors
 
@@ -82,12 +92,11 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 	std::shared_ptr<LevelModel> level = assets->get<LevelModel>(levelName);
 	ship = ShipModel::alloc(net->getNumPlayers(), level->getMaxBreaches(), level->getMaxDoors(),
 							playerID, (float)level->getShipSize((int)net->getNumPlayers()),
-							level->getInitHealth());
+							level->getInitHealth(), level->getMaxButtons());
 	gm.init(ship, level);
 
 	donutModel = ship->getDonuts().at(static_cast<unsigned long>(playerID));
 	ship->initTimer(level->getTime());
-	ship->setHealth(globals::INITIAL_SHIP_HEALTH);
 
 	// Scene graph Initialization
 	sgRoot.init(assets, ship, playerID);
@@ -172,16 +181,12 @@ void GameMode::update(float timestep) {
 				// Decrement Health
 				breach->decHealth(1);
 				breach->setIsPlayerOn(true);
+				net->resolveBreach(i);
 			}
 
 			// Slow player by friction factor if not already slowed more
 			if (donutModel->getFriction() > FIX_BREACH_FRICTION) {
 				donutModel->setFriction(FIX_BREACH_FRICTION);
-			}
-
-			// Resolve Breach if health is 0
-			if (breach->getHealth() == 0) {
-				net->resolveBreach(i);
 			}
 
 		} else if (diff > EPSILON_ANGLE && breach->isPlayerOn()) {
@@ -225,9 +230,10 @@ void GameMode::update(float timestep) {
 
 	for (int i = 0; i < ship->getBreaches().size(); i++) {
 		// this should be adjusted based on the level and number of players
-		if (ship->getBreaches().at(i) != nullptr &&
-			trunc(ship->getBreaches().at(i)->getTimeCreated()) - trunc(ship->timer) > 15) {
-			ship->decHealth(0.01);
+		if (ship->getBreaches().at(i)->getAngle() >= 0 &&
+			trunc(ship->getBreaches().at(i)->getTimeCreated()) - trunc(ship->timer) >
+				BREACH_HEALTH_GRACE_PERIOD) {
+			ship->decHealth(BREACH_HEALTH_PENALTY);
 		}
 	}
 
@@ -268,15 +274,43 @@ void GameMode::update(float timestep) {
 		if (allRoll) {
 			ship->updateChallengeProg();
 		}
-		if (ship->getChallengeProg() > 100 || trunc(ship->timer) == trunc(ship->getEndTime())) {
-			if (ship->getChallengeProg() < 10) {
-				float h = ship->getHealth();
-				ship->setHealth(h - 1);
+		if (ship->getChallengeProg() > CHALLENGE_PROGRESS_HIGH ||
+			trunc(ship->timer) == trunc(ship->getEndTime())) {
+			if (ship->getChallengeProg() < CHALLENGE_PROGRESS_LOW) {
 				gm.setChallengeFail(true);
 				ship->failAllTask();
 			}
 			ship->setChallenge(false);
 			ship->setChallengeProg(0);
+		}
+	}
+
+	for (int i = 0; i < ship->getButtons().size(); i++) {
+		if (ship->getButtons().at(i) == nullptr || ship->getButtons().at(i)->getAngle() < 0) {
+			continue;
+		}
+		float diff = donutModel->getAngle() - ship->getButtons().at(i)->getAngle();
+		float a = diff + ship->getSize() / 2;
+		diff = a - floor(a / ship->getSize()) * ship->getSize() - ship->getSize() / 2;
+
+		if (abs(diff) < globals::BUTTON_ACTIVE_ANGLE && donutModel->isJumping()) {
+			ship->getButtons().at(i)->addPlayer(playerID);
+			ship->getButtons().at(i)->setJumpedOn(true);
+
+			net->flagButton(i, playerID, 1);
+
+		} else {
+			// ship->getButtons().at(i)->removePlayer(playerID);
+			// net->flagButton(i, playerID, 0);
+		}
+		if (ship->getButtons().at(i)->jumpedOn()) { // ship->getButtons().at(i)->getPlayersOn() == 1
+													// && ship->getButtons().at(i)->jumpedOn()) {
+
+			if (ship->getButtons().at(i)->getPair()->jumpedOn()) { //&&
+				// ship->getButtons().at(i)->getPair()->getPlayersOn() == 1) {
+				ship->getButtons().at(i)->setResolved(true);
+				ship->getButtons().at(i)->getPair()->setResolved(true);
+			}
 		}
 	}
 

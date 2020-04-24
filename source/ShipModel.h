@@ -3,8 +3,11 @@
 #include <cugl/cugl.h>
 
 #include "BreachModel.h"
+#include "ButtonModel.h"
 #include "DonutModel.h"
 #include "DoorModel.h"
+#include "Globals.h"
+
 class ShipModel {
    private:
    protected:
@@ -14,6 +17,8 @@ class ShipModel {
 	std::vector<std::shared_ptr<BreachModel>> breaches;
 	/** Current list of doors on ship*/
 	std::vector<std::shared_ptr<DoorModel>> doors;
+	/** Current list of doors on ship*/
+	std::vector<std::shared_ptr<ButtonModel>> buttons;
 	/** Current health of the ship*/
 	float health;
 	/** Size of the ship. Minimum value should be 360. Default value 360 */
@@ -48,7 +53,8 @@ class ShipModel {
 		  challenge(false),
 		  challengeProg(0),
 		  endTime(0),
-		  totalTime(0) {}
+		  totalTime(0),
+		  timer(0) {}
 
 	/**
 	 * Destroys this breach, releasing all resources.
@@ -71,12 +77,14 @@ class ShipModel {
 	 * @param numDoors    The number of doors in this ship
 	 * @param playerID    The ID of the current local player
 	 * @param initHealth    The initial health of the ship
+	 * @param numButtons    The number of buttons on the ship
 	 *
 	 * @return true if the model is initialized properly, false otherwise.
 	 */
 	bool init(unsigned int numPlayers, unsigned int numBreaches, unsigned int numDoors,
-			  unsigned int playerID, int initHealth) {
-		return init(numPlayers, numBreaches, numDoors, playerID, (float)360, initHealth);
+			  unsigned int playerID, int initHealth, unsigned int numButtons) {
+		return init(numPlayers, numBreaches, numDoors, playerID, globals::DEG_ORIG_CIRCLE,
+					initHealth, numButtons);
 	}
 
 	/**
@@ -88,11 +96,12 @@ class ShipModel {
 	 * @param playerID    The ID of the current local player
 	 * @param shipSize		  The size of the level
 	 * @param initHealth    The initial health of the ship
+	 * @param numButtons    The number of buttons on the ship
 	 *
 	 * @return true if the model is initialized properly, false otherwise.
 	 */
 	bool init(unsigned int numPlayers, unsigned int numBreaches, unsigned int numDoors,
-			  unsigned int playerID, float shipSize, int initHealth);
+			  unsigned int playerID, float shipSize, int initHealth, unsigned int numButtons);
 
 	/**
 	 * Create and return a shared pointer to a new ship model.
@@ -102,15 +111,17 @@ class ShipModel {
 	 * @param numDoors    The number of doors in this ship
 	 * @param playerID    The ID of the current local player
 	 * @param initHealth    The initial health of the ship
+	 * @param numButtons    The number of buttons on the ship
 	 *
 	 * @return A smart pointer to a newly initialized ship model
 	 */
 	static std::shared_ptr<ShipModel> alloc(unsigned int numPlayers, unsigned int numBreaches,
 											unsigned int numDoors, unsigned int playerID,
-											int initHealth) {
+											int initHealth, unsigned int numButtons) {
 		std::shared_ptr<ShipModel> result = std::make_shared<ShipModel>();
-		return (result->init(numPlayers, numBreaches, numDoors, playerID, initHealth) ? result
-																					  : nullptr);
+		return (result->init(numPlayers, numBreaches, numDoors, playerID, initHealth, numButtons)
+					? result
+					: nullptr);
 	}
 
 	/**
@@ -122,14 +133,17 @@ class ShipModel {
 	 * @param playerID    The ID of the current local player
 	 * @param shipSize	  The size of the level
 	 * @param initHealth    The initial health of the ship
+	 * @param numButtons    The number of buttons on the ship
 	 *
 	 * @return A smart pointer to a newly initialized ship model
 	 */
 	static std::shared_ptr<ShipModel> alloc(unsigned int numPlayers, unsigned int numBreaches,
 											unsigned int numDoors, unsigned int playerID,
-											float shipSize, int initHealth) {
+											float shipSize, int initHealth,
+											unsigned int numButtons) {
 		std::shared_ptr<ShipModel> result = std::make_shared<ShipModel>();
-		return (result->init(numPlayers, numBreaches, numDoors, playerID, shipSize, initHealth)
+		return (result->init(numPlayers, numBreaches, numDoors, playerID, shipSize, initHealth,
+							 numButtons)
 					? result
 					: nullptr);
 	}
@@ -158,6 +172,13 @@ class ShipModel {
 	std::vector<std::shared_ptr<DoorModel>>& getDoors() { return doors; }
 
 	/**
+	 * Returns the current list of buttons.
+	 *
+	 * @return the current list of buttons.
+	 */
+	std::vector<std::shared_ptr<ButtonModel>>& getButtons() { return buttons; }
+
+	/**
 	 * Create breach.
 	 *
 	 * @param angle	   the location to create the breach.
@@ -177,7 +198,7 @@ class ShipModel {
 	bool createBreach(float angle, int health, int player, int id);
 
 	/**
-	 * Resolve breach with given id.
+	 * Decrement the health of a breach with given id.
 	 *
 	 * @param id   the id of breach to be resolved.
 	 */
@@ -212,7 +233,7 @@ class ShipModel {
 	 *
 	 * @param health   the health of the ship
 	 */
-	void setHealth(float health) { this->health = health; }
+	void setHealth(float health) { this->health = health < 0 ? 0 : health; }
 
 	/**
 	 * Get health of the ship
@@ -226,7 +247,7 @@ class ShipModel {
 	 *
 	 * @param health   the amount of health to be decremented
 	 */
-	void decHealth(float h) { health = health - h; }
+	void decHealth(float h) { setHealth(health - h); }
 
 	/**
 
@@ -339,5 +360,24 @@ class ShipModel {
 	 * Get end time for challenge
 	 */
 	float getEndTime() { return endTime; }
+
+	/**
+	 * Create button with given id.
+	 *
+	 * @param angle1	   the location to create the button.
+	 * @param id1  	       the id of button to be created.
+	 * @param angle2       the location to create the button's pair.
+	 * @param id2  	       the id of button's pair to be created.
+	 */
+	bool createButton(float angle1, int id1, float angle2, int id2);
+
+	/**
+	 * Flag button with given id.
+	 *
+	 * @param id   the id of door to be opened.
+	 * @param player   the player id flagging the door.
+	 * @param flag   the flag to set (on or off, 1 or 0)
+	 */
+	bool flagButton(int id, int player, int flag);
 };
 #endif /* __SHIP_MODEL_H__ */

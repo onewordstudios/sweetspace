@@ -31,11 +31,20 @@ constexpr float DOOR_WIDTH = 10.0f; // NOLINT
 /** The Angle in degrees for which a breach donut collision occurs*/
 constexpr float BREACH_WIDTH = 6.0f; // NOLINT
 
+/** The Angle in degrees for which a door can be activated*/
+constexpr float BUTTON_ACTIVE_ANGLE = 15.0f;
+
+/** The min angle in degrees for which two buttons can be placed*/
+constexpr int BUTTON_DIST = 100; // NOLINT
+
 /** The duration in seconds of the everyone roll challenge*/
 constexpr int ROLL_CHALLENGE_LENGTH = 6; // NOLINT
 
 #pragma region Math
 #pragma mark Math
+
+/** Size of generic ship, in degrees */
+constexpr float DEG_ORIG_CIRCLE = 360.0f; // NOLINT
 
 /** Pi */
 constexpr float PI = 3.14159265358979323846264338327950288f; // NOLINT
@@ -59,7 +68,10 @@ constexpr unsigned int RADIUS = 550; // NOLINT
 /** Maximum number of possibly visible ship segments at a time */
 constexpr unsigned int VISIBLE_SEGS = 6; // NOLINT
 
-/** The angle in degree of a single ship segment */
+/** The angle in degrees of a single ship segment */
+constexpr unsigned int SEG_DEG = 45; // NOLINT
+
+/** The angle in radians of a single ship segment */
 constexpr float SEG_SIZE = 45 * PI_180; // NOLINT
 
 /** The screen angle at which a ship segment is no longer visible */

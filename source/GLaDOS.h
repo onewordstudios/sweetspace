@@ -6,6 +6,7 @@
 #include "BreachModel.h"
 #include "DonutModel.h"
 #include "DoorModel.h"
+#include "Globals.h"
 #include "LevelModel.h"
 #include "MagicInternetBox.h"
 #include "ShipModel.h"
@@ -32,6 +33,29 @@ class GLaDOS {
 	shared_ptr<MagicInternetBox> mib;
 
 	bool fail;
+
+	/** The maximum number of events on ship at any one time. This will probably need to scale with
+	 * the number of players*/
+	unsigned int maxEvents;
+	/** The maximum number of events on ship at any one time. This will probably need to scale with
+	 * the number of players*/
+	unsigned int maxDoors;
+	/** The maximum number of buttons on ship at any one time. This will probably need to scale with
+	 * the number of players*/
+	unsigned int maxButtons;
+	/** Array recording which breaches are free or not. */
+	vector<bool> breachFree;
+	/** Array recording which doors are free or not. */
+	vector<bool> doorFree;
+	/** List of building blocks for this level*/
+	map<std::string, std::shared_ptr<BuildingBlockModel>> blocks;
+	/** List of events for this level*/
+	vector<std::shared_ptr<EventModel>> events;
+	/** List of events that are ready to be executed*/
+	vector<std::shared_ptr<EventModel>> readyQueue;
+
+	/** Array recording which doors are free or not. */
+	vector<bool> buttonFree;
 
    public:
 #pragma mark -

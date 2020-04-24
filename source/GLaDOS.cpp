@@ -6,25 +6,6 @@ using namespace cugl;
 using namespace std;
 
 #pragma mark -
-#pragma mark GM Variables
-/** The maximum number of events on ship at any one time. This will probably need to scale with
- * the number of players*/
-unsigned int maxEvents;
-/** The maximum number of events on ship at any one time. This will probably need to scale with
- * the number of players*/
-unsigned int maxDoors;
-/** Array recording which breaches are free or not. */
-vector<bool> breachFree;
-/** Array recording which doors are free or not. */
-vector<bool> doorFree;
-/** List of building blocks for this level*/
-map<std::string, std::shared_ptr<BuildingBlockModel>> blocks;
-/** List of events for this level*/
-vector<std::shared_ptr<EventModel>> events;
-/** List of events that are ready to be executed*/
-vector<std::shared_ptr<EventModel>> readyQueue;
-
-#pragma mark -
 #pragma mark GM
 /**
  * Creates a new GM controller.
@@ -32,7 +13,15 @@ vector<std::shared_ptr<EventModel>> readyQueue;
  * This constructor does NOT do any initialzation.  It simply allocates the
  * object. This makes it safe to use this class without a pointer.
  */
-GLaDOS::GLaDOS() : active(false), numEvents(0), playerID(0), mib(nullptr), fail(false) {}
+GLaDOS::GLaDOS()
+	: active(false),
+	  numEvents(0),
+	  playerID(0),
+	  mib(nullptr),
+	  fail(false),
+	  maxEvents(0),
+	  maxDoors(0),
+	  maxButtons(0) {}
 
 /**
  * Deactivates this input controller, releasing all listeners.
@@ -60,7 +49,9 @@ bool GLaDOS::init(std::shared_ptr<ShipModel> ship, std::shared_ptr<LevelModel> l
 	this->mib = MagicInternetBox::getInstance();
 	this->playerID = mib->getPlayerID();
 	maxEvents = level->getMaxBreaches();
-	maxDoors = level->getMaxDoors();
+	maxDoors = min(level->getMaxDoors(), mib->getNumPlayers() * 2 - 1);
+	maxButtons = level->getMaxButtons();
+	buttonFree.resize(maxButtons);
 	breachFree.resize(maxEvents);
 	doorFree.resize(maxDoors);
 	blocks = level->getBlocks();
@@ -71,6 +62,9 @@ bool GLaDOS::init(std::shared_ptr<ShipModel> ship, std::shared_ptr<LevelModel> l
 	}
 	for (int i = 0; i < maxDoors; i++) {
 		doorFree.at(i) = true;
+	}
+	for (int i = 0; i < maxButtons; i++) {
+		buttonFree.at(i) = true;
 	}
 	fail = false;
 	// Set random seed based on time
@@ -104,8 +98,34 @@ void GLaDOS::placeObject(BuildingBlockModel::Object obj, float zeroAngle, vector
 			doorFree.at(i) = false;
 			mib->createDualTask((float)obj.angle + zeroAngle, -1, -1, i);
 			break;
-		case BuildingBlockModel::Button:
+		case BuildingBlockModel::Button: {
+			i = (int)distance(buttonFree.begin(), find(buttonFree.begin(), buttonFree.end(), true));
+			buttonFree.at(i) = false;
+			int j =
+				(int)distance(buttonFree.begin(), find(buttonFree.begin(), buttonFree.end(), true));
+			buttonFree.at(j) = false;
+
+			std::shared_ptr<ButtonModel> btn1 = ship->getButtons().at(i);
+			std::shared_ptr<ButtonModel> btn2 = ship->getButtons().at(j);
+
+			float pairAngle;
+			do {
+				pairAngle = (float)(rand() % (int)(ship->getSize()));
+			} while (abs(pairAngle - ship->getButtons().at(i)->getAngle()) < globals::BUTTON_DIST);
+
+			btn1->clear();
+			btn1->setAngle((float)obj.angle + zeroAngle);
+			btn1->setJumpedOn(false);
+			btn1->setPair(btn2, j);
+
+			btn2->clear();
+			btn2->setAngle(pairAngle);
+			btn2->setJumpedOn(false);
+			btn2->setPair(btn1, i);
+
+			mib->createButtonTask((float)obj.angle + zeroAngle, i, pairAngle, j);
 			break;
+		}
 		case BuildingBlockModel::Roll:
 			if (ship->getChallenge()) break;
 			((int)(rand() % 2 == 0)) ? ship->setRollDir(0) : ship->setRollDir(1);
@@ -153,6 +173,21 @@ void GLaDOS::update(float dt) {
 		}
 	}
 
+	for (int i = 0; i < maxButtons; i++) {
+		if (ship->getButtons().at(i) == nullptr) {
+			continue;
+		}
+		if (ship->getButtons().at(i)->isResolved()) {
+			ship->getButtons().at(i)->setAngle(-1);
+			ship->getButtons().at(i)->getPair()->setAngle(-1);
+			buttonFree.at(ship->getButtons().at(i)->getPairID()) = true;
+			buttonFree.at(i) = true;
+			// mib->flagButton(i, (int)playerID, 0);
+			ship->getButtons().at(i)->setJumpedOn(false);
+			ship->getButtons().at(i)->getPair()->setJumpedOn(false);
+		}
+	}
+
 	// Check if this is the host for generating breaches and doors
 	if (playerID != 0) {
 		return;
@@ -172,6 +207,7 @@ void GLaDOS::update(float dt) {
 		}
 	}
 
+	int numButtonsFree = (int)count(buttonFree.begin(), buttonFree.end(), true);
 	int numBreachesFree = (int)count(breachFree.begin(), breachFree.end(), true);
 	int numDoorsFree = (int)count(doorFree.begin(), doorFree.end(), true);
 	for (int i = 0; i < readyQueue.size(); i++) {
@@ -180,15 +216,18 @@ void GLaDOS::update(float dt) {
 		for (int j = 0; j < ship->getDonuts().size(); j++) {
 			ids.push_back(j);
 		}
+		// NOLINTNEXTLINE It's fine that this shuffle algorithm isn't perfect
 		random_shuffle(ids.begin(), ids.end());
 		shared_ptr<EventModel> event = readyQueue.at(i);
 		shared_ptr<BuildingBlockModel> block = blocks.at(event->getBlock());
 		vector<BuildingBlockModel::Object> objects = block->getObjects();
 		int breachesNeeded = block->getBreachesNeeded();
 		int doorsNeeded = block->getDoorsNeeded();
+		int buttonsNeeded = block->getButtonsNeeded();
 
 		// If we don't have enough resources for this event, they're probably already fucked
-		if (doorsNeeded > numDoorsFree || breachesNeeded > numBreachesFree) {
+		if (doorsNeeded > numDoorsFree || breachesNeeded > numBreachesFree ||
+			buttonsNeeded > numButtonsFree) {
 			readyQueue.erase(readyQueue.begin() + i);
 			i--;
 			continue;
@@ -234,6 +273,15 @@ void GLaDOS::update(float dt) {
 			float breachAngle = ship->getBreaches()[k]->getAngle();
 			float diff = ship->getSize() / 2 - abs(abs(breachAngle - angle) - ship->getSize() / 2);
 			if (breachAngle != -1 && diff < (float)block->getRange() / 2) {
+				goodAngle = false;
+				break;
+			}
+		}
+
+		for (unsigned int k = 0; k < ship->getDoors().size(); k++) {
+			float doorAngle = ship->getDoors()[k]->getAngle();
+			float diff = ship->getSize() / 2 - abs(abs(doorAngle - angle) - ship->getSize() / 2);
+			if (doorAngle != -1 && diff < (float)block->getRange() / 2) {
 				goodAngle = false;
 				break;
 			}

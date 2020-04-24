@@ -1,7 +1,7 @@
 {
 	"textures": {
         "progress": {
-            "file":      "textures/progressbar.png",
+            "file":      "textures/loading/progressbar.png",
             "wrapS":     "clamp",
             "wrapT":     "clamp",
             "minfilter": "linear",
