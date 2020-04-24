@@ -1,5 +1,8 @@
 {
 	"textures": {
+		"bg" : {
+			"file":      "textures/main_menu/loading.png"
+		},
         "progress": {
             "file":      "textures/progressbar.png",
             "wrapS":     "clamp",
@@ -21,10 +24,25 @@
                 "type" : "Anchored"
             },
             "children"  : {
+				"bg" : {
+					"type" : "Image",
+					"format"    : {
+						"type" : "Anchored"
+					},
+					"data"   : {
+						"texture"  : "bg",
+						"anchor"   : [0.5,0.5],
+						"scale"    : 0.4
+					},
+					"layout" : {
+						"x_anchor" : "center",
+						"y_anchor" : "middle"
+					}
+				},
                 "bar"  : {
                     "type"   : "Progress",
                     "data"   : {
-                        "anchor"     : [0.5,0.5],
+                        "anchor"     : [0.5,0],
                         "background" : "progress_background",
                         "foreground" : "progress_foreground",
                         "left_cap"   : "progress_leftcap",
@@ -33,7 +51,7 @@
                     "layout" : {
                         "x_anchor" : "center",
                         "y_anchor" : "bottom",
-                        "y_offset" : 0.2
+                        "y_offset" : 0.1
                     }
                 }
             }
