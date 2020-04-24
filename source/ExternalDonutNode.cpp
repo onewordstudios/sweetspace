@@ -42,8 +42,10 @@ void ExternalDonutNode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch, co
 							-jump * (globals::RADIUS + RADIUS_OFFSET) * cos(relativeAngle));
 			setPosition(donutPos);
 
-			float angle = getAngle() - vel * globals::PI_180 * radiusRatio;
-			setAngle(angle);
+			float angle = rotationNode->getAngle() - vel * globals::PI_180 * radiusRatio;
+			rotationNode->setAngle(angle);
+			setAngle(onScreenAngle);
+			animateJumping();
 		}
 	} else {
 		// Donut is currently inactive
