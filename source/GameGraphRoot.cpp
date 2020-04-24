@@ -351,7 +351,7 @@ void GameGraphRoot::update(float timestep) {
 	switch (status) {
 		case Normal:
 			// Hide Unnecessary Overlays
-			// lossScreen->setVisible(false);
+			lossScreen->setVisible(false);
 			reconnectOverlay->setVisible(false);
 			break;
 		case Loss:
