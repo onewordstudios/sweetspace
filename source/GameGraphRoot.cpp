@@ -146,8 +146,13 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	// Initialize Reconnect Overlay
 	reconnectOverlay = assets->get<Node>("game_overlay_reconnect");
 
-	// Initialize Loss Screen
+	// Initialize Loss Screen Componenets
 	lossScreen = assets->get<Node>("game_overlay_loss");
+	restartBtn =
+		std::dynamic_pointer_cast<Button>(assets->get<Node>("game_overlay_loss_restartBtn"));
+	levelsBtn = std::dynamic_pointer_cast<Button>(assets->get<Node>("game_overlay_loss_levelsBtn"));
+	buttonManager.registerButton(restartBtn);
+	buttonManager.registerButton(levelsBtn);
 
 	// Initialize Ship Segments
 	leftMostSeg = 0;
@@ -346,7 +351,7 @@ void GameGraphRoot::update(float timestep) {
 	switch (status) {
 		case Normal:
 			// Hide Unnecessary Overlays
-			lossScreen->setVisible(false);
+			// lossScreen->setVisible(false);
 			reconnectOverlay->setVisible(false);
 			break;
 		case Loss:
@@ -357,7 +362,7 @@ void GameGraphRoot::update(float timestep) {
 			// Show Win Screen
 			break;
 		case Reconnecting:
-			//// Still Reconnecting
+			// Still Reconnecting
 			reconnectOverlay->setVisible(true);
 			break;
 		default:

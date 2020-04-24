@@ -78,6 +78,10 @@ class GameGraphRoot : public cugl::Scene {
 	// Loss Screen Textures
 	/** Node to hold all of the Loss Screen.*/
 	std::shared_ptr<cugl::Node> lossScreen;
+	/** Button to restart game */
+	std::shared_ptr<cugl::Button> restartBtn;
+	/** Button to levels */
+	std::shared_ptr<cugl::Button> levelsBtn;
 
 	// DRAWING STATE VARIABLES
 	/** The donut's base position. */

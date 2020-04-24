@@ -180,11 +180,20 @@
         "levels_btn_up" : {
         	"file" : "textures/wl_screens/levels_up.png"
         },
+        "levels_btn_down" : {
+        	"file" : "textures/wl_screens/levels_down.png"
+        },
         "next_btn_up" : {
         	"file" : "textures/wl_screens/next_up.png"
         },
+        "next_btn_down" : {
+        	"file" : "textures/wl_screens/next_down.png"
+        },
         "restart_btn_up" : {
         	"file" : "textures/wl_screens/restart_up.png"
+        },
+        "restart_btn_down" : {
+        	"file" : "textures/wl_screens/restart_down.png"
         },
         "wl_bg" : {
         	"file" : "textures/wl_screens/win_loss_bg.png"
@@ -466,7 +475,7 @@
 				                "type" : "Anchored"
 				            },
 				            "data": {
-				            	"visible": false,
+				            	"visible": true,
 				            	"anchor" : [0.5,0.5]
 				            },
 				            "layout" : {
@@ -570,7 +579,7 @@
 										"down" : {
 											"type"   : "Image",
 											"data"   : {
-												"texture"  : "restart_btn_up"
+												"texture"  : "restart_btn_down"
 											}
 										}
 									}
@@ -603,7 +612,7 @@
 										"down" : {
 											"type"   : "Image",
 											"data"   : {
-												"texture"  : "levels_btn_up"
+												"texture"  : "levels_btn_down"
 											}
 										}
 									}
