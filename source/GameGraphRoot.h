@@ -8,12 +8,13 @@
 #include "BreachNode.h"
 #include "ButtonNode.h"
 #include "DonutModel.h"
-#include "ExternalDonutNode.h"
 #include "DoorNode.h"
+#include "ExternalDonutNode.h"
 #include "Globals.h"
 #include "HealthNode.h"
 #include "InputController.h"
 #include "MagicInternetBox.h"
+#include "PlayerDonutNode.h"
 #include "ShipModel.h"
 
 class GameGraphRoot : public cugl::Scene {
@@ -25,7 +26,7 @@ class GameGraphRoot : public cugl::Scene {
 
 	// VIEW COMPONENTS
 	/** Filmstrip representing the player's animated donut */
-	std::shared_ptr<cugl::PolygonNode> donutNode;
+	std::shared_ptr<PlayerDonutNode> donutNode;
 	/** Label for on-screen coordinate HUD */
 	std::shared_ptr<cugl::Label> coordHUD;
 	/** Node to hold all of our graphics. Necesary for resolution indepedence. */
