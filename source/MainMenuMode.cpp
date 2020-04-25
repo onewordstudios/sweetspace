@@ -236,6 +236,7 @@ void MainMenuMode::processTransition() {
 			if (transitionFrame >= TRANSITION_DURATION) {
 				endTransition();
 				mainScreen->setVisible(false);
+				backBtn->setVisible(true);
 			} else {
 				mainScreen->setColor(
 					Tween::fade(Tween::linear(1.0f, 0.0f, transitionFrame, TRANSITION_DURATION)));
@@ -302,6 +303,7 @@ void MainMenuMode::processButtons() {
 		switch (currState) {
 			case HostScreen:
 				net->forceDisconnect();
+				// Intentional fall-through
 			case ClientScreen:
 				CULog("Going Back");
 				currState = StartScreen;
@@ -309,6 +311,7 @@ void MainMenuMode::processButtons() {
 				hostScreen->setVisible(false);
 				mainScreen->setVisible(true);
 				mainScreen->setColor(cugl::Color4::WHITE);
+				backBtn->setVisible(false);
 				return;
 			default:
 				break;
@@ -351,6 +354,7 @@ void MainMenuMode::processButtons() {
 				hostScreen->setVisible(false);
 				mainScreen->setVisible(true);
 				mainScreen->setColor(cugl::Color4::WHITE);
+				backBtn->setVisible(false);
 			}
 			break;
 		}
@@ -394,6 +398,7 @@ void MainMenuMode::processButtons() {
 				clientScreen->setVisible(false);
 				mainScreen->setVisible(true);
 				mainScreen->setColor(cugl::Color4::WHITE);
+				backBtn->setVisible(false);
 				return;
 			}
 

@@ -622,7 +622,8 @@
 						"upnode"   : "up",
 						"downnode" : "down",
 						"anchor"   : [0,0],
-						"scale" : 0.5
+						"scale" : 0.5,
+						"visible": false
 					},
 					"layout" : {
 						"x_anchor" : "left",
