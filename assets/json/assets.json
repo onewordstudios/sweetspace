@@ -120,8 +120,20 @@
 		"game_title": {
 			"file": "textures/main_menu/sweetspace.png"
 		},
-		"main_menu_bg": {
-			"file": "textures/main_menu/sweetspace_bg.png"
+		"main_menu_bg0": {
+			"file": "textures/main_menu/splash/0-logo.png"
+		},
+		"main_menu_bg1": {
+			"file": "textures/main_menu/splash/1-bg.png"
+		},
+		"main_menu_bg2": {
+			"file": "textures/main_menu/splash/2-sprinkles.png"
+		},
+		"main_menu_bg3": {
+			"file": "textures/main_menu/splash/3-landscape.png"
+		},
+		"main_menu_bg4": {
+			"file": "textures/main_menu/splash/4-ship.png"
 		},
 		"purple_panel" : {
 			"file": "textures/main_menu/purple_panel.png"
@@ -517,15 +529,78 @@
 				"y_anchor" : "middle"
 			},
             "children":  {
-				"mainmenubg" : {
+				"mainmenubg1" : {
 					"type" : "Image",
 					"format"    : {
 						"type" : "Anchored"
 					},
 					"data"   : {
-						"texture"  : "main_menu_bg",
+						"texture"  : "main_menu_bg1",
 						"anchor"   : [0.5,0.5],
-						"scale"    : 0.5
+						"scale"    : 0.4
+					},
+					"layout" : {
+						"x_anchor" : "center",
+						"y_anchor" : "middle"
+					}
+				},
+				"mainmenubg2" : {
+					"type" : "Image",
+					"format"    : {
+						"type" : "Anchored"
+					},
+					"data"   : {
+						"texture"  : "main_menu_bg2",
+						"anchor"   : [0.5,0.5],
+						"scale"    : 0.4
+					},
+					"layout" : {
+						"x_anchor" : "center",
+						"y_anchor" : "middle"
+					}
+				},
+				"mainmenubg3" : {
+					"type" : "Image",
+					"format"    : {
+						"type" : "Anchored"
+					},
+					"data"   : {
+						"texture"  : "main_menu_bg3",
+						"anchor"   : [0.5,0.5],
+						"scale"    : 0.4,
+						"visible" :false
+					},
+					"layout" : {
+						"x_anchor" : "center",
+						"y_anchor" : "middle"
+					}
+				},
+				"mainmenubg4" : {
+					"type" : "Image",
+					"format"    : {
+						"type" : "Anchored"
+					},
+					"data"   : {
+						"texture"  : "main_menu_bg4",
+						"anchor"   : [0.5,0.5],
+						"scale"    : 0.4,
+						"visible" :false
+					},
+					"layout" : {
+						"x_anchor" : "center",
+						"y_anchor" : "middle",
+						"y_offset" : -1.5
+					}
+				},
+				"studiologo" : {
+					"type" : "Image",
+					"format"    : {
+						"type" : "Anchored"
+					},
+					"data"   : {
+						"texture"  : "main_menu_bg0",
+						"anchor"   : [0.5,0.5],
+						"scale"    : 0.4
 					},
 					"layout" : {
 						"x_anchor" : "center",
@@ -538,7 +613,8 @@
 					"data"   : {
 						"anchor"   : [0.5,0.5],
 						"scale"    : 1,
-						"size" : [1600,500]
+						"size" : [1600,500],
+						"visible" : false
 					},
 					"layout" : {
 						"x_anchor" : "center",
