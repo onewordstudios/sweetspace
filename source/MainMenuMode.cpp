@@ -184,6 +184,13 @@ void MainMenuMode::setRoomID() {
 	hostLabel->setText(disp.str());
 }
 
+void MainMenuMode::endTransition() {
+	currState = transitionState;
+	transitionState = NA;
+	transitionFrame = -1;
+	input->clear();
+}
+
 void MainMenuMode::processTransition() {
 	transitionFrame++;
 	switch (currState) {
@@ -193,12 +200,9 @@ void MainMenuMode::processTransition() {
 				bg2ship->setVisible(true);
 			}
 			if (transitionFrame > OPEN_TRANSITION) {
-				currState = StartScreen;
-				transitionState = NA;
-				transitionFrame = -1;
 				bg9studio->setVisible(false);
 				mainScreen->setColor(Color4::WHITE);
-				input->clear();
+				endTransition();
 				return;
 			}
 
@@ -226,9 +230,7 @@ void MainMenuMode::processTransition() {
 		}
 		case StartScreen: {
 			if (transitionFrame >= TRANSITION_DURATION) {
-				currState = transitionState;
-				transitionState = NA;
-				transitionFrame = -1;
+				endTransition();
 				mainScreen->setVisible(false);
 			} else {
 				mainScreen->setColor(
@@ -243,9 +245,7 @@ void MainMenuMode::processTransition() {
 		case HostScreenWait: {
 			if (transitionState == HostScreen) {
 				if (transitionFrame >= TRANSITION_DURATION) {
-					currState = HostScreen;
-					transitionState = NA;
-					transitionFrame = -1;
+					endTransition();
 					hostScreen->setPositionY(0);
 				} else {
 					hostScreen->setPositionY(
