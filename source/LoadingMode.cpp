@@ -1,12 +1,16 @@
 #include "LoadingMode.h"
 
 #include "Globals.h"
+#include "Tween.h"
 
 using namespace cugl;
 
 constexpr float CLEAR_COLOR_R = 13.0f;
 constexpr float CLEAR_COLOR_G = 21.0f;
 constexpr float CLEAR_COLOR_B = 51.0f;
+
+/** Transition duration */
+constexpr int TRANSITION_DURATION = 30;
 
 #pragma mark -
 #pragma mark Constructors
@@ -72,12 +76,19 @@ void LoadingMode::update(float timestep) {
 			progress = 1.0f;
 		}
 		bar->setProgress(progress);
+	} else {
+		transition++;
+		if (transition > TRANSITION_DURATION) {
+			ready = true;
+			return;
+		}
+		bar->setColor(Tween::fade(Tween::linear(1.0f, 0.0f, transition, TRANSITION_DURATION)));
 	}
 }
 
 /**
- * Returns true if loading is complete, but the player has not pressed play
+ * Returns true if loading is complete
  *
- * @return true if loading is complete, but the player has not pressed play
+ * @return true if loading is complete
  */
-bool LoadingMode::isLoaded() const { return progress == 1.0f; }
+bool LoadingMode::isLoaded() const { return ready; }
