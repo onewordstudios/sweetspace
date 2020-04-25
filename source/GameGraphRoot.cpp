@@ -217,7 +217,9 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 												 .at((unsigned long)breachModel->getPlayer())
 												 ->getColorId());
 		image = assets->get<Texture>("breach_" + breachColor);
-		std::shared_ptr<PolygonNode> patternNode = PolygonNode::allocWithTexture(image);
+		std::shared_ptr<AnimationNode> patternNode =
+			AnimationNode::alloc(image, BreachNode::BREACH_H, BreachNode::BREACH_W);
+		shapeNode->setColor(color);
 		patternNode->setAnchor(Vec2::ANCHOR_CENTER);
 		patternNode->setPosition(0, 0);
 		breachNode->setPatternNode(patternNode);
@@ -480,6 +482,7 @@ void GameGraphRoot::update(float timestep) {
 													 ->getColorId());
 			std::shared_ptr<Texture> image = assets->get<Texture>("breach_" + breachColor);
 			breachNode->getPatternNode()->setTexture(image);
+			breachNode->getPatternNode()->setColor(color);
 			breachModel->setNeedSpriteUpdate(false);
 		}
 	}
