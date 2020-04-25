@@ -272,6 +272,8 @@ void MainMenuMode::processUpdate() {
 				hostScreen->setPositionY(-screenHeight);
 				transitionState = HostScreen;
 				connScreen->setVisible(false);
+
+				startHostThread->detach();
 			} else {
 				connScreen->setVisible(true);
 			}
@@ -294,6 +296,23 @@ void MainMenuMode::processUpdate() {
 void MainMenuMode::processButtons() {
 	if (currState != ClientScreenDone) {
 		buttonManager.process();
+	}
+
+	if (InputController::getInstance()->hasPressedBack()) {
+		switch (currState) {
+			case HostScreen:
+				net->forceDisconnect();
+			case ClientScreen:
+				CULog("Going Back");
+				currState = StartScreen;
+				clientScreen->setVisible(false);
+				hostScreen->setVisible(false);
+				mainScreen->setVisible(true);
+				mainScreen->setColor(cugl::Color4::WHITE);
+				return;
+			default:
+				break;
+		}
 	}
 
 	// Do not process inputs if a) nothing was pressed, or b) currently transitioning
@@ -325,6 +344,13 @@ void MainMenuMode::processButtons() {
 					hostScreen->setVisible(false);
 					levelSelect->setVisible(true);
 				}
+			} else if (buttonManager.tappedButton(backBtn, tapData)) {
+				CULog("Going Back");
+				net->forceDisconnect();
+				currState = StartScreen;
+				hostScreen->setVisible(false);
+				mainScreen->setVisible(true);
+				mainScreen->setColor(cugl::Color4::WHITE);
 			}
 			break;
 		}
@@ -362,6 +388,13 @@ void MainMenuMode::processButtons() {
 				net->initClient(room.str());
 
 				break;
+			} else if (buttonManager.tappedButton(backBtn, tapData)) {
+				CULog("Going Back");
+				currState = StartScreen;
+				clientScreen->setVisible(false);
+				mainScreen->setVisible(true);
+				mainScreen->setColor(cugl::Color4::WHITE);
+				return;
 			}
 
 			for (unsigned int i = 0; i < NUM_DIGITS; i++) {
