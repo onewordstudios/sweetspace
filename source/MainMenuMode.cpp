@@ -58,6 +58,8 @@ bool MainMenuMode::init(const std::shared_ptr<AssetManager>& assets) {
 	bg2ship = assets->get<Node>("matchmaking_mainmenubg4");
 	bg9studio = assets->get<Node>("matchmaking_studiologo");
 
+	backBtn = std::dynamic_pointer_cast<Button>(assets->get<Node>("matchmaking_backbtn"));
+
 	hostBtn =
 		std::dynamic_pointer_cast<Button>(assets->get<Node>("matchmaking_home_btnwrap_hostbtn"));
 	clientBtn =
@@ -89,6 +91,7 @@ bool MainMenuMode::init(const std::shared_ptr<AssetManager>& assets) {
 	hardBtn =
 		std::dynamic_pointer_cast<Button>(assets->get<Node>("matchmaking_levelselect_hardbtn"));
 
+	buttonManager.registerButton(backBtn);
 	buttonManager.registerButton(hostBtn);
 	buttonManager.registerButton(clientBtn);
 	buttonManager.registerButton(hostBeginBtn);
@@ -120,6 +123,7 @@ bool MainMenuMode::init(const std::shared_ptr<AssetManager>& assets) {
  */
 void MainMenuMode::dispose() {
 	removeAllChildren();
+	backBtn = nullptr;
 	hostBtn = nullptr;
 	clientBtn = nullptr;
 	mainScreen = nullptr;

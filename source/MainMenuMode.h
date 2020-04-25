@@ -84,6 +84,9 @@ class MainMenuMode : public cugl::Scene {
 	/** Background asset with studio name */
 	std::shared_ptr<cugl::Node> bg9studio;
 
+	/** Back button */
+	std::shared_ptr<cugl::Button> backBtn;
+
 	/** Button to create host */
 	std::shared_ptr<cugl::Button> hostBtn;
 	/** Button to create client */
