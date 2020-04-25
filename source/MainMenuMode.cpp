@@ -408,7 +408,7 @@ void MainMenuMode::update(float timestep) {
 	input->update(timestep);
 
 	rotationFrame = (rotationFrame + 1) % ROTATION_MAX;
-	bg0stars->setAngle(globals::TWO_PI * rotationFrame / ROTATION_MAX);
+	bg0stars->setAngle(globals::TWO_PI * (float)rotationFrame / ROTATION_MAX);
 
 	if (transitionState != NA) {
 		processTransition();

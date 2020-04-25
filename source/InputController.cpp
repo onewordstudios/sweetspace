@@ -24,10 +24,9 @@ constexpr unsigned int LISTENER_KEY = 1;
  */
 InputController::InputController() : active(false), rollAmount(0.0f), jumped(false) {
 	touchID = -1;
-	bool success = false;
+	bool success = Input::activate<Keyboard>();
 
 #ifndef CU_TOUCH_SCREEN
-	success = Input::activate<Keyboard>();
 
 	Input::activate<Mouse>();
 	Mouse* mouse = Input::get<Mouse>();
@@ -60,8 +59,8 @@ InputController::InputController() : active(false), rollAmount(0.0f), jumped(fal
 
 InputController::~InputController() {
 	if (active) {
-#ifndef CU_TOUCH_SCREEN
 		Input::deactivate<Keyboard>();
+#ifndef CU_TOUCH_SCREEN
 
 		Mouse* mouse = Input::get<Mouse>();
 		mouse->removePressListener(LISTENER_KEY);
@@ -122,6 +121,11 @@ void InputController::update(float dt) {
 		rollAmount = 0.0f;
 	}
 #else
+	Keyboard* keys = Input::get<Keyboard>();
+	if (keys->keyPressed(KeyCode::ANDROID_BACK)) {
+		CULog("BACK BUTTON PRESSED");
+	}
+
 	// MOBILE CONTROLS
 	Vec3 acc = Input::get<Accelerometer>()->getAcceleration();
 
