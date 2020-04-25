@@ -291,18 +291,6 @@ void MainMenuMode::processUpdate() {
 	}
 }
 
-/**
- * Returns true iff a button was properly tapped (the tap event both started and ended on the
- * button)
- *
- * @param button The button
- * @param tapData The start and end locations provided by the input controller
- */
-bool tappedButton(std::shared_ptr<Button> button, std::tuple<Vec2, Vec2> tapData) {
-	return button->containsScreen(std::get<0>(tapData)) &&
-		   button->containsScreen(std::get<1>(tapData));
-}
-
 void MainMenuMode::processButtons() {
 	if (currState != ClientScreenDone) {
 		buttonManager.process();
@@ -317,13 +305,13 @@ void MainMenuMode::processButtons() {
 
 	switch (currState) {
 		case StartScreen: {
-			if (tappedButton(hostBtn, tapData)) {
+			if (buttonManager.tappedButton(hostBtn, tapData)) {
 				startHostThread = std::unique_ptr<std::thread>(new std::thread([]() {
 					MagicInternetBox::getInstance()->initHost();
 					CULog("SEPARATE THREAD FINISHED INIT HOST");
 				}));
 				transitionState = HostScreenWait;
-			} else if (tappedButton(clientBtn, tapData)) {
+			} else if (buttonManager.tappedButton(clientBtn, tapData)) {
 				transitionState = ClientScreen;
 				clientScreen->setPositionY(-screenHeight);
 				clientScreen->setVisible(true);
@@ -331,7 +319,7 @@ void MainMenuMode::processButtons() {
 			break;
 		}
 		case HostScreen: {
-			if (tappedButton(hostBeginBtn, tapData)) {
+			if (buttonManager.tappedButton(hostBeginBtn, tapData)) {
 				if (net->getNumPlayers() >= globals::MIN_PLAYERS) {
 					currState = HostLevelSelect;
 					hostScreen->setVisible(false);
@@ -341,17 +329,17 @@ void MainMenuMode::processButtons() {
 			break;
 		}
 		case HostLevelSelect: {
-			if (tappedButton(easyBtn, tapData)) {
+			if (buttonManager.tappedButton(easyBtn, tapData)) {
 				gameReady = true;
 				net->startGame(1);
 				return;
 			}
-			if (tappedButton(medBtn, tapData)) {
+			if (buttonManager.tappedButton(medBtn, tapData)) {
 				gameReady = true;
 				net->startGame(2);
 				return;
 			}
-			if (tappedButton(hardBtn, tapData)) {
+			if (buttonManager.tappedButton(hardBtn, tapData)) {
 				gameReady = true;
 				net->startGame(3);
 				return;
@@ -359,7 +347,7 @@ void MainMenuMode::processButtons() {
 			break;
 		}
 		case ClientScreen: {
-			if (tappedButton(clientJoinBtn, tapData)) {
+			if (buttonManager.tappedButton(clientJoinBtn, tapData)) {
 				if (clientEnteredRoom.size() != globals::ROOM_LENGTH) {
 					break;
 				}
@@ -377,7 +365,7 @@ void MainMenuMode::processButtons() {
 			}
 
 			for (unsigned int i = 0; i < NUM_DIGITS; i++) {
-				if (tappedButton(clientRoomBtns[i], tapData)) {
+				if (buttonManager.tappedButton(clientRoomBtns[i], tapData)) {
 					if (clientEnteredRoom.size() < globals::ROOM_LENGTH) {
 						clientEnteredRoom.push_back(i);
 						updateClientLabel();
@@ -386,7 +374,7 @@ void MainMenuMode::processButtons() {
 				}
 			}
 
-			if (tappedButton(clientClearBtn, tapData)) {
+			if (buttonManager.tappedButton(clientClearBtn, tapData)) {
 				if (clientEnteredRoom.size() > 0) {
 					clientEnteredRoom.pop_back();
 					clientJoinBtn->setDown(false);
