@@ -42,12 +42,7 @@ class PlayerDonutNode : public DonutNode {
 		const std::shared_ptr<cugl::Texture> &bodyTexture) {
 		std::shared_ptr<PlayerDonutNode> node = std::make_shared<PlayerDonutNode>();
 		if (node->init()) {
-			node->rotationNode = cugl::Node::alloc();
-			node->bodyNode = cugl::PolygonNode::allocWithTexture(bodyTexture);
-			node->bodyNode->setAnchor(cugl::Vec2::ANCHOR_CENTER);
-			node->bodyNode->setPosition(0, 0);
-			node->addChild(node->rotationNode);
-			node->rotationNode->addChild(node->bodyNode);
+			node->initChildren(bodyTexture);
 			return node;
 		} else {
 			return nullptr;

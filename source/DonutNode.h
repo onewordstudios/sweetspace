@@ -52,6 +52,17 @@ class DonutNode : public cugl::Node {
 	 */
 	~DonutNode() { dispose(); }
 
+	/**
+	 * Init child nodes of donut node
+	 */
+	void initChildren(const std::shared_ptr<cugl::Texture> &bodyTexture) {
+		rotationNode = cugl::Node::alloc();
+		bodyNode = cugl::PolygonNode::allocWithTexture(bodyTexture);
+		bodyNode->setAnchor(cugl::Vec2::ANCHOR_CENTER);
+		bodyNode->setPosition(0, 0);
+		rotationNode->addChild(bodyNode);
+		addChild(rotationNode);
+	}
 #pragma mark -
 #pragma mark Getters Setters
 	/**
