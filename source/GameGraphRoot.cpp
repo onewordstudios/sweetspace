@@ -381,8 +381,6 @@ void GameGraphRoot::update(float timestep) {
 	nearSpace->setAngle(wrapAngle(nearSpace->getAngle() + delta));
 	prevPlayerAngle = newPlayerAngle;
 
-	double radiusRatio = (double)globals::RADIUS / (donutNode->getWidth() / 2);
-
 	// Update ship segments
 	std::shared_ptr<Texture> seg0 = assets->get<Texture>("shipseg0");
 	std::shared_ptr<Texture> seg1 = assets->get<Texture>("shipseg1");
