@@ -72,6 +72,13 @@ class GameGraphRoot : public cugl::Scene {
 	// Reconnection Textures
 	/** Node to hold all of the Reconnect Overlay.*/
 	std::shared_ptr<cugl::Node> reconnectOverlay;
+	/** Label for second ellipsis point */
+	std::shared_ptr<cugl::Label> reconnectE2;
+	/** Label for third ellipsis point */
+	std::shared_ptr<cugl::Label> reconnectE3;
+	/** Current animation frame for ellipses */
+	int currentEllipsesFrame;
+
 	/** Ship red overlay node */
 	std::shared_ptr<cugl::PolygonNode> shipOverlay;
 
@@ -161,7 +168,8 @@ class GameGraphRoot : public cugl::Scene {
 	 * This constructor does not allocate any objects or start the game.
 	 * This allows us to use the object without a heap pointer.
 	 */
-	GameGraphRoot() : Scene(), status(Normal) {}
+	GameGraphRoot()
+		: Scene(), status(Normal), currentEllipsesFrame(0), currentHealthWarningFrame(0) {}
 
 	/**
 	 * Disposes of all (non-static) resources allocated to this mode.

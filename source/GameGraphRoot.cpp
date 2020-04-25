@@ -35,6 +35,12 @@ constexpr int BG_SCROLL_LIMIT = 256;
 /** Parallax speed of background image */
 constexpr float BG_SCROLL_SPEED = 0.5;
 
+/** Animation cycle length of ellipses */
+constexpr int MAX_ELLIPSES_FRAMES = 180;
+
+/** Presumable number of frames per second */
+constexpr int FRAMES_PER_SECOND = 60;
+
 /** Animation cycle length of ship red flash */
 constexpr int MAX_HEALTH_WARNING_FRAMES = 150;
 
@@ -293,6 +299,10 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	// Overlay Components
 	// Initialize Reconnect Overlay
 	reconnectOverlay = assets->get<Node>("game_overlay_reconnect");
+	reconnectE2 =
+		std::dynamic_pointer_cast<Label>(assets->get<Node>("game_overlay_reconnect_ellipsis2"));
+	reconnectE3 =
+		std::dynamic_pointer_cast<Label>(assets->get<Node>("game_overlay_reconnect_ellipsis3"));
 
 	// Initialize Loss Screen Componenets
 	lossScreen = assets->get<Node>("game_overlay_loss");
@@ -378,6 +388,17 @@ void GameGraphRoot::update(float timestep) {
 		case Reconnecting:
 			// Still Reconnecting
 			reconnectOverlay->setVisible(true);
+			currentEllipsesFrame++;
+			if (currentEllipsesFrame > MAX_ELLIPSES_FRAMES) {
+				currentEllipsesFrame = 0;
+			} else if (currentEllipsesFrame % MAX_ELLIPSES_FRAMES < FRAMES_PER_SECOND) {
+				reconnectE2->setVisible(false);
+				reconnectE3->setVisible(false);
+			} else if (currentEllipsesFrame % MAX_ELLIPSES_FRAMES < 2 * FRAMES_PER_SECOND) {
+				reconnectE2->setVisible(true);
+			} else if (currentEllipsesFrame % MAX_ELLIPSES_FRAMES < 3 * FRAMES_PER_SECOND) {
+				reconnectE3->setVisible(true);
+			}
 			break;
 		default:
 			CULog("ERROR: Uncaught DrawingStatus Value Occurred");

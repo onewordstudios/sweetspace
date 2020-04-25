@@ -111,12 +111,6 @@
         "reconnect_bg": {
             "file":   "textures/reconnect/bg.png"
         },
-        "reconnect_text": {
-            "file":   "textures/reconnect/text.png"
-        },
-        "reconnect_ellipses": {
-            "file":   "textures/reconnect/ellipses.png"
-        },
 		"game_title": {
 			"file": "textures/main_menu/sweetspace.png"
 		},
@@ -815,23 +809,61 @@
 				                        "absolute" : true
 				                    }
 				            	},
-				            	"ellipses" : {
-				            		"type": "Image",
-									"format"    : {
-										"type" : "Anchored"
-									},
+				                "ellipsis1" : {
+				                    "type": "Label",
 				                    "data": {
-				                        "texture":  "reconnect_ellipses",
-				                        "anchor":   [0.5,0.5],
-				                        "scale":    0.6
+				                        "font"       : "mont_black_italic_big",
+				                        "text"       : ".",
+				                        "foreground" : [236,167,247,255],
+				                        "scale" 	 : 0.5,
+				                        "valign"     : "middle",
+				                        "halign"     : "center"
 				                    },
-									"layout" : {
-										"x_anchor" : "center",
+				                    "layout" : {
+				                        "x_anchor" : "center",
 										"y_anchor" : "middle",
-										"y_offset" : -125,
-										"absolute" : true
-									}
-				            	}
+				                        "y_offset" : -150,
+				                        "x_offset" : -15,
+				                        "absolute" : true
+				                    }
+				                },
+				                "ellipsis2" : {
+				                    "type": "Label",
+				                    "data": {
+				                        "font"       : "mont_black_italic_big",
+				                        "text"       : ".",
+				                        "visible" 	 : false,
+				                        "foreground" : [236,167,247,255],
+				                        "scale" 	 : 0.5,
+				                        "valign"     : "middle",
+				                        "halign"     : "center"
+				                    },
+				                    "layout" : {
+				                        "x_anchor" : "center",
+										"y_anchor" : "middle",
+				                        "y_offset" : -150,
+				                        "absolute" : true
+				                    }
+				                },
+				                "ellipsis3" : {
+				                    "type": "Label",
+				                    "data": {
+				                        "font"       : "mont_black_italic_big",
+				                        "text"       : ".",
+				                        "visible" 	 : false,
+				                        "foreground" : [236,167,247,255],
+				                        "scale" 	 : 0.5,
+				                        "valign"     : "middle",
+				                        "halign"     : "center"
+				                    },
+				                    "layout" : {
+				                        "x_anchor" : "center",
+										"y_anchor" : "middle",
+				                        "y_offset" : -150,
+				                        "x_offset" : 15,
+				                        "absolute" : true
+				                    }
+				                }
 				            }
 				        }
                     }
