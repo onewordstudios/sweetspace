@@ -198,6 +198,7 @@ void MainMenuMode::processTransition() {
 				transitionFrame = -1;
 				bg9studio->setVisible(false);
 				mainScreen->setColor(Color4::WHITE);
+				input->clear();
 				return;
 			}
 

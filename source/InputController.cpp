@@ -22,7 +22,8 @@ constexpr unsigned int LISTENER_KEY = 1;
  * This constructor does NOT do any initialzation.  It simply allocates the
  * object. This makes it safe to use this class without a pointer.
  */
-InputController::InputController() : active(false), rollAmount(0.0f), jumped(false) {
+InputController::InputController()
+	: active(false), rollAmount(0.0f), jumped(false), backPressed(false) {
 	touchID = -1;
 	bool success = Input::activate<Keyboard>();
 
@@ -85,6 +86,7 @@ InputController::~InputController() {
  */
 void InputController::clear() {
 	jumped = false;
+	backPressed = false;
 	rollAmount = 0.0f;
 	tapStart.setZero();
 	tapEnd.setZero();
@@ -110,6 +112,9 @@ void InputController::update(float dt) {
 	Keyboard* keys = Input::get<Keyboard>();
 	if (keys->keyPressed(JUMP_KEY)) {
 		jumped = true;
+	} else if (keys->keyPressed(KeyCode::ESCAPE)) {
+		backPressed = true;
+		CULog("Escape key pressed");
 	}
 
 	// Forces increase the longer you hold a key.
@@ -123,7 +128,8 @@ void InputController::update(float dt) {
 #else
 	Keyboard* keys = Input::get<Keyboard>();
 	if (keys->keyPressed(KeyCode::ANDROID_BACK)) {
-		CULog("BACK BUTTON PRESSED");
+		CULog("Android back button pressed");
+		backPressed = true;
 	}
 
 	// MOBILE CONTROLS
@@ -159,6 +165,14 @@ const cugl::Vec2 InputController::getCurrTapLoc() const {
 	}
 #endif
 	return cugl::Vec2::ZERO;
+}
+
+const bool InputController::hasPressedBack() {
+	if (backPressed) {
+		backPressed = false;
+		return true;
+	}
+	return false;
 }
 
 #pragma endregion
