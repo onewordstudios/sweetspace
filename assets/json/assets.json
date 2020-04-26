@@ -177,6 +177,12 @@
 		"clear_btn_down" : {
 			"file": "textures/main_menu/clear_down.png"
 		},
+		"back_btn" : {
+			"file": "textures/main_menu/back_up.png"
+		},
+		"back_btn_down" : {
+			"file": "textures/main_menu/back_down.png"
+		},
         "challenge_btn_up" : {
           "file": "textures/buttons/up.png"
         },
@@ -946,6 +952,39 @@
 					"layout" : {
 						"x_anchor" : "center",
 						"y_anchor" : "middle"
+					}
+				},
+				"backbtn" : {
+					"type": "Button",
+					"format" : {
+						"type" : "Anchored"
+					},
+					"data": {
+						"upnode"   : "up",
+						"downnode" : "down",
+						"anchor"   : [0,0],
+						"scale" : 0.5,
+						"visible": false
+					},
+					"layout" : {
+						"x_anchor" : "left",
+						"y_anchor" : "bottom",
+						"x_offset" : 0.02,
+						"y_offset" : 0.05
+					},
+					"children" : {
+						"up" : {
+							"type"   : "Image",
+							"data"   : {
+								"texture"  : "back_btn"
+							}
+						},
+						"down" : {
+							"type"   : "Image",
+							"data"   : {
+								"texture"  : "back_btn_down"
+							}
+						}
 					}
 				},
 				"home" : {

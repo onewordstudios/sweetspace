@@ -84,6 +84,9 @@ class MainMenuMode : public cugl::Scene {
 	/** Background asset with studio name */
 	std::shared_ptr<cugl::Node> bg9studio;
 
+	/** Back button */
+	std::shared_ptr<cugl::Button> backBtn;
+
 	/** Button to create host */
 	std::shared_ptr<cugl::Button> hostBtn;
 	/** Button to create client */
@@ -136,22 +139,30 @@ class MainMenuMode : public cugl::Scene {
 	 */
 	void setRoomID();
 
+#pragma region Update Handlers
 	/**
-	 * Animate a transition between states.
+	 * Called during a state transition upon completing the transition.
+	 */
+	void endTransition();
+
+	/**
+	 * Handle update during a state transition. Animates the transition between states.
 	 *
 	 * PRECONDITION: transitionState != NA
 	 */
 	void processTransition();
 
 	/**
-	 * Process state updates that happene each frame
+	 * Handle normal updates during a frame. Process state updates that happen each frame.
 	 */
 	void processUpdate();
 
 	/**
-	 * Update button states and handle when buttons are clicked.
+	 * Handle button presses during a frame. Update button states and handle when buttons are
+	 * clicked.
 	 */
 	void processButtons();
+#pragma endregion
 
    public:
 #pragma region Instantiation Logic
