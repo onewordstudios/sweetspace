@@ -32,13 +32,6 @@ class ButtonModel {
 	ButtonModel(void) : angle(-1), pairID(-1), resolved(false) {}
 
 	/**
-	 * Initializes a new button at an unassigned angle (-1) and without a defined pair.
-	 *
-	 * @return true if the obstacle is initialized properly, false otherwise.
-	 */
-	bool init() { return init(-1.0f, nullptr, -1); }
-
-	/**
 	 * Initializes a new button with the given angle and pair.
 	 *
 	 * @param a   The angle at which the button exists
@@ -48,14 +41,6 @@ class ButtonModel {
 	 * @return true if the obstacle is initialized properly, false otherwise.
 	 */
 	bool init(const float a, std::shared_ptr<ButtonModel> pair, int pairID);
-
-	/**
-	 * Allocate and return a pointer to a new, empty button model.
-	 */
-	static std::shared_ptr<ButtonModel> alloc() {
-		std::shared_ptr<ButtonModel> result = std::make_shared<ButtonModel>();
-		return (result->init() ? result : nullptr);
-	}
 
 #pragma mark -
 #pragma mark Accessors

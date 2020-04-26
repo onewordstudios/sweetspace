@@ -27,7 +27,7 @@ bool ShipModel::init(unsigned int numPlayers, unsigned int numBreaches, unsigned
 
 	// Instantiate button models
 	for (unsigned int i = 0; i < numButtons; i++) {
-		buttons.push_back(ButtonModel::alloc());
+		buttons.push_back(std::make_shared<ButtonModel>());
 	}
 
 	// Instantiate health
