@@ -439,8 +439,6 @@ void MainMenuMode::processButtons() {
 				clientJoinBtn->setDown(true);
 				net->initClient(room.str());
 
-				backBtn->setVisible(false);
-
 				break;
 			} else if (buttonManager.tappedButton(backBtn, tapData)) {
 				transitionState = StartScreen;
@@ -501,7 +499,6 @@ void MainMenuMode::update(float timestep) {
 				updateClientLabel();
 				currState = ClientScreen;
 				clientJoinBtn->setDown(false);
-				backBtn->setVisible(true);
 			}
 			return;
 		case MagicInternetBox::MatchmakingStatus::Uninitialized:
@@ -510,6 +507,10 @@ void MainMenuMode::update(float timestep) {
 		case MagicInternetBox::MatchmakingStatus::GameStart:
 			gameReady = true;
 			return;
+		case MagicInternetBox::MatchmakingStatus::ClientWaitingOnOthers:
+			if (backBtn->isVisible()) {
+				backBtn->setVisible(false);
+			}
 		default:
 			net->update();
 			break;
