@@ -87,7 +87,7 @@ bool ShipModel::failAllTask() {
 	for (int i = 0; i < donuts.size(); i++) {
 		float angle = (float)(rand() % (int)(getSize()));
 		bool goodAngle = false;
-		while(!goodAngle) {
+		while (!goodAngle) {
 			angle = (float)(rand() % (int)(getSize()));
 			for (unsigned int k = 0; k < breaches.size(); k++) {
 				float breachAngle = breaches[k]->getAngle();
