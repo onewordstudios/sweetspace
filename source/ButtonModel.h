@@ -73,13 +73,6 @@ class ButtonModel {
 	int getPlayersOn() { return (int)playersOn.count(); }
 
 	/**
-	 * Sets the current angle of the button in degrees.
-	 *
-	 * @param value The button angle in degrees
-	 */
-	void setAngle(float value) { angle = value; }
-
-	/**
 	 * Adds the given player's flag from the button.
 	 *
 	 */
