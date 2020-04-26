@@ -123,9 +123,7 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	doorsNode = assets->get<Node>("game_field_near_doors");
 	externalDonutsNode = assets->get<Node>("game_field_near_externaldonuts");
 	donutPos = donutNode->getPosition();
-	healthNode = dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_health"));
-	healthNodeOverlay =
-		dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_healthSeg"));
+	healthNode = dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_healthBase"));
 	coordHUD = std::dynamic_pointer_cast<Label>(assets->get<Node>("game_hud"));
 	shipOverlay =
 		dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_near_shipoverlay"));
@@ -149,6 +147,13 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 		std::shared_ptr<cugl::PolygonNode> arrow = dynamic_pointer_cast<cugl::PolygonNode>(
 			assets->get<Node>("game_field_challengePanelParent_challengePanelArrow" + s));
 		challengePanelArrows.push_back(arrow);
+	}
+
+	for(int i = 0; i < MAX_HEALTH_LABELS; i++) {
+		std::shared_ptr<cugl::PolygonNode> healthSeg =
+				dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_healthSeg"));
+		healthNodeOverlay.push_back(healthSeg);
+
 	}
 
 	// Initialize Ship Segments
@@ -421,22 +426,22 @@ void GameGraphRoot::update(float timestep) {
 	// Button Checks for Special Case Buttons
 	processButtons();
 
-	if (ship->getHealth() < 1) {
-		healthNodeOverlay->setVisible(false);
-	} else if (ship->getHealth() < globals::INITIAL_SHIP_HEALTH * 0.3) {
-		std::shared_ptr<Texture> image = assets->get<Texture>("health_red");
-		healthNodeOverlay->setTexture(image);
-		healthNodeOverlay->setPosition(-100, 176);
-		healthNodeOverlay->setAngle(240 * globals::PI_180);
-	} else if (ship->getHealth() < globals::INITIAL_SHIP_HEALTH * 0.5) {
-		std::shared_ptr<Texture> image = assets->get<Texture>("health_yellow");
-		healthNodeOverlay->setTexture(image);
-		healthNodeOverlay->setPosition(-120, 118);
-		healthNodeOverlay->setAngle(270 * globals::PI_180);
-	} else if (ship->getHealth() < globals::INITIAL_SHIP_HEALTH * 0.8) {
-		healthNodeOverlay->setPosition(-100, 60);
-		healthNodeOverlay->setAngle(300 * globals::PI_180);
-	}
+//	if (ship->getHealth() < 1) {
+//		healthNodeOverlay->setVisible(false);
+//	} else if (ship->getHealth() < globals::INITIAL_SHIP_HEALTH * 0.3) {
+//		std::shared_ptr<Texture> image = assets->get<Texture>("health_red");
+//		healthNodeOverlay->setTexture(image);
+//		healthNodeOverlay->setPosition(-100, 176);
+//		healthNodeOverlay->setAngle(240 * globals::PI_180);
+//	} else if (ship->getHealth() < globals::INITIAL_SHIP_HEALTH * 0.5) {
+//		std::shared_ptr<Texture> image = assets->get<Texture>("health_yellow");
+//		healthNodeOverlay->setTexture(image);
+//		healthNodeOverlay->setPosition(-120, 118);
+//		healthNodeOverlay->setAngle(270 * globals::PI_180);
+//	} else if (ship->getHealth() < globals::INITIAL_SHIP_HEALTH * 0.8) {
+//		healthNodeOverlay->setPosition(-100, 60);
+//		healthNodeOverlay->setAngle(300 * globals::PI_180);
+//	}
 
 	// Reanchor the node at the center of the screen and rotate about center.
 	Vec2 position = farSpace->getPosition();
