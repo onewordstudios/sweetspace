@@ -3,8 +3,8 @@
 #include <cugl/cugl.h>
 
 #include <bitset>
-/** The size to make the bitset */
-constexpr unsigned int PLAYERS = 6;
+
+#include "Globals.h"
 
 class ButtonModel {
    private:
@@ -15,10 +15,10 @@ class ButtonModel {
 	/** The angle at which the button exists */
 	float angle;
 	/** The state of the button */
-	unsigned char playersOn;
+	uint8_t playersOn;
 	bool jumped;
 	std::shared_ptr<ButtonModel> pairButton;
-	int pairId;
+	int pairID;
 	bool resolved = false;
 
    public:
@@ -29,48 +29,29 @@ class ButtonModel {
 	 * NEVER USE A CONSTRUCTOR WITH NEW. If you want to allocate a model on
 	 * the heap, use one of the static constructors instead.
 	 */
-	ButtonModel(void) : angle(-1), playersOn(0), jumped(false), pairId(-1) {}
+	ButtonModel(void) : angle(-1), playersOn(0), jumped(false), pairID(-1) {}
 
 	/**
-	 * Destroys this button, releasing all resources.
-	 */
-	~ButtonModel(void) { dispose(); }
-
-	/**
-	 * Disposes all resources and assets of this button
-	 *
-	 * Any assets owned by this object will be immediately released.  Once
-	 * disposed, a button may not be used until it is initialized again.
-	 */
-	void dispose();
-
-	/**
-	 * Initializes a new button at an unassigned angle (-1).
-	 *
-	 * An initializer does the real work that the constructor does not.  It
-	 * initializes all assets and makes the object read for use.  By separating
-	 * them, we allow ourselfs non-pointer references to complex objects.
+	 * Initializes a new button at an unassigned angle (-1) and without a defined pair.
 	 *
 	 * @return true if the obstacle is initialized properly, false otherwise.
 	 */
-	virtual bool init() { return init(-1.0f); }
+	bool init() { return init(-1.0f, nullptr, -1); }
 
 	/**
-	 * Initializes a new button with the given angle
-	 *
-	 * An initializer does the real work that the constructor does not.  It
-	 * initializes all assets and makes the object read for use.  By separating
-	 * them, we allow ourselfs non-pointer references to complex objects.
+	 * Initializes a new button with the given angle and pair.
 	 *
 	 * @param a   The angle at which the button exists
+	 * @param pair Pointer to the pair of this button
+	 * @param pairID ID of the pair of this button
 	 *
 	 * @return true if the obstacle is initialized properly, false otherwise.
 	 */
-	virtual bool init(const float a) {
-		this->angle = a;
-		return true;
-	};
+	bool init(const float a, std::shared_ptr<ButtonModel> pair, int pairID);
 
+	/**
+	 * Allocate and return a pointer to a new, empty button model.
+	 */
 	static std::shared_ptr<ButtonModel> alloc() {
 		std::shared_ptr<ButtonModel> result = std::make_shared<ButtonModel>();
 		return (result->init() ? result : nullptr);
@@ -105,7 +86,7 @@ class ButtonModel {
 	 * @return the number of players in range of the button.
 	 */
 	int getPlayersOn() {
-		std::bitset<PLAYERS> ids(playersOn);
+		std::bitset<globals::MAX_PLAYERS> ids(playersOn);
 		return (int)ids.count();
 	}
 
@@ -145,32 +126,23 @@ class ButtonModel {
 	 * Sets whether this button is resolved.
 	 */
 	void setResolved(bool r) { resolved = r; }
+
 	/**
 	 * Returns whether this button can be passed under.
 	 */
 	void setJumpedOn(bool jump) { jumped = jump; }
+
 	/**
 	 * Returns whether this button can be passed under.
 	 */
-	bool jumpedOn() {
-		return jumped;
-		// &&getPlayersOn() == 1;
-	}
+	bool jumpedOn() { return jumped && getPlayersOn() > 0; }
 
-	void setPair(std::shared_ptr<ButtonModel> b, int id) {
-		pairButton = b;
-		pairId = id;
-	}
 	std::shared_ptr<ButtonModel> getPair() { return pairButton; }
-	int getPairID() { return pairId; }
+	int getPairID() { return pairID; }
 
 	/**
 	 * Resets this button.
 	 */
-	void clear() {
-		playersOn = 0;
-		height = 0;
-		resolved = false;
-	}
+	void clear();
 };
 #endif /* __BUTTON_MODEL_H__ */

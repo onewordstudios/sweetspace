@@ -91,10 +91,8 @@ bool ShipModel::failAllTask() {
 }
 
 bool ShipModel::createButton(float angle1, int id1, float angle2, int id2) {
-	buttons.at(id1)->setAngle(angle1);
-	buttons.at(id2)->setAngle(angle2);
-	buttons.at(id1)->setPair(buttons.at(id2), id2);
-	buttons.at(id2)->setPair(buttons.at(id1), id1);
+	buttons.at(id1)->init(angle1, buttons.at(id2), id2);
+	buttons.at(id2)->init(angle2, buttons.at(id1), id1);
 	return true;
 }
 

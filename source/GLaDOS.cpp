@@ -105,25 +105,14 @@ void GLaDOS::placeObject(BuildingBlockModel::Object obj, float zeroAngle, vector
 				(int)distance(buttonFree.begin(), find(buttonFree.begin(), buttonFree.end(), true));
 			buttonFree.at(j) = false;
 
-			std::shared_ptr<ButtonModel> btn1 = ship->getButtons().at(i);
-			std::shared_ptr<ButtonModel> btn2 = ship->getButtons().at(j);
-
+			float origAngle = (float)obj.angle + zeroAngle;
 			float pairAngle;
 			do {
 				pairAngle = (float)(rand() % (int)(ship->getSize()));
 			} while (abs(pairAngle - ship->getButtons().at(i)->getAngle()) < globals::BUTTON_DIST);
 
-			btn1->clear();
-			btn1->setAngle((float)obj.angle + zeroAngle);
-			btn1->setJumpedOn(false);
-			btn1->setPair(btn2, j);
-
-			btn2->clear();
-			btn2->setAngle(pairAngle);
-			btn2->setJumpedOn(false);
-			btn2->setPair(btn1, i);
-
-			mib->createButtonTask((float)obj.angle + zeroAngle, i, pairAngle, j);
+			ship->createButton(origAngle, i, pairAngle, j);
+			mib->createButtonTask(origAngle, i, pairAngle, j);
 			break;
 		}
 		case BuildingBlockModel::Roll:
@@ -174,17 +163,16 @@ void GLaDOS::update(float dt) {
 	}
 
 	for (int i = 0; i < maxButtons; i++) {
-		if (ship->getButtons().at(i) == nullptr) {
+		auto btn = ship->getButtons().at(i);
+		if (btn == nullptr) {
 			continue;
 		}
-		if (ship->getButtons().at(i)->isResolved()) {
-			ship->getButtons().at(i)->setAngle(-1);
-			ship->getButtons().at(i)->getPair()->setAngle(-1);
-			buttonFree.at(ship->getButtons().at(i)->getPairID()) = true;
+		if (btn->isResolved()) {
 			buttonFree.at(i) = true;
-			// mib->flagButton(i, (int)playerID, 0);
-			ship->getButtons().at(i)->setJumpedOn(false);
-			ship->getButtons().at(i)->getPair()->setJumpedOn(false);
+			buttonFree.at(btn->getPairID()) = true;
+
+			btn->getPair()->clear();
+			btn->clear();
 		}
 	}
 
