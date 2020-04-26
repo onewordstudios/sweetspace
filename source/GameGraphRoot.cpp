@@ -582,18 +582,6 @@ void GameGraphRoot::update(float timestep) {
 	}
 }
 
-/**
- * Returns true iff a button was properly tapped (the tap event both started and ended on the
- * button)
- *
- * @param button The button
- * @param tapData The start and end locations provided by the input controller
- */
-bool tappedBtn(std::shared_ptr<Button> button, std::tuple<Vec2, Vec2> tapData) {
-	return button->containsScreen(std::get<0>(tapData)) &&
-		   button->containsScreen(std::get<1>(tapData));
-}
-
 void GameGraphRoot::processButtons() {
 	// Process normal button draw states
 	buttonManager.process();
@@ -607,7 +595,7 @@ void GameGraphRoot::processButtons() {
 
 	std::tuple<Vec2, Vec2> tapData = InputController::getInstance()->getTapEndLoc();
 	// Pause button
-	if (tappedBtn(pauseBtn, tapData)) {
+	if (buttonManager.tappedButton(pauseBtn, tapData)) {
 		if (pauseBtn->isDown()) {
 			// Close Pause Screen
 			pauseBtn->setDown(false);
@@ -619,7 +607,7 @@ void GameGraphRoot::processButtons() {
 		}
 	} else if (pauseScreen->isVisible()) {
 		// Mute Music Button
-		if (tappedBtn(musicBtn, tapData)) {
+		if (buttonManager.tappedButton(musicBtn, tapData)) {
 			if (musicBtn->isDown()) {
 				musicBtn->setDown(false);
 				AudioChannels::get()->resumeMusic();
@@ -629,7 +617,7 @@ void GameGraphRoot::processButtons() {
 			}
 		}
 		// Mute Sound Button
-		else if (tappedBtn(soundBtn, tapData)) {
+		else if (buttonManager.tappedButton(soundBtn, tapData)) {
 			if (soundBtn->isDown()) {
 				soundBtn->setDown(false);
 				AudioChannels::get()->resumeAllEffects();
@@ -639,13 +627,15 @@ void GameGraphRoot::processButtons() {
 			}
 		}
 		// Leave Button
-		else if (tappedBtn(leaveBtn, tapData)) {
+		else if (buttonManager.tappedButton(leaveBtn, tapData)) {
 			isBackToMainMenu = true;
 		}
 	}
 }
 
-void GameGraphRoot::setNeedleAngle(float angle) { needle->setAngle(-angle * globals::TWO_PI); }
+void GameGraphRoot::setNeedleAngle(float percentage) {
+	needle->setAngle(-percentage * globals::TWO_PI * globals::NEEDLE_OFFSET);
+}
 
 /**
  * Returns an informative string for the position
