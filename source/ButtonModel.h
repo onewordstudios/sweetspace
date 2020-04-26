@@ -74,7 +74,6 @@ class ButtonModel {
 
 	/**
 	 * Adds the given player's flag from the button.
-	 *
 	 */
 	void addPlayer(int id) { playersOn.set(id); }
 
@@ -98,9 +97,9 @@ class ButtonModel {
 	bool isResolved() { return resolved; }
 
 	/**
-	 * Sets whether this button is resolved.
+	 * Resolve this button
 	 */
-	void setResolved(bool r) { resolved = r; }
+	void resolve() { resolved = true; }
 
 	/**
 	 * Returns whether this button can be passed under.

@@ -110,8 +110,8 @@ void ShipModel::resolveButton(int id) {
 	if (btn == nullptr || btn->getAngle() == -1 || btn->isResolved()) {
 		return;
 	}
-	btn->getPair()->setResolved(true);
-	btn->setResolved(true);
+	btn->getPair()->resolve();
+	btn->resolve();
 }
 
 /**
