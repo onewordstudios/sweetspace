@@ -50,7 +50,7 @@ bool GLaDOS::init(std::shared_ptr<ShipModel> ship, std::shared_ptr<LevelModel> l
 	this->playerID = mib->getPlayerID();
 	maxEvents = level->getMaxBreaches();
 	maxDoors = min(level->getMaxDoors(), mib->getNumPlayers() * 2 - 1);
-	maxButtons = 2; // add to level
+	maxButtons = level->getMaxButtons();
 	buttonFree.resize(maxButtons);
 	breachFree.resize(maxEvents);
 	doorFree.resize(maxDoors);
@@ -112,9 +112,6 @@ void GLaDOS::placeObject(BuildingBlockModel::Object obj, float zeroAngle, vector
 			do {
 				pairAngle = (float)(rand() % (int)(ship->getSize()));
 			} while (abs(pairAngle - ship->getButtons().at(i)->getAngle()) < globals::BUTTON_DIST);
-
-			CULog("Generating buttons with IDs %d and %d, at angles %f and %f", i, j,
-				  obj.angle + zeroAngle, pairAngle);
 
 			btn1->clear();
 			btn1->setAngle((float)obj.angle + zeroAngle);
@@ -210,6 +207,7 @@ void GLaDOS::update(float dt) {
 		}
 	}
 
+	int numButtonsFree = (int)count(buttonFree.begin(), buttonFree.end(), true);
 	int numBreachesFree = (int)count(breachFree.begin(), breachFree.end(), true);
 	int numDoorsFree = (int)count(doorFree.begin(), doorFree.end(), true);
 	for (int i = 0; i < readyQueue.size(); i++) {
@@ -225,9 +223,11 @@ void GLaDOS::update(float dt) {
 		vector<BuildingBlockModel::Object> objects = block->getObjects();
 		int breachesNeeded = block->getBreachesNeeded();
 		int doorsNeeded = block->getDoorsNeeded();
+		int buttonsNeeded = block->getButtonsNeeded();
 
 		// If we don't have enough resources for this event, they're probably already fucked
-		if (doorsNeeded > numDoorsFree || breachesNeeded > numBreachesFree) {
+		if (doorsNeeded > numDoorsFree || breachesNeeded > numBreachesFree ||
+			buttonsNeeded > numButtonsFree) {
 			readyQueue.erase(readyQueue.begin() + i);
 			i--;
 			continue;

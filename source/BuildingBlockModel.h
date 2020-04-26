@@ -51,6 +51,9 @@ class BuildingBlockModel {
 	/** The number of doors needed for this block*/
 	int doorsNeeded = 0;
 
+	/** The number of buttons needed for this block*/
+	int buttonsNeeded = 0;
+
    public:
 #pragma mark Static Constructors
 
@@ -109,6 +112,7 @@ class BuildingBlockModel {
 	int getMin() { return min; }
 	int getBreachesNeeded() { return breachesNeeded; }
 	int getDoorsNeeded() { return doorsNeeded; }
+	int getButtonsNeeded() { return buttonsNeeded; }
 
 #pragma mark -
 #pragma mark Initializers
@@ -122,6 +126,7 @@ class BuildingBlockModel {
 		  range(0),
 		  min(0),
 		  breachesNeeded(0),
+		  buttonsNeeded(0),
 		  doorsNeeded(0){};
 
 	bool init(const std::shared_ptr<cugl::JsonValue>& json) {
@@ -161,7 +166,7 @@ class BuildingBlockModel {
 						rightWidth = globals::DOOR_WIDTH;
 						break;
 					case Button:
-						// TODO
+						rightWidth = globals::BUTTON_ACTIVE_ANGLE;
 						break;
 				};
 			}
@@ -175,7 +180,7 @@ class BuildingBlockModel {
 						leftWidth = globals::DOOR_WIDTH;
 						break;
 					case Button:
-						// TODO
+						leftWidth = globals::BUTTON_ACTIVE_ANGLE;
 						break;
 				};
 			}
@@ -188,6 +193,10 @@ class BuildingBlockModel {
 		doorsNeeded = (int)count_if(
 			objects.begin(), objects.end(),
 			[](BuildingBlockModel::Object o) { return o.type == BuildingBlockModel::Door; });
+		buttonsNeeded =
+			2 * (int)count_if(objects.begin(), objects.end(), [](BuildingBlockModel::Object o) {
+				return o.type == BuildingBlockModel::Button;
+			});
 		return true;
 	}
 

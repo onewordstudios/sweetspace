@@ -31,6 +31,9 @@ constexpr float DOOR_WIDTH = 10.0f; // NOLINT
 /** The Angle in degrees for which a breach donut collision occurs*/
 constexpr float BREACH_WIDTH = 6.0f; // NOLINT
 
+/** The Angle in degrees for which a door can be activated*/
+constexpr float BUTTON_ACTIVE_ANGLE = 15.0f;
+
 /** The min angle in degrees for which two buttons can be placed*/
 constexpr int BUTTON_DIST = 100; // NOLINT
 
