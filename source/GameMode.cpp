@@ -127,7 +127,7 @@ void GameMode::update(float timestep) {
 	// Check if need to go back to menu
 	isBackToMainMenu = sgRoot.getIsBackToMainMenu();
 	// Set needle percentage in pause menu
-	sgRoot.setNeedleAngle((float)(net->getNumPlayers() - 1) / (float)globals::MAX_PLAYERS);
+	sgRoot.setNeedlePercentage((float)(net->getNumPlayers() - 1) / (float)globals::MAX_PLAYERS);
 
 	// Connection Status Checks
 	switch (net->matchStatus()) {

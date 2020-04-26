@@ -242,7 +242,7 @@ class GameGraphRoot : public cugl::Scene {
 	 * Spin Dial in pause menu
 	 * @param percentage  The percent of dial to spin
 	 */
-	void setNeedleAngle(float percentage);
+	void setNeedlePercentage(float percentage);
 
 	std::shared_ptr<cugl::Node> getDonutNode();
 

@@ -633,7 +633,7 @@ void GameGraphRoot::processButtons() {
 	}
 }
 
-void GameGraphRoot::setNeedleAngle(float percentage) {
+void GameGraphRoot::setNeedlePercentage(float percentage) {
 	needle->setAngle(-percentage * globals::TWO_PI * globals::NEEDLE_OFFSET);
 }
 
