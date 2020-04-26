@@ -107,7 +107,7 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	scene->setContentSize(dimen);
 	scene->doLayout(); // Repositions the HUD
 
-	// Get the scene components.
+	// Game Scene Components.
 	allSpace = assets->get<Node>("game_field");
 	farSpace = assets->get<Node>("game_field_far");
 	nearSpace = assets->get<Node>("game_field_near");
@@ -125,6 +125,7 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	currentHealthWarningFrame = 0;
 	buttonNode = assets->get<Node>("game_field_near_button");
 
+	// Initialize Roll Challenge
 	challengePanelHanger = dynamic_pointer_cast<cugl::PolygonNode>(
 		assets->get<Node>("game_field_challengePanelParent_challengePanelHanger"));
 	challengePanelHanger->setVisible(false);
@@ -134,7 +135,6 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	challengePanelText = dynamic_pointer_cast<cugl::PolygonNode>(
 		assets->get<Node>("game_field_challengePanelParent_challengePanelText"));
 	challengePanelText->setVisible(false);
-	reconnectOverlay = assets->get<Node>("game_field_reconnect");
 
 	for (int i = 0; i < MAX_HEALTH_LABELS; i++) {
 		std::string s = std::to_string(i + 1);
@@ -168,7 +168,7 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	// Initialize Players
 	for (int i = 0; i < ship->getDonuts().size(); i++) {
 		std::shared_ptr<DonutModel> donutModel = ship->getDonuts().at((unsigned long)i);
-		string donutColor = playerColor.at((unsigned long)donutModel->getColorId());
+		string donutColor = PLAYER_COLOR.at((unsigned long)donutModel->getColorId());
 		std::shared_ptr<Texture> image = assets->get<Texture>("donut_" + donutColor);
 		// Player node is handled separately
 		if (i == playerID) {
@@ -201,9 +201,9 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 		Vec2 breachPos = Vec2(0, 0);
 		breachNode->setPosition(breachPos);
 		// Add shape node
-		cugl::Color4 color = breachColor.at((unsigned long)ship->getDonuts()
-												.at((unsigned long)breachModel->getPlayer())
-												->getColorId());
+		cugl::Color4 color = BREACH_COLOR.at((unsigned long)ship->getDonuts()
+												 .at((unsigned long)breachModel->getPlayer())
+												 ->getColorId());
 		std::shared_ptr<Texture> image = assets->get<Texture>("breach_filmstrip");
 		std::shared_ptr<AnimationNode> shapeNode =
 			AnimationNode::alloc(image, BreachNode::BREACH_H, BreachNode::BREACH_W);
@@ -213,9 +213,9 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 		breachNode->setShapeNode(shapeNode);
 		breachNode->addChildWithName(shapeNode, "shape");
 		// Add pattern node
-		string breachColor = playerColor.at((unsigned long)ship->getDonuts()
-												.at((unsigned long)breachModel->getPlayer())
-												->getColorId());
+		string breachColor = PLAYER_COLOR.at((unsigned long)ship->getDonuts()
+												 .at((unsigned long)breachModel->getPlayer())
+												 ->getColorId());
 		image = assets->get<Texture>("breach_" + breachColor);
 		std::shared_ptr<AnimationNode> patternNode =
 			AnimationNode::alloc(image, BreachNode::BREACH_H, BreachNode::BREACH_W);
@@ -290,6 +290,25 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 		bNode->addChild(buttonLabel);
 	}
 
+	// Overlay Components
+	// Initialize Reconnect Overlay
+	reconnectOverlay = assets->get<Node>("game_overlay_reconnect");
+
+	// Initialize Loss Screen Componenets
+	lossScreen = assets->get<Node>("game_overlay_loss");
+	restartBtn =
+		std::dynamic_pointer_cast<Button>(assets->get<Node>("game_overlay_loss_restartBtn"));
+	levelsBtn = std::dynamic_pointer_cast<Button>(assets->get<Node>("game_overlay_loss_levelsBtn"));
+
+	// Initialize Win Screen Componenets
+	winScreen = assets->get<Node>("game_overlay_win");
+	nextBtn = std::dynamic_pointer_cast<Button>(assets->get<Node>("game_overlay_win_nextBtn"));
+
+	// Register Buttons
+	buttonManager.registerButton(restartBtn);
+	buttonManager.registerButton(levelsBtn);
+	buttonManager.registerButton(nextBtn);
+
 	addChild(scene);
 	return true;
 }
@@ -337,6 +356,33 @@ void GameGraphRoot::update(float timestep) {
 	// "Drawing" code.  Move everything BUT the donut
 	// Update the HUD
 	coordHUD->setText(positionText());
+
+	// State Check for Drawing
+	switch (status) {
+		case Normal:
+			// Hide Unnecessary Overlays
+			lossScreen->setVisible(false);
+			winScreen->setVisible(false);
+			reconnectOverlay->setVisible(false);
+			break;
+		case Loss:
+			// Show loss screen
+			lossScreen->setVisible(true);
+			break;
+		case Win:
+			// Show Win Screen
+			winScreen->setVisible(true);
+			nearSpace->setVisible(false);
+			healthNode->setVisible(false);
+			break;
+		case Reconnecting:
+			// Still Reconnecting
+			reconnectOverlay->setVisible(true);
+			break;
+		default:
+			CULog("ERROR: Uncaught DrawingStatus Value Occurred");
+	}
+
 	if (ship->getHealth() < 1) {
 		std::shared_ptr<Texture> image = assets->get<Texture>("health_empty");
 		healthNode->setTexture(image);
@@ -426,14 +472,14 @@ void GameGraphRoot::update(float timestep) {
 			dynamic_pointer_cast<BreachNode>(breachesNode->getChildByTag((unsigned int)(i + 1)));
 		if (!breachNode->getIsAnimatingShrink() && breachModel->getHealth() > 0 &&
 			breachModel->getNeedSpriteUpdate()) {
-			cugl::Color4 color = breachColor.at((unsigned long)ship->getDonuts()
-													.at((unsigned long)breachModel->getPlayer())
-													->getColorId());
+			cugl::Color4 color = BREACH_COLOR.at((unsigned long)ship->getDonuts()
+													 .at((unsigned long)breachModel->getPlayer())
+													 ->getColorId());
 			breachNode->getShapeNode()->setColor(color);
 			breachNode->resetAnimation();
-			string breachColor = playerColor.at((unsigned long)ship->getDonuts()
-													.at((unsigned long)breachModel->getPlayer())
-													->getColorId());
+			string breachColor = PLAYER_COLOR.at((unsigned long)ship->getDonuts()
+													 .at((unsigned long)breachModel->getPlayer())
+													 ->getColorId());
 			std::shared_ptr<Texture> image = assets->get<Texture>("breach_" + breachColor);
 			breachNode->getPatternNode()->setTexture(image);
 			breachNode->getPatternNode()->setColor(color);
@@ -465,25 +511,6 @@ void GameGraphRoot::update(float timestep) {
 			challengePanelArrows.at(i)->setVisible(false);
 			challengePanelArrows.at(i)->setTexture(image);
 		}
-	}
-
-	// Draw Client Reconnection Overlay
-	switch (status) {
-		case MagicInternetBox::GameEnded:
-			// Insert Game Ended Screen
-			break;
-		case MagicInternetBox::Disconnected:
-		case MagicInternetBox::ReconnectError:
-		case MagicInternetBox::Reconnecting:
-		case MagicInternetBox::ClientRoomInvalid:
-			//// Still Reconnecting
-			reconnectOverlay->setVisible(true);
-			break;
-		case MagicInternetBox::GameStart:
-			reconnectOverlay->setVisible(false);
-			break;
-		default:
-			CULog("ERROR: Uncaught MatchmakingStatus Value Occurred");
 	}
 
 	// Animate health warning flashing
@@ -530,13 +557,7 @@ void GameGraphRoot::update(float timestep) {
  */
 std::string GameGraphRoot::positionText() {
 	stringstream ss;
-	if (ship->getHealth() < 1) {
-		ss << "You Lose.";
-	} else if (ship->timerEnded() && ship->getHealth() > 0) {
-		ss << "You Win!";
-	} else {
-		ss << "Time Left: " << trunc(ship->timer);
-	}
+	ss << "Time Left: " << trunc(ship->timer);
 	ss << " Position: " << ship->getDonuts().at(playerID)->getAngle();
 	return ss.str();
 }
