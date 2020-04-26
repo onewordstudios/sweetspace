@@ -27,6 +27,9 @@ constexpr int OPEN_TRANSITION = 120;
 
 /** When during opening transition to fade in stuff */
 constexpr int OPEN_TRANSITION_FADE = 90;
+
+/** How much the host player count needle is offset by */
+constexpr float NEEDLE_OFFSET = 0.9f;
 #pragma endregion
 
 #pragma region Initialization Logic
@@ -331,7 +334,7 @@ void MainMenuMode::processUpdate() {
 		}
 		case HostScreen: {
 			float percentage = (float)(net->getNumPlayers() - 1) / (float)globals::MAX_PLAYERS;
-			hostNeedle->setAngle(-percentage * globals::TWO_PI * 0.9f);
+			hostNeedle->setAngle(-percentage * globals::TWO_PI * NEEDLE_OFFSET);
 			if (backBtn->isVisible()) {
 				if (percentage > 0) {
 					backBtn->setVisible(false);
