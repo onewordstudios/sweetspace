@@ -10,16 +10,16 @@ class ButtonModel {
    private:
 	/** The height of the button */
 	int height = 0;
-
-   protected:
 	/** The angle at which the button exists */
 	float angle;
-	/** The state of the button */
-	uint8_t playersOn;
-	bool jumped;
+	/** Bitset of players on this button */
+	std::bitset<globals::MAX_PLAYERS> playersOn;
+	/** Pointer to the pair of this button */
 	std::shared_ptr<ButtonModel> pairButton;
+	/** ID of the pair of this button */
 	int pairID;
-	bool resolved = false;
+	/** Whether this button is resolved */
+	bool resolved;
 
    public:
 #pragma mark Constructors
@@ -29,7 +29,7 @@ class ButtonModel {
 	 * NEVER USE A CONSTRUCTOR WITH NEW. If you want to allocate a model on
 	 * the heap, use one of the static constructors instead.
 	 */
-	ButtonModel(void) : angle(-1), playersOn(0), jumped(false), pairID(-1) {}
+	ButtonModel(void) : angle(-1), pairID(-1), resolved(false) {}
 
 	/**
 	 * Initializes a new button at an unassigned angle (-1) and without a defined pair.
@@ -85,10 +85,7 @@ class ButtonModel {
 	 *
 	 * @return the number of players in range of the button.
 	 */
-	int getPlayersOn() {
-		std::bitset<globals::MAX_PLAYERS> ids(playersOn);
-		return (int)ids.count();
-	}
+	int getPlayersOn() { return (int)playersOn.count(); }
 
 	/**
 	 * Sets the current angle of the button in degrees.
@@ -101,21 +98,21 @@ class ButtonModel {
 	 * Adds the given player's flag from the button.
 	 *
 	 */
-	void addPlayer(int id) { playersOn = playersOn | (unsigned char)pow(2, id); }
+	void addPlayer(int id) { playersOn.set(id); }
 
 	/**
 	 * Removes the given player's flag from the button. Requires that this player is on the button
 	 */
 	void removePlayer(int id) {
 		if (!isResolved()) {
-			playersOn = playersOn ^ (unsigned char)pow(2, id);
+			playersOn.reset(id);
 		}
 	}
 
 	/**
 	 * Returns whether this player is on the button.
 	 */
-	bool isPlayerOn(int id) { return (playersOn & (unsigned char)pow(2, id)) > 0; }
+	bool isPlayerOn(int id) { return playersOn.test(id); }
 
 	/**
 	 * Returns whether this button is resolved.
@@ -130,14 +127,16 @@ class ButtonModel {
 	/**
 	 * Returns whether this button can be passed under.
 	 */
-	void setJumpedOn(bool jump) { jumped = jump; }
+	bool jumpedOn() { return playersOn.any(); }
 
 	/**
-	 * Returns whether this button can be passed under.
+	 * Return a pointer to the pair of this button
 	 */
-	bool jumpedOn() { return jumped && getPlayersOn() > 0; }
-
 	std::shared_ptr<ButtonModel> getPair() { return pairButton; }
+
+	/**
+	 * Return the ID of the pair of this button
+	 */
 	int getPairID() { return pairID; }
 
 	/**

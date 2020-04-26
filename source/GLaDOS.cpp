@@ -99,18 +99,21 @@ void GLaDOS::placeObject(BuildingBlockModel::Object obj, float zeroAngle, vector
 			mib->createDualTask((float)obj.angle + zeroAngle, -1, -1, i);
 			break;
 		case BuildingBlockModel::Button: {
+			// Find usable button IDs
 			i = (int)distance(buttonFree.begin(), find(buttonFree.begin(), buttonFree.end(), true));
 			buttonFree.at(i) = false;
 			int j =
 				(int)distance(buttonFree.begin(), find(buttonFree.begin(), buttonFree.end(), true));
 			buttonFree.at(j) = false;
 
+			// Roll for pair's angle
 			float origAngle = (float)obj.angle + zeroAngle;
 			float pairAngle;
 			do {
 				pairAngle = (float)(rand() % (int)(ship->getSize()));
 			} while (abs(pairAngle - ship->getButtons().at(i)->getAngle()) < globals::BUTTON_DIST);
 
+			// Dispatch challenge creation
 			ship->createButton(origAngle, i, pairAngle, j);
 			mib->createButtonTask(origAngle, i, pairAngle, j);
 			break;

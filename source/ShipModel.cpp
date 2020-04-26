@@ -103,7 +103,6 @@ bool ShipModel::flagButton(int id, int player, int flag) {
 		// buttons.at(id)->setJumpedOn(false);
 	} else {
 		buttons.at(id)->addPlayer(player);
-		buttons.at(id)->setJumpedOn(true);
 		CULog("JUmp button %d", id);
 	}
 	return true;

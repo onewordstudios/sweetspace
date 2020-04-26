@@ -4,7 +4,6 @@
 
 bool ButtonModel::init(const float a, std::shared_ptr<ButtonModel> pair, int pairID) {
 	clear();
-	jumped = false;
 	angle = a;
 	pairButton = pair;
 	this->pairID = pairID;
@@ -19,9 +18,8 @@ int ButtonModel::getSection() {
 }
 
 void ButtonModel::clear() {
-	playersOn = 0;
+	playersOn.reset();
 	height = 0;
 	resolved = false;
-	jumped = false;
 	angle = -1;
 }
