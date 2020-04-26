@@ -42,9 +42,8 @@ bool ShipModel::init(unsigned int numPlayers, unsigned int numBreaches, unsigned
 	return true;
 }
 
-bool ShipModel::createBreach(float angle, int player, int id, float timeCreated) {
+bool ShipModel::createBreach(float angle, int player, int id) {
 	breaches.at(id)->reset(angle, player);
-	breaches.at(id)->setTimeCreated(timeCreated);
 	return true;
 }
 
@@ -60,7 +59,6 @@ bool ShipModel::createDoor(float angle, int id) {
 }
 
 bool ShipModel::resolveBreach(int id) {
-	CULog("Received message to decrement health");
 	breaches.at(id)->decHealth(1);
 	return true;
 }

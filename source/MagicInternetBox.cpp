@@ -488,7 +488,7 @@ void MagicInternetBox::update(std::shared_ptr<ShipModel> state) {
 				break;
 			}
 			case BreachCreate: {
-				state->createBreach(angle, data1, id, data3);
+				state->createBreach(angle, data1, id);
 				CULog("Creating breach %d at angle %f with user %d", id, angle, data1);
 				break;
 			}
@@ -538,8 +538,8 @@ void MagicInternetBox::update(std::shared_ptr<ShipModel> state) {
 	});
 }
 
-void MagicInternetBox::createBreach(float angle, int player, int id, float timeCreated) {
-	sendData(BreachCreate, angle, id, player, -1, timeCreated);
+void MagicInternetBox::createBreach(float angle, int player, int id) {
+	sendData(BreachCreate, angle, id, player, -1, -1.0f);
 	CULog("Creating breach id %d player %d angle %f", id, player, angle);
 }
 
