@@ -240,6 +240,9 @@ enum class KeyCode : int {
     KEYPAD_PLUS = SDLK_KP_PLUS,
     /** The Enter key (numeric keypad) */
     KEYPAD_ENTER = SDLK_KP_ENTER,
+	
+	/** The back button on Android phones */
+	ANDROID_BACK = SDLK_AC_BACK,
     
     /** We have no idea what this key is */
     UNKNOWN = SDLK_POWER
