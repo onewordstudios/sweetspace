@@ -20,7 +20,7 @@ constexpr unsigned int ROOM_LENGTH = 5; // NOLINT
 constexpr int INITIAL_SHIP_HEALTH = 10; // NOLINT
 
 /** Minimum number of players per game */
-constexpr unsigned int MIN_PLAYERS = 3; // NOLINT
+constexpr unsigned int MIN_PLAYERS = 2; // NOLINT
 
 /** Maximum number of players per game */
 constexpr unsigned int MAX_PLAYERS = 6; // NOLINT
@@ -76,6 +76,9 @@ constexpr float SEG_SIZE = 45 * PI_180; // NOLINT
 
 /** The screen angle at which a ship segment is no longer visible */
 constexpr float SEG_CUTOFF_ANGLE = 90 * PI_180; // NOLINT
+
+/** How much the player count needle is offset by */
+constexpr float NEEDLE_OFFSET = 0.9f;
 
 #pragma endregion
 } // namespace globals

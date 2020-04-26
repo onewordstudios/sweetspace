@@ -6,6 +6,7 @@
 
 #include "BreachModel.h"
 #include "BreachNode.h"
+#include "ButtonManager.h"
 #include "ButtonNode.h"
 #include "DonutModel.h"
 #include "DoorNode.h"
@@ -18,11 +19,29 @@
 #include "ShipModel.h"
 
 class GameGraphRoot : public cugl::Scene {
+   public:
+	/** Enum for determining drawing state */
+	enum DrawStatus {
+		/** Reconnecting */
+		Reconnecting = -1,
+		/** Normal Gameplay */
+		Normal,
+		/** Win Screen */
+		Win,
+		/** Loss Screen */
+		Loss,
+		/** Game Ended Unexpectedly */
+		Ended
+	};
+
    protected:
 	/** The asset manager for this game mode. */
 	std::shared_ptr<cugl::AssetManager> assets;
 	/** The Screen's Height. */
 	float screenHeight;
+
+	/** Helper object to make the buttons go up and down */
+	ButtonManager buttonManager;
 
 	// VIEW COMPONENTS
 	/** Filmstrip representing the player's animated donut */
@@ -54,8 +73,43 @@ class GameGraphRoot : public cugl::Scene {
 	// Reconnection Textures
 	/** Node to hold all of the Reconnect Overlay.*/
 	std::shared_ptr<cugl::Node> reconnectOverlay;
+	/** Label for second ellipsis point */
+	std::shared_ptr<cugl::Label> reconnectE2;
+	/** Label for third ellipsis point */
+	std::shared_ptr<cugl::Label> reconnectE3;
+	/** Current animation frame for ellipses */
+	int currentEllipsesFrame;
+
+	// Pause Textures
+	/** Button to Open Pause */
+	std::shared_ptr<cugl::Button> pauseBtn;
+	/** Node to hold all of the Loss Screen.*/
+	std::shared_ptr<cugl::Node> pauseScreen;
+	/** Button to Mute Music */
+	std::shared_ptr<cugl::Button> musicBtn;
+	/** Button to Mute Sound Effects */
+	std::shared_ptr<cugl::Button> soundBtn;
+	/** Button to Leave */
+	std::shared_ptr<cugl::Button> leaveBtn;
+	/** The node containing the player count needle*/
+	std::shared_ptr<cugl::Node> needle;
+
 	/** Ship red overlay node */
 	std::shared_ptr<cugl::PolygonNode> shipOverlay;
+
+	// Loss Screen Textures
+	/** Node to hold all of the Loss Screen.*/
+	std::shared_ptr<cugl::Node> lossScreen;
+	/** Button to restart game */
+	std::shared_ptr<cugl::Button> restartBtn;
+	/** Button to levels */
+	std::shared_ptr<cugl::Button> levelsBtn;
+
+	// Win Screen Textures
+	/** Node to hold all of the Win Screen.*/
+	std::shared_ptr<cugl::Node> winScreen;
+	/** Button to next game */
+	std::shared_ptr<cugl::Button> nextBtn;
 
 	// DRAWING STATE VARIABLES
 	/** The donut's base position. */
@@ -89,8 +143,10 @@ class GameGraphRoot : public cugl::Scene {
 	 */
 	std::string positionText();
 
-	/** Local record of Network Status */
-	MagicInternetBox::MatchmakingStatus status;
+	/**
+	 * The current Drawing status
+	 */
+	DrawStatus status;
 
 	/**
 	 * Returns the wrapped value of input around the ship size.
@@ -103,13 +159,19 @@ class GameGraphRoot : public cugl::Scene {
 		return mod < 0 ? globals::TWO_PI + mod : mod;
 	};
 
+	/** Process Buttons in Special Screens */
+	void processButtons();
+
+	/** Whether to go back to main menu */
+	bool isBackToMainMenu;
+
    public:
 #pragma mark -
 #pragma mark Public Consts
 	/** Possible colors for player representations */
-	const std::vector<string> playerColor{"yellow", "red", "purple", "green", "orange", "cyan"};
+	const std::vector<string> PLAYER_COLOR{"yellow", "red", "purple", "green", "orange", "cyan"};
 	/** Possible colors for breach representations */
-	const std::vector<cugl::Color4> breachColor{
+	const std::vector<cugl::Color4> BREACH_COLOR{
 		cugl::Color4(219, 197, 52), cugl::Color4(227, 100, 159), cugl::Color4(152, 95, 204),
 		cugl::Color4(158, 212, 87), cugl::Color4(244, 150, 40),	 cugl::Color4(47, 206, 197)};
 	/** Color of ship segment label text */
@@ -120,6 +182,7 @@ class GameGraphRoot : public cugl::Scene {
 	static constexpr float DONUT_SCALE = 0.4f;
 	/** The scale of the breach textures. */
 	static constexpr float BREACH_SCALE = 0.25;
+
 #pragma mark -
 #pragma mark Constructors
 	/**
@@ -128,7 +191,12 @@ class GameGraphRoot : public cugl::Scene {
 	 * This constructor does not allocate any objects or start the game.
 	 * This allows us to use the object without a heap pointer.
 	 */
-	GameGraphRoot() : Scene(), status(MagicInternetBox::Uninitialized) {}
+	GameGraphRoot()
+		: Scene(),
+		  status(Normal),
+		  currentEllipsesFrame(0),
+		  currentHealthWarningFrame(0),
+		  isBackToMainMenu(false) {}
 
 	/**
 	 * Disposes of all (non-static) resources allocated to this mode.
@@ -173,22 +241,42 @@ class GameGraphRoot : public cugl::Scene {
 	 */
 	void reset() override;
 
+	/**
+	 * Spin Dial in pause menu
+	 * @param percentage  The percent of dial to spin
+	 */
+	void setNeedlePercentage(float percentage);
+
 	std::shared_ptr<cugl::Node> getDonutNode();
 
 #pragma mark -
 #pragma mark Accessors
 	/**
-	 * Set connection status
+	 * Set Drawing status
 	 *
-	 * @param status the connection status of the ship
+	 * @param status the drawing status of the ship
 	 */
-	void setStatus(MagicInternetBox::MatchmakingStatus status) { this->status = status; }
+	void setStatus(DrawStatus status) { this->status = status; }
 
 	/**
-	 * Get health of the ship
+	 * Get Drawing Status
 	 *
-	 * @return health the health of the ship
+	 * @return Drawing Status
 	 */
-	MagicInternetBox::MatchmakingStatus getStatus() { return status; }
+	DrawStatus getStatus() { return status; }
+
+	/**
+	 * Set whether to go back to the main menu (should not be called)
+	 *
+	 * @param b whether to go back to the main menu
+	 */
+	void setIsBackToMainMenu(bool b) { isBackToMainMenu = b; }
+
+	/**
+	 * Get whether to go back to the main menu
+	 *
+	 * @return whether to go back to the main menu
+	 */
+	bool getIsBackToMainMenu() { return isBackToMainMenu; }
 };
 #endif /* __GAME_GRAPH_ROOT_H__ */

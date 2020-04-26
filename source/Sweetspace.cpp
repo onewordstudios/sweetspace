@@ -107,6 +107,11 @@ void Sweetspace::update(float timestep) {
 		}
 		case Game: {
 			gameplay.update(timestep);
+			if (gameplay.getIsBackToMainMenu()) {
+				gameplay.dispose();
+				mainmenu.init(assets);
+				status = MainMenu;
+			}
 			return;
 		}
 	}

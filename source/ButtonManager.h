@@ -35,5 +35,15 @@ class ButtonManager {
 	 * Process input for a frame and update the state of all the buttons.
 	 */
 	void process();
+
+	/**
+	 * Returns true iff a button was properly tapped (the tap event both started and ended on the
+	 * button)
+	 *
+	 * @param button The button
+	 * @param tapData The start and end locations provided by the input controller
+	 */
+	bool tappedButton(std::shared_ptr<cugl::Button> button,
+					  std::tuple<cugl::Vec2, cugl::Vec2> tapData);
 };
 #endif /* __BUTTON_MANAGER_H__ */

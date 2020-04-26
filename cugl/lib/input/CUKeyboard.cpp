@@ -149,6 +149,7 @@ KeyCategory Keyboard::keyCategory(KeyCode code) {
         case KeyCode::PAGE_UP:
         case KeyCode::PAUSE:
         case KeyCode::RETURN:
+		case KeyCode::ANDROID_BACK:
             return KeyCategory::SPECIAL;
         case KeyCode::CAPS_LOCK:
         case KeyCode::LEFT_ALT:
