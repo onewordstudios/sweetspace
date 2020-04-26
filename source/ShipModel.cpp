@@ -105,6 +105,15 @@ bool ShipModel::flagButton(int id, int player, int flag) {
 	return true;
 }
 
+void ShipModel::resolveButton(int id) {
+	auto btn = buttons.at(id);
+	if (btn == nullptr || btn->getAngle() == -1 || btn->isResolved()) {
+		return;
+	}
+	btn->getPair()->setResolved(true);
+	btn->setResolved(true);
+}
+
 /**
  * Disposes all resources and assets of this breach.
  *
