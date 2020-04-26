@@ -44,6 +44,7 @@ bool ShipModel::init(unsigned int numPlayers, unsigned int numBreaches, unsigned
 
 bool ShipModel::createBreach(float angle, int player, int id) {
 	breaches.at(id)->reset(angle, player);
+	breaches.at(id)->setTimeCreated(timer);
 	return true;
 }
 
