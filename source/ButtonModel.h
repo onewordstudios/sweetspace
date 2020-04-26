@@ -24,10 +24,10 @@ class ButtonModel {
    public:
 #pragma mark Constructors
 	/*
-	 * Creates a new button, unused button.
+	 * Creates a new, uninitialized, and unused button.
 	 *
-	 * NEVER USE A CONSTRUCTOR WITH NEW. If you want to allocate a model on
-	 * the heap, use one of the static constructors instead.
+	 * Do not call this constructor using new. These models should exclusively be allocated into an
+	 * object pool by {@code ShipModel} and accessed from there.
 	 */
 	ButtonModel(void) : angle(-1), pairID(-1), resolved(false) {}
 
