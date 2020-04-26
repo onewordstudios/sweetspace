@@ -16,6 +16,7 @@ bool BreachModel::init(float a, int health, int p) {
 	angle = a;
 	this->health = health;
 	player = p;
+	isActive = false;
 	return true;
 }
 

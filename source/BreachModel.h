@@ -16,6 +16,8 @@ class BreachModel {
 	bool needSpriteUpdate;
 	/** Time at which breach was created */
 	float timeCreated;
+	/** Whether or not this object is active */
+	bool isActive;
 
    public:
 	/** Default Max Health of a Breach*/
@@ -32,6 +34,7 @@ class BreachModel {
 		  health(0),
 		  playerOn(false),
 		  player(0),
+		  isActive(false),
 		  needSpriteUpdate(false),
 		  timeCreated(0) {}
 
@@ -49,7 +52,7 @@ class BreachModel {
 	void dispose();
 
 	/**
-	 * Initializes a new breach at an unassigned angle (-1).
+	 * Initializes a new breach and set to be inactive.
 	 *
 	 * An initializer does the real work that the constructor does not.  It
 	 * initializes all assets and makes the object read for use.  By separating
@@ -57,7 +60,7 @@ class BreachModel {
 	 *
 	 * @return true if the obstacle is initialized properly, false otherwise.
 	 */
-	virtual bool init() { return init(-1.0f, 0, 0); }
+	virtual bool init() { return init(0.0f, 0, 0); }
 
 	/**
 	 * Initializes a new breach with the given angle
@@ -114,6 +117,13 @@ class BreachModel {
 	int isPlayerOn() { return playerOn; }
 
 	/**
+	 * Returns whether the breach is currently active.
+	 *
+	 * @return whether the breach is currently active.
+	 */
+	bool getIsActive() { return isActive; }
+
+	/**
 	 * Sets the current angle of the breach in degrees.
 	 *
 	 * @param value The breach angle in degrees
@@ -126,6 +136,13 @@ class BreachModel {
 	 * @param health New breach health.
 	 */
 	void setHealth(int value) { health = value; }
+
+	/**
+	 * Sets whether the breach is active.
+	 *
+	 * @param value New breach active status.
+	 */
+	void setIsActive(bool value) { isActive = value; }
 
 	/**
 	 * Decrements the current health of the breach by value.

@@ -155,7 +155,7 @@ void GLaDOS::update(float dt) {
 		if (ship->getBreaches().at(i)->getHealth() == 0 ||
 			!ship->getDonuts().at(ship->getBreaches().at(i)->getPlayer())->getIsActive()) {
 			ship->getBreaches().at(i)->setHealth(0);
-			ship->getBreaches().at(i)->setAngle(-1);
+			ship->getBreaches().at(i)->setIsActive(false);
 			breachFree.at(i) = true;
 		}
 	}
@@ -166,7 +166,7 @@ void GLaDOS::update(float dt) {
 			continue;
 		}
 		if (ship->getDoors().at(i)->resolvedAndRaised()) {
-			ship->getDoors().at(i)->setAngle(-1);
+			ship->getDoors().at(i)->setIsActive(false);
 			doorFree.at(i) = true;
 		} else if (ship->getDoors().at(i)->resolved()) {
 			ship->getDoors().at(i)->raiseDoor();
@@ -178,8 +178,8 @@ void GLaDOS::update(float dt) {
 			continue;
 		}
 		if (ship->getButtons().at(i)->isResolved()) {
-			ship->getButtons().at(i)->setAngle(-1);
-			ship->getButtons().at(i)->getPair()->setAngle(-1);
+			ship->getButtons().at(i)->setIsActive(false);
+			ship->getButtons().at(i)->getPair()->setIsActive(false);
 			buttonFree.at(ship->getButtons().at(i)->getPairID()) = true;
 			buttonFree.at(i) = true;
 			// mib->flagButton(i, (int)playerID, 0);
@@ -272,7 +272,7 @@ void GLaDOS::update(float dt) {
 		for (unsigned int k = 0; k < ship->getBreaches().size(); k++) {
 			float breachAngle = ship->getBreaches()[k]->getAngle();
 			float diff = ship->getSize() / 2 - abs(abs(breachAngle - angle) - ship->getSize() / 2);
-			if (breachAngle != -1 && diff < (float)block->getRange() / 2) {
+			if (ship->getBreaches()[k]->getIsActive() && diff < (float)block->getRange() / 2) {
 				goodAngle = false;
 				break;
 			}
@@ -281,7 +281,7 @@ void GLaDOS::update(float dt) {
 		for (unsigned int k = 0; k < ship->getDoors().size(); k++) {
 			float doorAngle = ship->getDoors()[k]->getAngle();
 			float diff = ship->getSize() / 2 - abs(abs(doorAngle - angle) - ship->getSize() / 2);
-			if (doorAngle != -1 && diff < (float)block->getRange() / 2) {
+			if (ship->getDoors()[k]->getIsActive() && diff < (float)block->getRange() / 2) {
 				goodAngle = false;
 				break;
 			}

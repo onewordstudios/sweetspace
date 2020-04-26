@@ -16,6 +16,8 @@ class DoorModel {
    private:
 	/** The height of the door */
 	int height = 0;
+	/** Whether or not this object is active */
+	bool isActive;
 
    protected:
 	/** The angle at which the door exists */
@@ -47,7 +49,7 @@ class DoorModel {
 	void dispose();
 
 	/**
-	 * Initializes a new door at an unassigned angle (-1).
+	 * Initializes a new door.
 	 *
 	 * An initializer does the real work that the constructor does not.  It
 	 * initializes all assets and makes the object read for use.  By separating
@@ -55,7 +57,7 @@ class DoorModel {
 	 *
 	 * @return true if the obstacle is initialized properly, false otherwise.
 	 */
-	virtual bool init() { return init(-1.0f); }
+	virtual bool init() { return init(0.0f); }
 
 	/**
 	 * Initializes a new door with the given angle
@@ -70,6 +72,7 @@ class DoorModel {
 	 */
 	virtual bool init(const float a) {
 		this->angle = a;
+		isActive = false;
 		return true;
 	};
 
@@ -88,6 +91,13 @@ class DoorModel {
 	float getAngle() { return angle; }
 
 	/**
+	 * Returns whether the breach is currently active.
+	 *
+	 * @return whether the breach is currently active.
+	 */
+	bool getIsActive() { return isActive; }
+
+	/**
 	 * Returns the current height of the door.
 	 *
 	 * @return the current height of the door.
@@ -103,6 +113,13 @@ class DoorModel {
 		std::bitset<MAX_PLAYERS> ids(playersOn);
 		return (int)ids.count();
 	}
+
+	/**
+	 * Sets whether the breach is active.
+	 *
+	 * @param value New breach active status.
+	 */
+	void setIsActive(bool value) { isActive = value; }
 
 	/**
 	 * Sets the current angle of the door in degrees.
