@@ -2,17 +2,24 @@
 
 #include "Globals.h"
 
-/**
- * Disposes all resources and assets of this door.
- *
- * Any assets owned by this object will be immediately released.  Once
- * disposed, a door may not be used until it is initialized again.
- */
-void ButtonModel::dispose() {}
+bool ButtonModel::init(const float a, std::shared_ptr<ButtonModel> pair, int pairID) {
+	clear();
+	angle = a;
+	pairButton = pair;
+	this->pairID = pairID;
+	return true;
+};
 
 int ButtonModel::getSection() {
 	float mod = fmod(getAngle(), (float)globals::SEG_DEG);
 	int section = (int)(mod < ((float)globals::SEG_DEG / 2) ? floorf(getAngle() / globals::SEG_DEG)
 															: ceilf(getAngle() / globals::SEG_DEG));
 	return section;
+}
+
+void ButtonModel::clear() {
+	playersOn.reset();
+	height = 0;
+	resolved = false;
+	angle = -1;
 }

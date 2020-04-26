@@ -40,6 +40,8 @@ class GameMode {
 	int playerID;
 	/** Local record of Room ID */
 	std::string roomId;
+	/** Whether to go back to main menu */
+	bool isBackToMainMenu;
 
    public:
 #pragma mark -
@@ -50,7 +52,7 @@ class GameMode {
 	 * This constructor does not allocate any objects or start the game.
 	 * This allows us to use the object without a heap pointer.
 	 */
-	GameMode() : input(nullptr), net(nullptr), playerID(-1), roomId("") {}
+	GameMode() : input(nullptr), net(nullptr), playerID(-1), roomId(""), isBackToMainMenu(false) {}
 
 	/**
 	 * Disposes of all (non-static) resources allocated to this mode.
@@ -93,6 +95,22 @@ class GameMode {
 	 * Draws the game.
 	 */
 	void draw(const std::shared_ptr<cugl::SpriteBatch>& batch);
+
+#pragma mark -
+#pragma mark Accessors
+	/**
+	 * Set whether to go back to the main menu (should not be called)
+	 *
+	 * @param b whether to go back to the main menu
+	 */
+	void setIsBackToMainMenu(bool b) { isBackToMainMenu = b; }
+
+	/**
+	 * Get whether to go back to the main menu
+	 *
+	 * @return whether to go back to the main menu
+	 */
+	bool getIsBackToMainMenu() { return isBackToMainMenu; }
 };
 
 #endif /* __GAME_MODE_H__ */

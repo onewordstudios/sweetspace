@@ -124,6 +124,11 @@ void GameMode::dispose() {
  * @param timestep  The amount of time (in seconds) since the last frame
  */
 void GameMode::update(float timestep) {
+	// Check if need to go back to menu
+	isBackToMainMenu = sgRoot.getIsBackToMainMenu();
+	// Set needle percentage in pause menu
+	sgRoot.setNeedlePercentage((float)(net->getNumPlayers() - 1) / (float)globals::MAX_PLAYERS);
+
 	// Connection Status Checks
 	switch (net->matchStatus()) {
 		case MagicInternetBox::Disconnected:
@@ -132,36 +137,60 @@ void GameMode::update(float timestep) {
 			if (net->reconnect(roomId)) {
 				net->update();
 			}
-			sgRoot.setStatus(MagicInternetBox::Disconnected);
+			sgRoot.setStatus(GameGraphRoot::Reconnecting);
 			sgRoot.update(timestep);
 			return;
 		case MagicInternetBox::Reconnecting:
 			// Still Reconnecting
 			net->update();
-			sgRoot.setStatus(MagicInternetBox::Reconnecting);
+			sgRoot.setStatus(GameGraphRoot::Reconnecting);
 			sgRoot.update(timestep);
 			return;
 		case MagicInternetBox::ClientRoomFull:
 		case MagicInternetBox::GameEnded:
-			// Insert Game End
+			// Game Ended, Replace with Another Screen
+			CULog("Game Ended");
 			net->update(ship);
-			sgRoot.setStatus(MagicInternetBox::GameEnded);
 			sgRoot.update(timestep);
 			return;
 		case MagicInternetBox::GameStart:
 			net->update(ship);
-			sgRoot.setStatus(MagicInternetBox::GameStart);
+			sgRoot.setStatus(GameGraphRoot::Normal);
 			break;
 		default:
 			CULog("ERROR: Uncaught MatchmakingStatus Value Occurred");
 	}
 
-	// Only process game logic if properly connected to game
+	// Only process game logic if game is running
 	input->update(timestep);
+
+	// Check for loss
+	if (ship->getHealth() < 1) {
+		sgRoot.setStatus(GameGraphRoot::Loss);
+		sgRoot.update(timestep);
+		return;
+	}
+
+	// Jump Logic. Moved here for Later Win Screen Jump support (Demi's Request)
+	if (input->hasJumped() && !donutModel->isJumping()) {
+		donutModel->startJump();
+		net->jump(playerID);
+	}
+
+	// Check for Win
+	if (ship->timerEnded() && ship->getHealth() > 0) {
+		sgRoot.setStatus(GameGraphRoot::Win);
+		sgRoot.update(timestep);
+		return;
+	}
 
 	if (!(ship->timerEnded())) {
 		ship->updateTimer(timestep);
 	}
+
+	// Move the donut (MODEL ONLY)
+	float thrust = input->getRoll();
+	donutModel->applyForce(thrust);
 
 	// Breach Checks
 	for (int i = 0; i < ship->getBreaches().size(); i++) {
@@ -239,15 +268,6 @@ void GameMode::update(float timestep) {
 
 	gm.update(timestep);
 
-	// Move the donut (MODEL ONLY)
-	float thrust = input->getRoll();
-	donutModel->applyForce(thrust);
-	// Jump Logic
-	if (input->hasJumped() && !donutModel->isJumping()) {
-		donutModel->startJump();
-		net->jump(playerID);
-	}
-
 	for (unsigned int i = 0; i < ship->getDonuts().size(); i++) {
 		ship->getDonuts()[i]->update(timestep);
 	}
@@ -286,30 +306,26 @@ void GameMode::update(float timestep) {
 	}
 
 	for (int i = 0; i < ship->getButtons().size(); i++) {
-		if (ship->getButtons().at(i) == nullptr || ship->getButtons().at(i)->getAngle() < 0) {
+		auto button = ship->getButtons().at(i);
+
+		if (button == nullptr || button->getAngle() < 0) {
 			continue;
 		}
-		float diff = donutModel->getAngle() - ship->getButtons().at(i)->getAngle();
-		float a = diff + ship->getSize() / 2;
-		diff = a - floor(a / ship->getSize()) * ship->getSize() - ship->getSize() / 2;
 
-		if (abs(diff) < globals::BUTTON_ACTIVE_ANGLE && donutModel->isJumping()) {
-			ship->getButtons().at(i)->addPlayer(playerID);
-			ship->getButtons().at(i)->setJumpedOn(true);
+		float diff = donutModel->getAngle() - button->getAngle();
+		float shipSize = ship->getSize();
+		float a = diff + shipSize / 2;
+		diff = a - floor(a / shipSize) * shipSize - shipSize / 2;
 
-			net->flagButton(i, playerID, 1);
+		int flag = (abs(diff) < globals::BUTTON_ACTIVE_ANGLE && donutModel->isJumping()) ? 1 : 0;
+		ship->flagButton(i, playerID, flag);
+		net->flagButton(i, playerID, flag);
 
-		} else {
-			// ship->getButtons().at(i)->removePlayer(playerID);
-			// net->flagButton(i, playerID, 0);
-		}
-		if (ship->getButtons().at(i)->jumpedOn()) { // ship->getButtons().at(i)->getPlayersOn() == 1
-													// && ship->getButtons().at(i)->jumpedOn()) {
-
-			if (ship->getButtons().at(i)->getPair()->jumpedOn()) { //&&
-				// ship->getButtons().at(i)->getPair()->getPlayersOn() == 1) {
-				ship->getButtons().at(i)->setResolved(true);
-				ship->getButtons().at(i)->getPair()->setResolved(true);
+		if (flag == 1) {
+			if (button->getPair()->jumpedOn()) {
+				CULog("Resolving button");
+				ship->resolveButton(i);
+				net->resolveButton(i);
 			}
 		}
 	}

@@ -21,7 +21,7 @@ constexpr int NUM_SKIP_FRAMES = 2;
 constexpr float PATTERN_SCALE = 0.1f;
 
 /** Horizontal position offset for pattern animation */
-constexpr int PATTERN_OFFSET = -180;
+constexpr int PATTERN_OFFSET = -120;
 
 void BreachNode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch, const Mat4& transform,
 					  Color4 tint) {
@@ -68,6 +68,7 @@ void BreachNode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch, const Mat
 			} else {
 				// Continue shrink animation
 				shapeNode->setFrame((int)shapeNode->getFrame() + 1);
+				patternNode->setFrame(shapeNode->getFrame());
 			}
 		} else {
 			// Play idle animation
@@ -75,6 +76,7 @@ void BreachNode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch, const Mat
 								(currentFrameIdle < NUM_IDLE_FRAMES / 2 * NUM_SKIP_FRAMES
 									 ? currentFrameIdle / NUM_SKIP_FRAMES
 									 : NUM_IDLE_FRAMES - currentFrameIdle / 2 - 1));
+			patternNode->setFrame(shapeNode->getFrame());
 			currentFrameIdle = currentFrameIdle == NUM_IDLE_FRAMES * NUM_SKIP_FRAMES - 1
 								   ? 0
 								   : currentFrameIdle + 1;

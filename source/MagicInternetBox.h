@@ -111,6 +111,7 @@ class MagicInternetBox {
 		DualCreate,
 		DualResolve,
 		ButtonCreate,
+		ButtonFlag,
 		ButtonResolve,
 		AllCreate,
 		AllFail,
@@ -339,16 +340,23 @@ class MagicInternetBox {
 
 	/**
 	 * Inform other players that one person is on the button.
-	 * This method does not keep track of whether one or both players are
-	 * resolving this task. It merely broadcasts to all other players that
-	 * one more person is now on this task; when both players are here, it
-	 * is the responsibility of the receivers of this message to resolve the task.
+	 * This method does not keep track of whether one or both players are resolving this task. It
+	 * merely broadcasts to all other players that one more person is now on this task. It is the
+	 * responsibility of the second player to jump on the button to call {@link resolveButton()} to
+	 * inform others that the task has been resolved.
 	 *
 	 * @param id The button ID
 	 * @param player The player ID who is activating the button
 	 * @param flag Whether the player is on or off the door (1 or 0)
 	 */
 	void flagButton(int id, int player, int flag);
+
+	/**
+	 * Inform other players that a pair of buttons have been resolved.
+	 *
+	 * @param id The ID of one of the two buttons.
+	 */
+	void resolveButton(int id);
 
 	/**
 	 * Inform other players that a task requiring all members of the ship has been created (eg:

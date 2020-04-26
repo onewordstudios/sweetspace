@@ -28,6 +28,12 @@ class LoadingMode : public cugl::Scene {
 	/** The progress displayed on the screen */
 	float progress;
 
+	/** Whether we're ready to move on */
+	bool ready;
+
+	/** Current transition frame */
+	int transition;
+
    public:
 #pragma mark -
 #pragma mark Constructors
@@ -37,7 +43,7 @@ class LoadingMode : public cugl::Scene {
 	 * This constructor does not allocate any objects or start the game.
 	 * This allows us to use the object without a heap pointer.
 	 */
-	LoadingMode() : Scene(), progress(0.0f) {}
+	LoadingMode() : Scene(), progress(0.0f), ready(false), transition(0) {}
 
 	/**
 	 * Disposes of all (non-static) resources allocated to this mode.
