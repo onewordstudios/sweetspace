@@ -304,6 +304,17 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	reconnectE3 =
 		std::dynamic_pointer_cast<Label>(assets->get<Node>("game_overlay_reconnect_ellipsis3"));
 
+	// Initialize Pause Screen Componenets
+	pauseBtn = std::dynamic_pointer_cast<Button>(assets->get<Node>("game_overlay_pauseBtn"));
+	pauseScreen = assets->get<Node>("game_overlay_pause");
+	musicBtn =
+		std::dynamic_pointer_cast<Button>(assets->get<Node>("game_overlay_pause_bg_musicBtn"));
+	soundBtn =
+		std::dynamic_pointer_cast<Button>(assets->get<Node>("game_overlay_pause_bg_soundBtn"));
+	leaveBtn =
+		std::dynamic_pointer_cast<Button>(assets->get<Node>("game_overlay_pause_bg_leaveBtn"));
+	needle = assets->get<Node>("game_overlay_pause_bg_dial_hand");
+
 	// Initialize Loss Screen Componenets
 	lossScreen = assets->get<Node>("game_overlay_loss");
 	restartBtn =
@@ -314,10 +325,11 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	winScreen = assets->get<Node>("game_overlay_win");
 	nextBtn = std::dynamic_pointer_cast<Button>(assets->get<Node>("game_overlay_win_nextBtn"));
 
-	// Register Buttons
+	// Register Regular Buttons
 	buttonManager.registerButton(restartBtn);
 	buttonManager.registerButton(levelsBtn);
 	buttonManager.registerButton(nextBtn);
+	buttonManager.registerButton(leaveBtn);
 
 	addChild(scene);
 	return true;
@@ -403,6 +415,9 @@ void GameGraphRoot::update(float timestep) {
 		default:
 			CULog("ERROR: Uncaught DrawingStatus Value Occurred");
 	}
+
+	// Button Checks for Special Case Buttons
+	processButtons();
 
 	if (ship->getHealth() < 1) {
 		std::shared_ptr<Texture> image = assets->get<Texture>("health_empty");
@@ -566,6 +581,71 @@ void GameGraphRoot::update(float timestep) {
 		currentHealthWarningFrame = 1;
 	}
 }
+
+/**
+ * Returns true iff a button was properly tapped (the tap event both started and ended on the
+ * button)
+ *
+ * @param button The button
+ * @param tapData The start and end locations provided by the input controller
+ */
+bool tappedBtn(std::shared_ptr<Button> button, std::tuple<Vec2, Vec2> tapData) {
+	return button->containsScreen(std::get<0>(tapData)) &&
+		   button->containsScreen(std::get<1>(tapData));
+}
+
+void GameGraphRoot::processButtons() {
+	// Process normal button draw states
+	buttonManager.process();
+
+	// Do not process inputs if a) nothing was pressed, or b) currently transitioning
+	if (!InputController::getInstance()->isTapEndAvailable()) {
+		return;
+	}
+
+	// TODO: Process Buttons for Win/Loss Screens
+
+	std::tuple<Vec2, Vec2> tapData = InputController::getInstance()->getTapEndLoc();
+	// Pause button
+	if (tappedBtn(pauseBtn, tapData)) {
+		if (pauseBtn->isDown()) {
+			// Close Pause Screen
+			pauseBtn->setDown(false);
+			pauseScreen->setVisible(false);
+		} else {
+			// Open Pause Screen
+			pauseBtn->setDown(true);
+			pauseScreen->setVisible(true);
+		}
+	} else if (pauseScreen->isVisible()) {
+		// Mute Music Button
+		if (tappedBtn(musicBtn, tapData)) {
+			if (musicBtn->isDown()) {
+				musicBtn->setDown(false);
+				AudioChannels::get()->resumeMusic();
+			} else {
+				musicBtn->setDown(true);
+				AudioChannels::get()->pauseMusic();
+			}
+		}
+		// Mute Sound Button
+		else if (tappedBtn(soundBtn, tapData)) {
+			if (soundBtn->isDown()) {
+				soundBtn->setDown(false);
+				AudioChannels::get()->resumeAllEffects();
+			} else {
+				soundBtn->setDown(true);
+				AudioChannels::get()->pauseAllEffects();
+			}
+		}
+		// Leave Button
+		else if (tappedBtn(leaveBtn, tapData)) {
+			isBackToMainMenu = true;
+		}
+	}
+}
+
+void GameGraphRoot::setNeedleAngle(float angle) { needle->setAngle(-angle * globals::TWO_PI); }
 
 /**
  * Returns an informative string for the position
