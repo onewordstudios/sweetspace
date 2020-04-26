@@ -233,16 +233,20 @@ void MainMenuMode::processTransition() {
 			return;
 		}
 		case StartScreen: {
-			if (transitionFrame >= TRANSITION_DURATION) {
+			if (transitionFrame > TRANSITION_DURATION) {
 				endTransition();
 				mainScreen->setVisible(false);
-				backBtn->setVisible(true);
 			} else {
 				mainScreen->setColor(
 					Tween::fade(Tween::linear(1.0f, 0.0f, transitionFrame, TRANSITION_DURATION)));
 				if (transitionState == ClientScreen) {
+					if (transitionFrame == 1) {
+						backBtn->setVisible(true);
+					}
 					clientScreen->setPositionY(
 						Tween::easeOut(-screenHeight, 0, transitionFrame, TRANSITION_DURATION));
+					backBtn->setColor(Tween::fade(
+						Tween::linear(0.0f, 1.0f, transitionFrame, TRANSITION_DURATION)));
 				}
 			}
 			break;
@@ -255,9 +259,49 @@ void MainMenuMode::processTransition() {
 				} else {
 					hostScreen->setPositionY(
 						Tween::easeOut(-screenHeight, 0, transitionFrame, TRANSITION_DURATION));
+
+					if (transitionFrame == 1) {
+						backBtn->setVisible(true);
+					}
+					backBtn->setColor(Tween::fade(
+						Tween::linear(0.0f, 1.0f, transitionFrame, TRANSITION_DURATION)));
 				}
 			}
 			break;
+		}
+		case HostScreen:
+		case ClientScreen: {
+			if (transitionState == StartScreen) {
+				// Start transition
+				if (transitionFrame == 1) {
+					mainScreen->setVisible(true);
+				}
+
+				// Transition over
+				if (transitionFrame > TRANSITION_DURATION) {
+					endTransition();
+					hostScreen->setVisible(false);
+					clientScreen->setVisible(false);
+					backBtn->setVisible(false);
+					return;
+				}
+
+				// Make current screen go down
+				if (currState == HostScreen) {
+					hostScreen->setPositionY(
+						Tween::easeIn(0, -screenHeight, transitionFrame, TRANSITION_DURATION));
+				} else {
+					clientScreen->setPositionY(
+						Tween::easeIn(0, -screenHeight, transitionFrame, TRANSITION_DURATION));
+				}
+
+				mainScreen->setColor(
+					Tween::fade(Tween::linear(0.0f, 1.0f, transitionFrame, TRANSITION_DURATION)));
+				backBtn->setColor(
+					Tween::fade(Tween::linear(1.0f, 0.0f, transitionFrame, TRANSITION_DURATION)));
+
+				return;
+			}
 		}
 		default:
 			break;
@@ -280,12 +324,19 @@ void MainMenuMode::processUpdate() {
 			}
 			if (net->matchStatus() == MagicInternetBox::MatchmakingStatus::HostError) {
 				connScreen->setText("Error Connecting :(");
+				backBtn->setVisible(true);
+				backBtn->setColor(cugl::Color4::WHITE);
 			}
 			break;
 		}
 		case HostScreen: {
 			float percentage = (float)(net->getNumPlayers() - 1) / (float)globals::MAX_PLAYERS;
-			hostNeedle->setAngle(-percentage * globals::TWO_PI);
+			hostNeedle->setAngle(-percentage * globals::TWO_PI * 0.9f);
+			if (backBtn->isVisible()) {
+				if (percentage > 0) {
+					backBtn->setVisible(false);
+				}
+			}
 			break;
 		}
 		default: {
@@ -301,17 +352,15 @@ void MainMenuMode::processButtons() {
 
 	if (InputController::getInstance()->hasPressedBack()) {
 		switch (currState) {
+			case HostScreenWait:
+				startHostThread->detach();
+				// Intentional fall-through
 			case HostScreen:
 				net->forceDisconnect();
 				// Intentional fall-through
 			case ClientScreen:
 				CULog("Going Back");
-				currState = StartScreen;
-				clientScreen->setVisible(false);
-				hostScreen->setVisible(false);
-				mainScreen->setVisible(true);
-				mainScreen->setColor(cugl::Color4::WHITE);
-				backBtn->setVisible(false);
+				transitionState = StartScreen;
 				return;
 			default:
 				break;
@@ -350,11 +399,7 @@ void MainMenuMode::processButtons() {
 			} else if (buttonManager.tappedButton(backBtn, tapData)) {
 				CULog("Going Back");
 				net->forceDisconnect();
-				currState = StartScreen;
-				hostScreen->setVisible(false);
-				mainScreen->setVisible(true);
-				mainScreen->setColor(cugl::Color4::WHITE);
-				backBtn->setVisible(false);
+				transitionState = StartScreen;
 			}
 			break;
 		}
@@ -391,14 +436,11 @@ void MainMenuMode::processButtons() {
 				clientJoinBtn->setDown(true);
 				net->initClient(room.str());
 
+				backBtn->setVisible(false);
+
 				break;
 			} else if (buttonManager.tappedButton(backBtn, tapData)) {
-				CULog("Going Back");
-				currState = StartScreen;
-				clientScreen->setVisible(false);
-				mainScreen->setVisible(true);
-				mainScreen->setColor(cugl::Color4::WHITE);
-				backBtn->setVisible(false);
+				transitionState = StartScreen;
 				return;
 			}
 
@@ -456,6 +498,7 @@ void MainMenuMode::update(float timestep) {
 				updateClientLabel();
 				currState = ClientScreen;
 				clientJoinBtn->setDown(false);
+				backBtn->setVisible(true);
 			}
 			return;
 		case MagicInternetBox::MatchmakingStatus::Uninitialized:
