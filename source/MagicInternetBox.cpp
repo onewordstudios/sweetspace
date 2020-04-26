@@ -574,6 +574,9 @@ void MagicInternetBox::jump(int player) { sendData(Jump, -1.0f, player, -1, -1, 
 
 void MagicInternetBox::forceDisconnect() {
 	CULog("Force disconnecting");
+	if (ws == nullptr) {
+		return;
+	}
 
 	std::vector<uint8_t> data;
 	data.push_back((uint8_t)PlayerDisconnect);

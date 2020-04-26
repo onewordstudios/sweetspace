@@ -44,6 +44,10 @@ class InputController {
 	 * Ending location of last tap.
 	 */
 	cugl::Vec2 tapEnd;
+	/**
+	 * Whether the escape or back button was recently pressed
+	 */
+	bool backPressed;
 
 	/**
 	 * Creates a new input controller.
@@ -52,14 +56,6 @@ class InputController {
 	 * object. This makes it safe to use this class without a pointer.
 	 */
 	InputController();
-
-	/**
-	 * Deactivates this input controller, releasing all listeners.
-	 *
-	 * This method will not dispose of the input controller. It can be reused
-	 * once it is reinitialized.
-	 */
-	void dispose();
 
    public:
 #pragma region Constructors
@@ -133,6 +129,11 @@ class InputController {
 		tapEnd.setZero();
 		return r;
 	}
+
+	/**
+	 * Return whether the player has pressed back since the last time this method was queried
+	 */
+	const bool hasPressedBack();
 
 #pragma endregion
 #pragma region Gameplay Input Results

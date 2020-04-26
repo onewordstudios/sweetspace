@@ -48,3 +48,9 @@ void ButtonManager::process() {
 		}
 	}
 }
+
+bool ButtonManager::tappedButton(std::shared_ptr<cugl::Button> button,
+								 std::tuple<cugl::Vec2, cugl::Vec2> tapData) {
+	return button->containsScreen(std::get<0>(tapData)) &&
+		   button->containsScreen(std::get<1>(tapData));
+}
