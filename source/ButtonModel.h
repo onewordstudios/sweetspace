@@ -46,50 +46,28 @@ class ButtonModel {
 #pragma mark Accessors
 	/**
 	 * Returns the current angle of the button in degrees.
-	 *
-	 * @return the current angle of the button in degrees.
 	 */
 	float getAngle() { return angle; }
 
 	/**
-	 * Returns the current section of the button.
-	 *
-	 * @return the current section of the button.
+	 * Returns the section of the ship containing this button.
 	 */
 	int getSection();
 
 	/**
 	 * Returns the current height of the button.
-	 *
-	 * @return the current height of the button.
 	 */
 	int getHeight() { return height; }
 
 	/**
-	 * Returns the number of players in range of the button.
-	 *
-	 * @return the number of players in range of the button.
-	 */
-	int getPlayersOn() { return (int)playersOn.count(); }
-
-	/**
-	 * Adds the given player's flag from the button.
+	 * Adds the given player's flag to the button.
 	 */
 	void addPlayer(int id) { playersOn.set(id); }
 
 	/**
-	 * Removes the given player's flag from the button. Requires that this player is on the button
+	 * Removes the given player's flag from the button if present. Has no effect otherwise.
 	 */
-	void removePlayer(int id) {
-		if (!isResolved()) {
-			playersOn.reset(id);
-		}
-	}
-
-	/**
-	 * Returns whether this player is on the button.
-	 */
-	bool isPlayerOn(int id) { return playersOn.test(id); }
+	void removePlayer(int id) { playersOn.reset(id); }
 
 	/**
 	 * Returns whether this button is resolved.
@@ -102,7 +80,7 @@ class ButtonModel {
 	void resolve() { resolved = true; }
 
 	/**
-	 * Returns whether this button can be passed under.
+	 * Returns whether any players are jumping on this button.
 	 */
 	bool jumpedOn() { return playersOn.any(); }
 
