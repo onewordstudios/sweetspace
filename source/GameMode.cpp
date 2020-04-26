@@ -306,29 +306,26 @@ void GameMode::update(float timestep) {
 	}
 
 	for (int i = 0; i < ship->getButtons().size(); i++) {
-		if (ship->getButtons().at(i) == nullptr || ship->getButtons().at(i)->getAngle() < 0) {
+		auto button = ship->getButtons().at(i);
+
+		if (button == nullptr || button->getAngle() < 0) {
 			continue;
 		}
-		float diff = donutModel->getAngle() - ship->getButtons().at(i)->getAngle();
-		float a = diff + ship->getSize() / 2;
-		diff = a - floor(a / ship->getSize()) * ship->getSize() - ship->getSize() / 2;
 
-		if (abs(diff) < globals::BUTTON_ACTIVE_ANGLE && donutModel->isJumping()) {
-			ship->getButtons().at(i)->addPlayer(playerID);
+		float diff = donutModel->getAngle() - button->getAngle();
+		float shipSize = ship->getSize();
+		float a = diff + shipSize / 2;
+		diff = a - floor(a / shipSize) * shipSize - shipSize / 2;
 
-			net->flagButton(i, playerID, 1);
+		int flag = (abs(diff) < globals::BUTTON_ACTIVE_ANGLE && donutModel->isJumping()) ? 1 : 0;
+		ship->flagButton(i, playerID, flag);
+		net->flagButton(i, playerID, flag);
 
-		} else {
-			// ship->getButtons().at(i)->removePlayer(playerID);
-			// net->flagButton(i, playerID, 0);
-		}
-		if (ship->getButtons().at(i)->jumpedOn()) { // ship->getButtons().at(i)->getPlayersOn() == 1
-													// && ship->getButtons().at(i)->jumpedOn()) {
-
-			if (ship->getButtons().at(i)->getPair()->jumpedOn()) { //&&
-				// ship->getButtons().at(i)->getPair()->getPlayersOn() == 1) {
-				ship->getButtons().at(i)->setResolved(true);
-				ship->getButtons().at(i)->getPair()->setResolved(true);
+		if (button->jumpedOn()) {
+			if (button->getPair()->jumpedOn()) {
+				CULog("Resolving button");
+				button->getPair()->setResolved(true);
+				button->setResolved(true);
 			}
 		}
 	}
