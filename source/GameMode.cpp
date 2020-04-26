@@ -124,6 +124,11 @@ void GameMode::dispose() {
  * @param timestep  The amount of time (in seconds) since the last frame
  */
 void GameMode::update(float timestep) {
+	// Check if need to go back to menu
+	isBackToMainMenu = sgRoot.getIsBackToMainMenu();
+	// Set needle percentage in pause menu
+	sgRoot.setNeedlePercentage((float)(net->getNumPlayers() - 1) / (float)globals::MAX_PLAYERS);
+
 	// Connection Status Checks
 	switch (net->matchStatus()) {
 		case MagicInternetBox::Disconnected:
@@ -132,36 +137,60 @@ void GameMode::update(float timestep) {
 			if (net->reconnect(roomId)) {
 				net->update();
 			}
-			sgRoot.setStatus(MagicInternetBox::Disconnected);
+			sgRoot.setStatus(GameGraphRoot::Reconnecting);
 			sgRoot.update(timestep);
 			return;
 		case MagicInternetBox::Reconnecting:
 			// Still Reconnecting
 			net->update();
-			sgRoot.setStatus(MagicInternetBox::Reconnecting);
+			sgRoot.setStatus(GameGraphRoot::Reconnecting);
 			sgRoot.update(timestep);
 			return;
 		case MagicInternetBox::ClientRoomFull:
 		case MagicInternetBox::GameEnded:
-			// Insert Game End
+			// Game Ended, Replace with Another Screen
+			CULog("Game Ended");
 			net->update(ship);
-			sgRoot.setStatus(MagicInternetBox::GameEnded);
 			sgRoot.update(timestep);
 			return;
 		case MagicInternetBox::GameStart:
 			net->update(ship);
-			sgRoot.setStatus(MagicInternetBox::GameStart);
+			sgRoot.setStatus(GameGraphRoot::Normal);
 			break;
 		default:
 			CULog("ERROR: Uncaught MatchmakingStatus Value Occurred");
 	}
 
-	// Only process game logic if properly connected to game
+	// Only process game logic if game is running
 	input->update(timestep);
+
+	// Check for loss
+	if (ship->getHealth() < 1) {
+		sgRoot.setStatus(GameGraphRoot::Loss);
+		sgRoot.update(timestep);
+		return;
+	}
+
+	// Jump Logic. Moved here for Later Win Screen Jump support (Demi's Request)
+	if (input->hasJumped() && !donutModel->isJumping()) {
+		donutModel->startJump();
+		net->jump(playerID);
+	}
+
+	// Check for Win
+	if (ship->timerEnded() && ship->getHealth() > 0) {
+		sgRoot.setStatus(GameGraphRoot::Win);
+		sgRoot.update(timestep);
+		return;
+	}
 
 	if (!(ship->timerEnded())) {
 		ship->updateTimer(timestep);
 	}
+
+	// Move the donut (MODEL ONLY)
+	float thrust = input->getRoll();
+	donutModel->applyForce(thrust);
 
 	// Breach Checks
 	for (int i = 0; i < ship->getBreaches().size(); i++) {
@@ -238,15 +267,6 @@ void GameMode::update(float timestep) {
 	}
 
 	gm.update(timestep);
-
-	// Move the donut (MODEL ONLY)
-	float thrust = input->getRoll();
-	donutModel->applyForce(thrust);
-	// Jump Logic
-	if (input->hasJumped() && !donutModel->isJumping()) {
-		donutModel->startJump();
-		net->jump(playerID);
-	}
 
 	for (unsigned int i = 0; i < ship->getDonuts().size(); i++) {
 		ship->getDonuts()[i]->update(timestep);

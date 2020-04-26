@@ -22,12 +22,12 @@ constexpr unsigned int LISTENER_KEY = 1;
  * This constructor does NOT do any initialzation.  It simply allocates the
  * object. This makes it safe to use this class without a pointer.
  */
-InputController::InputController() : active(false), rollAmount(0.0f), jumped(false) {
+InputController::InputController()
+	: active(false), rollAmount(0.0f), jumped(false), backPressed(false) {
 	touchID = -1;
-	bool success = false;
+	bool success = Input::activate<Keyboard>();
 
 #ifndef CU_TOUCH_SCREEN
-	success = Input::activate<Keyboard>();
 
 	Input::activate<Mouse>();
 	Mouse* mouse = Input::get<Mouse>();
@@ -60,8 +60,8 @@ InputController::InputController() : active(false), rollAmount(0.0f), jumped(fal
 
 InputController::~InputController() {
 	if (active) {
-#ifndef CU_TOUCH_SCREEN
 		Input::deactivate<Keyboard>();
+#ifndef CU_TOUCH_SCREEN
 
 		Mouse* mouse = Input::get<Mouse>();
 		mouse->removePressListener(LISTENER_KEY);
@@ -86,6 +86,7 @@ InputController::~InputController() {
  */
 void InputController::clear() {
 	jumped = false;
+	backPressed = false;
 	rollAmount = 0.0f;
 	tapStart.setZero();
 	tapEnd.setZero();
@@ -111,6 +112,9 @@ void InputController::update(float dt) {
 	Keyboard* keys = Input::get<Keyboard>();
 	if (keys->keyPressed(JUMP_KEY)) {
 		jumped = true;
+	} else if (keys->keyPressed(KeyCode::ESCAPE)) {
+		backPressed = true;
+		CULog("Escape key pressed");
 	}
 
 	// Forces increase the longer you hold a key.
@@ -122,6 +126,12 @@ void InputController::update(float dt) {
 		rollAmount = 0.0f;
 	}
 #else
+	Keyboard* keys = Input::get<Keyboard>();
+	if (keys->keyPressed(KeyCode::ANDROID_BACK)) {
+		CULog("Android back button pressed");
+		backPressed = true;
+	}
+
 	// MOBILE CONTROLS
 	Vec3 acc = Input::get<Accelerometer>()->getAcceleration();
 
@@ -155,6 +165,14 @@ const cugl::Vec2 InputController::getCurrTapLoc() const {
 	}
 #endif
 	return cugl::Vec2::ZERO;
+}
+
+const bool InputController::hasPressedBack() {
+	if (backPressed) {
+		backPressed = false;
+		return true;
+	}
+	return false;
 }
 
 #pragma endregion
