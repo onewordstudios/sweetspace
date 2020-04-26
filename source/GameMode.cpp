@@ -124,6 +124,11 @@ void GameMode::dispose() {
  * @param timestep  The amount of time (in seconds) since the last frame
  */
 void GameMode::update(float timestep) {
+	// Check if need to go back to menu
+	isBackToMainMenu = sgRoot.getIsBackToMainMenu();
+	// Set needle percentage in pause menu
+	sgRoot.setNeedlePercentage((float)(net->getNumPlayers() - 1) / (float)globals::MAX_PLAYERS);
+
 	// Connection Status Checks
 	switch (net->matchStatus()) {
 		case MagicInternetBox::Disconnected:

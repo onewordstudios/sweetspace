@@ -35,6 +35,12 @@ constexpr int BG_SCROLL_LIMIT = 256;
 /** Parallax speed of background image */
 constexpr float BG_SCROLL_SPEED = 0.5;
 
+/** Animation cycle length of ellipses */
+constexpr int MAX_ELLIPSES_FRAMES = 180;
+
+/** Presumable number of frames per second */
+constexpr int FRAMES_PER_SECOND = 60;
+
 /** Animation cycle length of ship red flash */
 constexpr int MAX_HEALTH_WARNING_FRAMES = 150;
 
@@ -293,6 +299,21 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	// Overlay Components
 	// Initialize Reconnect Overlay
 	reconnectOverlay = assets->get<Node>("game_overlay_reconnect");
+	reconnectE2 =
+		std::dynamic_pointer_cast<Label>(assets->get<Node>("game_overlay_reconnect_ellipsis2"));
+	reconnectE3 =
+		std::dynamic_pointer_cast<Label>(assets->get<Node>("game_overlay_reconnect_ellipsis3"));
+
+	// Initialize Pause Screen Componenets
+	pauseBtn = std::dynamic_pointer_cast<Button>(assets->get<Node>("game_overlay_pauseBtn"));
+	pauseScreen = assets->get<Node>("game_overlay_pause");
+	musicBtn =
+		std::dynamic_pointer_cast<Button>(assets->get<Node>("game_overlay_pause_bg_musicBtn"));
+	soundBtn =
+		std::dynamic_pointer_cast<Button>(assets->get<Node>("game_overlay_pause_bg_soundBtn"));
+	leaveBtn =
+		std::dynamic_pointer_cast<Button>(assets->get<Node>("game_overlay_pause_bg_leaveBtn"));
+	needle = assets->get<Node>("game_overlay_pause_bg_dial_hand");
 
 	// Initialize Loss Screen Componenets
 	lossScreen = assets->get<Node>("game_overlay_loss");
@@ -304,10 +325,11 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	winScreen = assets->get<Node>("game_overlay_win");
 	nextBtn = std::dynamic_pointer_cast<Button>(assets->get<Node>("game_overlay_win_nextBtn"));
 
-	// Register Buttons
+	// Register Regular Buttons
 	buttonManager.registerButton(restartBtn);
 	buttonManager.registerButton(levelsBtn);
 	buttonManager.registerButton(nextBtn);
+	buttonManager.registerButton(leaveBtn);
 
 	addChild(scene);
 	return true;
@@ -378,10 +400,24 @@ void GameGraphRoot::update(float timestep) {
 		case Reconnecting:
 			// Still Reconnecting
 			reconnectOverlay->setVisible(true);
+			currentEllipsesFrame++;
+			if (currentEllipsesFrame > MAX_ELLIPSES_FRAMES) {
+				currentEllipsesFrame = 0;
+			} else if (currentEllipsesFrame % MAX_ELLIPSES_FRAMES < FRAMES_PER_SECOND) {
+				reconnectE2->setVisible(false);
+				reconnectE3->setVisible(false);
+			} else if (currentEllipsesFrame % MAX_ELLIPSES_FRAMES < 2 * FRAMES_PER_SECOND) {
+				reconnectE2->setVisible(true);
+			} else if (currentEllipsesFrame % MAX_ELLIPSES_FRAMES < 3 * FRAMES_PER_SECOND) {
+				reconnectE3->setVisible(true);
+			}
 			break;
 		default:
 			CULog("ERROR: Uncaught DrawingStatus Value Occurred");
 	}
+
+	// Button Checks for Special Case Buttons
+	processButtons();
 
 	if (ship->getHealth() < 1) {
 		std::shared_ptr<Texture> image = assets->get<Texture>("health_empty");
@@ -544,6 +580,61 @@ void GameGraphRoot::update(float timestep) {
 									 MAX_HEALTH_WARNING_ALPHA / MAX_HEALTH_WARNING_FRAMES * 2));
 		currentHealthWarningFrame = 1;
 	}
+}
+
+void GameGraphRoot::processButtons() {
+	// Process normal button draw states
+	buttonManager.process();
+
+	// Do not process inputs if a) nothing was pressed, or b) currently transitioning
+	if (!InputController::getInstance()->isTapEndAvailable()) {
+		return;
+	}
+
+	// TODO: Process Buttons for Win/Loss Screens
+
+	std::tuple<Vec2, Vec2> tapData = InputController::getInstance()->getTapEndLoc();
+	// Pause button
+	if (buttonManager.tappedButton(pauseBtn, tapData)) {
+		if (pauseBtn->isDown()) {
+			// Close Pause Screen
+			pauseBtn->setDown(false);
+			pauseScreen->setVisible(false);
+		} else {
+			// Open Pause Screen
+			pauseBtn->setDown(true);
+			pauseScreen->setVisible(true);
+		}
+	} else if (pauseScreen->isVisible()) {
+		// Mute Music Button
+		if (buttonManager.tappedButton(musicBtn, tapData)) {
+			if (musicBtn->isDown()) {
+				musicBtn->setDown(false);
+				AudioChannels::get()->resumeMusic();
+			} else {
+				musicBtn->setDown(true);
+				AudioChannels::get()->pauseMusic();
+			}
+		}
+		// Mute Sound Button
+		else if (buttonManager.tappedButton(soundBtn, tapData)) {
+			if (soundBtn->isDown()) {
+				soundBtn->setDown(false);
+				AudioChannels::get()->resumeAllEffects();
+			} else {
+				soundBtn->setDown(true);
+				AudioChannels::get()->pauseAllEffects();
+			}
+		}
+		// Leave Button
+		else if (buttonManager.tappedButton(leaveBtn, tapData)) {
+			isBackToMainMenu = true;
+		}
+	}
+}
+
+void GameGraphRoot::setNeedlePercentage(float percentage) {
+	needle->setAngle(-percentage * globals::TWO_PI * globals::NEEDLE_OFFSET);
 }
 
 /**

@@ -72,6 +72,27 @@ class GameGraphRoot : public cugl::Scene {
 	// Reconnection Textures
 	/** Node to hold all of the Reconnect Overlay.*/
 	std::shared_ptr<cugl::Node> reconnectOverlay;
+	/** Label for second ellipsis point */
+	std::shared_ptr<cugl::Label> reconnectE2;
+	/** Label for third ellipsis point */
+	std::shared_ptr<cugl::Label> reconnectE3;
+	/** Current animation frame for ellipses */
+	int currentEllipsesFrame;
+
+	// Pause Textures
+	/** Button to Open Pause */
+	std::shared_ptr<cugl::Button> pauseBtn;
+	/** Node to hold all of the Loss Screen.*/
+	std::shared_ptr<cugl::Node> pauseScreen;
+	/** Button to Mute Music */
+	std::shared_ptr<cugl::Button> musicBtn;
+	/** Button to Mute Sound Effects */
+	std::shared_ptr<cugl::Button> soundBtn;
+	/** Button to Leave */
+	std::shared_ptr<cugl::Button> leaveBtn;
+	/** The node containing the player count needle*/
+	std::shared_ptr<cugl::Node> needle;
+
 	/** Ship red overlay node */
 	std::shared_ptr<cugl::PolygonNode> shipOverlay;
 
@@ -137,6 +158,12 @@ class GameGraphRoot : public cugl::Scene {
 		return mod < 0 ? globals::TWO_PI + mod : mod;
 	};
 
+	/** Process Buttons in Special Screens */
+	void processButtons();
+
+	/** Whether to go back to main menu */
+	bool isBackToMainMenu;
+
    public:
 #pragma mark -
 #pragma mark Public Consts
@@ -161,7 +188,12 @@ class GameGraphRoot : public cugl::Scene {
 	 * This constructor does not allocate any objects or start the game.
 	 * This allows us to use the object without a heap pointer.
 	 */
-	GameGraphRoot() : Scene(), status(Normal) {}
+	GameGraphRoot()
+		: Scene(),
+		  status(Normal),
+		  currentEllipsesFrame(0),
+		  currentHealthWarningFrame(0),
+		  isBackToMainMenu(false) {}
 
 	/**
 	 * Disposes of all (non-static) resources allocated to this mode.
@@ -206,22 +238,42 @@ class GameGraphRoot : public cugl::Scene {
 	 */
 	void reset() override;
 
+	/**
+	 * Spin Dial in pause menu
+	 * @param percentage  The percent of dial to spin
+	 */
+	void setNeedlePercentage(float percentage);
+
 	std::shared_ptr<cugl::Node> getDonutNode();
 
 #pragma mark -
 #pragma mark Accessors
 	/**
-	 * Set connection status
+	 * Set Drawing status
 	 *
-	 * @param status the connection status of the ship
+	 * @param status the drawing status of the ship
 	 */
 	void setStatus(DrawStatus status) { this->status = status; }
 
 	/**
-	 * Get health of the ship
+	 * Get Drawing Status
 	 *
-	 * @return health the health of the ship
+	 * @return Drawing Status
 	 */
 	DrawStatus getStatus() { return status; }
+
+	/**
+	 * Set whether to go back to the main menu (should not be called)
+	 *
+	 * @param b whether to go back to the main menu
+	 */
+	void setIsBackToMainMenu(bool b) { isBackToMainMenu = b; }
+
+	/**
+	 * Get whether to go back to the main menu
+	 *
+	 * @return whether to go back to the main menu
+	 */
+	bool getIsBackToMainMenu() { return isBackToMainMenu; }
 };
 #endif /* __GAME_GRAPH_ROOT_H__ */

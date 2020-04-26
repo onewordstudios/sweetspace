@@ -111,12 +111,6 @@
         "reconnect_bg": {
             "file":   "textures/reconnect/bg.png"
         },
-        "reconnect_text": {
-            "file":   "textures/reconnect/text.png"
-        },
-        "reconnect_ellipses": {
-            "file":   "textures/reconnect/ellipses.png"
-        },
 		"game_title": {
 			"file": "textures/main_menu/sweetspace.png"
 		},
@@ -221,6 +215,33 @@
         },
         "wl_bg" : {
         	"file" : "textures/wl_screens/win_loss_bg.png"
+        },
+        "pause_bg" : {
+        	"file" : "textures/pause/bg.png"
+        },
+        "leave_btn_up" : {
+        	"file" : "textures/pause/leave_up.png"
+        },
+        "leave_btn_down" : {
+        	"file" : "textures/pause/leave_down.png"
+        },
+        "menu_btn_up" : {
+        	"file" : "textures/pause/menu_up.png"
+        },
+        "menu_btn_down" : {
+        	"file" : "textures/pause/menu_down.png"
+        },
+        "music_btn_on" : {
+        	"file" : "textures/pause/music_on.png"
+        },
+        "music_btn_off" : {
+        	"file" : "textures/pause/music_off.png"
+        },
+        "sound_btn_on" : {
+        	"file" : "textures/pause/sound_on.png"
+        },
+        "sound_btn_off" : {
+        	"file" : "textures/pause/sound_off.png"
         }
 	},
 	"sounds": {
@@ -809,6 +830,7 @@
 				                        "font"       : "mont_black_italic_big",
 				                        "text"       : "reconnecting",
 				                        "foreground" : [236,167,247,255],
+                                		"anchor" : [0.5,0.5],
 				                        "scale" 	 : 0.5,
 				                        "valign"     : "middle",
 				                        "halign"     : "center"
@@ -817,29 +839,310 @@
 				                        "x_anchor" : "center",
 										"y_anchor" : "middle",
 				                        "y_offset" : -100,
-				                        "x_offset" : -175,
 				                        "absolute" : true
 				                    }
 				            	},
-				            	"ellipses" : {
+				                "ellipsis1" : {
+				                    "type": "Label",
+				                    "data": {
+				                        "font"       : "mont_black_italic_big",
+				                        "text"       : ".",
+				                        "foreground" : [236,167,247,255],
+                                		"anchor" : [0.5,0.5],
+				                        "scale" 	 : 0.5,
+				                        "valign"     : "middle",
+				                        "halign"     : "center"
+				                    },
+				                    "layout" : {
+				                        "x_anchor" : "center",
+										"y_anchor" : "middle",
+				                        "y_offset" : -150,
+				                        "x_offset" : -15,
+				                        "absolute" : true
+				                    }
+				                },
+				                "ellipsis2" : {
+				                    "type": "Label",
+				                    "data": {
+				                        "font"       : "mont_black_italic_big",
+				                        "text"       : ".",
+				                        "visible" 	 : false,
+				                        "foreground" : [236,167,247,255],
+                                		"anchor" : [0.5,0.5],
+				                        "scale" 	 : 0.5,
+				                        "valign"     : "middle",
+				                        "halign"     : "center"
+				                    },
+				                    "layout" : {
+				                        "x_anchor" : "center",
+										"y_anchor" : "middle",
+				                        "y_offset" : -150,
+				                        "absolute" : true
+				                    }
+				                },
+				                "ellipsis3" : {
+				                    "type": "Label",
+				                    "data": {
+				                        "font"       : "mont_black_italic_big",
+				                        "text"       : ".",
+				                        "visible" 	 : false,
+				                        "foreground" : [236,167,247,255],
+                                		"anchor" : [0.5,0.5],
+				                        "scale" 	 : 0.5,
+				                        "valign"     : "middle",
+				                        "halign"     : "center"
+				                    },
+				                    "layout" : {
+				                        "x_anchor" : "center",
+										"y_anchor" : "middle",
+				                        "y_offset" : -150,
+				                        "x_offset" : 15,
+				                        "absolute" : true
+				                    }
+				                }
+				            }
+				        },
+                        "pause": {
+							"type"      : "Node",
+				            "format"    : {
+				                "type" : "Anchored"
+				            },
+				            "data": {
+				            	"visible": false,
+                                "anchor" : [0.5,0.5]
+				            },
+							"layout" : {
+								"x_anchor" : "left",
+        						"y_anchor" : "bottom"
+							},
+				            "children":  {
+				            	"bg" : {
 				            		"type": "Image",
 									"format"    : {
 										"type" : "Anchored"
 									},
 				                    "data": {
-				                        "texture":  "reconnect_ellipses",
-				                        "anchor":   [0.5,0.5],
-				                        "scale":    0.6
+				                        "texture":  "pause_bg",
+				                        "anchor":   [1,0],
+				                        "scale":    0.5
 				                    },
 									"layout" : {
-										"x_anchor" : "center",
-										"y_anchor" : "middle",
-										"y_offset" : -125,
-										"absolute" : true
+										"x_anchor" : "right",
+										"y_anchor" : "bottom",
+				                        "y_offset" : -50,
+				                        "x_offset" : 50,
+				                        "absolute" : true
+									},
+									"children" :{
+										"crew" : {
+						            		"type": "Label",
+							                "data": {
+						                        "font"       : "mont_black_italic_big",
+						                        "text"       : "crew",
+						                        "foreground" : [236,167,247,255],
+												"anchor"   : [0.5,0.5],
+						                        "scale" 	 : 0.5,
+						                        "valign"     : "middle",
+						                        "halign"     : "center"
+						                    },
+						                    "layout" : {
+						                        "x_anchor" : "left",
+												"y_anchor" : "middle",
+						                        "y_offset" : -25,
+						                        "x_offset" : 290,
+						                        "absolute" : true
+						                    }
+							            },
+						            	"size" : {
+						            		"type": "Label",
+						                    "data": {
+						                        "font"       : "mont_black_italic_big",
+						                        "text"       : "size",
+						                        "foreground" : [236,167,247,255],
+												"anchor"   : [0.5,0.5],
+						                        "scale" 	 : 0.5,
+						                        "halign"     : "middle",
+						                        "valign"     : "center"
+						                    },
+						                    "layout" : {
+						                        "x_anchor" : "left",
+												"y_anchor" : "middle",
+						                        "y_offset" : -75,
+						                        "x_offset" : 290,
+						                        "absolute" : true
+						                    }
+						            	},
+						            	"dial" : {
+											"type" : "Image",
+											"format" : {
+												"type" : "Anchored"
+											},
+											"data"   : {
+												"texture"  : "dial",
+												"anchor"   : [0.5,1],
+												"scale"    : 0.5
+											},
+											"layout" : {
+												"x_anchor" : "left",
+												"y_anchor" : "top",
+												"x_offset" : 290,
+												"y_offset" : -100,
+						                        "absolute" : true
+											},
+											"children" : {
+												"hand" : {
+													"type" : "Image",
+													"format" : {
+														"type" : "Anchored"
+													},
+													"data"   : {
+														"texture"  : "dial_hand",
+														"anchor"   : [0.5,0.5],
+														"scale"    : 1
+													},
+													"layout" : {
+														"x_anchor" : "center",
+														"y_anchor" : "middle"
+													}
+												}
+											}
+										},
+						            	"leaveBtn" : {
+						            		"type": "Button",
+											"format" : {
+												"type" : "Anchored"
+											},
+											"data": {
+												"upnode"   : "up",
+												"downnode" : "down",
+												"anchor"   : [0.5,0.5],
+												"scale" : 1
+											},
+											"layout" : {
+												"x_anchor" : "center",
+		                        				"y_anchor" : "top",
+		                        				"x_offset" : 150,
+						                        "y_offset" : -225,
+		                        				"absolute" : true
+											},
+											"children" : {
+												"up" : {
+													"type"   : "Image",
+													"data"   : {
+														"texture"  : "leave_btn_up"
+													}
+												},
+												"down" : {
+													"type"   : "Image",
+													"data"   : {
+														"texture"  : "leave_btn_down"
+													}
+												}
+											}
+						            	},
+						            	"musicBtn" : {
+						            		"type": "Button",
+											"format" : {
+												"type" : "Anchored"
+											},
+											"data": {
+												"upnode"   : "up",
+												"downnode" : "down",
+												"anchor"   : [0.5,0.5],
+												"scale" : 1
+											},
+											"layout" : {
+												"x_anchor" : "center",
+		                        				"y_anchor" : "middle",
+		                        				"x_offset" : -50,
+		                        				"y_offset" : -75,
+		                        				"absolute" : true
+											},
+											"children" : {
+												"up" : {
+													"type"   : "Image",
+													"data"   : {
+														"texture"  : "music_btn_on"
+													}
+												},
+												"down" : {
+													"type"   : "Image",
+													"data"   : {
+														"texture"  : "music_btn_off"
+													}
+												}
+											}
+						            	},
+						            	"soundBtn" : {
+						            		"type": "Button",
+											"format" : {
+												"type" : "Anchored"
+											},
+											"data": {
+												"upnode"   : "up",
+												"downnode" : "down",
+												"anchor"   : [0.5,0.5],
+												"scale" : 1
+											},
+											"layout" : {
+												"x_anchor" : "center",
+		                        				"y_anchor" : "middle",
+		                        				"x_offset" : 350,
+		                        				"y_offset" : -75,
+		                        				"absolute" : true
+											},
+											"children" : {
+												"up" : {
+													"type"   : "Image",
+													"data"   : {
+														"texture"  : "sound_btn_on"
+													}
+												},
+												"down" : {
+													"type"   : "Image",
+													"data"   : {
+														"texture"  : "sound_btn_off"
+													}
+												}
+											}
+						            	}
 									}
 				            	}
 				            }
-				        }
+				        },
+		            	"pauseBtn" : {
+		            		"type": "Button",
+							"format" : {
+								"type" : "Anchored"
+							},
+							"data": {
+								"upnode"   : "up",
+								"downnode" : "down",
+								"anchor"   : [1,0],
+								"scale" : 0.5
+							},
+							"layout" : {
+								"x_anchor" : "right",
+                				"y_anchor" : "bottom",
+                				"x_offset" : -10,
+                				"y_offset" : 10,
+                				"absolute" : true
+							},
+							"children" : {
+								"up" : {
+									"type"   : "Image",
+									"data"   : {
+										"texture"  : "menu_btn_up"
+									}
+								},
+								"down" : {
+									"type"   : "Image",
+									"data"   : {
+										"texture"  : "menu_btn_down"
+									}
+								}
+							}
+		            	}
                     }
                 },
                 "hud" : {
