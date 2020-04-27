@@ -322,7 +322,7 @@ void GameMode::update(float timestep) {
 		net->flagButton(i, playerID, flag);
 
 		if (flag == 1) {
-			if (button->getPair()->jumpedOn()) {
+			if (button->getPair()->isJumpedOn()) {
 				CULog("Resolving button");
 				ship->resolveButton(i);
 				net->resolveButton(i);

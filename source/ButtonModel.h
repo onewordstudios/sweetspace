@@ -87,7 +87,7 @@ class ButtonModel {
 	/**
 	 * Returns whether any players are jumping on this button.
 	 */
-	bool jumpedOn() { return playersOn.any(); }
+	bool isJumpedOn() { return playersOn.any(); }
 
 	/**
 	 * Return a pointer to the pair of this button
