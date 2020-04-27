@@ -33,7 +33,7 @@ class DoorModel {
 	 * NEVER USE A CONSTRUCTOR WITH NEW. If you want to allocate a model on
 	 * the heap, use one of the static constructors instead.
 	 */
-	DoorModel(void) : angle(0), playersOn(0) {}
+	DoorModel(void) : angle(0), playersOn(0), isActive(false) {}
 
 	/**
 	 * Destroys this door, releasing all resources.
@@ -72,14 +72,9 @@ class DoorModel {
 	 */
 	virtual bool init(const float a) {
 		this->angle = a;
-		isActive = false;
+		isActive = true;
 		return true;
 	};
-
-	static std::shared_ptr<DoorModel> alloc() {
-		std::shared_ptr<DoorModel> result = std::make_shared<DoorModel>();
-		return (result->init() ? result : nullptr);
-	}
 
 #pragma mark -
 #pragma mark Accessors
@@ -113,13 +108,6 @@ class DoorModel {
 		std::bitset<MAX_PLAYERS> ids(playersOn);
 		return (int)ids.count();
 	}
-
-	/**
-	 * Sets whether the breach is active.
-	 *
-	 * @param value New breach active status.
-	 */
-	void setIsActive(bool value) { isActive = value; }
 
 	/**
 	 * Sets the current angle of the door in degrees.
@@ -173,9 +161,10 @@ class DoorModel {
 	/**
 	 * Resets this door.
 	 */
-	void clear() {
+	void reset() {
 		playersOn = 0;
 		height = 0;
+		isActive = false;
 	}
 };
 #endif /* __DOOR_MODEL_H__ */

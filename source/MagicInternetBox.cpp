@@ -239,8 +239,7 @@ void MagicInternetBox::resolveState(std::shared_ptr<ShipModel> state,
 		} else {
 			if (doors[i]->getIsActive()) {
 				CULog("Found closed door that should be open, id %d", i);
-				state->getDoors()[i]->setIsActive(false);
-				state->getDoors()[i]->clear();
+				state->getDoors()[i]->reset();
 			}
 		}
 

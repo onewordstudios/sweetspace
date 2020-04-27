@@ -34,9 +34,9 @@ class BreachModel {
 		  health(0),
 		  playerOn(false),
 		  player(0),
-		  isActive(false),
 		  needSpriteUpdate(false),
-		  timeCreated(0) {}
+		  timeCreated(0),
+		  isActive(false) {}
 
 	/**
 	 * Destroys this breach, releasing all resources.
@@ -60,7 +60,7 @@ class BreachModel {
 	 *
 	 * @return true if the obstacle is initialized properly, false otherwise.
 	 */
-	virtual bool init() { return init(0.0f, 0, 0); }
+	virtual bool init() { return init(0.0f, 0, 0, 0); }
 
 	/**
 	 * Initializes a new breach with the given angle
@@ -73,7 +73,7 @@ class BreachModel {
 	 *
 	 * @return true if the obstacle is initialized properly, false otherwise.
 	 */
-	virtual bool init(const float a) { return init(a, 0, 0); };
+	virtual bool init(const float a) { return init(a, 0, 0, 0); };
 
 	/**
 	 * Initializes a new breach with the given angle and max health
@@ -82,15 +82,35 @@ class BreachModel {
 	 * initializes all assets and makes the object read for use.  By separating
 	 * them, we allow ourselfs non-pointer references to complex objects.
 	 *
-	 * @param a   The angle at which the breach exists
+	 * @param  a   The angle at which the breach exists
+	 * @param  health  The initial health of the breach
+	 * @param  player  the player id
+	 * @param  time  the time this was created
 	 *
 	 * @return true if the obstacle is initialized properly, false otherwise.
 	 */
-	virtual bool init(const float a, const int b, const int c);
+	virtual bool init(const float a, const int health, const int player, const float time);
 
-	static std::shared_ptr<BreachModel> alloc() {
-		std::shared_ptr<BreachModel> result = std::make_shared<BreachModel>();
-		return (result->init() ? result : nullptr);
+	/**
+	 * Inits the breach upon recycling.
+	 * @param an
+	 * @param he
+	 * @param pl
+	 */
+	void init(float an, int pl, float time) { init(an, HEALTH_DEFAULT, pl, time); }
+
+	/**
+	 * Resets this breach
+	 *
+	 */
+	void reset() {
+		angle = 0;
+		health = 0;
+		playerOn = false;
+		player = -1;
+		needSpriteUpdate = false;
+		timeCreated = 0;
+		isActive = false;
 	}
 
 #pragma mark -
@@ -136,13 +156,6 @@ class BreachModel {
 	 * @param health New breach health.
 	 */
 	void setHealth(int value) { health = value; }
-
-	/**
-	 * Sets whether the breach is active.
-	 *
-	 * @param value New breach active status.
-	 */
-	void setIsActive(bool value) { isActive = value; }
 
 	/**
 	 * Decrements the current health of the breach by value.
@@ -200,26 +213,5 @@ class BreachModel {
 	 * @return time at which breach was created
 	 */
 	float getTimeCreated() { return timeCreated; }
-
-	/**
-	 * Resets the breach upon recycling.
-	 * @param an
-	 * @param he
-	 * @param pl
-	 */
-	void reset(float an, int he, int pl) {
-		setAngle(an);
-		health = he;
-		player = pl;
-		needSpriteUpdate = true;
-	}
-
-	/**
-	 * Resets the breach upon recycling.
-	 * @param an
-	 * @param he
-	 * @param pl
-	 */
-	void reset(float an, int pl) { reset(an, HEALTH_DEFAULT, pl); }
 };
 #endif /* __BREACH_MODEL_H__ */

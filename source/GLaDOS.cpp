@@ -87,14 +87,12 @@ void GLaDOS::placeObject(BuildingBlockModel::Object obj, float zeroAngle, vector
 		case BuildingBlockModel::Breach:
 			i = (int)distance(breachFree.begin(), find(breachFree.begin(), breachFree.end(), true));
 			breachFree.at(i) = false;
-			ship->getBreaches().at(i)->reset((float)obj.angle + zeroAngle, p);
-			ship->getBreaches().at(i)->setTimeCreated(ship->timer);
+			ship->createBreach((float)obj.angle + zeroAngle, p, i);
 			mib->createBreach((float)obj.angle + zeroAngle, p, i);
 			break;
 		case BuildingBlockModel::Door:
 			i = (int)distance(doorFree.begin(), find(doorFree.begin(), doorFree.end(), true));
-			ship->getDoors().at(i)->setAngle((float)obj.angle + zeroAngle);
-			ship->getDoors().at(i)->clear();
+			ship->createDoor((float)obj.angle + zeroAngle, i);
 			doorFree.at(i) = false;
 			mib->createDualTask((float)obj.angle + zeroAngle, -1, -1, i);
 			break;
@@ -127,6 +125,7 @@ void GLaDOS::placeObject(BuildingBlockModel::Object obj, float zeroAngle, vector
 			break;
 		}
 		case BuildingBlockModel::Roll:
+			break;
 			if (ship->getChallenge()) break;
 			((int)(rand() % 2 == 0)) ? ship->setRollDir(0) : ship->setRollDir(1);
 			if (p != playerID && ship->getDonuts().at(p)->getIsActive()) {
@@ -154,8 +153,7 @@ void GLaDOS::update(float dt) {
 		// check if health is zero or the assigned player is inactive
 		if (ship->getBreaches().at(i)->getHealth() == 0 ||
 			!ship->getDonuts().at(ship->getBreaches().at(i)->getPlayer())->getIsActive()) {
-			ship->getBreaches().at(i)->setHealth(0);
-			ship->getBreaches().at(i)->setIsActive(false);
+			ship->getBreaches().at(i)->reset();
 			breachFree.at(i) = true;
 		}
 	}
@@ -166,7 +164,7 @@ void GLaDOS::update(float dt) {
 			continue;
 		}
 		if (ship->getDoors().at(i)->resolvedAndRaised()) {
-			ship->getDoors().at(i)->setIsActive(false);
+			ship->getDoors().at(i)->reset();
 			doorFree.at(i) = true;
 		} else if (ship->getDoors().at(i)->resolved()) {
 			ship->getDoors().at(i)->raiseDoor();
