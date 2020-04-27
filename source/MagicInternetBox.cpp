@@ -183,7 +183,7 @@ void MagicInternetBox::syncState(std::shared_ptr<ShipModel> state) {
 	const auto& doors = state->getDoors();
 	data.push_back((uint8_t)doors.size());
 	for (unsigned int i = 0; i < doors.size(); i++) {
-		if (doors[i]->getAngle() == -1) {
+		if (!doors[i]->getIsActive()) {
 			data.push_back(0);
 			data.push_back(0);
 			data.push_back(0);
@@ -237,10 +237,9 @@ void MagicInternetBox::resolveState(std::shared_ptr<ShipModel> state,
 				state->createDoor(angle, (int)i);
 			}
 		} else {
-			if (doors[i]->getAngle() != -1.0f) {
+			if (doors[i]->getIsActive()) {
 				CULog("Found closed door that should be open, id %d", i);
-				state->getDoors()[i]->setAngle(-1);
-				state->getDoors()[i]->clear();
+				state->getDoors()[i]->reset();
 			}
 		}
 

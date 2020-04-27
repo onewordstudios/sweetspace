@@ -17,6 +17,7 @@ using namespace cugl;
 #pragma mark -
 #pragma mark Level Model
 
+const unsigned int DEFAULT_MAX_BUTTONS = 2;
 const unsigned int DEFAULT_MAX_BREACHES = 3;
 const unsigned int DEFAULT_MAX_DOORS = 1;
 const unsigned int DEFAULT_BASE_SIZE = 360;
@@ -205,6 +206,7 @@ class LevelModel : public Asset {
 	 * Creates a new, empty level.
 	 */
 	LevelModel(void) {
+		maxButtons = DEFAULT_MAX_BUTTONS;
 		maxBreaches = DEFAULT_MAX_BREACHES;
 		maxDoors = DEFAULT_MAX_DOORS;
 		baseShipSize = DEFAULT_BASE_SIZE;

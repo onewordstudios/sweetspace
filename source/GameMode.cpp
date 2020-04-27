@@ -226,7 +226,7 @@ void GameMode::update(float timestep) {
 	// Door Checks
 	for (int i = 0; i < ship->getDoors().size(); i++) {
 		if (ship->getDoors().at(i) == nullptr || ship->getDoors().at(i)->halfOpen() ||
-			ship->getDoors().at(i)->getAngle() < 0) {
+			!ship->getDoors().at(i)->getIsActive()) {
 			continue;
 		}
 		float diff = donutModel->getAngle() - ship->getDoors().at(i)->getAngle();
@@ -259,7 +259,7 @@ void GameMode::update(float timestep) {
 
 	for (int i = 0; i < ship->getBreaches().size(); i++) {
 		// this should be adjusted based on the level and number of players
-		if (ship->getBreaches().at(i)->getAngle() >= 0 &&
+		if (ship->getBreaches().at(i)->getIsActive() &&
 			trunc(ship->getBreaches().at(i)->getTimeCreated()) - trunc(ship->timer) >
 				BREACH_HEALTH_GRACE_PERIOD) {
 			ship->decHealth(BREACH_HEALTH_PENALTY);

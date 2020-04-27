@@ -1,4 +1,4 @@
-#ifndef __BUTTON_MODEL_H__
+﻿#ifndef __BUTTON_MODEL_H__
 #define __BUTTON_MODEL_H__
 #include <cugl/cugl.h>
 
