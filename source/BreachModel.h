@@ -52,7 +52,7 @@ class BreachModel {
 	void dispose();
 
 	/**
-	 * Initializes a new breach and set to be inactive.
+	 * Initializes a new breach.
 	 *
 	 * An initializer does the real work that the constructor does not.  It
 	 * initializes all assets and makes the object read for use.  By separating
