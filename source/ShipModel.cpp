@@ -85,7 +85,7 @@ bool ShipModel::createAllTask(int data) {
 
 bool ShipModel::failAllTask() {
 	for (int i = 0; i < donuts.size(); i++) {
-		float angle = (float)(rand() % (int)(getSize()));
+		float angle;
 		bool goodAngle = false;
 		while (!goodAngle) {
 			angle = (float)(rand() % (int)(getSize()));
@@ -94,6 +94,8 @@ bool ShipModel::failAllTask() {
 				float diff = shipSize / 2 - abs(abs(breachAngle - angle) - shipSize / 2);
 				if (breachAngle == -1 || diff > 15) {
 					goodAngle = true;
+				} else {
+					goodAngle = false;
 				}
 			}
 			for (unsigned int k = 0; k < doors.size(); k++) {
@@ -101,6 +103,8 @@ bool ShipModel::failAllTask() {
 				float diff = shipSize / 2 - abs(abs(doorAngle - angle) - shipSize / 2);
 				if (doorAngle == -1 || diff > 15) {
 					goodAngle = true;
+				} else {
+					goodAngle = false;
 				}
 			}
 		}
