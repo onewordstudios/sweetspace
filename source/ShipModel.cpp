@@ -104,7 +104,7 @@ bool ShipModel::flagButton(int id, int player, int flag) {
 
 void ShipModel::resolveButton(int id) {
 	auto btn = buttons.at(id);
-	if (btn == nullptr || btn->getAngle() == -1 || btn->isResolved()) {
+	if (btn == nullptr || !btn->getIsActive() || btn->isResolved()) {
 		return;
 	}
 	btn->getPair()->resolve();
