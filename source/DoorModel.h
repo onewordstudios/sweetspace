@@ -16,6 +16,8 @@ class DoorModel {
    private:
 	/** The height of the door */
 	int height = 0;
+	/** Whether or not this object is active */
+	bool isActive;
 
    protected:
 	/** The angle at which the door exists */
@@ -31,7 +33,7 @@ class DoorModel {
 	 * NEVER USE A CONSTRUCTOR WITH NEW. If you want to allocate a model on
 	 * the heap, use one of the static constructors instead.
 	 */
-	DoorModel(void) : angle(0), playersOn(0) {}
+	DoorModel(void) : angle(0), playersOn(0), isActive(false) {}
 
 	/**
 	 * Destroys this door, releasing all resources.
@@ -47,7 +49,7 @@ class DoorModel {
 	void dispose();
 
 	/**
-	 * Initializes a new door at an unassigned angle (-1).
+	 * Initializes a new door.
 	 *
 	 * An initializer does the real work that the constructor does not.  It
 	 * initializes all assets and makes the object read for use.  By separating
@@ -55,7 +57,7 @@ class DoorModel {
 	 *
 	 * @return true if the obstacle is initialized properly, false otherwise.
 	 */
-	virtual bool init() { return init(-1.0f); }
+	virtual bool init() { return init(0.0f); }
 
 	/**
 	 * Initializes a new door with the given angle
@@ -70,13 +72,9 @@ class DoorModel {
 	 */
 	virtual bool init(const float a) {
 		this->angle = a;
+		isActive = true;
 		return true;
 	};
-
-	static std::shared_ptr<DoorModel> alloc() {
-		std::shared_ptr<DoorModel> result = std::make_shared<DoorModel>();
-		return (result->init() ? result : nullptr);
-	}
 
 #pragma mark -
 #pragma mark Accessors
@@ -86,6 +84,13 @@ class DoorModel {
 	 * @return the current angle of the door in degrees.
 	 */
 	float getAngle() { return angle; }
+
+	/**
+	 * Returns whether the breach is currently active.
+	 *
+	 * @return whether the breach is currently active.
+	 */
+	bool getIsActive() { return isActive; }
 
 	/**
 	 * Returns the current height of the door.
@@ -156,9 +161,10 @@ class DoorModel {
 	/**
 	 * Resets this door.
 	 */
-	void clear() {
+	void reset() {
 		playersOn = 0;
 		height = 0;
+		isActive = false;
 	}
 };
 #endif /* __DOOR_MODEL_H__ */
