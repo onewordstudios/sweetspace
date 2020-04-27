@@ -53,20 +53,35 @@ void ButtonNode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch, const Mat
 		}
 
 		if (justJumpedOn) {
+			// Begin depression animation
 			currentFrame = 1;
-			baseNode->setTexture(btnBaseDown);
-			bodyNode->setTexture(btnDown);
+		} else if (!buttonModel->jumpedOn() && bodyNode->getPositionY() != 0 && currentFrame == 0) {
+			// No player on button, reverse depression
+			currentFrame = MAX_FRAMES - 1;
 		}
 		if (currentFrame != 0) {
-			if (currentFrame == MAX_FRAMES) {
-				currentFrame = 0;
-			} else {
-				if (currentFrame >= BEGIN_FRAME) {
-					bodyNode->setPositionY(Tween::linear(0, DEPRESSION_AMOUNT,
-														 currentFrame - BEGIN_FRAME,
-														 MAX_FRAMES - BEGIN_FRAME));
+			// In the middle of animating
+			if (currentFrame >= BEGIN_FRAME) {
+				bodyNode->setPositionY(Tween::linear(
+					0, DEPRESSION_AMOUNT, currentFrame - BEGIN_FRAME, MAX_FRAMES - BEGIN_FRAME));
+			}
+			if (!buttonModel->jumpedOn()) {
+				// No player on button, reverse depression
+				currentFrame -= 1;
+				if (currentFrame <= BEGIN_FRAME) {
+					baseNode->setTexture(btnBaseUp);
+					bodyNode->setTexture(btnUp);
 				}
+			} else {
+				// Player is still on button, continue
 				currentFrame += 1;
+				if (currentFrame == BEGIN_FRAME) {
+					baseNode->setTexture(btnBaseDown);
+					bodyNode->setTexture(btnDown);
+				} else if (currentFrame == MAX_FRAMES) {
+					// End of animation
+					currentFrame = 0;
+				}
 			}
 		}
 	} else {
@@ -77,6 +92,5 @@ void ButtonNode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch, const Mat
 		resetAnimation();
 	}
 	prevJumpedOn = buttonModel->jumpedOn();
-	prevResolved = buttonModel->getResolved();
 	Node::draw(batch, transform, tint);
 }

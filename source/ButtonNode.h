@@ -20,8 +20,6 @@ class ButtonNode : public cugl::Node {
 	int currentFrame;
 	/** Value of jumped on from previous frame */
 	bool prevJumpedOn;
-	/** Value of resolved from previous frame */
-	bool prevResolved;
 
 	/** Texture for activated button base */
 	std::shared_ptr<cugl::Texture> btnBaseDown;
