@@ -15,7 +15,6 @@ using namespace std;
  */
 GLaDOS::GLaDOS()
 	: active(false),
-	  numEvents(0),
 	  playerID(0),
 	  mib(nullptr),
 	  fail(false),
@@ -51,20 +50,17 @@ bool GLaDOS::init(std::shared_ptr<ShipModel> ship, std::shared_ptr<LevelModel> l
 	maxEvents = level->getMaxBreaches();
 	maxDoors = min(level->getMaxDoors(), mib->getNumPlayers() * 2 - 1);
 	maxButtons = level->getMaxButtons();
-	buttonFree.resize(maxButtons);
-	breachFree.resize(maxEvents);
-	doorFree.resize(maxDoors);
 	blocks = level->getBlocks();
 	events = level->getEvents();
 
 	for (int i = 0; i < maxEvents; i++) {
-		breachFree.at(i) = true;
+		breachFree.push(i);
 	}
 	for (int i = 0; i < maxDoors; i++) {
-		doorFree.at(i) = true;
+		doorFree.push(i);
 	}
 	for (int i = 0; i < maxButtons; i++) {
-		buttonFree.at(i) = true;
+		buttonFree.push(i);
 	}
 	fail = false;
 	// Set random seed based on time
@@ -85,25 +81,22 @@ void GLaDOS::placeObject(BuildingBlockModel::Object obj, float zeroAngle, vector
 	int p = obj.player == -1 ? (int)(rand() % ship->getDonuts().size()) : ids.at(obj.player);
 	switch (obj.type) {
 		case BuildingBlockModel::Breach:
-			i = (int)distance(breachFree.begin(), find(breachFree.begin(), breachFree.end(), true));
-			breachFree.at(i) = false;
-			ship->getBreaches().at(i)->reset((float)obj.angle + zeroAngle, p);
-			ship->getBreaches().at(i)->setTimeCreated(ship->timer);
+			i = breachFree.front();
+			breachFree.pop();
+			ship->createBreach((float)obj.angle + zeroAngle, p, i);
 			mib->createBreach((float)obj.angle + zeroAngle, p, i);
 			break;
 		case BuildingBlockModel::Door:
-			i = (int)distance(doorFree.begin(), find(doorFree.begin(), doorFree.end(), true));
-			ship->getDoors().at(i)->setAngle((float)obj.angle + zeroAngle);
-			ship->getDoors().at(i)->clear();
-			doorFree.at(i) = false;
+			i = doorFree.front();
+			doorFree.pop();
+			ship->createDoor((float)obj.angle + zeroAngle, i);
 			mib->createDualTask((float)obj.angle + zeroAngle, -1, -1, i);
 			break;
 		case BuildingBlockModel::Button: {
-			i = (int)distance(buttonFree.begin(), find(buttonFree.begin(), buttonFree.end(), true));
-			buttonFree.at(i) = false;
-			int j =
-				(int)distance(buttonFree.begin(), find(buttonFree.begin(), buttonFree.end(), true));
-			buttonFree.at(j) = false;
+			i = buttonFree.front();
+			buttonFree.pop();
+			int j = buttonFree.front();
+			buttonFree.pop();
 
 			std::shared_ptr<ButtonModel> btn1 = ship->getButtons().at(i);
 			std::shared_ptr<ButtonModel> btn2 = ship->getButtons().at(j);
@@ -154,9 +147,8 @@ void GLaDOS::update(float dt) {
 		// check if health is zero or the assigned player is inactive
 		if (ship->getBreaches().at(i)->getHealth() == 0 ||
 			!ship->getDonuts().at(ship->getBreaches().at(i)->getPlayer())->getIsActive()) {
-			ship->getBreaches().at(i)->setHealth(0);
-			ship->getBreaches().at(i)->setAngle(-1);
-			breachFree.at(i) = true;
+			ship->getBreaches().at(i)->reset();
+			breachFree.push(i);
 		}
 	}
 
@@ -166,8 +158,8 @@ void GLaDOS::update(float dt) {
 			continue;
 		}
 		if (ship->getDoors().at(i)->resolvedAndRaised()) {
-			ship->getDoors().at(i)->setAngle(-1);
-			doorFree.at(i) = true;
+			ship->getDoors().at(i)->reset();
+			doorFree.push(i);
 		} else if (ship->getDoors().at(i)->resolved()) {
 			ship->getDoors().at(i)->raiseDoor();
 		}
@@ -178,10 +170,10 @@ void GLaDOS::update(float dt) {
 			continue;
 		}
 		if (ship->getButtons().at(i)->isResolved()) {
-			ship->getButtons().at(i)->setAngle(-1);
-			ship->getButtons().at(i)->getPair()->setAngle(-1);
-			buttonFree.at(ship->getButtons().at(i)->getPairID()) = true;
-			buttonFree.at(i) = true;
+			ship->getButtons().at(i)->setIsActive(false);
+			ship->getButtons().at(i)->getPair()->setIsActive(false);
+			buttonFree.push(ship->getButtons().at(i)->getPairID());
+			buttonFree.push(i);
 			// mib->flagButton(i, (int)playerID, 0);
 			ship->getButtons().at(i)->setJumpedOn(false);
 			ship->getButtons().at(i)->getPair()->setJumpedOn(false);
@@ -206,10 +198,6 @@ void GLaDOS::update(float dt) {
 			}
 		}
 	}
-
-	int numButtonsFree = (int)count(buttonFree.begin(), buttonFree.end(), true);
-	int numBreachesFree = (int)count(breachFree.begin(), breachFree.end(), true);
-	int numDoorsFree = (int)count(doorFree.begin(), doorFree.end(), true);
 	for (int i = 0; i < readyQueue.size(); i++) {
 		// assign the relative player ids
 		vector<int> ids;
@@ -226,8 +214,8 @@ void GLaDOS::update(float dt) {
 		int buttonsNeeded = block->getButtonsNeeded();
 
 		// If we don't have enough resources for this event, they're probably already fucked
-		if (doorsNeeded > numDoorsFree || breachesNeeded > numBreachesFree ||
-			buttonsNeeded > numButtonsFree) {
+		if (doorsNeeded > doorFree.size() || breachesNeeded > breachFree.size() ||
+			buttonsNeeded > buttonFree.size()) {
 			readyQueue.erase(readyQueue.begin() + i);
 			i--;
 			continue;
@@ -272,7 +260,7 @@ void GLaDOS::update(float dt) {
 		for (unsigned int k = 0; k < ship->getBreaches().size(); k++) {
 			float breachAngle = ship->getBreaches()[k]->getAngle();
 			float diff = ship->getSize() / 2 - abs(abs(breachAngle - angle) - ship->getSize() / 2);
-			if (breachAngle != -1 && diff < (float)block->getRange() / 2) {
+			if (ship->getBreaches()[k]->getIsActive() && diff < (float)block->getRange() / 2) {
 				goodAngle = false;
 				break;
 			}
@@ -281,7 +269,7 @@ void GLaDOS::update(float dt) {
 		for (unsigned int k = 0; k < ship->getDoors().size(); k++) {
 			float doorAngle = ship->getDoors()[k]->getAngle();
 			float diff = ship->getSize() / 2 - abs(abs(doorAngle - angle) - ship->getSize() / 2);
-			if (doorAngle != -1 && diff < (float)block->getRange() / 2) {
+			if (ship->getDoors()[k]->getIsActive() && diff < (float)block->getRange() / 2) {
 				goodAngle = false;
 				break;
 			}
@@ -300,15 +288,4 @@ void GLaDOS::update(float dt) {
 		mib->failAllTask();
 		fail = false;
 	}
-}
-
-/**
- * Clears all events
- */
-void GLaDOS::clear() {
-	for (int i = 0; i < maxEvents; i++) {
-		ship->getBreaches().at(i) = nullptr;
-		breachFree.at(i) = true;
-	}
-	numEvents = 0;
 }

@@ -1,4 +1,4 @@
-#ifndef __BUTTON_MODEL_H__
+﻿#ifndef __BUTTON_MODEL_H__
 #define __BUTTON_MODEL_H__
 #include <cugl/cugl.h>
 
@@ -10,6 +10,8 @@ class ButtonModel {
    private:
 	/** The height of the button */
 	int height = 0;
+	/** Whether or not this object is active */
+	bool isActive;
 
    protected:
 	/** The angle at which the button exists */
@@ -29,7 +31,7 @@ class ButtonModel {
 	 * NEVER USE A CONSTRUCTOR WITH NEW. If you want to allocate a model on
 	 * the heap, use one of the static constructors instead.
 	 */
-	ButtonModel(void) : angle(-1), playersOn(0), jumped(false), pairId(-1) {}
+	ButtonModel(void) : angle(0), playersOn(0), jumped(false), pairId(-1), isActive(false) {}
 
 	/**
 	 * Destroys this button, releasing all resources.
@@ -45,7 +47,7 @@ class ButtonModel {
 	void dispose();
 
 	/**
-	 * Initializes a new button at an unassigned angle (-1).
+	 * Initializes a new button.
 	 *
 	 * An initializer does the real work that the constructor does not.  It
 	 * initializes all assets and makes the object read for use.  By separating
@@ -53,7 +55,7 @@ class ButtonModel {
 	 *
 	 * @return true if the obstacle is initialized properly, false otherwise.
 	 */
-	virtual bool init() { return init(-1.0f); }
+	virtual bool init() { return init(0.0f); }
 
 	/**
 	 * Initializes a new button with the given angle
@@ -68,6 +70,7 @@ class ButtonModel {
 	 */
 	virtual bool init(const float a) {
 		this->angle = a;
+		isActive = false;
 		return true;
 	};
 
@@ -108,6 +111,20 @@ class ButtonModel {
 		std::bitset<PLAYERS> ids(playersOn);
 		return (int)ids.count();
 	}
+
+	/**
+	 * Returns whether the breach is currently active.
+	 *
+	 * @return whether the breach is currently active.
+	 */
+	bool getIsActive() { return isActive; }
+
+	/**
+	 * Sets whether the breach is active.
+	 *
+	 * @param value New breach active status.
+	 */
+	void setIsActive(bool value) { isActive = value; }
 
 	/**
 	 * Sets the current angle of the button in degrees.
