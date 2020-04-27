@@ -25,6 +25,7 @@ constexpr int BEGIN_FRAME = 27;
 void ButtonNode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch, const Mat4& transform,
 					  Color4 tint) {
 	Vec2 buttonPos;
+	bool justJumpedOn = buttonModel->isJumpedOn() && !prevJumpedOn;
 	if (buttonModel->getIsActive() || currentFrame != 0 || justJumpedOn) {
 		// Button is currently active
 		float onScreenAngle = buttonModel->getAngle() - playerDonutModel->getAngle();
@@ -56,7 +57,7 @@ void ButtonNode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch, const Mat
 			currentFrame = 1;
 			baseNode->setTexture(btnBaseDown);
 			bodyNode->setTexture(btnDown);
-		} else if (!buttonModel->jumpedOn()) {
+		} else if (!buttonModel->isJumpedOn()) {
 			baseNode->setTexture(btnBaseUp);
 			bodyNode->setTexture(btnUp);
 			if (bodyNode->getPositionY() != 0 && currentFrame == 0) {
@@ -70,7 +71,7 @@ void ButtonNode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch, const Mat
 				bodyNode->setPositionY(Tween::linear(
 					0, DEPRESSION_AMOUNT, currentFrame - BEGIN_FRAME, MAX_FRAMES - BEGIN_FRAME));
 			}
-			if (!buttonModel->jumpedOn()) {
+			if (!buttonModel->isJumpedOn()) {
 				// No player on button, reverse depression
 				currentFrame -= 1;
 			} else {
@@ -89,6 +90,6 @@ void ButtonNode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch, const Mat
 		isShown = false;
 		resetAnimation();
 	}
-	prevJumpedOn = buttonModel->jumpedOn();
+	prevJumpedOn = buttonModel->isJumpedOn();
 	Node::draw(batch, transform, tint);
 }
