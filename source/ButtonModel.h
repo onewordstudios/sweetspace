@@ -20,6 +20,8 @@ class ButtonModel {
 	int pairID;
 	/** Whether this button is resolved */
 	bool resolved;
+	/** Whether this model is active */
+	bool isActive;
 
    public:
 #pragma mark Constructors
@@ -29,7 +31,7 @@ class ButtonModel {
 	 * Do not call this constructor using new. These models should exclusively be allocated into an
 	 * object pool by {@code ShipModel} and accessed from there.
 	 */
-	ButtonModel(void) : angle(-1), pairID(-1), resolved(false) {}
+	ButtonModel(void) : angle(-1), pairID(-1), resolved(false), isActive(false) {}
 
 	/**
 	 * Initializes a new button with the given angle and pair.
@@ -44,6 +46,9 @@ class ButtonModel {
 
 #pragma mark -
 #pragma mark Accessors
+	/** Returns whether this model is active */
+	bool getIsActive() { return isActive; }
+
 	/**
 	 * Returns the current angle of the button in degrees.
 	 */

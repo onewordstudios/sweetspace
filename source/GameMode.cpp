@@ -308,7 +308,7 @@ void GameMode::update(float timestep) {
 	for (int i = 0; i < ship->getButtons().size(); i++) {
 		auto button = ship->getButtons().at(i);
 
-		if (button == nullptr || button->getAngle() < 0) {
+		if (button == nullptr || !button->getIsActive()) {
 			continue;
 		}
 

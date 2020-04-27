@@ -7,6 +7,7 @@ bool ButtonModel::init(const float a, std::shared_ptr<ButtonModel> pair, int pai
 	angle = a;
 	pairButton = pair;
 	this->pairID = pairID;
+	isActive = true;
 	return true;
 };
 
@@ -22,4 +23,5 @@ void ButtonModel::clear() {
 	height = 0;
 	resolved = false;
 	angle = -1;
+	isActive = false;
 }
