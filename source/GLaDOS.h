@@ -20,9 +20,6 @@ class GLaDOS {
 	/** Whether or not this input is active */
 	bool active;
 
-	/** Current number of breaches on ship */
-	unsigned int numEvents;
-
 	/** Current player ID */
 	unsigned int playerID;
 
@@ -43,19 +40,18 @@ class GLaDOS {
 	/** The maximum number of buttons on ship at any one time. This will probably need to scale with
 	 * the number of players*/
 	unsigned int maxButtons;
-	/** Array recording which breaches are free or not. */
-	vector<bool> breachFree;
-	/** Array recording which doors are free or not. */
-	vector<bool> doorFree;
+	/** queue recording which breaches are free. */
+	queue<int> breachFree;
+	/** queue recording which doors are free. */
+	queue<int> doorFree;
+	/** queue recording which buttons are free. */
+	queue<int> buttonFree;
 	/** List of building blocks for this level*/
 	map<std::string, std::shared_ptr<BuildingBlockModel>> blocks;
 	/** List of events for this level*/
 	vector<std::shared_ptr<EventModel>> events;
 	/** List of events that are ready to be executed*/
 	vector<std::shared_ptr<EventModel>> readyQueue;
-
-	/** Array recording which doors are free or not. */
-	vector<bool> buttonFree;
 
    public:
 #pragma mark -
@@ -115,11 +111,6 @@ class GLaDOS {
 	 * This method is used to generate and manage current events
 	 */
 	void update(float dt);
-
-	/**
-	 * Clears all events
-	 */
-	void clear();
 
 #pragma mark -
 #pragma mark Accessors

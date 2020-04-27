@@ -1,4 +1,4 @@
-#ifndef __BUTTON_MODEL_H__
+﻿#ifndef __BUTTON_MODEL_H__
 #define __BUTTON_MODEL_H__
 #include <cugl/cugl.h>
 
@@ -20,6 +20,8 @@ class ButtonModel {
 	int pairID;
 	/** Whether this button is resolved */
 	bool resolved;
+	/** Whether this model is active */
+	bool isActive;
 
    public:
 #pragma mark Constructors
@@ -29,7 +31,7 @@ class ButtonModel {
 	 * Do not call this constructor using new. These models should exclusively be allocated into an
 	 * object pool by {@code ShipModel} and accessed from there.
 	 */
-	ButtonModel(void) : angle(-1), pairID(-1), resolved(false) {}
+	ButtonModel(void) : angle(-1), pairID(-1), resolved(false), isActive(false) {}
 
 	/**
 	 * Initializes a new button with the given angle and pair.
@@ -44,6 +46,9 @@ class ButtonModel {
 
 #pragma mark -
 #pragma mark Accessors
+	/** Returns whether this model is active */
+	bool getIsActive() { return isActive; }
+
 	/**
 	 * Returns the current angle of the button in degrees.
 	 */
@@ -82,7 +87,7 @@ class ButtonModel {
 	/**
 	 * Returns whether any players are jumping on this button.
 	 */
-	bool jumpedOn() { return playersOn.any(); }
+	bool isJumpedOn() { return playersOn.any(); }
 
 	/**
 	 * Return a pointer to the pair of this button

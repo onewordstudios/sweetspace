@@ -25,8 +25,7 @@ constexpr int BEGIN_FRAME = 27;
 void ButtonNode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch, const Mat4& transform,
 					  Color4 tint) {
 	Vec2 buttonPos;
-	bool justJumpedOn = buttonModel->jumpedOn() && !prevJumpedOn;
-	if (buttonModel->getAngle() >= 0 || currentFrame != 0 || justJumpedOn) {
+	if (buttonModel->getIsActive() || currentFrame != 0 || justJumpedOn) {
 		// Button is currently active
 		float onScreenAngle = buttonModel->getAngle() - playerDonutModel->getAngle();
 		onScreenAngle = onScreenAngle >= 0 ? onScreenAngle : shipSize + onScreenAngle;

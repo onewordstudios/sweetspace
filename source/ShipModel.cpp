@@ -17,12 +17,12 @@ bool ShipModel::init(unsigned int numPlayers, unsigned int numBreaches, unsigned
 
 	// Instantiate breach models
 	for (unsigned int i = 0; i < numBreaches; i++) {
-		breaches.push_back(BreachModel::alloc());
+		breaches.push_back(std::make_shared<BreachModel>());
 	}
 
 	// Instantiate door models
 	for (unsigned int i = 0; i < numDoors; i++) {
-		doors.push_back(DoorModel::alloc());
+		doors.push_back(std::make_shared<DoorModel>());
 	}
 
 	// Instantiate button models
@@ -43,18 +43,17 @@ bool ShipModel::init(unsigned int numPlayers, unsigned int numBreaches, unsigned
 }
 
 bool ShipModel::createBreach(float angle, int player, int id) {
-	breaches.at(id)->reset(angle, player);
+	breaches.at(id)->init(angle, player, timer);
 	return true;
 }
 
 bool ShipModel::createBreach(float angle, int health, int player, int id) {
-	breaches.at(id)->reset(angle, health, player);
+	breaches.at(id)->init(angle, health, player, timer);
 	return true;
 }
 
 bool ShipModel::createDoor(float angle, int id) {
-	doors.at(id)->clear();
-	doors.at(id)->setAngle(angle);
+	doors.at(id)->init(angle);
 	return true;
 }
 
@@ -71,8 +70,6 @@ bool ShipModel::flagDoor(int id, int player, int flag) {
 	}
 	return true;
 }
-
-bool ShipModel::closeDoor(int id) { return false; }
 
 bool ShipModel::createAllTask(int data) {
 	setRollDir(data);
@@ -107,7 +104,7 @@ bool ShipModel::flagButton(int id, int player, int flag) {
 
 void ShipModel::resolveButton(int id) {
 	auto btn = buttons.at(id);
-	if (btn == nullptr || btn->getAngle() == -1 || btn->isResolved()) {
+	if (btn == nullptr || !btn->getIsActive() || btn->isResolved()) {
 		return;
 	}
 	btn->getPair()->resolve();
