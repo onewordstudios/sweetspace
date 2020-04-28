@@ -18,7 +18,7 @@ constexpr float BUTTON_OFFSET = 10.0f;
 void ButtonNode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch, const Mat4& transform,
 					  Color4 tint) {
 	Vec2 buttonPos;
-	if (buttonModel->getAngle() >= 0) {
+	if (buttonModel->getIsActive()) {
 		// Button is currently active
 		float onScreenAngle = buttonModel->getAngle() - playerDonutModel->getAngle();
 		onScreenAngle = onScreenAngle >= 0 ? onScreenAngle : shipSize + onScreenAngle;
@@ -47,7 +47,7 @@ void ButtonNode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch, const Mat
 			isShown = false;
 		}
 
-		if (buttonModel->jumpedOn()) {
+		if (buttonModel->isJumpedOn()) {
 			if (buttonType == 0) {
 				setTexture(getButtonBaseDown());
 			} else {

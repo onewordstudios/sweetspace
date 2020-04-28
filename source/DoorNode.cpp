@@ -20,7 +20,7 @@ constexpr int TWO_PLAYER_FRAME = 31;
 void DoorNode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch, const Mat4& transform,
 					Color4 tint) {
 	Vec2 doorPos;
-	if (doorModel->getAngle() >= 0) {
+	if (doorModel->getIsActive()) {
 		// Door is currently active
 		float onScreenAngle = doorModel->getAngle() - playerDonutModel->getAngle();
 		onScreenAngle = onScreenAngle >= 0 ? onScreenAngle : shipSize + onScreenAngle;

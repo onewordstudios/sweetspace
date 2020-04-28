@@ -1,11 +1,20 @@
 #ifndef SWEETSPACE_DONUTNODE_H
 #define SWEETSPACE_DONUTNODE_H
 
-#include <cugl/2d/CUPolygonNode.h>
+#include <cugl/2d/CUNode.h>
 
 #include "DonutModel.h"
 
-class DonutNode : public cugl::PolygonNode {
+class DonutNode : public cugl::Node {
+   public:
+	enum FaceState {
+		/** When donut is still or rolling */
+		Idle,
+		/** When donut collides with mismatched breach */
+		Dizzy,
+		/** When donut is fixing own breach or collides with door */
+		Working
+	};
 #pragma mark Values
    protected:
 	std::shared_ptr<DonutModel> donutModel;
@@ -15,6 +24,11 @@ class DonutNode : public cugl::PolygonNode {
 	float shipSize;
 	/** Whether the breach is being shown right now */
 	bool isShown;
+
+	/** Reference to child node which is responsible for rotation */
+	std::shared_ptr<cugl::Node> rotationNode;
+	/** Reference to node of donut body */
+	std::shared_ptr<cugl::PolygonNode> bodyNode;
 
    public:
 #pragma mark -
@@ -27,7 +41,7 @@ class DonutNode : public cugl::PolygonNode {
 	 * NEVER USE A CONSTRUCTOR WITH NEW. If you want to allocate an object on
 	 * the heap, use one of the static constructors instead.
 	 */
-	DonutNode() : cugl::PolygonNode() {}
+	DonutNode() : cugl::Node() {}
 
 	/**
 	 * Releases all resources allocated with this node.
@@ -38,33 +52,49 @@ class DonutNode : public cugl::PolygonNode {
 	 */
 	~DonutNode() { dispose(); }
 
-#pragma mark -
 	/**
-	 * Returns a textured polygon from a Texture object.
-	 *
-	 * After creation, the polygon will be a rectangle. The vertices of this
-	 * polygon will be the corners of the texture.
-	 *
-	 * @param texture   A shared pointer to a Texture object.
-	 *
-	 * @return a textured polygon from a Texture object.
+	 * Init child nodes of donut node
 	 */
-	static std::shared_ptr<DonutNode> allocWithTexture(
-		const std::shared_ptr<cugl::Texture> &texture) {
-		std::shared_ptr<DonutNode> node = std::make_shared<DonutNode>();
-		return (node->initWithTexture(texture) ? node : nullptr);
+	void initChildren(const std::shared_ptr<cugl::Texture> &bodyTexture) {
+		rotationNode = cugl::Node::alloc();
+		bodyNode = cugl::PolygonNode::allocWithTexture(bodyTexture);
+		bodyNode->setAnchor(cugl::Vec2::ANCHOR_CENTER);
+		bodyNode->setPosition(0, 0);
+		rotationNode->addChild(bodyNode);
+		addChild(rotationNode);
 	}
-
+#pragma mark -
+#pragma mark Getters Setters
+	/**
+	 * Sets self's model to given parameter
+	 * @param model
+	 */
 	void setModel(std::shared_ptr<DonutModel> model) { donutModel = model; }
 
+	/**
+	 * Sets player's donut model to given parameter
+	 * @param model
+	 */
 	void setDonutModel(std::shared_ptr<DonutModel> model) { playerDonutModel = model; }
 
+	/**
+	 * Store size of ship level
+	 * @param f
+	 */
 	void setShipSize(float f) { shipSize = f; }
 
 	std::shared_ptr<DonutModel> getModel() { return donutModel; }
+#pragma mark -
+#pragma mark Draw Cycle
+	/**
+	 * Handles jumping-related animation each frame. Does NOT re-position node
+	 */
+	void animateJumping();
 
-	void draw(const shared_ptr<cugl::SpriteBatch> &batch, const cugl::Mat4 &transform,
-			  cugl::Color4 tint) override;
+	/**
+	 * Handles facial expression animation each frame
+	 */
+	void animateFacialExpression();
 };
 
 #endif // SWEETSPACE_DONUTNODE_H
