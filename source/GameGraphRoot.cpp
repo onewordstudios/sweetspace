@@ -648,6 +648,5 @@ void GameGraphRoot::setNeedlePercentage(float percentage) {
 std::string GameGraphRoot::positionText() {
 	stringstream ss;
 	ss << "Time Left: " << trunc(ship->timer);
-	ss << " Position: " << ship->getDonuts().at(playerID)->getAngle();
 	return ss.str();
 }

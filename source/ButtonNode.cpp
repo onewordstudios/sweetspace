@@ -47,7 +47,7 @@ void ButtonNode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch, const Mat
 			isShown = false;
 		}
 
-		if (buttonModel->jumpedOn()) {
+		if (buttonModel->isJumpedOn()) {
 			if (buttonType == 0) {
 				setTexture(getButtonBaseDown());
 			} else {

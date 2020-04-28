@@ -379,5 +379,12 @@ class ShipModel {
 	 * @param flag   the flag to set (on or off, 1 or 0)
 	 */
 	bool flagButton(int id, int player, int flag);
+
+	/**
+	 * Resolve a button pair
+	 *
+	 * @param id The ID of one of the two buttons
+	 */
+	void resolveButton(int id);
 };
 #endif /* __SHIP_MODEL_H__ */

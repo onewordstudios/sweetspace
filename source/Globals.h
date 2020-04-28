@@ -32,7 +32,7 @@ constexpr float DOOR_WIDTH = 10.0f; // NOLINT
 constexpr float BREACH_WIDTH = 6.0f; // NOLINT
 
 /** The Angle in degrees for which a door can be activated*/
-constexpr float BUTTON_ACTIVE_ANGLE = 15.0f;
+constexpr float BUTTON_ACTIVE_ANGLE = 15.0f; // NOLINT
 
 /** The min angle in degrees for which two buttons can be placed*/
 constexpr int BUTTON_DIST = 100; // NOLINT
@@ -78,7 +78,7 @@ constexpr float SEG_SIZE = 45 * PI_180; // NOLINT
 constexpr float SEG_CUTOFF_ANGLE = 90 * PI_180; // NOLINT
 
 /** How much the player count needle is offset by */
-constexpr float NEEDLE_OFFSET = 0.9f;
+constexpr float NEEDLE_OFFSET = 0.9f; // NOLINT
 
 #pragma endregion
 } // namespace globals
