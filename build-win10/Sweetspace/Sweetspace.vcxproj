@@ -199,6 +199,7 @@
     <ClInclude Include="..\..\source\ExternalDonutModel.h" />
     <ClInclude Include="..\..\source\DoorModel.h" />
     <ClInclude Include="..\..\source\DoorNode.h" />
+    <ClInclude Include="..\..\source\ExternalDonutNode.h" />
     <ClInclude Include="..\..\source\GameGraphRoot.h" />
     <ClInclude Include="..\..\source\GameMode.h" />
     <ClInclude Include="..\..\source\GLaDOS.h" />
@@ -212,6 +213,7 @@
     <ClInclude Include="..\..\source\MagicInternetBox.h" />
     <ClInclude Include="..\..\source\MainMenuMode.h" />
     <ClInclude Include="..\..\source\PlayerDonutModel.h" />
+    <ClInclude Include="..\..\source\PlayerDonutNode.h" />
     <ClInclude Include="..\..\source\ShipModel.h" />
     <ClInclude Include="..\..\source\Sweetspace.h" />
     <ClInclude Include="..\..\source\Tween.h" />
@@ -228,6 +230,7 @@
     <ClCompile Include="..\..\source\ExternalDonutModel.cpp" />
     <ClCompile Include="..\..\source\DoorModel.cpp" />
     <ClCompile Include="..\..\source\DoorNode.cpp" />
+    <ClCompile Include="..\..\source\ExternalDonutNode.cpp" />
     <ClCompile Include="..\..\source\GameGraphRoot.cpp" />
     <ClCompile Include="..\..\source\GLaDOS.cpp" />
     <ClCompile Include="..\..\source\HealthNode.cpp" />
@@ -239,6 +242,7 @@
     <ClCompile Include="..\..\source\LoadingMode.cpp" />
     <ClCompile Include="..\..\source\MainMenuMode.cpp" />
     <ClCompile Include="..\..\source\PlayerDonutModel.cpp" />
+    <ClCompile Include="..\..\source\PlayerDonutNode.cpp" />
     <ClCompile Include="..\..\source\ShipModel.cpp" />
     <ClCompile Include="..\..\source\Sweetspace.cpp" />
     <ClCompile Include="..\..\source\Tween.cpp" />
