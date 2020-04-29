@@ -9,12 +9,13 @@
 #include "ButtonManager.h"
 #include "ButtonNode.h"
 #include "DonutModel.h"
-#include "DonutNode.h"
 #include "DoorNode.h"
+#include "ExternalDonutNode.h"
 #include "Globals.h"
 #include "HealthNode.h"
 #include "InputController.h"
 #include "MagicInternetBox.h"
+#include "PlayerDonutNode.h"
 #include "ShipModel.h"
 
 class GameGraphRoot : public cugl::Scene {
@@ -44,7 +45,7 @@ class GameGraphRoot : public cugl::Scene {
 
 	// VIEW COMPONENTS
 	/** Filmstrip representing the player's animated donut */
-	std::shared_ptr<cugl::PolygonNode> donutNode;
+	std::shared_ptr<PlayerDonutNode> donutNode;
 	/** Label for on-screen coordinate HUD */
 	std::shared_ptr<cugl::Label> coordHUD;
 	/** Node to hold all of our graphics. Necesary for resolution indepedence. */
@@ -177,6 +178,8 @@ class GameGraphRoot : public cugl::Scene {
 	const cugl::Color4 SHIP_LABEL_COLOR{255, 248, 161};
 	/** Number of possible player colors */
 	static constexpr int NUM_COLORS = 6;
+	/** The scale of the donut textures. */
+	static constexpr float DONUT_SCALE = 0.4f;
 	/** The scale of the breach textures. */
 	static constexpr float BREACH_SCALE = 0.25;
 

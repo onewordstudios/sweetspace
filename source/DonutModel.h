@@ -26,11 +26,13 @@ class DonutModel {
 	/** The Default Ship Size */
 	static constexpr float DEFAULT_SHIP_SIZE = 360;
 
+   public:
 	/** The threshold which the donut will begin to fall back to the ground again */
 	static constexpr float JUMP_HEIGHT = 0.35f;
 	/** Downward Acceleration for calculating jump offsets */
 	static constexpr float GRAVITY = 10.0f;
 
+   protected:
 	/** Clamp x into the range [y,z] */
 	static constexpr float RANGE_CLAMP(float x, float y, float z) {
 		return (x < y ? y : (x > z ? z : x));
@@ -180,6 +182,12 @@ class DonutModel {
 	 * @return whether the donut is currently jumping.
 	 */
 	bool isJumping() { return jumping; }
+
+	/**
+	 * Returns the donut's jump time
+	 * @return
+	 */
+	float getJumpTime() { return jumpTime; }
 
 	/**
 	 * Sets the velocity of the donut directly.
