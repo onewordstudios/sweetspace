@@ -33,7 +33,7 @@ void ExternalDonutNode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch, co
 		}
 		if (isShown) {
 			float relativeAngle = onScreenAngle - getParent()->getParent()->getAngle();
-            donutPos = getPositionVec(relativeAngle, jump * (globals::RADIUS + RADIUS_OFFSET));
+			donutPos = getPositionVec(relativeAngle, jump * (globals::RADIUS + RADIUS_OFFSET));
 			setPosition(donutPos);
 
 			float angle = rotationNode->getAngle() - vel * globals::PI_180 * radiusRatio;

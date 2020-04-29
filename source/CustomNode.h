@@ -21,6 +21,21 @@ class CustomNode : public cugl::Node {
 	/** Whether the node is being shown right now */
 	bool isShown;
 #pragma mark -
+#pragma mark Constructor
+	/**
+	 * Constructor
+	 */
+	CustomNode() : cugl::Node(), shipSize(0), isShown(false) {}
+
+	/**
+	 * Releases all resources allocated with this node.
+	 *
+	 * This will release, but not necessarily delete the associated texture.
+	 * However, the polygon and drawing commands will be deleted and no
+	 * longer safe to use.
+	 */
+	~CustomNode() { dispose(); }
+#pragma mark -
 #pragma mark Setters
    public:
 	/**
