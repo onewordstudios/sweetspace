@@ -32,6 +32,8 @@ class ShipModel {
 	float endTime;
 	/** Total level time*/
 	float totalTime;
+	/** If is in tutorial level*/
+	int levelNum;
 
    public:
 	/** Game timer*/
@@ -386,5 +388,15 @@ class ShipModel {
 	 * @param id The ID of one of the two buttons
 	 */
 	void resolveButton(int id);
+
+	/**
+	 * Gets if level is tutorial
+	 */
+	int getLevelNum() { return levelNum; }
+
+	/**
+	 * Sets if level is tutorial
+	 */
+	void setLevelNum(int l) { levelNum = l; }
 };
 #endif /* __SHIP_MODEL_H__ */

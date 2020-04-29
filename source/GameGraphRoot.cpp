@@ -128,7 +128,8 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	shipOverlay->setColor(Color4::CLEAR);
 	currentHealthWarningFrame = 0;
 	buttonNode = assets->get<Node>("game_field_near_button");
-	tutorialOverlay = dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_near_tutorialOverlay"));
+	tutorialOverlay =
+		dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_breachTutorial1"));
 
 	// Initialize Roll Challenge
 	challengePanelHanger = dynamic_pointer_cast<cugl::PolygonNode>(
@@ -438,6 +439,16 @@ void GameGraphRoot::update(float timestep) {
 	} else if (ship->getHealth() < globals::INITIAL_SHIP_HEALTH * SHIP_HEALTH_YELLOW_CUTOFF) {
 		std::shared_ptr<Texture> image = assets->get<Texture>("health_yellow");
 		healthNode->setTexture(image);
+	}
+
+	if (ship->getLevelNum() == 2) {
+		std::shared_ptr<Texture> image = assets->get<Texture>("door_tutorial");
+		tutorialOverlay->setTexture(image);
+	} else if (ship->getLevelNum() == 3 && ship->getChallenge()) {
+		std::shared_ptr<Texture> image = assets->get<Texture>("stabilizer_tutorial");
+		tutorialOverlay->setTexture(image);
+	} else if (ship->getLevelNum() == 3 && !ship->getChallenge()) {
+		tutorialOverlay->setVisible(false);
 	}
 
 	// Reanchor the node at the center of the screen and rotate about center.
