@@ -12,7 +12,7 @@ using namespace cugl;
 constexpr float OFF_SCREEN_POS = 1500;
 
 /** How many idle animation frames there is */
-constexpr int NUM_IDLE_FRAMES = 22;
+constexpr int NUM_IDLE_FRAMES = 11;
 
 /** Controls how fast idle animations proceed */
 constexpr int NUM_SKIP_FRAMES = 2;
