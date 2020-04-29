@@ -456,6 +456,7 @@ void GameGraphRoot::update(float timestep) {
 			lossScreen->setVisible(false);
 			winScreen->setVisible(false);
 			reconnectOverlay->setVisible(false);
+			tutorialOverlay->setVisible(true);
 			break;
 		case Loss:
 			// Show loss screen
@@ -466,6 +467,7 @@ void GameGraphRoot::update(float timestep) {
 			winScreen->setVisible(true);
 			nearSpace->setVisible(false);
 			healthNode->setVisible(false);
+			tutorialOverlay->setVisible(false);
 			break;
 		case Reconnecting:
 			// Still Reconnecting
