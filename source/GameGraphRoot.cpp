@@ -93,7 +93,6 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	this->playerID = playerID;
 	this->ship = ship;
 	this->prevPlayerAngle = ship->getDonuts().at(playerID)->getAngle();
-
 	isBackToMainMenu = false;
 	status = Normal;
 	currentEllipsesFrame = 0;
@@ -135,7 +134,9 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	shipOverlay->setColor(Color4::CLEAR);
 	currentHealthWarningFrame = 0;
 	buttonNode = assets->get<Node>("game_field_near_button");
-
+	std::shared_ptr<Texture> image = assets->get<Texture>("health_green");
+	healthNode->setTexture(image);
+	nearSpace->setAngle(0.0f);
 	// Initialize Roll Challenge
 	challengePanelHanger = dynamic_pointer_cast<cugl::PolygonNode>(
 		assets->get<Node>("game_field_challengePanelParent_challengePanelHanger"));
