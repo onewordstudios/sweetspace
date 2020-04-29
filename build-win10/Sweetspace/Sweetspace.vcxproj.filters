@@ -138,6 +138,9 @@
     <ClInclude Include="..\..\source\PlayerDonutNode.h">
       <Filter>Header Files\SceneGraph</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\source\CustomNode.h">
+      <Filter>Header Files\SceneGraph</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\source\main.cpp">

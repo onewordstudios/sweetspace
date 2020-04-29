@@ -193,6 +193,7 @@
     <ClInclude Include="..\..\source\ButtonManager.h" />
     <ClInclude Include="..\..\source\ButtonModel.h" />
     <ClInclude Include="..\..\source\ButtonNode.h" />
+    <ClInclude Include="..\..\source\CustomNode.h" />
     <ClInclude Include="..\..\source\DonutModel.h" />
     <ClInclude Include="..\..\source\DonutNode.h" />
     <ClInclude Include="..\..\source\EventModel.h" />
