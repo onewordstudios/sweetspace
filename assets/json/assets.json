@@ -296,7 +296,8 @@
                             "data": {
                                 "size":     [2560,2560],
                                 "anchor":   [0,0],
-                                "position": [0,120]
+                                "position": [0,130],
+                                "scale": 0.9
                             },
                             "children": {
                                 "shipsegments": {
@@ -349,9 +350,9 @@
                             "type": "Image",
                             "data": {
                                 "texture":  "donut_yellow",
-                                "position": [0,-455],
+                                "position": [0,-398],
                                 "anchor":   [0.5,0.5],
-                                "scale":    0.4
+                                "scale":    0.36
                             }
                         },
                         "challengePanelParent": {

@@ -45,5 +45,10 @@ class ButtonManager {
 	 */
 	bool tappedButton(std::shared_ptr<cugl::Button> button,
 					  std::tuple<cugl::Vec2, cugl::Vec2> tapData);
+
+	/**
+	 * Deregisters all buttons
+	 */
+	void clear();
 };
 #endif /* __BUTTON_MANAGER_H__ */

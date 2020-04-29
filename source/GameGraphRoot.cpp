@@ -60,16 +60,19 @@ constexpr int SEG_LABEL_Y = 1113;
 constexpr float BUTTON_LABEL_SCALE = 1;
 
 /** Scale of the button */
-constexpr float BUTTON_SCALE = 0.7f;
+constexpr float BUTTON_SCALE = 0.3f;
 
 /** Determines vertical positino of button label */
-constexpr float BUTTON_LABEL_Y = 0.25;
+constexpr float BUTTON_LABEL_Y = -0.28f;
 
 /** Maximum number of health labels */
 constexpr int MAX_HEALTH_LABELS = 10;
 
 /** Percentage of ship health to start showing yellow */
 constexpr float SHIP_HEALTH_YELLOW_CUTOFF = 0.8f;
+
+/** Percentage of ship health to start showing red */
+constexpr float SHIP_HEALTH_RED_CUTOFF = 0.35f;
 
 #pragma mark -
 #pragma mark Constructors
@@ -90,6 +93,9 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	this->playerID = playerID;
 	this->ship = ship;
 	this->prevPlayerAngle = ship->getDonuts().at(playerID)->getAngle();
+	isBackToMainMenu = false;
+	status = Normal;
+	currentEllipsesFrame = 0;
 
 	// Initialize the scene to a locked width
 	Size dimen = Application::get()->getDisplaySize();
@@ -127,8 +133,10 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 		dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_near_shipoverlay"));
 	shipOverlay->setColor(Color4::CLEAR);
 	currentHealthWarningFrame = 0;
-	buttonNode = assets->get<Node>("game_field_near_button");
-
+	buttonsNode = assets->get<Node>("game_field_near_button");
+	std::shared_ptr<Texture> image = assets->get<Texture>("health_green");
+	healthNode->setTexture(image);
+	nearSpace->setAngle(0.0f);
 	// Initialize Roll Challenge
 	challengePanelHanger = dynamic_pointer_cast<cugl::PolygonNode>(
 		assets->get<Node>("game_field_challengePanelParent_challengePanelHanger"));
@@ -220,8 +228,8 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 												 .at((unsigned long)breachModel->getPlayer())
 												 ->getColorId());
 		std::shared_ptr<Texture> image = assets->get<Texture>("breach_filmstrip");
-		std::shared_ptr<AnimationNode> shapeNode =
-			AnimationNode::alloc(image, BreachNode::BREACH_H, BreachNode::BREACH_W);
+		std::shared_ptr<AnimationNode> shapeNode = AnimationNode::alloc(
+			image, BreachNode::BREACH_H, BreachNode::BREACH_W, BreachNode::BREACH_SIZE);
 		shapeNode->setColor(color);
 		shapeNode->setAnchor(Vec2::ANCHOR_CENTER);
 		shapeNode->setPosition(0, 0);
@@ -232,8 +240,8 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 												 .at((unsigned long)breachModel->getPlayer())
 												 ->getColorId());
 		image = assets->get<Texture>("breach_" + breachColor);
-		std::shared_ptr<AnimationNode> patternNode =
-			AnimationNode::alloc(image, BreachNode::BREACH_H, BreachNode::BREACH_W);
+		std::shared_ptr<AnimationNode> patternNode = AnimationNode::alloc(
+			image, BreachNode::BREACH_H, BreachNode::BREACH_W, BreachNode::BREACH_SIZE);
 		shapeNode->setColor(color);
 		patternNode->setAnchor(Vec2::ANCHOR_CENTER);
 		patternNode->setPosition(0, 0);
@@ -260,49 +268,46 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 
 	// Initialize Buttons
 	for (int i = 0; i < ship->getButtons().size(); i++) {
+		// Initialize nodes
 		std::shared_ptr<ButtonModel> buttonModel = ship->getButtons().at((unsigned long)i);
-		std::shared_ptr<Texture> image = assets->get<Texture>("challenge_btn_base_up");
-		std::shared_ptr<Texture> buttonImage = assets->get<Texture>("challenge_btn_up");
-		std::shared_ptr<ButtonNode> bNode = ButtonNode::alloc(image);
-		std::shared_ptr<ButtonNode> subNode = ButtonNode::alloc(buttonImage);
-		// Initialize Label
+		std::shared_ptr<Texture> baseTexture = assets->get<Texture>("challenge_btn_base_up");
+		std::shared_ptr<Texture> bodyTexture = assets->get<Texture>("challenge_btn_up");
+		std::shared_ptr<PolygonNode> baseNode = PolygonNode::allocWithTexture(baseTexture);
+		std::shared_ptr<PolygonNode> bodyNode = PolygonNode::allocWithTexture(bodyTexture);
+		std::shared_ptr<ButtonNode> buttonNode = ButtonNode::alloc();
+		// Initialize label
 		std::shared_ptr<cugl::Label> buttonLabel =
 			cugl::Label::alloc("null", assets->get<Font>("mont_black_italic_big"));
 		buttonLabel->setScale(BUTTON_LABEL_SCALE);
 		buttonLabel->setHorizontalAlignment(Label::HAlign::CENTER);
 		buttonLabel->setForeground(Color4::WHITE);
 		buttonLabel->setAnchor(Vec2::ANCHOR_CENTER);
-		buttonLabel->setPosition((float)image->getWidth() / 2,
-								 (float)image->getHeight() * BUTTON_LABEL_Y);
-		// Initialize Button Node
-		subNode->setModel(buttonModel);
-		subNode->setScale(BUTTON_SCALE);
-		subNode->setDonutModel(ship->getDonuts().at(playerID));
-		subNode->setAnchor(Vec2::ANCHOR_BOTTOM_CENTER);
-		subNode->setScale(DOOR_SCALE);
-		subNode->setShipSize(ship->getSize());
-		subNode->setButtonNodeType(1);
-		subNode->setButtonBaseDown(assets->get<Texture>("challenge_btn_base_down"));
-		subNode->setButtonBaseUp(assets->get<Texture>("challenge_btn_base_up"));
-		subNode->setButtonDown(assets->get<Texture>("challenge_btn_down"));
-		subNode->setButtonUp(assets->get<Texture>("challenge_btn_up"));
-		bNode->setModel(buttonModel);
-		bNode->setScale(BUTTON_SCALE);
-		bNode->setDonutModel(ship->getDonuts().at(playerID));
-		bNode->setAnchor(Vec2::ANCHOR_BOTTOM_CENTER);
-		bNode->setScale(DOOR_SCALE);
-		bNode->setShipSize(ship->getSize());
-		bNode->setButtonNodeType(0);
-		bNode->setButtonDown(assets->get<Texture>("challenge_btn_down"));
-		bNode->setButtonUp(assets->get<Texture>("challenge_btn_up"));
-		bNode->setButtonBaseDown(assets->get<Texture>("challenge_btn_base_down"));
-		bNode->setButtonBaseUp(assets->get<Texture>("challenge_btn_base_up"));
-		bNode->setButtonLabel(buttonLabel);
-		bNode->setShipSize(ship->getSize());
+		buttonLabel->setPosition(0, (float)baseTexture->getHeight() * BUTTON_LABEL_Y);
+		// Initialize fields
+		buttonNode->setModel(buttonModel);
+		buttonNode->setScale(BUTTON_SCALE);
+		buttonNode->setDonutModel(ship->getDonuts().at(playerID));
+		buttonNode->setAnchor(Vec2::ANCHOR_BOTTOM_CENTER);
+		buttonNode->setShipSize(ship->getSize());
+		buttonNode->setButtonBaseDown(assets->get<Texture>("challenge_btn_base_down"));
+		buttonNode->setButtonBaseUp(assets->get<Texture>("challenge_btn_base_up"));
+		buttonNode->setButtonDown(assets->get<Texture>("challenge_btn_down"));
+		buttonNode->setButtonUp(assets->get<Texture>("challenge_btn_up"));
+		buttonNode->setBodyNode(bodyNode);
+		buttonNode->setBaseNode(baseNode);
+		buttonNode->setButtonLabel(buttonLabel);
 
-		buttonNode->addChild(subNode);
-		buttonNode->addChild(bNode);
-		bNode->addChild(buttonLabel);
+		baseNode->setAnchor(Vec2::ANCHOR_CENTER);
+		baseNode->setPosition(0, 0);
+
+		bodyNode->setAnchor(Vec2::ANCHOR_CENTER);
+		bodyNode->setPosition(0, 0);
+
+		buttonNode->addChild(bodyNode);
+		buttonNode->addChild(baseNode);
+		buttonNode->addChild(buttonLabel);
+		buttonsNode->addChild(buttonNode);
+		buttonNode->setTag(i + 1);
 	}
 
 	// Overlay Components
@@ -316,6 +321,8 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	// Initialize Pause Screen Componenets
 	pauseBtn = std::dynamic_pointer_cast<Button>(assets->get<Node>("game_overlay_pauseBtn"));
 	pauseScreen = assets->get<Node>("game_overlay_pause");
+	pauseBtn->setDown(false);
+	pauseScreen->setVisible(false);
 	musicBtn =
 		std::dynamic_pointer_cast<Button>(assets->get<Node>("game_overlay_pause_bg_musicBtn"));
 	soundBtn =
@@ -334,6 +341,13 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	winScreen = assets->get<Node>("game_overlay_win");
 	nextBtn = std::dynamic_pointer_cast<Button>(assets->get<Node>("game_overlay_win_nextBtn"));
 
+	lossScreen->setVisible(false);
+	winScreen->setVisible(false);
+	nearSpace->setVisible(true);
+	healthNode->setVisible(true);
+
+	lastButtonPressed = None;
+
 	// Register Regular Buttons
 	buttonManager.registerButton(restartBtn);
 	buttonManager.registerButton(levelsBtn);
@@ -350,10 +364,52 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 void GameGraphRoot::dispose() {
 	if (_active) {
 		removeAllChildren();
+		buttonManager.clear();
 		allSpace = nullptr;
 		farSpace = nullptr;
 		nearSpace = nullptr;
+		donutNode->removeAllChildren();
 		donutNode = nullptr;
+
+		coordHUD = nullptr;
+		breachesNode->removeAllChildren();
+		breachesNode = nullptr;
+		shipSegsNode->removeAllChildren();
+		shipSegsNode = nullptr;
+		doorsNode->removeAllChildren();
+		doorsNode = nullptr;
+		externalDonutsNode->removeAllChildren();
+		externalDonutsNode = nullptr;
+
+		challengePanelHanger = nullptr;
+		challengePanel = nullptr;
+		challengePanelText = nullptr;
+		challengePanelArrows.clear();
+		healthNode = nullptr;
+
+		reconnectOverlay = nullptr;
+		reconnectE2 = nullptr;
+		reconnectE3 = nullptr;
+
+		pauseBtn = nullptr;
+		pauseScreen = nullptr;
+		musicBtn = nullptr;
+		soundBtn = nullptr;
+		leaveBtn = nullptr;
+		needle = nullptr;
+
+		shipOverlay = nullptr;
+
+		lossScreen = nullptr;
+		restartBtn = nullptr;
+		levelsBtn = nullptr;
+
+		buttonsNode->removeAllChildren();
+		buttonsNode = nullptr;
+
+		winScreen = nullptr;
+		nextBtn = nullptr;
+
 		_active = false;
 	}
 }
@@ -431,10 +487,10 @@ void GameGraphRoot::update(float timestep) {
 	if (ship->getHealth() < 1) {
 		std::shared_ptr<Texture> image = assets->get<Texture>("health_empty");
 		healthNode->setTexture(image);
-	} else if (ship->getHealth() < globals::INITIAL_SHIP_HEALTH / (float)2) {
+	} else if (ship->getHealth() < ship->getInitHealth() * SHIP_HEALTH_RED_CUTOFF) {
 		std::shared_ptr<Texture> image = assets->get<Texture>("health_red");
 		healthNode->setTexture(image);
-	} else if (ship->getHealth() < globals::INITIAL_SHIP_HEALTH * SHIP_HEALTH_YELLOW_CUTOFF) {
+	} else if (ship->getHealth() < ship->getInitHealth() * SHIP_HEALTH_YELLOW_CUTOFF) {
 		std::shared_ptr<Texture> image = assets->get<Texture>("health_yellow");
 		healthNode->setTexture(image);
 	}
@@ -628,6 +684,19 @@ void GameGraphRoot::processButtons() {
 		// Leave Button
 		else if (buttonManager.tappedButton(leaveBtn, tapData)) {
 			isBackToMainMenu = true;
+		}
+	} else {
+		if (winScreen->isVisible()) {
+			if (buttonManager.tappedButton(nextBtn, tapData)) {
+				lastButtonPressed = NextLevel;
+			}
+		} else if (lossScreen->isVisible()) {
+			// Is this loss?
+			if (buttonManager.tappedButton(restartBtn, tapData)) {
+				lastButtonPressed = Restart;
+			} else if (buttonManager.tappedButton(levelsBtn, tapData)) {
+				isBackToMainMenu = true;
+			}
 		}
 	}
 }

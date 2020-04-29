@@ -34,6 +34,9 @@ class GameGraphRoot : public cugl::Scene {
 		Ended
 	};
 
+	/** Buttons that can be pressed  */
+	enum GameButton { None, Restart, NextLevel };
+
    protected:
 	/** The asset manager for this game mode. */
 	std::shared_ptr<cugl::AssetManager> assets;
@@ -120,7 +123,7 @@ class GameGraphRoot : public cugl::Scene {
 	/** Tag of the right most ship segment */
 	unsigned int rightMostSeg;
 	/** Parent node of all buttons, is child of nearSpace */
-	std::shared_ptr<cugl::Node> buttonNode;
+	std::shared_ptr<cugl::Node> buttonsNode;
 
 	// MODEL INFORMATION
 	/** Id of the current client */
@@ -165,6 +168,9 @@ class GameGraphRoot : public cugl::Scene {
 	/** Whether to go back to main menu */
 	bool isBackToMainMenu;
 
+	/** The last pressed button */
+	GameButton lastButtonPressed;
+
    public:
 #pragma mark -
 #pragma mark Public Consts
@@ -181,7 +187,7 @@ class GameGraphRoot : public cugl::Scene {
 	/** The scale of the donut textures. */
 	static constexpr float DONUT_SCALE = 0.4f;
 	/** The scale of the breach textures. */
-	static constexpr float BREACH_SCALE = 0.25;
+	static constexpr float BREACH_SCALE = 0.5f;
 
 #pragma mark -
 #pragma mark Constructors
@@ -193,10 +199,16 @@ class GameGraphRoot : public cugl::Scene {
 	 */
 	GameGraphRoot()
 		: Scene(),
-		  status(Normal),
+		  screenHeight(0),
 		  currentEllipsesFrame(0),
+		  leftMostSeg(0),
+		  rightMostSeg(0),
+		  playerID(0),
+		  prevPlayerAngle(0),
 		  currentHealthWarningFrame(0),
-		  isBackToMainMenu(false) {}
+		  status(Normal),
+		  isBackToMainMenu(false),
+		  lastButtonPressed(None) {}
 
 	/**
 	 * Disposes of all (non-static) resources allocated to this mode.
@@ -247,8 +259,6 @@ class GameGraphRoot : public cugl::Scene {
 	 */
 	void setNeedlePercentage(float percentage);
 
-	std::shared_ptr<cugl::Node> getDonutNode();
-
 #pragma mark -
 #pragma mark Accessors
 	/**
@@ -278,5 +288,15 @@ class GameGraphRoot : public cugl::Scene {
 	 * @return whether to go back to the main menu
 	 */
 	bool getIsBackToMainMenu() { return isBackToMainMenu; }
+
+	/**
+	 * Returns the last button pressed, if any, and resets the field so future calls to this method
+	 * will return None until another button is pressed.
+	 */
+	GameButton getAndResetLastButtonPressed() {
+		GameButton ret = lastButtonPressed;
+		lastButtonPressed = None;
+		return ret;
+	}
 };
 #endif /* __GAME_GRAPH_ROOT_H__ */

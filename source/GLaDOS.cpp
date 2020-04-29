@@ -47,9 +47,9 @@ bool GLaDOS::init(std::shared_ptr<ShipModel> ship, std::shared_ptr<LevelModel> l
 	this->ship = ship;
 	this->mib = MagicInternetBox::getInstance();
 	this->playerID = mib->getPlayerID();
-	maxEvents = level->getMaxBreaches();
-	maxDoors = min(level->getMaxDoors(), mib->getNumPlayers() * 2 - 1);
-	maxButtons = level->getMaxButtons();
+	maxEvents = ship->getBreaches().size();
+	maxDoors = ship->getDoors().size();
+	maxButtons = ship->getButtons().size();
 	blocks = level->getBlocks();
 	events = level->getEvents();
 
@@ -178,7 +178,9 @@ void GLaDOS::update(float dt) {
 
 	for (int i = 0; i < events.size(); i++) {
 		std::shared_ptr<EventModel> event = events.at(i);
-		int spawnRate = (int)(1 / event->getProbability());
+		int spawnRate =
+			(int)(globals::MIN_PLAYERS / (event->getProbability() * mib->getNumPlayers()));
+		if (spawnRate < 1) spawnRate = 1;
 		if (event->isActive((int)ship->timePassed()) && rand() % spawnRate <= 1) {
 			// ready up the event
 			readyQueue.push_back(event);
