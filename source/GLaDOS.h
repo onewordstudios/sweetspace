@@ -135,6 +135,5 @@ class GLaDOS {
 	 * Sets if all player challenge failed.
 	 */
 	void setChallengeFail(bool b) { fail = b; }
-
 };
 #endif /* __GM_CONTROLLER_H__ */
