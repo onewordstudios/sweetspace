@@ -93,6 +93,9 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	this->playerID = playerID;
 	this->ship = ship;
 	this->prevPlayerAngle = ship->getDonuts().at(playerID)->getAngle();
+	isBackToMainMenu = false;
+	status = Normal;
+	currentEllipsesFrame = 0;
 
 	// Initialize the scene to a locked width
 	Size dimen = Application::get()->getDisplaySize();
@@ -130,8 +133,10 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 		dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_near_shipoverlay"));
 	shipOverlay->setColor(Color4::CLEAR);
 	currentHealthWarningFrame = 0;
-	buttonsNode = assets->get<Node>("game_field_near_button");
-
+	buttonNode = assets->get<Node>("game_field_near_button");
+	std::shared_ptr<Texture> image = assets->get<Texture>("health_green");
+	healthNode->setTexture(image);
+	nearSpace->setAngle(0.0f);
 	// Initialize Roll Challenge
 	challengePanelHanger = dynamic_pointer_cast<cugl::PolygonNode>(
 		assets->get<Node>("game_field_challengePanelParent_challengePanelHanger"));
@@ -223,8 +228,8 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 												 .at((unsigned long)breachModel->getPlayer())
 												 ->getColorId());
 		std::shared_ptr<Texture> image = assets->get<Texture>("breach_filmstrip");
-		std::shared_ptr<AnimationNode> shapeNode =
-			AnimationNode::alloc(image, BreachNode::BREACH_H, BreachNode::BREACH_W);
+		std::shared_ptr<AnimationNode> shapeNode = AnimationNode::alloc(
+			image, BreachNode::BREACH_H, BreachNode::BREACH_W, BreachNode::BREACH_SIZE);
 		shapeNode->setColor(color);
 		shapeNode->setAnchor(Vec2::ANCHOR_CENTER);
 		shapeNode->setPosition(0, 0);
@@ -235,8 +240,8 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 												 .at((unsigned long)breachModel->getPlayer())
 												 ->getColorId());
 		image = assets->get<Texture>("breach_" + breachColor);
-		std::shared_ptr<AnimationNode> patternNode =
-			AnimationNode::alloc(image, BreachNode::BREACH_H, BreachNode::BREACH_W);
+		std::shared_ptr<AnimationNode> patternNode = AnimationNode::alloc(
+			image, BreachNode::BREACH_H, BreachNode::BREACH_W, BreachNode::BREACH_SIZE);
 		shapeNode->setColor(color);
 		patternNode->setAnchor(Vec2::ANCHOR_CENTER);
 		patternNode->setPosition(0, 0);
@@ -316,6 +321,8 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	// Initialize Pause Screen Componenets
 	pauseBtn = std::dynamic_pointer_cast<Button>(assets->get<Node>("game_overlay_pauseBtn"));
 	pauseScreen = assets->get<Node>("game_overlay_pause");
+	pauseBtn->setDown(false);
+	pauseScreen->setVisible(false);
 	musicBtn =
 		std::dynamic_pointer_cast<Button>(assets->get<Node>("game_overlay_pause_bg_musicBtn"));
 	soundBtn =
@@ -334,6 +341,13 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	winScreen = assets->get<Node>("game_overlay_win");
 	nextBtn = std::dynamic_pointer_cast<Button>(assets->get<Node>("game_overlay_win_nextBtn"));
 
+	lossScreen->setVisible(false);
+	winScreen->setVisible(false);
+	nearSpace->setVisible(true);
+	healthNode->setVisible(true);
+
+	lastButtonPressed = None;
+
 	// Register Regular Buttons
 	buttonManager.registerButton(restartBtn);
 	buttonManager.registerButton(levelsBtn);
@@ -350,10 +364,52 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 void GameGraphRoot::dispose() {
 	if (_active) {
 		removeAllChildren();
+		buttonManager.clear();
 		allSpace = nullptr;
 		farSpace = nullptr;
 		nearSpace = nullptr;
+		donutNode->removeAllChildren();
 		donutNode = nullptr;
+
+		coordHUD = nullptr;
+		breachesNode->removeAllChildren();
+		breachesNode = nullptr;
+		shipSegsNode->removeAllChildren();
+		shipSegsNode = nullptr;
+		doorsNode->removeAllChildren();
+		doorsNode = nullptr;
+		externalDonutsNode->removeAllChildren();
+		externalDonutsNode = nullptr;
+
+		challengePanelHanger = nullptr;
+		challengePanel = nullptr;
+		challengePanelText = nullptr;
+		challengePanelArrows.clear();
+		healthNode = nullptr;
+
+		reconnectOverlay = nullptr;
+		reconnectE2 = nullptr;
+		reconnectE3 = nullptr;
+
+		pauseBtn = nullptr;
+		pauseScreen = nullptr;
+		musicBtn = nullptr;
+		soundBtn = nullptr;
+		leaveBtn = nullptr;
+		needle = nullptr;
+
+		shipOverlay = nullptr;
+
+		lossScreen = nullptr;
+		restartBtn = nullptr;
+		levelsBtn = nullptr;
+
+		buttonNode->removeAllChildren();
+		buttonNode = nullptr;
+
+		winScreen = nullptr;
+		nextBtn = nullptr;
+
 		_active = false;
 	}
 }
@@ -628,6 +684,19 @@ void GameGraphRoot::processButtons() {
 		// Leave Button
 		else if (buttonManager.tappedButton(leaveBtn, tapData)) {
 			isBackToMainMenu = true;
+		}
+	} else {
+		if (winScreen->isVisible()) {
+			if (buttonManager.tappedButton(nextBtn, tapData)) {
+				lastButtonPressed = NextLevel;
+			}
+		} else if (lossScreen->isVisible()) {
+			// Is this loss?
+			if (buttonManager.tappedButton(restartBtn, tapData)) {
+				lastButtonPressed = Restart;
+			} else if (buttonManager.tappedButton(levelsBtn, tapData)) {
+				isBackToMainMenu = true;
+			}
 		}
 	}
 }
