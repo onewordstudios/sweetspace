@@ -17,7 +17,6 @@
 #include "MagicInternetBox.h"
 #include "PlayerDonutNode.h"
 #include "ShipModel.h"
-#include "TutorialNode.h"
 
 class GameGraphRoot : public cugl::Scene {
    public:
