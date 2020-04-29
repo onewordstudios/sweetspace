@@ -201,7 +201,7 @@ void GameMode::update(float timestep) {
 	// Breach Checks
 	for (int i = 0; i < ship->getBreaches().size(); i++) {
 		std::shared_ptr<BreachModel> breach = ship->getBreaches().at(i);
-		if (breach == nullptr) {
+		if (breach == nullptr || !breach->getIsActive()) {
 			continue;
 		}
 		float diff = ship->getSize() / 2 -
