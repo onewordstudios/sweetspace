@@ -94,6 +94,8 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	this->ship = ship;
 	this->prevPlayerAngle = ship->getDonuts().at(playerID)->getAngle();
 
+	isBackToMainMenu = false;
+
 	// Initialize the scene to a locked width
 	Size dimen = Application::get()->getDisplaySize();
 	dimen *= globals::SCENE_WIDTH / dimen.width; // Lock the game to a reasonable resolution
