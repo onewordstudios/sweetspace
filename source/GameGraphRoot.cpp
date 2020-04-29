@@ -225,8 +225,8 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 												 .at((unsigned long)breachModel->getPlayer())
 												 ->getColorId());
 		std::shared_ptr<Texture> image = assets->get<Texture>("breach_filmstrip");
-		std::shared_ptr<AnimationNode> shapeNode =
-			AnimationNode::alloc(image, BreachNode::BREACH_H, BreachNode::BREACH_W);
+		std::shared_ptr<AnimationNode> shapeNode = AnimationNode::alloc(
+			image, BreachNode::BREACH_H, BreachNode::BREACH_W, BreachNode::BREACH_SIZE);
 		shapeNode->setColor(color);
 		shapeNode->setAnchor(Vec2::ANCHOR_CENTER);
 		shapeNode->setPosition(0, 0);
@@ -237,8 +237,8 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 												 .at((unsigned long)breachModel->getPlayer())
 												 ->getColorId());
 		image = assets->get<Texture>("breach_" + breachColor);
-		std::shared_ptr<AnimationNode> patternNode =
-			AnimationNode::alloc(image, BreachNode::BREACH_H, BreachNode::BREACH_W);
+		std::shared_ptr<AnimationNode> patternNode = AnimationNode::alloc(
+			image, BreachNode::BREACH_H, BreachNode::BREACH_W, BreachNode::BREACH_SIZE);
 		shapeNode->setColor(color);
 		patternNode->setAnchor(Vec2::ANCHOR_CENTER);
 		patternNode->setPosition(0, 0);
