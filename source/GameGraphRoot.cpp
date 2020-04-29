@@ -71,6 +71,9 @@ constexpr int MAX_HEALTH_LABELS = 10;
 /** Percentage of ship health to start showing yellow */
 constexpr float SHIP_HEALTH_YELLOW_CUTOFF = 0.8f;
 
+/** Percentage of ship health to start showing red */
+constexpr float SHIP_HEALTH_RED_CUTOFF = 0.35f;
+
 #pragma mark -
 #pragma mark Constructors
 
@@ -433,10 +436,10 @@ void GameGraphRoot::update(float timestep) {
 	if (ship->getHealth() < 1) {
 		std::shared_ptr<Texture> image = assets->get<Texture>("health_empty");
 		healthNode->setTexture(image);
-	} else if (ship->getHealth() < globals::INITIAL_SHIP_HEALTH / (float)2) {
+	} else if (ship->getHealth() < ship->getInitHealth() * SHIP_HEALTH_RED_CUTOFF) {
 		std::shared_ptr<Texture> image = assets->get<Texture>("health_red");
 		healthNode->setTexture(image);
-	} else if (ship->getHealth() < globals::INITIAL_SHIP_HEALTH * SHIP_HEALTH_YELLOW_CUTOFF) {
+	} else if (ship->getHealth() < ship->getInitHealth() * SHIP_HEALTH_YELLOW_CUTOFF) {
 		std::shared_ptr<Texture> image = assets->get<Texture>("health_yellow");
 		healthNode->setTexture(image);
 	}

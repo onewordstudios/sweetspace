@@ -32,6 +32,7 @@ bool ShipModel::init(unsigned int numPlayers, unsigned int numBreaches, unsigned
 
 	// Instantiate health
 	health = (float)initHealth;
+	this->initHealth = (float)initHealth;
 
 	// Initialize size
 	this->shipSize = shipSize;
