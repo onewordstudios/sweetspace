@@ -4,25 +4,20 @@
 #include <cugl/2d/CUNode.h>
 
 #include "BreachModel.h"
+#include "CustomNode.h"
 #include "DonutModel.h"
 #include "cugl/2d/CUAnimationNode.h"
 #include "cugl/2d/CUPolygonNode.h"
 
-class BreachNode : public cugl::Node {
+class BreachNode : public CustomNode {
 #pragma mark Values
    protected:
 	/** Reference to the model of this node. */
 	std::shared_ptr<BreachModel> breachModel;
-	/** Reference to the player donut model */
-	std::shared_ptr<DonutModel> playerDonutModel;
 	/** Reference to the shape node of this breach */
 	std::shared_ptr<cugl::AnimationNode> shapeNode;
 	/** Reference to the pattern node of this breach */
 	std::shared_ptr<cugl::AnimationNode> patternNode;
-	/** Size of the ship. Needed for visibility determination */
-	float shipSize;
-	/** Whether the breach is being shown right now */
-	bool isShown;
 	/** Whether the breach is playing idle animation */
 	bool isAnimatingShrink;
 	/** Health of the breach model from previous frame */
@@ -52,7 +47,7 @@ class BreachNode : public cugl::Node {
 	 * NEVER USE A CONSTRUCTOR WITH NEW. If you want to allocate an object on
 	 * the heap, use one of the static constructors instead.
 	 */
-	BreachNode() : cugl::Node() {}
+	BreachNode() : CustomNode() {}
 
 	/**
 	 * Releases all resources allocated with this node.
@@ -79,10 +74,6 @@ class BreachNode : public cugl::Node {
 #pragma mark Getters & Setters
 
 	void setModel(std::shared_ptr<BreachModel> model) { breachModel = model; }
-
-	void setDonutModel(std::shared_ptr<DonutModel> model) { playerDonutModel = model; }
-
-	void setShipSize(float f) { shipSize = f; }
 
 	void setPrevHealth(int i) { prevHealth = i; }
 

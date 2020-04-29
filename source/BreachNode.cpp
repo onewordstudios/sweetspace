@@ -29,21 +29,15 @@ void BreachNode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch, const Mat
 	if (breachModel->getHealth() > 0 || isAnimatingShrink) {
 		// Breach is currently active
 		if (!isAnimatingShrink) {
-			float onScreenAngle = breachModel->getAngle() - playerDonutModel->getAngle();
-			onScreenAngle = onScreenAngle >= 0 ? onScreenAngle : shipSize + onScreenAngle;
-			onScreenAngle = onScreenAngle > shipSize / 2 ? onScreenAngle - shipSize : onScreenAngle;
-			onScreenAngle *= globals::PI_180;
-			if (!isShown && onScreenAngle < globals::SEG_CUTOFF_ANGLE &&
-				onScreenAngle > -globals::SEG_CUTOFF_ANGLE) {
+			float onScreenAngle = getOnScreenAngle(breachModel->getAngle());
+			if (isComingIntoView(onScreenAngle)) {
 				// Breach is coming into visible range
 				float relativeAngle = onScreenAngle - getParent()->getParent()->getAngle();
-				breachPos = Vec2(globals::RADIUS * sin(relativeAngle),
-								 -(float)globals::RADIUS * cos(relativeAngle));
-				setPosition(breachPos);
+				breachPos = getPositionVec(relativeAngle, globals::RADIUS);
 				setAngle(relativeAngle);
+				setPosition(breachPos);
 				isShown = true;
-			} else if (isShown && (onScreenAngle >= globals::SEG_CUTOFF_ANGLE ||
-								   onScreenAngle <= -globals::SEG_CUTOFF_ANGLE)) {
+			} else if (isGoingOutOfView(onScreenAngle)) {
 				// Breach is leaving visible range
 				breachPos = Vec2(OFF_SCREEN_POS, OFF_SCREEN_POS);
 				setPosition(breachPos);

@@ -18,15 +18,17 @@ class CustomNode : public cugl::Node {
 	std::shared_ptr<DonutModel> playerDonutModel;
 	/** Size of the ship. Needed for visibility determination */
 	float shipSize;
-	/** Whether the breach is being shown right now */
+	/** Whether the node is being shown right now */
 	bool isShown;
 #pragma mark -
 #pragma mark Setters
+   public:
 	void setDonutModel(std::shared_ptr<DonutModel> model) { playerDonutModel = model; }
 
 	void setShipSize(float f) { shipSize = f; }
 #pragma mark -
 #pragma mark Positioning Methods
+   protected:
 	/**
 	 * Calculates the on-screen angle of node relative to the player avatar
 	 *
@@ -63,8 +65,8 @@ class CustomNode : public cugl::Node {
 						   onScreenAngle <= -globals::SEG_CUTOFF_ANGLE);
 	}
 
-	Vec2 getPositionVec(float relAngle, float radius) {
-		return Vec2(radius * sin(relAngle), -radius * cos(relAngle));
+	cugl::Vec2 getPositionVec(float relAngle, float radius) {
+		return cugl::Vec2(radius * sin(relAngle), -radius * cos(relAngle));
 	}
 };
 
