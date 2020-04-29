@@ -1,8 +1,6 @@
 #ifndef SWEETSPACE_BREACHNODE_H
 #define SWEETSPACE_BREACHNODE_H
 
-#include <cugl/2d/CUNode.h>
-
 #include "BreachModel.h"
 #include "CustomNode.h"
 #include "DonutModel.h"

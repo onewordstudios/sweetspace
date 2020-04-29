@@ -23,8 +23,16 @@ class CustomNode : public cugl::Node {
 #pragma mark -
 #pragma mark Setters
    public:
+	/**
+	 * Sets playerDonutModel to given parameter
+	 * @param model
+	 */
 	void setDonutModel(std::shared_ptr<DonutModel> model) { playerDonutModel = model; }
 
+	/**
+	 * Store size of ship level
+	 * @param f
+	 */
 	void setShipSize(float f) { shipSize = f; }
 #pragma mark -
 #pragma mark Positioning Methods

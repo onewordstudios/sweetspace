@@ -21,16 +21,11 @@ void ExternalDonutNode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch, co
 	Vec2 donutPos;
 	if (donutModel->getIsActive()) {
 		// Donut is currently active
-		float onScreenAngle = donutModel->getAngle() - playerDonutModel->getAngle();
-		onScreenAngle = onScreenAngle < 0 ? shipSize + onScreenAngle : onScreenAngle;
-		onScreenAngle = onScreenAngle > shipSize / 2 ? onScreenAngle - shipSize : onScreenAngle;
-		onScreenAngle *= globals::PI_180;
-		if (!isShown && onScreenAngle < globals::SEG_CUTOFF_ANGLE &&
-			onScreenAngle > -globals::SEG_CUTOFF_ANGLE) {
+		float onScreenAngle = getOnScreenAngle(donutModel->getAngle());
+		if (isComingIntoView(onScreenAngle)) {
 			// Donut is coming into visible range
 			isShown = true;
-		} else if (isShown && (onScreenAngle >= globals::SEG_CUTOFF_ANGLE ||
-							   onScreenAngle <= -globals::SEG_CUTOFF_ANGLE)) {
+		} else if (isGoingOutOfView(onScreenAngle)) {
 			// Donut is leaving visible range
 			donutPos = Vec2(OFF_SCREEN_POS, OFF_SCREEN_POS);
 			setPosition(donutPos);
@@ -38,8 +33,7 @@ void ExternalDonutNode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch, co
 		}
 		if (isShown) {
 			float relativeAngle = onScreenAngle - getParent()->getParent()->getAngle();
-			donutPos = Vec2(jump * (globals::RADIUS + RADIUS_OFFSET) * sin(relativeAngle),
-							-jump * (globals::RADIUS + RADIUS_OFFSET) * cos(relativeAngle));
+            donutPos = getPositionVec(relativeAngle, jump * (globals::RADIUS + RADIUS_OFFSET));
 			setPosition(donutPos);
 
 			float angle = rotationNode->getAngle() - vel * globals::PI_180 * radiusRatio;
