@@ -187,7 +187,7 @@ class GameGraphRoot : public cugl::Scene {
 	/** The scale of the donut textures. */
 	static constexpr float DONUT_SCALE = 0.4f;
 	/** The scale of the breach textures. */
-	static constexpr float BREACH_SCALE = 0.25;
+	static constexpr float BREACH_SCALE = 0.5f;
 
 #pragma mark -
 #pragma mark Constructors
