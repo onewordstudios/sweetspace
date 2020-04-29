@@ -133,7 +133,7 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 		dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_near_shipoverlay"));
 	shipOverlay->setColor(Color4::CLEAR);
 	currentHealthWarningFrame = 0;
-	buttonNode = assets->get<Node>("game_field_near_button");
+	buttonsNode = assets->get<Node>("game_field_near_button");
 	std::shared_ptr<Texture> image = assets->get<Texture>("health_green");
 	healthNode->setTexture(image);
 	nearSpace->setAngle(0.0f);
@@ -404,8 +404,8 @@ void GameGraphRoot::dispose() {
 		restartBtn = nullptr;
 		levelsBtn = nullptr;
 
-		buttonNode->removeAllChildren();
-		buttonNode = nullptr;
+		buttonsNode->removeAllChildren();
+		buttonsNode = nullptr;
 
 		winScreen = nullptr;
 		nextBtn = nullptr;

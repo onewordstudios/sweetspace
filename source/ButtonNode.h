@@ -1,5 +1,5 @@
-#ifndef SWEETSPACE_BUTTONNODE_H
-#define SWEETSPACE_BUTTONNODE_H
+#ifndef __SWEETSPACE_BUTTONNODE_H__
+#define __SWEETSPACE_BUTTONNODE_H__
 
 #include <cugl/2d/CUNode.h>
 
