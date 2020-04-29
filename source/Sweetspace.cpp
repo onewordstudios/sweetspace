@@ -40,6 +40,10 @@ void Sweetspace::onStartup() {
 	assets->loadAsync<LevelModel>(LEVEL_ONE_KEY, LEVEL_ONE_FILE, nullptr);
 	assets->loadAsync<LevelModel>(LEVEL_TWO_KEY, LEVEL_TWO_FILE, nullptr);
 	assets->loadAsync<LevelModel>(LEVEL_THREE_KEY, LEVEL_THREE_FILE, nullptr);
+	assets->loadAsync<LevelModel>(TUT_ONE_KEY, TUT_ONE_FILE, nullptr);
+	assets->loadAsync<LevelModel>(TUT_TWO_KEY, TUT_TWO_FILE, nullptr);
+	assets->loadAsync<LevelModel>(TUT_THREE_KEY, TUT_THREE_FILE, nullptr);
+	assets->loadAsync<LevelModel>(TUT_FOUR_KEY, TUT_FOUR_FILE, nullptr);
 
 	Application::onStartup(); // YOU MUST END with call to parent
 }
