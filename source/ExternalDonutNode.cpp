@@ -19,7 +19,7 @@ void ExternalDonutNode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch, co
 	float vel = donutModel->getVelocity();
 	float radiusRatio = (globals::RADIUS + RADIUS_OFFSET) / (bodyNode->getWidth() / 2);
 	Vec2 donutPos;
-	if (donutModel->getAngle() >= 0) {
+	if (donutModel->getIsActive()) {
 		// Donut is currently active
 		float onScreenAngle = donutModel->getAngle() - playerDonutModel->getAngle();
 		onScreenAngle = onScreenAngle < 0 ? shipSize + onScreenAngle : onScreenAngle;
