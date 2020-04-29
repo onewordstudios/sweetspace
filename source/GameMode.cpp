@@ -52,6 +52,8 @@ constexpr int CHALLENGE_PROGRESS_LOW = 10;
  * @return true if the controller is initialized properly, false otherwise.
  */
 bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
+	isBackToMainMenu = false;
+
 	// Music Initialization
 	auto source = assets->get<Sound>("theme");
 	AudioChannels::get()->playMusic(source, true, source->getVolume());
@@ -90,15 +92,15 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 	CULog("Loading level %s b/c mib gave level num %d", levelName, net->getLevelNum());
 
 	std::shared_ptr<LevelModel> level = assets->get<LevelModel>(levelName);
-	int maxEvents = level->getMaxBreaches() * net->getNumPlayers() / globals::MIN_PLAYERS;
+	int maxEvents = (int)(level->getMaxBreaches() * net->getNumPlayers() / globals::MIN_PLAYERS);
 	int maxDoors = std::min(level->getMaxDoors() * net->getNumPlayers() / globals::MIN_PLAYERS,
 							net->getNumPlayers() * 2 - 1);
-	int maxButtons = level->getMaxButtons() * net->getNumPlayers() / globals::MIN_PLAYERS;
+	int maxButtons = (int)(level->getMaxButtons() * net->getNumPlayers() / globals::MIN_PLAYERS);
 	if (maxButtons % 2 != 0) maxButtons += 1;
-	ship = ShipModel::alloc(net->getNumPlayers(), maxEvents, maxDoors, playerID,
-							(float)level->getShipSize((int)net->getNumPlayers()),
-							level->getInitHealth() * net->getNumPlayers() / globals::MIN_PLAYERS,
-							maxButtons);
+	ship = ShipModel::alloc(
+		net->getNumPlayers(), maxEvents, maxDoors, playerID,
+		(float)level->getShipSize((int)net->getNumPlayers()),
+		(int)(level->getInitHealth() * net->getNumPlayers() / globals::MIN_PLAYERS), maxButtons);
 	gm.init(ship, level);
 
 	donutModel = ship->getDonuts().at(static_cast<unsigned long>(playerID));
@@ -131,7 +133,12 @@ void GameMode::dispose() {
  */
 void GameMode::update(float timestep) {
 	// Check if need to go back to menu
-	isBackToMainMenu = sgRoot.getIsBackToMainMenu();
+	if (!isBackToMainMenu) {
+		isBackToMainMenu = sgRoot.getIsBackToMainMenu();
+		if (isBackToMainMenu) {
+			AudioChannels::get()->stopMusic(1);
+		}
+	}
 	// Set needle percentage in pause menu
 	sgRoot.setNeedlePercentage((float)(net->getNumPlayers() - 1) / (float)globals::MAX_PLAYERS);
 
@@ -174,6 +181,18 @@ void GameMode::update(float timestep) {
 	if (ship->getHealth() < 1) {
 		sgRoot.setStatus(GameGraphRoot::Loss);
 		sgRoot.update(timestep);
+
+		switch (sgRoot.getAndResetLastButtonPressed()) {
+			case GameGraphRoot::GameButton::Restart:
+				net->restartGame();
+				break;
+			case GameGraphRoot::GameButton::NextLevel:
+				CULog("Next Level Pressed");
+				net->nextLevel();
+				break;
+			default:
+				break;
+		}
 		return;
 	}
 
@@ -187,6 +206,18 @@ void GameMode::update(float timestep) {
 	if (ship->timerEnded() && ship->getHealth() > 0) {
 		sgRoot.setStatus(GameGraphRoot::Win);
 		sgRoot.update(timestep);
+
+		switch (sgRoot.getAndResetLastButtonPressed()) {
+			case GameGraphRoot::GameButton::Restart:
+				net->restartGame();
+				break;
+			case GameGraphRoot::GameButton::NextLevel:
+				CULog("Next Level Pressed");
+				net->nextLevel();
+				break;
+			default:
+				break;
+		}
 		return;
 	}
 
