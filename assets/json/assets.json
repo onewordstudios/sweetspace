@@ -242,6 +242,9 @@
         },
         "sound_btn_off" : {
         	"file" : "textures/pause/sound_off.png"
+        },
+        "fix_breach_tutorial" : {
+            "file" : "textures/tutorial/fix_breach_1.png"
         }
 	},
 	"sounds": {
@@ -341,6 +344,15 @@
                                   "data": {
                                     "anchor":   [0,0],
                                     "position": [0,0]
+                                  }
+                                },
+                                "tutorialOverlay" : {
+                                  "type": "Image",
+                                  "data": {
+                                    "texture": "fix_breach_tutorial",
+                                    "anchor": [0,0],
+                                    "position": [-50,-400],
+                                    "scale": 0.3
                                   }
                                 }
                             }

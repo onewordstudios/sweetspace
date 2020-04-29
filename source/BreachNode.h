@@ -97,6 +97,8 @@ class BreachNode : public cugl::Node {
 
 	std::shared_ptr<BreachModel> getModel() { return breachModel; }
 
+	bool getIsShown() { return isShown; }
+
 #pragma mark -
 	/**
 	 * Reset flags for node animation.

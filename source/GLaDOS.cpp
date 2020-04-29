@@ -52,6 +52,7 @@ bool GLaDOS::init(std::shared_ptr<ShipModel> ship, std::shared_ptr<LevelModel> l
 	maxButtons = level->getMaxButtons();
 	blocks = level->getBlocks();
 	events = level->getEvents();
+	isTutorial = true;
 
 	for (int i = 0; i < maxEvents; i++) {
 		breachFree.push(i);

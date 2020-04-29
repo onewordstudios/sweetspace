@@ -52,6 +52,8 @@ class GLaDOS {
 	vector<std::shared_ptr<EventModel>> events;
 	/** List of events that are ready to be executed*/
 	vector<std::shared_ptr<EventModel>> readyQueue;
+	/** If level is a tutorial level */
+	bool isTutorial;
 
    public:
 #pragma mark -
@@ -135,5 +137,10 @@ class GLaDOS {
 	 * Sets if all player challenge failed.
 	 */
 	void setChallengeFail(bool b) { fail = b; }
+
+	/**
+	 * Gets if level is tutorial
+	 */
+	bool getIsTutorial() { return isTutorial; }
 };
 #endif /* __GM_CONTROLLER_H__ */
