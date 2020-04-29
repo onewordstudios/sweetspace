@@ -444,9 +444,9 @@ void GameGraphRoot::update(float timestep) {
 		healthNode->setTexture(image);
 	}
 
-	if(ship->getLevelNum() == 1 && trunc(ship->timer) == 10) {
-        std::shared_ptr<Texture> image = assets->get<Texture>("jump_tutorial");
-        tutorialOverlay->setTexture(image);
+	if (ship->getLevelNum() == 1 && trunc(ship->timer) == 10) {
+		std::shared_ptr<Texture> image = assets->get<Texture>("jump_tutorial");
+		tutorialOverlay->setTexture(image);
 	} else if (ship->getLevelNum() == 2) {
 		std::shared_ptr<Texture> image = assets->get<Texture>("door_tutorial");
 		tutorialOverlay->setTexture(image);
