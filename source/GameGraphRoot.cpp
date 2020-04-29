@@ -323,6 +323,7 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	// Initialize Pause Screen Componenets
 	pauseBtn = std::dynamic_pointer_cast<Button>(assets->get<Node>("game_overlay_pauseBtn"));
 	pauseScreen = assets->get<Node>("game_overlay_pause");
+	pauseBtn->setDown(false);
 	pauseScreen->setVisible(false);
 	musicBtn =
 		std::dynamic_pointer_cast<Button>(assets->get<Node>("game_overlay_pause_bg_musicBtn"));
@@ -341,6 +342,11 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	// Initialize Win Screen Componenets
 	winScreen = assets->get<Node>("game_overlay_win");
 	nextBtn = std::dynamic_pointer_cast<Button>(assets->get<Node>("game_overlay_win_nextBtn"));
+
+	lossScreen->setVisible(false);
+	winScreen->setVisible(false);
+	nearSpace->setVisible(true);
+	healthNode->setVisible(true);
 
 	// Register Regular Buttons
 	buttonManager.registerButton(restartBtn);
