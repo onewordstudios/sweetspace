@@ -133,17 +133,20 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 		dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_near_shipoverlay"));
 	shipOverlay->setColor(Color4::CLEAR);
 	currentHealthWarningFrame = 0;
-	tutorialOverlay =
-		dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_breachTutorial"));
-	tutorialOverlay->setVisible(false);
-	if (ship->getLevelNum() < 4) {
-		tutorialOverlay->setVisible(true);
+	moveTutorial =
+		dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_moveTutorial"));
+	moveTutorial->setVisible(false);
+	if (ship->getLevelNum() == 1) {
+		moveTutorial->setVisible(true);
 	}
 	healthTutorial = dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_healthTutorial"));
 	healthTutorial->setVisible(false);
 	if(ship->getLevelNum() == 1) {
 	    healthTutorial->setVisible(true);
 	}
+	rollTutorial = dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_rollTutorial"));
+	rollTutorial->setVisible(false);
+	tutorialNode = assets->get<Node>("game_field_near_tutorial");
 	buttonsNode = assets->get<Node>("game_field_near_button");
 	std::shared_ptr<Texture> image = assets->get<Texture>("health_green");
 	healthNode->setTexture(image);
@@ -274,7 +277,7 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 		doorNode->setScale(DOOR_SCALE);
 		doorNode->setShipSize(ship->getSize());
 		doorNode->setDonutModel(ship->getDonuts().at(playerID));
-		doorsNode->addChild(doorNode);
+		doorsNode->addChildWithTag(doorNode, i + 1);
 	}
 
 	// Initialize Buttons
@@ -319,6 +322,37 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 		buttonNode->addChild(buttonLabel);
 		buttonsNode->addChild(buttonNode);
 		buttonNode->setTag(i + 1);
+	}
+
+	if(ship->getLevelNum() == 1) {
+        for(int i = 0; i < breachesNode->getChildCount(); i++) {
+            std::shared_ptr<Texture> image = assets->get<Texture>("fix_breach_tutorial0");
+            std::shared_ptr<TutorialNode> tutorial = TutorialNode::alloc(image);
+			shared_ptr<BreachNode> breachNode =
+					dynamic_pointer_cast<BreachNode>(breachesNode->getChildByTag((unsigned int)(i + 1)));
+            tutorial->setBreachNode(breachNode);
+            tutorialNode->addChildWithTag(tutorial, i+1);
+        }
+	} else if(ship->getLevelNum() == 2) {
+		tutorialNode->removeAllChildren();
+        for(int i = 0; i < doorsNode->getChildCount(); i++) {
+            std::shared_ptr<Texture> image = assets->get<Texture>("door_tutorial");
+            std::shared_ptr<TutorialNode> tutorial = TutorialNode::alloc(image);
+			shared_ptr<DoorNode> doorNode =
+					dynamic_pointer_cast<DoorNode>(doorsNode->getChildByTag((unsigned int)(i + 1)));
+			tutorial->setDoorNode(doorNode);
+            tutorialNode->addChildWithTag(tutorial, i+1);
+        }
+	} else if(ship->getLevelNum() == 3) {
+		tutorialNode->removeAllChildren();
+        for(int i = 0; i < buttonsNode->getChildCount(); i++) {
+            std::shared_ptr<Texture> image = assets->get<Texture>("engine_tutorial0");
+            std::shared_ptr<TutorialNode> tutorial = TutorialNode::alloc(image);
+			shared_ptr<ButtonNode> buttonNode =
+					dynamic_pointer_cast<ButtonNode>(buttonsNode->getChildByTag((unsigned int)(i + 1)));
+			tutorial->setButtonNode(buttonNode);
+            tutorialNode->addChildWithTag(tutorial, i+1);
+        }
 	}
 
 	// Overlay Components
@@ -462,7 +496,6 @@ void GameGraphRoot::update(float timestep) {
 			lossScreen->setVisible(false);
 			winScreen->setVisible(false);
 			reconnectOverlay->setVisible(false);
-			tutorialOverlay->setVisible(true);
 			break;
 		case Loss:
 			// Show loss screen
@@ -473,7 +506,8 @@ void GameGraphRoot::update(float timestep) {
 			winScreen->setVisible(true);
 			nearSpace->setVisible(false);
 			healthNode->setVisible(false);
-			tutorialOverlay->setVisible(false);
+			rollTutorial->setVisible(false);
+			moveTutorial->setVisible(false);
 			break;
 		case Reconnecting:
 			// Still Reconnecting
@@ -508,24 +542,13 @@ void GameGraphRoot::update(float timestep) {
 		healthNode->setTexture(image);
 	}
 
-	if (ship->getLevelNum() == 1 && trunc(ship->timer) == 10) {
-	    healthTutorial->setVisible(false);
-		std::shared_ptr<Texture> image = assets->get<Texture>("jump_tutorial");
-		tutorialOverlay->setTexture(image);
-	} else if (ship->getLevelNum() == 2) {
-		std::shared_ptr<Texture> image = assets->get<Texture>("door_tutorial");
-		tutorialOverlay->setTexture(image);
-	} else if (ship->getLevelNum() == 3) {
-		std::shared_ptr<Texture> image = assets->get<Texture>("stabilizer_tutorial");
-		tutorialOverlay->setTexture(image);
-		tutorialOverlay->setVisible(!ship->getChallenge());
-		if (status == Win) {
-			tutorialOverlay->setVisible(false);
+	if (ship->getLevelNum() == 1) {
+		if (trunc(ship->timer) == 10) {
+			healthTutorial->setVisible(false);
 		}
-	} else if (ship->getLevelNum() > 3) {
-		tutorialOverlay->setVisible(false);
+	} else if(ship->getLevelNum() == 4) {
+		rollTutorial->setVisible(true);
 	}
-
 	// Reanchor the node at the center of the screen and rotate about center.
 	Vec2 position = farSpace->getPosition();
 	farSpace->setAnchor(Vec2::ANCHOR_CENTER);

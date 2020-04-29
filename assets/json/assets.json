@@ -376,6 +376,13 @@
                                     "anchor":   [0,0],
                                     "position": [0,0]
                                   }
+                                },
+                                "tutorial": {
+                                  "type": "Node",
+                                  "data": {
+                                    "anchor": [0,0],
+                                    "position": [0,0]
+                                  }
                                 }
                             }
                         },
@@ -533,13 +540,12 @@
 								"scale": 0.3
 							}
 						},
-                        "breachTutorial" : {
+                        "moveTutorial" : {
                           "type": "Image",
                           "data": {
-                            "texture": "fix_breach_tutorial1",
+                            "texture": "move_tutorial0",
                             "position": [0,-250],
-                            "anchor":   [0.5,0.5],
-                            "scale": 0.3
+                            "anchor":   [0.5,0.5]
                           }
                         },
                         "healthTutorial" : {
@@ -549,7 +555,16 @@
                             "position": [-100,-125],
                             "anchor":   [0.5,0.5]
                           }
-                      }
+                        },
+                        "rollTutorial" : {
+                          "type": "Image",
+                          "data": {
+                            "texture": "stabilizer_tutorial",
+                            "position": [-200,-200],
+                            "anchor":   [0.5,0.5]
+                          }
+                        }
+
                     }
                 },
                 "overlay" : {
