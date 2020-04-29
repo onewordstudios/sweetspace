@@ -320,6 +320,7 @@ void MagicInternetBox::nextLevel() {
 	data.push_back((uint8_t)1);
 	ws->sendBinary(data);
 	events = NextLevel;
+	levelNum++;
 }
 
 void MagicInternetBox::update() {
