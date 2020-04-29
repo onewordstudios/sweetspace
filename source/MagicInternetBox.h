@@ -385,6 +385,11 @@ class MagicInternetBox {
 	 * Disconnect this player from the server, by force.
 	 */
 	void forceDisconnect();
+
+	/**
+	 * Reset the controller entirely; useful when leaving a game.
+	 */
+	void reset();
 };
 
 #endif /* __NETWORK_CONTROLLER_H__ */

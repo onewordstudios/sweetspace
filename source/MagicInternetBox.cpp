@@ -592,3 +592,10 @@ void MagicInternetBox::forceDisconnect() {
 	status = Disconnected;
 	lastConnection = 0;
 }
+
+void MagicInternetBox::reset() {
+	forceDisconnect();
+	delete ws;
+	ws = nullptr;
+	status = Uninitialized;
+}

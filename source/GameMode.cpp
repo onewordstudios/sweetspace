@@ -52,6 +52,8 @@ constexpr int CHALLENGE_PROGRESS_LOW = 10;
  * @return true if the controller is initialized properly, false otherwise.
  */
 bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
+	isBackToMainMenu = false;
+
 	// Music Initialization
 	auto source = assets->get<Sound>("theme");
 	AudioChannels::get()->playMusic(source, true, source->getVolume());
@@ -131,7 +133,12 @@ void GameMode::dispose() {
  */
 void GameMode::update(float timestep) {
 	// Check if need to go back to menu
-	isBackToMainMenu = sgRoot.getIsBackToMainMenu();
+	if (!isBackToMainMenu) {
+		isBackToMainMenu = sgRoot.getIsBackToMainMenu();
+		if (isBackToMainMenu) {
+			AudioChannels::get()->stopMusic(1);
+		}
+	}
 	// Set needle percentage in pause menu
 	sgRoot.setNeedlePercentage((float)(net->getNumPlayers() - 1) / (float)globals::MAX_PLAYERS);
 

@@ -110,6 +110,8 @@ void Sweetspace::update(float timestep) {
 			if (gameplay.getIsBackToMainMenu()) {
 				gameplay.dispose();
 				mainmenu.init(assets);
+				MagicInternetBox::getInstance()->reset();
+				CULog("Ending");
 				status = MainMenu;
 			}
 			return;
