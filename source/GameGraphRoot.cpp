@@ -323,6 +323,7 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	// Initialize Pause Screen Componenets
 	pauseBtn = std::dynamic_pointer_cast<Button>(assets->get<Node>("game_overlay_pauseBtn"));
 	pauseScreen = assets->get<Node>("game_overlay_pause");
+	pauseScreen->setVisible(false);
 	musicBtn =
 		std::dynamic_pointer_cast<Button>(assets->get<Node>("game_overlay_pause_bg_musicBtn"));
 	soundBtn =
