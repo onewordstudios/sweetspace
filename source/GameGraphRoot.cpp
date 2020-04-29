@@ -139,12 +139,14 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	if (ship->getLevelNum() == 1) {
 		moveTutorial->setVisible(true);
 	}
-	healthTutorial = dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_healthTutorial"));
+	healthTutorial =
+		dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_healthTutorial"));
 	healthTutorial->setVisible(false);
-	if(ship->getLevelNum() == 1) {
-	    healthTutorial->setVisible(true);
+	if (ship->getLevelNum() == 1) {
+		healthTutorial->setVisible(true);
 	}
-	rollTutorial = dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_rollTutorial"));
+	rollTutorial =
+		dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_rollTutorial"));
 	rollTutorial->setVisible(false);
 	tutorialNode = assets->get<Node>("game_field_near_tutorial");
 	buttonsNode = assets->get<Node>("game_field_near_button");
@@ -324,35 +326,35 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 		buttonNode->setTag(i + 1);
 	}
 
-	if(ship->getLevelNum() == 1) {
-        for(int i = 0; i < breachesNode->getChildCount(); i++) {
-            std::shared_ptr<Texture> image = assets->get<Texture>("fix_breach_tutorial0");
-            std::shared_ptr<TutorialNode> tutorial = TutorialNode::alloc(image);
-			shared_ptr<BreachNode> breachNode =
-					dynamic_pointer_cast<BreachNode>(breachesNode->getChildByTag((unsigned int)(i + 1)));
-            tutorial->setBreachNode(breachNode);
-            tutorialNode->addChildWithTag(tutorial, i+1);
-        }
-	} else if(ship->getLevelNum() == 2) {
+	if (ship->getLevelNum() == 1) {
+		for (int i = 0; i < breachesNode->getChildCount(); i++) {
+			std::shared_ptr<Texture> image = assets->get<Texture>("fix_breach_tutorial0");
+			std::shared_ptr<TutorialNode> tutorial = TutorialNode::alloc(image);
+			shared_ptr<BreachNode> breachNode = dynamic_pointer_cast<BreachNode>(
+				breachesNode->getChildByTag((unsigned int)(i + 1)));
+			tutorial->setBreachNode(breachNode);
+			tutorialNode->addChildWithTag(tutorial, i + 1);
+		}
+	} else if (ship->getLevelNum() == 2) {
 		tutorialNode->removeAllChildren();
-        for(int i = 0; i < doorsNode->getChildCount(); i++) {
-            std::shared_ptr<Texture> image = assets->get<Texture>("door_tutorial");
-            std::shared_ptr<TutorialNode> tutorial = TutorialNode::alloc(image);
+		for (int i = 0; i < doorsNode->getChildCount(); i++) {
+			std::shared_ptr<Texture> image = assets->get<Texture>("door_tutorial");
+			std::shared_ptr<TutorialNode> tutorial = TutorialNode::alloc(image);
 			shared_ptr<DoorNode> doorNode =
-					dynamic_pointer_cast<DoorNode>(doorsNode->getChildByTag((unsigned int)(i + 1)));
+				dynamic_pointer_cast<DoorNode>(doorsNode->getChildByTag((unsigned int)(i + 1)));
 			tutorial->setDoorNode(doorNode);
-            tutorialNode->addChildWithTag(tutorial, i+1);
-        }
-	} else if(ship->getLevelNum() == 3) {
+			tutorialNode->addChildWithTag(tutorial, i + 1);
+		}
+	} else if (ship->getLevelNum() == 3) {
 		tutorialNode->removeAllChildren();
-        for(int i = 0; i < buttonsNode->getChildCount(); i++) {
-            std::shared_ptr<Texture> image = assets->get<Texture>("engine_tutorial0");
-            std::shared_ptr<TutorialNode> tutorial = TutorialNode::alloc(image);
+		for (int i = 0; i < buttonsNode->getChildCount(); i++) {
+			std::shared_ptr<Texture> image = assets->get<Texture>("engine_tutorial0");
+			std::shared_ptr<TutorialNode> tutorial = TutorialNode::alloc(image);
 			shared_ptr<ButtonNode> buttonNode =
-					dynamic_pointer_cast<ButtonNode>(buttonsNode->getChildByTag((unsigned int)(i + 1)));
+				dynamic_pointer_cast<ButtonNode>(buttonsNode->getChildByTag((unsigned int)(i + 1)));
 			tutorial->setButtonNode(buttonNode);
-            tutorialNode->addChildWithTag(tutorial, i+1);
-        }
+			tutorialNode->addChildWithTag(tutorial, i + 1);
+		}
 	}
 
 	// Overlay Components
@@ -546,7 +548,7 @@ void GameGraphRoot::update(float timestep) {
 		if (trunc(ship->timer) == 10) {
 			healthTutorial->setVisible(false);
 		}
-	} else if(ship->getLevelNum() == 4) {
+	} else if (ship->getLevelNum() == 4) {
 		rollTutorial->setVisible(true);
 	}
 	// Reanchor the node at the center of the screen and rotate about center.
