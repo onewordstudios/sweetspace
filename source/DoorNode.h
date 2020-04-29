@@ -3,23 +3,20 @@
 
 #include <cugl/2d/CUAnimationNode.h>
 
+#include "CustomNode.h"
 #include "DonutModel.h"
 #include "DoorModel.h"
 
-class DoorNode : public cugl::AnimationNode {
+class DoorNode : public CustomNode {
 #pragma mark Values
    protected:
+	/** Reference to the DoorModel of this node */
 	std::shared_ptr<DoorModel> doorModel;
-	/** Reference to the player donut model */
-	std::shared_ptr<DonutModel> playerDonutModel;
-	/** Size of the ship. Needed for visibility determination */
-	float shipSize;
-	/** Whether the breach is being shown right now */
-	bool isShown;
+	/** Reference to the AnimationNode child of this node */
+	std::shared_ptr<cugl::AnimationNode> animationNode;
 
 	/** The height of the door. */
 	int height;
-
 	/** The max frame this door can have. */
 	int frameCap;
 
@@ -34,7 +31,7 @@ class DoorNode : public cugl::AnimationNode {
 	 * NEVER USE A CONSTRUCTOR WITH NEW. If you want to allocate an object on
 	 * the heap, use one of the static constructors instead.
 	 */
-	DoorNode() : cugl::AnimationNode(), height(0), frameCap(0) {}
+	DoorNode() : CustomNode() {}
 
 	/**
 	 * Releases all resources allocated with this node.
@@ -64,18 +61,24 @@ class DoorNode : public cugl::AnimationNode {
 	static std::shared_ptr<DoorNode> alloc(const std::shared_ptr<cugl::Texture> &texture, int rows,
 										   int cols, int size) {
 		std::shared_ptr<DoorNode> node = std::make_shared<DoorNode>();
-		return (node->initWithFilmstrip(texture, rows, cols, size) ? node : nullptr);
+		if (node->init()) {
+			node->animationNode = cugl::AnimationNode::alloc(texture, rows, cols, size);
+			node->animationNode->setAnchor(cugl::Vec2::ANCHOR_BOTTOM_CENTER);
+			node->animationNode->setPosition(0, 0);
+			node->addChild(node->animationNode);
+			return node;
+		} else {
+			return nullptr;
+		}
 	}
 
 #pragma mark -
 
 	void setModel(std::shared_ptr<DoorModel> model) { doorModel = model; }
 
-	void setDonutModel(std::shared_ptr<DonutModel> model) { playerDonutModel = model; }
-
-	void setShipSize(float f) { shipSize = f; }
-
 	std::shared_ptr<DoorModel> getModel() { return doorModel; }
+
+	std::shared_ptr<cugl::AnimationNode> getAnimationNode() { return animationNode; }
 
 	void draw(const shared_ptr<cugl::SpriteBatch> &batch, const cugl::Mat4 &transform,
 			  cugl::Color4 tint) override;

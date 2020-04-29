@@ -7,7 +7,7 @@
 using namespace cugl;
 
 /** The radius used for placement of the doors. */
-constexpr float DOOR_RADIUS = 650;
+constexpr float DOOR_RADIUS = 660;
 
 /** Position to place DoorNode offscreen. */
 constexpr float OFF_SCREEN_POS = 1500;
@@ -22,20 +22,15 @@ void DoorNode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch, const Mat4&
 	Vec2 doorPos;
 	if (doorModel->getIsActive()) {
 		// Door is currently active
-		float onScreenAngle = doorModel->getAngle() - playerDonutModel->getAngle();
-		onScreenAngle = onScreenAngle >= 0 ? onScreenAngle : shipSize + onScreenAngle;
-		onScreenAngle = onScreenAngle > shipSize / 2 ? onScreenAngle - shipSize : onScreenAngle;
-		onScreenAngle *= globals::PI_180;
-		if (!isShown && onScreenAngle < globals::SEG_CUTOFF_ANGLE &&
-			onScreenAngle > -globals::SEG_CUTOFF_ANGLE) {
+		float onScreenAngle = getOnScreenAngle(doorModel->getAngle());
+		if (isComingIntoView(onScreenAngle)) {
 			// Door is coming into visible range
 			float relativeAngle = onScreenAngle - getParent()->getParent()->getAngle();
-			doorPos = Vec2(DOOR_RADIUS * sin(relativeAngle), -DOOR_RADIUS * cos(relativeAngle));
+			doorPos = getPositionVec(relativeAngle, DOOR_RADIUS);
 			setPosition(doorPos);
 			isShown = true;
 			setAngle(relativeAngle);
-		} else if (isShown && (onScreenAngle >= globals::SEG_CUTOFF_ANGLE ||
-							   onScreenAngle <= -globals::SEG_CUTOFF_ANGLE)) {
+		} else if (isGoingOutOfView(onScreenAngle)) {
 			// Door is leaving visible range
 			doorPos = Vec2(OFF_SCREEN_POS, OFF_SCREEN_POS);
 			setPosition(doorPos);
@@ -44,16 +39,16 @@ void DoorNode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch, const Mat4&
 
 		frameCap = doorModel->getPlayersOn() < 2 ? doorModel->getPlayersOn() * ONE_PLAYER_FRAME
 												 : TWO_PLAYER_FRAME;
-		if (getFrame() < frameCap) {
-			setFrame((int)getFrame() + 1);
-		} else if (getFrame() > frameCap) {
-			setFrame((int)getFrame() - 1);
+		if (animationNode->getFrame() < frameCap) {
+			animationNode->setFrame((int)animationNode->getFrame() + 1);
+		} else if (animationNode->getFrame() > frameCap) {
+			animationNode->setFrame((int)animationNode->getFrame() - 1);
 		}
 
 		int diff = height - doorModel->getHeight();
 		height = doorModel->getHeight();
 		if (diff != 0) {
-			shiftPolygon(0, (float)diff);
+			animationNode->shiftPolygon(0, (float)diff);
 		}
 	} else {
 		// Door is currently inactive
@@ -61,5 +56,5 @@ void DoorNode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch, const Mat4&
 		setPosition(doorPos);
 		isShown = false;
 	}
-	AnimationNode::draw(batch, transform, tint);
+	CustomNode::draw(batch, transform, tint);
 }

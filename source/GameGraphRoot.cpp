@@ -264,7 +264,7 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 		std::shared_ptr<Texture> image = assets->get<Texture>("door");
 		std::shared_ptr<DoorNode> doorNode = DoorNode::alloc(image, 1, DOOR_FRAMES, DOOR_FRAMES);
 		doorNode->setModel(doorModel);
-		doorNode->setFrame(0);
+		doorNode->getAnimationNode()->setFrame(0);
 		doorNode->setAnchor(Vec2::ANCHOR_BOTTOM_CENTER);
 		doorNode->setScale(DOOR_SCALE);
 		doorNode->setShipSize(ship->getSize());
