@@ -133,6 +133,12 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 		dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_near_shipoverlay"));
 	shipOverlay->setColor(Color4::CLEAR);
 	currentHealthWarningFrame = 0;
+	tutorialOverlay =
+		dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_breachTutorial"));
+	tutorialOverlay->setVisible(false);
+	if (ship->getLevelNum() < 4) {
+		tutorialOverlay->setVisible(true);
+	}
 	buttonsNode = assets->get<Node>("game_field_near_button");
 	std::shared_ptr<Texture> image = assets->get<Texture>("health_green");
 	healthNode->setTexture(image);
@@ -451,6 +457,7 @@ void GameGraphRoot::update(float timestep) {
 			lossScreen->setVisible(false);
 			winScreen->setVisible(false);
 			reconnectOverlay->setVisible(false);
+			tutorialOverlay->setVisible(true);
 			break;
 		case Loss:
 			// Show loss screen
@@ -461,6 +468,7 @@ void GameGraphRoot::update(float timestep) {
 			winScreen->setVisible(true);
 			nearSpace->setVisible(false);
 			healthNode->setVisible(false);
+			tutorialOverlay->setVisible(false);
 			break;
 		case Reconnecting:
 			// Still Reconnecting
@@ -493,6 +501,23 @@ void GameGraphRoot::update(float timestep) {
 	} else if (ship->getHealth() < ship->getInitHealth() * SHIP_HEALTH_YELLOW_CUTOFF) {
 		std::shared_ptr<Texture> image = assets->get<Texture>("health_yellow");
 		healthNode->setTexture(image);
+	}
+
+	if (ship->getLevelNum() == 1 && trunc(ship->timer) == 10) {
+		std::shared_ptr<Texture> image = assets->get<Texture>("jump_tutorial");
+		tutorialOverlay->setTexture(image);
+	} else if (ship->getLevelNum() == 2) {
+		std::shared_ptr<Texture> image = assets->get<Texture>("door_tutorial");
+		tutorialOverlay->setTexture(image);
+	} else if (ship->getLevelNum() == 3) {
+		std::shared_ptr<Texture> image = assets->get<Texture>("stabilizer_tutorial");
+		tutorialOverlay->setTexture(image);
+		tutorialOverlay->setVisible(!ship->getChallenge());
+		if (status == Win) {
+			tutorialOverlay->setVisible(false);
+		}
+	} else if (ship->getLevelNum() > 3) {
+		tutorialOverlay->setVisible(false);
 	}
 
 	// Reanchor the node at the center of the screen and rotate about center.

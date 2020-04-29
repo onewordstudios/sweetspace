@@ -77,12 +77,21 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 	const char* levelName = nullptr;
 	switch (net->getLevelNum()) {
 		case 1:
-			levelName = LEVEL_ONE_KEY;
+			levelName = TUT_ONE_KEY;
 			break;
 		case 2:
-			levelName = LEVEL_TWO_KEY;
+			levelName = TUT_TWO_KEY;
 			break;
 		case 3:
+			levelName = TUT_FOUR_KEY;
+			break;
+		case 4:
+			levelName = LEVEL_ONE_KEY;
+			break;
+		case 5: // NOLINT counting numbers
+			levelName = LEVEL_TWO_KEY;
+			break;
+		case 6: // NOLINT counting numbers
 			levelName = LEVEL_THREE_KEY;
 			break;
 		default:
@@ -105,6 +114,7 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 
 	donutModel = ship->getDonuts().at(static_cast<unsigned long>(playerID));
 	ship->initTimer(level->getTime());
+	ship->setLevelNum(net->getLevelNum());
 
 	// Scene graph Initialization
 	sgRoot.init(assets, ship, playerID);

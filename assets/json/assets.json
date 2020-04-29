@@ -242,6 +242,21 @@
         },
         "sound_btn_off" : {
         	"file" : "textures/pause/sound_off.png"
+        },
+        "fix_breach_tutorial1" : {
+            "file" : "textures/tutorial/fix_breach_0.png"
+        },
+        "fix_breach_tutorial2" : {
+          "file" : "textures/tutorial/fix_breach_1.png"
+        },
+        "door_tutorial" : {
+          "file" : "textures/tutorial/door_3.png"
+        },
+        "jump_tutorial" : {
+          "file" : "textures/tutorial/jump_breach_0.png"
+        },
+        "stabilizer_tutorial" : {
+          "file" : "textures/tutorial/stabilizer_2.png"
         }
 	},
 	"sounds": {
@@ -499,7 +514,16 @@
 								"position": [0, 0],
 								"scale": 0.3
 							}
-						}
+						},
+                        "breachTutorial" : {
+                          "type": "Image",
+                          "data": {
+                            "texture": "fix_breach_tutorial1",
+                            "position": [0,-250],
+                            "anchor":   [0.5,0.5],
+                            "scale": 0.3
+                          }
+                        }
                     }
                 },
                 "overlay" : {
