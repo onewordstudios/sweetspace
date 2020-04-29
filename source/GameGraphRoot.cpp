@@ -136,6 +136,10 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	buttonNode = assets->get<Node>("game_field_near_button");
 	tutorialOverlay =
 		dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_breachTutorial"));
+	tutorialOverlay->setVisible(false);
+	if (ship->getLevelNum() < 4) {
+		tutorialOverlay->setVisible(true);
+	}
 	std::shared_ptr<Texture> image = assets->get<Texture>("health_green");
 	healthNode->setTexture(image);
 	nearSpace->setAngle(0.0f);
@@ -512,6 +516,11 @@ void GameGraphRoot::update(float timestep) {
 		std::shared_ptr<Texture> image = assets->get<Texture>("stabilizer_tutorial");
 		tutorialOverlay->setTexture(image);
 		tutorialOverlay->setVisible(!ship->getChallenge());
+		if (status == Win) {
+			tutorialOverlay->setVisible(false);
+		}
+	} else if (ship->getLevelNum() > 3) {
+		tutorialOverlay->setVisible(false);
 	}
 
 	// Reanchor the node at the center of the screen and rotate about center.
