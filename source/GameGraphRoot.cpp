@@ -361,12 +361,17 @@ void GameGraphRoot::dispose() {
 		allSpace = nullptr;
 		farSpace = nullptr;
 		nearSpace = nullptr;
+		donutNode->removeAllChildren();
 		donutNode = nullptr;
 
 		coordHUD = nullptr;
+		breachesNode->removeAllChildren();
 		breachesNode = nullptr;
+		shipSegsNode->removeAllChildren();
 		shipSegsNode = nullptr;
+		doorsNode->removeAllChildren();
 		doorsNode = nullptr;
+		externalDonutsNode->removeAllChildren();
 		externalDonutsNode = nullptr;
 
 		challengePanelHanger = nullptr;
@@ -391,6 +396,9 @@ void GameGraphRoot::dispose() {
 		lossScreen = nullptr;
 		restartBtn = nullptr;
 		levelsBtn = nullptr;
+
+		buttonNode->removeAllChildren();
+		buttonNode = nullptr;
 
 		winScreen = nullptr;
 		nextBtn = nullptr;
