@@ -44,7 +44,6 @@ void ExternalDonutNode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch, co
 
 			float angle = rotationNode->getAngle() - vel * globals::PI_180 * radiusRatio;
 			rotationNode->setAngle(angle);
-			setAngle(onScreenAngle);
 			animateJumping();
 		}
 	} else {
