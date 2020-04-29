@@ -181,6 +181,18 @@ void GameMode::update(float timestep) {
 	if (ship->getHealth() < 1) {
 		sgRoot.setStatus(GameGraphRoot::Loss);
 		sgRoot.update(timestep);
+
+		switch (sgRoot.getAndResetLastButtonPressed()) {
+			case GameGraphRoot::GameButton::Restart:
+				net->restartGame();
+				break;
+			case GameGraphRoot::GameButton::NextLevel:
+				CULog("Next Level Pressed");
+				net->nextLevel();
+				break;
+			default:
+				break;
+		}
 		return;
 	}
 
@@ -194,6 +206,18 @@ void GameMode::update(float timestep) {
 	if (ship->timerEnded() && ship->getHealth() > 0) {
 		sgRoot.setStatus(GameGraphRoot::Win);
 		sgRoot.update(timestep);
+
+		switch (sgRoot.getAndResetLastButtonPressed()) {
+			case GameGraphRoot::GameButton::Restart:
+				net->restartGame();
+				break;
+			case GameGraphRoot::GameButton::NextLevel:
+				CULog("Next Level Pressed");
+				net->nextLevel();
+				break;
+			default:
+				break;
+		}
 		return;
 	}
 

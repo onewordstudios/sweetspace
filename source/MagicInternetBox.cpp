@@ -298,6 +298,30 @@ void MagicInternetBox::startGame(int levelNum) {
 	status = GameStart;
 }
 
+void MagicInternetBox::restartGame() {
+	if (status != GameStart) {
+		CULog("ERROR: Trying to restart game during invalid state %d", status);
+		return;
+	}
+	std::vector<uint8_t> data;
+	data.push_back((uint8_t)ChangeGame);
+	data.push_back((uint8_t)0);
+	ws->sendBinary(data);
+	events = RestartLevel;
+}
+
+void MagicInternetBox::nextLevel() {
+	if (status != GameStart) {
+		CULog("ERROR: Trying to move to next level during invalid state %d", status);
+		return;
+	}
+	std::vector<uint8_t> data;
+	data.push_back((uint8_t)ChangeGame);
+	data.push_back((uint8_t)1);
+	ws->sendBinary(data);
+	events = NextLevel;
+}
+
 void MagicInternetBox::update() {
 	switch (status) {
 		case Uninitialized:
@@ -458,6 +482,15 @@ void MagicInternetBox::update(std::shared_ptr<ShipModel> state) {
 			}
 			case StateSync: {
 				resolveState(state, message);
+				return;
+			}
+			case ChangeGame: {
+				if (message[1] == 0) {
+					events = RestartLevel;
+				} else {
+					events = NextLevel;
+					levelNum++;
+				}
 				return;
 			}
 			default:

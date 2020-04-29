@@ -50,6 +50,11 @@ class MagicInternetBox {
 		GameEnded = 900
 	};
 
+	/**
+	 * Important events from the network that the root controller needs to know about
+	 */
+	enum NetworkEvents { None, RestartLevel, NextLevel };
+
    private:
 	/**
 	 * The singleton instance of this class.
@@ -65,6 +70,11 @@ class MagicInternetBox {
 	 * The current status
 	 */
 	MatchmakingStatus status;
+
+	/**
+	 * The last major unacknowledged network event
+	 */
+	NetworkEvents events;
 
 	/**
 	 * The current frame, modulo the network tick rate.
@@ -121,6 +131,7 @@ class MagicInternetBox {
 		PlayerJoined = 50, // Doubles for both matchmaking and reconnect
 		PlayerDisconnect,  // Doubles for manually disconnecting
 		StartGame,
+		ChangeGame, // Followed by 0 for restart, 1 for next level
 
 		// Matchmaking messages only
 		AssignedRoom = 100, // Doubles for both creating and created
@@ -179,6 +190,7 @@ class MagicInternetBox {
 	MagicInternetBox() {
 		ws = nullptr;
 		status = Uninitialized;
+		events = None;
 		levelNum = -1;
 		currFrame = 0;
 		playerID = -1;
@@ -193,10 +205,7 @@ class MagicInternetBox {
 	 */
 	static std::shared_ptr<MagicInternetBox> getInstance() {
 		if (instance == nullptr) {
-			// clang-tidy doesn't like this raw pointer assignment, but it's a singleton so it
-			// should be fine NOLINTNEXTLINE
-			MagicInternetBox* temp = new MagicInternetBox();
-			instance = std::shared_ptr<MagicInternetBox>(temp);
+			instance = std::shared_ptr<MagicInternetBox>(new MagicInternetBox());
 		}
 		return instance;
 	}
@@ -236,6 +245,17 @@ class MagicInternetBox {
 	MatchmakingStatus matchStatus();
 
 	/**
+	 * Get the last major unacknowledged network event; does NOT acknowledge the event.
+	 */
+	NetworkEvents lastNetworkEvent() { return events; }
+
+	/**
+	 * Acknowledge the last network event, causing {@link lastNetworkEvent()} to return None until
+	 * the next event.
+	 */
+	void acknowledgeNetworkEvent() { events = None; }
+
+	/**
 	 * Disconnect from the room and cleanup this object.
 	 */
 	void leaveRoom();
@@ -273,6 +293,18 @@ class MagicInternetBox {
 	 * @param levelNum The level number to start
 	 */
 	void startGame(int levelNum);
+
+	/**
+	 * Restart the current level.
+	 * Should only be called by the host when a level is in progress.
+	 */
+	void restartGame();
+
+	/**
+	 * Move to the current level number + 1.
+	 * Should only be called by the host after winning a level.
+	 */
+	void nextLevel();
 
 	/**
 	 * Update method called every frame during matchmaking phase.
