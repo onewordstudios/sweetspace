@@ -29,9 +29,9 @@ constexpr float OTHER_BREACH_FRICTION = 0.2f;
 
 // Health
 /** Grace period for a breach before it starts deducting health */
-constexpr float BREACH_HEALTH_GRACE_PERIOD = 15.0f;
+constexpr float BREACH_HEALTH_GRACE_PERIOD = 5.0f;
 /** Amount of health to decrement each frame per breach */
-constexpr float BREACH_HEALTH_PENALTY = 0.01f;
+constexpr float BREACH_HEALTH_PENALTY = 0.003f;
 /** Some undocumented upper bound for challenge progress */
 constexpr int CHALLENGE_PROGRESS_HIGH = 100;
 /** Some undocumented lower bound for challenge progress */
