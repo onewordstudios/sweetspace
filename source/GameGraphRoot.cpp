@@ -139,6 +139,11 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	if (ship->getLevelNum() < 4) {
 		tutorialOverlay->setVisible(true);
 	}
+	healthTutorial = dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_healthTutorial"));
+	healthTutorial->setVisible(false);
+	if(ship->getLevelNum() == 1) {
+	    healthTutorial->setVisible(true);
+	}
 	buttonsNode = assets->get<Node>("game_field_near_button");
 	std::shared_ptr<Texture> image = assets->get<Texture>("health_green");
 	healthNode->setTexture(image);
@@ -504,6 +509,7 @@ void GameGraphRoot::update(float timestep) {
 	}
 
 	if (ship->getLevelNum() == 1 && trunc(ship->timer) == 10) {
+	    healthTutorial->setVisible(false);
 		std::shared_ptr<Texture> image = assets->get<Texture>("jump_tutorial");
 		tutorialOverlay->setTexture(image);
 	} else if (ship->getLevelNum() == 2) {

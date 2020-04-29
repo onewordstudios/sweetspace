@@ -243,20 +243,38 @@
         "sound_btn_off" : {
         	"file" : "textures/pause/sound_off.png"
         },
-        "fix_breach_tutorial1" : {
+        "health_tutorial" : {
+          "file" : "textures/tutorial/health_0.png"
+        },
+        "move_tutorial0" : {
+          "file" : "textures/tutorial/move_0.png"
+        },
+        "move_tutorial1" : {
+          "file" : "textures/tutorial/move_1.png"
+        },
+        "fix_breach_tutorial0" : {
             "file" : "textures/tutorial/fix_breach_0.png"
         },
-        "fix_breach_tutorial2" : {
+        "fix_breach_tutorial1" : {
           "file" : "textures/tutorial/fix_breach_1.png"
         },
         "door_tutorial" : {
-          "file" : "textures/tutorial/door_3.png"
+          "file" : "textures/tutorial/door_0.png"
         },
-        "jump_tutorial" : {
+        "jump_tutorial0" : {
           "file" : "textures/tutorial/jump_breach_0.png"
         },
+        "jump_tutorial1" : {
+          "file" : "textures/tutorial/jump_breach_1.png"
+        },
+        "engine_tutorial0" : {
+          "file" : "textures/tutorial/engine_0.png"
+        },
+        "engine_tutorial1" : {
+          "file" : "textures/tutorial/engine_1.png"
+        },
         "stabilizer_tutorial" : {
-          "file" : "textures/tutorial/stabilizer_2.png"
+          "file" : "textures/tutorial/stabilizer_0.png"
         }
 	},
 	"sounds": {
@@ -523,7 +541,15 @@
                             "anchor":   [0.5,0.5],
                             "scale": 0.3
                           }
-                        }
+                        },
+                        "healthTutorial" : {
+                          "type": "Image",
+                          "data": {
+                            "texture": "health_tutorial",
+                            "position": [-100,-125],
+                            "anchor":   [0.5,0.5]
+                          }
+                      }
                     }
                 },
                 "overlay" : {

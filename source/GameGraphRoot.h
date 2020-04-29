@@ -74,6 +74,7 @@ class GameGraphRoot : public cugl::Scene {
 	std::shared_ptr<cugl::PolygonNode> healthNode;
 	/** Filmstrip representing the player's animated donut */
 	std::shared_ptr<cugl::PolygonNode> tutorialOverlay;
+	std::shared_ptr<cugl::PolygonNode> healthTutorial;
 
 	// Reconnection Textures
 	/** Node to hold all of the Reconnect Overlay.*/
