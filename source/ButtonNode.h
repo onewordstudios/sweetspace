@@ -1,21 +1,14 @@
 #ifndef __SWEETSPACE_BUTTONNODE_H__
 #define __SWEETSPACE_BUTTONNODE_H__
 
-#include <cugl/2d/CUNode.h>
-
 #include "ButtonModel.h"
+#include "CustomNode.h"
 #include "DonutModel.h"
 
-class ButtonNode : public cugl::Node {
+class ButtonNode : public CustomNode {
 #pragma mark Values
    protected:
 	shared_ptr<ButtonModel> buttonModel;
-	/** Reference to the player donut model */
-	std::shared_ptr<DonutModel> playerDonutModel;
-	/** Size of the ship. Needed for visibility determination */
-	float shipSize;
-	/** Whether the breach is being shown right now */
-	bool isShown;
 	/** Current animation frame of button */
 	int currentFrame;
 	/** Value of jumped on from previous frame */
@@ -47,7 +40,7 @@ class ButtonNode : public cugl::Node {
 	 * NEVER USE A CONSTRUCTOR WITH NEW. If you want to allocate an object on
 	 * the heap, use one of the static constructors instead.
 	 */
-	ButtonNode() : cugl::Node(), shipSize(0), isShown(false), currentFrame(0) {}
+	ButtonNode() : CustomNode(), currentFrame(0) {}
 
 	/**
 	 * Releases all resources allocated with this node.
@@ -92,10 +85,6 @@ class ButtonNode : public cugl::Node {
 #pragma mark -
 
 	void setModel(std::shared_ptr<ButtonModel> model) { buttonModel = model; }
-
-	void setDonutModel(std::shared_ptr<DonutModel> model) { playerDonutModel = model; }
-
-	void setShipSize(float f) { shipSize = f; }
 
 	std::shared_ptr<ButtonModel> getModel() { return buttonModel; }
 

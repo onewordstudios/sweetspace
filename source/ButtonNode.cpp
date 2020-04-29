@@ -8,7 +8,7 @@
 using namespace cugl;
 
 /** The radius used for placement of the doors. */
-constexpr float BUTTON_POS = 600;
+constexpr float BUTTON_RADIUS = 600;
 
 /** Position to place DoorNode offscreen. */
 constexpr float OFF_SCREEN_POS = 1500;
@@ -28,23 +28,19 @@ void ButtonNode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch, const Mat
 	bool justJumpedOn = buttonModel->isJumpedOn() && !prevJumpedOn;
 	if (buttonModel->getIsActive() || currentFrame != 0 || justJumpedOn) {
 		// Button is currently active
-		float onScreenAngle = buttonModel->getAngle() - playerDonutModel->getAngle();
-		onScreenAngle = onScreenAngle >= 0 ? onScreenAngle : shipSize + onScreenAngle;
-		onScreenAngle = onScreenAngle > shipSize / 2 ? onScreenAngle - shipSize : onScreenAngle;
-		onScreenAngle *= globals::PI_180;
+		float onScreenAngle = getOnScreenAngle(buttonModel->getAngle());
 		if (!(!buttonModel->getIsActive() && (currentFrame != 0 || justJumpedOn))) {
-			if (!isShown && onScreenAngle < globals::SEG_CUTOFF_ANGLE &&
-				onScreenAngle > -globals::SEG_CUTOFF_ANGLE) {
+			if (isComingIntoView(onScreenAngle)) {
 				// Coming into visible range
 				float relativeAngle = onScreenAngle - getParent()->getParent()->getAngle();
-				buttonPos = Vec2(BUTTON_POS * sin(relativeAngle), -BUTTON_POS * cos(relativeAngle));
+				buttonPos = getPositionVec(relativeAngle, BUTTON_RADIUS);
 				setPosition(buttonPos);
-				isShown = true;
 				setAngle(relativeAngle);
+				isShown = true;
+
 				std::string s = std::to_string(buttonModel->getPair()->getSection());
 				label->setText(s);
-			} else if (isShown && (onScreenAngle >= globals::SEG_CUTOFF_ANGLE ||
-								   onScreenAngle <= -globals::SEG_CUTOFF_ANGLE)) {
+			} else if (isGoingOutOfView(onScreenAngle)) {
 				// Leaving visible range
 				buttonPos = Vec2(OFF_SCREEN_POS, OFF_SCREEN_POS);
 				setPosition(buttonPos);
