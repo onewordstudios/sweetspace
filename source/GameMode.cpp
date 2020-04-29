@@ -97,7 +97,8 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 	if (maxButtons % 2 != 0) maxButtons += 1;
 	ship = ShipModel::alloc(net->getNumPlayers(), maxEvents, maxDoors, playerID,
 							(float)level->getShipSize((int)net->getNumPlayers()),
-							level->getInitHealth(), maxButtons);
+							level->getInitHealth() * net->getNumPlayers() / globals::MIN_PLAYERS,
+							maxButtons);
 	gm.init(ship, level);
 
 	donutModel = ship->getDonuts().at(static_cast<unsigned long>(playerID));
