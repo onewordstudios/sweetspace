@@ -419,12 +419,12 @@ void MainMenuMode::processButtons() {
 			}
 			if (buttonManager.tappedButton(medBtn, tapData)) {
 				gameReady = true;
-				net->startGame(2);
+				net->startGame(4);
 				return;
 			}
 			if (buttonManager.tappedButton(hardBtn, tapData)) {
 				gameReady = true;
-				net->startGame(3);
+				net->startGame(6); // NOLINT refactor out level constants later
 				return;
 			}
 			break;
