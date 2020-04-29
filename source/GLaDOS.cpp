@@ -47,11 +47,9 @@ bool GLaDOS::init(std::shared_ptr<ShipModel> ship, std::shared_ptr<LevelModel> l
 	this->ship = ship;
 	this->mib = MagicInternetBox::getInstance();
 	this->playerID = mib->getPlayerID();
-	maxEvents = level->getMaxBreaches() * mib->getNumPlayers() / globals::MIN_PLAYERS;
-	maxDoors = min(level->getMaxDoors() * mib->getNumPlayers() / globals::MIN_PLAYERS,
-				   mib->getNumPlayers() * 2 - 1);
-	maxButtons = level->getMaxButtons() * mib->getNumPlayers() / globals::MIN_PLAYERS;
-	if (maxButtons % 2 != 0) maxButtons += 1;
+	maxEvents = ship->getBreaches().size();
+	maxDoors = ship->getDoors().size();
+	maxButtons = ship->getButtons().size();
 	blocks = level->getBlocks();
 	events = level->getEvents();
 
