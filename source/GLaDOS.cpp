@@ -47,9 +47,9 @@ bool GLaDOS::init(std::shared_ptr<ShipModel> ship, std::shared_ptr<LevelModel> l
 	this->ship = ship;
 	this->mib = MagicInternetBox::getInstance();
 	this->playerID = mib->getPlayerID();
-	maxEvents = level->getMaxBreaches();
-	maxDoors = min(level->getMaxDoors(), mib->getNumPlayers() * 2 - 1);
-	maxButtons = level->getMaxButtons();
+	maxEvents = ship->getBreaches().size();
+	maxDoors = ship->getDoors().size();
+	maxButtons = ship->getButtons().size();
 	blocks = level->getBlocks();
 	events = level->getEvents();
 
@@ -93,30 +93,22 @@ void GLaDOS::placeObject(BuildingBlockModel::Object obj, float zeroAngle, vector
 			mib->createDualTask((float)obj.angle + zeroAngle, -1, -1, i);
 			break;
 		case BuildingBlockModel::Button: {
+			// Find usable button IDs
 			i = buttonFree.front();
 			buttonFree.pop();
 			int j = buttonFree.front();
 			buttonFree.pop();
 
-			std::shared_ptr<ButtonModel> btn1 = ship->getButtons().at(i);
-			std::shared_ptr<ButtonModel> btn2 = ship->getButtons().at(j);
-
+			// Roll for pair's angle
+			float origAngle = (float)obj.angle + zeroAngle;
 			float pairAngle;
 			do {
 				pairAngle = (float)(rand() % (int)(ship->getSize()));
 			} while (abs(pairAngle - ship->getButtons().at(i)->getAngle()) < globals::BUTTON_DIST);
 
-			btn1->clear();
-			btn1->setAngle((float)obj.angle + zeroAngle);
-			btn1->setJumpedOn(false);
-			btn1->setPair(btn2, j);
-
-			btn2->clear();
-			btn2->setAngle(pairAngle);
-			btn2->setJumpedOn(false);
-			btn2->setPair(btn1, i);
-
-			mib->createButtonTask((float)obj.angle + zeroAngle, i, pairAngle, j);
+			// Dispatch challenge creation
+			ship->createButton(origAngle, i, pairAngle, j);
+			mib->createButtonTask(origAngle, i, pairAngle, j);
 			break;
 		}
 		case BuildingBlockModel::Roll:
@@ -166,17 +158,16 @@ void GLaDOS::update(float dt) {
 	}
 
 	for (int i = 0; i < maxButtons; i++) {
-		if (ship->getButtons().at(i) == nullptr) {
+		auto btn = ship->getButtons().at(i);
+		if (btn == nullptr) {
 			continue;
 		}
-		if (ship->getButtons().at(i)->isResolved()) {
-			ship->getButtons().at(i)->setIsActive(false);
-			ship->getButtons().at(i)->getPair()->setIsActive(false);
-			buttonFree.push(ship->getButtons().at(i)->getPairID());
+		if (btn->isResolved()) {
+			buttonFree.push(btn->getPairID());
 			buttonFree.push(i);
-			// mib->flagButton(i, (int)playerID, 0);
-			ship->getButtons().at(i)->setJumpedOn(false);
-			ship->getButtons().at(i)->getPair()->setJumpedOn(false);
+
+			btn->getPair()->clear();
+			btn->clear();
 		}
 	}
 
@@ -187,7 +178,9 @@ void GLaDOS::update(float dt) {
 
 	for (int i = 0; i < events.size(); i++) {
 		std::shared_ptr<EventModel> event = events.at(i);
-		int spawnRate = (int)(1 / event->getProbability());
+		int spawnRate =
+			(int)(globals::MIN_PLAYERS / (event->getProbability() * mib->getNumPlayers()));
+		if (spawnRate < 1) spawnRate = 1;
 		if (event->isActive((int)ship->timePassed()) && rand() % spawnRate <= 1) {
 			// ready up the event
 			readyQueue.push_back(event);

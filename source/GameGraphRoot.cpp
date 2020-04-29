@@ -14,9 +14,6 @@ using namespace std;
 #pragma mark -
 #pragma mark Level Layout
 
-/** The scale of the donut textures. */
-constexpr float DONUT_SCALE = 0.4f;
-
 /** Offset of donut sprites from the radius of the ship */
 constexpr int DONUT_OFFSET = 195;
 
@@ -74,6 +71,9 @@ constexpr int MAX_HEALTH_LABELS = 10;
 /** Percentage of ship health to start showing yellow */
 constexpr float SHIP_HEALTH_YELLOW_CUTOFF = 0.8f;
 
+/** Percentage of ship health to start showing red */
+constexpr float SHIP_HEALTH_RED_CUTOFF = 0.35f;
+
 #pragma mark -
 #pragma mark Constructors
 
@@ -117,12 +117,13 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	allSpace = assets->get<Node>("game_field");
 	farSpace = assets->get<Node>("game_field_far");
 	nearSpace = assets->get<Node>("game_field_near");
-	donutNode = dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_player1"));
+	std::shared_ptr<PolygonNode> tempDonutNode =
+		dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_player1"));
+	donutPos = tempDonutNode->getPosition();
 	breachesNode = assets->get<Node>("game_field_near_breaches");
 	shipSegsNode = assets->get<Node>("game_field_near_shipsegments");
 	doorsNode = assets->get<Node>("game_field_near_doors");
 	externalDonutsNode = assets->get<Node>("game_field_near_externaldonuts");
-	donutPos = donutNode->getPosition();
 	healthNode = dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_health"));
 	coordHUD = std::dynamic_pointer_cast<Label>(assets->get<Node>("game_hud"));
 	shipOverlay =
@@ -178,9 +179,20 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 		std::shared_ptr<Texture> image = assets->get<Texture>("donut_" + donutColor);
 		// Player node is handled separately
 		if (i == playerID) {
-			donutNode->setTexture(image);
+			donutNode = PlayerDonutNode::allocWithTextures(image);
+			donutNode->setAnchor(Vec2::ANCHOR_CENTER);
+			donutNode->setPosition(tempDonutNode->getPosition());
+			donutNode->setModel(donutModel);
+			donutNode->setScale(DONUT_SCALE);
+			donutNode->setShipSize(ship->getSize());
+			donutNode->setDonutModel(ship->getDonuts().at(playerID));
+			donutNode->setInitPos(tempDonutNode->getPosition());
+			donutNode->setScreenHeight(screenHeight);
+			allSpace->addChild(donutNode);
+			tempDonutNode->setVisible(false);
 		} else {
-			std::shared_ptr<DonutNode> newDonutNode = DonutNode::allocWithTexture(image);
+			std::shared_ptr<ExternalDonutNode> newDonutNode =
+				ExternalDonutNode::allocWithTextures(image);
 			newDonutNode->setModel(donutModel);
 			newDonutNode->setScale(DONUT_SCALE);
 			newDonutNode->setShipSize(ship->getSize());
@@ -422,10 +434,10 @@ void GameGraphRoot::update(float timestep) {
 	if (ship->getHealth() < 1) {
 		std::shared_ptr<Texture> image = assets->get<Texture>("health_empty");
 		healthNode->setTexture(image);
-	} else if (ship->getHealth() < globals::INITIAL_SHIP_HEALTH / (float)2) {
+	} else if (ship->getHealth() < ship->getInitHealth() * SHIP_HEALTH_RED_CUTOFF) {
 		std::shared_ptr<Texture> image = assets->get<Texture>("health_red");
 		healthNode->setTexture(image);
-	} else if (ship->getHealth() < globals::INITIAL_SHIP_HEALTH * SHIP_HEALTH_YELLOW_CUTOFF) {
+	} else if (ship->getHealth() < ship->getInitHealth() * SHIP_HEALTH_YELLOW_CUTOFF) {
 		std::shared_ptr<Texture> image = assets->get<Texture>("health_yellow");
 		healthNode->setTexture(image);
 	}
@@ -453,16 +465,6 @@ void GameGraphRoot::update(float timestep) {
 	}
 	nearSpace->setAngle(wrapAngle(nearSpace->getAngle() + delta));
 	prevPlayerAngle = newPlayerAngle;
-
-	double radiusRatio = (double)globals::RADIUS / (donutNode->getWidth() / 2);
-
-	float angle = (float)(donutNode->getAngle() - ship->getDonuts().at(playerID)->getVelocity() *
-													  globals::PI_180 * radiusRatio);
-	donutNode->setAnchor(Vec2::ANCHOR_CENTER);
-	donutNode->setAngle(angle);
-	// Draw Jump Offset
-	float donutNewY = donutPos.y + ship->getDonuts().at(playerID)->getJumpOffset() * screenHeight;
-	donutNode->setPositionY(donutNewY);
 
 	// Update ship segments
 	std::shared_ptr<Texture> seg0 = assets->get<Texture>("shipseg0");
@@ -649,12 +651,5 @@ void GameGraphRoot::setNeedlePercentage(float percentage) {
 std::string GameGraphRoot::positionText() {
 	stringstream ss;
 	ss << "Time Left: " << trunc(ship->timer);
-	ss << " Position: " << ship->getDonuts().at(playerID)->getAngle();
 	return ss.str();
 }
-
-/**
- * Returns the donut node
- *
- */
-std::shared_ptr<cugl::Node> GameGraphRoot::getDonutNode() { return donutNode; }

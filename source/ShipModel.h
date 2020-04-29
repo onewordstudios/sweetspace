@@ -19,6 +19,8 @@ class ShipModel {
 	std::vector<std::shared_ptr<DoorModel>> doors;
 	/** Current list of doors on ship*/
 	std::vector<std::shared_ptr<ButtonModel>> buttons;
+	/** Initial health of the ship*/
+	float initHealth;
 	/** Current health of the ship*/
 	float health;
 	/** Size of the ship. Minimum value should be 360. Default value 360 */
@@ -47,6 +49,7 @@ class ShipModel {
 		: donuts(0),
 		  breaches(0),
 		  doors(0),
+		  initHealth(0),
 		  health(0),
 		  shipSize(0),
 		  rollDir(0),
@@ -243,6 +246,13 @@ class ShipModel {
 	float getHealth() { return health; }
 
 	/**
+	 * Get health of the ship
+	 *
+	 * @return health  the health of the ship
+	 */
+	float getInitHealth() { return initHealth; }
+
+	/**
 	 * Decrement health of the ship
 	 *
 	 * @param health   the amount of health to be decremented
@@ -379,5 +389,12 @@ class ShipModel {
 	 * @param flag   the flag to set (on or off, 1 or 0)
 	 */
 	bool flagButton(int id, int player, int flag);
+
+	/**
+	 * Resolve a button pair
+	 *
+	 * @param id The ID of one of the two buttons
+	 */
+	void resolveButton(int id);
 };
 #endif /* __SHIP_MODEL_H__ */

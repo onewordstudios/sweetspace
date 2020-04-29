@@ -1,55 +1,50 @@
-﻿#include "DonutNode.h"
+#include "DonutNode.h"
 
-#include <cugl/2d/CUPolygonNode.h>
+#include <cugl/2d/CUNode.h>
 
+#include "GameGraphRoot.h"
 #include "Globals.h"
+#include "Tween.h"
 
 using namespace cugl;
 
-/** The radius of the ship. Also the y coordinate of the center of the ship */
-constexpr unsigned int RADIUS_OFFSET = 30;
+/** The scale by which donut stretches when jumping */
+constexpr float JUMP_SCALE = 0.6f;
 
-/** Position to place node offscreen. */
-constexpr float OFF_SCREEN_POS = 1500;
+/** Percentage of jump at which distortion begins */
+constexpr float SCALING_BEGIN = 0.1f;
 
-void DonutNode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch, const Mat4& transform,
-					 Color4 tint) {
-	if (!donutModel->getIsActive()) return;
-	const float jump = 1.0f - donutModel->getJumpOffset();
-	float vel = donutModel->getVelocity();
-	float radiusRatio = (globals::RADIUS + RADIUS_OFFSET) / (getWidth() / 2);
-	Vec2 donutPos;
-	if (donutModel->getIsActive()) {
-		// Donut is currently active
-		float onScreenAngle = donutModel->getAngle() - playerDonutModel->getAngle();
-		onScreenAngle = onScreenAngle < 0 ? shipSize + onScreenAngle : onScreenAngle;
-		onScreenAngle = onScreenAngle > shipSize / 2 ? onScreenAngle - shipSize : onScreenAngle;
-		onScreenAngle *= globals::PI_180;
-		if (!isShown && onScreenAngle < globals::SEG_CUTOFF_ANGLE &&
-			onScreenAngle > -globals::SEG_CUTOFF_ANGLE) {
-			// Donut is coming into visible range
-			isShown = true;
-		} else if (isShown && (onScreenAngle >= globals::SEG_CUTOFF_ANGLE ||
-							   onScreenAngle <= -globals::SEG_CUTOFF_ANGLE)) {
-			// Donut is leaving visible range
-			donutPos = Vec2(OFF_SCREEN_POS, OFF_SCREEN_POS);
-			setPosition(donutPos);
-			isShown = false;
-		}
-		if (isShown) {
-			float relativeAngle = onScreenAngle - getParent()->getParent()->getAngle();
-			donutPos = Vec2(jump * (globals::RADIUS + RADIUS_OFFSET) * sin(relativeAngle),
-							-jump * (globals::RADIUS + RADIUS_OFFSET) * cos(relativeAngle));
-			setPosition(donutPos);
+/** Percentage of jump at which distortion stops */
+constexpr float SCALING_END = 1.2f;
 
-			float angle = getAngle() - vel * globals::PI_180 * radiusRatio;
-			setAngle(angle);
-		}
-	} else {
-		// Donut is currently inactive
-		donutPos = Vec2(OFF_SCREEN_POS, OFF_SCREEN_POS);
-		setPosition(donutPos);
-		isShown = false;
+void DonutNode::animateJumping() {
+	float halfJumpTime =
+		sqrt(2 * DonutModel::GRAVITY * DonutModel::JUMP_HEIGHT) / DonutModel::GRAVITY;
+	float scalingWindowSize = halfJumpTime * (SCALING_END - SCALING_BEGIN);
+	bool isInScalingWindow = donutModel->getJumpTime() > halfJumpTime * SCALING_BEGIN &&
+							 donutModel->getJumpTime() < halfJumpTime * SCALING_END;
+	if (!donutModel->isJumping()) {
+		// Not jumping. Set scale to normal and return
+		setScale(GameGraphRoot::DONUT_SCALE, GameGraphRoot::DONUT_SCALE);
+		return;
 	}
-	PolygonNode::draw(batch, transform, tint);
+	float xScale;
+	if (donutModel->getJumpTime() <= halfJumpTime * SCALING_BEGIN) {
+		// First animation stage
+		xScale = Tween::linear(GameGraphRoot::DONUT_SCALE, GameGraphRoot::DONUT_SCALE * JUMP_SCALE,
+							   (int)((donutModel->getJumpTime()) * 100),
+							   (int)(halfJumpTime * SCALING_BEGIN * 100));
+	} else if (isInScalingWindow) {
+		// Second animation stage
+		xScale =
+			Tween::linear(GameGraphRoot::DONUT_SCALE * JUMP_SCALE, GameGraphRoot::DONUT_SCALE,
+						  (int)((donutModel->getJumpTime() - halfJumpTime * SCALING_BEGIN) * 100),
+						  (int)(scalingWindowSize * 100));
+	} else {
+		// Not in animation stage
+		xScale = GameGraphRoot::DONUT_SCALE;
+	}
+	setScale(xScale, GameGraphRoot::DONUT_SCALE);
 }
+
+void DonutNode::animateFacialExpression() {}

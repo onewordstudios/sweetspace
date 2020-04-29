@@ -29,9 +29,9 @@ constexpr float OTHER_BREACH_FRICTION = 0.2f;
 
 // Health
 /** Grace period for a breach before it starts deducting health */
-constexpr float BREACH_HEALTH_GRACE_PERIOD = 15.0f;
+constexpr float BREACH_HEALTH_GRACE_PERIOD = 5.0f;
 /** Amount of health to decrement each frame per breach */
-constexpr float BREACH_HEALTH_PENALTY = 0.01f;
+constexpr float BREACH_HEALTH_PENALTY = 0.003f;
 /** Some undocumented upper bound for challenge progress */
 constexpr int CHALLENGE_PROGRESS_HIGH = 100;
 /** Some undocumented lower bound for challenge progress */
@@ -90,9 +90,15 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 	CULog("Loading level %s b/c mib gave level num %d", levelName, net->getLevelNum());
 
 	std::shared_ptr<LevelModel> level = assets->get<LevelModel>(levelName);
-	ship = ShipModel::alloc(net->getNumPlayers(), level->getMaxBreaches(), level->getMaxDoors(),
-							playerID, (float)level->getShipSize((int)net->getNumPlayers()),
-							level->getInitHealth(), level->getMaxButtons());
+	int maxEvents = level->getMaxBreaches() * net->getNumPlayers() / globals::MIN_PLAYERS;
+	int maxDoors = std::min(level->getMaxDoors() * net->getNumPlayers() / globals::MIN_PLAYERS,
+							net->getNumPlayers() * 2 - 1);
+	int maxButtons = level->getMaxButtons() * net->getNumPlayers() / globals::MIN_PLAYERS;
+	if (maxButtons % 2 != 0) maxButtons += 1;
+	ship = ShipModel::alloc(net->getNumPlayers(), maxEvents, maxDoors, playerID,
+							(float)level->getShipSize((int)net->getNumPlayers()),
+							level->getInitHealth() * net->getNumPlayers() / globals::MIN_PLAYERS,
+							maxButtons);
 	gm.init(ship, level);
 
 	donutModel = ship->getDonuts().at(static_cast<unsigned long>(playerID));
@@ -195,7 +201,7 @@ void GameMode::update(float timestep) {
 	// Breach Checks
 	for (int i = 0; i < ship->getBreaches().size(); i++) {
 		std::shared_ptr<BreachModel> breach = ship->getBreaches().at(i);
-		if (breach == nullptr) {
+		if (breach == nullptr || !breach->getIsActive()) {
 			continue;
 		}
 		float diff = ship->getSize() / 2 -
@@ -306,30 +312,26 @@ void GameMode::update(float timestep) {
 	}
 
 	for (int i = 0; i < ship->getButtons().size(); i++) {
-		if (ship->getButtons().at(i) == nullptr || !ship->getButtons().at(i)->getIsActive()) {
+		auto button = ship->getButtons().at(i);
+
+		if (button == nullptr || !button->getIsActive()) {
 			continue;
 		}
-		float diff = donutModel->getAngle() - ship->getButtons().at(i)->getAngle();
-		float a = diff + ship->getSize() / 2;
-		diff = a - floor(a / ship->getSize()) * ship->getSize() - ship->getSize() / 2;
 
-		if (abs(diff) < globals::BUTTON_ACTIVE_ANGLE && donutModel->isJumping()) {
-			ship->getButtons().at(i)->addPlayer(playerID);
-			ship->getButtons().at(i)->setJumpedOn(true);
+		float diff = donutModel->getAngle() - button->getAngle();
+		float shipSize = ship->getSize();
+		float a = diff + shipSize / 2;
+		diff = a - floor(a / shipSize) * shipSize - shipSize / 2;
 
-			net->flagButton(i, playerID, 1);
+		int flag = (abs(diff) < globals::BUTTON_ACTIVE_ANGLE && donutModel->isJumping()) ? 1 : 0;
+		ship->flagButton(i, playerID, flag);
+		net->flagButton(i, playerID, flag);
 
-		} else {
-			// ship->getButtons().at(i)->removePlayer(playerID);
-			// net->flagButton(i, playerID, 0);
-		}
-		if (ship->getButtons().at(i)->jumpedOn()) { // ship->getButtons().at(i)->getPlayersOn() == 1
-													// && ship->getButtons().at(i)->jumpedOn()) {
-
-			if (ship->getButtons().at(i)->getPair()->jumpedOn()) { //&&
-				// ship->getButtons().at(i)->getPair()->getPlayersOn() == 1) {
-				ship->getButtons().at(i)->setResolved(true);
-				ship->getButtons().at(i)->getPair()->setResolved(true);
+		if (flag == 1) {
+			if (button->getPair()->isJumpedOn()) {
+				CULog("Resolving button");
+				ship->resolveButton(i);
+				net->resolveButton(i);
 			}
 		}
 	}
