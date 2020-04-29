@@ -88,6 +88,13 @@ class CustomNode : public cugl::Node {
 						   onScreenAngle <= -globals::SEG_CUTOFF_ANGLE);
 	}
 
+	/**
+	 * Returns relative position to nearSpace after polar coord calculation
+	 *
+	 * @param relAngle Relative angle to nearSpace
+	 * @param radius Distance from nearSpace origin
+	 * @return
+	 */
 	cugl::Vec2 getPositionVec(float relAngle, float radius) {
 		return cugl::Vec2(radius * sin(relAngle), -radius * cos(relAngle));
 	}
