@@ -181,7 +181,7 @@ void GLaDOS::update(float dt) {
 	for (int i = 0; i < events.size(); i++) {
 		std::shared_ptr<EventModel> event = events.at(i);
 		int spawnRate =
-			(int)(mib->getNumPlayers() / (event->getProbability() * globals::MIN_PLAYERS));
+			(int)(globals::MIN_PLAYERS / (event->getProbability() * mib->getNumPlayers()));
 		if (spawnRate < 1) spawnRate = 1;
 		if (event->isActive((int)ship->timePassed()) && rand() % spawnRate <= 1) {
 			// ready up the event
