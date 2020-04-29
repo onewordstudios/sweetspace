@@ -242,6 +242,21 @@
         },
         "sound_btn_off" : {
         	"file" : "textures/pause/sound_off.png"
+        },
+        "fix_breach_tutorial1" : {
+            "file" : "textures/tutorial/fix_breach_0.png"
+        },
+        "fix_breach_tutorial2" : {
+          "file" : "textures/tutorial/fix_breach_1.png"
+        },
+        "door_tutorial" : {
+          "file" : "textures/tutorial/door_3.png"
+        },
+        "jump_tutorial" : {
+          "file" : "textures/tutorial/jump_breach_0.png"
+        },
+        "stabilizer_tutorial" : {
+          "file" : "textures/tutorial/stabilizer_2.png"
         }
 	},
 	"sounds": {
@@ -296,7 +311,8 @@
                             "data": {
                                 "size":     [2560,2560],
                                 "anchor":   [0,0],
-                                "position": [0,120]
+                                "position": [0,130],
+                                "scale": 0.9
                             },
                             "children": {
                                 "shipsegments": {
@@ -349,9 +365,9 @@
                             "type": "Image",
                             "data": {
                                 "texture":  "donut_yellow",
-                                "position": [0,-455],
+                                "position": [0,-398],
                                 "anchor":   [0.5,0.5],
-                                "scale":    0.4
+                                "scale":    0.36
                             }
                         },
                         "healthBase": {
@@ -514,6 +530,27 @@
                                   }
                                 }
                             }
+<<<<<<< HEAD
+=======
+                        },
+						"health": {
+							"type": "Image",
+							"data": {
+								"texture": "health_green",
+								"anchor":   [0.5,0.5],
+								"position": [0, 0],
+								"scale": 0.3
+							}
+						},
+                        "breachTutorial" : {
+                          "type": "Image",
+                          "data": {
+                            "texture": "fix_breach_tutorial1",
+                            "position": [0,-250],
+                            "anchor":   [0.5,0.5],
+                            "scale": 0.3
+                          }
+>>>>>>> master
                         }
                     }
                 },

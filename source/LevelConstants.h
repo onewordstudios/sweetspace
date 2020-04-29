@@ -25,12 +25,20 @@ constexpr auto TIME_STOP_FIELD = "timeStop";	   // NOLINT
 constexpr auto PROBABILITY_FIELD = "probability";  // NOLINT
 
 /** The source for our level file */
-constexpr auto LEVEL_ONE_FILE = "json/level1.owslevel";	  // NOLINT
-constexpr auto LEVEL_TWO_FILE = "json/level2.owslevel";	  // NOLINT
-constexpr auto LEVEL_THREE_FILE = "json/level3.owslevel"; // NOLINT
+constexpr auto LEVEL_ONE_FILE = "json/level1.owslevel";	   // NOLINT
+constexpr auto LEVEL_TWO_FILE = "json/level2.owslevel";	   // NOLINT
+constexpr auto LEVEL_THREE_FILE = "json/level3.owslevel";  // NOLINT
+constexpr auto TUT_ONE_FILE = "json/tutorial1.owslevel";   // NOLINT
+constexpr auto TUT_TWO_FILE = "json/tutorial2.owslevel";   // NOLINT
+constexpr auto TUT_THREE_FILE = "json/tutorial3.owslevel"; // NOLINT
+constexpr auto TUT_FOUR_FILE = "json/tutorial4.owslevel";  // NOLINT
 /** The key for our loaded level */
 constexpr auto LEVEL_ONE_KEY = "level1";   // NOLINT
 constexpr auto LEVEL_TWO_KEY = "level2";   // NOLINT
 constexpr auto LEVEL_THREE_KEY = "level3"; // NOLINT
+constexpr auto TUT_ONE_KEY = "tut1";	   // NOLINT
+constexpr auto TUT_TWO_KEY = "tut2";	   // NOLINT
+constexpr auto TUT_THREE_KEY = "tut3";	   // NOLINT
+constexpr auto TUT_FOUR_KEY = "tut4";	   // NOLINT
 
 #endif /* defined(__JS_LEVEL_CONSTANTS_H__) */

@@ -40,8 +40,9 @@ class BreachNode : public cugl::Node {
 
    public:
 #pragma mark -
-	static constexpr int BREACH_H = 9;
-	static constexpr int BREACH_W = 10;
+	static constexpr int BREACH_H = 6;
+	static constexpr int BREACH_W = 8;
+	static constexpr int BREACH_SIZE = 45;
 #pragma mark Constructor
 	/**
 	 * Creates an empty Breach with the degenerate texture.
@@ -96,6 +97,8 @@ class BreachNode : public cugl::Node {
 	std::shared_ptr<cugl::AnimationNode> getPatternNode() { return patternNode; }
 
 	std::shared_ptr<BreachModel> getModel() { return breachModel; }
+
+	bool getIsShown() { return isShown; }
 
 #pragma mark -
 	/**

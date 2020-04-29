@@ -17,21 +17,22 @@ bool ShipModel::init(unsigned int numPlayers, unsigned int numBreaches, unsigned
 
 	// Instantiate breach models
 	for (unsigned int i = 0; i < numBreaches; i++) {
-		breaches.push_back(BreachModel::alloc());
+		breaches.push_back(std::make_shared<BreachModel>());
 	}
 
 	// Instantiate door models
 	for (unsigned int i = 0; i < numDoors; i++) {
-		doors.push_back(DoorModel::alloc());
+		doors.push_back(std::make_shared<DoorModel>());
 	}
 
 	// Instantiate button models
 	for (unsigned int i = 0; i < numButtons; i++) {
-		buttons.push_back(ButtonModel::alloc());
+		buttons.push_back(std::make_shared<ButtonModel>());
 	}
 
 	// Instantiate health
 	health = (float)initHealth;
+	this->initHealth = (float)initHealth;
 
 	// Initialize size
 	this->shipSize = shipSize;
@@ -43,19 +44,17 @@ bool ShipModel::init(unsigned int numPlayers, unsigned int numBreaches, unsigned
 }
 
 bool ShipModel::createBreach(float angle, int player, int id) {
-	breaches.at(id)->reset(angle, player);
-	breaches.at(id)->setTimeCreated(timer);
+	breaches.at(id)->init(angle, player, timer);
 	return true;
 }
 
 bool ShipModel::createBreach(float angle, int health, int player, int id) {
-	breaches.at(id)->reset(angle, health, player);
+	breaches.at(id)->init(angle, health, player, timer);
 	return true;
 }
 
 bool ShipModel::createDoor(float angle, int id) {
-	doors.at(id)->clear();
-	doors.at(id)->setAngle(angle);
+	doors.at(id)->init(angle);
 	return true;
 }
 
@@ -72,8 +71,6 @@ bool ShipModel::flagDoor(int id, int player, int flag) {
 	}
 	return true;
 }
-
-bool ShipModel::closeDoor(int id) { return false; }
 
 bool ShipModel::createAllTask(int data) {
 	setRollDir(data);
@@ -92,24 +89,27 @@ bool ShipModel::failAllTask() {
 }
 
 bool ShipModel::createButton(float angle1, int id1, float angle2, int id2) {
-	buttons.at(id1)->setAngle(angle1);
-	buttons.at(id2)->setAngle(angle2);
-	buttons.at(id1)->setPair(buttons.at(id2), id2);
-	buttons.at(id2)->setPair(buttons.at(id1), id1);
+	buttons.at(id1)->init(angle1, buttons.at(id2), id2);
+	buttons.at(id2)->init(angle2, buttons.at(id1), id1);
 	return true;
 }
 
 bool ShipModel::flagButton(int id, int player, int flag) {
 	if (flag == 0) {
-		CULog("UNFLAGGING");
-		// buttons.at(id)->removePlayer(player);
-		// buttons.at(id)->setJumpedOn(false);
+		buttons.at(id)->removePlayer(player);
 	} else {
 		buttons.at(id)->addPlayer(player);
-		buttons.at(id)->setJumpedOn(true);
-		CULog("JUmp button %d", id);
 	}
 	return true;
+}
+
+void ShipModel::resolveButton(int id) {
+	auto btn = buttons.at(id);
+	if (btn == nullptr || !btn->getIsActive() || btn->isResolved()) {
+		return;
+	}
+	btn->getPair()->resolve();
+	btn->resolve();
 }
 
 /**

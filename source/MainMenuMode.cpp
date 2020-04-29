@@ -111,8 +111,15 @@ bool MainMenuMode::init(const std::shared_ptr<AssetManager>& assets) {
 	currState = NA;
 	transitionState = StartScreen;
 
-	updateClientLabel();
+	// Reset state in case coming back from other place
+	gameReady = false;
+	hostScreen->setVisible(false);
+	clientScreen->setVisible(false);
+	clientJoinBtn->setDown(false);
+	levelSelect->setVisible(false);
+	clientEnteredRoom.clear();
 
+	updateClientLabel();
 	addChild(scene);
 
 	return true;
@@ -140,6 +147,7 @@ void MainMenuMode::dispose() {
 	easyBtn = nullptr;
 	medBtn = nullptr;
 	hardBtn = nullptr;
+	buttonManager.clear();
 	clientRoomBtns.clear();
 }
 #pragma endregion
@@ -411,12 +419,12 @@ void MainMenuMode::processButtons() {
 			}
 			if (buttonManager.tappedButton(medBtn, tapData)) {
 				gameReady = true;
-				net->startGame(2);
+				net->startGame(4);
 				return;
 			}
 			if (buttonManager.tappedButton(hardBtn, tapData)) {
 				gameReady = true;
-				net->startGame(3);
+				net->startGame(6); // NOLINT refactor out level constants later
 				return;
 			}
 			break;

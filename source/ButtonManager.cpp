@@ -54,3 +54,9 @@ bool ButtonManager::tappedButton(std::shared_ptr<cugl::Button> button,
 	return button->containsScreen(std::get<0>(tapData)) &&
 		   button->containsScreen(std::get<1>(tapData));
 }
+
+void ButtonManager::clear() {
+	wasDown = false;
+	buttons.clear();
+	downBtns.clear();
+}

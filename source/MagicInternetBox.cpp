@@ -183,7 +183,7 @@ void MagicInternetBox::syncState(std::shared_ptr<ShipModel> state) {
 	const auto& doors = state->getDoors();
 	data.push_back((uint8_t)doors.size());
 	for (unsigned int i = 0; i < doors.size(); i++) {
-		if (doors[i]->getAngle() == -1) {
+		if (!doors[i]->getIsActive()) {
 			data.push_back(0);
 			data.push_back(0);
 			data.push_back(0);
@@ -237,10 +237,9 @@ void MagicInternetBox::resolveState(std::shared_ptr<ShipModel> state,
 				state->createDoor(angle, (int)i);
 			}
 		} else {
-			if (doors[i]->getAngle() != -1.0f) {
+			if (doors[i]->getIsActive()) {
 				CULog("Found closed door that should be open, id %d", i);
-				state->getDoors()[i]->setAngle(-1);
-				state->getDoors()[i]->clear();
+				state->getDoors()[i]->reset();
 			}
 		}
 
@@ -297,6 +296,31 @@ void MagicInternetBox::startGame(int levelNum) {
 
 	maxPlayers = numPlayers;
 	status = GameStart;
+}
+
+void MagicInternetBox::restartGame() {
+	if (status != GameStart) {
+		CULog("ERROR: Trying to restart game during invalid state %d", status);
+		return;
+	}
+	std::vector<uint8_t> data;
+	data.push_back((uint8_t)ChangeGame);
+	data.push_back((uint8_t)0);
+	ws->sendBinary(data);
+	events = RestartLevel;
+}
+
+void MagicInternetBox::nextLevel() {
+	if (status != GameStart) {
+		CULog("ERROR: Trying to move to next level during invalid state %d", status);
+		return;
+	}
+	std::vector<uint8_t> data;
+	data.push_back((uint8_t)ChangeGame);
+	data.push_back((uint8_t)1);
+	ws->sendBinary(data);
+	events = NextLevel;
+	levelNum++;
 }
 
 void MagicInternetBox::update() {
@@ -461,6 +485,15 @@ void MagicInternetBox::update(std::shared_ptr<ShipModel> state) {
 				resolveState(state, message);
 				return;
 			}
+			case ChangeGame: {
+				if (message[1] == 0) {
+					events = RestartLevel;
+				} else {
+					events = NextLevel;
+					levelNum++;
+				}
+				return;
+			}
 			default:
 				break;
 		}
@@ -517,9 +550,13 @@ void MagicInternetBox::update(std::shared_ptr<ShipModel> state) {
 				state->createButton(angle1, id1, angle2, id2);
 				break;
 			}
-			case ButtonResolve: {
-				CULog("Flag button %d", id);
+			case ButtonFlag: {
 				state->flagButton(id, data1, data2);
+				break;
+			}
+			case ButtonResolve: {
+				state->resolveButton(id);
+				CULog("Resolve button %d", id);
 				break;
 			}
 			case AllCreate: {
@@ -565,8 +602,10 @@ void MagicInternetBox::createButtonTask(float angle1, int id1, float angle2, int
 }
 
 void MagicInternetBox::flagButton(int id, int player, int flag) {
-	sendData(ButtonResolve, -1, id, player, flag, -1.0f);
+	sendData(ButtonFlag, -1, id, player, flag, -1.0f);
 }
+
+void MagicInternetBox::resolveButton(int id) { sendData(ButtonResolve, -1, id, -1, -1, -1.0f); }
 
 void MagicInternetBox::failAllTask() { sendData(AllFail, -1.0f, -1, -1, -1, -1.0f); }
 
@@ -586,4 +625,11 @@ void MagicInternetBox::forceDisconnect() {
 	ws->close();
 	status = Disconnected;
 	lastConnection = 0;
+}
+
+void MagicInternetBox::reset() {
+	forceDisconnect();
+	delete ws;
+	ws = nullptr;
+	status = Uninitialized;
 }

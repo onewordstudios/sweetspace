@@ -50,6 +50,11 @@ class MagicInternetBox {
 		GameEnded = 900
 	};
 
+	/**
+	 * Important events from the network that the root controller needs to know about
+	 */
+	enum NetworkEvents { None, RestartLevel, NextLevel };
+
    private:
 	/**
 	 * The singleton instance of this class.
@@ -65,6 +70,11 @@ class MagicInternetBox {
 	 * The current status
 	 */
 	MatchmakingStatus status;
+
+	/**
+	 * The last major unacknowledged network event
+	 */
+	NetworkEvents events;
 
 	/**
 	 * The current frame, modulo the network tick rate.
@@ -111,6 +121,7 @@ class MagicInternetBox {
 		DualCreate,
 		DualResolve,
 		ButtonCreate,
+		ButtonFlag,
 		ButtonResolve,
 		AllCreate,
 		AllFail,
@@ -120,6 +131,7 @@ class MagicInternetBox {
 		PlayerJoined = 50, // Doubles for both matchmaking and reconnect
 		PlayerDisconnect,  // Doubles for manually disconnecting
 		StartGame,
+		ChangeGame, // Followed by 0 for restart, 1 for next level
 
 		// Matchmaking messages only
 		AssignedRoom = 100, // Doubles for both creating and created
@@ -178,6 +190,7 @@ class MagicInternetBox {
 	MagicInternetBox() {
 		ws = nullptr;
 		status = Uninitialized;
+		events = None;
 		levelNum = -1;
 		currFrame = 0;
 		playerID = -1;
@@ -192,10 +205,7 @@ class MagicInternetBox {
 	 */
 	static std::shared_ptr<MagicInternetBox> getInstance() {
 		if (instance == nullptr) {
-			// clang-tidy doesn't like this raw pointer assignment, but it's a singleton so it
-			// should be fine NOLINTNEXTLINE
-			MagicInternetBox* temp = new MagicInternetBox();
-			instance = std::shared_ptr<MagicInternetBox>(temp);
+			instance = std::shared_ptr<MagicInternetBox>(new MagicInternetBox());
 		}
 		return instance;
 	}
@@ -235,6 +245,17 @@ class MagicInternetBox {
 	MatchmakingStatus matchStatus();
 
 	/**
+	 * Get the last major unacknowledged network event; does NOT acknowledge the event.
+	 */
+	NetworkEvents lastNetworkEvent() { return events; }
+
+	/**
+	 * Acknowledge the last network event, causing {@link lastNetworkEvent()} to return None until
+	 * the next event.
+	 */
+	void acknowledgeNetworkEvent() { events = None; }
+
+	/**
 	 * Disconnect from the room and cleanup this object.
 	 */
 	void leaveRoom();
@@ -272,6 +293,18 @@ class MagicInternetBox {
 	 * @param levelNum The level number to start
 	 */
 	void startGame(int levelNum);
+
+	/**
+	 * Restart the current level.
+	 * Should only be called by the host when a level is in progress.
+	 */
+	void restartGame();
+
+	/**
+	 * Move to the current level number + 1.
+	 * Should only be called by the host after winning a level.
+	 */
+	void nextLevel();
 
 	/**
 	 * Update method called every frame during matchmaking phase.
@@ -339,16 +372,23 @@ class MagicInternetBox {
 
 	/**
 	 * Inform other players that one person is on the button.
-	 * This method does not keep track of whether one or both players are
-	 * resolving this task. It merely broadcasts to all other players that
-	 * one more person is now on this task; when both players are here, it
-	 * is the responsibility of the receivers of this message to resolve the task.
+	 * This method does not keep track of whether one or both players are resolving this task. It
+	 * merely broadcasts to all other players that one more person is now on this task. It is the
+	 * responsibility of the second player to jump on the button to call {@link resolveButton()} to
+	 * inform others that the task has been resolved.
 	 *
 	 * @param id The button ID
 	 * @param player The player ID who is activating the button
 	 * @param flag Whether the player is on or off the door (1 or 0)
 	 */
 	void flagButton(int id, int player, int flag);
+
+	/**
+	 * Inform other players that a pair of buttons have been resolved.
+	 *
+	 * @param id The ID of one of the two buttons.
+	 */
+	void resolveButton(int id);
 
 	/**
 	 * Inform other players that a task requiring all members of the ship has been created (eg:
@@ -377,6 +417,11 @@ class MagicInternetBox {
 	 * Disconnect this player from the server, by force.
 	 */
 	void forceDisconnect();
+
+	/**
+	 * Reset the controller entirely; useful when leaving a game.
+	 */
+	void reset();
 };
 
 #endif /* __NETWORK_CONTROLLER_H__ */
