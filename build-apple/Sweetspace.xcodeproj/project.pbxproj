@@ -218,6 +218,7 @@
 		C58C59370F28300C621B05DD /* ButtonModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ButtonModel.cpp; sourceTree = "<group>"; };
 		C58C5D00FFFC42F97DEC65C0 /* ButtonModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ButtonModel.h; sourceTree = "<group>"; };
 		C58C5F587FFB8E623B5C9D7F /* ButtonNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ButtonNode.cpp; sourceTree = "<group>"; };
+		D152222ED700A38FD9334825 /* CustomNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomNode.h; sourceTree = "<group>"; };
 		D15224B9EA517A2BFF54A6C2 /* easywsclient.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = easywsclient.hpp; sourceTree = "<group>"; };
 		D1522514F4482BDE04D4AABE /* PlayerDonutNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayerDonutNode.h; sourceTree = "<group>"; };
 		D15227D97E11C33C1D22A5E2 /* DoorModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DoorModel.h; sourceTree = "<group>"; };
@@ -555,6 +556,7 @@
 				D15229EF18C3F82477D4E059 /* DonutNode.h */,
 				D1522DC8B550BC37E1C05E7B /* PlayerDonutNode.cpp */,
 				D1522514F4482BDE04D4AABE /* PlayerDonutNode.h */,
+				D152222ED700A38FD9334825 /* CustomNode.h */,
 			);
 			name = Source;
 			path = ../source;
