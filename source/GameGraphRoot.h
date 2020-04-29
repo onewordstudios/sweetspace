@@ -123,7 +123,7 @@ class GameGraphRoot : public cugl::Scene {
 	/** Tag of the right most ship segment */
 	unsigned int rightMostSeg;
 	/** Parent node of all buttons, is child of nearSpace */
-	std::shared_ptr<cugl::Node> buttonNode;
+	std::shared_ptr<cugl::Node> buttonsNode;
 
 	// MODEL INFORMATION
 	/** Id of the current client */
