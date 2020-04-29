@@ -362,6 +362,39 @@ void GameGraphRoot::dispose() {
 		farSpace = nullptr;
 		nearSpace = nullptr;
 		donutNode = nullptr;
+
+		coordHUD = nullptr;
+		breachesNode = nullptr;
+		shipSegsNode = nullptr;
+		doorsNode = nullptr;
+		externalDonutsNode = nullptr;
+
+		challengePanelHanger = nullptr;
+		challengePanel = nullptr;
+		challengePanelText = nullptr;
+		challengePanelArrows.clear();
+		healthNode = nullptr;
+
+		reconnectOverlay = nullptr;
+		reconnectE2 = nullptr;
+		reconnectE3 = nullptr;
+
+		pauseBtn = nullptr;
+		pauseScreen = nullptr;
+		musicBtn = nullptr;
+		soundBtn = nullptr;
+		leaveBtn = nullptr;
+		needle = nullptr;
+
+		shipOverlay = nullptr;
+
+		lossScreen = nullptr;
+		restartBtn = nullptr;
+		levelsBtn = nullptr;
+
+		winScreen = nullptr;
+		nextBtn = nullptr;
+
 		_active = false;
 	}
 }
