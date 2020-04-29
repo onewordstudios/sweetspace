@@ -252,8 +252,6 @@ class GameGraphRoot : public cugl::Scene {
 	 */
 	void setNeedlePercentage(float percentage);
 
-	std::shared_ptr<cugl::Node> getDonutNode();
-
 #pragma mark -
 #pragma mark Accessors
 	/**
