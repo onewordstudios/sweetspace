@@ -348,6 +348,8 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	nearSpace->setVisible(true);
 	healthNode->setVisible(true);
 
+	lastButtonPressed = None;
+
 	// Register Regular Buttons
 	buttonManager.registerButton(restartBtn);
 	buttonManager.registerButton(levelsBtn);
@@ -684,6 +686,19 @@ void GameGraphRoot::processButtons() {
 		// Leave Button
 		else if (buttonManager.tappedButton(leaveBtn, tapData)) {
 			isBackToMainMenu = true;
+		}
+	} else {
+		if (winScreen->isVisible()) {
+			if (buttonManager.tappedButton(nextBtn, tapData)) {
+				lastButtonPressed = NextLevel;
+			}
+		} else if (lossScreen->isVisible()) {
+			// Is this loss?
+			if (buttonManager.tappedButton(restartBtn, tapData)) {
+				lastButtonPressed = Restart;
+			} else if (buttonManager.tappedButton(levelsBtn, tapData)) {
+				isBackToMainMenu = true;
+			}
 		}
 	}
 }

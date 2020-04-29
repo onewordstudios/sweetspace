@@ -34,6 +34,9 @@ class GameGraphRoot : public cugl::Scene {
 		Ended
 	};
 
+	/** Buttons that can be pressed  */
+	enum GameButton { None, Restart, NextLevel };
+
    protected:
 	/** The asset manager for this game mode. */
 	std::shared_ptr<cugl::AssetManager> assets;
@@ -165,6 +168,9 @@ class GameGraphRoot : public cugl::Scene {
 	/** Whether to go back to main menu */
 	bool isBackToMainMenu;
 
+	/** The last pressed button */
+	GameButton lastButtonPressed;
+
    public:
 #pragma mark -
 #pragma mark Public Consts
@@ -201,7 +207,8 @@ class GameGraphRoot : public cugl::Scene {
 		  prevPlayerAngle(0),
 		  currentHealthWarningFrame(0),
 		  status(Normal),
-		  isBackToMainMenu(false) {}
+		  isBackToMainMenu(false),
+		  lastButtonPressed(None) {}
 
 	/**
 	 * Disposes of all (non-static) resources allocated to this mode.
@@ -281,5 +288,15 @@ class GameGraphRoot : public cugl::Scene {
 	 * @return whether to go back to the main menu
 	 */
 	bool getIsBackToMainMenu() { return isBackToMainMenu; }
+
+	/**
+	 * Returns the last button pressed, if any, and resets the field so future calls to this method
+	 * will return None until another button is pressed.
+	 */
+	GameButton getAndResetLastButtonPressed() {
+		GameButton ret = lastButtonPressed;
+		lastButtonPressed = None;
+		return ret;
+	}
 };
 #endif /* __GAME_GRAPH_ROOT_H__ */
