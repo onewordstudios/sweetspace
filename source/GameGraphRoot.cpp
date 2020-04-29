@@ -509,7 +509,7 @@ void GameGraphRoot::update(float timestep) {
 	} else if (ship->getLevelNum() == 3) {
 		std::shared_ptr<Texture> image = assets->get<Texture>("stabilizer_tutorial");
 		tutorialOverlay->setTexture(image);
-		tutorialOverlay->setVisible(ship->getChallenge());
+		tutorialOverlay->setVisible(!ship->getChallenge());
 	}
 
 	// Reanchor the node at the center of the screen and rotate about center.

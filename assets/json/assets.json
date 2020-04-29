@@ -519,7 +519,7 @@
                           "type": "Image",
                           "data": {
                             "texture": "fix_breach_tutorial1",
-                            "position": [0,-310],
+                            "position": [0,-250],
                             "anchor":   [0.5,0.5],
                             "scale": 0.3
                           }
