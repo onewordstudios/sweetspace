@@ -32,7 +32,7 @@ void ButtonNode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch, const Mat
 		onScreenAngle = onScreenAngle >= 0 ? onScreenAngle : shipSize + onScreenAngle;
 		onScreenAngle = onScreenAngle > shipSize / 2 ? onScreenAngle - shipSize : onScreenAngle;
 		onScreenAngle *= globals::PI_180;
-		if (!(buttonModel->getAngle() == -1 && (currentFrame != 0 || justJumpedOn))) {
+		if (!(!buttonModel->getIsActive() && (currentFrame != 0 || justJumpedOn))) {
 			if (!isShown && onScreenAngle < globals::SEG_CUTOFF_ANGLE &&
 				onScreenAngle > -globals::SEG_CUTOFF_ANGLE) {
 				// Coming into visible range
