@@ -147,6 +147,7 @@ void MainMenuMode::dispose() {
 	easyBtn = nullptr;
 	medBtn = nullptr;
 	hardBtn = nullptr;
+	buttonManager.clear();
 	clientRoomBtns.clear();
 }
 #pragma endregion

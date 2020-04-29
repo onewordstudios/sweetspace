@@ -193,9 +193,14 @@ class GameGraphRoot : public cugl::Scene {
 	 */
 	GameGraphRoot()
 		: Scene(),
-		  status(Normal),
+		  screenHeight(0),
 		  currentEllipsesFrame(0),
+		  leftMostSeg(0),
+		  rightMostSeg(0),
+		  playerID(0),
+		  prevPlayerAngle(0),
 		  currentHealthWarningFrame(0),
+		  status(Normal),
 		  isBackToMainMenu(false) {}
 
 	/**

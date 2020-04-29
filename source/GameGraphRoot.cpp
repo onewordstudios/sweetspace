@@ -95,6 +95,8 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	this->prevPlayerAngle = ship->getDonuts().at(playerID)->getAngle();
 
 	isBackToMainMenu = false;
+	status = Normal;
+	currentEllipsesFrame = 0;
 
 	// Initialize the scene to a locked width
 	Size dimen = Application::get()->getDisplaySize();
@@ -355,6 +357,7 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 void GameGraphRoot::dispose() {
 	if (_active) {
 		removeAllChildren();
+		buttonManager.clear();
 		allSpace = nullptr;
 		farSpace = nullptr;
 		nearSpace = nullptr;
