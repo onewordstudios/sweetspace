@@ -129,7 +129,7 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	currentHealthWarningFrame = 0;
 	buttonNode = assets->get<Node>("game_field_near_button");
 	tutorialOverlay =
-		dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_breachTutorial1"));
+		dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_breachTutorial"));
 
 	// Initialize Roll Challenge
 	challengePanelHanger = dynamic_pointer_cast<cugl::PolygonNode>(
@@ -441,14 +441,16 @@ void GameGraphRoot::update(float timestep) {
 		healthNode->setTexture(image);
 	}
 
-	if (ship->getLevelNum() == 2) {
+	if(ship->getLevelNum() == 1 && trunc(ship->timer) == 10) {
+        std::shared_ptr<Texture> image = assets->get<Texture>("jump_tutorial");
+        tutorialOverlay->setTexture(image);
+	} else if (ship->getLevelNum() == 2) {
 		std::shared_ptr<Texture> image = assets->get<Texture>("door_tutorial");
 		tutorialOverlay->setTexture(image);
-	} else if (ship->getLevelNum() == 3 && ship->getChallenge()) {
+	} else if (ship->getLevelNum() == 3) {
 		std::shared_ptr<Texture> image = assets->get<Texture>("stabilizer_tutorial");
 		tutorialOverlay->setTexture(image);
-	} else if (ship->getLevelNum() == 3 && !ship->getChallenge()) {
-		tutorialOverlay->setVisible(false);
+		tutorialOverlay->setVisible(ship->getChallenge());
 	}
 
 	// Reanchor the node at the center of the screen and rotate about center.

@@ -514,11 +514,11 @@
 								"scale": 0.3
 							}
 						},
-                        "breachTutorial1" : {
+                        "breachTutorial" : {
                           "type": "Image",
                           "data": {
                             "texture": "fix_breach_tutorial1",
-                            "position": [0,-100],
+                            "position": [0,-310],
                             "anchor":   [0.5,0.5],
                             "scale": 0.3
                           }
