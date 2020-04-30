@@ -789,34 +789,21 @@
 				            }
 						},
                         "reconnect": {
-							"type"      : "Node",
+							"type"      : "Image",
 				            "format"    : {
 				                "type" : "Anchored"
 				            },
 				            "data": {
-				            	"visible": false,
-                                "anchor" : [0.5,0.5]
+								"texture":  "overlay_dim",
+								"anchor":   [0.5,0.5],
+								"scale":    1,
+				            	"visible": false
 				            },
-							"layout" : {
-								"x_anchor" : "left",
-        						"y_anchor" : "bottom"
+				            "layout" : {
+								"x_anchor" : "center",
+								"y_anchor" : "middle"
 							},
 				            "children":  {
-				            	"dim" : {
-				            		"type": "Image",
-									"format"    : {
-										"type" : "Anchored"
-									},
-				                    "data": {
-				                        "texture":  "overlay_dim",
-				                        "anchor":   [0.5,0.5],
-				                        "scale":    1
-				                    },
-									"layout" : {
-										"x_anchor" : "center",
-										"y_anchor" : "middle"
-									}
-				            	},
 				            	"bg" : {
 				            		"type": "Image",
 									"format"    : {
