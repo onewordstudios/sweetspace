@@ -16,9 +16,6 @@ constexpr unsigned int NETWORK_TICK = 12; // NOLINT
 /** Number of characters in a ship ID */
 constexpr unsigned int ROOM_LENGTH = 5; // NOLINT
 
-/** Minimum of ship health for win condition */
-constexpr int INITIAL_SHIP_HEALTH = 10; // NOLINT
-
 /** Minimum number of players per game */
 constexpr unsigned int MIN_PLAYERS = 2; // NOLINT
 
@@ -32,7 +29,7 @@ constexpr float DOOR_WIDTH = 10.0f; // NOLINT
 constexpr float BREACH_WIDTH = 6.0f; // NOLINT
 
 /** The Angle in degrees for which a door can be activated*/
-constexpr float BUTTON_ACTIVE_ANGLE = 15.0f;
+constexpr float BUTTON_ACTIVE_ANGLE = 15.0f; // NOLINT
 
 /** The min angle in degrees for which two buttons can be placed*/
 constexpr int BUTTON_DIST = 100; // NOLINT
@@ -65,6 +62,9 @@ constexpr unsigned int SCENE_WIDTH = 1024; // NOLINT
 /** Radius of the ship for the scene graph */
 constexpr unsigned int RADIUS = 550; // NOLINT
 
+/** Radius ratio for calculating spin speed */
+constexpr float SPIN_RATIO = 2.6f; // NOLINT
+
 /** Maximum number of possibly visible ship segments at a time */
 constexpr unsigned int VISIBLE_SEGS = 6; // NOLINT
 
@@ -78,7 +78,13 @@ constexpr float SEG_SIZE = 45 * PI_180; // NOLINT
 constexpr float SEG_CUTOFF_ANGLE = 90 * PI_180; // NOLINT
 
 /** How much the player count needle is offset by */
-constexpr float NEEDLE_OFFSET = 0.9f;
+constexpr float NEEDLE_OFFSET = 0.9f; // NOLINT
+
+/** Music Fade-in time in seconds*/
+constexpr float MUSIC_FADE_IN = 0.2f; // NOLINT
+
+/** Music Fade-out time in seconds*/
+constexpr float MUSIC_FADE_OUT = 0.2f; // NOLINT
 
 #pragma endregion
 } // namespace globals

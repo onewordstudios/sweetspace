@@ -9,13 +9,15 @@
 #include "ButtonManager.h"
 #include "ButtonNode.h"
 #include "DonutModel.h"
-#include "DonutNode.h"
 #include "DoorNode.h"
+#include "ExternalDonutNode.h"
 #include "Globals.h"
 #include "HealthNode.h"
 #include "InputController.h"
 #include "MagicInternetBox.h"
+#include "PlayerDonutNode.h"
 #include "ShipModel.h"
+#include "TutorialNode.h"
 
 class GameGraphRoot : public cugl::Scene {
    public:
@@ -33,6 +35,9 @@ class GameGraphRoot : public cugl::Scene {
 		Ended
 	};
 
+	/** Buttons that can be pressed  */
+	enum GameButton { None, Restart, NextLevel };
+
    protected:
 	/** The asset manager for this game mode. */
 	std::shared_ptr<cugl::AssetManager> assets;
@@ -44,7 +49,7 @@ class GameGraphRoot : public cugl::Scene {
 
 	// VIEW COMPONENTS
 	/** Filmstrip representing the player's animated donut */
-	std::shared_ptr<cugl::PolygonNode> donutNode;
+	std::shared_ptr<PlayerDonutNode> donutNode;
 	/** Label for on-screen coordinate HUD */
 	std::shared_ptr<cugl::Label> coordHUD;
 	/** Node to hold all of our graphics. Necesary for resolution indepedence. */
@@ -68,6 +73,11 @@ class GameGraphRoot : public cugl::Scene {
 	std::vector<std::shared_ptr<cugl::PolygonNode>> challengePanelArrows;
 	/** Filmstrip representing the player's animated donut */
 	std::shared_ptr<cugl::PolygonNode> healthNode;
+	/** Filmstrip representing the player's animated donut */
+	std::shared_ptr<cugl::PolygonNode> moveTutorial;
+	std::shared_ptr<cugl::PolygonNode> healthTutorial;
+	std::shared_ptr<cugl::PolygonNode> rollTutorial;
+	std::shared_ptr<cugl::Node> tutorialNode;
 
 	// Reconnection Textures
 	/** Node to hold all of the Reconnect Overlay.*/
@@ -119,7 +129,7 @@ class GameGraphRoot : public cugl::Scene {
 	/** Tag of the right most ship segment */
 	unsigned int rightMostSeg;
 	/** Parent node of all buttons, is child of nearSpace */
-	std::shared_ptr<cugl::Node> buttonNode;
+	std::shared_ptr<cugl::Node> buttonsNode;
 
 	// MODEL INFORMATION
 	/** Id of the current client */
@@ -164,6 +174,9 @@ class GameGraphRoot : public cugl::Scene {
 	/** Whether to go back to main menu */
 	bool isBackToMainMenu;
 
+	/** The last pressed button */
+	GameButton lastButtonPressed;
+
    public:
 #pragma mark -
 #pragma mark Public Consts
@@ -177,8 +190,10 @@ class GameGraphRoot : public cugl::Scene {
 	const cugl::Color4 SHIP_LABEL_COLOR{255, 248, 161};
 	/** Number of possible player colors */
 	static constexpr int NUM_COLORS = 6;
+	/** The scale of the donut textures. */
+	static constexpr float DONUT_SCALE = 0.4f;
 	/** The scale of the breach textures. */
-	static constexpr float BREACH_SCALE = 0.25;
+	static constexpr float BREACH_SCALE = 0.5f;
 
 #pragma mark -
 #pragma mark Constructors
@@ -190,10 +205,16 @@ class GameGraphRoot : public cugl::Scene {
 	 */
 	GameGraphRoot()
 		: Scene(),
-		  status(Normal),
+		  screenHeight(0),
 		  currentEllipsesFrame(0),
+		  leftMostSeg(0),
+		  rightMostSeg(0),
+		  playerID(0),
+		  prevPlayerAngle(0),
 		  currentHealthWarningFrame(0),
-		  isBackToMainMenu(false) {}
+		  status(Normal),
+		  isBackToMainMenu(false),
+		  lastButtonPressed(None) {}
 
 	/**
 	 * Disposes of all (non-static) resources allocated to this mode.
@@ -244,8 +265,6 @@ class GameGraphRoot : public cugl::Scene {
 	 */
 	void setNeedlePercentage(float percentage);
 
-	std::shared_ptr<cugl::Node> getDonutNode();
-
 #pragma mark -
 #pragma mark Accessors
 	/**
@@ -275,5 +294,15 @@ class GameGraphRoot : public cugl::Scene {
 	 * @return whether to go back to the main menu
 	 */
 	bool getIsBackToMainMenu() { return isBackToMainMenu; }
+
+	/**
+	 * Returns the last button pressed, if any, and resets the field so future calls to this method
+	 * will return None until another button is pressed.
+	 */
+	GameButton getAndResetLastButtonPressed() {
+		GameButton ret = lastButtonPressed;
+		lastButtonPressed = None;
+		return ret;
+	}
 };
 #endif /* __GAME_GRAPH_ROOT_H__ */

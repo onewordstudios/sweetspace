@@ -132,6 +132,15 @@
     <ClInclude Include="..\..\source\LevelConstants.h">
       <Filter>Header Files\Helpers</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\source\ExternalDonutNode.h">
+      <Filter>Header Files\SceneGraph</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\PlayerDonutNode.h">
+      <Filter>Header Files\SceneGraph</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\TutorialNode.h">
+      <Filter>Header Files\SceneGraph</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\source\main.cpp">
@@ -205,6 +214,15 @@
     </ClCompile>
     <ClCompile Include="..\..\source\MainMenuMode.cpp">
       <Filter>Source Files\Modes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\ExternalDonutNode.cpp">
+      <Filter>Source Files\SceneGraph</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\PlayerDonutNode.cpp">
+      <Filter>Source Files\SceneGraph</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\TutorialNode.cpp">
+      <Filter>Source Files\SceneGraph</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
