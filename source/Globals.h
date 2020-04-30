@@ -81,7 +81,7 @@ constexpr float NEEDLE_OFFSET = 0.9f; // NOLINT
 constexpr float MUSIC_FADE_IN = 0.2f; // NOLINT
 
 /** Music Fade-out time in seconds*/
-constexpr float MUSIC_FADE_OUT = 0.1f; // NOLINT
+constexpr float MUSIC_FADE_OUT = 0.2f; // NOLINT
 
 #pragma endregion
 } // namespace globals

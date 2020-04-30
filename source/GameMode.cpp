@@ -55,9 +55,13 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 	isBackToMainMenu = false;
 
 	// Music Initialization
-	auto source = assets->get<Sound>("theme");
-	AudioChannels::get()->playMusic(source, true, source->getVolume(), globals::MUSIC_FADE_IN);
 
+	auto source = assets->get<Sound>("theme");
+	if (AudioChannels::get()->currentMusic() == nullptr ||
+		AudioChannels::get()->currentMusic()->getFile() != source->getFile()) {
+		AudioChannels::get()->stopMusic(globals::MUSIC_FADE_OUT);
+		AudioChannels::get()->queueMusic(source, true, source->getVolume(), globals::MUSIC_FADE_IN);
+	}
 	// Initialize the scene to a locked width
 	Size dimen = Application::get()->getDisplaySize();
 	dimen *= globals::SCENE_WIDTH / dimen.width; // Lock the game to a reasonable resolution
@@ -129,7 +133,6 @@ void GameMode::dispose() {
 	gm.dispose();
 	sgRoot.dispose();
 	donutModel = nullptr;
-	AudioChannels::get()->stopMusic(globals::MUSIC_FADE_OUT);
 }
 
 #pragma mark -
