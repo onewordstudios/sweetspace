@@ -327,18 +327,18 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	}
 
 	if (ship->getLevelNum() == 1) {
-        std::vector<int> players;
+		std::vector<int> players;
 		for (int i = 0; i < breachesNode->getChildCount(); i++) {
 			shared_ptr<BreachNode> breachNode = dynamic_pointer_cast<BreachNode>(
 				breachesNode->getChildByTag((unsigned int)(i + 1)));
 			int player = breachNode->getModel()->getPlayer();
-            if(!(std::count(players.begin(), players.end(), player))) {
-                std::shared_ptr<Texture> image = assets->get<Texture>("fix_breach_tutorial0");
-                std::shared_ptr<TutorialNode> tutorial = TutorialNode::alloc(image);
-                tutorial->setBreachNode(breachNode);
-                tutorialNode->addChildWithTag(tutorial, i + 1);
-                players.push_back(player);
-            }
+			if (!(std::count(players.begin(), players.end(), player))) {
+				std::shared_ptr<Texture> image = assets->get<Texture>("fix_breach_tutorial0");
+				std::shared_ptr<TutorialNode> tutorial = TutorialNode::alloc(image);
+				tutorial->setBreachNode(breachNode);
+				tutorialNode->addChildWithTag(tutorial, i + 1);
+				players.push_back(player);
+			}
 		}
 	} else if (ship->getLevelNum() == 2) {
 		tutorialNode->removeAllChildren();
@@ -552,8 +552,8 @@ void GameGraphRoot::update(float timestep) {
 	if (ship->getLevelNum() == 1) {
 		if (trunc(ship->timer) == 10) {
 			healthTutorial->setVisible(false);
-		} else if(trunc(ship->timer) == 4) {
-		    moveTutorial->setVisible(false);
+		} else if (trunc(ship->timer) == 4) {
+			moveTutorial->setVisible(false);
 		}
 	} else if (ship->getLevelNum() == 4) {
 		rollTutorial->setVisible(true);
