@@ -1,4 +1,4 @@
-#include "PlayerDonutNode.h"
+﻿#include "PlayerDonutNode.h"
 
 #include <cugl/2d/CUNode.h>
 
@@ -8,10 +8,8 @@ using namespace cugl;
 
 void PlayerDonutNode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch, const Mat4& transform,
 						   Color4 tint) {
-	double radiusRatio = (double)globals::RADIUS / (bodyNode->getWidth() / 2);
-
 	float angle = (float)(rotationNode->getAngle() -
-						  playerDonutModel->getVelocity() * globals::PI_180 * radiusRatio);
+						  playerDonutModel->getVelocity() * globals::PI_180 * globals::SPIN_RATIO);
 	setAnchor(Vec2::ANCHOR_CENTER);
 	rotationNode->setAngle(angle);
 	// Draw Jump Offset
