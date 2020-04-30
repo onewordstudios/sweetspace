@@ -218,9 +218,17 @@ void GameMode::update(float timestep) {
 		donutModel->startJump();
 		net->jump(playerID);
 	}
+	bool allResolved = true;
+	for (int i = 0; i < ship->getBreaches().size(); i++) {
+		if (ship->getBreaches().at(i)->getPlayer() != -1) {
+			allResolved = false;
+		}
+	}
+	bool tutorialWin = (ship->getLevelNum() < 5 && allResolved && ship->timerEnded());
+	bool nonTutorialWin = (ship->getLevelNum() > 4 && ship->timerEnded() && ship->getHealth() > 0);
 
 	// Check for Win
-	if (ship->timerEnded() && ship->getHealth() > 0) {
+	if (tutorialWin || nonTutorialWin) {
 		sgRoot.setStatus(GameGraphRoot::Win);
 		sgRoot.update(timestep);
 
