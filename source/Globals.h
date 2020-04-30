@@ -77,6 +77,12 @@ constexpr float SEG_CUTOFF_ANGLE = 90 * PI_180; // NOLINT
 /** How much the player count needle is offset by */
 constexpr float NEEDLE_OFFSET = 0.9f; // NOLINT
 
+/** Music Fade-in time in seconds*/
+constexpr float MUSIC_FADE_IN = 0.2f; // NOLINT
+
+/** Music Fade-out time in seconds*/
+constexpr float MUSIC_FADE_OUT = 0.2f; // NOLINT
+
 #pragma endregion
 } // namespace globals
 #endif
