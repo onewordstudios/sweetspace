@@ -266,7 +266,7 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 		// Add the breach node
 		breachNode->resetAnimation();
 		breachesNode->addChild(breachNode);
-		if(ship->getLevelNum() == 1) {
+		if (ship->getLevelNum() == 1) {
 			std::shared_ptr<Texture> image = assets->get<Texture>("fix_breach_tutorial0");
 			std::shared_ptr<TutorialNode> tutorial = TutorialNode::alloc(image);
 			tutorial->setBreachNode(breachNode);
