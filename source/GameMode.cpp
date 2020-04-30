@@ -56,7 +56,7 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 
 	// Music Initialization
 	auto source = assets->get<Sound>("theme");
-	AudioChannels::get()->playMusic(source, true, source->getVolume());
+	AudioChannels::get()->playMusic(source, true, source->getVolume(), globals::MUSIC_FADE_IN);
 
 	// Initialize the scene to a locked width
 	Size dimen = Application::get()->getDisplaySize();
@@ -129,6 +129,7 @@ void GameMode::dispose() {
 	gm.dispose();
 	sgRoot.dispose();
 	donutModel = nullptr;
+	AudioChannels::get()->stopMusic(globals::MUSIC_FADE_OUT);
 }
 
 #pragma mark -

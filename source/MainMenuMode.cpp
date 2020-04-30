@@ -37,6 +37,11 @@ bool MainMenuMode::init(const std::shared_ptr<AssetManager>& assets) {
 	if (assets == nullptr) {
 		return false;
 	}
+
+	// Music Initialization
+	auto source = assets->get<Sound>("menu");
+	AudioChannels::get()->playMusic(source, true, source->getVolume(), globals::MUSIC_FADE_IN);
+
 	// Set network controller
 	net = MagicInternetBox::getInstance();
 	input = InputController::getInstance();
@@ -149,6 +154,7 @@ void MainMenuMode::dispose() {
 	hardBtn = nullptr;
 	buttonManager.clear();
 	clientRoomBtns.clear();
+	AudioChannels::get()->stopMusic(globals::MUSIC_FADE_OUT);
 }
 #pragma endregion
 
