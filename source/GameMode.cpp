@@ -83,15 +83,18 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 			levelName = TUT_TWO_KEY;
 			break;
 		case 3:
-			levelName = TUT_FOUR_KEY;
+			levelName = TUT_THREE_KEY;
 			break;
 		case 4:
-			levelName = LEVEL_ONE_KEY;
+			levelName = TUT_FOUR_KEY;
 			break;
 		case 5: // NOLINT counting numbers
-			levelName = LEVEL_TWO_KEY;
+			levelName = LEVEL_ONE_KEY;
 			break;
 		case 6: // NOLINT counting numbers
+			levelName = LEVEL_TWO_KEY;
+			break;
+		case 7: // NOLINT counting numbers
 			levelName = LEVEL_THREE_KEY;
 			break;
 		default:
