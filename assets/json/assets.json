@@ -282,6 +282,14 @@
             "format"    : {
                 "type" : "Anchored"
             },
+			"data"   : {
+				"anchor"   : [0.5,0.5],
+				"scale"    : 1
+			},
+			"layout" : {
+				"x_anchor" : "center",
+				"y_anchor" : "middle"
+			},
             "children":  {
                 "field": {
                     "type": "Node",
@@ -532,42 +540,30 @@
                         "type" : "Anchored"
                     },
                     "data": {
-                        "anchor":   [0.5,0.5]
+                        "anchor":   [0.5,0.5],
+						"size" : [1024,1024]
             		},
 		            "layout" : {
-						"x_anchor" : "left",
-        				"y_anchor" : "bottom"
+						"x_anchor" : "center",
+						"y_anchor" : "middle"
 					},
                     "children": {
                     	"loss": {
-							"type"      : "Node",
+							"type"      : "Image",
 				            "format"    : {
 				                "type" : "Anchored"
 				            },
 				            "data": {
-				            	"visible": false,
-				            	"anchor" : [0.5,0.5]
+								"texture":  "overlay_dim",
+								"anchor":   [0.5,0.5],
+								"scale":    1,
+				            	"visible": false
 				            },
 				            "layout" : {
-								"x_anchor" : "left",
-                				"y_anchor" : "bottom"
+								"x_anchor" : "center",
+								"y_anchor" : "middle"
 							},
 				            "children":  {
-				            	"dim" : {
-				            		"type": "Image",
-									"format" : {
-										"type" : "Anchored"
-									},
-				                    "data": {
-				                        "texture":  "overlay_dim",
-				                        "anchor":   [0.5,0.5],
-				                        "scale":    1
-				                    },
-				                    "layout" : {
-				                    	"x_anchor" : "center",
-                        				"y_anchor" : "middle"
-				                    }
-				            	},
 				            	"bg" : {
 				            		"type": "Image",
 									"format" : {
@@ -629,14 +625,14 @@
 									"data": {
 										"upnode"   : "up",
 										"downnode" : "down",
-										"anchor"   : [0,0],
+										"anchor"   : [1,1],
 										"scale" : 0.5
 									},
 									"layout" : {
-										"x_anchor" : "left",
-                        				"y_anchor" : "bottom",
-                        				"y_offset" : 25,
-                        				"x_offset" : 25,
+										"x_anchor" : "center",
+                        				"y_anchor" : "middle",
+                        				"y_offset" : -100,
+                        				"x_offset" : -25,
                         				"absolute" : true
 									},
 									"children" : {
@@ -662,14 +658,14 @@
 									"data": {
 										"upnode"   : "up",
 										"downnode" : "down",
-										"anchor"   : [1,0],
+										"anchor"   : [0,1],
 										"scale" : 0.5
 									},
 						            "layout" : {
-										"x_anchor" : "right",
-		                				"y_anchor" : "bottom",
-                        				"y_offset" : 25,
-                        				"x_offset" : -25,
+										"x_anchor" : "center",
+                        				"y_anchor" : "middle",
+                        				"y_offset" : -100,
+                        				"x_offset" : 25,
                         				"absolute" : true
 									},
 									"children" : {
@@ -690,34 +686,21 @@
 				            }
 						},
 						"win": {
-							"type"      : "Node",
+							"type"      : "Image",
 				            "format"    : {
 				                "type" : "Anchored"
 				            },
 				            "data": {
-				            	"visible": false,
-				            	"anchor" : [0.5,0.5]
+								"texture":  "overlay_dim",
+								"anchor":   [0.5,0.5],
+								"scale":    1,
+				            	"visible": false
 				            },
 				            "layout" : {
-								"x_anchor" : "left",
-                				"y_anchor" : "bottom"
+								"x_anchor" : "center",
+								"y_anchor" : "middle"
 							},
 				            "children":  {
-				            	"dim" : {
-				            		"type": "Image",
-									"format" : {
-										"type" : "Anchored"
-									},
-				                    "data": {
-				                        "texture":  "overlay_dim",
-				                        "anchor":   [0.5,0.5],
-				                        "scale":    1
-				                    },
-				                    "layout" : {
-				                    	"x_anchor" : "center",
-                        				"y_anchor" : "middle"
-				                    }
-				            	},
 				            	"bg" : {
 				            		"type": "Image",
 									"format" : {
@@ -779,13 +762,13 @@
 									"data": {
 										"upnode"   : "up",
 										"downnode" : "down",
-										"anchor"   : [0.5,0],
+										"anchor"   : [0.5,1],
 										"scale" : 0.5
 									},
 									"layout" : {
 										"x_anchor" : "center",
-                        				"y_anchor" : "bottom",
-                        				"y_offset" : 25,
+                        				"y_anchor" : "middle",
+                        				"y_offset" : -100,
                         				"absolute" : true
 									},
 									"children" : {
