@@ -37,6 +37,15 @@ bool MainMenuMode::init(const std::shared_ptr<AssetManager>& assets) {
 	if (assets == nullptr) {
 		return false;
 	}
+
+	// Music Initialization
+	auto source = assets->get<Sound>("menu");
+	if (AudioChannels::get()->currentMusic() == nullptr ||
+		AudioChannels::get()->currentMusic()->getFile() != source->getFile()) {
+		AudioChannels::get()->stopMusic(globals::MUSIC_FADE_OUT);
+		AudioChannels::get()->queueMusic(source, true, source->getVolume(), globals::MUSIC_FADE_IN);
+	}
+
 	// Set network controller
 	net = MagicInternetBox::getInstance();
 	input = InputController::getInstance();

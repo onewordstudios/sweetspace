@@ -282,6 +282,11 @@
             "type":     "sample",
             "file":     "sounds/music.wav",
             "volume":   0.4
+        },
+        "menu": {
+            "type":     "sample",
+            "file":     "sounds/menu.wav",
+            "volume":   0.5
         }
     },
 	"fonts": {

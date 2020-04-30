@@ -17,7 +17,6 @@ void ExternalDonutNode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch, co
 	if (!donutModel->getIsActive()) return;
 	const float jump = 1.0f - donutModel->getJumpOffset();
 	float vel = donutModel->getVelocity();
-	float radiusRatio = (globals::RADIUS + RADIUS_OFFSET) / (bodyNode->getWidth() / 2);
 	Vec2 donutPos;
 	if (donutModel->getAngle() >= 0) {
 		// Donut is currently active
@@ -42,7 +41,7 @@ void ExternalDonutNode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch, co
 							-jump * (globals::RADIUS + RADIUS_OFFSET) * cos(relativeAngle));
 			setPosition(donutPos);
 
-			float angle = rotationNode->getAngle() - vel * globals::PI_180 * radiusRatio;
+			float angle = rotationNode->getAngle() - vel * globals::PI_180 * globals::SPIN_RATIO;
 			rotationNode->setAngle(angle);
 			animateJumping();
 		}
