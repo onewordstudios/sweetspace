@@ -360,6 +360,8 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 			tutorial->setButtonNode(buttonNode);
 			tutorialNode->addChildWithTag(tutorial, i + 1);
 		}
+	} else if (ship->getLevelNum() == 4) {
+		tutorialNode->removeAllChildren();
 	}
 
 	// Overlay Components
