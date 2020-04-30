@@ -373,17 +373,14 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 		std::dynamic_pointer_cast<Label>(assets->get<Node>("game_overlay_reconnect_ellipsis3"));
 
 	// Initialize Pause Screen Componenets
-	pauseBtn = std::dynamic_pointer_cast<Button>(assets->get<Node>("game_overlay_pauseBtn"));
-	pauseScreen = assets->get<Node>("game_overlay_pause");
+	pauseBtn = std::dynamic_pointer_cast<Button>(assets->get<Node>("game_pauseBtn"));
+	pauseScreen = assets->get<Node>("game_pause");
 	pauseBtn->setDown(false);
 	pauseScreen->setVisible(false);
-	musicBtn =
-		std::dynamic_pointer_cast<Button>(assets->get<Node>("game_overlay_pause_bg_musicBtn"));
-	soundBtn =
-		std::dynamic_pointer_cast<Button>(assets->get<Node>("game_overlay_pause_bg_soundBtn"));
-	leaveBtn =
-		std::dynamic_pointer_cast<Button>(assets->get<Node>("game_overlay_pause_bg_leaveBtn"));
-	needle = assets->get<Node>("game_overlay_pause_bg_dial_hand");
+	musicBtn = std::dynamic_pointer_cast<Button>(assets->get<Node>("game_pause_musicBtn"));
+	soundBtn = std::dynamic_pointer_cast<Button>(assets->get<Node>("game_pause_soundBtn"));
+	leaveBtn = std::dynamic_pointer_cast<Button>(assets->get<Node>("game_pause_leaveBtn"));
+	needle = assets->get<Node>("game_pause_dial_hand");
 
 	// Initialize Loss Screen Componenets
 	lossScreen = assets->get<Node>("game_overlay_loss");
