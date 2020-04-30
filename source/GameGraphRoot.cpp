@@ -266,12 +266,6 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 		// Add the breach node
 		breachNode->resetAnimation();
 		breachesNode->addChild(breachNode);
-		if (ship->getLevelNum() == 1) {
-			std::shared_ptr<Texture> image = assets->get<Texture>("fix_breach_tutorial0");
-			std::shared_ptr<TutorialNode> tutorial = TutorialNode::alloc(image);
-			tutorial->setBreachNode(breachNode);
-			tutorialNode->addChild(tutorial);
-		}
 	}
 
 	// Initialize Doors
@@ -545,6 +539,25 @@ void GameGraphRoot::update(float timestep) {
 			healthTutorial->setVisible(false);
 		} else if (trunc(ship->timer) == 15) {
 			moveTutorial->setVisible(false);
+		}
+		for(int i = 0; i < breachesNode->getChildCount(); i++) {
+			std::shared_ptr<BreachNode> breachNode =
+					dynamic_pointer_cast<BreachNode>(breachesNode->getChildByTag(i + 1));
+			int player = breachNode->getModel()->getPlayer();
+			if(std::find(playerBreaches.begin(), playerBreaches.end(), player) == playerBreaches.end() && player != -1) {
+				if(player != playerID) {
+					std::shared_ptr<Texture> image = assets->get<Texture>("jump_tutorial0");
+					std::shared_ptr<TutorialNode> tutorial = TutorialNode::alloc(image);
+					tutorial->setBreachNode(breachNode);
+					tutorialNode->addChild(tutorial);
+				} else {
+					std::shared_ptr<Texture> image = assets->get<Texture>("fix_breach_tutorial0");
+					std::shared_ptr<TutorialNode> tutorial = TutorialNode::alloc(image);
+					tutorial->setBreachNode(breachNode);
+					tutorialNode->addChild(tutorial);
+				}
+				playerBreaches.push_back(player);
+			}
 		}
 	} else if (ship->getLevelNum() == 4) {
 		rollTutorial->setVisible(true);
