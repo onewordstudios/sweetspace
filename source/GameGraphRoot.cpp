@@ -538,8 +538,8 @@ void GameGraphRoot::update(float timestep) {
 		if (trunc(ship->timer) == 10) {
 			healthTutorial->setVisible(false);
 		} else if (trunc(ship->timer) == 15) {
-            moveTutorial->setVisible(false);
-        }
+			moveTutorial->setVisible(false);
+		}
 		for (int i = 0; i < breachesNode->getChildCount(); i++) {
 			std::shared_ptr<BreachNode> breachNode =
 				dynamic_pointer_cast<BreachNode>(breachesNode->getChildByTag(i + 1));
@@ -550,20 +550,20 @@ void GameGraphRoot::update(float timestep) {
 					std::shared_ptr<Texture> image = assets->get<Texture>("jump_tutorial0");
 					std::shared_ptr<TutorialNode> tutorial = TutorialNode::alloc(image);
 					tutorial->setBreachNode(breachNode);
-                    tutorialNode->addChildWithTag(tutorial, i + 1);
+					tutorialNode->addChildWithTag(tutorial, i + 1);
 				} else {
 					std::shared_ptr<Texture> image = assets->get<Texture>("fix_breach_tutorial0");
 					std::shared_ptr<TutorialNode> tutorial = TutorialNode::alloc(image);
 					tutorial->setBreachNode(breachNode);
 					tutorialNode->addChildWithTag(tutorial, i + 1);
-                    playerBreaches.push_back(i + 1);
+					playerBreaches.push_back(i + 1);
 				}
 			}
-			if(health < 1) {
-			    for(int j = 0; j < playerBreaches.size(); j++) {
-			        int id = playerBreaches.at(j);
-                    tutorialNode->removeChildByTag(id);
-			    }
+			if (health < 1) {
+				for (int j = 0; j < playerBreaches.size(); j++) {
+					int id = playerBreaches.at(j);
+					tutorialNode->removeChildByTag(id);
+				}
 			}
 		}
 	} else if (ship->getLevelNum() == 4) {
