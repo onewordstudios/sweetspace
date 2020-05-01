@@ -106,17 +106,18 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 	}
 
 	CULog("Loading level %s b/c mib gave level num %d", levelName, net->getLevelNum());
+	unsigned int shipNumPlayers = net->getMaxNumPlayers();
 
 	std::shared_ptr<LevelModel> level = assets->get<LevelModel>(levelName);
-	int maxEvents = (int)(level->getMaxBreaches() * net->getNumPlayers() / globals::MIN_PLAYERS);
-	int maxDoors = std::min(level->getMaxDoors() * net->getNumPlayers() / globals::MIN_PLAYERS,
-							net->getNumPlayers() * 2 - 1);
-	int maxButtons = (int)(level->getMaxButtons() * net->getNumPlayers() / globals::MIN_PLAYERS);
+	int maxEvents = (int)(level->getMaxBreaches() * shipNumPlayers / globals::MIN_PLAYERS);
+	int maxDoors = std::min(level->getMaxDoors() * shipNumPlayers / globals::MIN_PLAYERS,
+							shipNumPlayers * 2 - 1);
+	int maxButtons = (int)(level->getMaxButtons() * shipNumPlayers / globals::MIN_PLAYERS);
 	if (maxButtons % 2 != 0) maxButtons += 1;
-	ship = ShipModel::alloc(
-		net->getNumPlayers(), maxEvents, maxDoors, playerID,
-		(float)level->getShipSize((int)net->getNumPlayers()),
-		(int)(level->getInitHealth() * net->getNumPlayers() / globals::MIN_PLAYERS), maxButtons);
+	ship = ShipModel::alloc(shipNumPlayers, maxEvents, maxDoors, playerID,
+							(float)level->getShipSize((int)shipNumPlayers),
+							(int)(level->getInitHealth() * shipNumPlayers / globals::MIN_PLAYERS),
+							maxButtons);
 	gm.init(ship, level);
 
 	donutModel = ship->getDonuts().at(static_cast<unsigned long>(playerID));
