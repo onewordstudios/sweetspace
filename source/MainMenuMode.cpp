@@ -423,17 +423,17 @@ void MainMenuMode::processButtons() {
 		case HostLevelSelect: {
 			if (buttonManager.tappedButton(easyBtn, tapData)) {
 				gameReady = true;
-				net->startGame(1);
+				net->startGame(EASY_LEVEL);
 				return;
 			}
 			if (buttonManager.tappedButton(medBtn, tapData)) {
 				gameReady = true;
-				net->startGame(5); // NOLINT refactor out level constants later
+				net->startGame(MED_LEVEL);
 				return;
 			}
 			if (buttonManager.tappedButton(hardBtn, tapData)) {
 				gameReady = true;
-				net->startGame(7); // NOLINT refactor out level constants later
+				net->startGame(HARD_LEVEL);
 				return;
 			}
 			break;
