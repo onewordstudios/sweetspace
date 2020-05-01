@@ -1,7 +1,7 @@
 ﻿#ifndef __JS_LEVEL_CONSTANTS_H__
 #define __JS_LEVEL_CONSTANTS_H__
 
-#include <initializer_list>
+#include <array>
 
 constexpr auto MAX_BREACH_FIELD = "maxBreaches";   // NOLINT
 constexpr auto MAX_DOOR_FIELD = "maxDoors";		   // NOLINT
@@ -26,8 +26,11 @@ constexpr auto TIME_START_FIELD = "timeStart";	   // NOLINT
 constexpr auto TIME_STOP_FIELD = "timeStop";	   // NOLINT
 constexpr auto PROBABILITY_FIELD = "probability";  // NOLINT
 
-/** List of all level names, used as both keys and values */
-constexpr auto LEVEL_NAMES = { // NOLINT
+/** Total number of levels in the game */
+constexpr unsigned int MAX_NUM_LEVELS = 7;
+
+/** List of all level names, used as both keys and values NOLINTNEXTLINE */
+constexpr std::array<const char*, MAX_NUM_LEVELS> LEVEL_NAMES = {
 	"json/tutorial1.owslevel", "json/tutorial2.owslevel", "json/tutorial3.owslevel",
 	"json/tutorial4.owslevel", "json/level1.owslevel",	  "json/level2.owslevel",
 	"json/level3.owslevel"};
