@@ -365,9 +365,9 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 		std::dynamic_pointer_cast<Label>(assets->get<Node>("game_overlay_reconnect_ellipsis3"));
 	reconnectDonut = dynamic_pointer_cast<cugl::PolygonNode>(
 		assets->get<Texture>("donut_" + PLAYER_COLOR.at(playerID)));
-	donutNode->setAnchor(Vec2::ANCHOR_CENTER);
-	donutNode->setScale(DONUT_SCALE);
-	donutNode->setPositionY(50);
+	reconnectDonut->setAnchor(Vec2::ANCHOR_CENTER);
+	reconnectDonut->setScale(DONUT_SCALE);
+	reconnectDonut->setPositionY(50);
 	reconnectOverlay->addChild(donutNode);
 
 	// Initialize Pause Screen Componenets
