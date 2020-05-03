@@ -843,7 +843,7 @@
 								"texture":  "overlay_dim",
 								"anchor":   [0.5,0.5],
 								"scale":    1,
-				            	"visible": false
+				            	"visible": true
 				            },
 				            "layout" : {
 								"x_anchor" : "center",
@@ -865,6 +865,21 @@
 										"y_anchor" : "middle"
 									}
 				            	},
+		                        "donut": {
+		                            "type": "Image",
+		                            "data": {
+		                                "texture":  "donut_yellow",
+		                                "anchor":   [0.5,0.5],
+		                                "visible" : false,
+		                                "scale":    0.36
+		                            },
+				                    "layout" : {
+				                        "x_anchor" : "center",
+										"y_anchor" : "middle",
+				                        "y_offset" : 50,
+				                        "absolute" : true
+				                    }
+		                        },
 				            	"text" : {
 				            		"type": "Label",
 				                    "data": {

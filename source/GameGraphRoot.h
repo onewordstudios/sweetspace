@@ -82,6 +82,8 @@ class GameGraphRoot : public cugl::Scene {
 	// Reconnection Textures
 	/** Node to hold all of the Reconnect Overlay.*/
 	std::shared_ptr<cugl::Node> reconnectOverlay;
+	/** The player's animated donut in the reconnection screen */
+	std::shared_ptr<cugl::PolygonNode> reconnectDonut;
 	/** Label for second ellipsis point */
 	std::shared_ptr<cugl::Label> reconnectE2;
 	/** Label for third ellipsis point */
