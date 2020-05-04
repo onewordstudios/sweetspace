@@ -243,20 +243,38 @@
         "sound_btn_off" : {
         	"file" : "textures/pause/sound_off.png"
         },
-        "fix_breach_tutorial1" : {
+        "health_tutorial" : {
+          "file" : "textures/tutorial/health_0.png"
+        },
+        "move_tutorial0" : {
+          "file" : "textures/tutorial/move_0.png"
+        },
+        "move_tutorial1" : {
+          "file" : "textures/tutorial/move_1.png"
+        },
+        "fix_breach_tutorial0" : {
             "file" : "textures/tutorial/fix_breach_0.png"
         },
-        "fix_breach_tutorial2" : {
+        "fix_breach_tutorial1" : {
           "file" : "textures/tutorial/fix_breach_1.png"
         },
         "door_tutorial" : {
-          "file" : "textures/tutorial/door_3.png"
+          "file" : "textures/tutorial/door_0.png"
         },
-        "jump_tutorial" : {
+        "jump_tutorial0" : {
           "file" : "textures/tutorial/jump_breach_0.png"
         },
+        "jump_tutorial1" : {
+          "file" : "textures/tutorial/jump_breach_1.png"
+        },
+        "engine_tutorial0" : {
+          "file" : "textures/tutorial/engine_0.png"
+        },
+        "engine_tutorial1" : {
+          "file" : "textures/tutorial/engine_1.png"
+        },
         "stabilizer_tutorial" : {
-          "file" : "textures/tutorial/stabilizer_2.png"
+          "file" : "textures/tutorial/stabilizer_0.png"
         }
 	},
 	"sounds": {
@@ -264,6 +282,11 @@
             "type":     "sample",
             "file":     "sounds/music.wav",
             "volume":   0.4
+        },
+        "menu": {
+            "type":     "sample",
+            "file":     "sounds/menu.wav",
+            "volume":   0.5
         }
     },
 	"fonts": {
@@ -282,6 +305,14 @@
             "format"    : {
                 "type" : "Anchored"
             },
+			"data"   : {
+				"anchor"   : [0.5,0.5],
+				"scale"    : 1
+			},
+			"layout" : {
+				"x_anchor" : "center",
+				"y_anchor" : "middle"
+			},
             "children":  {
                 "field": {
                     "type": "Node",
@@ -356,6 +387,13 @@
                                   "type": "Node",
                                   "data": {
                                     "anchor":   [0,0],
+                                    "position": [0,0]
+                                  }
+                                },
+                                "tutorial": {
+                                  "type": "Node",
+                                  "data": {
+                                    "anchor": [0,0],
                                     "position": [0,0]
                                   }
                                 }
@@ -515,15 +553,31 @@
 								"scale": 0.3
 							}
 						},
-                        "breachTutorial" : {
+                        "moveTutorial" : {
                           "type": "Image",
                           "data": {
-                            "texture": "fix_breach_tutorial1",
+                            "texture": "move_tutorial0",
                             "position": [0,-250],
-                            "anchor":   [0.5,0.5],
-                            "scale": 0.3
+                            "anchor":   [0.5,0.5]
+                          }
+                        },
+                        "healthTutorial" : {
+                          "type": "Image",
+                          "data": {
+                            "texture": "health_tutorial",
+                            "position": [-100,-125],
+                            "anchor":   [0.5,0.5]
+                          }
+                        },
+                        "rollTutorial" : {
+                          "type": "Image",
+                          "data": {
+                            "texture": "stabilizer_tutorial",
+                            "position": [-200,-200],
+                            "anchor":   [0.5,0.5]
                           }
                         }
+
                     }
                 },
                 "overlay" : {
@@ -532,42 +586,30 @@
                         "type" : "Anchored"
                     },
                     "data": {
-                        "anchor":   [0.5,0.5]
+                        "anchor":   [0.5,0.5],
+						"size" : [1024,1024]
             		},
 		            "layout" : {
-						"x_anchor" : "left",
-        				"y_anchor" : "bottom"
+						"x_anchor" : "center",
+						"y_anchor" : "middle"
 					},
                     "children": {
                     	"loss": {
-							"type"      : "Node",
+							"type"      : "Image",
 				            "format"    : {
 				                "type" : "Anchored"
 				            },
 				            "data": {
-				            	"visible": false,
-				            	"anchor" : [0.5,0.5]
+								"texture":  "overlay_dim",
+								"anchor":   [0.5,0.5],
+								"scale":    1,
+				            	"visible": false
 				            },
 				            "layout" : {
-								"x_anchor" : "left",
-                				"y_anchor" : "bottom"
+								"x_anchor" : "center",
+								"y_anchor" : "middle"
 							},
 				            "children":  {
-				            	"dim" : {
-				            		"type": "Image",
-									"format" : {
-										"type" : "Anchored"
-									},
-				                    "data": {
-				                        "texture":  "overlay_dim",
-				                        "anchor":   [0.5,0.5],
-				                        "scale":    1
-				                    },
-				                    "layout" : {
-				                    	"x_anchor" : "center",
-                        				"y_anchor" : "middle"
-				                    }
-				            	},
 				            	"bg" : {
 				            		"type": "Image",
 									"format" : {
@@ -629,14 +671,14 @@
 									"data": {
 										"upnode"   : "up",
 										"downnode" : "down",
-										"anchor"   : [0,0],
+										"anchor"   : [1,1],
 										"scale" : 0.5
 									},
 									"layout" : {
-										"x_anchor" : "left",
-                        				"y_anchor" : "bottom",
-                        				"y_offset" : 25,
-                        				"x_offset" : 25,
+										"x_anchor" : "center",
+                        				"y_anchor" : "middle",
+                        				"y_offset" : -100,
+                        				"x_offset" : -25,
                         				"absolute" : true
 									},
 									"children" : {
@@ -662,14 +704,14 @@
 									"data": {
 										"upnode"   : "up",
 										"downnode" : "down",
-										"anchor"   : [1,0],
+										"anchor"   : [0,1],
 										"scale" : 0.5
 									},
 						            "layout" : {
-										"x_anchor" : "right",
-		                				"y_anchor" : "bottom",
-                        				"y_offset" : 25,
-                        				"x_offset" : -25,
+										"x_anchor" : "center",
+                        				"y_anchor" : "middle",
+                        				"y_offset" : -100,
+                        				"x_offset" : 25,
                         				"absolute" : true
 									},
 									"children" : {
@@ -690,34 +732,21 @@
 				            }
 						},
 						"win": {
-							"type"      : "Node",
+							"type"      : "Image",
 				            "format"    : {
 				                "type" : "Anchored"
 				            },
 				            "data": {
-				            	"visible": false,
-				            	"anchor" : [0.5,0.5]
+								"texture":  "overlay_dim",
+								"anchor":   [0.5,0.5],
+								"scale":    1,
+				            	"visible": false
 				            },
 				            "layout" : {
-								"x_anchor" : "left",
-                				"y_anchor" : "bottom"
+								"x_anchor" : "center",
+								"y_anchor" : "middle"
 							},
 				            "children":  {
-				            	"dim" : {
-				            		"type": "Image",
-									"format" : {
-										"type" : "Anchored"
-									},
-				                    "data": {
-				                        "texture":  "overlay_dim",
-				                        "anchor":   [0.5,0.5],
-				                        "scale":    1
-				                    },
-				                    "layout" : {
-				                    	"x_anchor" : "center",
-                        				"y_anchor" : "middle"
-				                    }
-				            	},
 				            	"bg" : {
 				            		"type": "Image",
 									"format" : {
@@ -779,13 +808,13 @@
 									"data": {
 										"upnode"   : "up",
 										"downnode" : "down",
-										"anchor"   : [0.5,0],
+										"anchor"   : [0.5,1],
 										"scale" : 0.5
 									},
 									"layout" : {
 										"x_anchor" : "center",
-                        				"y_anchor" : "bottom",
-                        				"y_offset" : 25,
+                        				"y_anchor" : "middle",
+                        				"y_offset" : -100,
                         				"absolute" : true
 									},
 									"children" : {
@@ -806,34 +835,21 @@
 				            }
 						},
                         "reconnect": {
-							"type"      : "Node",
+							"type"      : "Image",
 				            "format"    : {
 				                "type" : "Anchored"
 				            },
 				            "data": {
-				            	"visible": false,
-                                "anchor" : [0.5,0.5]
+								"texture":  "overlay_dim",
+								"anchor":   [0.5,0.5],
+								"scale":    1,
+				            	"visible": false
 				            },
-							"layout" : {
-								"x_anchor" : "left",
-        						"y_anchor" : "bottom"
+				            "layout" : {
+								"x_anchor" : "center",
+								"y_anchor" : "middle"
 							},
 				            "children":  {
-				            	"dim" : {
-				            		"type": "Image",
-									"format"    : {
-										"type" : "Anchored"
-									},
-				                    "data": {
-				                        "texture":  "overlay_dim",
-				                        "anchor":   [0.5,0.5],
-				                        "scale":    1
-				                    },
-									"layout" : {
-										"x_anchor" : "center",
-										"y_anchor" : "middle"
-									}
-				            	},
 				            	"bg" : {
 				            		"type": "Image",
 									"format"    : {
@@ -926,250 +942,234 @@
 				                    }
 				                }
 				            }
-				        },
-                        "pause": {
-							"type"      : "Node",
-				            "format"    : {
-				                "type" : "Anchored"
-				            },
-				            "data": {
-				            	"visible": false,
-                                "anchor" : [0.5,0.5]
-				            },
+				        }
+                    }
+                },
+				"pause": {
+					"type": "Image",
+					"format"    : {
+						"type" : "Anchored"
+					},
+					"data": {
+						"texture":  "pause_bg",
+						"anchor":   [1,0],
+						"scale":    0.5
+					},
+					"layout" : {
+						"x_anchor" : "right",
+						"y_anchor" : "bottom",
+						"y_offset" : -50,
+						"x_offset" : 50,
+						"absolute" : true
+					},
+					"children" :{
+						"crew" : {
+							"type": "Label",
+							"data": {
+								"font"       : "mont_black_italic_big",
+								"text"       : "crew",
+								"foreground" : [236,167,247,255],
+								"anchor"   : [0.5,0.5],
+								"scale" 	 : 0.5,
+								"valign"     : "middle",
+								"halign"     : "center"
+							},
 							"layout" : {
 								"x_anchor" : "left",
-        						"y_anchor" : "bottom"
+								"y_anchor" : "middle",
+								"y_offset" : -25,
+								"x_offset" : 290,
+								"absolute" : true
+							}
+						},
+						"size" : {
+							"type": "Label",
+							"data": {
+								"font"       : "mont_black_italic_big",
+								"text"       : "size",
+								"foreground" : [236,167,247,255],
+								"anchor"   : [0.5,0.5],
+								"scale" 	 : 0.5,
+								"halign"     : "middle",
+								"valign"     : "center"
 							},
-				            "children":  {
-				            	"bg" : {
-				            		"type": "Image",
-									"format"    : {
+							"layout" : {
+								"x_anchor" : "left",
+								"y_anchor" : "middle",
+								"y_offset" : -75,
+								"x_offset" : 290,
+								"absolute" : true
+							}
+						},
+						"dial" : {
+							"type" : "Image",
+							"format" : {
+								"type" : "Anchored"
+							},
+							"data"   : {
+								"texture"  : "dial",
+								"anchor"   : [0.5,1],
+								"scale"    : 0.5
+							},
+							"layout" : {
+								"x_anchor" : "left",
+								"y_anchor" : "top",
+								"x_offset" : 290,
+								"y_offset" : -100,
+								"absolute" : true
+							},
+							"children" : {
+								"hand" : {
+									"type" : "Image",
+									"format" : {
 										"type" : "Anchored"
 									},
-				                    "data": {
-				                        "texture":  "pause_bg",
-				                        "anchor":   [1,0],
-				                        "scale":    0.5
-				                    },
-									"layout" : {
-										"x_anchor" : "right",
-										"y_anchor" : "bottom",
-				                        "y_offset" : -50,
-				                        "x_offset" : 50,
-				                        "absolute" : true
+									"data"   : {
+										"texture"  : "dial_hand",
+										"anchor"   : [0.5,0.5],
+										"scale"    : 1
 									},
-									"children" :{
-										"crew" : {
-						            		"type": "Label",
-							                "data": {
-						                        "font"       : "mont_black_italic_big",
-						                        "text"       : "crew",
-						                        "foreground" : [236,167,247,255],
-												"anchor"   : [0.5,0.5],
-						                        "scale" 	 : 0.5,
-						                        "valign"     : "middle",
-						                        "halign"     : "center"
-						                    },
-						                    "layout" : {
-						                        "x_anchor" : "left",
-												"y_anchor" : "middle",
-						                        "y_offset" : -25,
-						                        "x_offset" : 290,
-						                        "absolute" : true
-						                    }
-							            },
-						            	"size" : {
-						            		"type": "Label",
-						                    "data": {
-						                        "font"       : "mont_black_italic_big",
-						                        "text"       : "size",
-						                        "foreground" : [236,167,247,255],
-												"anchor"   : [0.5,0.5],
-						                        "scale" 	 : 0.5,
-						                        "halign"     : "middle",
-						                        "valign"     : "center"
-						                    },
-						                    "layout" : {
-						                        "x_anchor" : "left",
-												"y_anchor" : "middle",
-						                        "y_offset" : -75,
-						                        "x_offset" : 290,
-						                        "absolute" : true
-						                    }
-						            	},
-						            	"dial" : {
-											"type" : "Image",
-											"format" : {
-												"type" : "Anchored"
-											},
-											"data"   : {
-												"texture"  : "dial",
-												"anchor"   : [0.5,1],
-												"scale"    : 0.5
-											},
-											"layout" : {
-												"x_anchor" : "left",
-												"y_anchor" : "top",
-												"x_offset" : 290,
-												"y_offset" : -100,
-						                        "absolute" : true
-											},
-											"children" : {
-												"hand" : {
-													"type" : "Image",
-													"format" : {
-														"type" : "Anchored"
-													},
-													"data"   : {
-														"texture"  : "dial_hand",
-														"anchor"   : [0.5,0.5],
-														"scale"    : 1
-													},
-													"layout" : {
-														"x_anchor" : "center",
-														"y_anchor" : "middle"
-													}
-												}
-											}
-										},
-						            	"leaveBtn" : {
-						            		"type": "Button",
-											"format" : {
-												"type" : "Anchored"
-											},
-											"data": {
-												"upnode"   : "up",
-												"downnode" : "down",
-												"anchor"   : [0.5,0.5],
-												"scale" : 1
-											},
-											"layout" : {
-												"x_anchor" : "center",
-		                        				"y_anchor" : "top",
-		                        				"x_offset" : 150,
-						                        "y_offset" : -225,
-		                        				"absolute" : true
-											},
-											"children" : {
-												"up" : {
-													"type"   : "Image",
-													"data"   : {
-														"texture"  : "leave_btn_up"
-													}
-												},
-												"down" : {
-													"type"   : "Image",
-													"data"   : {
-														"texture"  : "leave_btn_down"
-													}
-												}
-											}
-						            	},
-						            	"musicBtn" : {
-						            		"type": "Button",
-											"format" : {
-												"type" : "Anchored"
-											},
-											"data": {
-												"upnode"   : "up",
-												"downnode" : "down",
-												"anchor"   : [0.5,0.5],
-												"scale" : 1
-											},
-											"layout" : {
-												"x_anchor" : "center",
-		                        				"y_anchor" : "middle",
-		                        				"x_offset" : -50,
-		                        				"y_offset" : -75,
-		                        				"absolute" : true
-											},
-											"children" : {
-												"up" : {
-													"type"   : "Image",
-													"data"   : {
-														"texture"  : "music_btn_on"
-													}
-												},
-												"down" : {
-													"type"   : "Image",
-													"data"   : {
-														"texture"  : "music_btn_off"
-													}
-												}
-											}
-						            	},
-						            	"soundBtn" : {
-						            		"type": "Button",
-											"format" : {
-												"type" : "Anchored"
-											},
-											"data": {
-												"upnode"   : "up",
-												"downnode" : "down",
-												"anchor"   : [0.5,0.5],
-												"scale" : 1
-											},
-											"layout" : {
-												"x_anchor" : "center",
-		                        				"y_anchor" : "middle",
-		                        				"x_offset" : 350,
-		                        				"y_offset" : -75,
-		                        				"absolute" : true
-											},
-											"children" : {
-												"up" : {
-													"type"   : "Image",
-													"data"   : {
-														"texture"  : "sound_btn_on"
-													}
-												},
-												"down" : {
-													"type"   : "Image",
-													"data"   : {
-														"texture"  : "sound_btn_off"
-													}
-												}
-											}
-						            	}
+									"layout" : {
+										"x_anchor" : "center",
+										"y_anchor" : "middle"
 									}
-				            	}
-				            }
-				        },
-		            	"pauseBtn" : {
-		            		"type": "Button",
+								}
+							}
+						},
+						"leaveBtn" : {
+							"type": "Button",
 							"format" : {
 								"type" : "Anchored"
 							},
 							"data": {
 								"upnode"   : "up",
 								"downnode" : "down",
-								"anchor"   : [1,0],
-								"scale" : 0.5
+								"anchor"   : [0.5,0.5],
+								"scale" : 1
 							},
 							"layout" : {
-								"x_anchor" : "right",
-                				"y_anchor" : "bottom",
-                				"x_offset" : -10,
-                				"y_offset" : 10,
-                				"absolute" : true
+								"x_anchor" : "center",
+								"y_anchor" : "top",
+								"x_offset" : 150,
+								"y_offset" : -225,
+								"absolute" : true
 							},
 							"children" : {
 								"up" : {
 									"type"   : "Image",
 									"data"   : {
-										"texture"  : "menu_btn_up"
+										"texture"  : "leave_btn_up"
 									}
 								},
 								"down" : {
 									"type"   : "Image",
 									"data"   : {
-										"texture"  : "menu_btn_down"
+										"texture"  : "leave_btn_down"
 									}
 								}
 							}
-		            	}
-                    }
-                },
+						},
+						"musicBtn" : {
+							"type": "Button",
+							"format" : {
+								"type" : "Anchored"
+							},
+							"data": {
+								"upnode"   : "up",
+								"downnode" : "down",
+								"anchor"   : [0.5,0.5],
+								"scale" : 1
+							},
+							"layout" : {
+								"x_anchor" : "center",
+								"y_anchor" : "middle",
+								"x_offset" : -50,
+								"y_offset" : -75,
+								"absolute" : true
+							},
+							"children" : {
+								"up" : {
+									"type"   : "Image",
+									"data"   : {
+										"texture"  : "music_btn_on"
+									}
+								},
+								"down" : {
+									"type"   : "Image",
+									"data"   : {
+										"texture"  : "music_btn_off"
+									}
+								}
+							}
+						},
+						"soundBtn" : {
+							"type": "Button",
+							"format" : {
+								"type" : "Anchored"
+							},
+							"data": {
+								"upnode"   : "up",
+								"downnode" : "down",
+								"anchor"   : [0.5,0.5],
+								"scale" : 1
+							},
+							"layout" : {
+								"x_anchor" : "center",
+								"y_anchor" : "middle",
+								"x_offset" : 350,
+								"y_offset" : -75,
+								"absolute" : true
+							},
+							"children" : {
+								"up" : {
+									"type"   : "Image",
+									"data"   : {
+										"texture"  : "sound_btn_on"
+									}
+								},
+								"down" : {
+									"type"   : "Image",
+									"data"   : {
+										"texture"  : "sound_btn_off"
+									}
+								}
+							}
+						}
+					}
+				},
+				"pauseBtn" : {
+					"type": "Button",
+					"format" : {
+						"type" : "Anchored"
+					},
+					"data": {
+						"upnode"   : "up",
+						"downnode" : "down",
+						"anchor"   : [1,0],
+						"scale" : 0.5
+					},
+					"layout" : {
+						"x_anchor" : "right",
+						"y_anchor" : "bottom",
+						"x_offset" : -10,
+						"y_offset" : 10,
+						"absolute" : true
+					},
+					"children" : {
+						"up" : {
+							"type"   : "Image",
+							"data"   : {
+								"texture"  : "menu_btn_up"
+							}
+						},
+						"down" : {
+							"type"   : "Image",
+							"data"   : {
+								"texture"  : "menu_btn_down"
+							}
+						}
+					}
+				},
                 "hud" : {
                     "type": "Label",
                     "data": {

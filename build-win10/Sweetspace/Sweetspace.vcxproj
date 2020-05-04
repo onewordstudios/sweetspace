@@ -217,6 +217,7 @@
     <ClInclude Include="..\..\source\PlayerDonutNode.h" />
     <ClInclude Include="..\..\source\ShipModel.h" />
     <ClInclude Include="..\..\source\Sweetspace.h" />
+    <ClInclude Include="..\..\source\TutorialNode.h" />
     <ClInclude Include="..\..\source\Tween.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>
@@ -246,6 +247,7 @@
     <ClCompile Include="..\..\source\PlayerDonutNode.cpp" />
     <ClCompile Include="..\..\source\ShipModel.cpp" />
     <ClCompile Include="..\..\source\Sweetspace.cpp" />
+    <ClCompile Include="..\..\source\TutorialNode.cpp" />
     <ClCompile Include="..\..\source\Tween.cpp" />
   </ItemGroup>
   <ItemGroup>

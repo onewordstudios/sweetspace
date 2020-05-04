@@ -37,6 +37,15 @@ bool MainMenuMode::init(const std::shared_ptr<AssetManager>& assets) {
 	if (assets == nullptr) {
 		return false;
 	}
+
+	// Music Initialization
+	auto source = assets->get<Sound>("menu");
+	if (AudioChannels::get()->currentMusic() == nullptr ||
+		AudioChannels::get()->currentMusic()->getFile() != source->getFile()) {
+		AudioChannels::get()->stopMusic(globals::MUSIC_FADE_OUT);
+		AudioChannels::get()->queueMusic(source, true, source->getVolume(), globals::MUSIC_FADE_IN);
+	}
+
 	// Set network controller
 	net = MagicInternetBox::getInstance();
 	input = InputController::getInstance();
@@ -414,17 +423,17 @@ void MainMenuMode::processButtons() {
 		case HostLevelSelect: {
 			if (buttonManager.tappedButton(easyBtn, tapData)) {
 				gameReady = true;
-				net->startGame(1);
+				net->startGame(EASY_LEVEL);
 				return;
 			}
 			if (buttonManager.tappedButton(medBtn, tapData)) {
 				gameReady = true;
-				net->startGame(4);
+				net->startGame(MED_LEVEL);
 				return;
 			}
 			if (buttonManager.tappedButton(hardBtn, tapData)) {
 				gameReady = true;
-				net->startGame(6); // NOLINT refactor out level constants later
+				net->startGame(HARD_LEVEL);
 				return;
 			}
 			break;
