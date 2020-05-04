@@ -405,7 +405,8 @@
                                 "texture":  "donut_yellow",
                                 "position": [0,-398],
                                 "anchor":   [0.5,0.5],
-                                "scale":    0.36
+                                "scale":    0.36,
+                                "visible": false
                             }
                         },
                         "challengePanelParent": {
@@ -843,7 +844,7 @@
 								"texture":  "overlay_dim",
 								"anchor":   [0.5,0.5],
 								"scale":    1,
-				            	"visible": true
+				            	"visible": false
 				            },
 				            "layout" : {
 								"x_anchor" : "center",
@@ -870,15 +871,15 @@
 		                            "data": {
 		                                "texture":  "donut_yellow",
 		                                "anchor":   [0.5,0.5],
-		                                "visible" : false,
-		                                "scale":    0.36
+		                                "scale":    0.36,
+		                                "visible" : false
 		                            },
-				                    "layout" : {
-				                        "x_anchor" : "center",
+									"layout" : {
+										"x_anchor" : "center",
 										"y_anchor" : "middle",
 				                        "y_offset" : 50,
 				                        "absolute" : true
-				                    }
+									}
 		                        },
 				            	"text" : {
 				            		"type": "Label",

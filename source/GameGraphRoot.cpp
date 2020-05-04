@@ -38,6 +38,9 @@ constexpr int MAX_ELLIPSES_FRAMES = 180;
 /** Presumable number of frames per second */
 constexpr int FRAMES_PER_SECOND = 60;
 
+/** Ratio of spin on reconnect donut */
+constexpr float RECONNECT_SPIN_RATIO = 0.26f;
+
 /** Animation cycle length of ship red flash */
 constexpr int MAX_HEALTH_WARNING_FRAMES = 150;
 
@@ -210,7 +213,7 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 			donutNode->setInitPos(tempDonutNode->getPosition());
 			donutNode->setScreenHeight(screenHeight);
 			allSpace->addChild(donutNode);
-			tempDonutNode->setVisible(false);
+			tempDonutNode = nullptr;
 		} else {
 			std::shared_ptr<ExternalDonutNode> newDonutNode =
 				ExternalDonutNode::allocWithTextures(image);
@@ -363,12 +366,16 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 		std::dynamic_pointer_cast<Label>(assets->get<Node>("game_overlay_reconnect_ellipsis2"));
 	reconnectE3 =
 		std::dynamic_pointer_cast<Label>(assets->get<Node>("game_overlay_reconnect_ellipsis3"));
-	reconnectDonut = dynamic_pointer_cast<cugl::PolygonNode>(
+	std::shared_ptr<PolygonNode> tempReconnectDonut =
+		dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_overlay_reconnect_donut"));
+	reconnectDonut = cugl::PolygonNode::allocWithTexture(
 		assets->get<Texture>("donut_" + PLAYER_COLOR.at(playerID)));
+	reconnectOverlay->addChild(reconnectDonut);
 	reconnectDonut->setAnchor(Vec2::ANCHOR_CENTER);
+	reconnectDonut->setPosition(tempReconnectDonut->getPosition());
 	reconnectDonut->setScale(DONUT_SCALE);
-	reconnectDonut->setPositionY(50);
-	reconnectOverlay->addChild(donutNode);
+	reconnectDonut->setVisible(true);
+	tempReconnectDonut = nullptr;
 
 	// Initialize Pause Screen Componenets
 	pauseBtn = std::dynamic_pointer_cast<Button>(assets->get<Node>("game_pauseBtn"));
@@ -390,6 +397,7 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	winScreen = assets->get<Node>("game_overlay_win");
 	nextBtn = std::dynamic_pointer_cast<Button>(assets->get<Node>("game_overlay_win_nextBtn"));
 
+	reconnectOverlay->setVisible(false);
 	lossScreen->setVisible(false);
 	winScreen->setVisible(false);
 	nearSpace->setVisible(true);
@@ -439,6 +447,7 @@ void GameGraphRoot::dispose() {
 		reconnectOverlay = nullptr;
 		reconnectE2 = nullptr;
 		reconnectE3 = nullptr;
+		reconnectDonut = nullptr;
 
 		pauseBtn = nullptr;
 		pauseScreen = nullptr;
@@ -499,7 +508,7 @@ void GameGraphRoot::update(float timestep) {
 			// Hide Unnecessary Overlays
 			lossScreen->setVisible(false);
 			winScreen->setVisible(false);
-			// reconnectOverlay->setVisible(false);
+			reconnectOverlay->setVisible(false);
 			break;
 		case Loss:
 			// Show loss screen
@@ -514,8 +523,10 @@ void GameGraphRoot::update(float timestep) {
 			moveTutorial->setVisible(false);
 			break;
 		case Reconnecting:
-			// Still Reconnecting
+			// Still Reconnecting, Animation Frames
 			reconnectOverlay->setVisible(true);
+			reconnectDonut->setAngle(
+				(float)(reconnectDonut->getAngle() - globals::PI_180 * RECONNECT_SPIN_RATIO));
 			currentEllipsesFrame++;
 			if (currentEllipsesFrame > MAX_ELLIPSES_FRAMES) {
 				currentEllipsesFrame = 0;
