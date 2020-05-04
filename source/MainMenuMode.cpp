@@ -58,8 +58,6 @@ bool MainMenuMode::init(const std::shared_ptr<AssetManager>& assets) {
 	bg2ship = assets->get<Node>("matchmaking_mainmenubg4");
 	bg3land = assets->get<Node>("matchmaking_mainmenubg5");
 	bg9studio = assets->get<Node>("matchmaking_studiologo");
-	// bring ship to front
-    bg2ship->setZOrder(1);
 
 	backBtn = std::dynamic_pointer_cast<Button>(assets->get<Node>("matchmaking_backbtn"));
 
