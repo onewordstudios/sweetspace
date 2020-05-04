@@ -62,7 +62,7 @@ void BreachNode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch, const Mat
 			} else {
 				// Continue shrink animation
 				shapeNode->setFrame((int)shapeNode->getFrame() + 1);
-				patternNode->setFrame(shapeNode->getFrame());
+				patternNode->setFrame((int)(shapeNode->getFrame()));
 			}
 		} else {
 			// Play idle animation
@@ -70,7 +70,7 @@ void BreachNode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch, const Mat
 								(currentFrameIdle < NUM_IDLE_FRAMES / 2 * NUM_SKIP_FRAMES
 									 ? currentFrameIdle / NUM_SKIP_FRAMES
 									 : NUM_IDLE_FRAMES - currentFrameIdle / 2 - 1));
-			patternNode->setFrame(shapeNode->getFrame());
+			patternNode->setFrame((int)(shapeNode->getFrame()));
 			currentFrameIdle = currentFrameIdle == NUM_IDLE_FRAMES * NUM_SKIP_FRAMES - 1
 								   ? 0
 								   : currentFrameIdle + 1;
