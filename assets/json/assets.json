@@ -114,6 +114,9 @@
 		"game_title": {
 			"file": "textures/main_menu/sweetspace.png"
 		},
+        "game_title_halo": {
+            "file": "textures/main_menu/sweetspace_halo.png"
+        },
 		"main_menu_bg0": {
 			"file": "textures/main_menu/splash/0-logo.png"
 		},
@@ -124,11 +127,14 @@
 			"file": "textures/main_menu/splash/2-sprinkles.png"
 		},
 		"main_menu_bg3": {
-			"file": "textures/main_menu/splash/3-landscape.png"
+			"file": "textures/main_menu/splash/3-glow.png"
 		},
 		"main_menu_bg4": {
 			"file": "textures/main_menu/splash/4-ship.png"
 		},
+        "main_menu_bg5": {
+            "file": "textures/main_menu/splash/5-landscape.png"
+        },
 		"purple_panel" : {
 			"file": "textures/main_menu/purple_panel.png"
 		},
@@ -1241,7 +1247,7 @@
 					},
 					"data"   : {
 						"texture"  : "main_menu_bg3",
-						"anchor"   : [0.5,0.5],
+						"anchor"   : [0.5,0.45],
 						"scale"    : 0.4,
 						"visible" :false
 					},
@@ -1263,10 +1269,26 @@
 					},
 					"layout" : {
 						"x_anchor" : "center",
-						"y_anchor" : "middle",
-						"y_offset" : -1.5
+						"y_anchor" : "middle"
 					}
 				},
+                "mainmenubg5" : {
+                    "type" : "Image",
+                    "format"    : {
+                        "type" : "Anchored"
+                    },
+                    "data"   : {
+                        "texture"  : "main_menu_bg5",
+                        "anchor"   : [0.5,0.5],
+                        "scale"    : 0.4,
+                        "visible" :false
+                    },
+                    "layout" : {
+                        "x_anchor" : "center",
+                        "y_anchor" : "middle",
+                        "y_offset" : -1.5
+                    }
+                },
 				"studiologo" : {
 					"type" : "Image",
 					"format"    : {
@@ -1335,13 +1357,14 @@
 								"type" : "Anchored"
 							},
 							"data"   : {
-								"texture"  : "game_title",
+								"texture"  : "game_title_halo",
 								"anchor"   : [0.5,0.5],
-								"scale"    : 0.5
+								"scale"    : 0.4
 							},
 							"layout" : {
 								"x_anchor" : "center",
-								"y_anchor" : "middle"
+								"y_anchor" : "middle",
+                                "y_offset" : 0.15
 							}
 						},
 						"btnwrap" : {
@@ -1354,7 +1377,8 @@
 							},
 							"layout" : {
 								"x_anchor" : "center",
-								"y_anchor" : "bottom"
+								"y_anchor" : "bottom",
+                                "y_offset" : 0.05
 							},
 							"children" : {
 								"hostbtn" : {
@@ -1384,7 +1408,8 @@
 									},
 									"layout" : {
 										"x_anchor" : "center",
-										"y_anchor" : "middle"
+										"y_anchor" : "middle",
+                                        "x_offset" : -0.02
 									}
 								},
 								"clientbtn" : {
@@ -1414,7 +1439,8 @@
 									},
 									"layout" : {
 										"x_anchor" : "center",
-										"y_anchor" : "middle"
+										"y_anchor" : "middle",
+                                        "x_offset" : 0.02
 									}
 								}
 							}

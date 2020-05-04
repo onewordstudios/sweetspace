@@ -77,10 +77,12 @@ class MainMenuMode : public cugl::Scene {
 
 	/** Background asset with stars */
 	std::shared_ptr<cugl::Node> bg0stars;
-	/** Background asset with landscape */
-	std::shared_ptr<cugl::Node> bg1land;
+	/** Background asset with ship glow */
+	std::shared_ptr<cugl::Node> bg1glow;
 	/** Background asset with donut ship */
 	std::shared_ptr<cugl::Node> bg2ship;
+	/** Background asset with land */
+	std::shared_ptr<cugl::Node> bg3land;
 	/** Background asset with studio name */
 	std::shared_ptr<cugl::Node> bg9studio;
 
