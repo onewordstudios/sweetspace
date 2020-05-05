@@ -32,10 +32,13 @@ class ExternalDonutNode : public DonutNode {
 	 * @return a textured polygon from a Texture object.
 	 */
 	static std::shared_ptr<ExternalDonutNode> allocWithTextures(
-		const std::shared_ptr<cugl::Texture> &bodyTexture) {
+		const std::shared_ptr<cugl::Texture> &bodyTexture,
+		const std::shared_ptr<cugl::Texture> &faceIdleTexture,
+		const std::shared_ptr<cugl::Texture> &faceDizzyTexture,
+		const std::shared_ptr<cugl::Texture> &faceWorkTexture) {
 		std::shared_ptr<ExternalDonutNode> node = std::make_shared<ExternalDonutNode>();
 		if (node->init()) {
-			node->initChildren(bodyTexture);
+			node->initChildren(bodyTexture, faceIdleTexture, faceDizzyTexture, faceWorkTexture);
 			return node;
 		} else {
 			return nullptr;
