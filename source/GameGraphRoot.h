@@ -91,6 +91,16 @@ class GameGraphRoot : public cugl::Scene {
 	/** Current animation frame for ellipses */
 	int currentEllipsesFrame;
 
+	// Timeout Textures
+	/** Node to hold the timeout Display.*/
+	std::shared_ptr<cugl::Node> timeoutDisplay;
+	/** Label for back to lobby counter */
+	std::shared_ptr<cugl::Label> timeoutCounter;
+	/** Connection Timeout Start */
+	cugl::Timestamp timeoutStart;
+	/** Connection Timeout Counter */
+	cugl::Timestamp timeoutCurrent;
+
 	// Pause Textures
 	/** Button to Open Pause */
 	std::shared_ptr<cugl::Button> pauseBtn;

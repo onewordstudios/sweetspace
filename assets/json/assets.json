@@ -958,7 +958,93 @@
 				                    }
 				                }
 				            }
-				        }
+				        },
+						"timeout": {
+							"type"      : "Image",
+				            "format"    : {
+				                "type" : "Anchored"
+				            },
+				            "data": {
+								"texture":  "overlay_dim",
+								"anchor":   [0.5,0.5],
+								"scale":    1,
+				            	"visible": false
+				            },
+				            "layout" : {
+								"x_anchor" : "center",
+								"y_anchor" : "middle"
+							},
+							"children":  {
+				            	"bg" : {
+				            		"type": "Image",
+									"format"    : {
+										"type" : "Anchored"
+									},
+				                    "data": {
+				                        "texture":  "reconnect_bg",
+				                        "anchor":   [0.5,0.5],
+				                        "scale":    0.6
+				                    },
+									"layout" : {
+										"x_anchor" : "center",
+										"y_anchor" : "middle"
+									}
+				            	},
+								"textup" : {
+				            		"type": "Label",
+				                    "data": {
+				                        "font"       : "mont_black_italic_big",
+				                        "text"       : "Connection Timed Out",
+				                        "foreground" : [236,167,247,255],
+                                		"anchor" : [0.5,0.5],
+				                        "scale" 	 : 0.4,
+				                        "valign"     : "middle",
+				                        "halign"     : "center"
+				                    },
+				                    "layout" : {
+				                        "x_anchor" : "center",
+										"y_anchor" : "middle",
+				                        "y_offset" : 40,
+				                        "absolute" : true
+				                    }
+				            	},
+								"textdown" : {
+				            		"type": "Label",
+				                    "data": {
+				                        "font"       : "mont_black_italic_big",
+				                        "text"       : "Back to Lobby",
+				                        "foreground" : [236,167,247,255],
+                                		"anchor" : [0.5,0.5],
+				                        "scale" 	 : 0.4,
+				                        "valign"     : "middle",
+				                        "halign"     : "center"
+				                    },
+				                    "layout" : {
+				                        "x_anchor" : "center",
+										"y_anchor" : "middle",
+				                        "absolute" : true
+				                    }
+				            	},
+								"countdown" : {
+				            		"type": "Label",
+				                    "data": {
+				                        "font"       : "mont_black_italic_big",
+				                        "text"       : "4",
+				                        "foreground" : [236,167,247,255],
+                                		"anchor" : [0.5,0.5],
+				                        "scale" 	 : 0.7,
+				                        "valign"     : "middle",
+				                        "halign"     : "center"
+				                    },
+				                    "layout" : {
+				                        "x_anchor" : "center",
+										"y_anchor" : "middle",
+				                        "y_offset" : -50,
+				                        "absolute" : true
+				                    }
+				            	}
+				            }
+						}
                     }
                 },
 				"pause": {
