@@ -15,13 +15,13 @@ constexpr float OFF_SCREEN_POS = 1500;
 constexpr int NUM_IDLE_FRAMES = 11;
 
 /** Controls how fast idle animations proceed */
-constexpr int NUM_SKIP_FRAMES = 2;
+constexpr int NUM_SKIP_FRAMES = 3;
 
 /** Minimum scale of pattern node */
 constexpr float PATTERN_SCALE = 0.1f;
 
 /** Horizontal position offset for pattern animation */
-constexpr int PATTERN_OFFSET = -120;
+constexpr int PATTERN_OFFSET = -60;
 
 void BreachNode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch, const Mat4& transform,
 					  Color4 tint) {
@@ -66,12 +66,13 @@ void BreachNode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch, const Mat
 			}
 		} else {
 			// Play idle animation
-			shapeNode->setFrame(getFrameFromHealth(breachModel->getHealth()) +
-								(currentFrameIdle < NUM_IDLE_FRAMES / 2 * NUM_SKIP_FRAMES
-									 ? currentFrameIdle / NUM_SKIP_FRAMES
-									 : NUM_IDLE_FRAMES - currentFrameIdle / 2 - 1));
-			patternNode->setFrame((int)(shapeNode->getFrame()));
-			currentFrameIdle = currentFrameIdle == NUM_IDLE_FRAMES * NUM_SKIP_FRAMES - 1
+			int magicNum = (currentFrameIdle < NUM_IDLE_FRAMES * NUM_SKIP_FRAMES
+								? currentFrameIdle / NUM_SKIP_FRAMES
+								: (NUM_IDLE_FRAMES * NUM_SKIP_FRAMES * 2 - currentFrameIdle) /
+									  NUM_SKIP_FRAMES);
+			shapeNode->setFrame(getFrameFromHealth(breachModel->getHealth()) + magicNum);
+			patternNode->setFrame(shapeNode->getFrame());
+			currentFrameIdle = currentFrameIdle == NUM_IDLE_FRAMES * 2 * NUM_SKIP_FRAMES - 1
 								   ? 0
 								   : currentFrameIdle + 1;
 		}
