@@ -20,9 +20,6 @@ constexpr int DONUT_OFFSET = 195;
 /** The scale of the ship segments. */
 constexpr float SEG_SCALE = 0.33f;
 
-/** The scale of the doors. */
-constexpr float DOOR_SCALE = 0.3f;
-
 /** Number of animation frames of doors */
 constexpr int DOOR_FRAMES = 32;
 
@@ -278,13 +275,9 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	for (int i = 0; i < ship->getDoors().size(); i++) {
 		std::shared_ptr<DoorModel> doorModel = ship->getDoors().at((unsigned long)i);
 		std::shared_ptr<Texture> image = assets->get<Texture>("door");
-		std::shared_ptr<DoorNode> doorNode = DoorNode::alloc(image, 1, DOOR_FRAMES, DOOR_FRAMES);
-		doorNode->setModel(doorModel);
-		doorNode->getAnimationNode()->setFrame(0);
-		doorNode->setAnchor(Vec2::ANCHOR_BOTTOM_CENTER);
-		doorNode->setScale(DOOR_SCALE);
-		doorNode->setShipSize(ship->getSize());
-		doorNode->setDonutModel(ship->getDonuts().at(playerID));
+		std::shared_ptr<DoorNode> doorNode =
+			DoorNode::alloc(doorModel, ship->getDonuts()[playerID], ship->getSize(), image, 1,
+							DOOR_FRAMES, DOOR_FRAMES);
 		doorsNode->addChildWithTag(doorNode, i + 1);
 	}
 

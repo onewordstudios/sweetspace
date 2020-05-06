@@ -12,46 +12,9 @@
  * Note: if the node is not a child of nearSpace, it probably should not inherit this class.
  */
 class CustomNode : public cugl::Node {
-#pragma mark Fields
-   protected:
-	/** Reference to the player donut model */
-	std::shared_ptr<DonutModel> playerDonutModel;
-	/** Size of the ship. Needed for visibility determination */
-	float shipSize;
-	/** Whether the node is being shown right now */
-	bool isShown;
-#pragma mark -
-#pragma mark Constructor
-	/**
-	 * Constructor
-	 */
-	CustomNode() : cugl::Node(), shipSize(0), isShown(false) {}
-
-	/**
-	 * Releases all resources allocated with this node.
-	 *
-	 * This will release, but not necessarily delete the associated texture.
-	 * However, the polygon and drawing commands will be deleted and no
-	 * longer safe to use.
-	 */
-	~CustomNode() { dispose(); }
-#pragma mark -
-#pragma mark Setters
-   public:
-	/**
-	 * Sets playerDonutModel to given parameter
-	 * @param model
-	 */
-	void setDonutModel(std::shared_ptr<DonutModel> model) { playerDonutModel = model; }
-
-	/**
-	 * Store size of ship level
-	 * @param f
-	 */
-	void setShipSize(float f) { shipSize = f; }
-#pragma mark -
+   private:
+#pragma region Positioning
 #pragma mark Positioning Methods
-   protected:
 	/**
 	 * Calculates the on-screen angle of node relative to the player avatar
 	 *
@@ -98,6 +61,95 @@ class CustomNode : public cugl::Node {
 	cugl::Vec2 getPositionVec(float relAngle, float radius) {
 		return cugl::Vec2(radius * sin(relAngle), -radius * cos(relAngle));
 	}
+#pragma mark -
+#pragma endregion
+   protected:
+#pragma region Fields
+#pragma mark Fields
+	/** Reference to the player donut model */
+	std::shared_ptr<DonutModel> playerDonutModel;
+	/** Size of the ship. Needed for visibility determination */
+	float shipSize;
+	/** Whether the node is being shown right now */
+	bool isShown;
+	/** The angle on the ship where this object is located */
+	float angle;
+	/** The radius on the ship where this object is located */
+	float radius;
+#pragma mark -
+#pragma endregion
+#pragma region Constructor
+#pragma mark Constructor
+	/**
+	 * Constructor
+	 */
+	CustomNode() : cugl::Node(), shipSize(0), isShown(false), angle(0), radius(0) {}
+
+	/**
+	 * Releases all resources allocated with this node.
+	 *
+	 * This will release, but not necessarily delete the associated texture.
+	 * However, the polygon and drawing commands will be deleted and no
+	 * longer safe to use.
+	 */
+	~CustomNode() { dispose(); }
+
+	/**
+	 * Properly initialize this node. Do NOT use the constructors in the parent class. They will not
+	 * initialize everything.
+	 *
+	 * @param player Pointer to the player's donut model
+	 * @param shipSize Size of the ship (in degrees)
+	 * @param angle Angle on the ship where this node is located
+	 * @param radius Radius on the ship where this node is located
+	 */
+	virtual bool init(std::shared_ptr<DonutModel> player, float shipSize, float angle,
+					  float radius);
+
+	/**
+	 * Releases all resources allocated with this node.
+	 *
+	 * This will release, but not necessarily delete the associated texture.
+	 * However, the polygon and drawing commands will be deleted and no
+	 * longer safe to use.
+	 */
+	void dispose() override;
+#pragma mark -
+#pragma endregion
+#pragma region State Methods
+	/** Returns whether this node should be active. */
+	virtual bool isActive() = 0;
+	/**
+	 * Compute any initialization and view state updates that need to happen before the object is
+	 * positioned relative to the current angle of the ship.
+	 *
+	 * This method is not called if the associated model is inactive.
+	 */
+	virtual void prePosition() {}
+	/**
+	 * Compute any view state updates that need to happen after the object is positioned relative to
+	 * the current angle of the ship.
+	 *
+	 * This method is not called if the associated model is inactive.
+	 */
+	virtual void postPosition() {}
+#pragma endregion
+
+   public:
+	/**
+	 * Sets playerDonutModel to given parameter
+	 * @param model
+	 */
+	void setDonutModel(std::shared_ptr<DonutModel> model) { playerDonutModel = model; }
+
+	/**
+	 * Store size of ship level
+	 * @param f
+	 */
+	void setShipSize(float f) { shipSize = f; }
+
+	void draw(const shared_ptr<cugl::SpriteBatch> &batch, const cugl::Mat4 &transform,
+			  cugl::Color4 tint) override;
 };
 
 #endif // SWEETSPACE_CUSTOMNODE_H
