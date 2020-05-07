@@ -7,14 +7,6 @@
 
 class DonutNode : public cugl::Node {
    public:
-	enum FaceState {
-		/** When donut is still or rolling */
-		Idle,
-		/** When donut collides with mismatched breach */
-		Dizzy,
-		/** When donut is fixing own breach or collides with door */
-		Working
-	};
 
 	/** Spritesheet dimensions for idle face animation */
 	static constexpr int ANIMATION_IDLE_W = 4;

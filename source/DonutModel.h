@@ -32,6 +32,15 @@ class DonutModel {
 	/** Downward Acceleration for calculating jump offsets */
 	static constexpr float GRAVITY = 10.0f;
 
+	enum FaceState {
+		/** When donut is still or rolling */
+		Idle,
+		/** When donut collides with mismatched breach */
+		Dizzy,
+		/** When donut is fixing own breach or collides with door */
+		Working
+	};
+
    protected:
 	/** Clamp x into the range [y,z] */
 	static constexpr float RANGE_CLAMP(float x, float y, float z) {
@@ -60,6 +69,8 @@ class DonutModel {
 	float jumpVelocity;
 	/** Whether or not this player is active */
 	bool isActive = true;
+	/** Current animation state the player is in */
+	FaceState faceState;
 
 	/**
 	 * Performs state and animation updates for a jumping donut.
@@ -247,6 +258,40 @@ class DonutModel {
 	 */
 	void startJump();
 
+	/**
+	 * Transition player animation state
+	 * @param newState
+	 */
+	void transitionFaceState(FaceState newState) {
+		switch (faceState) {
+			case Idle:
+				switch (newState) {
+					case Dizzy:
+						faceState = FaceState::Dizzy;
+					case Working:
+						faceState = FaceState::Working;
+				}
+			case Dizzy:
+				switch (newState) {
+					case Idle:
+						if (friction == DEFAULT_DONUT_FRICTION_FACTOR){
+							faceState = FaceState::Idle;
+						}
+					case Working:
+						faceState = FaceState::Working;
+				}
+			case Working:
+				switch (newState) {
+					case Idle:
+						// TODO: update once self-friction is removed
+						if (friction == DEFAULT_DONUT_FRICTION_FACTOR){
+							faceState = FaceState::Idle;
+						}
+					case Dizzy:
+						faceState = FaceState::Dizzy;
+				}
+		}
+	}
 #pragma mark -
 #pragma mark Animation
 
