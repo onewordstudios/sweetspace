@@ -6,6 +6,20 @@
 
 using namespace cugl;
 
+bool PlayerDonutNode::init(std::shared_ptr<DonutModel> player, float screenHeight,
+						   const std::shared_ptr<cugl::Texture>& bodyTexture,
+						   const Vec2& position) {
+	this->screenHeight = screenHeight;
+
+	setAnchor(Vec2::ANCHOR_CENTER);
+	setPosition(position);
+	// donutNode->setShipSize(ship->getSize());
+	initPos = position;
+
+	DonutNode::init(bodyTexture, player);
+	return false;
+}
+
 void PlayerDonutNode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch, const Mat4& transform,
 						   Color4 tint) {
 	float angle = (float)(rotationNode->getAngle() -

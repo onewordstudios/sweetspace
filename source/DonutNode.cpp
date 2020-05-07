@@ -17,13 +17,18 @@ constexpr float SCALING_BEGIN = 0.1f;
 /** Percentage of jump at which distortion stops */
 constexpr float SCALING_END = 1.2f;
 
-bool DonutNode::init(const std::shared_ptr<cugl::Texture>& bodyTexture) {
+bool DonutNode::init(const std::shared_ptr<cugl::Texture>& bodyTexture,
+					 std::shared_ptr<DonutModel> donut) {
+	donutModel = donut;
+
 	rotationNode = cugl::Node::alloc();
 	bodyNode = cugl::PolygonNode::allocWithTexture(bodyTexture);
 	bodyNode->setAnchor(cugl::Vec2::ANCHOR_CENTER);
 	bodyNode->setPosition(0, 0);
 	rotationNode->addChild(bodyNode);
 	addChild(rotationNode);
+
+	setScale(DONUT_SCALE);
 	return true;
 }
 

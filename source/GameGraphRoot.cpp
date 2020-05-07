@@ -195,15 +195,8 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 		std::shared_ptr<Texture> image = assets->get<Texture>("donut_" + donutColor);
 		// Player node is handled separately
 		if (i == playerID) {
-			donutNode = PlayerDonutNode::allocWithTextures(image);
-			donutNode->setAnchor(Vec2::ANCHOR_CENTER);
-			donutNode->setPosition(tempDonutNode->getPosition());
-			donutNode->setModel(donutModel);
-			donutNode->setScale(DONUT_SCALE);
-			donutNode->setShipSize(ship->getSize());
-			donutNode->setDonutModel(ship->getDonuts().at(playerID));
-			donutNode->setInitPos(tempDonutNode->getPosition());
-			donutNode->setScreenHeight(screenHeight);
+			donutNode = PlayerDonutNode::alloc(playerModel, screenHeight, image,
+											   tempDonutNode->getPosition());
 			allSpace->addChild(donutNode);
 			tempDonutNode->setVisible(false);
 		} else {

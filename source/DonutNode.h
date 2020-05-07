@@ -16,7 +16,7 @@ class DonutNode : public CustomNode {
 	};
 #pragma mark Values
    protected:
-	/** Reference to the player donut model */
+	/** Reference to the donut model this node represents */
 	std::shared_ptr<DonutModel> donutModel;
 
 	/** Reference to child node which is responsible for rotation */
@@ -52,7 +52,7 @@ class DonutNode : public CustomNode {
 	/**
 	 * Init child nodes of donut node
 	 */
-	bool init(const std::shared_ptr<cugl::Texture> &bodyTexture);
+	bool init(const std::shared_ptr<cugl::Texture> &bodyTexture, std::shared_ptr<DonutModel> donut);
 #pragma mark -
 #pragma mark Getters Setters
 

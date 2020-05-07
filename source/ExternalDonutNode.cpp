@@ -14,8 +14,7 @@ bool ExternalDonutNode::init(std::shared_ptr<DonutModel> externalDonutModel,
 							 std::shared_ptr<DonutModel> player, float shipSize,
 							 const std::shared_ptr<cugl::Texture>& bodyTexture) {
 	CustomNode::init(player, shipSize, externalDonutModel->getAngle(), globals::RADIUS);
-	DonutNode::init(bodyTexture);
-	setScale(DONUT_SCALE);
+	DonutNode::init(bodyTexture, externalDonutModel);
 	return true;
 }
 

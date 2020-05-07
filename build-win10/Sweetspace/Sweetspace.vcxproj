@@ -227,6 +227,7 @@
     <ClCompile Include="..\..\source\ButtonManager.cpp" />
     <ClCompile Include="..\..\source\ButtonModel.cpp" />
     <ClCompile Include="..\..\source\ButtonNode.cpp" />
+    <ClCompile Include="..\..\source\CustomNode.cpp" />
     <ClCompile Include="..\..\source\DonutModel.cpp" />
     <ClCompile Include="..\..\source\DonutNode.cpp" />
     <ClCompile Include="..\..\source\ExternalDonutModel.cpp" />

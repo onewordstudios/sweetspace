@@ -188,8 +188,6 @@ class GameGraphRoot : public cugl::Scene {
 	const cugl::Color4 SHIP_LABEL_COLOR{255, 248, 161};
 	/** Number of possible player colors */
 	static constexpr int NUM_COLORS = 6;
-	/** The scale of the donut textures. */
-	static constexpr float DONUT_SCALE = 0.4f;
 
 #pragma mark -
 #pragma mark Constructors

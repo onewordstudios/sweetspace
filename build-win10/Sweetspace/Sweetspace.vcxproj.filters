@@ -227,6 +227,9 @@
     <ClCompile Include="..\..\source\TutorialNode.cpp">
       <Filter>Source Files\SceneGraph</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\source\CustomNode.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Sweetspace.rc">
