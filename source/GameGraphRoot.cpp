@@ -53,15 +53,6 @@ constexpr int SEG_LABEL_SIZE = 100;
 /** Y position of ship segment label */
 constexpr int SEG_LABEL_Y = 1113;
 
-/** Scale of button label text */
-constexpr float BUTTON_LABEL_SCALE = 1;
-
-/** Scale of the button */
-constexpr float BUTTON_SCALE = 0.3f;
-
-/** Determines vertical positino of button label */
-constexpr float BUTTON_LABEL_Y = -0.28f;
-
 /** Maximum number of health labels */
 constexpr int MAX_HEALTH_LABELS = 10;
 
@@ -271,58 +262,27 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 		}
 	}
 
+	std::shared_ptr<DonutModel> playerModel = ship->getDonuts()[playerID];
+
 	// Initialize Doors
 	for (int i = 0; i < ship->getDoors().size(); i++) {
 		std::shared_ptr<DoorModel> doorModel = ship->getDoors().at((unsigned long)i);
 		std::shared_ptr<Texture> image = assets->get<Texture>("door");
-		std::shared_ptr<DoorNode> doorNode =
-			DoorNode::alloc(doorModel, ship->getDonuts()[playerID], ship->getSize(), image, 1,
-							DOOR_FRAMES, DOOR_FRAMES);
+		std::shared_ptr<DoorNode> doorNode = DoorNode::alloc(
+			doorModel, playerModel, ship->getSize(), image, 1, DOOR_FRAMES, DOOR_FRAMES);
 		doorsNode->addChildWithTag(doorNode, i + 1);
 	}
 
 	// Initialize Buttons
 	for (int i = 0; i < ship->getButtons().size(); i++) {
-		// Initialize nodes
 		std::shared_ptr<ButtonModel> buttonModel = ship->getButtons().at((unsigned long)i);
-		std::shared_ptr<Texture> baseTexture = assets->get<Texture>("challenge_btn_base_up");
-		std::shared_ptr<Texture> bodyTexture = assets->get<Texture>("challenge_btn_up");
-		std::shared_ptr<PolygonNode> baseNode = PolygonNode::allocWithTexture(baseTexture);
-		std::shared_ptr<PolygonNode> bodyNode = PolygonNode::allocWithTexture(bodyTexture);
-		std::shared_ptr<ButtonNode> buttonNode = ButtonNode::alloc();
-		// Initialize label
-		std::shared_ptr<cugl::Label> buttonLabel =
-			cugl::Label::alloc("null", assets->get<Font>("mont_black_italic_big"));
-		buttonLabel->setScale(BUTTON_LABEL_SCALE);
-		buttonLabel->setHorizontalAlignment(Label::HAlign::CENTER);
-		buttonLabel->setForeground(Color4::WHITE);
-		buttonLabel->setAnchor(Vec2::ANCHOR_CENTER);
-		buttonLabel->setPosition(0, (float)baseTexture->getHeight() * BUTTON_LABEL_Y);
-		// Initialize fields
-		buttonNode->setModel(buttonModel);
-		buttonNode->setScale(BUTTON_SCALE);
-		buttonNode->setDonutModel(ship->getDonuts().at(playerID));
-		buttonNode->setAnchor(Vec2::ANCHOR_BOTTOM_CENTER);
-		buttonNode->setShipSize(ship->getSize());
-		buttonNode->setButtonBaseDown(assets->get<Texture>("challenge_btn_base_down"));
-		buttonNode->setButtonBaseUp(assets->get<Texture>("challenge_btn_base_up"));
-		buttonNode->setButtonDown(assets->get<Texture>("challenge_btn_down"));
-		buttonNode->setButtonUp(assets->get<Texture>("challenge_btn_up"));
-		buttonNode->setBodyNode(bodyNode);
-		buttonNode->setBaseNode(baseNode);
-		buttonNode->setButtonLabel(buttonLabel);
-
-		baseNode->setAnchor(Vec2::ANCHOR_CENTER);
-		baseNode->setPosition(0, 0);
-
-		bodyNode->setAnchor(Vec2::ANCHOR_CENTER);
-		bodyNode->setPosition(0, 0);
-
-		buttonNode->addChild(bodyNode);
-		buttonNode->addChild(baseNode);
-		buttonNode->addChild(buttonLabel);
-		buttonsNode->addChild(buttonNode);
-		buttonNode->setTag(i + 1);
+		std::shared_ptr<ButtonNode> buttonNode = ButtonNode::alloc(
+			buttonModel, playerModel, ship->getSize(),
+			assets->get<Texture>("challenge_btn_base_down"),
+			assets->get<Texture>("challenge_btn_base_up"),
+			assets->get<Texture>("challenge_btn_down"), assets->get<Texture>("challenge_btn_up"),
+			assets->get<Font>("mont_black_italic_big"));
+		buttonsNode->addChildWithTag(buttonNode, i + 1);
 	}
 
 	if (ship->getLevelNum() == 1) {
