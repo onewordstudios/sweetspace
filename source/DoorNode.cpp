@@ -21,6 +21,7 @@ bool DoorNode::init(std::shared_ptr<DoorModel> door, std::shared_ptr<DonutModel>
 					float shipSize, const std::shared_ptr<cugl::Texture>& texture, int rows,
 					int cols, int size) {
 	CustomNode::init(player, shipSize, door->getAngle(), DOOR_RADIUS);
+	doorModel = door;
 	animationNode = cugl::AnimationNode::alloc(texture, rows, cols, size);
 	animationNode->setAnchor(Vec2::ANCHOR_BOTTOM_CENTER);
 	animationNode->setPosition(0, 0);

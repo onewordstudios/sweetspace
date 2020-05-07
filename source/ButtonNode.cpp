@@ -34,6 +34,8 @@ bool ButtonNode::init(std::shared_ptr<ButtonModel> btn, std::shared_ptr<DonutMod
 					  std::shared_ptr<cugl::Texture> btnUp, std::shared_ptr<cugl::Font> labelFont) {
 	CustomNode::init(player, shipSize, btn->getAngle(), BUTTON_RADIUS);
 
+	buttonModel = btn;
+
 	btnBaseDown = baseDown;
 	btnBaseUp = baseUp;
 	this->btnDown = btnDown;
@@ -51,7 +53,7 @@ bool ButtonNode::init(std::shared_ptr<ButtonModel> btn, std::shared_ptr<DonutMod
 	bodyNode->setAnchor(Vec2::ANCHOR_CENTER);
 	bodyNode->setPosition(0, 0);
 
-	label = Label::alloc(std::to_string(buttonModel->getPair()->getSection()), labelFont);
+	label = Label::alloc("", labelFont);
 
 	addChild(bodyNode);
 	addChild(baseNode);
@@ -69,6 +71,10 @@ bool ButtonNode::init(std::shared_ptr<ButtonModel> btn, std::shared_ptr<DonutMod
 bool ButtonNode::isActive() {
 	bool justJumpedOn = buttonModel->isJumpedOn() && !prevJumpedOn;
 	return buttonModel->getIsActive() || currentFrame != 0 || justJumpedOn;
+}
+
+void ButtonNode::prePosition() {
+	label->setText(std::to_string(buttonModel->getPair()->getSection()));
 }
 
 void ButtonNode::postPosition() {

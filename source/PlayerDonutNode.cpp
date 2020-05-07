@@ -17,6 +17,7 @@ bool PlayerDonutNode::init(std::shared_ptr<DonutModel> player, float screenHeigh
 	initPos = position;
 
 	DonutNode::init(bodyTexture, player);
+	CustomNode::init(player, 0, 0, 0);
 	return true;
 }
 

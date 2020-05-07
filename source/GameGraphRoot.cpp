@@ -239,6 +239,7 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	for (int i = 0; i < ship->getDoors().size(); i++) {
 		std::shared_ptr<DoorModel> doorModel = ship->getDoors().at((unsigned long)i);
 		std::shared_ptr<Texture> image = assets->get<Texture>("door");
+		CUAssert(doorModel != nullptr);
 		std::shared_ptr<DoorNode> doorNode = DoorNode::alloc(
 			doorModel, playerModel, ship->getSize(), image, 1, DOOR_FRAMES, DOOR_FRAMES);
 		doorsNode->addChildWithTag(doorNode, i + 1);
