@@ -228,7 +228,7 @@
       <Filter>Source Files\SceneGraph</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\CustomNode.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\SceneGraph</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

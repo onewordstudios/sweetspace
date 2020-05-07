@@ -11,6 +11,8 @@ bool CustomNode::init(std::shared_ptr<DonutModel> player, float shipSize, float 
 	this->shipSize = shipSize;
 	this->angle = angle;
 	this->radius = radius;
+	isDirty = true;
+	isShown = true;
 	Node::init();
 	return false;
 }
