@@ -17,7 +17,7 @@ bool PlayerDonutNode::init(std::shared_ptr<DonutModel> player, float screenHeigh
 	initPos = position;
 
 	DonutNode::init(bodyTexture, player);
-	return false;
+	return true;
 }
 
 void PlayerDonutNode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch, const Mat4& transform,
