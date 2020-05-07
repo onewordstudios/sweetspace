@@ -24,12 +24,17 @@ class BreachNode : public CustomNode {
 	int currentFrameIdle;
 
 	/** Helper function to calculate frame */
-	int getFrameFromHealth(int health) {
-		int currentHealth =
+	unsigned int getFrameFromHealth(int health) {
+		unsigned int currentHealth =
 			health > BreachModel::HEALTH_DEFAULT ? BreachModel::HEALTH_DEFAULT : health;
 		return (BreachModel::HEALTH_DEFAULT - currentHealth) *
 			   (shapeNode->getSize() / BreachModel::HEALTH_DEFAULT);
 	}
+
+#pragma region State Methods
+	bool isActive() override;
+	void postPosition() override;
+#pragma endregion
 
    public:
 #pragma mark -
@@ -45,7 +50,7 @@ class BreachNode : public CustomNode {
 	 * NEVER USE A CONSTRUCTOR WITH NEW. If you want to allocate an object on
 	 * the heap, use one of the static constructors instead.
 	 */
-	BreachNode() : CustomNode() {}
+	BreachNode() : CustomNode(), isAnimatingShrink(false), prevHealth(0), currentFrameIdle(0) {}
 
 	/**
 	 * Releases all resources allocated with this node.
@@ -57,15 +62,40 @@ class BreachNode : public CustomNode {
 	~BreachNode() { dispose(); }
 
 	/**
+	 * Properly initialize this breach node. Do NOT use the constructors in the parent class. They
+	 * will not initialize everything.
+	 *
+	 * @param breach	Pointer to the breach model
+	 * @param player	Pointer to the player's donut model
+	 * @param shipSize	Size of the ship (in degrees)
+	 * @param filmstrip	The texture image to use
+	 * @param pattern	The texture of the inside pattern
+	 * @param color		The color of the player's breach
+	 */
+	virtual bool init(std::shared_ptr<BreachModel> breach, std::shared_ptr<DonutModel> player,
+					  float shipSize, std::shared_ptr<cugl::Texture> filmstrip,
+					  std::shared_ptr<cugl::Texture> pattern, cugl::Color4 color);
+
+	/**
 	 * Returns a newly allocated BreachNode at the world origin.
 	 *
-	 * The node has both position and size (0,0).
+	 * @param breach	Pointer to the breach model
+	 * @param player	Pointer to the player's donut model
+	 * @param shipSize	Size of the ship (in degrees)
+	 * @param filmstrip	The texture image to use
+	 * @param pattern	The texture of the inside pattern
+	 * @param color		The color of the player's breach
 	 *
 	 * @return a newly allocated node at the world origin.
 	 */
-	static std::shared_ptr<BreachNode> alloc() {
+	static std::shared_ptr<BreachNode> alloc(std::shared_ptr<BreachModel> breach,
+											 std::shared_ptr<DonutModel> player, float shipSize,
+											 std::shared_ptr<cugl::Texture> filmstrip,
+											 std::shared_ptr<cugl::Texture> pattern,
+											 cugl::Color4 color) {
 		std::shared_ptr<BreachNode> result = std::make_shared<BreachNode>();
-		return (result->init() ? result : nullptr);
+		return (result->init(breach, player, shipSize, filmstrip, pattern, color) ? result
+																				  : nullptr);
 	}
 
 #pragma mark -

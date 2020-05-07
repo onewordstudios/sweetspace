@@ -183,17 +183,13 @@ class GameGraphRoot : public cugl::Scene {
 	/** Possible colors for player representations */
 	const std::vector<string> PLAYER_COLOR{"yellow", "red", "purple", "green", "orange", "cyan"};
 	/** Possible colors for breach representations */
-	const std::vector<cugl::Color4> BREACH_COLOR{
-		cugl::Color4(219, 197, 52), cugl::Color4(227, 100, 159), cugl::Color4(152, 95, 204),
-		cugl::Color4(158, 212, 87), cugl::Color4(244, 150, 40),	 cugl::Color4(47, 206, 197)};
+	static const std::vector<cugl::Color4> BREACH_COLOR;
 	/** Color of ship segment label text */
 	const cugl::Color4 SHIP_LABEL_COLOR{255, 248, 161};
 	/** Number of possible player colors */
 	static constexpr int NUM_COLORS = 6;
 	/** The scale of the donut textures. */
 	static constexpr float DONUT_SCALE = 0.4f;
-	/** The scale of the breach textures. */
-	static constexpr float BREACH_SCALE = 0.5f;
 
 #pragma mark -
 #pragma mark Constructors
