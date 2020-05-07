@@ -36,11 +36,9 @@ void CustomNode::draw(const shared_ptr<cugl::SpriteBatch>& batch, const cugl::Ma
 			isShown = true;
 		} else if (isGoingOutOfView(onScreenAngle)) {
 			// Leaving visible range
-			if (isShown) {
-				Vec2 hidden = Vec2(OFF_SCREEN_POS, OFF_SCREEN_POS);
-				setPosition(hidden);
-				isShown = false;
-			}
+			Vec2 hidden = Vec2(OFF_SCREEN_POS, OFF_SCREEN_POS);
+			setPosition(hidden);
+			isShown = false;
 		}
 
 		postPosition();
