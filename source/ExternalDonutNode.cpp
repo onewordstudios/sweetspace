@@ -12,38 +12,18 @@ constexpr unsigned int RADIUS_OFFSET = 30;
 /** Position to place node offscreen. */
 constexpr float OFF_SCREEN_POS = 1500;
 
-void ExternalDonutNode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch, const Mat4& transform,
-							 Color4 tint) {
-	if (!donutModel->getIsActive()) return;
-	const float jump = 1.0f - donutModel->getJumpOffset();
-	float vel = donutModel->getVelocity();
-	Vec2 donutPos;
-	if (donutModel->getIsActive()) {
-		// Donut is currently active
-		float onScreenAngle = getOnScreenAngle(donutModel->getAngle());
-		if (isComingIntoView(onScreenAngle)) {
-			// Donut is coming into visible range
-			isShown = true;
-		} else if (isGoingOutOfView(onScreenAngle)) {
-			// Donut is leaving visible range
-			donutPos = Vec2(OFF_SCREEN_POS, OFF_SCREEN_POS);
-			setPosition(donutPos);
-			isShown = false;
-		}
-		if (isShown) {
-			float relativeAngle = onScreenAngle - getParent()->getParent()->getAngle();
-			donutPos = getPositionVec(relativeAngle, jump * (globals::RADIUS + RADIUS_OFFSET));
-			setPosition(donutPos);
+bool ExternalDonutNode::isActive() { return donutModel->getIsActive(); }
 
-			float angle = rotationNode->getAngle() - vel * globals::PI_180 * globals::SPIN_RATIO;
-			rotationNode->setAngle(angle);
-			animateJumping();
-		}
-	} else {
-		// Donut is currently inactive
-		donutPos = Vec2(OFF_SCREEN_POS, OFF_SCREEN_POS);
-		setPosition(donutPos);
-		isShown = false;
+void ExternalDonutNode::prePosition() {
+	const float jump = 1.0f - donutModel->getJumpOffset();
+	radius = jump * (globals::RADIUS + RADIUS_OFFSET);
+}
+
+void ExternalDonutNode::postPosition() {
+	if (isShown) {
+		float vel = donutModel->getVelocity();
+		float angle = rotationNode->getAngle() - vel * globals::PI_180 * globals::SPIN_RATIO;
+		rotationNode->setAngle(angle);
+		animateJumping();
 	}
-	Node::draw(batch, transform, tint);
 }

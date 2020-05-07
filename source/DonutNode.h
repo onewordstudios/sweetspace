@@ -16,8 +16,8 @@ class DonutNode : public CustomNode {
 	};
 #pragma mark Values
    protected:
-	std::shared_ptr<DonutModel> donutModel;
 	/** Reference to the player donut model */
+	std::shared_ptr<DonutModel> donutModel;
 
 	/** Reference to child node which is responsible for rotation */
 	std::shared_ptr<cugl::Node> rotationNode;

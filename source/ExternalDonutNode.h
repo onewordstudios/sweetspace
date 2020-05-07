@@ -7,6 +7,11 @@
 #include "DonutNode.h"
 
 class ExternalDonutNode : public DonutNode {
+   protected:
+	bool isActive() override;
+	void prePosition() override;
+	void postPosition() override;
+
    public:
 #pragma mark -
 #pragma mark Constructor
@@ -43,8 +48,6 @@ class ExternalDonutNode : public DonutNode {
 	}
 
 #pragma mark -
-	void draw(const shared_ptr<cugl::SpriteBatch> &batch, const cugl::Mat4 &transform,
-			  cugl::Color4 tint) override;
 };
 
 #endif // SWEETSPACE_EXTERNALDONUTNODE_H
