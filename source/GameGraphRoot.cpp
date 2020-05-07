@@ -303,7 +303,7 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	reconnectOverlay->addChild(reconnectDonut);
 	reconnectDonut->setAnchor(Vec2::ANCHOR_CENTER);
 	reconnectDonut->setPosition(tempReconnectDonut->getPosition());
-	reconnectDonut->setScale(DONUT_SCALE);
+	reconnectDonut->setScale(DonutNode::DONUT_SCALE);
 	reconnectDonut->setVisible(true);
 	tempReconnectDonut = nullptr;
 
