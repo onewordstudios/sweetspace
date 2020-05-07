@@ -53,7 +53,7 @@ bool ButtonNode::init(std::shared_ptr<ButtonModel> btn, std::shared_ptr<DonutMod
 	bodyNode->setAnchor(Vec2::ANCHOR_CENTER);
 	bodyNode->setPosition(0, 0);
 
-	label = Label::alloc("", labelFont);
+	label = Label::alloc("0000", labelFont);
 
 	addChild(bodyNode);
 	addChild(baseNode);
