@@ -186,6 +186,8 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 		shipSegsNode->addChildWithTag(segment, (unsigned int)(i + 1));
 	}
 
+	std::shared_ptr<DonutModel> playerModel = ship->getDonuts()[playerID];
+
 	// Initialize Players
 	for (int i = 0; i < ship->getDonuts().size(); i++) {
 		std::shared_ptr<DonutModel> donutModel = ship->getDonuts().at((unsigned long)i);
@@ -206,11 +208,7 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 			tempDonutNode->setVisible(false);
 		} else {
 			std::shared_ptr<ExternalDonutNode> newDonutNode =
-				ExternalDonutNode::allocWithTextures(image);
-			newDonutNode->setModel(donutModel);
-			newDonutNode->setScale(DONUT_SCALE);
-			newDonutNode->setShipSize(ship->getSize());
-			newDonutNode->setDonutModel(ship->getDonuts().at(playerID));
+				ExternalDonutNode::alloc(donutModel, playerModel, ship->getSize(), image);
 			externalDonutsNode->addChild(newDonutNode);
 
 			Vec2 donutPos = Vec2(sin(donutModel->getAngle() * (globals::RADIUS + DONUT_OFFSET)),
@@ -218,8 +216,6 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 			newDonutNode->setPosition(donutPos);
 		}
 	}
-
-	std::shared_ptr<DonutModel> playerModel = ship->getDonuts()[playerID];
 
 	// Initialize Breaches
 	for (int i = 0; i < ship->getBreaches().size(); i++) {

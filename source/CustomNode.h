@@ -136,18 +136,6 @@ class CustomNode : public cugl::Node {
 #pragma endregion
 
    public:
-	/**
-	 * Sets playerDonutModel to given parameter
-	 * @param model
-	 */
-	void setDonutModel(std::shared_ptr<DonutModel> model) { playerDonutModel = model; }
-
-	/**
-	 * Store size of ship level
-	 * @param f
-	 */
-	void setShipSize(float f) { shipSize = f; }
-
 	void draw(const shared_ptr<cugl::SpriteBatch> &batch, const cugl::Mat4 &transform,
 			  cugl::Color4 tint) override;
 };

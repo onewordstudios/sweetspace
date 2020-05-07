@@ -29,22 +29,14 @@ class ExternalDonutNode : public DonutNode {
 	 */
 	~ExternalDonutNode() { dispose(); }
 
-	/**
-	 * Returns an ExternalDonutNode
-	 *
-	 * @param bodyTexture   A shared pointer to the body Texture object.
-	 *
-	 * @return a textured polygon from a Texture object.
-	 */
-	static std::shared_ptr<ExternalDonutNode> allocWithTextures(
-		const std::shared_ptr<cugl::Texture> &bodyTexture) {
+	bool init(std::shared_ptr<DonutModel> externalDonutModel, std::shared_ptr<DonutModel> player,
+			  float shipSize, const std::shared_ptr<cugl::Texture> &bodyTexture);
+
+	static std::shared_ptr<ExternalDonutNode> alloc(
+		std::shared_ptr<DonutModel> externalDonutModel, std::shared_ptr<DonutModel> player,
+		float shipSize, const std::shared_ptr<cugl::Texture> &bodyTexture) {
 		std::shared_ptr<ExternalDonutNode> node = std::make_shared<ExternalDonutNode>();
-		if (node->init()) {
-			node->initChildren(bodyTexture);
-			return node;
-		} else {
-			return nullptr;
-		}
+		return node->init(externalDonutModel, player, shipSize, bodyTexture) ? node : nullptr;
 	}
 
 #pragma mark -

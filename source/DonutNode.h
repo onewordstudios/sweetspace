@@ -24,6 +24,9 @@ class DonutNode : public CustomNode {
 	/** Reference to node of donut body */
 	std::shared_ptr<cugl::PolygonNode> bodyNode;
 
+	/** The scale of the donut textures. */
+	static constexpr float DONUT_SCALE = 0.4f;
+
    public:
 #pragma mark -
 #pragma mark Constructor
@@ -49,21 +52,9 @@ class DonutNode : public CustomNode {
 	/**
 	 * Init child nodes of donut node
 	 */
-	void initChildren(const std::shared_ptr<cugl::Texture> &bodyTexture) {
-		rotationNode = cugl::Node::alloc();
-		bodyNode = cugl::PolygonNode::allocWithTexture(bodyTexture);
-		bodyNode->setAnchor(cugl::Vec2::ANCHOR_CENTER);
-		bodyNode->setPosition(0, 0);
-		rotationNode->addChild(bodyNode);
-		addChild(rotationNode);
-	}
+	bool init(const std::shared_ptr<cugl::Texture> &bodyTexture);
 #pragma mark -
 #pragma mark Getters Setters
-	/**
-	 * Sets self's model to given parameter
-	 * @param model
-	 */
-	void setModel(std::shared_ptr<DonutModel> model) { donutModel = model; }
 
 	/**
 	 * Returns this node's DonutModel
