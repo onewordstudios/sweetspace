@@ -7,59 +7,45 @@
 using namespace cugl;
 
 /** The radius used for placement of the doors. */
-constexpr float DOOR_RADIUS = 650;
+constexpr float DOOR_RADIUS = 660;
 
-/** Position to place DoorNode offscreen. */
-constexpr float OFF_SCREEN_POS = 1500;
+/** The scale of the doors. */
+constexpr float DOOR_SCALE = 0.3f;
 
 /** The frame of the animation strip to freeze on when one player is on the door */
 constexpr int ONE_PLAYER_FRAME = 16;
 /** The frame of the animation strip to freeze on when two players are on the door */
 constexpr int TWO_PLAYER_FRAME = 31;
 
-void DoorNode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch, const Mat4& transform,
-					Color4 tint) {
-	Vec2 doorPos;
-	if (doorModel->getIsActive()) {
-		// Door is currently active
-		float onScreenAngle = doorModel->getAngle() - playerDonutModel->getAngle();
-		onScreenAngle = onScreenAngle >= 0 ? onScreenAngle : shipSize + onScreenAngle;
-		onScreenAngle = onScreenAngle > shipSize / 2 ? onScreenAngle - shipSize : onScreenAngle;
-		onScreenAngle *= globals::PI_180;
-		if (!isShown && onScreenAngle < globals::SEG_CUTOFF_ANGLE &&
-			onScreenAngle > -globals::SEG_CUTOFF_ANGLE) {
-			// Door is coming into visible range
-			float relativeAngle = onScreenAngle - getParent()->getParent()->getAngle();
-			doorPos = Vec2(DOOR_RADIUS * sin(relativeAngle), -DOOR_RADIUS * cos(relativeAngle));
-			setPosition(doorPos);
-			isShown = true;
-			setAngle(relativeAngle);
-		} else if (isShown && (onScreenAngle >= globals::SEG_CUTOFF_ANGLE ||
-							   onScreenAngle <= -globals::SEG_CUTOFF_ANGLE)) {
-			// Door is leaving visible range
-			doorPos = Vec2(OFF_SCREEN_POS, OFF_SCREEN_POS);
-			setPosition(doorPos);
-			isShown = false;
-		}
+bool DoorNode::init(std::shared_ptr<DoorModel> door, std::shared_ptr<DonutModel> player,
+					float shipSize, const std::shared_ptr<cugl::Texture>& texture, int rows,
+					int cols, int size) {
+	CustomNode::init(player, shipSize, door->getAngle(), DOOR_RADIUS);
+	doorModel = door;
+	animationNode = cugl::AnimationNode::alloc(texture, rows, cols, size);
+	animationNode->setAnchor(Vec2::ANCHOR_BOTTOM_CENTER);
+	animationNode->setPosition(0, 0);
+	animationNode->setFrame(0);
+	addChild(animationNode);
+	setAnchor(Vec2::ANCHOR_BOTTOM_CENTER);
+	setScale(DOOR_SCALE);
+	return true;
+}
 
-		frameCap = doorModel->getPlayersOn() < 2 ? doorModel->getPlayersOn() * ONE_PLAYER_FRAME
-												 : TWO_PLAYER_FRAME;
-		if (getFrame() < frameCap) {
-			setFrame((int)getFrame() + 1);
-		} else if (getFrame() > frameCap) {
-			setFrame((int)getFrame() - 1);
-		}
+void DoorNode::prePosition() { angle = doorModel->getAngle(); }
 
-		int diff = height - doorModel->getHeight();
-		height = doorModel->getHeight();
-		if (diff != 0) {
-			shiftPolygon(0, (float)diff);
-		}
-	} else {
-		// Door is currently inactive
-		doorPos = Vec2(OFF_SCREEN_POS, OFF_SCREEN_POS);
-		setPosition(doorPos);
-		isShown = false;
+void DoorNode::postPosition() {
+	frameCap = doorModel->getPlayersOn() < 2 ? doorModel->getPlayersOn() * ONE_PLAYER_FRAME
+											 : TWO_PLAYER_FRAME;
+	if (animationNode->getFrame() < frameCap) {
+		animationNode->setFrame((int)animationNode->getFrame() + 1);
+	} else if (animationNode->getFrame() > frameCap) {
+		animationNode->setFrame((int)animationNode->getFrame() - 1);
 	}
-	AnimationNode::draw(batch, transform, tint);
+
+	int diff = height - doorModel->getHeight();
+	height = doorModel->getHeight();
+	if (diff != 0) {
+		animationNode->shiftPolygon(0, (float)diff);
+	}
 }
