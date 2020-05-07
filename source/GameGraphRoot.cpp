@@ -11,6 +11,11 @@
 using namespace cugl;
 using namespace std;
 
+// NOLINTNEXTLINE Simple 4-vectors are unlikely to throw an exception
+const std::vector<Color4> GameGraphRoot::BREACH_COLOR{
+	cugl::Color4(219, 197, 52), cugl::Color4(227, 100, 159), cugl::Color4(152, 95, 204),
+	cugl::Color4(158, 212, 87), cugl::Color4(244, 150, 40),	 cugl::Color4(47, 206, 197)};
+
 #pragma mark -
 #pragma mark Level Layout
 
@@ -19,9 +24,6 @@ constexpr int DONUT_OFFSET = 195;
 
 /** The scale of the ship segments. */
 constexpr float SEG_SCALE = 0.33f;
-
-/** The scale of the doors. */
-constexpr float DOOR_SCALE = 0.3f;
 
 /** Number of animation frames of doors */
 constexpr int DOOR_FRAMES = 32;
@@ -55,15 +57,6 @@ constexpr int SEG_LABEL_SIZE = 100;
 
 /** Y position of ship segment label */
 constexpr int SEG_LABEL_Y = 1113;
-
-/** Scale of button label text */
-constexpr float BUTTON_LABEL_SCALE = 1;
-
-/** Scale of the button */
-constexpr float BUTTON_SCALE = 0.3f;
-
-/** Determines vertical positino of button label */
-constexpr float BUTTON_LABEL_Y = -0.28f;
 
 /** Maximum number of health labels */
 constexpr int MAX_HEALTH_LABELS = 10;
@@ -193,6 +186,8 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 		shipSegsNode->addChildWithTag(segment, (unsigned int)(i + 1));
 	}
 
+	std::shared_ptr<DonutModel> playerModel = ship->getDonuts()[playerID];
+
 	// Initialize Players
 	for (int i = 0; i < ship->getDonuts().size(); i++) {
 		std::shared_ptr<DonutModel> donutModel = ship->getDonuts().at((unsigned long)i);
@@ -200,24 +195,13 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 		std::shared_ptr<Texture> image = assets->get<Texture>("donut_" + donutColor);
 		// Player node is handled separately
 		if (i == playerID) {
-			donutNode = PlayerDonutNode::allocWithTextures(image);
-			donutNode->setAnchor(Vec2::ANCHOR_CENTER);
-			donutNode->setPosition(tempDonutNode->getPosition());
-			donutNode->setModel(donutModel);
-			donutNode->setScale(DONUT_SCALE);
-			donutNode->setShipSize(ship->getSize());
-			donutNode->setDonutModel(ship->getDonuts().at(playerID));
-			donutNode->setInitPos(tempDonutNode->getPosition());
-			donutNode->setScreenHeight(screenHeight);
+			donutNode = PlayerDonutNode::alloc(playerModel, screenHeight, image,
+											   tempDonutNode->getPosition());
 			allSpace->addChild(donutNode);
 			tempDonutNode->setVisible(false);
 		} else {
 			std::shared_ptr<ExternalDonutNode> newDonutNode =
-				ExternalDonutNode::allocWithTextures(image);
-			newDonutNode->setModel(donutModel);
-			newDonutNode->setScale(DONUT_SCALE);
-			newDonutNode->setShipSize(ship->getSize());
-			newDonutNode->setDonutModel(ship->getDonuts().at(playerID));
+				ExternalDonutNode::alloc(donutModel, playerModel, ship->getSize(), image);
 			externalDonutsNode->addChild(newDonutNode);
 
 			Vec2 donutPos = Vec2(sin(donutModel->getAngle() * (globals::RADIUS + DONUT_OFFSET)),
@@ -229,42 +213,19 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	// Initialize Breaches
 	for (int i = 0; i < ship->getBreaches().size(); i++) {
 		std::shared_ptr<BreachModel> breachModel = ship->getBreaches().at((unsigned long)i);
-		std::shared_ptr<BreachNode> breachNode = BreachNode::alloc();
-		breachNode->setModel(breachModel);
-		breachNode->setTag((unsigned int)(i + 1));
-		breachNode->setScale(BREACH_SCALE);
-		breachNode->setShipSize(ship->getSize());
-		breachNode->setDonutModel(ship->getDonuts().at(playerID));
-		breachNode->setPrevHealth(breachModel->getHealth());
-		// Start position is off screen
-		Vec2 breachPos = Vec2(0, 0);
-		breachNode->setPosition(breachPos);
-		// Add shape node
-		cugl::Color4 color = BREACH_COLOR.at((unsigned long)ship->getDonuts()
-												 .at((unsigned long)breachModel->getPlayer())
-												 ->getColorId());
-		std::shared_ptr<Texture> image = assets->get<Texture>("breach_filmstrip");
-		std::shared_ptr<AnimationNode> shapeNode = AnimationNode::alloc(
-			image, BreachNode::BREACH_H, BreachNode::BREACH_W, BreachNode::BREACH_SIZE);
-		shapeNode->setColor(color);
-		shapeNode->setAnchor(Vec2::ANCHOR_CENTER);
-		shapeNode->setPosition(0, 0);
-		breachNode->setShapeNode(shapeNode);
-		breachNode->addChildWithName(shapeNode, "shape");
-		// Add pattern node
 		string breachColor = PLAYER_COLOR.at((unsigned long)ship->getDonuts()
 												 .at((unsigned long)breachModel->getPlayer())
 												 ->getColorId());
-		image = assets->get<Texture>("breach_" + breachColor);
-		std::shared_ptr<AnimationNode> patternNode = AnimationNode::alloc(
-			image, BreachNode::BREACH_H, BreachNode::BREACH_W, BreachNode::BREACH_SIZE);
-		shapeNode->setColor(color);
-		patternNode->setAnchor(Vec2::ANCHOR_CENTER);
-		patternNode->setPosition(0, 0);
-		breachNode->setPatternNode(patternNode);
-		breachNode->addChildWithName(patternNode, "pattern");
+		std::shared_ptr<cugl::Texture> filmstrip = assets->get<Texture>("breach_filmstrip");
+		std::shared_ptr<cugl::Texture> pattern = assets->get<Texture>("breach_" + breachColor);
+		cugl::Color4 color = BREACH_COLOR.at((unsigned long)ship->getDonuts()
+												 .at((unsigned long)breachModel->getPlayer())
+												 ->getColorId());
+		std::shared_ptr<BreachNode> breachNode =
+			BreachNode::alloc(breachModel, playerModel, ship->getSize(), filmstrip, pattern, color);
+		breachNode->setTag((unsigned int)(i + 1));
+
 		// Add the breach node
-		breachNode->resetAnimation();
 		breachesNode->addChild(breachNode);
 		if (ship->getLevelNum() == 0) {
 			std::shared_ptr<Texture> image = assets->get<Texture>("fix_breach_tutorial0");
@@ -278,58 +239,21 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	for (int i = 0; i < ship->getDoors().size(); i++) {
 		std::shared_ptr<DoorModel> doorModel = ship->getDoors().at((unsigned long)i);
 		std::shared_ptr<Texture> image = assets->get<Texture>("door");
-		std::shared_ptr<DoorNode> doorNode = DoorNode::alloc(image, 1, DOOR_FRAMES, DOOR_FRAMES);
-		doorNode->setModel(doorModel);
-		doorNode->setFrame(0);
-		doorNode->setAnchor(Vec2::ANCHOR_BOTTOM_CENTER);
-		doorNode->setScale(DOOR_SCALE);
-		doorNode->setShipSize(ship->getSize());
-		doorNode->setDonutModel(ship->getDonuts().at(playerID));
+		std::shared_ptr<DoorNode> doorNode = DoorNode::alloc(
+			doorModel, playerModel, ship->getSize(), image, 1, DOOR_FRAMES, DOOR_FRAMES);
 		doorsNode->addChildWithTag(doorNode, i + 1);
 	}
 
 	// Initialize Buttons
 	for (int i = 0; i < ship->getButtons().size(); i++) {
-		// Initialize nodes
 		std::shared_ptr<ButtonModel> buttonModel = ship->getButtons().at((unsigned long)i);
-		std::shared_ptr<Texture> baseTexture = assets->get<Texture>("challenge_btn_base_up");
-		std::shared_ptr<Texture> bodyTexture = assets->get<Texture>("challenge_btn_up");
-		std::shared_ptr<PolygonNode> baseNode = PolygonNode::allocWithTexture(baseTexture);
-		std::shared_ptr<PolygonNode> bodyNode = PolygonNode::allocWithTexture(bodyTexture);
-		std::shared_ptr<ButtonNode> buttonNode = ButtonNode::alloc();
-		// Initialize label
-		std::shared_ptr<cugl::Label> buttonLabel =
-			cugl::Label::alloc("null", assets->get<Font>("mont_black_italic_big"));
-		buttonLabel->setScale(BUTTON_LABEL_SCALE);
-		buttonLabel->setHorizontalAlignment(Label::HAlign::CENTER);
-		buttonLabel->setForeground(Color4::WHITE);
-		buttonLabel->setAnchor(Vec2::ANCHOR_CENTER);
-		buttonLabel->setPosition(0, (float)baseTexture->getHeight() * BUTTON_LABEL_Y);
-		// Initialize fields
-		buttonNode->setModel(buttonModel);
-		buttonNode->setScale(BUTTON_SCALE);
-		buttonNode->setDonutModel(ship->getDonuts().at(playerID));
-		buttonNode->setAnchor(Vec2::ANCHOR_BOTTOM_CENTER);
-		buttonNode->setShipSize(ship->getSize());
-		buttonNode->setButtonBaseDown(assets->get<Texture>("challenge_btn_base_down"));
-		buttonNode->setButtonBaseUp(assets->get<Texture>("challenge_btn_base_up"));
-		buttonNode->setButtonDown(assets->get<Texture>("challenge_btn_down"));
-		buttonNode->setButtonUp(assets->get<Texture>("challenge_btn_up"));
-		buttonNode->setBodyNode(bodyNode);
-		buttonNode->setBaseNode(baseNode);
-		buttonNode->setButtonLabel(buttonLabel);
-
-		baseNode->setAnchor(Vec2::ANCHOR_CENTER);
-		baseNode->setPosition(0, 0);
-
-		bodyNode->setAnchor(Vec2::ANCHOR_CENTER);
-		bodyNode->setPosition(0, 0);
-
-		buttonNode->addChild(bodyNode);
-		buttonNode->addChild(baseNode);
-		buttonNode->addChild(buttonLabel);
-		buttonsNode->addChild(buttonNode);
-		buttonNode->setTag(i + 1);
+		std::shared_ptr<ButtonNode> buttonNode = ButtonNode::alloc(
+			buttonModel, playerModel, ship->getSize(),
+			assets->get<Texture>("challenge_btn_base_down"),
+			assets->get<Texture>("challenge_btn_base_up"),
+			assets->get<Texture>("challenge_btn_down"), assets->get<Texture>("challenge_btn_up"),
+			assets->get<Font>("mont_black_italic_big"));
+		buttonsNode->addChildWithTag(buttonNode, i + 1);
 	}
 
 	if (ship->getLevelNum() == 1) {
