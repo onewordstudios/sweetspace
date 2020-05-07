@@ -7,9 +7,32 @@
 #include "Globals.h"
 
 /*
- * This class acts as an interface for game objects that exist in the level and require
- * view boundary calculations.
- * Note: if the node is not a child of nearSpace, it probably should not inherit this class.
+ * This class acts as an interface for game objects that exist at a well-defined location on the
+ * ship and thus require view boundary calculations.
+ *
+ * Objects that are fixed to the viewport and not to the ship generally should not extend this
+ * class.
+ *
+ * This class is abstract and thus cannot be instantiated directly. The method isActive() must be
+ * overridden by any children.
+ *
+ * All spawning and despawning from the screen as the player moves around the ship is handled by
+ * this class's draw method. This class exposes three lifecycle methods that its children should
+ * override to customize the functionality.
+ *
+ * 1 - {@link isActive()}. Called at the beginning of each frame. Should return true if and only if
+ * this node needs to be drawn this frame. If this method returns false, the node is moved offscreen
+ * and the rest of the lifecycle is skipped this frame. Is abstract and must be overriden.
+ * Generally, should just query whether the associated model is active.
+ *
+ * 2 - {@link prePositioning()}. Called before this class does its positioning calculations. Used to
+ * update any variables used by this class in the event they have changed. Note that this class only
+ * processes objects once as they move onto screen. If an object's state changes while it is already
+ * on screen, set isDirty to true to force a redraw.
+ *
+ * 3 - {@link postPositioning()}. Called after this class does its positioning calculations. Used to
+ * perform any additional custom calculations needed for each type of node. For example, if a donut
+ * model needs to jump, that should be processed here.
  */
 class CustomNode : public cugl::Node {
    private:
