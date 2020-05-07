@@ -11,7 +11,8 @@
  * ship and thus require view boundary calculations.
  *
  * Objects that are fixed to the viewport and not to the ship generally should not extend this
- * class.
+ * class. Specifically, nodes of this class should only be added to the scene graph as the second
+ * level descendant of nearSpace.
  *
  * This class is abstract and thus cannot be instantiated directly. The method isActive() must be
  * overridden by any children.
