@@ -32,6 +32,8 @@ bool DoorNode::init(std::shared_ptr<DoorModel> door, std::shared_ptr<DonutModel>
 	return true;
 }
 
+void DoorNode::prePosition() { angle = doorModel->getAngle(); }
+
 void DoorNode::postPosition() {
 	frameCap = doorModel->getPlayersOn() < 2 ? doorModel->getPlayersOn() * ONE_PLAYER_FRAME
 											 : TWO_PLAYER_FRAME;

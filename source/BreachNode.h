@@ -33,6 +33,7 @@ class BreachNode : public CustomNode {
 
 #pragma region State Methods
 	bool isActive() override;
+	void prePosition() override;
 	void postPosition() override;
 #pragma endregion
 

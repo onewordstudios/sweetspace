@@ -23,6 +23,7 @@ bool ExternalDonutNode::isActive() { return donutModel->getIsActive(); }
 void ExternalDonutNode::prePosition() {
 	const float jump = 1.0f - donutModel->getJumpOffset();
 	radius = jump * (globals::RADIUS + RADIUS_OFFSET);
+	angle = donutModel->getAngle();
 }
 
 void ExternalDonutNode::postPosition() {

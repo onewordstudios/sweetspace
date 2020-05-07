@@ -75,6 +75,7 @@ bool ButtonNode::isActive() {
 
 void ButtonNode::prePosition() {
 	label->setText(std::to_string(buttonModel->getPair()->getSection()));
+	angle = buttonModel->getAngle();
 }
 
 void ButtonNode::postPosition() {

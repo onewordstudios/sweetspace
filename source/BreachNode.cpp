@@ -56,6 +56,8 @@ bool BreachNode::init(std::shared_ptr<BreachModel> breach, std::shared_ptr<Donut
 
 bool BreachNode::isActive() { return breachModel->getHealth() > 0 || isAnimatingShrink; }
 
+void BreachNode::prePosition() { angle = breachModel->getAngle(); }
+
 void BreachNode::postPosition() {
 	if (prevHealth > breachModel->getHealth()) {
 		// Start breach shrinking animation

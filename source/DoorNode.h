@@ -23,7 +23,7 @@ class DoorNode : public CustomNode {
 
 #pragma region State Methods
 	bool isActive() override { return doorModel->getIsActive(); }
-
+	void prePosition() override;
 	void postPosition() override;
 #pragma endregion
 
