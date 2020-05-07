@@ -17,7 +17,7 @@ class DonutNode : public CustomNode {
 #pragma mark Values
    protected:
 	/** Reference to the donut model this node represents */
-	std::shared_ptr<DonutModel> donutModel;
+	std::shared_ptr<DonutModel> referencedDonutModel;
 
 	/** Reference to child node which is responsible for rotation */
 	std::shared_ptr<cugl::Node> rotationNode;
@@ -60,7 +60,7 @@ class DonutNode : public CustomNode {
 	 * Returns this node's DonutModel
 	 * @return
 	 */
-	std::shared_ptr<DonutModel> getModel() { return donutModel; }
+	std::shared_ptr<DonutModel> getModel() { return referencedDonutModel; }
 #pragma mark -
 #pragma mark Draw Cycle
 	/**

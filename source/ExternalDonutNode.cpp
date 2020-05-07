@@ -18,17 +18,17 @@ bool ExternalDonutNode::init(std::shared_ptr<DonutModel> externalDonutModel,
 	return true;
 }
 
-bool ExternalDonutNode::isActive() { return donutModel->getIsActive(); }
+bool ExternalDonutNode::isActive() { return referencedDonutModel->getIsActive(); }
 
 void ExternalDonutNode::prePosition() {
-	const float jump = 1.0f - donutModel->getJumpOffset();
+	const float jump = 1.0f - referencedDonutModel->getJumpOffset();
 	radius = jump * (globals::RADIUS + RADIUS_OFFSET);
-	angle = donutModel->getAngle();
+	angle = referencedDonutModel->getAngle();
 }
 
 void ExternalDonutNode::postPosition() {
 	if (isShown) {
-		float vel = donutModel->getVelocity();
+		float vel = referencedDonutModel->getVelocity();
 		float angle = rotationNode->getAngle() - vel * globals::PI_180 * globals::SPIN_RATIO;
 		rotationNode->setAngle(angle);
 		animateJumping();

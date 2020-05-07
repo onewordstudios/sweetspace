@@ -19,7 +19,7 @@ constexpr float SCALING_END = 1.2f;
 
 bool DonutNode::init(const std::shared_ptr<cugl::Texture>& bodyTexture,
 					 std::shared_ptr<DonutModel> donut) {
-	donutModel = donut;
+	referencedDonutModel = donut;
 
 	rotationNode = cugl::Node::alloc();
 	bodyNode = cugl::PolygonNode::allocWithTexture(bodyTexture);
@@ -36,25 +36,25 @@ void DonutNode::animateJumping() {
 	float halfJumpTime =
 		sqrt(2 * DonutModel::GRAVITY * DonutModel::JUMP_HEIGHT) / DonutModel::GRAVITY;
 	float scalingWindowSize = halfJumpTime * (SCALING_END - SCALING_BEGIN);
-	bool isInScalingWindow = donutModel->getJumpTime() > halfJumpTime * SCALING_BEGIN &&
-							 donutModel->getJumpTime() < halfJumpTime * SCALING_END;
-	if (!donutModel->isJumping()) {
+	bool isInScalingWindow = referencedDonutModel->getJumpTime() > halfJumpTime * SCALING_BEGIN &&
+							 referencedDonutModel->getJumpTime() < halfJumpTime * SCALING_END;
+	if (!referencedDonutModel->isJumping()) {
 		// Not jumping. Set scale to normal and return
 		setScale(DONUT_SCALE, DONUT_SCALE);
 		return;
 	}
 	float xScale;
-	if (donutModel->getJumpTime() <= halfJumpTime * SCALING_BEGIN) {
+	if (referencedDonutModel->getJumpTime() <= halfJumpTime * SCALING_BEGIN) {
 		// First animation stage
 		xScale = Tween::linear(DONUT_SCALE, DONUT_SCALE * JUMP_SCALE,
-							   (int)((donutModel->getJumpTime()) * 100),
+							   (int)((referencedDonutModel->getJumpTime()) * 100),
 							   (int)(halfJumpTime * SCALING_BEGIN * 100));
 	} else if (isInScalingWindow) {
 		// Second animation stage
-		xScale =
-			Tween::linear(DONUT_SCALE * JUMP_SCALE, DONUT_SCALE,
-						  (int)((donutModel->getJumpTime() - halfJumpTime * SCALING_BEGIN) * 100),
-						  (int)(scalingWindowSize * 100));
+		xScale = Tween::linear(
+			DONUT_SCALE * JUMP_SCALE, DONUT_SCALE,
+			(int)((referencedDonutModel->getJumpTime() - halfJumpTime * SCALING_BEGIN) * 100),
+			(int)(scalingWindowSize * 100));
 	} else {
 		// Not in animation stage
 		xScale = DONUT_SCALE;
