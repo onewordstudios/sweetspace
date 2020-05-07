@@ -24,6 +24,7 @@ void ExternalDonutNode::prePosition() {
 	const float jump = 1.0f - referencedDonutModel->getJumpOffset();
 	radius = jump * (globals::RADIUS + RADIUS_OFFSET);
 	angle = referencedDonutModel->getAngle();
+	isDirty = true;
 }
 
 void ExternalDonutNode::postPosition() {

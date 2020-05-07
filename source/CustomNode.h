@@ -36,7 +36,7 @@ class CustomNode : public cugl::Node {
 	 * @return
 	 */
 	bool isComingIntoView(float onScreenAngle) {
-		return !isShown && onScreenAngle < globals::SEG_CUTOFF_ANGLE &&
+		return (!isShown || isDirty) && onScreenAngle < globals::SEG_CUTOFF_ANGLE &&
 			   onScreenAngle > -globals::SEG_CUTOFF_ANGLE;
 	}
 
@@ -76,6 +76,8 @@ class CustomNode : public cugl::Node {
 	float angle;
 	/** The radius on the ship where this object is located */
 	float radius;
+	/** Whether we need to force a redraw this frame */
+	bool isDirty;
 #pragma mark -
 #pragma endregion
 #pragma region Constructor
@@ -83,7 +85,7 @@ class CustomNode : public cugl::Node {
 	/**
 	 * Constructor
 	 */
-	CustomNode() : cugl::Node(), shipSize(0), isShown(false), angle(0), radius(0) {}
+	CustomNode() : cugl::Node(), shipSize(0), isShown(false), angle(0), radius(0), isDirty(false) {}
 
 	/**
 	 * Releases all resources allocated with this node.
