@@ -39,10 +39,13 @@
 		C58C52151163B8FEA7247F91 /* ButtonNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C58C5F587FFB8E623B5C9D7F /* ButtonNode.cpp */; };
 		C58C5216B68A5A2C01E445BD /* ButtonModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C58C59370F28300C621B05DD /* ButtonModel.cpp */; };
 		C58C5561B66760E8D1E3FC80 /* ShipModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C58C51549E90F0CA2D05EB7A /* ShipModel.cpp */; };
+		C58C55CA89EB5CC3E4B63033 /* TutorialNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C58C508D52C8A85185254C7F /* TutorialNode.cpp */; };
 		C58C587207BA3D72319C1412 /* ButtonNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C58C5F587FFB8E623B5C9D7F /* ButtonNode.cpp */; };
 		C58C59336C34E6B9948875A5 /* ButtonNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C58C5F587FFB8E623B5C9D7F /* ButtonNode.cpp */; };
 		C58C5B82A24C809F0E12DEFF /* ShipModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C58C51549E90F0CA2D05EB7A /* ShipModel.cpp */; };
 		C58C5DD0D57B8D381A72FFD5 /* ButtonModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C58C59370F28300C621B05DD /* ButtonModel.cpp */; };
+		C58C5EEC7CF99C273A252E9F /* TutorialNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C58C508D52C8A85185254C7F /* TutorialNode.cpp */; };
+		C58C5F812801BCDA6A6400BE /* TutorialNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C58C508D52C8A85185254C7F /* TutorialNode.cpp */; };
 		D15220621F9C106302ACEBBB /* BreachNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D1522B5DE1BDF682A53D6F29 /* BreachNode.cpp */; };
 		D152210B21A0FDE6A6995456 /* easywsclient.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D152292423B890A105CFF1E1 /* easywsclient.cpp */; };
 		D15222477324B444CAE67673 /* MagicInternetBox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D15228511721431DE5C3F8BF /* MagicInternetBox.cpp */; };
@@ -212,9 +215,11 @@
 		C1222CCE44B8D9EECD741BF0 /* Tween.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Tween.cpp; sourceTree = "<group>"; };
 		C1222EECE0C31958EBE060C3 /* PlayerDonutModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayerDonutModel.h; sourceTree = "<group>"; };
 		C1222F4322133A83016A4F48 /* ExternalDonutModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ExternalDonutModel.cpp; sourceTree = "<group>"; };
+		C58C508D52C8A85185254C7F /* TutorialNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TutorialNode.cpp; sourceTree = "<group>"; };
 		C58C51549E90F0CA2D05EB7A /* ShipModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ShipModel.cpp; sourceTree = "<group>"; };
 		C58C531CA6998820E3FA7D86 /* ShipModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShipModel.h; sourceTree = "<group>"; };
 		C58C5490476458CA8CE02EAA /* ButtonNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ButtonNode.h; sourceTree = "<group>"; };
+		C58C554FEE32C1C1D0CC1584 /* TutorialNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TutorialNode.h; sourceTree = "<group>"; };
 		C58C59370F28300C621B05DD /* ButtonModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ButtonModel.cpp; sourceTree = "<group>"; };
 		C58C5D00FFFC42F97DEC65C0 /* ButtonModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ButtonModel.h; sourceTree = "<group>"; };
 		C58C5F587FFB8E623B5C9D7F /* ButtonNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ButtonNode.cpp; sourceTree = "<group>"; };
@@ -555,6 +560,8 @@
 				D15229EF18C3F82477D4E059 /* DonutNode.h */,
 				D1522DC8B550BC37E1C05E7B /* PlayerDonutNode.cpp */,
 				D1522514F4482BDE04D4AABE /* PlayerDonutNode.h */,
+				C58C554FEE32C1C1D0CC1584 /* TutorialNode.h */,
+				C58C508D52C8A85185254C7F /* TutorialNode.cpp */,
 			);
 			name = Source;
 			path = ../source;
@@ -768,6 +775,7 @@
 				C58C59336C34E6B9948875A5 /* ButtonNode.cpp in Sources */,
 				D1522A2D610C4EFF4A6EED6C /* DonutNode.cpp in Sources */,
 				D1522ADD8ABCEE84CF9827B5 /* PlayerDonutNode.cpp in Sources */,
+				C58C5F812801BCDA6A6400BE /* TutorialNode.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -803,6 +811,7 @@
 				C58C587207BA3D72319C1412 /* ButtonNode.cpp in Sources */,
 				D1522D979D30C44099EA9E62 /* DonutNode.cpp in Sources */,
 				D1522A6F18E2D619E6A88B4A /* PlayerDonutNode.cpp in Sources */,
+				C58C5EEC7CF99C273A252E9F /* TutorialNode.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -838,6 +847,7 @@
 				C58C52151163B8FEA7247F91 /* ButtonNode.cpp in Sources */,
 				D15226BFFD4EF194344E0D85 /* DonutNode.cpp in Sources */,
 				D152242AC8E2C5E2BBE9935B /* PlayerDonutNode.cpp in Sources */,
+				C58C55CA89EB5CC3E4B63033 /* TutorialNode.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -863,6 +873,7 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 7Z3H2LHML6;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -870,7 +881,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(STATIC_LIB)";
-				MARKETING_VERSION = 0.1.3;
+				MARKETING_VERSION = 0.2.0;
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = fun.onewordstudios.ios.sweetspace;
 				PRODUCT_NAME = sweetspace;
@@ -899,13 +910,14 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 7Z3H2LHML6;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = "$(SRCROOT)/Resources/iOS-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(STATIC_LIB)";
-				MARKETING_VERSION = 0.1.3;
+				MARKETING_VERSION = 0.2.0;
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = fun.onewordstudios.ios.sweetspace;
 				PRODUCT_NAME = sweetspace;
@@ -925,6 +937,7 @@
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 7Z3H2LHML6;
 				ENABLE_BITCODE = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -932,7 +945,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
-				MARKETING_VERSION = 0.1.3;
+				MARKETING_VERSION = 0.2.0;
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = fun.onewordstudios.sweetspace.ios;
 				PRODUCT_NAME = sweetspace;
@@ -950,6 +963,7 @@
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 7Z3H2LHML6;
 				ENABLE_BITCODE = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -957,7 +971,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
-				MARKETING_VERSION = 0.1.3;
+				MARKETING_VERSION = 0.2.0;
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = fun.onewordstudios.sweetspace.ios;
 				PRODUCT_NAME = sweetspace;
@@ -1088,10 +1102,11 @@
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_IDENTITY = "-";
 				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 2;
 				INFOPLIST_FILE = "$(SRCROOT)/Resources/Mac-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
-				MARKETING_VERSION = 0.1.3;
+				MARKETING_VERSION = 0.2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = fun.onewordstudios.sweetspace;
 				PRODUCT_NAME = "Sweetspace (Mac)";
 			};
@@ -1104,11 +1119,12 @@
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_IDENTITY = "-";
 				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = "$(SRCROOT)/Resources/Mac-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
-				MARKETING_VERSION = 0.1.3;
+				MARKETING_VERSION = 0.2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = fun.onewordstudios.sweetspace;
 				PRODUCT_NAME = "Sweetspace (Mac)";
 			};

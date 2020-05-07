@@ -14,6 +14,18 @@ Coming August 2020 to Android and iOS.
 
 ## Current Progress
 
+### Beta Release
+
+With the core gameplay in place, this release was about tutorialization and polish.
+
+The most notable improvement is the tutorials that now show when players start on easy mode. These tutorials are very much still a work in progress, and are a bit buggy, but represent our vision for how we plan to teach players to play our game. Each tutorial level introduces a single new mechanic, and our goal is to visually guide players into solving these new challenges, easing them into our game.
+
+Numerous UI changes have happened, including a pause menu and the ability to continue to the next level after winning, as well as a restart button after losing. This allows players to actually play a continuous session spanning multiple levels, instead of being forced to restart after every level.
+
+Apart from that, the remaining changes have all been visual and gameplay polish. Lots of balancing was done internally, though we anticipate external playtesting still being very necessary. There are still some bugs and placeholder assets here and there, though all of them are slowly but surely being phased out over the next few weeks.
+
+Controls are the same as before. Tilt (or use arrow keys) to move left and right. Tap (or click / press space) to jump. Roll over breaches of your own color repeatedly to fix them, get two players onto a door to open them, get two players to both jump on buttons to fix them, and when told to roll in a direction, get everyone doing that. Keep the ship health out of the red until the end of the level to win.
+
 ### Pre-Beta Release
 
 We said we got all core gameplay features implemented last release. We lied.
