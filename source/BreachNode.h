@@ -101,14 +101,6 @@ class BreachNode : public CustomNode {
 #pragma mark -
 #pragma mark Getters & Setters
 
-	void setModel(std::shared_ptr<BreachModel> model) { breachModel = model; }
-
-	void setPrevHealth(int i) { prevHealth = i; }
-
-	void setShapeNode(std::shared_ptr<cugl::AnimationNode> n) { shapeNode = n; }
-
-	void setPatternNode(std::shared_ptr<cugl::AnimationNode> n) { patternNode = n; }
-
 	bool getIsAnimatingShrink() { return isAnimatingShrink; }
 
 	std::shared_ptr<cugl::AnimationNode> getShapeNode() { return shapeNode; }
