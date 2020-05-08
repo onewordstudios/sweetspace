@@ -303,7 +303,7 @@
 		},
         "digital": {
             "file":    "fonts/DigitalNormal-xO6j.otf",
-            "size":     32
+            "size":     40
         }
 	},
     "scenes" : {
@@ -1190,7 +1190,7 @@
                     "layout" : {
                         "x_anchor" : "center",
                         "y_anchor" : "top",
-                        "x_offset" : -30,
+                        "x_offset" : -40,
                         "y_offset" : -40,
                         "absolute" : true
                     }
