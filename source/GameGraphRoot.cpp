@@ -124,6 +124,8 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	coordHUD = std::dynamic_pointer_cast<Label>(assets->get<Node>("game_hud"));
 	timerBorder =
 		std::dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_timerBorder"));
+    timerBorder->setVisible(true);
+    coordHUD->setVisible(true);
 	shipOverlay =
 		dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_near_shipoverlay"));
 	shipOverlay->setColor(Color4::CLEAR);
@@ -432,6 +434,8 @@ void GameGraphRoot::update(float timestep) {
 			healthNode->setVisible(false);
 			rollTutorial->setVisible(false);
 			moveTutorial->setVisible(false);
+			timerBorder->setVisible(false);
+			coordHUD->setVisible(false);
 			break;
 		case Reconnecting:
 			// Still Reconnecting
