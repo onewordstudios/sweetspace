@@ -122,6 +122,8 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	externalDonutsNode = assets->get<Node>("game_field_near_externaldonuts");
 	healthNode = dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_health"));
 	coordHUD = std::dynamic_pointer_cast<Label>(assets->get<Node>("game_hud"));
+	timerBorder =
+		std::dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_timerBorder"));
 	shipOverlay =
 		dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_near_shipoverlay"));
 	shipOverlay->setColor(Color4::CLEAR);
@@ -694,6 +696,15 @@ void GameGraphRoot::setNeedlePercentage(float percentage) {
  */
 std::string GameGraphRoot::positionText() {
 	stringstream ss;
-	ss << "Time Left: " << trunc(ship->timer);
+	if (trunc(ship->timer) > 59) {
+		ss << (int)trunc(ship->timer) / 60 << " : " << (int)trunc(ship->timer) % 60;
+	} else {
+		if (trunc(ship->timer) < 10) {
+			ss << "00 : 0" << trunc(ship->timer);
+		} else {
+			ss << "00 : " << trunc(ship->timer);
+		}
+	}
+
 	return ss.str();
 }
