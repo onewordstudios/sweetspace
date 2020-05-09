@@ -17,7 +17,10 @@ constexpr float SCALING_BEGIN = 0.1f;
 /** Percentage of jump at which distortion stops */
 constexpr float SCALING_END = 1.2f;
 
-bool DonutNode::init(const std::shared_ptr<cugl::Texture>& bodyTexture,
+bool DonutNode::init(const std::shared_ptr<cugl::Texture> &bodyTexture,
+					 const std::shared_ptr<cugl::Texture> &faceIdleTexture,
+					 const std::shared_ptr<cugl::Texture> &faceDizzyTexture,
+					 const std::shared_ptr<cugl::Texture> &faceWorkTexture,
 					 std::shared_ptr<DonutModel> donut) {
 	referencedDonutModel = donut;
 
@@ -26,7 +29,16 @@ bool DonutNode::init(const std::shared_ptr<cugl::Texture>& bodyTexture,
 	bodyNode->setAnchor(cugl::Vec2::ANCHOR_CENTER);
 	bodyNode->setPosition(0, 0);
 	rotationNode->addChild(bodyNode);
+	faceNode = cugl::AnimationNode::alloc(faceIdleTexture, ANIMATION_IDLE_H, ANIMATION_IDLE_W,
+										  ANIMATION_IDLE_FRAMES);
+	faceNode->setAnchor(cugl::Vec2::ANCHOR_CENTER);
+	faceNode->setPosition(0, 0);
+	rotationNode->addChild(faceNode);
 	addChild(rotationNode);
+
+	faceTextureIdle = faceIdleTexture;
+	faceTextureDizzy = faceDizzyTexture;
+	faceTextureWorking = faceWorkTexture;
 
 	setScale(DONUT_SCALE);
 	return true;

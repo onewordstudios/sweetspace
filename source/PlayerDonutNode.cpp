@@ -8,6 +8,9 @@ using namespace cugl;
 
 bool PlayerDonutNode::init(std::shared_ptr<DonutModel> player, float screenHeight,
 						   const std::shared_ptr<cugl::Texture>& bodyTexture,
+						   const std::shared_ptr<cugl::Texture>& faceIdleTexture,
+						   const std::shared_ptr<cugl::Texture>& faceDizzyTexture,
+						   const std::shared_ptr<cugl::Texture>& faceWorkTexture,
 						   const Vec2& position) {
 	this->screenHeight = screenHeight;
 
@@ -16,7 +19,7 @@ bool PlayerDonutNode::init(std::shared_ptr<DonutModel> player, float screenHeigh
 	// donutNode->setShipSize(ship->getSize());
 	initPos = position;
 
-	DonutNode::init(bodyTexture, player);
+	DonutNode::init(bodyTexture, faceIdleTexture, faceDizzyTexture, faceWorkTexture, player);
 	CustomNode::init(player, 0, 0, 0);
 	return true;
 }

@@ -6,7 +6,6 @@
 
 class DonutNode : public CustomNode {
    public:
-
 	/** Spritesheet dimensions for idle face animation */
 	static constexpr int ANIMATION_IDLE_W = 4;
 	static constexpr int ANIMATION_IDLE_H = 3;
@@ -30,11 +29,11 @@ class DonutNode : public CustomNode {
 	std::shared_ptr<cugl::AnimationNode> faceNode;
 
 	/** Reference to texture of idle face animation */
-	std::shared_ptr<cugl::Texture> idleFace;
+	std::shared_ptr<cugl::Texture> faceTextureIdle;
 	/** Reference to texture of dizzy face animation */
-	std::shared_ptr<cugl::Texture> dizzyFace;
+	std::shared_ptr<cugl::Texture> faceTextureDizzy;
 	/** Reference to texture of working face animation */
-	std::shared_ptr<cugl::Texture> workFace;
+	std::shared_ptr<cugl::Texture> faceTextureWorking;
 
 	/** The scale of the donut textures. */
 	static constexpr float DONUT_SCALE = 0.4f;
@@ -64,7 +63,11 @@ class DonutNode : public CustomNode {
 	/**
 	 * Init child nodes of donut node
 	 */
-	bool init(const std::shared_ptr<cugl::Texture> &bodyTexture, std::shared_ptr<DonutModel> donut);
+	bool init(const std::shared_ptr<cugl::Texture> &bodyTexture,
+			  const std::shared_ptr<cugl::Texture> &faceIdleTexture,
+			  const std::shared_ptr<cugl::Texture> &faceDizzyTexture,
+			  const std::shared_ptr<cugl::Texture> &faceWorkTexture,
+			  std::shared_ptr<DonutModel> donut);
 #pragma mark -
 #pragma mark Getters Setters
 

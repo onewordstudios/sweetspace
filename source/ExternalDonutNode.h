@@ -30,13 +30,22 @@ class ExternalDonutNode : public DonutNode {
 	~ExternalDonutNode() { dispose(); }
 
 	bool init(std::shared_ptr<DonutModel> externalDonutModel, std::shared_ptr<DonutModel> player,
-			  float shipSize, const std::shared_ptr<cugl::Texture> &bodyTexture);
+			  float shipSize, const std::shared_ptr<cugl::Texture> &bodyTexture,
+			  const std::shared_ptr<cugl::Texture> &faceIdleTexture,
+			  const std::shared_ptr<cugl::Texture> &faceDizzyTexture,
+			  const std::shared_ptr<cugl::Texture> &faceWorkTexture);
 
 	static std::shared_ptr<ExternalDonutNode> alloc(
 		std::shared_ptr<DonutModel> externalDonutModel, std::shared_ptr<DonutModel> player,
-		float shipSize, const std::shared_ptr<cugl::Texture> &bodyTexture) {
+		float shipSize, const std::shared_ptr<cugl::Texture> &bodyTexture,
+		const std::shared_ptr<cugl::Texture> &faceIdleTexture,
+		const std::shared_ptr<cugl::Texture> &faceDizzyTexture,
+		const std::shared_ptr<cugl::Texture> &faceWorkTexture) {
 		std::shared_ptr<ExternalDonutNode> node = std::make_shared<ExternalDonutNode>();
-		return node->init(externalDonutModel, player, shipSize, bodyTexture) ? node : nullptr;
+		return node->init(externalDonutModel, player, shipSize, bodyTexture, faceIdleTexture,
+						  faceDizzyTexture, faceWorkTexture)
+				   ? node
+				   : nullptr;
 	}
 
 #pragma mark -
