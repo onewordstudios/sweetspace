@@ -414,7 +414,8 @@
                                 "texture":  "donut_yellow",
                                 "position": [0,-398],
                                 "anchor":   [0.5,0.5],
-                                "scale":    0.36
+                                "scale":    0.36,
+                                "visible": false
                             }
                         },
                         "challengePanelParent": {
@@ -874,6 +875,21 @@
 										"y_anchor" : "middle"
 									}
 				            	},
+		                        "donut": {
+		                            "type": "Image",
+		                            "data": {
+		                                "texture":  "donut_yellow",
+		                                "anchor":   [0.5,0.5],
+		                                "scale":    0.36,
+		                                "visible" : false
+		                            },
+									"layout" : {
+										"x_anchor" : "center",
+										"y_anchor" : "middle",
+				                        "y_offset" : 50,
+				                        "absolute" : true
+									}
+		                        },
 				            	"text" : {
 				            		"type": "Label",
 				                    "data": {
@@ -951,7 +967,94 @@
 				                    }
 				                }
 				            }
-				        }
+				        },
+						"timeout": {
+							"type"      : "Image",
+				            "format"    : {
+				                "type" : "Anchored"
+				            },
+				            "data": {
+								"texture":  "overlay_dim",
+								"anchor":   [0.5,0.5],
+								"scale":    1,
+				            	"visible": false
+				            },
+				            "layout" : {
+								"x_anchor" : "center",
+								"y_anchor" : "middle"
+							},
+							"children":  {
+				            	"bg" : {
+				            		"type": "Image",
+									"format"    : {
+										"type" : "Anchored"
+									},
+				                    "data": {
+				                        "texture":  "reconnect_bg",
+				                        "anchor":   [0.5,0.5],
+				                        "scale":    0.6
+				                    },
+									"layout" : {
+										"x_anchor" : "center",
+										"y_anchor" : "middle"
+									}
+				            	},
+								"textup" : {
+				            		"type": "Label",
+				                    "data": {
+				                        "font"       : "mont_black_italic_big",
+				                        "text"       : "Connection Timed Out",
+				                        "foreground" : [236,167,247,255],
+                                		"anchor" : [0.5,0.5],
+				                        "scale" 	 : 0.4,
+				                        "valign"     : "middle",
+				                        "halign"     : "center"
+				                    },
+				                    "layout" : {
+				                        "x_anchor" : "center",
+										"y_anchor" : "middle",
+				                        "y_offset" : 40,
+				                        "absolute" : true
+				                    }
+				            	},
+								"textdown" : {
+				            		"type": "Label",
+				                    "data": {
+				                        "font"       : "mont_black_italic_big",
+				                        "text"       : "Back to Lobby",
+				                        "foreground" : [236,167,247,255],
+                                		"anchor" : [0.5,0.5],
+				                        "scale" 	 : 0.4,
+				                        "valign"     : "middle",
+				                        "halign"     : "center"
+				                    },
+				                    "layout" : {
+				                        "x_anchor" : "center",
+										"y_anchor" : "middle",
+				                        "y_offset" : -25,
+				                        "absolute" : true
+				                    }
+				            	},
+								"countdown" : {
+				            		"type": "Label",
+				                    "data": {
+				                        "font"       : "mont_black_italic_big",
+				                        "text"       : "4",
+				                        "foreground" : [236,167,247,255],
+                                		"anchor" : [0.5,0.5],
+				                        "scale" 	 : 0.9,
+				                        "valign"     : "middle",
+				                        "halign"     : "center"
+				                    },
+				                    "layout" : {
+				                        "x_anchor" : "center",
+										"y_anchor" : "middle",
+				                        "y_offset" : -125,
+				                        "absolute" : true
+				                    }
+				            	}
+				            }
+						}
                     }
                 },
 				"pause": {

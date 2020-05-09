@@ -1,4 +1,4 @@
-#ifndef SWEETSPACE_DONUTNODE_H
+﻿#ifndef SWEETSPACE_DONUTNODE_H
 #define SWEETSPACE_DONUTNODE_H
 
 #include "CustomNode.h"
@@ -25,6 +25,7 @@ class DonutNode : public CustomNode {
 	/** Last face state of the model */
 	DonutModel::FaceState lastFaceState;
 
+   public:
 	/** The scale of the donut textures. */
 	static constexpr float DONUT_SCALE = 0.4f;
 
