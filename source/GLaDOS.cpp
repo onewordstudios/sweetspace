@@ -82,15 +82,19 @@ bool GLaDOS::init(std::shared_ptr<ShipModel> ship, int levelNum) {
 	this->ship = ship;
 	this->mib = MagicInternetBox::getInstance();
 	this->levelNum = levelNum;
+	CULog("Starting level %d", levelNum);
 	this->playerID = mib->getPlayerID();
 	maxEvents = tutorial::MAX_BREACH[levelNum] * mib->getNumPlayers();
 	maxDoors = tutorial::MAX_DOOR[levelNum] * mib->getNumPlayers();
 	maxButtons = tutorial::MAX_BUTTON[levelNum] * mib->getNumPlayers();
 	int unop = tutorial::SECTIONED[levelNum] * mib->getNumPlayers();
 	sections = unop;
+	things = tutorial::THINGS[levelNum];
 	float size = tutorial::SIZE_PER[levelNum] * mib->getNumPlayers();
 	ship->init(mib->getNumPlayers(), maxEvents, maxDoors, mib->getPlayerID(), size,
 			   tutorial::HEALTH[levelNum], maxButtons, unop);
+	ship->initTimer(100);
+	ship->setLevelNum(levelNum);
 	for (int i = 0; i < maxEvents; i++) {
 		breachFree.push(i);
 	}
@@ -105,12 +109,13 @@ bool GLaDOS::init(std::shared_ptr<ShipModel> ship, int levelNum) {
 	srand((unsigned int)time(NULL));
 	active = success;
 	if (unop > 0) {
-		for (int i = 0; i < unop; i++) {
-			float angle = size / ((float)unop * 2) + (size * (float)i) / (float)unop;
-			ship->createUnopenable(angle, i);
-			// TODO:mib
-		}
+		ship->separateDonuts();
 	}
+	for (int i = 0; i < unop; i++) {
+		float angle = size / ((float)unop * 2) + (size * (float)i) / (float)unop;
+		ship->createUnopenable(angle, i);
+	}
+	if (mib->getPlayerID() != 0) return success;
 	switch (levelNum) {
 		case tutorial::DOOR_LEVEL:
 			for (int i = 0; i < maxDoors; i++) {
@@ -368,7 +373,7 @@ void GLaDOS::update(float dt) {
 void GLaDOS::tutorialLevels(float dt) {
 	switch (levelNum) {
 		case tutorial::BREACH_LEVEL:
-			if (ship->timePassed() == tutorial::B_L_PART1 && things == 2) {
+			if (ship->timePassed() >= tutorial::B_L_PART1 && things == 2) {
 				float actualWidth = ship->getSize() / (float)sections;
 				float width = actualWidth - tutorial::FAKE_DOOR_PADDING * 2;
 				for (int i = 0; i < ship->getDonuts().size(); i++) {
@@ -385,8 +390,22 @@ void GLaDOS::tutorialLevels(float dt) {
 								(i + 1) % ship->getDonuts().size());
 				}
 				things--;
-			} else if (ship->timePassed() == tutorial::B_L_PART2 && things == 1) {
-				// Create same breach
+			} else if (ship->timePassed() >= tutorial::B_L_PART2 && things == 1) {
+				// TODO: fix breach overlap
+				float actualWidth = ship->getSize() / (float)sections;
+				float width = actualWidth - tutorial::FAKE_DOOR_PADDING * 2;
+				for (int i = 0; i < ship->getDonuts().size(); i++) {
+					float suggestedAngle =
+						ship->getDonuts().at(i)->getAngle() - tutorial::BREACH_DIST;
+					float mid = actualWidth * (float)i;
+					float diff =
+						ship->getSize() / 2 - abs(abs(suggestedAngle - mid) - ship->getSize() / 2);
+					if (diff > width / 2) {
+						// clamp this angle within the width of the section
+						suggestedAngle += width;
+					}
+					placeObject({BuildingBlockModel::Breach, 0, -1}, suggestedAngle, i);
+				}
 				things--;
 			}
 			break;

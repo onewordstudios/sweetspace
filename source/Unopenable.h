@@ -32,7 +32,7 @@ class Unopenable {
 	 * Any assets owned by this object will be immediately released.  Once
 	 * disposed, a unopenable door may not be used until it is initialized again.
 	 */
-	void dispose();
+	void dispose(){};
 
 	/**
 	 * Initializes a new unopenable door.

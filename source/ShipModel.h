@@ -114,11 +114,11 @@ class ShipModel {
 	bool init(unsigned int numPlayers, unsigned int numBreaches, unsigned int numDoors,
 			  unsigned int playerID, float shipSize, int initHealth, unsigned int numButtons,
 			  int numUnop) {
-		init(numPlayers, numBreaches, numDoors, playerID, shipSize, initHealth, numButtons);
 		// Instantiate door models
 		for (unsigned int i = 0; i < numUnop; i++) {
 			unopenable.push_back(std::make_shared<Unopenable>());
 		}
+		return init(numPlayers, numBreaches, numDoors, playerID, shipSize, initHealth, numButtons);
 	}
 
 	/**
@@ -436,5 +436,15 @@ class ShipModel {
 	 * Sets if level is tutorial
 	 */
 	void setLevelNum(int l) { levelNum = l; }
+
+	/**
+	 * Separates each donut into their own section
+	 */
+	void separateDonuts() {
+		for (int i = 0; i < getDonuts().size(); i++) {
+			float angle = getSize() * i / getDonuts().size();
+			getDonuts().at(i)->setAngle(angle);
+		}
+	}
 };
 #endif /* __SHIP_MODEL_H__ */

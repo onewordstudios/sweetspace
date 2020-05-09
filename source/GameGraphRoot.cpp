@@ -119,6 +119,7 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	breachesNode = assets->get<Node>("game_field_near_breaches");
 	shipSegsNode = assets->get<Node>("game_field_near_shipsegments");
 	doorsNode = assets->get<Node>("game_field_near_doors");
+	unopsNode = assets->get<Node>("game_field_near_unops");
 	externalDonutsNode = assets->get<Node>("game_field_near_externaldonuts");
 	healthNode = dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_health"));
 	coordHUD = std::dynamic_pointer_cast<Label>(assets->get<Node>("game_hud"));
@@ -242,6 +243,15 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 		std::shared_ptr<DoorNode> doorNode = DoorNode::alloc(
 			doorModel, playerModel, ship->getSize(), image, 1, DOOR_FRAMES, DOOR_FRAMES);
 		doorsNode->addChildWithTag(doorNode, i + 1);
+	}
+
+	// Initialize unopenable doors
+	for (int i = 0; i < ship->getUnopenable().size(); i++) {
+		std::shared_ptr<Unopenable> unopModel = ship->getUnopenable().at((unsigned long)i);
+		std::shared_ptr<Texture> image = assets->get<Texture>("unop");
+		std::shared_ptr<UnopenableNode> unopNode = UnopenableNode::alloc(
+			unopModel, playerModel, ship->getSize(), image, 1, DOOR_FRAMES, DOOR_FRAMES);
+		unopsNode->addChildWithTag(unopNode, i + 1);
 	}
 
 	// Initialize Buttons

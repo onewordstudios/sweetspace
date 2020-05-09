@@ -18,6 +18,7 @@
 #include "PlayerDonutNode.h"
 #include "ShipModel.h"
 #include "TutorialNode.h"
+#include "UnopenableNode.h"
 
 class GameGraphRoot : public cugl::Scene {
    public:
@@ -64,6 +65,8 @@ class GameGraphRoot : public cugl::Scene {
 	std::shared_ptr<cugl::Node> shipSegsNode;
 	/** Parent node of all doors, is child of nearSpace */
 	std::shared_ptr<cugl::Node> doorsNode;
+	/** Parent node of all unops, is child of nearSpace */
+	std::shared_ptr<cugl::Node> unopsNode;
 	/** Parent node of all external donuts, is child of nearSpace */
 	std::shared_ptr<cugl::Node> externalDonutsNode;
 
