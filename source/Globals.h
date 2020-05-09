@@ -63,7 +63,7 @@ constexpr unsigned int SCENE_WIDTH = 1024; // NOLINT
 constexpr unsigned int RADIUS = 550; // NOLINT
 
 /** Radius ratio for calculating spin speed */
-constexpr float SPIN_RATIO = 2.6f; // NOLINT
+constexpr float SPIN_RATIO = 3.0f; // NOLINT
 
 /** Maximum number of possibly visible ship segments at a time */
 constexpr unsigned int VISIBLE_SEGS = 6; // NOLINT

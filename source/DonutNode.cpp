@@ -17,34 +17,49 @@ constexpr float SCALING_BEGIN = 0.1f;
 /** Percentage of jump at which distortion stops */
 constexpr float SCALING_END = 1.2f;
 
+bool DonutNode::init(const std::shared_ptr<cugl::Texture>& bodyTexture,
+					 std::shared_ptr<DonutModel> donut) {
+	referencedDonutModel = donut;
+
+	rotationNode = cugl::Node::alloc();
+	bodyNode = cugl::PolygonNode::allocWithTexture(bodyTexture);
+	bodyNode->setAnchor(cugl::Vec2::ANCHOR_CENTER);
+	bodyNode->setPosition(0, 0);
+	rotationNode->addChild(bodyNode);
+	addChild(rotationNode);
+
+	setScale(DONUT_SCALE);
+	return true;
+}
+
 void DonutNode::animateJumping() {
 	float halfJumpTime =
 		sqrt(2 * DonutModel::GRAVITY * DonutModel::JUMP_HEIGHT) / DonutModel::GRAVITY;
 	float scalingWindowSize = halfJumpTime * (SCALING_END - SCALING_BEGIN);
-	bool isInScalingWindow = donutModel->getJumpTime() > halfJumpTime * SCALING_BEGIN &&
-							 donutModel->getJumpTime() < halfJumpTime * SCALING_END;
-	if (!donutModel->isJumping()) {
+	bool isInScalingWindow = referencedDonutModel->getJumpTime() > halfJumpTime * SCALING_BEGIN &&
+							 referencedDonutModel->getJumpTime() < halfJumpTime * SCALING_END;
+	if (!referencedDonutModel->isJumping()) {
 		// Not jumping. Set scale to normal and return
-		setScale(GameGraphRoot::DONUT_SCALE, GameGraphRoot::DONUT_SCALE);
+		setScale(DONUT_SCALE, DONUT_SCALE);
 		return;
 	}
 	float xScale;
-	if (donutModel->getJumpTime() <= halfJumpTime * SCALING_BEGIN) {
+	if (referencedDonutModel->getJumpTime() <= halfJumpTime * SCALING_BEGIN) {
 		// First animation stage
-		xScale = Tween::linear(GameGraphRoot::DONUT_SCALE, GameGraphRoot::DONUT_SCALE * JUMP_SCALE,
-							   (int)((donutModel->getJumpTime()) * 100),
+		xScale = Tween::linear(DONUT_SCALE, DONUT_SCALE * JUMP_SCALE,
+							   (int)((referencedDonutModel->getJumpTime()) * 100),
 							   (int)(halfJumpTime * SCALING_BEGIN * 100));
 	} else if (isInScalingWindow) {
 		// Second animation stage
-		xScale =
-			Tween::linear(GameGraphRoot::DONUT_SCALE * JUMP_SCALE, GameGraphRoot::DONUT_SCALE,
-						  (int)((donutModel->getJumpTime() - halfJumpTime * SCALING_BEGIN) * 100),
-						  (int)(scalingWindowSize * 100));
+		xScale = Tween::linear(
+			DONUT_SCALE * JUMP_SCALE, DONUT_SCALE,
+			(int)((referencedDonutModel->getJumpTime() - halfJumpTime * SCALING_BEGIN) * 100),
+			(int)(scalingWindowSize * 100));
 	} else {
 		// Not in animation stage
-		xScale = GameGraphRoot::DONUT_SCALE;
+		xScale = DONUT_SCALE;
 	}
-	setScale(xScale, GameGraphRoot::DONUT_SCALE);
+	setScale(xScale, DONUT_SCALE);
 }
 
 void DonutNode::animateFacialExpression() {}
