@@ -292,7 +292,29 @@ void GameMode::update(float timestep) {
 			}
 		}
 	}
+	// Door Checks
+	for (int i = 0; i < ship->getUnopenable().size(); i++) {
+		if (ship->getUnopenable().at(i) == nullptr || !ship->getUnopenable().at(i)->getIsActive()) {
+			continue;
+		}
+		float diff = donutModel->getAngle() - ship->getUnopenable().at(i)->getAngle();
+		float a = diff + ship->getSize() / 2;
+		diff = a - floor(a / ship->getSize()) * ship->getSize() - ship->getSize() / 2;
 
+		if (abs(diff) < globals::DOOR_WIDTH) {
+			// Stop donut and push it out if inside
+			donutModel->setVelocity(0);
+			if (diff < 0) {
+				donutModel->setAngle(donutModel->getAngle() - ANGLE_ADJUST < 0.0f
+										 ? ship->getSize()
+										 : donutModel->getAngle() - ANGLE_ADJUST);
+			} else {
+				donutModel->setAngle(donutModel->getAngle() + ANGLE_ADJUST > ship->getSize()
+										 ? 0.0f
+										 : donutModel->getAngle() + ANGLE_ADJUST);
+			}
+		}
+	}
 	for (int i = 0; i < ship->getBreaches().size(); i++) {
 		// this should be adjusted based on the level and number of players
 		if (ship->getBreaches().at(i)->getIsActive() &&
