@@ -11,6 +11,9 @@
 		3CDD11B2242D1DDF00FD21F8 /* HealthNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3CDD11AC242D1DDF00FD21F8 /* HealthNode.cpp */; };
 		3CDD11B3242D1DDF00FD21F8 /* HealthNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3CDD11AC242D1DDF00FD21F8 /* HealthNode.cpp */; };
 		7B2F9C822429960500283B4A /* DoorNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A577C9232422AA0D00B12ADE /* DoorNode.cpp */; };
+		7B341E612463C5E70073D4D2 /* CustomNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7B341E5D2463C5E70073D4D2 /* CustomNode.cpp */; };
+		7B341E622463C5E70073D4D2 /* CustomNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7B341E5D2463C5E70073D4D2 /* CustomNode.cpp */; };
+		7B341E632463C5E70073D4D2 /* CustomNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7B341E5D2463C5E70073D4D2 /* CustomNode.cpp */; };
 		7BD666F22448E8E500D68748 /* MainMenuMode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7BD666F12448E8E500D68748 /* MainMenuMode.cpp */; };
 		7BD666F32448E8E500D68748 /* MainMenuMode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7BD666F12448E8E500D68748 /* MainMenuMode.cpp */; };
 		7BD666F42448E8E500D68748 /* MainMenuMode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7BD666F12448E8E500D68748 /* MainMenuMode.cpp */; };
@@ -198,6 +201,7 @@
 		7B209DFA24395A8F00B657D2 /* Tween.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Tween.h; sourceTree = "<group>"; };
 		7B209DFE24395A9D00B657D2 /* ButtonManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ButtonManager.h; sourceTree = "<group>"; };
 		7B3270692425A569004A3B36 /* GLaDOS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLaDOS.h; sourceTree = "<group>"; };
+		7B341E5D2463C5E70073D4D2 /* CustomNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CustomNode.cpp; sourceTree = "<group>"; };
 		7BD666F02448E8E500D68748 /* MainMenuMode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainMenuMode.h; sourceTree = "<group>"; };
 		7BD666F12448E8E500D68748 /* MainMenuMode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MainMenuMode.cpp; sourceTree = "<group>"; };
 		7BDE1A3E243422EC0080F7CB /* Globals.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Globals.h; sourceTree = "<group>"; };
@@ -223,6 +227,7 @@
 		C58C59370F28300C621B05DD /* ButtonModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ButtonModel.cpp; sourceTree = "<group>"; };
 		C58C5D00FFFC42F97DEC65C0 /* ButtonModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ButtonModel.h; sourceTree = "<group>"; };
 		C58C5F587FFB8E623B5C9D7F /* ButtonNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ButtonNode.cpp; sourceTree = "<group>"; };
+		D152222ED700A38FD9334825 /* CustomNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomNode.h; sourceTree = "<group>"; };
 		D15224B9EA517A2BFF54A6C2 /* easywsclient.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = easywsclient.hpp; sourceTree = "<group>"; };
 		D1522514F4482BDE04D4AABE /* PlayerDonutNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayerDonutNode.h; sourceTree = "<group>"; };
 		D15227D97E11C33C1D22A5E2 /* DoorModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DoorModel.h; sourceTree = "<group>"; };
@@ -560,6 +565,8 @@
 				D15229EF18C3F82477D4E059 /* DonutNode.h */,
 				D1522DC8B550BC37E1C05E7B /* PlayerDonutNode.cpp */,
 				D1522514F4482BDE04D4AABE /* PlayerDonutNode.h */,
+				D152222ED700A38FD9334825 /* CustomNode.h */,
+				7B341E5D2463C5E70073D4D2 /* CustomNode.cpp */,
 				C58C554FEE32C1C1D0CC1584 /* TutorialNode.h */,
 				C58C508D52C8A85185254C7F /* TutorialNode.cpp */,
 			);
@@ -761,6 +768,7 @@
 				D1522B75CBE989BF3E62FFF0 /* MagicInternetBox.cpp in Sources */,
 				A577C9402438F7ED00B12ADE /* LevelModel.cpp in Sources */,
 				D15226A31B180B8600E8235E /* README.md in Sources */,
+				7B341E632463C5E70073D4D2 /* CustomNode.cpp in Sources */,
 				D152277E2A8E96B810AEB205 /* easywsclient.cpp in Sources */,
 				C12224CE8F1354665ED3097E /* ExternalDonutModel.cpp in Sources */,
 				C122265ED47A5D2CFBAFDADF /* PlayerDonutModel.cpp in Sources */,
@@ -797,6 +805,7 @@
 				D152269FB9C3FBF14B624C33 /* ExternalDonutNode.cpp in Sources */,
 				A577C93F2438F7ED00B12ADE /* LevelModel.cpp in Sources */,
 				D15229CE017D5510C972C380 /* MagicInternetBox.cpp in Sources */,
+				7B341E622463C5E70073D4D2 /* CustomNode.cpp in Sources */,
 				D15224573606D56005192E3D /* README.md in Sources */,
 				D1522B1EDA7299CAAE55B21E /* easywsclient.cpp in Sources */,
 				C1222E686D1435B6446D0307 /* ExternalDonutModel.cpp in Sources */,
@@ -833,6 +842,7 @@
 				D1522F66D7605010BF4DE624 /* ExternalDonutNode.cpp in Sources */,
 				A577C93E2438F7ED00B12ADE /* LevelModel.cpp in Sources */,
 				D15222477324B444CAE67673 /* MagicInternetBox.cpp in Sources */,
+				7B341E612463C5E70073D4D2 /* CustomNode.cpp in Sources */,
 				D152272F0C47BB34513BF98A /* README.md in Sources */,
 				D152210B21A0FDE6A6995456 /* easywsclient.cpp in Sources */,
 				C12223392F6704D2EE10713A /* ExternalDonutModel.cpp in Sources */,
@@ -873,6 +883,7 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 7Z3H2LHML6;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -909,6 +920,7 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 7Z3H2LHML6;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = "$(SRCROOT)/Resources/iOS-Info.plist";
@@ -935,6 +947,7 @@
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 7Z3H2LHML6;
 				ENABLE_BITCODE = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -960,6 +973,7 @@
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 7Z3H2LHML6;
 				ENABLE_BITCODE = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -1098,6 +1112,7 @@
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_IDENTITY = "-";
 				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 2;
 				INFOPLIST_FILE = "$(SRCROOT)/Resources/Mac-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
@@ -1114,6 +1129,7 @@
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_IDENTITY = "-";
 				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = "$(SRCROOT)/Resources/Mac-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
