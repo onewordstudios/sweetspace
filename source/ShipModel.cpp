@@ -58,6 +58,11 @@ bool ShipModel::createDoor(float angle, int id) {
 	return true;
 }
 
+bool ShipModel::createUnopenable(float angle, int id) {
+	unopenable.at(id)->init(angle);
+	return true;
+}
+
 bool ShipModel::resolveBreach(int id) {
 	breaches.at(id)->decHealth(1);
 	return true;

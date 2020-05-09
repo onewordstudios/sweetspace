@@ -7,6 +7,7 @@
 #include "DonutModel.h"
 #include "DoorModel.h"
 #include "Globals.h"
+#include "Unopenable.h"
 
 class ShipModel {
    private:
@@ -17,6 +18,8 @@ class ShipModel {
 	std::vector<std::shared_ptr<BreachModel>> breaches;
 	/** Current list of doors on ship*/
 	std::vector<std::shared_ptr<DoorModel>> doors;
+	/** Current list of doors on ship*/
+	std::vector<std::shared_ptr<Unopenable>> unopenable;
 	/** Current list of doors on ship*/
 	std::vector<std::shared_ptr<ButtonModel>> buttons;
 	/** Initial health of the ship*/
@@ -108,6 +111,16 @@ class ShipModel {
 	bool init(unsigned int numPlayers, unsigned int numBreaches, unsigned int numDoors,
 			  unsigned int playerID, float shipSize, int initHealth, unsigned int numButtons);
 
+	bool init(unsigned int numPlayers, unsigned int numBreaches, unsigned int numDoors,
+			  unsigned int playerID, float shipSize, int initHealth, unsigned int numButtons,
+			  int numUnop) {
+		init(numPlayers, numBreaches, numDoors, playerID, shipSize, initHealth, numButtons);
+		// Instantiate door models
+		for (unsigned int i = 0; i < numUnop; i++) {
+			unopenable.push_back(std::make_shared<Unopenable>());
+		}
+	}
+
 	/**
 	 * Create and return a shared pointer to a new ship model.
 	 *
@@ -177,6 +190,13 @@ class ShipModel {
 	std::vector<std::shared_ptr<DoorModel>>& getDoors() { return doors; }
 
 	/**
+	 * Returns the current list of doors.
+	 *
+	 * @return the current list of doors.
+	 */
+	std::vector<std::shared_ptr<Unopenable>>& getUnopenable() { return unopenable; }
+
+	/**
 	 * Returns the current list of buttons.
 	 *
 	 * @return the current list of buttons.
@@ -216,6 +236,14 @@ class ShipModel {
 	 * @param id   	   the id of door to be created.
 	 */
 	bool createDoor(float angle, int id);
+
+	/**
+	 * Create door with given id.
+	 *
+	 * @param angle	   the location to create the door.
+	 * @param id   	   the id of door to be created.
+	 */
+	bool createUnopenable(float angle, int id);
 
 	/**
 	 * Flag door with given id.

@@ -70,6 +70,67 @@ bool GLaDOS::init(std::shared_ptr<ShipModel> ship, std::shared_ptr<LevelModel> l
 }
 
 /**
+ * Initializes the GM for the tutorial levels
+ *
+ * This method works like a proper constructor, initializing the GM
+ * controller and allocating memory.
+ *
+ * @return true if the controller was initialized successfully
+ */
+bool GLaDOS::init(std::shared_ptr<ShipModel> ship, int levelNum) {
+	bool success = true;
+	this->ship = ship;
+	this->mib = MagicInternetBox::getInstance();
+	this->levelNum = levelNum;
+	this->playerID = mib->getPlayerID();
+	maxEvents = tutorial::MAX_BREACH[levelNum] * mib->getNumPlayers();
+	maxDoors = tutorial::MAX_DOOR[levelNum] * mib->getNumPlayers();
+	maxButtons = tutorial::MAX_BUTTON[levelNum] * mib->getNumPlayers();
+	int unop = tutorial::SECTIONED[levelNum] * mib->getNumPlayers();
+	float size = tutorial::SIZE_PER[levelNum] * mib->getNumPlayers();
+	ship->init(mib->getNumPlayers(), maxEvents, maxDoors, mib->getPlayerID(), size,
+			   tutorial::HEALTH[levelNum], maxButtons, unop);
+	for (int i = 0; i < maxEvents; i++) {
+		breachFree.push(i);
+	}
+	for (int i = 0; i < maxDoors; i++) {
+		doorFree.push(i);
+	}
+	for (int i = 0; i < maxButtons; i++) {
+		buttonFree.push(i);
+	}
+	fail = false;
+	// Set random seed based on time
+	srand((unsigned int)time(NULL));
+	active = success;
+	if (unop > 0) {
+		for (int i = 0; i < unop; i++) {
+			float angle = size / ((float)unop * 2) + (size * (float)i) / (float)unop;
+			ship->createUnopenable(angle, i);
+			// TODO:mib
+		}
+	}
+	switch (levelNum) {
+		case 3:
+			for (int i = 0; i < maxDoors; i++) {
+				float angle = size / ((float)maxDoors * 2) + (size * (float)i) / (float)maxDoors;
+				int j = doorFree.front();
+				doorFree.pop();
+				ship->createDoor(angle, j);
+				mib->createDualTask(angle, -1, -1, j);
+			}
+			break;
+		case 5:
+			for (int i = 0; i < unop; i++) {
+				float angle = size / ((float)unop * 2) + (size * (float)i) / (float)unop;
+				placeButtons(angle + 30, angle - 30);
+			}
+			break;
+	}
+	return success;
+}
+
+/**
  * Places an object in the game. Requires that enough resources are present.
  *
  * @param obj the object to place
@@ -77,8 +138,19 @@ bool GLaDOS::init(std::shared_ptr<ShipModel> ship, std::shared_ptr<LevelModel> l
  * @param ids a vector of relative ids, scrambled by the caller
  */
 void GLaDOS::placeObject(BuildingBlockModel::Object obj, float zeroAngle, vector<int> ids) {
-	int i = 0;
 	int p = obj.player == -1 ? (int)(rand() % ship->getDonuts().size()) : ids.at(obj.player);
+	placeObject(obj, zeroAngle, p);
+}
+
+/**
+ * Places an object in the game. Requires that enough resources are present.
+ *
+ * @param obj the object to place
+ * @param zeroAngle the angle corresponding to the relative angle zero
+ * @param p the id to use for the player
+ */
+void GLaDOS::placeObject(BuildingBlockModel::Object obj, float zeroAngle, int p) {
+	int i = 0;
 	switch (obj.type) {
 		case BuildingBlockModel::Breach:
 			i = breachFree.front();
@@ -93,12 +165,6 @@ void GLaDOS::placeObject(BuildingBlockModel::Object obj, float zeroAngle, vector
 			mib->createDualTask((float)obj.angle + zeroAngle, -1, -1, i);
 			break;
 		case BuildingBlockModel::Button: {
-			// Find usable button IDs
-			i = buttonFree.front();
-			buttonFree.pop();
-			int j = buttonFree.front();
-			buttonFree.pop();
-
 			// Roll for pair's angle
 			float origAngle = (float)obj.angle + zeroAngle;
 			float pairAngle;
@@ -106,9 +172,7 @@ void GLaDOS::placeObject(BuildingBlockModel::Object obj, float zeroAngle, vector
 				pairAngle = (float)(rand() % (int)(ship->getSize()));
 			} while (abs(pairAngle - ship->getButtons().at(i)->getAngle()) < globals::BUTTON_DIST);
 
-			// Dispatch challenge creation
-			ship->createButton(origAngle, i, pairAngle, j);
-			mib->createButtonTask(origAngle, i, pairAngle, j);
+			placeButtons(origAngle, pairAngle);
 			break;
 		}
 		case BuildingBlockModel::Roll:
@@ -123,6 +187,18 @@ void GLaDOS::placeObject(BuildingBlockModel::Object obj, float zeroAngle, vector
 			}
 			break;
 	}
+}
+
+void GLaDOS::placeButtons(float angle1, float angle2) {
+	// Find usable button IDs
+	int i = buttonFree.front();
+	buttonFree.pop();
+	int j = buttonFree.front();
+	buttonFree.pop();
+
+	// Dispatch challenge creation
+	ship->createButton(angle1, i, angle2, j);
+	mib->createButtonTask(angle1, i, angle2, j);
 }
 
 /**
@@ -173,6 +249,11 @@ void GLaDOS::update(float dt) {
 
 	// Check if this is the host for generating breaches and doors
 	if (playerID != 0) {
+		return;
+	}
+
+	if (levelNum < globals::NUM_TUTORIAL_LEVELS) {
+		tutorialLevels(dt);
 		return;
 	}
 
@@ -280,5 +361,23 @@ void GLaDOS::update(float dt) {
 	if (fail) {
 		mib->failAllTask();
 		fail = false;
+	}
+}
+
+void GLaDOS::tutorialLevels(float dt) {
+	switch (levelNum) {
+		case 0:
+			if (ship->timePassed() == 10 && things == 2) {
+				// Create opposite breach
+				things--;
+			} else if (ship->timePassed() == 15 && things == 1) {
+				// Create same breach
+				things--;
+			}
+			break;
+		case 8:
+			if (things >= mib->getNumPlayers()) things--;
+			// Create roll
+			break;
 	}
 }

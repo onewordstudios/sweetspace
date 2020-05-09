@@ -77,26 +77,32 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 	net = MagicInternetBox::getInstance();
 	playerID = net->getPlayerID();
 	roomId = net->getRoomID();
+	if (net->getLevelNum >= globals::NUM_TUTORIAL_LEVELS) {
+		const char* levelName = LEVEL_NAMES[net->getLevelNum()];
 
-	const char* levelName = LEVEL_NAMES[net->getLevelNum()];
+		CULog("Loading level %s b/c mib gave level num %d", levelName, net->getLevelNum());
+		unsigned int shipNumPlayers = net->getMaxNumPlayers();
 
-	CULog("Loading level %s b/c mib gave level num %d", levelName, net->getLevelNum());
-	unsigned int shipNumPlayers = net->getMaxNumPlayers();
-
-	std::shared_ptr<LevelModel> level = assets->get<LevelModel>(levelName);
-	int maxEvents = (int)(level->getMaxBreaches() * shipNumPlayers / globals::MIN_PLAYERS);
-	int maxDoors = std::min(level->getMaxDoors() * shipNumPlayers / globals::MIN_PLAYERS,
-							shipNumPlayers * 2 - 1);
-	int maxButtons = (int)(level->getMaxButtons() * shipNumPlayers / globals::MIN_PLAYERS);
-	if (maxButtons % 2 != 0) maxButtons += 1;
-	ship = ShipModel::alloc(shipNumPlayers, maxEvents, maxDoors, playerID,
-							(float)level->getShipSize((int)shipNumPlayers),
-							(int)(level->getInitHealth() * shipNumPlayers / globals::MIN_PLAYERS),
-							maxButtons);
-	gm.init(ship, level);
+		std::shared_ptr<LevelModel> level = assets->get<LevelModel>(levelName);
+		int maxEvents = (int)(level->getMaxBreaches() * shipNumPlayers / globals::MIN_PLAYERS);
+		int maxDoors = std::min(level->getMaxDoors() * shipNumPlayers / globals::MIN_PLAYERS,
+								shipNumPlayers * 2 - 1);
+		int maxButtons = (int)(level->getMaxButtons() * shipNumPlayers / globals::MIN_PLAYERS);
+		if (maxButtons % 2 != 0) maxButtons += 1;
+		ship = ShipModel::alloc(
+			shipNumPlayers, maxEvents, maxDoors, playerID,
+			(float)level->getShipSize((int)shipNumPlayers),
+			(int)(level->getInitHealth() * shipNumPlayers / globals::MIN_PLAYERS), maxButtons);
+		ship->initTimer(level->getTime());
+		gm.init(ship, level);
+	} else {
+		// Tutorial Mode. Allocate an empty ship and let the gm do the rest.
+		// Prepare for maximum hardcoding
+		ship = ShipModel::alloc(0, 0, 0, 0, 0, 0);
+		gm.init(ship, net->getLevelNum());
+	}
 
 	donutModel = ship->getDonuts().at(static_cast<unsigned long>(playerID));
-	ship->initTimer(level->getTime());
 	ship->setLevelNum(net->getLevelNum());
 
 	// Scene graph Initialization

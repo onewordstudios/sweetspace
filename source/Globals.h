@@ -13,6 +13,9 @@ namespace globals {
 /** Network tick frequency */
 constexpr unsigned int NETWORK_TICK = 12; // NOLINT
 
+/** Number of tutorial levels */
+constexpr unsigned int NUM_TUTORIAL_LEVELS = 8; // NOLINT
+
 /** Number of characters in a ship ID */
 constexpr unsigned int ROOM_LENGTH = 5; // NOLINT
 

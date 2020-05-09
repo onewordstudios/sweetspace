@@ -10,6 +10,7 @@
 #include "LevelModel.h"
 #include "MagicInternetBox.h"
 #include "ShipModel.h"
+#include "TutorialConstants.h"
 
 /**
  * Game Logic and Distribution Operations Synthesizer
@@ -34,6 +35,10 @@ class GLaDOS {
 	/** The maximum number of events on ship at any one time. This will probably need to scale with
 	 * the number of players*/
 	unsigned int maxEvents;
+	/** The level number, for tutorial only*/
+	int levelNum;
+	/** The "things" (custom events) in this level, for tutorial only*/
+	int things;
 	/** The maximum number of events on ship at any one time. This will probably need to scale with
 	 * the number of players*/
 	unsigned int maxDoors;
@@ -87,6 +92,16 @@ class GLaDOS {
 	 */
 	bool init(std::shared_ptr<ShipModel> ship, std::shared_ptr<LevelModel> level);
 
+	/**
+	 * Initializes the GM for tutorial levels
+	 *
+	 * This method works like a proper constructor, initializing the GM
+	 * controller and allocating memory.
+	 *
+	 * @return true if the controller was initialized successfully
+	 */
+	bool init(std::shared_ptr<ShipModel> ship, int levelNum);
+
 #pragma mark -
 #pragma mark GM Handling
 	/**
@@ -106,11 +121,24 @@ class GLaDOS {
 	void placeObject(BuildingBlockModel::Object obj, float zeroAngle, vector<int> ids);
 
 	/**
+	 * Places an object in the game. Requires that enough resources are present.
+	 *
+	 * @param obj the object to place
+	 * @param zeroAngle the angle corresponding to the relative angle zero
+	 * @param p the id to use for the player
+	 */
+	void placeObject(BuildingBlockModel::Object obj, float zeroAngle, int p);
+
+	void placeButtons(float a1, float a2);
+
+	/**
 	 * Processes the GM.
 	 *
 	 * This method is used to generate and manage current events
 	 */
 	void update(float dt);
+
+	void tutorialLevels(float dt);
 
 #pragma mark -
 #pragma mark Accessors
