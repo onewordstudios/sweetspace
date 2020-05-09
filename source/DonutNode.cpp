@@ -17,6 +17,12 @@ constexpr float SCALING_BEGIN = 0.1f;
 /** Percentage of jump at which distortion stops */
 constexpr float SCALING_END = 1.2f;
 
+/** Number of frames between blinking */
+constexpr float FACE_ANIMATION_BLINK_INTERVAL = 100;
+
+/** Controls speed of facial animation. Inverse relationship to speed */
+constexpr float FACE_ANIMATION_SPEED = 3;
+
 bool DonutNode::init(const std::shared_ptr<cugl::Texture> &bodyTexture,
 					 const std::shared_ptr<cugl::Texture> &faceIdleTexture,
 					 const std::shared_ptr<cugl::Texture> &faceDizzyTexture,
@@ -29,18 +35,31 @@ bool DonutNode::init(const std::shared_ptr<cugl::Texture> &bodyTexture,
 	bodyNode->setAnchor(cugl::Vec2::ANCHOR_CENTER);
 	bodyNode->setPosition(0, 0);
 	rotationNode->addChild(bodyNode);
-	faceNode = cugl::AnimationNode::alloc(faceIdleTexture, ANIMATION_IDLE_H, ANIMATION_IDLE_W,
-										  ANIMATION_IDLE_FRAMES);
-	faceNode->setAnchor(cugl::Vec2::ANCHOR_CENTER);
-	faceNode->setPosition(0, 0);
-	rotationNode->addChild(faceNode);
+
+	faceNodeIdle = cugl::AnimationNode::alloc(faceIdleTexture, ANIMATION_IDLE_H, ANIMATION_IDLE_W,
+											  ANIMATION_IDLE_FRAMES);
+	faceNodeIdle->setAnchor(cugl::Vec2::ANCHOR_CENTER);
+	faceNodeIdle->setPosition(0, 0);
+	rotationNode->addChild(faceNodeIdle);
+
+	faceNodeDizzy = cugl::AnimationNode::alloc(faceDizzyTexture, ANIMATION_NOTIDLE_H,
+											   ANIMATION_NOTIDLE_W, ANIMATION_NOTIDLE_FRAMES);
+	faceNodeDizzy->setAnchor(cugl::Vec2::ANCHOR_CENTER);
+	faceNodeDizzy->setPosition(0, 0);
+	faceNodeDizzy->setVisible(false);
+	rotationNode->addChild(faceNodeDizzy);
+
+	faceNodeWorking = cugl::AnimationNode::alloc(faceWorkTexture, ANIMATION_NOTIDLE_H,
+												 ANIMATION_NOTIDLE_W, ANIMATION_NOTIDLE_FRAMES);
+	faceNodeWorking->setAnchor(cugl::Vec2::ANCHOR_CENTER);
+	faceNodeWorking->setPosition(0, 0);
+	faceNodeWorking->setVisible(false);
+	rotationNode->addChild(faceNodeWorking);
+
 	addChild(rotationNode);
 
-	faceTextureIdle = faceIdleTexture;
-	faceTextureDizzy = faceDizzyTexture;
-	faceTextureWorking = faceWorkTexture;
-
 	setScale(DONUT_SCALE);
+	animationCounter = 0;
 	return true;
 }
 
@@ -74,4 +93,47 @@ void DonutNode::animateJumping() {
 	setScale(xScale, DONUT_SCALE);
 }
 
-void DonutNode::animateFacialExpression() {}
+void DonutNode::animateFacialExpression() {
+	DonutModel::FaceState faceState = referencedDonutModel->getFaceState();
+	std::shared_ptr<cugl::AnimationNode> visibleFaceNode;
+	int nextFrame;
+	switch (faceState) {
+		case DonutModel::FaceState::Idle:
+			visibleFaceNode = faceNodeIdle;
+			animationCounter += 1;
+			if (visibleFaceNode->getFrame() == 0) {
+				// No animation
+				CULog("No animation, counter = %d", animationCounter);
+				nextFrame = 0;
+				if (animationCounter == FACE_ANIMATION_BLINK_INTERVAL) {
+					// Start animation
+					nextFrame = 1;
+					animationCounter = 0;
+				}
+			} else {
+				// Perform idle face animation
+				CULog("Doing animation, counter = %d", animationCounter);
+				if (animationCounter == FACE_ANIMATION_SPEED) {
+					animationCounter = 0;
+				}
+				nextFrame = visibleFaceNode->getFrame() + (animationCounter == 0 ? 1 : 0);
+			}
+			break;
+		case DonutModel::FaceState::Dizzy:
+			visibleFaceNode = faceNodeDizzy;
+			nextFrame = visibleFaceNode->getFrame() + 1;
+			break;
+		case DonutModel::FaceState::Working:
+			visibleFaceNode = faceNodeWorking;
+			nextFrame = visibleFaceNode->getFrame() + 1;
+			break;
+		default:
+			nextFrame = 0;
+	}
+	faceNodeIdle->setVisible(false);
+	faceNodeDizzy->setVisible(false);
+	faceNodeWorking->setVisible(false);
+	visibleFaceNode->setVisible(true);
+
+	visibleFaceNode->setFrame(nextFrame < visibleFaceNode->getSize() ? nextFrame : 0);
+}

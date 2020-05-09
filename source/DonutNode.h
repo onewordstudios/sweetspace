@@ -5,17 +5,6 @@
 #include "DonutModel.h"
 
 class DonutNode : public CustomNode {
-   public:
-	/** Spritesheet dimensions for idle face animation */
-	static constexpr int ANIMATION_IDLE_W = 4;
-	static constexpr int ANIMATION_IDLE_H = 3;
-	static constexpr int ANIMATION_IDLE_FRAMES = 10;
-
-	/** Spritesheet dimensions for non-idle face animation */
-	static constexpr int ANIMATION_NOTIDLE_W = 5;
-	static constexpr int ANIMATION_NOTIDLE_H = 4;
-	static constexpr int ANIMATION_NOTIDLE_FRAMES = 20;
-
 #pragma mark Values
    protected:
 	/** Reference to the donut model this node represents */
@@ -25,18 +14,27 @@ class DonutNode : public CustomNode {
 	std::shared_ptr<cugl::Node> rotationNode;
 	/** Reference to node of donut body */
 	std::shared_ptr<cugl::PolygonNode> bodyNode;
-	/** Reference to node of donut face */
-	std::shared_ptr<cugl::AnimationNode> faceNode;
-
-	/** Reference to texture of idle face animation */
-	std::shared_ptr<cugl::Texture> faceTextureIdle;
-	/** Reference to texture of dizzy face animation */
-	std::shared_ptr<cugl::Texture> faceTextureDizzy;
-	/** Reference to texture of working face animation */
-	std::shared_ptr<cugl::Texture> faceTextureWorking;
+	/** Reference to node of donut idle face, is active by default */
+	std::shared_ptr<cugl::AnimationNode> faceNodeIdle;
+	/** Reference to node of donut idle face */
+	std::shared_ptr<cugl::AnimationNode> faceNodeDizzy;
+	/** Reference to node of donut idle face */
+	std::shared_ptr<cugl::AnimationNode> faceNodeWorking;
+	/** Counter for controlling speed of facial animation */
+	int animationCounter;
 
 	/** The scale of the donut textures. */
 	static constexpr float DONUT_SCALE = 0.4f;
+
+	/** Spritesheet dimensions for idle face animation */
+	static constexpr int ANIMATION_IDLE_W = 4;
+	static constexpr int ANIMATION_IDLE_H = 3;
+	static constexpr int ANIMATION_IDLE_FRAMES = 10;
+
+	/** Spritesheet dimensions for non-idle face animation */
+	static constexpr int ANIMATION_NOTIDLE_W = 5;
+	static constexpr int ANIMATION_NOTIDLE_H = 4;
+	static constexpr int ANIMATION_NOTIDLE_FRAMES = 20;
 
    public:
 #pragma mark -

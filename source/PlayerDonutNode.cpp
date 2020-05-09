@@ -34,5 +34,6 @@ void PlayerDonutNode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch, cons
 	float donutNewY = initPos.y + playerDonutModel->getJumpOffset() * screenHeight;
 	setPositionY(donutNewY);
 	animateJumping();
+	animateFacialExpression();
 	Node::draw(batch, transform, tint);
 }
