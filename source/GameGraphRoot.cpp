@@ -203,8 +203,9 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 			allSpace->addChild(donutNode);
 			tempDonutNode->setVisible(false);
 		} else {
-			std::shared_ptr<ExternalDonutNode> newDonutNode = ExternalDonutNode::alloc(
-				donutModel, playerModel, ship->getSize(), bodyTexture, faceIdle, faceDizzy, faceWork);
+			std::shared_ptr<ExternalDonutNode> newDonutNode =
+				ExternalDonutNode::alloc(donutModel, playerModel, ship->getSize(), bodyTexture,
+										 faceIdle, faceDizzy, faceWork);
 			externalDonutsNode->addChild(newDonutNode);
 
 			Vec2 donutPos = Vec2(sin(donutModel->getAngle() * (globals::RADIUS + DONUT_OFFSET)),
