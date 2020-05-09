@@ -100,7 +100,7 @@ bool GLaDOS::init(std::shared_ptr<ShipModel> ship, int levelNum) {
 	float size = tutorial::SIZE_PER[levelNum] * mib->getNumPlayers();
 	ship->init(mib->getNumPlayers(), maxEvents, maxDoors, mib->getPlayerID(), size,
 			   tutorial::HEALTH[levelNum], maxButtons, unop);
-	ship->initTimer(20);
+	ship->initTimer(30);
 	ship->setLevelNum(levelNum);
 	std::queue<int> empty1;
 	std::queue<int> empty2;
@@ -436,8 +436,34 @@ void GLaDOS::tutorialLevels(float dt) {
 			}
 			break;
 		case tutorial::STABILIZER_LEVEL:
-			if (things >= mib->getNumPlayers()) things--;
-			// Create roll
+			if (things >= mib->getNumPlayers()) things = mib->getNumPlayers() - 1;
+			if (things < 0) break;
+			switch (ship->getChallengeStatus()) {
+				case ShipModel::ACTIVE:
+					break;
+				case ShipModel::INACTIVE:
+				case ShipModel::FAILURE: {
+					int dir = (int)(rand() % 2);
+					if (things != playerID && ship->getDonuts().at(things)->getIsActive()) {
+						mib->createAllTask(things, dir);
+					} else {
+						ship->createAllTask(dir);
+					}
+					ship->setStatus(ShipModel::ACTIVE);
+					break;
+				}
+				case ShipModel::SUCCESS: {
+					things--;
+					int dir = (int)(rand() % 2);
+					if (things != playerID && ship->getDonuts().at(things)->getIsActive()) {
+						mib->createAllTask(things, dir);
+					} else {
+						ship->createAllTask(dir);
+					}
+					ship->setStatus(ShipModel::ACTIVE);
+					break;
+				}
+			}
 			break;
 	}
 }

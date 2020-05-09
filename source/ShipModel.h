@@ -41,6 +41,10 @@ class ShipModel {
 	int levelNum;
 
    public:
+	enum Status { INACTIVE, ACTIVE, FAILURE, SUCCESS };
+	/** Status of all player challenge. 0 = no challenge, 1 = challenge, 2 = challenge failed, 3 =
+	 * challenge success*/
+	Status status;
 	/** Game timer*/
 	float timer;
 #pragma mark Constructors
@@ -59,6 +63,7 @@ class ShipModel {
 		  shipSize(0),
 		  rollDir(0),
 		  challenge(false),
+		  status(INACTIVE),
 		  challengeProg(0),
 		  endTime(0),
 		  totalTime(0),
@@ -392,6 +397,11 @@ class ShipModel {
 	bool failAllTask();
 
 	/**
+	 * Set challenge status
+	 */
+	void setStatus(Status s);
+
+	/**
 	 * Set end time for challenge
 	 */
 	void setEndTime(float time) { endTime = time; };
@@ -431,6 +441,11 @@ class ShipModel {
 	 * Gets if level is tutorial
 	 */
 	int getLevelNum() { return levelNum; }
+
+	/**
+	 * Gets status of challenge
+	 */
+	Status getChallengeStatus() { return status; }
 
 	/**
 	 * Sets if level is tutorial

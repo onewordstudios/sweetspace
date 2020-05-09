@@ -45,7 +45,7 @@ constexpr std::array<const char*, MAX_NUM_LEVELS> LEVEL_NAMES = {"",
 /** Easy level index */
 constexpr unsigned int EASY_LEVEL = 0; // NOLINT
 /** Medium level index */
-constexpr unsigned int MED_LEVEL = 4; // NOLINT
+constexpr unsigned int MED_LEVEL = 7; // NOLINT
 /** Hard level index */
 constexpr unsigned int HARD_LEVEL = 6; // NOLINT
 
