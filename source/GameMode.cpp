@@ -239,6 +239,8 @@ void GameMode::update(float timestep) {
 		if (!donutModel->isJumping() && playerID != breach->getPlayer() &&
 			diff < globals::BREACH_WIDTH && breach->getHealth() != 0) {
 			// Slow player by drag factor
+			CULog("Player %d at angle %f slowed by breach at %f with id %d", playerID,
+				  donutModel->getAngle(), breach->getAngle(), breach->getPlayer());
 			donutModel->setFriction(OTHER_BREACH_FRICTION);
 		} else if (playerID == breach->getPlayer() && diff < EPSILON_ANGLE &&
 				   donutModel->getJumpOffset() == 0.0f && breach->getHealth() > 0) {

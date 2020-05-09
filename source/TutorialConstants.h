@@ -6,7 +6,7 @@ namespace tutorial {
 constexpr int MAX_BREACH[] = {10, 10, 10, 10, 10, 10, 10, 10}; // NOLINT
 constexpr int MAX_DOOR[] = {10, 10, 10, 10, 10, 10, 10, 10};   // NOLINT
 constexpr int MAX_BUTTON[] = {10, 10, 10, 10, 10, 10, 10, 10}; // NOLINT
-constexpr int HEALTH[] = {10, 10, 10, 10, 10, 10, 10, 10};	   // NOLINT
+constexpr int HEALTH[] = {1000, 10, 10, 10, 10, 10, 10, 10};   // NOLINT
 constexpr int SIZE_PER[] = {180, 10, 10, 10, 10, 10, 10, 10};  // NOLINT
 constexpr int SECTIONED[] = {1, 1, 1, 1, 1, 1, 1, 1};		   // NOLINT
 constexpr int THINGS[] = {2, 1, 1, 1, 1, 1, 1, 1};			   // NOLINT

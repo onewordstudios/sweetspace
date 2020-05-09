@@ -379,12 +379,14 @@ void GLaDOS::tutorialLevels(float dt) {
 				for (int i = 0; i < ship->getDonuts().size(); i++) {
 					float suggestedAngle =
 						ship->getDonuts().at(i)->getAngle() + tutorial::BREACH_DIST;
+					if (suggestedAngle >= ship->getSize()) suggestedAngle -= ship->getSize();
 					float mid = actualWidth * (float)i;
 					float diff =
 						ship->getSize() / 2 - abs(abs(suggestedAngle - mid) - ship->getSize() / 2);
 					if (diff > width / 2) {
 						// clamp this angle within the width of the section
 						suggestedAngle -= width;
+						if (suggestedAngle < 0) suggestedAngle += ship->getSize();
 					}
 					placeObject({BuildingBlockModel::Breach, 0, -1}, suggestedAngle,
 								(i + 1) % ship->getDonuts().size());
@@ -394,15 +396,18 @@ void GLaDOS::tutorialLevels(float dt) {
 				// TODO: fix breach overlap
 				float actualWidth = ship->getSize() / (float)sections;
 				float width = actualWidth - tutorial::FAKE_DOOR_PADDING * 2;
+				CULog("actual: %f. fake: %f", actualWidth, width);
 				for (int i = 0; i < ship->getDonuts().size(); i++) {
 					float suggestedAngle =
 						ship->getDonuts().at(i)->getAngle() - tutorial::BREACH_DIST;
+					if (suggestedAngle < 0) suggestedAngle += ship->getSize();
 					float mid = actualWidth * (float)i;
 					float diff =
 						ship->getSize() / 2 - abs(abs(suggestedAngle - mid) - ship->getSize() / 2);
 					if (diff > width / 2) {
 						// clamp this angle within the width of the section
 						suggestedAngle += width;
+						if (suggestedAngle >= ship->getSize()) suggestedAngle -= ship->getSize();
 					}
 					placeObject({BuildingBlockModel::Breach, 0, -1}, suggestedAngle, i);
 				}
