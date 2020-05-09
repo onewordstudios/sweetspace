@@ -32,6 +32,8 @@ class ShipModel {
 	int rollDir;
 	/** If a all player challenge is in effect*/
 	bool challenge;
+	/** If this level has no time limit*/
+	bool timeless;
 	/** Challenge progress*/
 	int challengeProg;
 	float endTime;
@@ -45,8 +47,10 @@ class ShipModel {
 	/** Status of all player challenge. 0 = no challenge, 1 = challenge, 2 = challenge failed, 3 =
 	 * challenge success*/
 	Status status;
-	/** Game timer*/
+	/** Game countdown timer*/
 	float timer;
+	/** Game timer*/
+	float timeCtr;
 #pragma mark Constructors
 	/*
 	 * Creates a ship.
@@ -63,8 +67,8 @@ class ShipModel {
 		  shipSize(0),
 		  rollDir(0),
 		  challenge(false),
-		  status(INACTIVE),
 		  challengeProg(0),
+		  status(INACTIVE),
 		  endTime(0),
 		  totalTime(0),
 		  timer(0) {}
@@ -280,6 +284,9 @@ class ShipModel {
 	 */
 	float getHealth() { return health; }
 
+	void setTimeless(bool t) { timeless = t; }
+	bool getTimeless() { return timeless; }
+
 	/**
 	 * Get health of the ship
 	 *
@@ -303,6 +310,7 @@ class ShipModel {
 	void initTimer(float startTime) {
 		timer = startTime;
 		totalTime = startTime;
+		timeCtr = 0;
 	}
 
 	/**
@@ -310,7 +318,12 @@ class ShipModel {
 	 *
 	 * @param time amount of time to detract from timer
 	 */
-	void updateTimer(float time) { timer = timer - time; }
+	void updateTimer(float time) {
+		timeCtr += time;
+		if (!timeless) {
+			timer = totalTime - timeCtr;
+		}
+	}
 
 	/**
 	 * Get if timer has ended
@@ -324,7 +337,7 @@ class ShipModel {
 	 *
 	 * @return the time that has passed
 	 */
-	float timePassed() { return totalTime - timer; }
+	float timePassed() { return timeCtr; }
 
 	/**
 	 * Set size of the ship

@@ -575,6 +575,11 @@ void MagicInternetBox::update(std::shared_ptr<ShipModel> state) {
 				state->setStatus(ShipModel::SUCCESS);
 				break;
 			}
+			case ForceWin: {
+				state->setTimeless(false);
+				state->initTimer(0);
+				break;
+			}
 			default:
 				break;
 		}
@@ -616,6 +621,8 @@ void MagicInternetBox::resolveButton(int id) { sendData(ButtonResolve, -1, id, -
 void MagicInternetBox::failAllTask() { sendData(AllFail, -1.0f, -1, -1, -1, -1.0f); }
 
 void MagicInternetBox::succeedAllTask() { sendData(AllSucceed, -1.0f, -1, -1, -1, -1.0f); }
+
+void MagicInternetBox::forceWinLevel() { sendData(ForceWin, -1.0f, -1, -1, -1, -1.0f); }
 
 void MagicInternetBox::jump(int player) { sendData(Jump, -1.0f, player, -1, -1, -1.0f); }
 

@@ -47,6 +47,6 @@ constexpr unsigned int EASY_LEVEL = 0; // NOLINT
 /** Medium level index */
 constexpr unsigned int MED_LEVEL = 7; // NOLINT
 /** Hard level index */
-constexpr unsigned int HARD_LEVEL = 6; // NOLINT
+constexpr unsigned int HARD_LEVEL = 8; // NOLINT
 
 #endif /* defined(__JS_LEVEL_CONSTANTS_H__) */

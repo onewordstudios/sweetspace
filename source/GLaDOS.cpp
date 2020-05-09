@@ -100,7 +100,8 @@ bool GLaDOS::init(std::shared_ptr<ShipModel> ship, int levelNum) {
 	float size = tutorial::SIZE_PER[levelNum] * mib->getNumPlayers();
 	ship->init(mib->getNumPlayers(), maxEvents, maxDoors, mib->getPlayerID(), size,
 			   tutorial::HEALTH[levelNum], maxButtons, unop);
-	ship->initTimer(30);
+	ship->setTimeless(true);
+	ship->initTimer(1);
 	ship->setLevelNum(levelNum);
 	std::queue<int> empty1;
 	std::queue<int> empty2;
@@ -208,7 +209,7 @@ void GLaDOS::placeObject(BuildingBlockModel::Object obj, float zeroAngle, int p)
 				mib->createAllTask(p, ship->getRollDir());
 			} else {
 				ship->setChallengeProg(0);
-				ship->setEndTime((ship->timer) - globals::ROLL_CHALLENGE_LENGTH);
+				ship->setEndTime((ship->timeCtr) + globals::ROLL_CHALLENGE_LENGTH);
 				ship->setChallenge(true);
 			}
 			break;
@@ -271,6 +272,11 @@ void GLaDOS::update(float dt) {
 			btn->getPair()->clear();
 			btn->clear();
 		}
+	}
+
+	if (fail) {
+		mib->failAllTask();
+		fail = false;
 	}
 
 	// Check if this is the host for generating breaches and doors
@@ -385,17 +391,13 @@ void GLaDOS::update(float dt) {
 		readyQueue.erase(readyQueue.begin() + i);
 		break;
 	}
-
-	if (fail) {
-		mib->failAllTask();
-		fail = false;
-	}
 }
 
 void GLaDOS::tutorialLevels(float dt) {
 	switch (levelNum) {
 		case tutorial::BREACH_LEVEL:
 			if (ship->timePassed() >= tutorial::B_L_PART1 && things == 2) {
+				CULog("things : %d", things);
 				float actualWidth = ship->getSize() / (float)sections;
 				float width = actualWidth - tutorial::FAKE_DOOR_PADDING * 2;
 				for (int i = 0; i < ship->getDonuts().size(); i++) {
@@ -415,6 +417,7 @@ void GLaDOS::tutorialLevels(float dt) {
 				}
 				things--;
 			} else if (ship->timePassed() >= tutorial::B_L_PART2 && things == 1) {
+				CULog("things a: %d", things);
 				// TODO: fix breach overlap
 				float actualWidth = ship->getSize() / (float)sections;
 				float width = actualWidth - tutorial::FAKE_DOOR_PADDING * 2;
@@ -433,11 +436,35 @@ void GLaDOS::tutorialLevels(float dt) {
 					placeObject({BuildingBlockModel::Breach, 0, -1}, suggestedAngle, i);
 				}
 				things--;
+			} else if (things <= 0) {
+				CULog("things b: %d", things);
+				// Check if all breaches that can be resolved are resolved.
+				if (ship->getBreaches().size() - breachFree.size() == mib->getNumPlayers()) {
+					ship->setTimeless(false);
+					mib->forceWinLevel();
+					ship->initTimer(0);
+				}
+			}
+			break;
+		case tutorial::DOOR_LEVEL:
+			if (ship->getDoors().size() - doorFree.size() == 0) {
+				ship->setTimeless(false);
+				mib->forceWinLevel();
+				ship->initTimer(0);
+				break;
+			}
+			break;
+		case tutorial::BUTTON_LEVEL:
+			if (ship->getButtons().size() - buttonFree.size() == 0) {
+				ship->setTimeless(false);
+				mib->forceWinLevel();
+				ship->initTimer(0);
+				break;
 			}
 			break;
 		case tutorial::STABILIZER_LEVEL:
 			if (things >= mib->getNumPlayers()) things = mib->getNumPlayers() - 1;
-			if (things < 0) break;
+
 			switch (ship->getChallengeStatus()) {
 				case ShipModel::ACTIVE:
 					break;
@@ -454,6 +481,12 @@ void GLaDOS::tutorialLevels(float dt) {
 				}
 				case ShipModel::SUCCESS: {
 					things--;
+					if (things < 0) {
+						ship->setTimeless(false);
+						mib->forceWinLevel();
+						ship->initTimer(0);
+						break;
+					}
 					int dir = (int)(rand() % 2);
 					if (things != playerID && ship->getDonuts().at(things)->getIsActive()) {
 						mib->createAllTask(things, dir);

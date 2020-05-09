@@ -477,9 +477,9 @@ void GameGraphRoot::update(float timestep) {
 	}
 
 	if (ship->getLevelNum() == 0) {
-		if (trunc(ship->timer) == 10) {
+		if (trunc(ship->timeCtr) == 10) {
 			healthTutorial->setVisible(false);
-		} else if (trunc(ship->timer) == 15) {
+		} else if (trunc(ship->timeCtr) == 5) {
 			moveTutorial->setVisible(false);
 		}
 	} else if (ship->getLevelNum() == 3) {

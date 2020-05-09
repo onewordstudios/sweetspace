@@ -126,6 +126,7 @@ class MagicInternetBox {
 		AllCreate,
 		AllFail,
 		AllSucceed,
+		ForceWin,
 		StateSync,
 
 		// Connection messages that can be received during gameplay
@@ -411,6 +412,11 @@ class MagicInternetBox {
 	 * Inform the host that a task requiring all members of the ship has succeeded
 	 */
 	void succeedAllTask();
+
+	/**
+	 * Inform the clients that the level has been won
+	 */
+	void forceWinLevel();
 
 	/**
 	 * Inform other players that a player has initiated a jump.

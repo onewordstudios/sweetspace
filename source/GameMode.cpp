@@ -334,11 +334,12 @@ void GameMode::update(float timestep) {
 		ship->getDonuts()[i]->update(timestep);
 	}
 
-	if (ship->getChallenge() && trunc(ship->timer) <= globals::ROLL_CHALLENGE_LENGTH) {
+	if (ship->getChallenge() && !ship->getTimeless() &&
+		trunc(ship->timer) <= globals::ROLL_CHALLENGE_LENGTH) {
 		ship->setChallenge(false);
 	}
 
-	if (ship->getChallenge() && trunc(ship->timer) > globals::ROLL_CHALLENGE_LENGTH) {
+	if (ship->getChallenge()) {
 		bool allRoll = true;
 		for (unsigned int i = 0; i < ship->getDonuts().size(); i++) {
 			if (ship->getRollDir() == 0) {
@@ -357,7 +358,7 @@ void GameMode::update(float timestep) {
 			ship->updateChallengeProg();
 		}
 		if (ship->getChallengeProg() > CHALLENGE_PROGRESS_HIGH ||
-			trunc(ship->timer) == trunc(ship->getEndTime())) {
+			trunc(ship->timeCtr) == trunc(ship->getEndTime())) {
 			if (ship->getChallengeProg() < CHALLENGE_PROGRESS_LOW) {
 				gm.setChallengeFail(true);
 				ship->setStatus(ShipModel::FAILURE);
