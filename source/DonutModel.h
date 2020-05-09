@@ -268,30 +268,48 @@ class DonutModel {
 				switch (newState) {
 					case Dizzy:
 						faceState = FaceState::Dizzy;
+						return;
 					case Working:
 						faceState = FaceState::Working;
+						return;
+					case Idle:
+						return;
 				}
 			case Dizzy:
 				switch (newState) {
 					case Idle:
-						if (friction == DEFAULT_DONUT_FRICTION_FACTOR){
+						if (friction == DEFAULT_DONUT_FRICTION_FACTOR) {
 							faceState = FaceState::Idle;
 						}
+						return;
 					case Working:
 						faceState = FaceState::Working;
+						return;
+					case Dizzy:
+						return;
 				}
 			case Working:
 				switch (newState) {
 					case Idle:
 						// TODO: update once self-friction is removed
-						if (friction == DEFAULT_DONUT_FRICTION_FACTOR){
+						if (friction == DEFAULT_DONUT_FRICTION_FACTOR) {
 							faceState = FaceState::Idle;
 						}
+						return;
 					case Dizzy:
 						faceState = FaceState::Dizzy;
+						return;
+					case Working:
+						return;
 				}
 		}
 	}
+
+	/**
+	 * Returns animation state of donut face
+	 * @return
+	 */
+	FaceState getFaceState() { return faceState; }
 #pragma mark -
 #pragma mark Animation
 
