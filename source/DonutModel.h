@@ -37,8 +37,10 @@ class DonutModel {
 		Idle,
 		/** When donut collides with mismatched breach */
 		Dizzy,
-		/** When donut is fixing own breach or collides with door */
-		Working
+		/** When donut is fixing own breach */
+		Working,
+		/** When donut collides with door */
+		Colliding
 	};
 
    protected:

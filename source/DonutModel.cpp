@@ -73,14 +73,20 @@ void DonutModel::updateJump(float timestep) {
 void DonutModel::transitionFaceState(FaceState newState) {
 	switch (faceState) {
 		case Idle:
+		case Working:
+		case Colliding:
 			switch (newState) {
+				case Idle:
+					faceState = FaceState::Idle;
+					return;
 				case Dizzy:
 					faceState = FaceState::Dizzy;
 					return;
 				case Working:
 					faceState = FaceState::Working;
 					return;
-				case Idle:
+				case Colliding:
+					faceState = FaceState::Colliding;
 					return;
 			}
 		case Dizzy:
@@ -93,18 +99,10 @@ void DonutModel::transitionFaceState(FaceState newState) {
 				case Working:
 					faceState = FaceState::Working;
 					return;
-				case Dizzy:
-					return;
-			}
-		case Working:
-			switch (newState) {
-				case Idle:
-					faceState = FaceState::Idle;
+				case Colliding:
+					faceState = FaceState::Colliding;
 					return;
 				case Dizzy:
-					faceState = FaceState::Dizzy;
-					return;
-				case Working:
 					return;
 			}
 	}

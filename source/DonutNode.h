@@ -22,6 +22,8 @@ class DonutNode : public CustomNode {
 	std::shared_ptr<cugl::AnimationNode> faceNodeWorking;
 	/** Counter for controlling speed of facial animation */
 	int animationCounter;
+	/** Last face state of the model */
+	DonutModel::FaceState lastFaceState;
 
 	/** The scale of the donut textures. */
 	static constexpr float DONUT_SCALE = 0.4f;

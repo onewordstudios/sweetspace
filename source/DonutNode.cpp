@@ -60,6 +60,7 @@ bool DonutNode::init(const std::shared_ptr<cugl::Texture> &bodyTexture,
 
 	setScale(DONUT_SCALE);
 	animationCounter = 0;
+	lastFaceState = DonutModel::FaceState::Idle;
 	return true;
 }
 
@@ -97,13 +98,18 @@ void DonutNode::animateFacialExpression() {
 	DonutModel::FaceState faceState = referencedDonutModel->getFaceState();
 	std::shared_ptr<cugl::AnimationNode> visibleFaceNode;
 	int nextFrame;
+	if (lastFaceState == DonutModel::FaceState::Working && faceState != lastFaceState &&
+		faceNodeWorking->getFrame() != 0) {
+		faceState = DonutModel::FaceState::Working;
+	} else {
+		lastFaceState = referencedDonutModel->getFaceState();
+	}
 	switch (faceState) {
 		case DonutModel::FaceState::Idle:
 			visibleFaceNode = faceNodeIdle;
 			animationCounter += 1;
 			if (visibleFaceNode->getFrame() == 0) {
 				// No animation
-				CULog("No animation, counter = %d", animationCounter);
 				nextFrame = 0;
 				if (animationCounter == FACE_ANIMATION_BLINK_INTERVAL) {
 					// Start animation
@@ -112,7 +118,6 @@ void DonutNode::animateFacialExpression() {
 				}
 			} else {
 				// Perform idle face animation
-				CULog("Doing animation, counter = %d", animationCounter);
 				if (animationCounter == FACE_ANIMATION_SPEED) {
 					animationCounter = 0;
 				}
@@ -124,6 +129,7 @@ void DonutNode::animateFacialExpression() {
 			nextFrame = visibleFaceNode->getFrame() + 1;
 			break;
 		case DonutModel::FaceState::Working:
+		case DonutModel::FaceState::Colliding:
 			visibleFaceNode = faceNodeWorking;
 			nextFrame = visibleFaceNode->getFrame() + 1;
 			break;
@@ -133,7 +139,8 @@ void DonutNode::animateFacialExpression() {
 	faceNodeIdle->setVisible(false);
 	faceNodeDizzy->setVisible(false);
 	faceNodeWorking->setVisible(false);
-	visibleFaceNode->setVisible(true);
-
-	visibleFaceNode->setFrame(nextFrame < visibleFaceNode->getSize() ? nextFrame : 0);
+	if (visibleFaceNode != nullptr) {
+		visibleFaceNode->setVisible(true);
+		visibleFaceNode->setFrame(nextFrame < visibleFaceNode->getSize() ? nextFrame : 0);
+	}
 }

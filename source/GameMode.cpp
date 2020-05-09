@@ -282,7 +282,7 @@ void GameMode::update(float timestep) {
 		if (abs(diff) < DOOR_ACTIVE_ANGLE) {
 			ship->getDoors().at(i)->addPlayer(playerID);
 			net->flagDualTask(i, playerID, 1);
-			donutModel->transitionFaceState(DonutModel::FaceState::Working);
+			donutModel->transitionFaceState(DonutModel::FaceState::Colliding);
 		} else {
 			if (ship->getDoors().at(i)->isPlayerOn(playerID)) {
 				ship->getDoors().at(i)->removePlayer(playerID);
