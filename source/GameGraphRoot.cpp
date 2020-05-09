@@ -249,8 +249,8 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	for (int i = 0; i < ship->getUnopenable().size(); i++) {
 		std::shared_ptr<Unopenable> unopModel = ship->getUnopenable().at((unsigned long)i);
 		std::shared_ptr<Texture> image = assets->get<Texture>("unop");
-		std::shared_ptr<UnopenableNode> unopNode = UnopenableNode::alloc(
-			unopModel, playerModel, ship->getSize(), image, 1, DOOR_FRAMES, DOOR_FRAMES);
+		std::shared_ptr<UnopenableNode> unopNode =
+			UnopenableNode::alloc(unopModel, playerModel, ship->getSize(), image);
 		unopsNode->addChildWithTag(unopNode, i + 1);
 	}
 
@@ -355,6 +355,8 @@ void GameGraphRoot::dispose() {
 		shipSegsNode = nullptr;
 		doorsNode->removeAllChildren();
 		doorsNode = nullptr;
+		unopsNode->removeAllChildren();
+		unopsNode = nullptr;
 		externalDonutsNode->removeAllChildren();
 		externalDonutsNode = nullptr;
 

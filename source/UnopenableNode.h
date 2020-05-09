@@ -54,8 +54,7 @@ class UnopenableNode : public CustomNode {
 	 * @param cols      The number of columns in the filmstrip
 	 */
 	virtual bool init(std::shared_ptr<Unopenable> unop, std::shared_ptr<DonutModel> player,
-					  float shipSize, const std::shared_ptr<cugl::Texture> &texture, int rows,
-					  int cols, int size);
+					  float shipSize, const std::shared_ptr<cugl::Texture> &texture);
 
 	/**
 	 * Returns a newly allocated filmstrip node from the given texture.
@@ -64,17 +63,14 @@ class UnopenableNode : public CustomNode {
 	 * @param player	Pointer to the player's donut model
 	 * @param shipSize	Size of the ship (in degrees)
 	 * @param texture   The texture image to use
-	 * @param rows      The number of rows in the filmstrip
-	 * @param cols      The number of columns in the filmstrip
 	 *
 	 * @return a newly allocated Unopenable node.
 	 */
 	static std::shared_ptr<UnopenableNode> alloc(std::shared_ptr<Unopenable> unop,
 												 std::shared_ptr<DonutModel> player, float shipSize,
-												 const std::shared_ptr<cugl::Texture> &texture,
-												 int rows, int cols, int size) {
+												 const std::shared_ptr<cugl::Texture> &texture) {
 		std::shared_ptr<UnopenableNode> node = std::make_shared<UnopenableNode>();
-		return node->init(unop, player, shipSize, texture, rows, cols, size) ? node : nullptr;
+		return node->init(unop, player, shipSize, texture) ? node : nullptr;
 	}
 
 #pragma mark -
