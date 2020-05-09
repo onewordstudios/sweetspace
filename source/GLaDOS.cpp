@@ -52,6 +52,12 @@ bool GLaDOS::init(std::shared_ptr<ShipModel> ship, std::shared_ptr<LevelModel> l
 	maxButtons = ship->getButtons().size();
 	blocks = level->getBlocks();
 	events = level->getEvents();
+	std::queue<int> empty1;
+	std::queue<int> empty2;
+	std::queue<int> empty3;
+	std::swap(breachFree, empty1);
+	std::swap(doorFree, empty2);
+	std::swap(buttonFree, empty3);
 
 	for (int i = 0; i < maxEvents; i++) {
 		breachFree.push(i);
@@ -84,17 +90,24 @@ bool GLaDOS::init(std::shared_ptr<ShipModel> ship, int levelNum) {
 	this->levelNum = levelNum;
 	CULog("Starting level %d", levelNum);
 	this->playerID = mib->getPlayerID();
-	maxEvents = tutorial::MAX_BREACH[levelNum] * mib->getNumPlayers();
-	maxDoors = tutorial::MAX_DOOR[levelNum] * mib->getNumPlayers();
-	maxButtons = tutorial::MAX_BUTTON[levelNum] * mib->getNumPlayers();
+	maxEvents = tutorial::MAX_BREACH[levelNum] * mib->getNumPlayers() / globals::MIN_PLAYERS;
+	maxDoors = tutorial::MAX_DOOR[levelNum] * mib->getNumPlayers() / globals::MIN_PLAYERS;
+	maxButtons = tutorial::MAX_BUTTON[levelNum] * mib->getNumPlayers() / globals::MIN_PLAYERS;
+	CULog("%d, %d, %d", maxEvents, maxDoors, maxButtons);
 	int unop = tutorial::SECTIONED[levelNum] * mib->getNumPlayers();
 	sections = unop;
 	things = tutorial::THINGS[levelNum];
 	float size = tutorial::SIZE_PER[levelNum] * mib->getNumPlayers();
 	ship->init(mib->getNumPlayers(), maxEvents, maxDoors, mib->getPlayerID(), size,
 			   tutorial::HEALTH[levelNum], maxButtons, unop);
-	ship->initTimer(100);
+	ship->initTimer(20);
 	ship->setLevelNum(levelNum);
+	std::queue<int> empty1;
+	std::queue<int> empty2;
+	std::queue<int> empty3;
+	std::swap(breachFree, empty1);
+	std::swap(doorFree, empty2);
+	std::swap(buttonFree, empty3);
 	for (int i = 0; i < maxEvents; i++) {
 		breachFree.push(i);
 	}
@@ -108,28 +121,35 @@ bool GLaDOS::init(std::shared_ptr<ShipModel> ship, int levelNum) {
 	// Set random seed based on time
 	srand((unsigned int)time(NULL));
 	active = success;
-	if (unop > 0) {
+	if (unop > 0 || levelNum == tutorial::DOOR_LEVEL) {
 		ship->separateDonuts();
 	}
 	for (int i = 0; i < unop; i++) {
 		float angle = size / ((float)unop * 2) + (size * (float)i) / (float)unop;
 		ship->createUnopenable(angle, i);
 	}
-	if (mib->getPlayerID() != 0) return success;
 	switch (levelNum) {
 		case tutorial::DOOR_LEVEL:
 			for (int i = 0; i < maxDoors; i++) {
 				float angle = size / ((float)maxDoors * 2) + (size * (float)i) / (float)maxDoors;
+				CULog("Placing door %d of %d at %f", i, maxDoors, angle);
 				int j = doorFree.front();
 				doorFree.pop();
 				ship->createDoor(angle, j);
-				mib->createDualTask(angle, -1, -1, j);
 			}
 			break;
 		case tutorial::BUTTON_LEVEL:
 			for (int i = 0; i < unop; i++) {
 				float angle = size / ((float)unop * 2) + (size * (float)i) / (float)unop;
-				placeButtons(angle + tutorial::BUTTON_PADDING, angle - tutorial::BUTTON_PADDING);
+				// Find usable button IDs
+				int k = buttonFree.front();
+				buttonFree.pop();
+				int j = buttonFree.front();
+				buttonFree.pop();
+
+				// Dispatch challenge creation
+				ship->createButton(angle + tutorial::BUTTON_PADDING, k,
+								   angle - tutorial::BUTTON_PADDING, j);
 			}
 			break;
 	}
@@ -215,7 +235,7 @@ void GLaDOS::placeButtons(float angle1, float angle2) {
 void GLaDOS::update(float dt) {
 	// Removing breaches that have 0 health left
 	for (int i = 0; i < maxEvents; i++) {
-		if (ship->getBreaches().at(i) == nullptr) {
+		if (ship->getBreaches().at(i) == nullptr || !ship->getBreaches().at(i)->getIsActive()) {
 			continue;
 		}
 		// check if health is zero or the assigned player is inactive
@@ -258,7 +278,9 @@ void GLaDOS::update(float dt) {
 		return;
 	}
 
-	if (levelNum < globals::NUM_TUTORIAL_LEVELS) {
+	if (levelNum < globals::NUM_TUTORIAL_LEVELS &&
+		std::find(std::begin(tutorial::REAL_LEVELS), std::end(tutorial::REAL_LEVELS),
+				  mib->getLevelNum()) == std::end(tutorial::REAL_LEVELS)) {
 		tutorialLevels(dt);
 		return;
 	}
@@ -396,7 +418,6 @@ void GLaDOS::tutorialLevels(float dt) {
 				// TODO: fix breach overlap
 				float actualWidth = ship->getSize() / (float)sections;
 				float width = actualWidth - tutorial::FAKE_DOOR_PADDING * 2;
-				CULog("actual: %f. fake: %f", actualWidth, width);
 				for (int i = 0; i < ship->getDonuts().size(); i++) {
 					float suggestedAngle =
 						ship->getDonuts().at(i)->getAngle() - tutorial::BREACH_DIST;
