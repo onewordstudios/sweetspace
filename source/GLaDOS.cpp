@@ -101,7 +101,7 @@ void GLaDOS::placeObject(BuildingBlockModel::Object obj, float zeroAngle, vector
 
 			// Roll for pair's angle
 			float origAngle = (float)obj.angle + zeroAngle;
-			float pairAngle;
+			float pairAngle = 0;
 			do {
 				pairAngle = (float)(rand() % (int)(ship->getSize()));
 			} while (abs(pairAngle - ship->getButtons().at(i)->getAngle()) < globals::BUTTON_DIST);
@@ -219,7 +219,7 @@ void GLaDOS::update(float dt) {
 			int id = objects.at(j).player;
 			if (id != -1) ids.push_back(id);
 		}
-		float angle;
+		float angle = 0;
 		int padding = 0;
 		switch (block->getType()) {
 			case BuildingBlockModel::MinDist: {

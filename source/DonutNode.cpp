@@ -46,7 +46,7 @@ void DonutNode::animateJumping() {
 		setScale(DONUT_SCALE, DONUT_SCALE);
 		return;
 	}
-	float xScale;
+	float xScale = 0;
 	if (referencedDonutModel->getJumpTime() <= halfJumpTime * SCALING_BEGIN) {
 		// First animation stage
 		xScale = Tween::linear(DONUT_SCALE, DONUT_SCALE * JUMP_SCALE,
