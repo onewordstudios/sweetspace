@@ -42,6 +42,9 @@
 	    "door": {
             "file":   "textures/doors/door.png"
         },
+	    "unop": {
+            "file":   "textures/unop.png"
+        },
         "space": {
             "file":  "textures/misc_use/sprinkle_sky256.png",
             "wrapS": "repeat",
@@ -367,6 +370,13 @@
                                     }
                                 },
                                 "doors": {
+                                    "type": "Node",
+                                    "data": {
+                                        "anchor":   [0,0],
+                                        "position": [0,0]
+                                    }
+                                },
+                                "unops": {
                                     "type": "Node",
                                     "data": {
                                         "anchor":   [0,0],

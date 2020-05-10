@@ -1,1 +1,0 @@
-{"maxBreaches":0,"maxDoors":0,"baseShipSize":450,"perPlayerSize":45,"time":50,"initHealth":10,"blocks":[{"name":"button","playerDist":{"spawnRule":2},"objects":[{"type":2,"player":-1,"angle":30}]}],"events":[{"blockName":"button","timeStart":3,"timeStop":3,"probability":1},{"blockName":"button","timeStart":23,"timeStop":23,"probability":1}]}

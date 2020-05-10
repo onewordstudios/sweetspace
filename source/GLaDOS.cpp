@@ -46,12 +46,19 @@ bool GLaDOS::init(std::shared_ptr<ShipModel> ship, std::shared_ptr<LevelModel> l
 	bool success = true;
 	this->ship = ship;
 	this->mib = MagicInternetBox::getInstance();
+	levelNum = mib->getLevelNum();
 	this->playerID = mib->getPlayerID();
 	maxEvents = ship->getBreaches().size();
 	maxDoors = ship->getDoors().size();
 	maxButtons = ship->getButtons().size();
 	blocks = level->getBlocks();
 	events = level->getEvents();
+	std::queue<int> empty1;
+	std::queue<int> empty2;
+	std::queue<int> empty3;
+	std::swap(breachFree, empty1);
+	std::swap(doorFree, empty2);
+	std::swap(buttonFree, empty3);
 
 	for (int i = 0; i < maxEvents; i++) {
 		breachFree.push(i);
@@ -70,6 +77,86 @@ bool GLaDOS::init(std::shared_ptr<ShipModel> ship, std::shared_ptr<LevelModel> l
 }
 
 /**
+ * Initializes the GM for the tutorial levels
+ *
+ * This method works like a proper constructor, initializing the GM
+ * controller and allocating memory.
+ *
+ * @return true if the controller was initialized successfully
+ */
+bool GLaDOS::init(std::shared_ptr<ShipModel> ship, int levelNum) {
+	bool success = true;
+	this->ship = ship;
+	this->mib = MagicInternetBox::getInstance();
+	this->levelNum = levelNum;
+	CULog("Starting level %d", levelNum);
+	this->playerID = mib->getPlayerID();
+	maxEvents = tutorial::MAX_BREACH[levelNum] * mib->getNumPlayers() / globals::MIN_PLAYERS;
+	maxDoors = tutorial::MAX_DOOR[levelNum] * mib->getNumPlayers() / globals::MIN_PLAYERS;
+	maxButtons = tutorial::MAX_BUTTON[levelNum] * mib->getNumPlayers() / globals::MIN_PLAYERS;
+	int unop = tutorial::SECTIONED[levelNum] * mib->getNumPlayers();
+	sections = unop;
+	customEventCtr = tutorial::CUSTOM_EVENTS[levelNum];
+	float size = tutorial::SIZE_PER[levelNum] * mib->getNumPlayers();
+	ship->init(mib->getNumPlayers(), maxEvents, maxDoors, mib->getPlayerID(), size,
+			   tutorial::HEALTH[levelNum], maxButtons, unop);
+	ship->setTimeless(true);
+	ship->initTimer(1);
+	ship->setLevelNum(levelNum);
+	std::queue<int> empty1;
+	std::queue<int> empty2;
+	std::queue<int> empty3;
+	std::swap(breachFree, empty1);
+	std::swap(doorFree, empty2);
+	std::swap(buttonFree, empty3);
+	for (int i = 0; i < maxEvents; i++) {
+		breachFree.push(i);
+	}
+	for (int i = 0; i < maxDoors; i++) {
+		doorFree.push(i);
+	}
+	for (int i = 0; i < maxButtons; i++) {
+		buttonFree.push(i);
+	}
+	fail = false;
+	// Set random seed based on time
+	srand((unsigned int)time(NULL));
+	active = success;
+	if (unop > 0 || levelNum == tutorial::DOOR_LEVEL) {
+		ship->separateDonuts();
+	}
+	for (int i = 0; i < unop; i++) {
+		float angle = size / ((float)unop * 2) + (size * (float)i) / (float)unop;
+		ship->createUnopenable(angle, i);
+	}
+	switch (levelNum) {
+		case tutorial::DOOR_LEVEL:
+			for (int i = 0; i < maxDoors; i++) {
+				float angle = size / ((float)maxDoors * 2) + (size * (float)i) / (float)maxDoors;
+				int j = doorFree.front();
+				doorFree.pop();
+				ship->createDoor(angle, j);
+			}
+			break;
+		case tutorial::BUTTON_LEVEL:
+			for (int i = 0; i < unop; i++) {
+				float angle = size / ((float)unop * 2) + (size * (float)i) / (float)unop;
+				// Find usable button IDs
+				int k = buttonFree.front();
+				buttonFree.pop();
+				int j = buttonFree.front();
+				buttonFree.pop();
+
+				// Dispatch challenge creation
+				ship->createButton(angle + tutorial::BUTTON_PADDING, k,
+								   angle - tutorial::BUTTON_PADDING, j);
+			}
+			break;
+	}
+	return success;
+}
+
+/**
  * Places an object in the game. Requires that enough resources are present.
  *
  * @param obj the object to place
@@ -77,8 +164,19 @@ bool GLaDOS::init(std::shared_ptr<ShipModel> ship, std::shared_ptr<LevelModel> l
  * @param ids a vector of relative ids, scrambled by the caller
  */
 void GLaDOS::placeObject(BuildingBlockModel::Object obj, float zeroAngle, vector<int> ids) {
-	int i = 0;
 	int p = obj.player == -1 ? (int)(rand() % ship->getDonuts().size()) : ids.at(obj.player);
+	placeObject(obj, zeroAngle, p);
+}
+
+/**
+ * Places an object in the game. Requires that enough resources are present.
+ *
+ * @param obj the object to place
+ * @param zeroAngle the angle corresponding to the relative angle zero
+ * @param p the id to use for the player
+ */
+void GLaDOS::placeObject(BuildingBlockModel::Object obj, float zeroAngle, int p) {
+	int i = 0;
 	switch (obj.type) {
 		case BuildingBlockModel::Breach:
 			i = breachFree.front();
@@ -93,12 +191,6 @@ void GLaDOS::placeObject(BuildingBlockModel::Object obj, float zeroAngle, vector
 			mib->createDualTask((float)obj.angle + zeroAngle, -1, -1, i);
 			break;
 		case BuildingBlockModel::Button: {
-			// Find usable button IDs
-			i = buttonFree.front();
-			buttonFree.pop();
-			int j = buttonFree.front();
-			buttonFree.pop();
-
 			// Roll for pair's angle
 			float origAngle = (float)obj.angle + zeroAngle;
 			float pairAngle = 0;
@@ -106,9 +198,7 @@ void GLaDOS::placeObject(BuildingBlockModel::Object obj, float zeroAngle, vector
 				pairAngle = (float)(rand() % (int)(ship->getSize()));
 			} while (abs(pairAngle - ship->getButtons().at(i)->getAngle()) < globals::BUTTON_DIST);
 
-			// Dispatch challenge creation
-			ship->createButton(origAngle, i, pairAngle, j);
-			mib->createButtonTask(origAngle, i, pairAngle, j);
+			placeButtons(origAngle, pairAngle);
 			break;
 		}
 		case BuildingBlockModel::Roll:
@@ -118,11 +208,23 @@ void GLaDOS::placeObject(BuildingBlockModel::Object obj, float zeroAngle, vector
 				mib->createAllTask(p, ship->getRollDir());
 			} else {
 				ship->setChallengeProg(0);
-				ship->setEndTime((ship->timer) - globals::ROLL_CHALLENGE_LENGTH);
+				ship->setEndTime((ship->timeCtr) + globals::ROLL_CHALLENGE_LENGTH);
 				ship->setChallenge(true);
 			}
 			break;
 	}
+}
+
+void GLaDOS::placeButtons(float angle1, float angle2) {
+	// Find usable button IDs
+	int i = buttonFree.front();
+	buttonFree.pop();
+	int j = buttonFree.front();
+	buttonFree.pop();
+
+	// Dispatch challenge creation
+	ship->createButton(angle1, i, angle2, j);
+	mib->createButtonTask(angle1, i, angle2, j);
 }
 
 /**
@@ -133,7 +235,7 @@ void GLaDOS::placeObject(BuildingBlockModel::Object obj, float zeroAngle, vector
 void GLaDOS::update(float dt) {
 	// Removing breaches that have 0 health left
 	for (int i = 0; i < maxEvents; i++) {
-		if (ship->getBreaches().at(i) == nullptr) {
+		if (ship->getBreaches().at(i) == nullptr || !ship->getBreaches().at(i)->getIsActive()) {
 			continue;
 		}
 		// check if health is zero or the assigned player is inactive
@@ -171,8 +273,20 @@ void GLaDOS::update(float dt) {
 		}
 	}
 
+	if (fail) {
+		mib->failAllTask();
+		fail = false;
+	}
+
 	// Check if this is the host for generating breaches and doors
 	if (playerID != 0) {
+		return;
+	}
+
+	if (levelNum < globals::NUM_TUTORIAL_LEVELS &&
+		std::find(std::begin(tutorial::REAL_LEVELS), std::end(tutorial::REAL_LEVELS),
+				  mib->getLevelNum()) == std::end(tutorial::REAL_LEVELS)) {
+		tutorialLevels(dt);
 		return;
 	}
 
@@ -276,9 +390,119 @@ void GLaDOS::update(float dt) {
 		readyQueue.erase(readyQueue.begin() + i);
 		break;
 	}
+}
 
-	if (fail) {
-		mib->failAllTask();
-		fail = false;
+void GLaDOS::tutorialLevels(float dt) {
+	switch (levelNum) {
+		case tutorial::BREACH_LEVEL:
+			if (ship->timePassed() >= tutorial::B_L_PART1 && customEventCtr == 2) {
+				float actualWidth = ship->getSize() / (float)sections;
+				float width = actualWidth - tutorial::FAKE_DOOR_PADDING * 2;
+				for (int i = 0; i < ship->getDonuts().size(); i++) {
+					float mid = actualWidth * (float)i;
+					float suggestedAngle1 = mid + tutorial::B_L_LOC1;
+					float suggestedAngle2 = mid + tutorial::B_L_LOC2;
+					if (suggestedAngle1 < 0) suggestedAngle1 += ship->getSize();
+					if (suggestedAngle2 < 0) suggestedAngle2 += ship->getSize();
+					float diff1 = ship->getSize() / 2 -
+								  abs(abs(suggestedAngle1 - ship->getDonuts().at(i)->getAngle()) -
+									  ship->getSize() / 2);
+					float diff2 = ship->getSize() / 2 -
+								  abs(abs(suggestedAngle2 - ship->getDonuts().at(i)->getAngle()) -
+									  ship->getSize() / 2);
+					if (diff1 > diff2) {
+						placeObject({BuildingBlockModel::Breach, 0, -1}, suggestedAngle1,
+									(i + 1) % ship->getDonuts().size());
+					} else {
+						placeObject({BuildingBlockModel::Breach, 0, -1}, suggestedAngle2,
+									(i + 1) % ship->getDonuts().size());
+					}
+				}
+				customEventCtr--;
+			} else if (ship->timePassed() >= tutorial::B_L_PART2 && customEventCtr == 1) {
+				float actualWidth = ship->getSize() / (float)sections;
+				float width = actualWidth - tutorial::FAKE_DOOR_PADDING * 2;
+				for (int i = 0; i < ship->getDonuts().size(); i++) {
+					float mid = actualWidth * (float)i;
+					float suggestedAngle1 = mid + tutorial::B_L_LOC3;
+					float suggestedAngle2 = mid + tutorial::B_L_LOC4;
+					if (suggestedAngle1 >= ship->getSize()) suggestedAngle1 -= ship->getSize();
+					if (suggestedAngle2 >= ship->getSize()) suggestedAngle2 -= ship->getSize();
+					float diff1 = ship->getSize() / 2 -
+								  abs(abs(suggestedAngle1 - ship->getDonuts().at(i)->getAngle()) -
+									  ship->getSize() / 2);
+					float diff2 = ship->getSize() / 2 -
+								  abs(abs(suggestedAngle2 - ship->getDonuts().at(i)->getAngle()) -
+									  ship->getSize() / 2);
+					if (diff1 > diff2) {
+						placeObject({BuildingBlockModel::Breach, 0, -1}, suggestedAngle1, i);
+					} else {
+						placeObject({BuildingBlockModel::Breach, 0, -1}, suggestedAngle2, i);
+					}
+				}
+				customEventCtr--;
+			} else if (customEventCtr <= 0) {
+				// Check if all breaches that can be resolved are resolved.
+				if (ship->getBreaches().size() - breachFree.size() == mib->getNumPlayers()) {
+					ship->setTimeless(false);
+					mib->forceWinLevel();
+					ship->initTimer(0);
+				}
+			}
+			break;
+		case tutorial::DOOR_LEVEL:
+			if (ship->getDoors().size() - doorFree.size() == 0) {
+				ship->setTimeless(false);
+				mib->forceWinLevel();
+				ship->initTimer(0);
+				break;
+			}
+			break;
+		case tutorial::BUTTON_LEVEL:
+			if (ship->getButtons().size() - buttonFree.size() == 0) {
+				ship->setTimeless(false);
+				mib->forceWinLevel();
+				ship->initTimer(0);
+				break;
+			}
+			break;
+		case tutorial::STABILIZER_LEVEL:
+			if (customEventCtr >= mib->getNumPlayers()) customEventCtr = mib->getNumPlayers() - 1;
+
+			switch (ship->getChallengeStatus()) {
+				case ShipModel::ACTIVE:
+					break;
+				case ShipModel::INACTIVE:
+				case ShipModel::FAILURE: {
+					int dir = (int)(rand() % 2);
+					if (customEventCtr != playerID &&
+						ship->getDonuts().at(customEventCtr)->getIsActive()) {
+						mib->createAllTask(customEventCtr, dir);
+					} else {
+						ship->createAllTask(dir);
+					}
+					ship->setStatus(ShipModel::ACTIVE);
+					break;
+				}
+				case ShipModel::SUCCESS: {
+					customEventCtr--;
+					if (customEventCtr < 0) {
+						ship->setTimeless(false);
+						mib->forceWinLevel();
+						ship->initTimer(0);
+						break;
+					}
+					int dir = (int)(rand() % 2);
+					if (customEventCtr != playerID &&
+						ship->getDonuts().at(customEventCtr)->getIsActive()) {
+						mib->createAllTask(customEventCtr, dir);
+					} else {
+						ship->createAllTask(dir);
+					}
+					ship->setStatus(ShipModel::ACTIVE);
+					break;
+				}
+			}
+			break;
 	}
 }
