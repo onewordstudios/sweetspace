@@ -788,7 +788,11 @@ void GameGraphRoot::setNeedlePercentage(float percentage) {
 std::string GameGraphRoot::positionText() {
 	stringstream ss;
 	if (trunc(ship->timer) > 59) {
-		ss << (int)trunc(ship->timer) / 60 << " : " << (int)trunc(ship->timer) % 60;
+		if ((int)trunc(ship->timer) % 60 < 10) {
+			ss << "0" << (int)trunc(ship->timer) / 60 << " : 0" << (int)trunc(ship->timer) % 60;
+		} else {
+			ss << "0" << (int)trunc(ship->timer) / 60 << " : " << (int)trunc(ship->timer) % 60;
+		}
 	} else {
 		if (trunc(ship->timer) < 10) {
 			ss << "00 : 0" << trunc(ship->timer);
