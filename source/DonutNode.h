@@ -1,4 +1,4 @@
-#ifndef SWEETSPACE_DONUTNODE_H
+﻿#ifndef SWEETSPACE_DONUTNODE_H
 #define SWEETSPACE_DONUTNODE_H
 
 #include "CustomNode.h"
@@ -24,6 +24,7 @@ class DonutNode : public CustomNode {
 	/** Reference to node of donut body */
 	std::shared_ptr<cugl::PolygonNode> bodyNode;
 
+   public:
 	/** The scale of the donut textures. */
 	static constexpr float DONUT_SCALE = 0.4f;
 

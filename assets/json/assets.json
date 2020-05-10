@@ -117,6 +117,9 @@
 		"game_title": {
 			"file": "textures/main_menu/sweetspace.png"
 		},
+        "game_title_halo": {
+            "file": "textures/main_menu/sweetspace_halo.png"
+        },
 		"main_menu_bg0": {
 			"file": "textures/main_menu/splash/0-logo.png"
 		},
@@ -127,11 +130,14 @@
 			"file": "textures/main_menu/splash/2-sprinkles.png"
 		},
 		"main_menu_bg3": {
-			"file": "textures/main_menu/splash/3-landscape.png"
+			"file": "textures/main_menu/splash/3-glow.png"
 		},
 		"main_menu_bg4": {
 			"file": "textures/main_menu/splash/4-ship.png"
 		},
+        "main_menu_bg5": {
+            "file": "textures/main_menu/splash/5-landscape.png"
+        },
 		"purple_panel" : {
 			"file": "textures/main_menu/purple_panel.png"
 		},
@@ -415,7 +421,8 @@
                                 "texture":  "donut_yellow",
                                 "position": [0,-398],
                                 "anchor":   [0.5,0.5],
-                                "scale":    0.36
+                                "scale":    0.36,
+                                "visible": false
                             }
                         },
                         "challengePanelParent": {
@@ -875,6 +882,21 @@
 										"y_anchor" : "middle"
 									}
 				            	},
+		                        "donut": {
+		                            "type": "Image",
+		                            "data": {
+		                                "texture":  "donut_yellow",
+		                                "anchor":   [0.5,0.5],
+		                                "scale":    0.36,
+		                                "visible" : false
+		                            },
+									"layout" : {
+										"x_anchor" : "center",
+										"y_anchor" : "middle",
+				                        "y_offset" : 50,
+				                        "absolute" : true
+									}
+		                        },
 				            	"text" : {
 				            		"type": "Label",
 				                    "data": {
@@ -952,7 +974,94 @@
 				                    }
 				                }
 				            }
-				        }
+				        },
+						"timeout": {
+							"type"      : "Image",
+				            "format"    : {
+				                "type" : "Anchored"
+				            },
+				            "data": {
+								"texture":  "overlay_dim",
+								"anchor":   [0.5,0.5],
+								"scale":    1,
+				            	"visible": false
+				            },
+				            "layout" : {
+								"x_anchor" : "center",
+								"y_anchor" : "middle"
+							},
+							"children":  {
+				            	"bg" : {
+				            		"type": "Image",
+									"format"    : {
+										"type" : "Anchored"
+									},
+				                    "data": {
+				                        "texture":  "reconnect_bg",
+				                        "anchor":   [0.5,0.5],
+				                        "scale":    0.6
+				                    },
+									"layout" : {
+										"x_anchor" : "center",
+										"y_anchor" : "middle"
+									}
+				            	},
+								"textup" : {
+				            		"type": "Label",
+				                    "data": {
+				                        "font"       : "mont_black_italic_big",
+				                        "text"       : "Connection Timed Out",
+				                        "foreground" : [236,167,247,255],
+                                		"anchor" : [0.5,0.5],
+				                        "scale" 	 : 0.4,
+				                        "valign"     : "middle",
+				                        "halign"     : "center"
+				                    },
+				                    "layout" : {
+				                        "x_anchor" : "center",
+										"y_anchor" : "middle",
+				                        "y_offset" : 40,
+				                        "absolute" : true
+				                    }
+				            	},
+								"textdown" : {
+				            		"type": "Label",
+				                    "data": {
+				                        "font"       : "mont_black_italic_big",
+				                        "text"       : "Back to Lobby",
+				                        "foreground" : [236,167,247,255],
+                                		"anchor" : [0.5,0.5],
+				                        "scale" 	 : 0.4,
+				                        "valign"     : "middle",
+				                        "halign"     : "center"
+				                    },
+				                    "layout" : {
+				                        "x_anchor" : "center",
+										"y_anchor" : "middle",
+				                        "y_offset" : -25,
+				                        "absolute" : true
+				                    }
+				            	},
+								"countdown" : {
+				            		"type": "Label",
+				                    "data": {
+				                        "font"       : "mont_black_italic_big",
+				                        "text"       : "4",
+				                        "foreground" : [236,167,247,255],
+                                		"anchor" : [0.5,0.5],
+				                        "scale" 	 : 0.9,
+				                        "valign"     : "middle",
+				                        "halign"     : "center"
+				                    },
+				                    "layout" : {
+				                        "x_anchor" : "center",
+										"y_anchor" : "middle",
+				                        "y_offset" : -125,
+				                        "absolute" : true
+				                    }
+				            	}
+				            }
+						}
                     }
                 },
 				"pause": {
@@ -1251,7 +1360,7 @@
 					},
 					"data"   : {
 						"texture"  : "main_menu_bg3",
-						"anchor"   : [0.5,0.5],
+						"anchor"   : [0.5,0.45],
 						"scale"    : 0.4,
 						"visible" :false
 					},
@@ -1273,10 +1382,26 @@
 					},
 					"layout" : {
 						"x_anchor" : "center",
-						"y_anchor" : "middle",
-						"y_offset" : -1.5
+						"y_anchor" : "middle"
 					}
 				},
+                "mainmenubg5" : {
+                    "type" : "Image",
+                    "format"    : {
+                        "type" : "Anchored"
+                    },
+                    "data"   : {
+                        "texture"  : "main_menu_bg5",
+                        "anchor"   : [0.5,0.5],
+                        "scale"    : 0.4,
+                        "visible" :false
+                    },
+                    "layout" : {
+                        "x_anchor" : "center",
+                        "y_anchor" : "middle",
+                        "y_offset" : -1.5
+                    }
+                },
 				"studiologo" : {
 					"type" : "Image",
 					"format"    : {
@@ -1345,13 +1470,14 @@
 								"type" : "Anchored"
 							},
 							"data"   : {
-								"texture"  : "game_title",
+								"texture"  : "game_title_halo",
 								"anchor"   : [0.5,0.5],
-								"scale"    : 0.5
+								"scale"    : 0.4
 							},
 							"layout" : {
 								"x_anchor" : "center",
-								"y_anchor" : "middle"
+								"y_anchor" : "middle",
+                                "y_offset" : 0.15
 							}
 						},
 						"btnwrap" : {
@@ -1364,7 +1490,8 @@
 							},
 							"layout" : {
 								"x_anchor" : "center",
-								"y_anchor" : "bottom"
+								"y_anchor" : "bottom",
+                                "y_offset" : 0.05
 							},
 							"children" : {
 								"hostbtn" : {
@@ -1394,7 +1521,8 @@
 									},
 									"layout" : {
 										"x_anchor" : "center",
-										"y_anchor" : "middle"
+										"y_anchor" : "middle",
+                                        "x_offset" : -0.02
 									}
 								},
 								"clientbtn" : {
@@ -1424,7 +1552,8 @@
 									},
 									"layout" : {
 										"x_anchor" : "center",
-										"y_anchor" : "middle"
+										"y_anchor" : "middle",
+                                        "x_offset" : 0.02
 									}
 								}
 							}

@@ -41,6 +41,15 @@ constexpr int MAX_ELLIPSES_FRAMES = 180;
 /** Presumable number of frames per second */
 constexpr int FRAMES_PER_SECOND = 60;
 
+/** Ratio of spin on reconnect donut */
+constexpr float RECONNECT_SPIN_RATIO = 0.26f;
+
+/** Milliseconds before connection timeout */
+constexpr int CONNECTION_TIMEOUT = 15000;
+
+/** Milliseconds in a second */
+constexpr int MILLISECONDS_IN_SECONDS = 1000;
+
 /** Animation cycle length of ship red flash */
 constexpr int MAX_HEALTH_WARNING_FRAMES = 150;
 
@@ -200,7 +209,7 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 			donutNode = PlayerDonutNode::alloc(playerModel, screenHeight, image,
 											   tempDonutNode->getPosition());
 			allSpace->addChild(donutNode);
-			tempDonutNode->setVisible(false);
+			tempDonutNode = nullptr;
 		} else {
 			std::shared_ptr<ExternalDonutNode> newDonutNode =
 				ExternalDonutNode::alloc(donutModel, playerModel, ship->getSize(), image);
@@ -294,6 +303,23 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 		std::dynamic_pointer_cast<Label>(assets->get<Node>("game_overlay_reconnect_ellipsis2"));
 	reconnectE3 =
 		std::dynamic_pointer_cast<Label>(assets->get<Node>("game_overlay_reconnect_ellipsis3"));
+	std::shared_ptr<PolygonNode> tempReconnectDonut =
+		dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_overlay_reconnect_donut"));
+	reconnectDonut = cugl::PolygonNode::allocWithTexture(
+		assets->get<Texture>("donut_" + PLAYER_COLOR.at(playerID)));
+	reconnectOverlay->addChild(reconnectDonut);
+	reconnectDonut->setAnchor(Vec2::ANCHOR_CENTER);
+	reconnectDonut->setPosition(tempReconnectDonut->getPosition());
+	reconnectDonut->setScale(DonutNode::DONUT_SCALE);
+	reconnectDonut->setVisible(true);
+	tempReconnectDonut = nullptr;
+
+	// Initialize Timeout Display
+	timeoutDisplay = assets->get<Node>("game_overlay_timeout");
+	timeoutCounter =
+		std::dynamic_pointer_cast<Label>(assets->get<Node>("game_overlay_timeout_countdown"));
+	timeoutCurrent.mark();
+	timeoutStart.mark();
 
 	// Initialize Pause Screen Componenets
 	pauseBtn = std::dynamic_pointer_cast<Button>(assets->get<Node>("game_pauseBtn"));
@@ -315,6 +341,8 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	winScreen = assets->get<Node>("game_overlay_win");
 	nextBtn = std::dynamic_pointer_cast<Button>(assets->get<Node>("game_overlay_win_nextBtn"));
 
+	reconnectOverlay->setVisible(false);
+	timeoutDisplay->setVisible(false);
 	lossScreen->setVisible(false);
 	winScreen->setVisible(false);
 	nearSpace->setVisible(true);
@@ -368,6 +396,10 @@ void GameGraphRoot::dispose() {
 		reconnectOverlay = nullptr;
 		reconnectE2 = nullptr;
 		reconnectE3 = nullptr;
+		reconnectDonut = nullptr;
+
+		timeoutDisplay = nullptr;
+		timeoutCounter = nullptr;
 
 		pauseBtn = nullptr;
 		pauseScreen = nullptr;
@@ -429,6 +461,10 @@ void GameGraphRoot::update(float timestep) {
 			lossScreen->setVisible(false);
 			winScreen->setVisible(false);
 			reconnectOverlay->setVisible(false);
+			timeoutDisplay->setVisible(false);
+			// Reset Timeout Counters to negative value
+			timeoutCurrent.mark();
+			timeoutStart.mark();
 			break;
 		case Loss:
 			// Show loss screen
@@ -443,18 +479,45 @@ void GameGraphRoot::update(float timestep) {
 			moveTutorial->setVisible(false);
 			break;
 		case Reconnecting:
-			// Still Reconnecting
-			reconnectOverlay->setVisible(true);
-			currentEllipsesFrame++;
-			if (currentEllipsesFrame > MAX_ELLIPSES_FRAMES) {
-				currentEllipsesFrame = 0;
-			} else if (currentEllipsesFrame % MAX_ELLIPSES_FRAMES < FRAMES_PER_SECOND) {
-				reconnectE2->setVisible(false);
-				reconnectE3->setVisible(false);
-			} else if (currentEllipsesFrame % MAX_ELLIPSES_FRAMES < 2 * FRAMES_PER_SECOND) {
-				reconnectE2->setVisible(true);
-			} else if (currentEllipsesFrame % MAX_ELLIPSES_FRAMES < 3 * FRAMES_PER_SECOND) {
-				reconnectE3->setVisible(true);
+			// Still Reconnecting, Animation Frames
+			// Check for initial reconnection attempt
+			if (timeoutCurrent.ellapsedNanos(timeoutStart) < 0) {
+				timeoutStart.mark();
+			}
+			if (timeoutCurrent.ellapsedMillis(timeoutStart) <
+				CONNECTION_TIMEOUT - 3 * MILLISECONDS_IN_SECONDS) {
+				// Regular Reconnect Display
+				timeoutDisplay->setVisible(false);
+				timeoutCurrent.mark();
+				reconnectOverlay->setVisible(true);
+				reconnectDonut->setAngle(
+					(float)(reconnectDonut->getAngle() - globals::PI_180 * RECONNECT_SPIN_RATIO));
+				currentEllipsesFrame++;
+				if (currentEllipsesFrame > MAX_ELLIPSES_FRAMES) {
+					currentEllipsesFrame = 0;
+				} else if (currentEllipsesFrame % MAX_ELLIPSES_FRAMES < FRAMES_PER_SECOND) {
+					reconnectE2->setVisible(false);
+					reconnectE3->setVisible(false);
+				} else if (currentEllipsesFrame % MAX_ELLIPSES_FRAMES < 2 * FRAMES_PER_SECOND) {
+					reconnectE2->setVisible(true);
+				} else if (currentEllipsesFrame % MAX_ELLIPSES_FRAMES < 3 * FRAMES_PER_SECOND) {
+					reconnectE3->setVisible(true);
+				}
+			} else {
+				// 3 Second Timeout Counter back to lobby
+				timeoutDisplay->setVisible(true);
+				if (timeoutCurrent.ellapsedMillis(timeoutStart) <
+					CONNECTION_TIMEOUT - 2 * MILLISECONDS_IN_SECONDS) {
+					timeoutCounter->setText("3");
+				} else if (timeoutCurrent.ellapsedMillis(timeoutStart) <
+						   CONNECTION_TIMEOUT - MILLISECONDS_IN_SECONDS) {
+					timeoutCounter->setText("2");
+				} else if (timeoutCurrent.ellapsedMillis(timeoutStart) < CONNECTION_TIMEOUT) {
+					timeoutCounter->setText("1");
+				} else {
+					isBackToMainMenu = true;
+				}
+				timeoutCurrent.mark();
 			}
 			break;
 		default:
