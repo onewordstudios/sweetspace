@@ -77,6 +77,12 @@ constexpr float SHIP_HEALTH_YELLOW_CUTOFF = 0.8f;
 /** Percentage of ship health to start showing red */
 constexpr float SHIP_HEALTH_RED_CUTOFF = 0.35f;
 
+/** Time to stop showing health tutorial */
+constexpr int HEALTH_TUTORIAL_CUTOFF = 10;
+
+/** Time to stop showing move tutorial */
+constexpr int MOVE_TUTORIAL_CUTOFF = 5;
+
 #pragma mark -
 #pragma mark Constructors
 
@@ -335,11 +341,13 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	lossScreen = assets->get<Node>("game_overlay_loss");
 	restartBtn =
 		std::dynamic_pointer_cast<Button>(assets->get<Node>("game_overlay_loss_restartBtn"));
-	levelsBtn = std::dynamic_pointer_cast<Button>(assets->get<Node>("game_overlay_loss_levelsBtn"));
+	lostWaitText =
+		std::dynamic_pointer_cast<Label>(assets->get<Node>("game_overlay_loss_waitText"));
 
 	// Initialize Win Screen Componenets
 	winScreen = assets->get<Node>("game_overlay_win");
 	nextBtn = std::dynamic_pointer_cast<Button>(assets->get<Node>("game_overlay_win_nextBtn"));
+	winWaitText = std::dynamic_pointer_cast<Label>(assets->get<Node>("game_overlay_win_waitText"));
 
 	reconnectOverlay->setVisible(false);
 	timeoutDisplay->setVisible(false);
@@ -347,12 +355,15 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	winScreen->setVisible(false);
 	nearSpace->setVisible(true);
 	healthNode->setVisible(true);
+	lostWaitText->setVisible(false);
+	winWaitText->setVisible(false);
+	nextBtn->setVisible(true);
+	restartBtn->setVisible(true);
 
 	lastButtonPressed = None;
 
 	// Register Regular Buttons
 	buttonManager.registerButton(restartBtn);
-	buttonManager.registerButton(levelsBtn);
 	buttonManager.registerButton(nextBtn);
 	buttonManager.registerButton(leaveBtn);
 
@@ -412,13 +423,14 @@ void GameGraphRoot::dispose() {
 
 		lossScreen = nullptr;
 		restartBtn = nullptr;
-		levelsBtn = nullptr;
+		lostWaitText = nullptr;
 
 		buttonsNode->removeAllChildren();
 		buttonsNode = nullptr;
 
 		winScreen = nullptr;
 		nextBtn = nullptr;
+		winWaitText = nullptr;
 
 		_active = false;
 	}
@@ -469,6 +481,10 @@ void GameGraphRoot::update(float timestep) {
 		case Loss:
 			// Show loss screen
 			lossScreen->setVisible(true);
+			if (playerID != 0) {
+				lostWaitText->setVisible(true);
+				restartBtn->setVisible(false);
+			}
 			break;
 		case Win:
 			// Show Win Screen
@@ -477,6 +493,10 @@ void GameGraphRoot::update(float timestep) {
 			healthNode->setVisible(false);
 			rollTutorial->setVisible(false);
 			moveTutorial->setVisible(false);
+			if (playerID != 0) {
+				winWaitText->setVisible(true);
+				nextBtn->setVisible(false);
+			}
 			break;
 		case Reconnecting:
 			// Still Reconnecting, Animation Frames
@@ -537,11 +557,10 @@ void GameGraphRoot::update(float timestep) {
 		std::shared_ptr<Texture> image = assets->get<Texture>("health_yellow");
 		healthNode->setTexture(image);
 	}
-
 	if (ship->getLevelNum() == tutorial::BREACH_LEVEL) {
-		if (trunc(ship->timeCtr) == 10) {
+		if (trunc(ship->timeCtr) == HEALTH_TUTORIAL_CUTOFF) {
 			healthTutorial->setVisible(false);
-		} else if (trunc(ship->timeCtr) == 5) {
+		} else if (trunc(ship->timeCtr) == MOVE_TUTORIAL_CUTOFF) {
 			moveTutorial->setVisible(false);
 		}
 	} else if (ship->getLevelNum() == tutorial::STABILIZER_LEVEL) {
@@ -746,8 +765,6 @@ void GameGraphRoot::processButtons() {
 			// Is this loss?
 			if (buttonManager.tappedButton(restartBtn, tapData)) {
 				lastButtonPressed = Restart;
-			} else if (buttonManager.tappedButton(levelsBtn, tapData)) {
-				isBackToMainMenu = true;
 			}
 		}
 	}
