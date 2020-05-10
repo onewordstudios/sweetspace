@@ -4,7 +4,7 @@ if [ $# == 0 ]
 then
     echo ''
     echo '    To run the linter on a single file, pass in the name of the cpp file as the argument to this script (without the .cpp)'
-    echo '    For example, run:         ./lint.sh GLaDOS'
+    echo '    For example, run:         ./lint.sh ShipModel'
     echo '    Pass the flag "-all" as an argument to run on all source files (will take a while)'
     echo '    The flag "-ci" is used by the CI pipeline; please ignore it'
     echo ''

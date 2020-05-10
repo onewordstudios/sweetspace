@@ -17,6 +17,9 @@ constexpr float SCALING_BEGIN = 0.1f;
 /** Percentage of jump at which distortion stops */
 constexpr float SCALING_END = 1.2f;
 
+/** Percentage conversion */
+constexpr float PERCENTAGE_SCALE = 100;
+
 bool DonutNode::init(const std::shared_ptr<cugl::Texture>& bodyTexture,
 					 std::shared_ptr<DonutModel> donut) {
 	referencedDonutModel = donut;
@@ -47,14 +50,15 @@ void DonutNode::animateJumping() {
 	if (referencedDonutModel->getJumpTime() <= halfJumpTime * SCALING_BEGIN) {
 		// First animation stage
 		xScale = Tween::linear(DONUT_SCALE, DONUT_SCALE * JUMP_SCALE,
-							   (int)((referencedDonutModel->getJumpTime()) * 100),
-							   (int)(halfJumpTime * SCALING_BEGIN * 100));
+							   (int)((referencedDonutModel->getJumpTime()) * PERCENTAGE_SCALE),
+							   (int)(halfJumpTime * SCALING_BEGIN * PERCENTAGE_SCALE));
 	} else if (isInScalingWindow) {
 		// Second animation stage
 		xScale = Tween::linear(
 			DONUT_SCALE * JUMP_SCALE, DONUT_SCALE,
-			(int)((referencedDonutModel->getJumpTime() - halfJumpTime * SCALING_BEGIN) * 100),
-			(int)(scalingWindowSize * 100));
+			(int)((referencedDonutModel->getJumpTime() - halfJumpTime * SCALING_BEGIN) *
+				  PERCENTAGE_SCALE),
+			(int)(scalingWindowSize * PERCENTAGE_SCALE));
 	} else {
 		// Not in animation stage
 		xScale = DONUT_SCALE;
