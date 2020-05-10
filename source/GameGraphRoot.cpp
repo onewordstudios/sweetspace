@@ -334,7 +334,6 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	lossScreen = assets->get<Node>("game_overlay_loss");
 	restartBtn =
 		std::dynamic_pointer_cast<Button>(assets->get<Node>("game_overlay_loss_restartBtn"));
-	levelsBtn = std::dynamic_pointer_cast<Button>(assets->get<Node>("game_overlay_loss_levelsBtn"));
 
 	// Initialize Win Screen Componenets
 	winScreen = assets->get<Node>("game_overlay_win");
@@ -351,7 +350,6 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 
 	// Register Regular Buttons
 	buttonManager.registerButton(restartBtn);
-	buttonManager.registerButton(levelsBtn);
 	buttonManager.registerButton(nextBtn);
 	buttonManager.registerButton(leaveBtn);
 
@@ -407,7 +405,6 @@ void GameGraphRoot::dispose() {
 
 		lossScreen = nullptr;
 		restartBtn = nullptr;
-		levelsBtn = nullptr;
 
 		buttonsNode->removeAllChildren();
 		buttonsNode = nullptr;
@@ -741,8 +738,6 @@ void GameGraphRoot::processButtons() {
 			// Is this loss?
 			if (buttonManager.tappedButton(restartBtn, tapData)) {
 				lastButtonPressed = Restart;
-			} else if (buttonManager.tappedButton(levelsBtn, tapData)) {
-				isBackToMainMenu = true;
 			}
 		}
 	}

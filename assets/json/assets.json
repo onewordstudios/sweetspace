@@ -678,14 +678,13 @@
 									"data": {
 										"upnode"   : "up",
 										"downnode" : "down",
-										"anchor"   : [1,1],
+										"anchor"   : [0.5,1],
 										"scale" : 0.5
 									},
 									"layout" : {
 										"x_anchor" : "center",
                         				"y_anchor" : "middle",
                         				"y_offset" : -100,
-                        				"x_offset" : -25,
                         				"absolute" : true
 									},
 									"children" : {
@@ -699,39 +698,6 @@
 											"type"   : "Image",
 											"data"   : {
 												"texture"  : "restart_btn_down"
-											}
-										}
-									}
-				            	},
-				            	"levelsBtn" : {
-				            		"type": "Button",
-									"format" : {
-										"type" : "Anchored"
-									},
-									"data": {
-										"upnode"   : "up",
-										"downnode" : "down",
-										"anchor"   : [0,1],
-										"scale" : 0.5
-									},
-						            "layout" : {
-										"x_anchor" : "center",
-                        				"y_anchor" : "middle",
-                        				"y_offset" : -100,
-                        				"x_offset" : 25,
-                        				"absolute" : true
-									},
-									"children" : {
-										"up" : {
-											"type"   : "Image",
-											"data"   : {
-												"texture"  : "levels_btn_up"
-											}
-										},
-										"down" : {
-											"type"   : "Image",
-											"data"   : {
-												"texture"  : "levels_btn_down"
 											}
 										}
 									}

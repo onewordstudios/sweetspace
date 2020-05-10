@@ -123,8 +123,6 @@ class GameGraphRoot : public cugl::Scene {
 	std::shared_ptr<cugl::Node> lossScreen;
 	/** Button to restart game */
 	std::shared_ptr<cugl::Button> restartBtn;
-	/** Button to levels */
-	std::shared_ptr<cugl::Button> levelsBtn;
 
 	// Win Screen Textures
 	/** Node to hold all of the Win Screen.*/
