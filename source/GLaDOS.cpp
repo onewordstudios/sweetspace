@@ -21,8 +21,8 @@ GLaDOS::GLaDOS()
 	  maxEvents(0),
 	  levelNum(0),
 	  customEventCtr(0),
-	  maxDoors(0),
 	  sections(0),
+	  maxDoors(0),
 	  maxButtons(0) {}
 
 /**
@@ -87,7 +87,7 @@ bool GLaDOS::init(std::shared_ptr<ShipModel> ship, std::shared_ptr<LevelModel> l
  *
  * @return true if the controller was initialized successfully
  */
-bool GLaDOS::init(std::shared_ptr<ShipModel> ship, int levelNum) {
+bool GLaDOS::init(std::shared_ptr<ShipModel> ship, const int levelNum) {
 	bool success = true;
 	this->ship = ship;
 	this->mib = MagicInternetBox::getInstance();
@@ -468,8 +468,9 @@ void GLaDOS::tutorialLevels(float dt) {
 			}
 			break;
 		case tutorial::STABILIZER_LEVEL:
-			if (customEventCtr >= mib->getNumPlayers())
+			if (customEventCtr >= mib->getNumPlayers()) {
 				customEventCtr = (int)mib->getNumPlayers() - 1;
+			}
 
 			switch (ship->getChallengeStatus()) {
 				case ShipModel::ACTIVE:
