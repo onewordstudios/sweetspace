@@ -7,6 +7,7 @@
 bool ShipModel::init(unsigned int numPlayers, unsigned int numBreaches, unsigned int numDoors,
 					 unsigned int playerID, float shipSize, int initHealth,
 					 unsigned int numButtons) {
+	timeless = false;
 	// Instantiate donut models and assign colors
 	for (unsigned int i = 0; i < numPlayers; i++) {
 		donuts.push_back(playerID == i ? PlayerDonutModel::alloc(shipSize)
@@ -58,6 +59,11 @@ bool ShipModel::createDoor(float angle, int id) {
 	return true;
 }
 
+bool ShipModel::createUnopenable(float angle, int id) {
+	unopenable.at(id)->init(angle);
+	return true;
+}
+
 bool ShipModel::resolveBreach(int id) {
 	breaches.at(id)->decHealth(1);
 	return true;
@@ -75,7 +81,7 @@ bool ShipModel::flagDoor(int id, int player, int flag) {
 bool ShipModel::createAllTask(int data) {
 	setRollDir(data);
 	challenge = true;
-	endTime = timer - globals::ROLL_CHALLENGE_LENGTH;
+	endTime = timeCtr + globals::ROLL_CHALLENGE_LENGTH;
 	challengeProg = 0;
 	return true;
 }
@@ -87,6 +93,8 @@ bool ShipModel::failAllTask() {
 	}
 	return true;
 }
+
+void ShipModel::setStatus(Status b) { status = b; }
 
 bool ShipModel::createButton(float angle1, int id1, float angle2, int id2) {
 	buttons.at(id1)->init(angle1, buttons.at(id2), id2);

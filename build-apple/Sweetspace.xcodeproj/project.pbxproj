@@ -97,6 +97,9 @@
 		DF3B74642403A46B0063552F /* BreachModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DF3B744B2403A46B0063552F /* BreachModel.cpp */; };
 		DF3B74652403A46B0063552F /* BreachModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DF3B744B2403A46B0063552F /* BreachModel.cpp */; };
 		DF3B74662403A46B0063552F /* BreachModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DF3B744B2403A46B0063552F /* BreachModel.cpp */; };
+		DF621BDE24677E3D0059D55B /* UnopenableNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DF621BDD24677E3D0059D55B /* UnopenableNode.cpp */; };
+		DF621BDF24677E3D0059D55B /* UnopenableNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DF621BDD24677E3D0059D55B /* UnopenableNode.cpp */; };
+		DF621BE024677E3D0059D55B /* UnopenableNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DF621BDD24677E3D0059D55B /* UnopenableNode.cpp */; };
 		DFECA6F12431610C008342FB /* sounds in Resources */ = {isa = PBXBuildFile; fileRef = DFECA6ED2431610C008342FB /* sounds */; };
 		DFECA6F22431610C008342FB /* sounds in Resources */ = {isa = PBXBuildFile; fileRef = DFECA6ED2431610C008342FB /* sounds */; };
 		DFECA6F32431610C008342FB /* sounds in Resources */ = {isa = PBXBuildFile; fileRef = DFECA6ED2431610C008342FB /* sounds */; };
@@ -258,6 +261,10 @@
 		DF3B74492403A46B0063552F /* GameMode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GameMode.cpp; sourceTree = "<group>"; };
 		DF3B744A2403A46B0063552F /* GameGraphRoot.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GameGraphRoot.cpp; sourceTree = "<group>"; };
 		DF3B744B2403A46B0063552F /* BreachModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BreachModel.cpp; sourceTree = "<group>"; };
+		DF621BD724677E3C0059D55B /* Unopenable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Unopenable.h; sourceTree = "<group>"; };
+		DF621BDB24677E3C0059D55B /* TutorialConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TutorialConstants.h; sourceTree = "<group>"; };
+		DF621BDC24677E3D0059D55B /* UnopenableNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UnopenableNode.h; sourceTree = "<group>"; };
+		DF621BDD24677E3D0059D55B /* UnopenableNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = UnopenableNode.cpp; sourceTree = "<group>"; };
 		DFECA6ED2431610C008342FB /* sounds */ = {isa = PBXFileReference; lastKnownFileType = folder; path = sounds; sourceTree = "<group>"; };
 		EB0FF5082016E4A700517030 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		EB0FF5FC2016EF4F00517030 /* sweetspace.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = sweetspace.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -509,6 +516,10 @@
 		EBBF18B11D749176008E2001 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				DF621BDB24677E3C0059D55B /* TutorialConstants.h */,
+				DF621BD724677E3C0059D55B /* Unopenable.h */,
+				DF621BDD24677E3D0059D55B /* UnopenableNode.cpp */,
+				DF621BDC24677E3D0059D55B /* UnopenableNode.h */,
 				7BD666F12448E8E500D68748 /* MainMenuMode.cpp */,
 				7BD666F02448E8E500D68748 /* MainMenuMode.h */,
 				A577C95B2446324C00B12ADE /* BuildingBlockModel.h */,
@@ -754,6 +765,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DF621BE024677E3D0059D55B /* UnopenableNode.cpp in Sources */,
 				DF3B744E2403A46B0063552F /* DonutModel.cpp in Sources */,
 				DF3B74572403A46B0063552F /* LoadingMode.cpp in Sources */,
 				7BD666F42448E8E500D68748 /* MainMenuMode.cpp in Sources */,
@@ -791,6 +803,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DF621BDF24677E3D0059D55B /* UnopenableNode.cpp in Sources */,
 				DF3B744D2403A46B0063552F /* DonutModel.cpp in Sources */,
 				DF3B74562403A46B0063552F /* LoadingMode.cpp in Sources */,
 				7BD666F32448E8E500D68748 /* MainMenuMode.cpp in Sources */,
@@ -828,6 +841,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DF621BDE24677E3D0059D55B /* UnopenableNode.cpp in Sources */,
 				DF3B744C2403A46B0063552F /* DonutModel.cpp in Sources */,
 				DF3B74552403A46B0063552F /* LoadingMode.cpp in Sources */,
 				7BD666F22448E8E500D68748 /* MainMenuMode.cpp in Sources */,

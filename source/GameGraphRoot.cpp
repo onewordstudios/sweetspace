@@ -7,6 +7,7 @@
 #include <vector>
 
 #include "Globals.h"
+#include "TutorialConstants.h"
 
 using namespace cugl;
 using namespace std;
@@ -80,7 +81,7 @@ constexpr float SHIP_HEALTH_RED_CUTOFF = 0.35f;
 constexpr int HEALTH_TUTORIAL_CUTOFF = 10;
 
 /** Time to stop showing move tutorial */
-constexpr int MOVE_TUTORIAL_CUTOFF = 15;
+constexpr int MOVE_TUTORIAL_CUTOFF = 5;
 
 #pragma mark -
 #pragma mark Constructors
@@ -134,6 +135,7 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	breachesNode = assets->get<Node>("game_field_near_breaches");
 	shipSegsNode = assets->get<Node>("game_field_near_shipsegments");
 	doorsNode = assets->get<Node>("game_field_near_doors");
+	unopsNode = assets->get<Node>("game_field_near_unops");
 	externalDonutsNode = assets->get<Node>("game_field_near_externaldonuts");
 	healthNode = dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_health"));
 	coordHUD = std::dynamic_pointer_cast<Label>(assets->get<Node>("game_hud"));
@@ -148,13 +150,13 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	moveTutorial =
 		dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_moveTutorial"));
 	moveTutorial->setVisible(false);
-	if (ship->getLevelNum() == 0) {
+	if (ship->getLevelNum() == tutorial::BREACH_LEVEL) {
 		moveTutorial->setVisible(true);
 	}
 	healthTutorial =
 		dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_healthTutorial"));
 	healthTutorial->setVisible(false);
-	if (ship->getLevelNum() == 0) {
+	if (ship->getLevelNum() == tutorial::BREACH_LEVEL) {
 		healthTutorial->setVisible(true);
 	}
 	rollTutorial =
@@ -246,7 +248,7 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 
 		// Add the breach node
 		breachesNode->addChild(breachNode);
-		if (ship->getLevelNum() == 0) {
+		if (ship->getLevelNum() == tutorial::BREACH_LEVEL) {
 			std::shared_ptr<Texture> image = assets->get<Texture>("fix_breach_tutorial0");
 			std::shared_ptr<TutorialNode> tutorial = TutorialNode::alloc(image);
 			tutorial->setBreachNode(breachNode);
@@ -263,6 +265,15 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 		doorsNode->addChildWithTag(doorNode, i + 1);
 	}
 
+	// Initialize unopenable doors
+	for (int i = 0; i < ship->getUnopenable().size(); i++) {
+		std::shared_ptr<Unopenable> unopModel = ship->getUnopenable().at((unsigned long)i);
+		std::shared_ptr<Texture> image = assets->get<Texture>("unop");
+		std::shared_ptr<UnopenableNode> unopNode =
+			UnopenableNode::alloc(unopModel, playerModel, ship->getSize(), image);
+		unopsNode->addChildWithTag(unopNode, i + 1);
+	}
+
 	// Initialize Buttons
 	for (int i = 0; i < ship->getButtons().size(); i++) {
 		std::shared_ptr<ButtonModel> buttonModel = ship->getButtons().at((unsigned long)i);
@@ -275,8 +286,7 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 		buttonsNode->addChildWithTag(buttonNode, i + 1);
 	}
 
-	if (ship->getLevelNum() == 1) {
-		tutorialNode->removeAllChildren();
+	if (ship->getLevelNum() == tutorial::DOOR_LEVEL) {
 		for (int i = 0; i < doorsNode->getChildCount(); i++) {
 			std::shared_ptr<Texture> image = assets->get<Texture>("door_tutorial");
 			std::shared_ptr<TutorialNode> tutorial = TutorialNode::alloc(image);
@@ -285,8 +295,7 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 			tutorial->setDoorNode(doorNode);
 			tutorialNode->addChildWithTag(tutorial, i + 1);
 		}
-	} else if (ship->getLevelNum() == 2) {
-		tutorialNode->removeAllChildren();
+	} else if (ship->getLevelNum() == tutorial::BUTTON_LEVEL) {
 		for (int i = 0; i < buttonsNode->getChildCount(); i++) {
 			std::shared_ptr<Texture> image = assets->get<Texture>("engine_tutorial0");
 			std::shared_ptr<TutorialNode> tutorial = TutorialNode::alloc(image);
@@ -295,8 +304,6 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 			tutorial->setButtonNode(buttonNode);
 			tutorialNode->addChildWithTag(tutorial, i + 1);
 		}
-	} else if (ship->getLevelNum() == 3) {
-		tutorialNode->removeAllChildren();
 	}
 
 	// Overlay Components
@@ -388,6 +395,10 @@ void GameGraphRoot::dispose() {
 		shipSegsNode = nullptr;
 		doorsNode->removeAllChildren();
 		doorsNode = nullptr;
+		tutorialNode->removeAllChildren();
+		tutorialNode = nullptr;
+		unopsNode->removeAllChildren();
+		unopsNode = nullptr;
 		externalDonutsNode->removeAllChildren();
 		externalDonutsNode = nullptr;
 
@@ -558,14 +569,13 @@ void GameGraphRoot::update(float timestep) {
 		std::shared_ptr<Texture> image = assets->get<Texture>("health_yellow");
 		healthNode->setTexture(image);
 	}
-
-	if (ship->getLevelNum() == 0) {
-		if (trunc(ship->timer) == HEALTH_TUTORIAL_CUTOFF) {
+	if (ship->getLevelNum() == tutorial::BREACH_LEVEL) {
+		if (trunc(ship->timeCtr) == HEALTH_TUTORIAL_CUTOFF) {
 			healthTutorial->setVisible(false);
-		} else if (trunc(ship->timer) == MOVE_TUTORIAL_CUTOFF) {
+		} else if (trunc(ship->timeCtr) == MOVE_TUTORIAL_CUTOFF) {
 			moveTutorial->setVisible(false);
 		}
-	} else if (ship->getLevelNum() == 3) {
+	} else if (ship->getLevelNum() == tutorial::STABILIZER_LEVEL) {
 		rollTutorial->setVisible(true);
 	}
 	// Reanchor the node at the center of the screen and rotate about center.
