@@ -94,15 +94,15 @@ bool GLaDOS::init(std::shared_ptr<ShipModel> ship, const int levelNum) {
 	this->levelNum = levelNum;
 	CULog("Starting level %d", levelNum);
 	this->playerID = mib->getPlayerID();
-	maxEvents = tutorial::MAX_BREACH[levelNum] * mib->getNumPlayers() / globals::MIN_PLAYERS;
-	maxDoors = tutorial::MAX_DOOR[levelNum] * mib->getNumPlayers() / globals::MIN_PLAYERS;
-	maxButtons = tutorial::MAX_BUTTON[levelNum] * mib->getNumPlayers() / globals::MIN_PLAYERS;
-	int unop = tutorial::SECTIONED[levelNum] * (int)mib->getNumPlayers();
+	maxEvents = tutorial::MAX_BREACH.at(levelNum) * mib->getNumPlayers() / globals::MIN_PLAYERS;
+	maxDoors = tutorial::MAX_DOOR.at(levelNum) * mib->getNumPlayers() / globals::MIN_PLAYERS;
+	maxButtons = tutorial::MAX_BUTTON.at(levelNum) * mib->getNumPlayers() / globals::MIN_PLAYERS;
+	int unop = tutorial::SECTIONED.at(levelNum) * (int)mib->getNumPlayers();
 	sections = unop;
-	customEventCtr = tutorial::CUSTOM_EVENTS[levelNum];
-	float size = (float)tutorial::SIZE_PER[levelNum] * (float)mib->getNumPlayers();
+	customEventCtr = tutorial::CUSTOM_EVENTS.at(levelNum);
+	float size = (float)tutorial::SIZE_PER.at(levelNum) * (float)mib->getNumPlayers();
 	ship->init(mib->getNumPlayers(), maxEvents, maxDoors, mib->getPlayerID(), size,
-			   tutorial::HEALTH[levelNum], maxButtons, unop);
+			   tutorial::HEALTH.at(levelNum), maxButtons, unop);
 	ship->setTimeless(true);
 	ship->initTimer(1);
 	ship->setLevelNum(levelNum);
