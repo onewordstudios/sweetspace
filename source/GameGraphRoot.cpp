@@ -40,6 +40,15 @@ constexpr int MAX_ELLIPSES_FRAMES = 180;
 /** Presumable number of frames per second */
 constexpr int FRAMES_PER_SECOND = 60;
 
+/** Ratio of spin on reconnect donut */
+constexpr float RECONNECT_SPIN_RATIO = 0.26f;
+
+/** Milliseconds before connection timeout */
+constexpr int CONNECTION_TIMEOUT = 15000;
+
+/** Milliseconds in a second */
+constexpr int MILLISECONDS_IN_SECONDS = 1000;
+
 /** Animation cycle length of ship red flash */
 constexpr int MAX_HEALTH_WARNING_FRAMES = 150;
 
@@ -66,6 +75,12 @@ constexpr float SHIP_HEALTH_YELLOW_CUTOFF = 0.8f;
 
 /** Percentage of ship health to start showing red */
 constexpr float SHIP_HEALTH_RED_CUTOFF = 0.35f;
+
+/** Time to stop showing health tutorial */
+constexpr int HEALTH_TUTORIAL_CUTOFF = 10;
+
+/** Time to stop showing move tutorial */
+constexpr int MOVE_TUTORIAL_CUTOFF = 15;
 
 #pragma mark -
 #pragma mark Constructors
@@ -202,7 +217,7 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 			donutNode = PlayerDonutNode::alloc(playerModel, screenHeight, image,
 											   tempDonutNode->getPosition());
 			allSpace->addChild(donutNode);
-			tempDonutNode->setVisible(false);
+			tempDonutNode = nullptr;
 		} else {
 			std::shared_ptr<ExternalDonutNode> newDonutNode =
 				ExternalDonutNode::alloc(donutModel, playerModel, ship->getSize(), image);
@@ -291,6 +306,23 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 		std::dynamic_pointer_cast<Label>(assets->get<Node>("game_overlay_reconnect_ellipsis2"));
 	reconnectE3 =
 		std::dynamic_pointer_cast<Label>(assets->get<Node>("game_overlay_reconnect_ellipsis3"));
+	std::shared_ptr<PolygonNode> tempReconnectDonut =
+		dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_overlay_reconnect_donut"));
+	reconnectDonut = cugl::PolygonNode::allocWithTexture(
+		assets->get<Texture>("donut_" + PLAYER_COLOR.at(playerID)));
+	reconnectOverlay->addChild(reconnectDonut);
+	reconnectDonut->setAnchor(Vec2::ANCHOR_CENTER);
+	reconnectDonut->setPosition(tempReconnectDonut->getPosition());
+	reconnectDonut->setScale(DonutNode::DONUT_SCALE);
+	reconnectDonut->setVisible(true);
+	tempReconnectDonut = nullptr;
+
+	// Initialize Timeout Display
+	timeoutDisplay = assets->get<Node>("game_overlay_timeout");
+	timeoutCounter =
+		std::dynamic_pointer_cast<Label>(assets->get<Node>("game_overlay_timeout_countdown"));
+	timeoutCurrent.mark();
+	timeoutStart.mark();
 
 	// Initialize Pause Screen Componenets
 	pauseBtn = std::dynamic_pointer_cast<Button>(assets->get<Node>("game_pauseBtn"));
@@ -306,22 +338,29 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	lossScreen = assets->get<Node>("game_overlay_loss");
 	restartBtn =
 		std::dynamic_pointer_cast<Button>(assets->get<Node>("game_overlay_loss_restartBtn"));
-	levelsBtn = std::dynamic_pointer_cast<Button>(assets->get<Node>("game_overlay_loss_levelsBtn"));
+	lostWaitText =
+		std::dynamic_pointer_cast<Label>(assets->get<Node>("game_overlay_loss_waitText"));
 
 	// Initialize Win Screen Componenets
 	winScreen = assets->get<Node>("game_overlay_win");
 	nextBtn = std::dynamic_pointer_cast<Button>(assets->get<Node>("game_overlay_win_nextBtn"));
+	winWaitText = std::dynamic_pointer_cast<Label>(assets->get<Node>("game_overlay_win_waitText"));
 
+	reconnectOverlay->setVisible(false);
+	timeoutDisplay->setVisible(false);
 	lossScreen->setVisible(false);
 	winScreen->setVisible(false);
 	nearSpace->setVisible(true);
 	healthNode->setVisible(true);
+	lostWaitText->setVisible(false);
+	winWaitText->setVisible(false);
+	nextBtn->setVisible(true);
+	restartBtn->setVisible(true);
 
 	lastButtonPressed = None;
 
 	// Register Regular Buttons
 	buttonManager.registerButton(restartBtn);
-	buttonManager.registerButton(levelsBtn);
 	buttonManager.registerButton(nextBtn);
 	buttonManager.registerButton(leaveBtn);
 
@@ -361,6 +400,10 @@ void GameGraphRoot::dispose() {
 		reconnectOverlay = nullptr;
 		reconnectE2 = nullptr;
 		reconnectE3 = nullptr;
+		reconnectDonut = nullptr;
+
+		timeoutDisplay = nullptr;
+		timeoutCounter = nullptr;
 
 		pauseBtn = nullptr;
 		pauseScreen = nullptr;
@@ -373,13 +416,14 @@ void GameGraphRoot::dispose() {
 
 		lossScreen = nullptr;
 		restartBtn = nullptr;
-		levelsBtn = nullptr;
+		lostWaitText = nullptr;
 
 		buttonsNode->removeAllChildren();
 		buttonsNode = nullptr;
 
 		winScreen = nullptr;
 		nextBtn = nullptr;
+		winWaitText = nullptr;
 
 		_active = false;
 	}
@@ -428,10 +472,18 @@ void GameGraphRoot::update(float timestep) {
 			lossScreen->setVisible(false);
 			winScreen->setVisible(false);
 			reconnectOverlay->setVisible(false);
+			timeoutDisplay->setVisible(false);
+			// Reset Timeout Counters to negative value
+			timeoutCurrent.mark();
+			timeoutStart.mark();
 			break;
 		case Loss:
 			// Show loss screen
 			lossScreen->setVisible(true);
+			if (playerID != 0) {
+				lostWaitText->setVisible(true);
+				restartBtn->setVisible(false);
+			}
 			break;
 		case Win:
 			// Show Win Screen
@@ -442,20 +494,51 @@ void GameGraphRoot::update(float timestep) {
 			moveTutorial->setVisible(false);
 			timerBorder->setVisible(false);
 			coordHUD->setVisible(false);
+			if (playerID != 0) {
+				winWaitText->setVisible(true);
+				nextBtn->setVisible(false);
+			}
 			break;
 		case Reconnecting:
-			// Still Reconnecting
-			reconnectOverlay->setVisible(true);
-			currentEllipsesFrame++;
-			if (currentEllipsesFrame > MAX_ELLIPSES_FRAMES) {
-				currentEllipsesFrame = 0;
-			} else if (currentEllipsesFrame % MAX_ELLIPSES_FRAMES < FRAMES_PER_SECOND) {
-				reconnectE2->setVisible(false);
-				reconnectE3->setVisible(false);
-			} else if (currentEllipsesFrame % MAX_ELLIPSES_FRAMES < 2 * FRAMES_PER_SECOND) {
-				reconnectE2->setVisible(true);
-			} else if (currentEllipsesFrame % MAX_ELLIPSES_FRAMES < 3 * FRAMES_PER_SECOND) {
-				reconnectE3->setVisible(true);
+			// Still Reconnecting, Animation Frames
+			// Check for initial reconnection attempt
+			if (timeoutCurrent.ellapsedNanos(timeoutStart) < 0) {
+				timeoutStart.mark();
+			}
+			if (timeoutCurrent.ellapsedMillis(timeoutStart) <
+				CONNECTION_TIMEOUT - 3 * MILLISECONDS_IN_SECONDS) {
+				// Regular Reconnect Display
+				timeoutDisplay->setVisible(false);
+				timeoutCurrent.mark();
+				reconnectOverlay->setVisible(true);
+				reconnectDonut->setAngle(
+					(float)(reconnectDonut->getAngle() - globals::PI_180 * RECONNECT_SPIN_RATIO));
+				currentEllipsesFrame++;
+				if (currentEllipsesFrame > MAX_ELLIPSES_FRAMES) {
+					currentEllipsesFrame = 0;
+				} else if (currentEllipsesFrame % MAX_ELLIPSES_FRAMES < FRAMES_PER_SECOND) {
+					reconnectE2->setVisible(false);
+					reconnectE3->setVisible(false);
+				} else if (currentEllipsesFrame % MAX_ELLIPSES_FRAMES < 2 * FRAMES_PER_SECOND) {
+					reconnectE2->setVisible(true);
+				} else if (currentEllipsesFrame % MAX_ELLIPSES_FRAMES < 3 * FRAMES_PER_SECOND) {
+					reconnectE3->setVisible(true);
+				}
+			} else {
+				// 3 Second Timeout Counter back to lobby
+				timeoutDisplay->setVisible(true);
+				if (timeoutCurrent.ellapsedMillis(timeoutStart) <
+					CONNECTION_TIMEOUT - 2 * MILLISECONDS_IN_SECONDS) {
+					timeoutCounter->setText("3");
+				} else if (timeoutCurrent.ellapsedMillis(timeoutStart) <
+						   CONNECTION_TIMEOUT - MILLISECONDS_IN_SECONDS) {
+					timeoutCounter->setText("2");
+				} else if (timeoutCurrent.ellapsedMillis(timeoutStart) < CONNECTION_TIMEOUT) {
+					timeoutCounter->setText("1");
+				} else {
+					isBackToMainMenu = true;
+				}
+				timeoutCurrent.mark();
 			}
 			break;
 		default:
@@ -477,9 +560,9 @@ void GameGraphRoot::update(float timestep) {
 	}
 
 	if (ship->getLevelNum() == 0) {
-		if (trunc(ship->timer) == 10) {
+		if (trunc(ship->timer) == HEALTH_TUTORIAL_CUTOFF) {
 			healthTutorial->setVisible(false);
-		} else if (trunc(ship->timer) == 15) {
+		} else if (trunc(ship->timer) == MOVE_TUTORIAL_CUTOFF) {
 			moveTutorial->setVisible(false);
 		}
 	} else if (ship->getLevelNum() == 3) {
@@ -684,8 +767,6 @@ void GameGraphRoot::processButtons() {
 			// Is this loss?
 			if (buttonManager.tappedButton(restartBtn, tapData)) {
 				lastButtonPressed = Restart;
-			} else if (buttonManager.tappedButton(levelsBtn, tapData)) {
-				isBackToMainMenu = true;
 			}
 		}
 	}

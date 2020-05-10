@@ -83,12 +83,24 @@ class GameGraphRoot : public cugl::Scene {
 	// Reconnection Textures
 	/** Node to hold all of the Reconnect Overlay.*/
 	std::shared_ptr<cugl::Node> reconnectOverlay;
+	/** The player's animated donut in the reconnection screen */
+	std::shared_ptr<cugl::PolygonNode> reconnectDonut;
 	/** Label for second ellipsis point */
 	std::shared_ptr<cugl::Label> reconnectE2;
 	/** Label for third ellipsis point */
 	std::shared_ptr<cugl::Label> reconnectE3;
 	/** Current animation frame for ellipses */
 	int currentEllipsesFrame;
+
+	// Timeout Textures
+	/** Node to hold the timeout Display.*/
+	std::shared_ptr<cugl::Node> timeoutDisplay;
+	/** Label for back to lobby counter */
+	std::shared_ptr<cugl::Label> timeoutCounter;
+	/** Connection Timeout Start */
+	cugl::Timestamp timeoutStart;
+	/** Connection Timeout Counter */
+	cugl::Timestamp timeoutCurrent;
 
 	// Pause Textures
 	/** Button to Open Pause */
@@ -112,14 +124,16 @@ class GameGraphRoot : public cugl::Scene {
 	std::shared_ptr<cugl::Node> lossScreen;
 	/** Button to restart game */
 	std::shared_ptr<cugl::Button> restartBtn;
-	/** Button to levels */
-	std::shared_ptr<cugl::Button> levelsBtn;
+	/** Text to wait for game restart */
+	std::shared_ptr<cugl::Label> lostWaitText;
 
 	// Win Screen Textures
 	/** Node to hold all of the Win Screen.*/
 	std::shared_ptr<cugl::Node> winScreen;
 	/** Button to next game */
 	std::shared_ptr<cugl::Button> nextBtn;
+	/** Text to wait for game progress */
+	std::shared_ptr<cugl::Label> winWaitText;
 
 	// DRAWING STATE VARIABLES
 	/** The donut's base position. */
