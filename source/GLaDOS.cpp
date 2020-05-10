@@ -19,7 +19,10 @@ GLaDOS::GLaDOS()
 	  mib(nullptr),
 	  fail(false),
 	  maxEvents(0),
+	  levelNum(0),
+	  customEventCtr(0),
 	  maxDoors(0),
+	  sections(0),
 	  maxButtons(0) {}
 
 /**
@@ -48,9 +51,9 @@ bool GLaDOS::init(std::shared_ptr<ShipModel> ship, std::shared_ptr<LevelModel> l
 	this->mib = MagicInternetBox::getInstance();
 	levelNum = mib->getLevelNum();
 	this->playerID = mib->getPlayerID();
-	maxEvents = ship->getBreaches().size();
-	maxDoors = ship->getDoors().size();
-	maxButtons = ship->getButtons().size();
+	maxEvents = (int)ship->getBreaches().size();
+	maxDoors = (int)ship->getDoors().size();
+	maxButtons = (int)ship->getButtons().size();
 	blocks = level->getBlocks();
 	events = level->getEvents();
 	std::queue<int> empty1;
@@ -94,10 +97,10 @@ bool GLaDOS::init(std::shared_ptr<ShipModel> ship, int levelNum) {
 	maxEvents = tutorial::MAX_BREACH[levelNum] * mib->getNumPlayers() / globals::MIN_PLAYERS;
 	maxDoors = tutorial::MAX_DOOR[levelNum] * mib->getNumPlayers() / globals::MIN_PLAYERS;
 	maxButtons = tutorial::MAX_BUTTON[levelNum] * mib->getNumPlayers() / globals::MIN_PLAYERS;
-	int unop = tutorial::SECTIONED[levelNum] * mib->getNumPlayers();
+	int unop = tutorial::SECTIONED[levelNum] * (int)mib->getNumPlayers();
 	sections = unop;
 	customEventCtr = tutorial::CUSTOM_EVENTS[levelNum];
-	float size = tutorial::SIZE_PER[levelNum] * mib->getNumPlayers();
+	float size = (float)tutorial::SIZE_PER[levelNum] * (float)mib->getNumPlayers();
 	ship->init(mib->getNumPlayers(), maxEvents, maxDoors, mib->getPlayerID(), size,
 			   tutorial::HEALTH[levelNum], maxButtons, unop);
 	ship->setTimeless(true);
@@ -397,7 +400,6 @@ void GLaDOS::tutorialLevels(float dt) {
 		case tutorial::BREACH_LEVEL:
 			if (ship->timePassed() >= tutorial::B_L_PART1 && customEventCtr == 2) {
 				float actualWidth = ship->getSize() / (float)sections;
-				float width = actualWidth - tutorial::FAKE_DOOR_PADDING * 2;
 				for (int i = 0; i < ship->getDonuts().size(); i++) {
 					float mid = actualWidth * (float)i;
 					float suggestedAngle1 = mid + tutorial::B_L_LOC1;
@@ -412,16 +414,15 @@ void GLaDOS::tutorialLevels(float dt) {
 									  ship->getSize() / 2);
 					if (diff1 > diff2) {
 						placeObject({BuildingBlockModel::Breach, 0, -1}, suggestedAngle1,
-									(i + 1) % ship->getDonuts().size());
+									(i + 1) % (int)ship->getDonuts().size());
 					} else {
 						placeObject({BuildingBlockModel::Breach, 0, -1}, suggestedAngle2,
-									(i + 1) % ship->getDonuts().size());
+									(i + 1) % (int)ship->getDonuts().size());
 					}
 				}
 				customEventCtr--;
 			} else if (ship->timePassed() >= tutorial::B_L_PART2 && customEventCtr == 1) {
 				float actualWidth = ship->getSize() / (float)sections;
-				float width = actualWidth - tutorial::FAKE_DOOR_PADDING * 2;
 				for (int i = 0; i < ship->getDonuts().size(); i++) {
 					float mid = actualWidth * (float)i;
 					float suggestedAngle1 = mid + tutorial::B_L_LOC3;
@@ -467,7 +468,8 @@ void GLaDOS::tutorialLevels(float dt) {
 			}
 			break;
 		case tutorial::STABILIZER_LEVEL:
-			if (customEventCtr >= mib->getNumPlayers()) customEventCtr = mib->getNumPlayers() - 1;
+			if (customEventCtr >= mib->getNumPlayers())
+				customEventCtr = (int)mib->getNumPlayers() - 1;
 
 			switch (ship->getChallengeStatus()) {
 				case ShipModel::ACTIVE:

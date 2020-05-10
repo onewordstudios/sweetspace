@@ -168,7 +168,7 @@ void MainMenuMode::updateClientLabel() {
 	for (unsigned int i = 0; i < clientEnteredRoom.size(); i++) {
 		room.push_back('0' + clientEnteredRoom[i]);
 	}
-	for (unsigned int i = clientEnteredRoom.size(); i < globals::ROOM_LENGTH; i++) {
+	for (unsigned int i = (unsigned int)clientEnteredRoom.size(); i < globals::ROOM_LENGTH; i++) {
 		room.push_back('_');
 	}
 
