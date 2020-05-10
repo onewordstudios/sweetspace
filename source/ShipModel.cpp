@@ -93,6 +93,7 @@ bool ShipModel::failAllTask() {
 					goodAngle = true;
 				} else {
 					goodAngle = false;
+					continue;
 				}
 			}
 			for (unsigned int k = 0; k < doors.size(); k++) {
