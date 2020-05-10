@@ -701,6 +701,26 @@
 											}
 										}
 									}
+				            	},
+				            	"waitText" : {
+				            		"type": "Label",
+									"format" : {
+										"type" : "Anchored"
+									},
+									"data": {
+										"font"       : "mont_med",
+										"text"       : "Waiting for host...",
+										"foreground" : [255,255,255,255],
+										"anchor"   : [0.5,1],
+										"scale" : 1,
+										"visible" : false
+									},
+									"layout" : {
+										"x_anchor" : "center",
+                        				"y_anchor" : "middle",
+                        				"y_offset" : -100,
+                        				"absolute" : true
+									}
 				            	}
 				            }
 						},
@@ -803,6 +823,26 @@
 												"texture"  : "next_btn_down"
 											}
 										}
+									}
+				            	},
+								"waitText" : {
+				            		"type": "Label",
+									"format" : {
+										"type" : "Anchored"
+									},
+									"data": {
+										"font"       : "mont_med",
+										"text"       : "Waiting for host...",
+										"foreground" : [255,255,255,255],
+										"anchor"   : [0.5,1],
+										"scale" : 1,
+										"visible" : false
+									},
+									"layout" : {
+										"x_anchor" : "center",
+                        				"y_anchor" : "middle",
+                        				"y_offset" : -100,
+                        				"absolute" : true
 									}
 				            	}
 				            }
