@@ -43,10 +43,10 @@ void GLaDOS::dispose() {
  * @return true if the controller was initialized successfully
  */
 bool GLaDOS::init(std::shared_ptr<ShipModel> ship, std::shared_ptr<LevelModel> level) {
-	levelNum = mib->getLevelNum();
 	bool success = true;
 	this->ship = ship;
 	this->mib = MagicInternetBox::getInstance();
+	levelNum = mib->getLevelNum();
 	this->playerID = mib->getPlayerID();
 	maxEvents = ship->getBreaches().size();
 	maxDoors = ship->getDoors().size();
