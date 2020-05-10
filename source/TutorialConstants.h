@@ -20,6 +20,10 @@ constexpr int BUTTON_LEVEL = 4;										 // NOLINT
 constexpr int STABILIZER_LEVEL = 7;									 // NOLINT
 constexpr int B_L_PART1 = 10;										 // NOLINT
 constexpr int B_L_PART2 = 15;										 // NOLINT
+constexpr int B_L_LOC1 = -25;										 // NOLINT
+constexpr int B_L_LOC2 = -50;										 // NOLINT
+constexpr int B_L_LOC3 = 25;										 // NOLINT
+constexpr int B_L_LOC4 = 50;										 // NOLINT
 
 } // namespace tutorial
 

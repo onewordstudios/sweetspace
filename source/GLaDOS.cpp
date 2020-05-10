@@ -399,38 +399,42 @@ void GLaDOS::tutorialLevels(float dt) {
 				float actualWidth = ship->getSize() / (float)sections;
 				float width = actualWidth - tutorial::FAKE_DOOR_PADDING * 2;
 				for (int i = 0; i < ship->getDonuts().size(); i++) {
-					float suggestedAngle =
-						ship->getDonuts().at(i)->getAngle() + tutorial::BREACH_DIST;
-					if (suggestedAngle >= ship->getSize()) suggestedAngle -= ship->getSize();
 					float mid = actualWidth * (float)i;
-					float diff =
-						ship->getSize() / 2 - abs(abs(suggestedAngle - mid) - ship->getSize() / 2);
-					if (diff > width / 2) {
-						// clamp this angle within the width of the section
-						suggestedAngle -= width;
-						if (suggestedAngle < 0) suggestedAngle += ship->getSize();
+					float suggestedAngle1 = mid + tutorial::B_L_LOC1;
+					float suggestedAngle2 = mid + tutorial::B_L_LOC2;
+					if (suggestedAngle1 < 0) suggestedAngle1 += ship->getSize();
+					if (suggestedAngle2 < 0) suggestedAngle2 += ship->getSize();
+					float diff1 = ship->getSize() / 2 -
+								  abs(abs(suggestedAngle1 - ship->getDonuts().at(i)->getAngle()) -
+									  ship->getSize() / 2);
+					float diff2 = ship->getSize() / 2 -
+								  abs(abs(suggestedAngle2 - ship->getDonuts().at(i)->getAngle()) -
+									  ship->getSize() / 2);
+					if (diff1 > diff2) {
+						placeObject({BuildingBlockModel::Breach, 0, -1}, suggestedAngle1,
+									(i + 1) % ship->getDonuts().size());
 					}
-					placeObject({BuildingBlockModel::Breach, 0, -1}, suggestedAngle,
-								(i + 1) % ship->getDonuts().size());
 				}
 				customEventCtr--;
 			} else if (ship->timePassed() >= tutorial::B_L_PART2 && customEventCtr == 1) {
-				// TODO: fix breach overlap
 				float actualWidth = ship->getSize() / (float)sections;
 				float width = actualWidth - tutorial::FAKE_DOOR_PADDING * 2;
 				for (int i = 0; i < ship->getDonuts().size(); i++) {
-					float suggestedAngle =
-						ship->getDonuts().at(i)->getAngle() - tutorial::BREACH_DIST;
-					if (suggestedAngle < 0) suggestedAngle += ship->getSize();
 					float mid = actualWidth * (float)i;
-					float diff =
-						ship->getSize() / 2 - abs(abs(suggestedAngle - mid) - ship->getSize() / 2);
-					if (diff > width / 2) {
-						// clamp this angle within the width of the section
-						suggestedAngle += width;
-						if (suggestedAngle >= ship->getSize()) suggestedAngle -= ship->getSize();
+					float suggestedAngle1 = mid + tutorial::B_L_LOC3;
+					float suggestedAngle2 = mid + tutorial::B_L_LOC4;
+					if (suggestedAngle1 >= ship->getSize()) suggestedAngle1 -= ship->getSize();
+					if (suggestedAngle2 >= ship->getSize()) suggestedAngle2 -= ship->getSize();
+					float diff1 = ship->getSize() / 2 -
+								  abs(abs(suggestedAngle1 - ship->getDonuts().at(i)->getAngle()) -
+									  ship->getSize() / 2);
+					float diff2 = ship->getSize() / 2 -
+								  abs(abs(suggestedAngle2 - ship->getDonuts().at(i)->getAngle()) -
+									  ship->getSize() / 2);
+					if (diff1 > diff2) {
+						placeObject({BuildingBlockModel::Breach, 0, -1}, suggestedAngle1,
+									(i + 1) % ship->getDonuts().size());
 					}
-					placeObject({BuildingBlockModel::Breach, 0, -1}, suggestedAngle, i);
 				}
 				customEventCtr--;
 			} else if (customEventCtr <= 0) {
