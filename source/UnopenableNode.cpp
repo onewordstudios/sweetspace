@@ -18,7 +18,8 @@ bool UnopenableNode::init(std::shared_ptr<Unopenable> unop, std::shared_ptr<Donu
 	unopModel = unop;
 	std::shared_ptr<PolygonNode> p = PolygonNode::allocWithTexture(texture);
 	addChild(p);
-	setAnchor(Vec2::ANCHOR_BOTTOM_CENTER);
+	p->setAnchor(Vec2::ANCHOR_BOTTOM_CENTER);
+	p->setPosition(0, 0);
 	setScale(DOOR_SCALE);
 	return true;
 }
