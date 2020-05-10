@@ -82,12 +82,24 @@ class GameGraphRoot : public cugl::Scene {
 	// Reconnection Textures
 	/** Node to hold all of the Reconnect Overlay.*/
 	std::shared_ptr<cugl::Node> reconnectOverlay;
+	/** The player's animated donut in the reconnection screen */
+	std::shared_ptr<cugl::PolygonNode> reconnectDonut;
 	/** Label for second ellipsis point */
 	std::shared_ptr<cugl::Label> reconnectE2;
 	/** Label for third ellipsis point */
 	std::shared_ptr<cugl::Label> reconnectE3;
 	/** Current animation frame for ellipses */
 	int currentEllipsesFrame;
+
+	// Timeout Textures
+	/** Node to hold the timeout Display.*/
+	std::shared_ptr<cugl::Node> timeoutDisplay;
+	/** Label for back to lobby counter */
+	std::shared_ptr<cugl::Label> timeoutCounter;
+	/** Connection Timeout Start */
+	cugl::Timestamp timeoutStart;
+	/** Connection Timeout Counter */
+	cugl::Timestamp timeoutCurrent;
 
 	// Pause Textures
 	/** Button to Open Pause */
@@ -111,14 +123,16 @@ class GameGraphRoot : public cugl::Scene {
 	std::shared_ptr<cugl::Node> lossScreen;
 	/** Button to restart game */
 	std::shared_ptr<cugl::Button> restartBtn;
-	/** Button to levels */
-	std::shared_ptr<cugl::Button> levelsBtn;
+	/** Text to wait for game restart */
+	std::shared_ptr<cugl::Label> lostWaitText;
 
 	// Win Screen Textures
 	/** Node to hold all of the Win Screen.*/
 	std::shared_ptr<cugl::Node> winScreen;
 	/** Button to next game */
 	std::shared_ptr<cugl::Button> nextBtn;
+	/** Text to wait for game progress */
+	std::shared_ptr<cugl::Label> winWaitText;
 
 	// DRAWING STATE VARIABLES
 	/** The donut's base position. */
@@ -183,17 +197,11 @@ class GameGraphRoot : public cugl::Scene {
 	/** Possible colors for player representations */
 	const std::vector<string> PLAYER_COLOR{"yellow", "red", "purple", "green", "orange", "cyan"};
 	/** Possible colors for breach representations */
-	const std::vector<cugl::Color4> BREACH_COLOR{
-		cugl::Color4(219, 197, 52), cugl::Color4(227, 100, 159), cugl::Color4(152, 95, 204),
-		cugl::Color4(158, 212, 87), cugl::Color4(244, 150, 40),	 cugl::Color4(47, 206, 197)};
+	static const std::vector<cugl::Color4> BREACH_COLOR;
 	/** Color of ship segment label text */
 	const cugl::Color4 SHIP_LABEL_COLOR{255, 248, 161};
 	/** Number of possible player colors */
 	static constexpr int NUM_COLORS = 6;
-	/** The scale of the donut textures. */
-	static constexpr float DONUT_SCALE = 0.4f;
-	/** The scale of the breach textures. */
-	static constexpr float BREACH_SCALE = 0.5f;
 
 #pragma mark -
 #pragma mark Constructors

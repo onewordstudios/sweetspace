@@ -1,21 +1,14 @@
 #ifndef __SWEETSPACE_BUTTONNODE_H__
 #define __SWEETSPACE_BUTTONNODE_H__
 
-#include <cugl/2d/CUNode.h>
-
 #include "ButtonModel.h"
+#include "CustomNode.h"
 #include "DonutModel.h"
 
-class ButtonNode : public cugl::Node {
+class ButtonNode : public CustomNode {
 #pragma mark Values
    protected:
 	shared_ptr<ButtonModel> buttonModel;
-	/** Reference to the player donut model */
-	std::shared_ptr<DonutModel> playerDonutModel;
-	/** Size of the ship. Needed for visibility determination */
-	float shipSize;
-	/** Whether the breach is being shown right now */
-	bool isShown;
 	/** Current animation frame of button */
 	int currentFrame;
 	/** Value of jumped on from previous frame */
@@ -36,6 +29,12 @@ class ButtonNode : public cugl::Node {
 	/** Reference to button label */
 	std::shared_ptr<cugl::Label> label;
 
+#pragma region State Methods
+	bool isActive() override;
+	void prePosition() override;
+	void postPosition() override;
+#pragma endregion
+
    public:
 #pragma mark -
 #pragma mark Constructor
@@ -47,7 +46,7 @@ class ButtonNode : public cugl::Node {
 	 * NEVER USE A CONSTRUCTOR WITH NEW. If you want to allocate an object on
 	 * the heap, use one of the static constructors instead.
 	 */
-	ButtonNode() : cugl::Node(), shipSize(0), isShown(false), currentFrame(0) {}
+	ButtonNode() : CustomNode(), currentFrame(0), prevJumpedOn(false) {}
 
 	/**
 	 * Releases all resources allocated with this node.
@@ -57,6 +56,22 @@ class ButtonNode : public cugl::Node {
 	 * longer safe to use.
 	 */
 	~ButtonNode() { dispose(); }
+
+	/**
+	 * Properly initialize this button node. Do NOT use the constructors in the parent class. They
+	 * will not initialize everything.
+	 *
+	 * @param btn		Pointer to the button model
+	 * @param player	Pointer to the player's donut model
+	 * @param shipSize	Size of the ship (in degrees)
+	 * @param texture   The texture image to use
+	 * @param rows      The number of rows in the filmstrip
+	 * @param cols      The number of columns in the filmstrip
+	 */
+	virtual bool init(std::shared_ptr<ButtonModel> btn, std::shared_ptr<DonutModel> player,
+					  float shipSize, std::shared_ptr<cugl::Texture> baseDown,
+					  std::shared_ptr<cugl::Texture> baseUp, std::shared_ptr<cugl::Texture> btnDown,
+					  std::shared_ptr<cugl::Texture> btnUp, std::shared_ptr<cugl::Font> labelFont);
 
 	/**
 	 * Returns a newly allocated filmstrip node from the given texture.
@@ -74,9 +89,17 @@ class ButtonNode : public cugl::Node {
 	 *
 	 * @return a newly allocated filmstrip node from the given texture.
 	 */
-	static std::shared_ptr<ButtonNode> alloc() {
+	static std::shared_ptr<ButtonNode> alloc(std::shared_ptr<ButtonModel> btn,
+											 std::shared_ptr<DonutModel> player, float shipSize,
+											 std::shared_ptr<cugl::Texture> baseDown,
+											 std::shared_ptr<cugl::Texture> baseUp,
+											 std::shared_ptr<cugl::Texture> btnDown,
+											 std::shared_ptr<cugl::Texture> btnUp,
+											 std::shared_ptr<cugl::Font> labelFont) {
 		std::shared_ptr<ButtonNode> node = std::make_shared<ButtonNode>();
-		return (node->init() ? node : nullptr);
+		return (node->init(btn, player, shipSize, baseDown, baseUp, btnDown, btnUp, labelFont)
+					? node
+					: nullptr);
 	}
 
 	/**
@@ -91,27 +114,7 @@ class ButtonNode : public cugl::Node {
 
 #pragma mark -
 
-	void setModel(std::shared_ptr<ButtonModel> model) { buttonModel = model; }
-
-	void setDonutModel(std::shared_ptr<DonutModel> model) { playerDonutModel = model; }
-
-	void setShipSize(float f) { shipSize = f; }
-
 	std::shared_ptr<ButtonModel> getModel() { return buttonModel; }
-
-	void setButtonBaseDown(std::shared_ptr<cugl::Texture> texture) { btnBaseDown = texture; }
-
-	void setButtonBaseUp(std::shared_ptr<cugl::Texture> texture) { btnBaseUp = texture; }
-
-	void setButtonDown(std::shared_ptr<cugl::Texture> texture) { btnDown = texture; }
-
-	void setButtonUp(std::shared_ptr<cugl::Texture> texture) { btnUp = texture; }
-
-	void setBodyNode(std::shared_ptr<cugl::PolygonNode> n) { bodyNode = n; }
-
-	void setBaseNode(std::shared_ptr<cugl::PolygonNode> n) { baseNode = n; }
-
-	void setButtonLabel(std::shared_ptr<cugl::Label> l) { label = l; }
 
 	void draw(const shared_ptr<cugl::SpriteBatch> &batch, const cugl::Mat4 &transform,
 			  cugl::Color4 tint) override;

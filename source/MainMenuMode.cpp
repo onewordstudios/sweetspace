@@ -63,8 +63,9 @@ bool MainMenuMode::init(const std::shared_ptr<AssetManager>& assets) {
 
 #pragma region Scene Graph Components
 	bg0stars = assets->get<Node>("matchmaking_mainmenubg2");
-	bg1land = assets->get<Node>("matchmaking_mainmenubg3");
+	bg1glow = assets->get<Node>("matchmaking_mainmenubg3");
 	bg2ship = assets->get<Node>("matchmaking_mainmenubg4");
+	bg3land = assets->get<Node>("matchmaking_mainmenubg5");
 	bg9studio = assets->get<Node>("matchmaking_studiologo");
 
 	backBtn = std::dynamic_pointer_cast<Button>(assets->get<Node>("matchmaking_backbtn"));
@@ -217,8 +218,9 @@ void MainMenuMode::processTransition() {
 	switch (currState) {
 		case NA: {
 			if (transitionFrame == 1) {
-				bg1land->setVisible(true);
+				bg1glow->setVisible(true);
 				bg2ship->setVisible(true);
+				bg3land->setVisible(true);
 			}
 			if (transitionFrame > OPEN_TRANSITION) {
 				bg9studio->setVisible(false);
@@ -242,9 +244,11 @@ void MainMenuMode::processTransition() {
 			}
 
 			// Background pans up into view
-			bg1land->setPositionY(
+			bg1glow->setPositionY(
 				Tween::easeOut(-screenHeight, screenHeight / 2, transitionFrame, OPEN_TRANSITION));
 			bg2ship->setPositionY(
+				Tween::easeOut(-screenHeight, screenHeight / 2, transitionFrame, OPEN_TRANSITION));
+			bg3land->setPositionY(
 				Tween::easeOut(-screenHeight, screenHeight / 2, transitionFrame, OPEN_TRANSITION));
 
 			return;
@@ -423,17 +427,17 @@ void MainMenuMode::processButtons() {
 		case HostLevelSelect: {
 			if (buttonManager.tappedButton(easyBtn, tapData)) {
 				gameReady = true;
-				net->startGame(1);
+				net->startGame(EASY_LEVEL);
 				return;
 			}
 			if (buttonManager.tappedButton(medBtn, tapData)) {
 				gameReady = true;
-				net->startGame(5); // NOLINT refactor out level constants later
+				net->startGame(MED_LEVEL);
 				return;
 			}
 			if (buttonManager.tappedButton(hardBtn, tapData)) {
 				gameReady = true;
-				net->startGame(7); // NOLINT refactor out level constants later
+				net->startGame(HARD_LEVEL);
 				return;
 			}
 			break;
