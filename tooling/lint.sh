@@ -13,7 +13,6 @@ then
     clang-tidy ../source/*.cpp -- -I../cugl/include
 elif [ $1 == '-ci' ]
 then
-	#clang-tidy ../source/*.cpp -- -I../cugl/include 2>&1 >/dev/null | grep -v "warnings generated." | grep -v "in non-user code" | grep -v "errors from system headers" >&2
 	clang-tidy ../source/*.cpp -- -I../cugl/include 1>&2 2>/dev/null
 	exit 0
 else
