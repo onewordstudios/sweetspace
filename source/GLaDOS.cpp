@@ -413,6 +413,9 @@ void GLaDOS::tutorialLevels(float dt) {
 					if (diff1 > diff2) {
 						placeObject({BuildingBlockModel::Breach, 0, -1}, suggestedAngle1,
 									(i + 1) % ship->getDonuts().size());
+					} else {
+						placeObject({BuildingBlockModel::Breach, 0, -1}, suggestedAngle2,
+									(i + 1) % ship->getDonuts().size());
 					}
 				}
 				customEventCtr--;
@@ -432,8 +435,9 @@ void GLaDOS::tutorialLevels(float dt) {
 								  abs(abs(suggestedAngle2 - ship->getDonuts().at(i)->getAngle()) -
 									  ship->getSize() / 2);
 					if (diff1 > diff2) {
-						placeObject({BuildingBlockModel::Breach, 0, -1}, suggestedAngle1,
-									(i + 1) % ship->getDonuts().size());
+						placeObject({BuildingBlockModel::Breach, 0, -1}, suggestedAngle1, i);
+					} else {
+						placeObject({BuildingBlockModel::Breach, 0, -1}, suggestedAngle2, i);
 					}
 				}
 				customEventCtr--;
