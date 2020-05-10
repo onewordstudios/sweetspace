@@ -678,14 +678,13 @@
 									"data": {
 										"upnode"   : "up",
 										"downnode" : "down",
-										"anchor"   : [1,1],
+										"anchor"   : [0.5,1],
 										"scale" : 0.5
 									},
 									"layout" : {
 										"x_anchor" : "center",
                         				"y_anchor" : "middle",
                         				"y_offset" : -100,
-                        				"x_offset" : -25,
                         				"absolute" : true
 									},
 									"children" : {
@@ -703,37 +702,24 @@
 										}
 									}
 				            	},
-				            	"levelsBtn" : {
-				            		"type": "Button",
+				            	"waitText" : {
+				            		"type": "Label",
 									"format" : {
 										"type" : "Anchored"
 									},
 									"data": {
-										"upnode"   : "up",
-										"downnode" : "down",
-										"anchor"   : [0,1],
-										"scale" : 0.5
+										"font"       : "mont_med",
+										"text"       : "Waiting for host...",
+										"foreground" : [255,255,255,255],
+										"anchor"   : [0.5,1],
+										"scale" : 1,
+										"visible" : false
 									},
-						            "layout" : {
+									"layout" : {
 										"x_anchor" : "center",
                         				"y_anchor" : "middle",
                         				"y_offset" : -100,
-                        				"x_offset" : 25,
                         				"absolute" : true
-									},
-									"children" : {
-										"up" : {
-											"type"   : "Image",
-											"data"   : {
-												"texture"  : "levels_btn_up"
-											}
-										},
-										"down" : {
-											"type"   : "Image",
-											"data"   : {
-												"texture"  : "levels_btn_down"
-											}
-										}
 									}
 				            	}
 				            }
@@ -837,6 +823,26 @@
 												"texture"  : "next_btn_down"
 											}
 										}
+									}
+				            	},
+								"waitText" : {
+				            		"type": "Label",
+									"format" : {
+										"type" : "Anchored"
+									},
+									"data": {
+										"font"       : "mont_med",
+										"text"       : "Waiting for host...",
+										"foreground" : [255,255,255,255],
+										"anchor"   : [0.5,1],
+										"scale" : 1,
+										"visible" : false
+									},
+									"layout" : {
+										"x_anchor" : "center",
+                        				"y_anchor" : "middle",
+                        				"y_offset" : -100,
+                        				"absolute" : true
 									}
 				            	}
 				            }

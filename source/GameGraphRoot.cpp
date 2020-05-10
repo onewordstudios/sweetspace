@@ -334,11 +334,13 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	lossScreen = assets->get<Node>("game_overlay_loss");
 	restartBtn =
 		std::dynamic_pointer_cast<Button>(assets->get<Node>("game_overlay_loss_restartBtn"));
-	levelsBtn = std::dynamic_pointer_cast<Button>(assets->get<Node>("game_overlay_loss_levelsBtn"));
+	lostWaitText =
+		std::dynamic_pointer_cast<Label>(assets->get<Node>("game_overlay_loss_waitText"));
 
 	// Initialize Win Screen Componenets
 	winScreen = assets->get<Node>("game_overlay_win");
 	nextBtn = std::dynamic_pointer_cast<Button>(assets->get<Node>("game_overlay_win_nextBtn"));
+	winWaitText = std::dynamic_pointer_cast<Label>(assets->get<Node>("game_overlay_win_waitText"));
 
 	reconnectOverlay->setVisible(false);
 	timeoutDisplay->setVisible(false);
@@ -346,12 +348,15 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	winScreen->setVisible(false);
 	nearSpace->setVisible(true);
 	healthNode->setVisible(true);
+	lostWaitText->setVisible(false);
+	winWaitText->setVisible(false);
+	nextBtn->setVisible(true);
+	restartBtn->setVisible(true);
 
 	lastButtonPressed = None;
 
 	// Register Regular Buttons
 	buttonManager.registerButton(restartBtn);
-	buttonManager.registerButton(levelsBtn);
 	buttonManager.registerButton(nextBtn);
 	buttonManager.registerButton(leaveBtn);
 
@@ -407,13 +412,14 @@ void GameGraphRoot::dispose() {
 
 		lossScreen = nullptr;
 		restartBtn = nullptr;
-		levelsBtn = nullptr;
+		lostWaitText = nullptr;
 
 		buttonsNode->removeAllChildren();
 		buttonsNode = nullptr;
 
 		winScreen = nullptr;
 		nextBtn = nullptr;
+		winWaitText = nullptr;
 
 		_active = false;
 	}
@@ -464,6 +470,10 @@ void GameGraphRoot::update(float timestep) {
 		case Loss:
 			// Show loss screen
 			lossScreen->setVisible(true);
+			if (playerID != 0) {
+				lostWaitText->setVisible(true);
+				restartBtn->setVisible(false);
+			}
 			break;
 		case Win:
 			// Show Win Screen
@@ -472,6 +482,10 @@ void GameGraphRoot::update(float timestep) {
 			healthNode->setVisible(false);
 			rollTutorial->setVisible(false);
 			moveTutorial->setVisible(false);
+			if (playerID != 0) {
+				winWaitText->setVisible(true);
+				nextBtn->setVisible(false);
+			}
 			break;
 		case Reconnecting:
 			// Still Reconnecting, Animation Frames
@@ -741,8 +755,6 @@ void GameGraphRoot::processButtons() {
 			// Is this loss?
 			if (buttonManager.tappedButton(restartBtn, tapData)) {
 				lastButtonPressed = Restart;
-			} else if (buttonManager.tappedButton(levelsBtn, tapData)) {
-				isBackToMainMenu = true;
 			}
 		}
 	}
