@@ -78,7 +78,7 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 	playerID = net->getPlayerID();
 	roomId = net->getRoomID();
 
-	const char* levelName = LEVEL_NAMES[net->getLevelNum()];
+	const char* levelName = LEVEL_NAMES.at(net->getLevelNum());
 
 	CULog("Loading level %s b/c mib gave level num %d", levelName, net->getLevelNum());
 	unsigned int shipNumPlayers = net->getMaxNumPlayers();

@@ -101,7 +101,7 @@ void GLaDOS::placeObject(BuildingBlockModel::Object obj, float zeroAngle, vector
 
 			// Roll for pair's angle
 			float origAngle = (float)obj.angle + zeroAngle;
-			float pairAngle;
+			float pairAngle = 0;
 			do {
 				pairAngle = (float)(rand() % (int)(ship->getSize()));
 			} while (abs(pairAngle - ship->getButtons().at(i)->getAngle()) < globals::BUTTON_DIST);
@@ -179,7 +179,7 @@ void GLaDOS::update(float dt) {
 	for (int i = 0; i < events.size(); i++) {
 		std::shared_ptr<EventModel> event = events.at(i);
 		int spawnRate =
-			(int)(globals::MIN_PLAYERS / (event->getProbability() * mib->getNumPlayers()));
+			(int)(globals::MIN_PLAYERS / (event->getProbability() * (float)mib->getNumPlayers()));
 		if (spawnRate < 1) spawnRate = 1;
 		if (event->isActive((int)ship->timePassed()) && rand() % spawnRate <= 1) {
 			// ready up the event
@@ -219,7 +219,7 @@ void GLaDOS::update(float dt) {
 			int id = objects.at(j).player;
 			if (id != -1) ids.push_back(id);
 		}
-		float angle;
+		float angle = 0;
 		int padding = 0;
 		switch (block->getType()) {
 			case BuildingBlockModel::MinDist: {

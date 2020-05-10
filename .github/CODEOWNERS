@@ -1,0 +1,69 @@
+# This file describes who will be automatically tagged for review when editing specific files
+
+#
+#	DEFAULT
+#
+# Default to all developers
+* @onewordstudios/dev
+
+#
+#	DESIGN ASSETS
+#
+# Designers get tagged on asset changes
+/assets/ @onewordstudios/design
+
+#
+#	INFRASTRUCTURE
+#
+# Tag dev lead for infra changes
+/tooling/ @mt-xing
+/source/libraries/ @mt-xing
+.clang-format @mt-xing
+.clang-tidy @mt-xing
+/cugl/ @mt-xing
+README.md @mt-xing
+
+#
+#	MAIN CODE BASE
+#
+
+# Aashna
+/source/HealthNode.* @asaxena5
+/source/TutorialNode.* @asaxena5
+/source/ShipModel.* @asaxena5
+/source/ButtonModel.* @asaxena5
+/source/BreachModel.* @asaxena5
+/source/DonutModel.* @asaxena5
+/source/PlayerDonutModel.* @asaxena5
+
+# Sam
+/source/GLaDOS.* @ssorenson130
+/source/BuildingBlockModel.* @ssorenson130
+/source/EventModel.* @ssorenson130
+/source/LevelModel.* @ssorenson130
+/source/LevelConstants.* @ssorenson130
+/source/DoorModel.* @ssorenson130
+
+# Michael
+/source/ButtonManager.* @mt-xing
+/source/CustomNode.* @mt-xing
+/source/ExternalDonutModel.* @mt-xing
+/source/LoadingMode.* @mt-xing
+/source/MainMenuMode.* @mt-xing
+/source/main.cpp @mt-xing
+/source/MagicInternetBox.* @mt-xing
+/source/Sweetspace.* @mt-xing
+/source/Tween.* @mt-xing
+
+# Jeffrey
+/source/GameMode.* @Jeffrey-J-Yao
+/source/InputController.* @Jeffrey-J-Yao
+
+# Wendy
+/source/GameGraphRoot.* @wenjiazhang
+/source/BreachNode.* @wenjiazhang
+/source/ButtonNode.* @wenjiazhang
+/source/DonutNode.* @wenjiazhang
+/source/DoorNode.* @wenjiazhang
+/source/ExternalDonutNode.* @wenjiazhang
+/source/PlayerDonutNode.* @wenjiazhang

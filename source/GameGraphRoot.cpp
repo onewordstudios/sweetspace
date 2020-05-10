@@ -76,6 +76,12 @@ constexpr float SHIP_HEALTH_YELLOW_CUTOFF = 0.8f;
 /** Percentage of ship health to start showing red */
 constexpr float SHIP_HEALTH_RED_CUTOFF = 0.35f;
 
+/** Time to stop showing health tutorial */
+constexpr int HEALTH_TUTORIAL_CUTOFF = 10;
+
+/** Time to stop showing move tutorial */
+constexpr int MOVE_TUTORIAL_CUTOFF = 15;
+
 #pragma mark -
 #pragma mark Constructors
 
@@ -528,9 +534,9 @@ void GameGraphRoot::update(float timestep) {
 	}
 
 	if (ship->getLevelNum() == 0) {
-		if (trunc(ship->timer) == 10) {
+		if (trunc(ship->timer) == HEALTH_TUTORIAL_CUTOFF) {
 			healthTutorial->setVisible(false);
-		} else if (trunc(ship->timer) == 15) {
+		} else if (trunc(ship->timer) == MOVE_TUTORIAL_CUTOFF) {
 			moveTutorial->setVisible(false);
 		}
 	} else if (ship->getLevelNum() == 3) {
