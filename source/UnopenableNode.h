@@ -17,7 +17,6 @@ class UnopenableNode : public CustomNode {
 #pragma region State Methods
 	bool isActive() override { return unopModel->getIsActive(); }
 	void prePosition() override;
-	void postPosition() override;
 #pragma endregion
 
    public:

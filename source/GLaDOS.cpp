@@ -94,10 +94,9 @@ bool GLaDOS::init(std::shared_ptr<ShipModel> ship, int levelNum) {
 	maxEvents = tutorial::MAX_BREACH[levelNum] * mib->getNumPlayers() / globals::MIN_PLAYERS;
 	maxDoors = tutorial::MAX_DOOR[levelNum] * mib->getNumPlayers() / globals::MIN_PLAYERS;
 	maxButtons = tutorial::MAX_BUTTON[levelNum] * mib->getNumPlayers() / globals::MIN_PLAYERS;
-	CULog("%d, %d, %d", maxEvents, maxDoors, maxButtons);
 	int unop = tutorial::SECTIONED[levelNum] * mib->getNumPlayers();
 	sections = unop;
-	things = tutorial::THINGS[levelNum];
+	customEventCtr = tutorial::CUSTOM_EVENTS[levelNum];
 	float size = tutorial::SIZE_PER[levelNum] * mib->getNumPlayers();
 	ship->init(mib->getNumPlayers(), maxEvents, maxDoors, mib->getPlayerID(), size,
 			   tutorial::HEALTH[levelNum], maxButtons, unop);
@@ -134,7 +133,6 @@ bool GLaDOS::init(std::shared_ptr<ShipModel> ship, int levelNum) {
 		case tutorial::DOOR_LEVEL:
 			for (int i = 0; i < maxDoors; i++) {
 				float angle = size / ((float)maxDoors * 2) + (size * (float)i) / (float)maxDoors;
-				CULog("Placing door %d of %d at %f", i, maxDoors, angle);
 				int j = doorFree.front();
 				doorFree.pop();
 				ship->createDoor(angle, j);
@@ -397,8 +395,7 @@ void GLaDOS::update(float dt) {
 void GLaDOS::tutorialLevels(float dt) {
 	switch (levelNum) {
 		case tutorial::BREACH_LEVEL:
-			if (ship->timePassed() >= tutorial::B_L_PART1 && things == 2) {
-				CULog("things : %d", things);
+			if (ship->timePassed() >= tutorial::B_L_PART1 && customEventCtr == 2) {
 				float actualWidth = ship->getSize() / (float)sections;
 				float width = actualWidth - tutorial::FAKE_DOOR_PADDING * 2;
 				for (int i = 0; i < ship->getDonuts().size(); i++) {
@@ -416,9 +413,8 @@ void GLaDOS::tutorialLevels(float dt) {
 					placeObject({BuildingBlockModel::Breach, 0, -1}, suggestedAngle,
 								(i + 1) % ship->getDonuts().size());
 				}
-				things--;
-			} else if (ship->timePassed() >= tutorial::B_L_PART2 && things == 1) {
-				CULog("things a: %d", things);
+				customEventCtr--;
+			} else if (ship->timePassed() >= tutorial::B_L_PART2 && customEventCtr == 1) {
 				// TODO: fix breach overlap
 				float actualWidth = ship->getSize() / (float)sections;
 				float width = actualWidth - tutorial::FAKE_DOOR_PADDING * 2;
@@ -436,9 +432,8 @@ void GLaDOS::tutorialLevels(float dt) {
 					}
 					placeObject({BuildingBlockModel::Breach, 0, -1}, suggestedAngle, i);
 				}
-				things--;
-			} else if (things <= 0) {
-				CULog("things b: %d", things);
+				customEventCtr--;
+			} else if (customEventCtr <= 0) {
 				// Check if all breaches that can be resolved are resolved.
 				if (ship->getBreaches().size() - breachFree.size() == mib->getNumPlayers()) {
 					ship->setTimeless(false);
@@ -464,7 +459,7 @@ void GLaDOS::tutorialLevels(float dt) {
 			}
 			break;
 		case tutorial::STABILIZER_LEVEL:
-			if (things >= mib->getNumPlayers()) things = mib->getNumPlayers() - 1;
+			if (customEventCtr >= mib->getNumPlayers()) customEventCtr = mib->getNumPlayers() - 1;
 
 			switch (ship->getChallengeStatus()) {
 				case ShipModel::ACTIVE:
@@ -472,8 +467,9 @@ void GLaDOS::tutorialLevels(float dt) {
 				case ShipModel::INACTIVE:
 				case ShipModel::FAILURE: {
 					int dir = (int)(rand() % 2);
-					if (things != playerID && ship->getDonuts().at(things)->getIsActive()) {
-						mib->createAllTask(things, dir);
+					if (customEventCtr != playerID &&
+						ship->getDonuts().at(customEventCtr)->getIsActive()) {
+						mib->createAllTask(customEventCtr, dir);
 					} else {
 						ship->createAllTask(dir);
 					}
@@ -481,16 +477,17 @@ void GLaDOS::tutorialLevels(float dt) {
 					break;
 				}
 				case ShipModel::SUCCESS: {
-					things--;
-					if (things < 0) {
+					customEventCtr--;
+					if (customEventCtr < 0) {
 						ship->setTimeless(false);
 						mib->forceWinLevel();
 						ship->initTimer(0);
 						break;
 					}
 					int dir = (int)(rand() % 2);
-					if (things != playerID && ship->getDonuts().at(things)->getIsActive()) {
-						mib->createAllTask(things, dir);
+					if (customEventCtr != playerID &&
+						ship->getDonuts().at(customEventCtr)->getIsActive()) {
+						mib->createAllTask(customEventCtr, dir);
 					} else {
 						ship->createAllTask(dir);
 					}

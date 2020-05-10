@@ -25,5 +25,3 @@ bool UnopenableNode::init(std::shared_ptr<Unopenable> unop, std::shared_ptr<Donu
 }
 
 void UnopenableNode::prePosition() { angle = unopModel->getAngle(); }
-
-void UnopenableNode::postPosition() {}
