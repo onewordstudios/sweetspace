@@ -38,7 +38,7 @@ class GLaDOS {
 	/** The level number, for tutorial only*/
 	int levelNum;
 	/** The "things" (custom events) in this level, for tutorial only*/
-	int things;
+	int customEventCtr;
 	/** sections for tutorial only */
 	int sections;
 	/** The maximum number of events on ship at any one time. This will probably need to scale with
