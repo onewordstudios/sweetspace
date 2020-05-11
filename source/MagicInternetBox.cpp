@@ -485,7 +485,9 @@ void MagicInternetBox::update(std::shared_ptr<ShipModel> state) {
 				return;
 			}
 			case StateSync: {
-				resolveState(state, message);
+				if (!state->isLevelOver()) {
+					resolveState(state, message);
+				}
 				return;
 			}
 			case ChangeGame: {
