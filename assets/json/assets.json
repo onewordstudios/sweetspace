@@ -18,6 +18,15 @@
         "donut_cyan": {
             "file":   "textures/donuts/donut_cyan.png"
         },
+        "donut_face_idle": {
+            "file":   "textures/donuts/blink.png"
+        },
+        "donut_face_dizzy": {
+            "file":   "textures/donuts/dizzy.png"
+        },
+        "donut_face_work": {
+            "file":   "textures/donuts/work.png"
+        },
         "breach_yellow": {
             "file":   "textures/breaches/breach_yellow.png"
         },

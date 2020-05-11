@@ -34,14 +34,22 @@ class PlayerDonutNode : public DonutNode {
 	~PlayerDonutNode() { dispose(); }
 
 	bool init(std::shared_ptr<DonutModel> player, float screenHeight,
-			  const std::shared_ptr<cugl::Texture> &bodyTexture, const cugl::Vec2 &position);
+			  const std::shared_ptr<cugl::Texture> &bodyTexture,
+			  const std::shared_ptr<cugl::Texture> &faceIdleTexture,
+			  const std::shared_ptr<cugl::Texture> &faceDizzyTexture,
+			  const std::shared_ptr<cugl::Texture> &faceWorkTexture, const cugl::Vec2 &position);
 
-	static std::shared_ptr<PlayerDonutNode> alloc(std::shared_ptr<DonutModel> player,
-												  float screenHeight,
-												  const std::shared_ptr<cugl::Texture> &bodyTexture,
-												  const cugl::Vec2 &position) {
+	static std::shared_ptr<PlayerDonutNode> alloc(
+		std::shared_ptr<DonutModel> player, float screenHeight,
+		const std::shared_ptr<cugl::Texture> &bodyTexture,
+		const std::shared_ptr<cugl::Texture> &faceIdleTexture,
+		const std::shared_ptr<cugl::Texture> &faceDizzyTexture,
+		const std::shared_ptr<cugl::Texture> &faceWorkTexture, const cugl::Vec2 &position) {
 		std::shared_ptr<PlayerDonutNode> node = std::make_shared<PlayerDonutNode>();
-		return node->init(player, screenHeight, bodyTexture, position) ? node : nullptr;
+		return node->init(player, screenHeight, bodyTexture, faceIdleTexture, faceDizzyTexture,
+						  faceWorkTexture, position)
+				   ? node
+				   : nullptr;
 	}
 
 #pragma mark -
