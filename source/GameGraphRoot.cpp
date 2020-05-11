@@ -142,6 +142,10 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	externalDonutsNode = assets->get<Node>("game_field_near_externaldonuts");
 	healthNode = dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_health"));
 	coordHUD = std::dynamic_pointer_cast<Label>(assets->get<Node>("game_hud"));
+	timerBorder =
+		std::dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_timerBorder"));
+	timerBorder->setVisible(true);
+	coordHUD->setVisible(true);
 	shipOverlay =
 		dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_near_shipoverlay"));
 	shipOverlay->setColor(Color4::CLEAR);
@@ -471,6 +475,14 @@ void GameGraphRoot::reset() {
 void GameGraphRoot::update(float timestep) {
 	// "Drawing" code.  Move everything BUT the donut
 	// Update the HUD
+	for (int i = 0; i < ship->getButtons().size(); i++) {
+		if (ship->getButtons().at(i)->getIsActive()) {
+			coordHUD->setColor(cugl::Color4::RED);
+			break;
+		} else {
+			coordHUD->setColor(cugl::Color4::WHITE);
+		}
+	}
 	coordHUD->setText(positionText());
 
 	// State Check for Drawing
@@ -500,6 +512,8 @@ void GameGraphRoot::update(float timestep) {
 			healthNode->setVisible(false);
 			rollTutorial->setVisible(false);
 			moveTutorial->setVisible(false);
+			timerBorder->setVisible(false);
+			coordHUD->setVisible(false);
 			if (playerID != 0) {
 				winWaitText->setVisible(true);
 				nextBtn->setVisible(false);
@@ -549,6 +563,12 @@ void GameGraphRoot::update(float timestep) {
 			break;
 		default:
 			CULog("ERROR: Uncaught DrawingStatus Value Occurred");
+	}
+	if (ship->getTimeless()) {
+		coordHUD->setVisible(false);
+		timeoutCounter->setVisible(false);
+		timeoutDisplay->setVisible(false);
+		timerBorder->setVisible(false);
 	}
 
 	// Button Checks for Special Case Buttons
@@ -809,6 +829,21 @@ void GameGraphRoot::setNeedlePercentage(float percentage) {
  */
 std::string GameGraphRoot::positionText() {
 	stringstream ss;
-	ss << "Time Left: " << trunc(ship->timer);
+	if (trunc(ship->timer) > SEC_IN_MIN - 1) {
+		if ((int)trunc(ship->timer) % SEC_IN_MIN < tenSeconds) {
+			ss << "0" << (int)trunc(ship->timer) / SEC_IN_MIN << " : 0"
+			   << (int)trunc(ship->timer) % SEC_IN_MIN;
+		} else {
+			ss << "0" << (int)trunc(ship->timer) / SEC_IN_MIN << " : "
+			   << (int)trunc(ship->timer) % SEC_IN_MIN;
+		}
+	} else {
+		if (trunc(ship->timer) < tenSeconds) {
+			ss << "00 : 0" << trunc(ship->timer);
+		} else {
+			ss << "00 : " << trunc(ship->timer);
+		}
+	}
+
 	return ss.str();
 }
