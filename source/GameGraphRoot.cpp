@@ -209,19 +209,23 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	std::shared_ptr<DonutModel> playerModel = ship->getDonuts()[playerID];
 
 	// Initialize Players
+	std::shared_ptr<Texture> faceIdle = assets->get<Texture>("donut_face_idle");
+	std::shared_ptr<Texture> faceDizzy = assets->get<Texture>("donut_face_dizzy");
+	std::shared_ptr<Texture> faceWork = assets->get<Texture>("donut_face_work");
 	for (int i = 0; i < ship->getDonuts().size(); i++) {
 		std::shared_ptr<DonutModel> donutModel = ship->getDonuts().at((unsigned long)i);
 		string donutColor = PLAYER_COLOR.at((unsigned long)donutModel->getColorId());
-		std::shared_ptr<Texture> image = assets->get<Texture>("donut_" + donutColor);
+		std::shared_ptr<Texture> bodyTexture = assets->get<Texture>("donut_" + donutColor);
 		// Player node is handled separately
 		if (i == playerID) {
-			donutNode = PlayerDonutNode::alloc(playerModel, screenHeight, image,
-											   tempDonutNode->getPosition());
+			donutNode = PlayerDonutNode::alloc(playerModel, screenHeight, bodyTexture, faceIdle,
+											   faceDizzy, faceWork, tempDonutNode->getPosition());
 			allSpace->addChild(donutNode);
 			tempDonutNode = nullptr;
 		} else {
 			std::shared_ptr<ExternalDonutNode> newDonutNode =
-				ExternalDonutNode::alloc(donutModel, playerModel, ship->getSize(), image);
+				ExternalDonutNode::alloc(donutModel, playerModel, ship->getSize(), bodyTexture,
+										 faceIdle, faceDizzy, faceWork);
 			externalDonutsNode->addChild(newDonutNode);
 
 			Vec2 donutPos = Vec2(sin(donutModel->getAngle() * (globals::RADIUS + DONUT_OFFSET)),
