@@ -23,6 +23,9 @@ constexpr float FACE_ANIMATION_BLINK_INTERVAL = 100;
 /** Controls speed of facial animation. Inverse relationship to speed */
 constexpr float FACE_ANIMATION_SPEED = 3;
 
+/** Percentage conversion */
+constexpr float PERCENTAGE_SCALE = 100;
+
 bool DonutNode::init(const std::shared_ptr<cugl::Texture> &bodyTexture,
 					 const std::shared_ptr<cugl::Texture> &faceIdleTexture,
 					 const std::shared_ptr<cugl::Texture> &faceDizzyTexture,
@@ -75,18 +78,19 @@ void DonutNode::animateJumping() {
 		setScale(DONUT_SCALE, DONUT_SCALE);
 		return;
 	}
-	float xScale;
+	float xScale = 0;
 	if (referencedDonutModel->getJumpTime() <= halfJumpTime * SCALING_BEGIN) {
 		// First animation stage
 		xScale = Tween::linear(DONUT_SCALE, DONUT_SCALE * JUMP_SCALE,
-							   (int)((referencedDonutModel->getJumpTime()) * 100),
-							   (int)(halfJumpTime * SCALING_BEGIN * 100));
+							   (int)((referencedDonutModel->getJumpTime()) * PERCENTAGE_SCALE),
+							   (int)(halfJumpTime * SCALING_BEGIN * PERCENTAGE_SCALE));
 	} else if (isInScalingWindow) {
 		// Second animation stage
 		xScale = Tween::linear(
 			DONUT_SCALE * JUMP_SCALE, DONUT_SCALE,
-			(int)((referencedDonutModel->getJumpTime() - halfJumpTime * SCALING_BEGIN) * 100),
-			(int)(scalingWindowSize * 100));
+			(int)((referencedDonutModel->getJumpTime() - halfJumpTime * SCALING_BEGIN) *
+				  PERCENTAGE_SCALE),
+			(int)(scalingWindowSize * PERCENTAGE_SCALE));
 	} else {
 		// Not in animation stage
 		xScale = DONUT_SCALE;

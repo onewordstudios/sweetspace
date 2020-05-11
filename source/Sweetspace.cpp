@@ -38,6 +38,7 @@ void Sweetspace::onStartup() {
 	AudioChannels::start(24);
 	assets->loadDirectoryAsync("json/assets.json", nullptr);
 	for (auto level : LEVEL_NAMES) {
+		if (strcmp(level, "") == 0) continue;
 		assets->loadAsync<LevelModel>(level, level, nullptr);
 	}
 
@@ -115,6 +116,7 @@ void Sweetspace::update(float timestep) {
 				status = MainMenu;
 			} else if (MagicInternetBox::getInstance()->lastNetworkEvent() !=
 					   MagicInternetBox::NetworkEvents::None) {
+				CULog("almost there");
 				MagicInternetBox::getInstance()->acknowledgeNetworkEvent();
 				CULog("Restarting Level");
 				gameplay.dispose();
