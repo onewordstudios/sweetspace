@@ -41,6 +41,7 @@ class ShipModel {
 	float totalTime;
 	/** If is in tutorial level*/
 	int levelNum;
+	static constexpr int MIN_DISTANCE = 15;
 
    public:
 	enum Status { INACTIVE, ACTIVE, FAILURE, SUCCESS };
