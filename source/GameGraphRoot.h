@@ -118,9 +118,6 @@ class GameGraphRoot : public cugl::Scene {
 	/** The node containing the player count needle*/
 	std::shared_ptr<cugl::Node> needle;
 
-	/** Ship red overlay node */
-	std::shared_ptr<cugl::PolygonNode> shipOverlay;
-
 	// Loss Screen Textures
 	/** Node to hold all of the Loss Screen.*/
 	std::shared_ptr<cugl::Node> lossScreen;
@@ -275,6 +272,11 @@ class GameGraphRoot : public cugl::Scene {
 	 * @param percentage  The percent of dial to spin
 	 */
 	void setNeedlePercentage(float percentage);
+
+	/**
+	 * Healper function for setting alpha value of ship health warning
+	 */
+	void setSegHealthWarning(int alpha);
 
 #pragma mark -
 #pragma mark Accessors

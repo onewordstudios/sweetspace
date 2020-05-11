@@ -136,9 +136,6 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	externalDonutsNode = assets->get<Node>("game_field_near_externaldonuts");
 	healthNode = dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_health"));
 	coordHUD = std::dynamic_pointer_cast<Label>(assets->get<Node>("game_hud"));
-	shipOverlay =
-		dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_near_shipoverlay"));
-	shipOverlay->setColor(Color4::CLEAR);
 	currentHealthWarningFrame = 0;
 	moveTutorial =
 		dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_moveTutorial"));
@@ -183,6 +180,7 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	rightMostSeg = globals::VISIBLE_SEGS - 1;
 	std::shared_ptr<Texture> seg0 = assets->get<Texture>("shipseg0");
 	std::shared_ptr<Texture> seg1 = assets->get<Texture>("shipseg1");
+	std::shared_ptr<Texture> segRed = assets->get<Texture>("shipsegred");
 	for (int i = 0; i < globals::VISIBLE_SEGS; i++) {
 		std::shared_ptr<PolygonNode> segment =
 			cugl::PolygonNode::allocWithTexture(i % 2 == 0 ? seg0 : seg1);
@@ -197,6 +195,9 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 		segLabel->setPosition((float)segment->getTexture()->getWidth() / 2, SEG_LABEL_Y);
 		segLabel->setForeground(SHIP_LABEL_COLOR);
 		segment->addChild(segLabel);
+		std::shared_ptr<PolygonNode> segmentRed = cugl::PolygonNode::allocWithTexture(segRed);
+		segmentRed->setColor(Color4::CLEAR);
+		segment->addChild(segmentRed);
 		shipSegsNode->addChildWithTag(segment, (unsigned int)(i + 1));
 	}
 
@@ -416,8 +417,6 @@ void GameGraphRoot::dispose() {
 		leaveBtn = nullptr;
 		needle = nullptr;
 
-		shipOverlay = nullptr;
-
 		lossScreen = nullptr;
 		restartBtn = nullptr;
 		lostWaitText = nullptr;
@@ -619,8 +618,8 @@ void GameGraphRoot::update(float timestep) {
 		segAngle = fmod(segAngle, ship->getSize() * globals::PI_180);
 		segAngle = segAngle < 0 ? segAngle + ship->getSize() * globals::PI_180 : segAngle;
 		unsigned int segNum = (unsigned int)(segAngle / globals::SEG_SIZE);
-		std::shared_ptr<cugl::Label> segLabel = dynamic_pointer_cast<cugl::Label>(
-			segment->getChild(static_cast<unsigned int>(segment->getChildCount() - 1)));
+		std::shared_ptr<cugl::Label> segLabel =
+			dynamic_pointer_cast<cugl::Label>(segment->getChild(static_cast<unsigned int>(0)));
 		segLabel->setText(std::to_string(segNum));
 	}
 
@@ -678,11 +677,9 @@ void GameGraphRoot::update(float timestep) {
 		if (currentHealthWarningFrame == MAX_HEALTH_WARNING_FRAMES) {
 			if (ship->getHealth() > SHIP_HEALTH_RED_CUTOFF * ship->getInitHealth()) {
 				currentHealthWarningFrame = 0;
-				shipOverlay->setColor(Color4::CLEAR);
+				setSegHealthWarning(0);
 			} else {
-				shipOverlay->setColor(
-					Color4(COLOR_CHANNEL_MAX, COLOR_CHANNEL_MAX, COLOR_CHANNEL_MAX,
-						   MAX_HEALTH_WARNING_ALPHA / MAX_HEALTH_WARNING_FRAMES * 2));
+				setSegHealthWarning(MAX_HEALTH_WARNING_ALPHA / MAX_HEALTH_WARNING_FRAMES * 2);
 				currentHealthWarningFrame = 1;
 			}
 		} else {
@@ -695,12 +692,10 @@ void GameGraphRoot::update(float timestep) {
 						(MAX_HEALTH_WARNING_FRAMES - currentHealthWarningFrame) /
 						MAX_HEALTH_WARNING_FRAMES * 2;
 			}
-			shipOverlay->setColor(
-				Color4(COLOR_CHANNEL_MAX, COLOR_CHANNEL_MAX, COLOR_CHANNEL_MAX, alpha));
+			setSegHealthWarning(alpha);
 		}
 	} else if (ship->getHealth() <= SHIP_HEALTH_RED_CUTOFF * ship->getInitHealth()) {
-		shipOverlay->setColor(Color4(COLOR_CHANNEL_MAX, COLOR_CHANNEL_MAX, COLOR_CHANNEL_MAX,
-									 MAX_HEALTH_WARNING_ALPHA / MAX_HEALTH_WARNING_FRAMES * 2));
+		setSegHealthWarning(MAX_HEALTH_WARNING_ALPHA / MAX_HEALTH_WARNING_FRAMES * 2);
 		currentHealthWarningFrame = 1;
 	}
 }
@@ -769,6 +764,16 @@ void GameGraphRoot::processButtons() {
 
 void GameGraphRoot::setNeedlePercentage(float percentage) {
 	needle->setAngle(-percentage * globals::TWO_PI * globals::NEEDLE_OFFSET);
+}
+
+void GameGraphRoot::setSegHealthWarning(int alpha) {
+	for (int i = 0; i < globals::VISIBLE_SEGS; i++) {
+		std::shared_ptr<cugl::PolygonNode> segment = dynamic_pointer_cast<cugl::PolygonNode>(
+			shipSegsNode->getChildByTag((unsigned int)(i + 1)));
+		std::shared_ptr<cugl::PolygonNode> segRed = dynamic_pointer_cast<cugl::PolygonNode>(
+			segment->getChild(static_cast<unsigned int>(1)));
+		segRed->setColor(Color4(COLOR_CHANNEL_MAX, COLOR_CHANNEL_MAX, COLOR_CHANNEL_MAX, alpha));
+	}
 }
 
 /**
