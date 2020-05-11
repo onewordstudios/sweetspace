@@ -18,10 +18,10 @@ constexpr float SCALING_BEGIN = 0.1f;
 constexpr float SCALING_END = 1.2f;
 
 /** Number of frames between blinking */
-constexpr float FACE_ANIMATION_BLINK_INTERVAL = 100;
+constexpr int FACE_ANIMATION_BLINK_INTERVAL = 100;
 
 /** Controls speed of facial animation. Inverse relationship to speed */
-constexpr float FACE_ANIMATION_SPEED = 3;
+constexpr int FACE_ANIMATION_SPEED = 3;
 
 /** Percentage conversion */
 constexpr float PERCENTAGE_SCALE = 100;
@@ -101,7 +101,7 @@ void DonutNode::animateJumping() {
 void DonutNode::animateFacialExpression() {
 	DonutModel::FaceState faceState = referencedDonutModel->getFaceState();
 	std::shared_ptr<cugl::AnimationNode> visibleFaceNode;
-	int nextFrame;
+	unsigned int nextFrame = 0;
 	if (lastFaceState == DonutModel::FaceState::Working && faceState != lastFaceState &&
 		faceNodeWorking->getFrame() != 0) {
 		faceState = DonutModel::FaceState::Working;
@@ -137,14 +137,12 @@ void DonutNode::animateFacialExpression() {
 			visibleFaceNode = faceNodeWorking;
 			nextFrame = visibleFaceNode->getFrame() + 1;
 			break;
-		default:
-			nextFrame = 0;
 	}
 	faceNodeIdle->setVisible(false);
 	faceNodeDizzy->setVisible(false);
 	faceNodeWorking->setVisible(false);
 	if (visibleFaceNode != nullptr) {
 		visibleFaceNode->setVisible(true);
-		visibleFaceNode->setFrame(nextFrame < visibleFaceNode->getSize() ? nextFrame : 0);
+		visibleFaceNode->setFrame(nextFrame < visibleFaceNode->getSize() ? (int)nextFrame : 0);
 	}
 }
