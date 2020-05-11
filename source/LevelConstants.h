@@ -27,7 +27,7 @@ constexpr auto TIME_STOP_FIELD = "timeStop";	   // NOLINT
 constexpr auto PROBABILITY_FIELD = "probability";  // NOLINT
 
 /** Total number of levels in the game */
-constexpr unsigned int MAX_NUM_LEVELS = 11;
+constexpr unsigned int MAX_NUM_LEVELS = 12;
 
 /** Number of buttons in the level select */
 static constexpr unsigned int NUM_LEVEL_BTNS = 5;
@@ -43,10 +43,11 @@ constexpr std::array<const char*, MAX_NUM_LEVELS> LEVEL_NAMES = {"",
 																 "",
 																 "json/level1.owslevel",
 																 "json/level2.owslevel",
-																 "json/level3.owslevel"};
+																 "json/level3.owslevel",
+																 "json/level4.owslevel"};
 
 /** List of where the buttons on the level select map */
-constexpr std::array<unsigned int, NUM_LEVEL_BTNS> LEVEL_ENTRY_POINTS = {0, 6, 8, 9, 10}; // NOLINT
+constexpr std::array<unsigned int, NUM_LEVEL_BTNS> LEVEL_ENTRY_POINTS = {0, 8, 9, 10, 11}; // NOLINT
 
 /** Easy level index */
 constexpr unsigned int EASY_LEVEL = 0; // NOLINT
