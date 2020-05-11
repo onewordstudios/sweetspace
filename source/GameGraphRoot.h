@@ -49,7 +49,7 @@ class GameGraphRoot : public cugl::Scene {
 	ButtonManager buttonManager;
 
 	/** Seconds in a minute for timer display */
-	constexpr int SEC_IN_MIN = 60;
+	static constexpr int SEC_IN_MIN = 60;
 
 	// VIEW COMPONENTS
 	/** Filmstrip representing the player's animated donut */
