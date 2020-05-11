@@ -1740,6 +1740,42 @@
 						"y_anchor" : "middle"
 					},
 					"children" : {
+						"easyLabel" : {
+							"type": "Label",
+							"data": {
+								"font"       : "mont_black_italic_big",
+								"text"       : "Easy",
+								"foreground" : [248,231,78,255],
+								"anchor"	 : [0.5,0.5],
+								"valign"     : "middle",
+								"halign"     : "center",
+								"scale" : 1
+							},
+							"layout" : {
+								"x_anchor" : "center",
+								"y_anchor" : "middle",
+								"x_offset" : -1,
+								"y_offset" : -0.25
+							}
+						},
+						"hardLabel" : {
+							"type": "Label",
+							"data": {
+								"font"       : "mont_black_italic_big",
+								"text"       : "Hard",
+								"foreground" : [248,231,78,255],
+								"anchor"	 : [0.5,0.5],
+								"valign"     : "middle",
+								"halign"     : "center",
+								"scale" : 1
+							},
+							"layout" : {
+								"x_anchor" : "center",
+								"y_anchor" : "middle",
+								"x_offset" : 1,
+								"y_offset" : -0.25
+							}
+						},
 						"lvl0" : {
 							"type": "Button",
 							"format" : {
