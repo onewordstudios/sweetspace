@@ -83,6 +83,9 @@ constexpr int HEALTH_TUTORIAL_CUTOFF = 10;
 /** Time to stop showing move tutorial */
 constexpr int MOVE_TUTORIAL_CUTOFF = 5;
 
+/** Time to show breach tutorial */
+constexpr int BREACH_TUTORIAL_CUTOFF = 10;
+
 #pragma mark -
 #pragma mark Constructors
 
@@ -152,7 +155,7 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	healthTutorial =
 		dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_healthTutorial"));
 	healthTutorial->setVisible(false);
-	if (ship->getLevelNum() == tutorial::BREACH_LEVEL) {
+	if (ship->getLevelNum() == tutorial::REAL_LEVELS.at(0)) {
 		healthTutorial->setVisible(true);
 	}
 	rollTutorial =
@@ -245,10 +248,10 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 		// Add the breach node
 		breachesNode->addChild(breachNode);
 		if (ship->getLevelNum() == tutorial::BREACH_LEVEL) {
-			std::shared_ptr<Texture> image = assets->get<Texture>("fix_breach_tutorial0");
+			std::shared_ptr<Texture> image = assets->get<Texture>("jump_tutorial0");
 			std::shared_ptr<TutorialNode> tutorial = TutorialNode::alloc(image);
 			tutorial->setBreachNode(breachNode);
-			tutorialNode->addChild(tutorial);
+			tutorialNode->addChildWithTag(tutorial, i + 1);
 		}
 	}
 
@@ -546,6 +549,23 @@ void GameGraphRoot::update(float timestep) {
 
 	// Button Checks for Special Case Buttons
 	processButtons();
+
+	if (ship->getLevelNum() == tutorial::BREACH_LEVEL) {
+		if (trunc(ship->timeCtr) > 10) {
+			for (int i = 0; i < tutorialNode->getChildCount(); i++) {
+				shared_ptr<TutorialNode> tutorial =
+					dynamic_pointer_cast<TutorialNode>(tutorialNode->getChildByTag(i + 1));
+				if (tutorial != nullptr) {
+					tutorial->setVisible(true);
+					if (tutorial->getPlayer() == playerID) {
+						std::shared_ptr<Texture> image =
+							assets->get<Texture>("fix_breach_tutorial0");
+						tutorial->setTexture(image);
+					}
+				}
+			}
+		}
+	}
 
 	if (ship->getHealth() < 1) {
 		std::shared_ptr<Texture> image = assets->get<Texture>("health_empty");
