@@ -2,6 +2,9 @@
 
 using namespace cugl;
 
+/** Cutoff value below default friction at which donut is no longer dizzy */
+constexpr float DIZZY_STATE_FRICTION_CUTOFF = 0.1;
+
 #pragma mark -
 #pragma mark Constructors
 
@@ -21,6 +24,7 @@ bool DonutModel::init(const Vec2& pos, float shipSize) {
 	// Set Initial jump Velocity based on gravity and max jump height
 	jumpVelocity = sqrt(2 * GRAVITY * JUMP_HEIGHT);
 	this->shipSize = shipSize;
+	faceState = FaceState::Idle;
 	return true;
 }
 
@@ -63,6 +67,44 @@ void DonutModel::updateJump(float timestep) {
 			jumping = false;
 		}
 		jumpTime += timestep;
+	}
+}
+
+void DonutModel::transitionFaceState(FaceState newState) {
+	switch (faceState) {
+		case Idle:
+		case Working:
+		case Colliding:
+			switch (newState) {
+				case Idle:
+					faceState = FaceState::Idle;
+					return;
+				case Dizzy:
+					faceState = FaceState::Dizzy;
+					return;
+				case Working:
+					faceState = FaceState::Working;
+					return;
+				case Colliding:
+					faceState = FaceState::Colliding;
+					return;
+			}
+		case Dizzy:
+			switch (newState) {
+				case Idle:
+					if (friction > DEFAULT_DONUT_FRICTION_FACTOR - DIZZY_STATE_FRICTION_CUTOFF) {
+						faceState = FaceState::Idle;
+					}
+					return;
+				case Working:
+					faceState = FaceState::Working;
+					return;
+				case Colliding:
+					faceState = FaceState::Colliding;
+					return;
+				case Dizzy:
+					return;
+			}
 	}
 }
 
