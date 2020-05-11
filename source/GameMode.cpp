@@ -235,7 +235,16 @@ void GameMode::update(float timestep) {
 	}
 
 	if (!(ship->timerEnded())) {
-		ship->updateTimer(timestep);
+		bool allButtonsInactive = true;
+		for (int i = 0; i < ship->getButtons().size(); i++) {
+			if (ship->getButtons().at(i)->getIsActive()) {
+				allButtonsInactive = false;
+				break;
+			}
+		}
+		if (allButtonsInactive) {
+			ship->updateTimer(timestep);
+		}
 	}
 
 	// Move the donut (MODEL ONLY)
