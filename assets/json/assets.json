@@ -1828,7 +1828,7 @@
 								"downnode" : "down",
 								"anchor"   : [0.5,0.5],
 								"scale" : 1,
-								"angle" : -45
+								"angle" : -15
 							},
 							"layout" : {
 								"x_anchor" : "center",
