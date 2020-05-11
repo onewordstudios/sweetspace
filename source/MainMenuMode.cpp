@@ -528,6 +528,7 @@ void MainMenuMode::update(float timestep) {
 		case MagicInternetBox::MatchmakingStatus::ClientWaitingOnOthers:
 			if (backBtn->isVisible()) {
 				backBtn->setVisible(false);
+				clientJoinBtn->setVisible(false);
 			}
 		default:
 			net->update();
