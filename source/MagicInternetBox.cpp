@@ -166,6 +166,9 @@ void MagicInternetBox::sendData(NetworkDataType type, float angle, int id, int d
 #pragma region State Sync
 
 void MagicInternetBox::syncState(std::shared_ptr<ShipModel> state) {
+	if (state->isLevelOver()) {
+		return;
+	}
 	std::vector<uint8_t> data;
 	data.push_back(StateSync);
 
@@ -482,7 +485,9 @@ void MagicInternetBox::update(std::shared_ptr<ShipModel> state) {
 				return;
 			}
 			case StateSync: {
-				resolveState(state, message);
+				if (!state->isLevelOver()) {
+					resolveState(state, message);
+				}
 				return;
 			}
 			case ChangeGame: {
@@ -496,6 +501,10 @@ void MagicInternetBox::update(std::shared_ptr<ShipModel> state) {
 			}
 			default:
 				break;
+		}
+
+		if (state->isLevelOver()) {
+			return;
 		}
 
 		float angle = (float)(message[1] + ONE_BYTE * message[2]) / FLOAT_PRECISION;

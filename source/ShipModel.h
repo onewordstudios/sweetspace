@@ -267,13 +267,6 @@ class ShipModel {
 	bool flagDoor(int id, int player, int flag);
 
 	/**
-	 * Close door with given id.
-	 *
-	 * @param id   the id of door to be closed.
-	 */
-	bool closeDoor(int id);
-
-	/**
 	 * Set health of the ship
 	 *
 	 * @param health   the health of the ship
@@ -334,6 +327,11 @@ class ShipModel {
 	 * @return if timer has ended
 	 */
 	bool timerEnded() { return timer < 1; }
+
+	/**
+	 * Returns whether the level has ended (won or lost)
+	 */
+	bool isLevelOver() { return timerEnded() || health <= 0; }
 
 	/**
 	 * Get the amount of time that has passed in the level

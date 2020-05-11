@@ -238,6 +238,8 @@ void GameMode::update(float timestep) {
 	// Move the donut (MODEL ONLY)
 	float thrust = input->getRoll();
 	donutModel->applyForce(thrust);
+	// Attempt to recover to idle animation
+	donutModel->transitionFaceState(DonutModel::FaceState::Idle);
 
 	// Breach Checks
 	for (int i = 0; i < ship->getBreaches().size(); i++) {
@@ -251,6 +253,7 @@ void GameMode::update(float timestep) {
 			diff < globals::BREACH_WIDTH && breach->getHealth() != 0) {
 			// Slow player by drag factor
 			donutModel->setFriction(OTHER_BREACH_FRICTION);
+			donutModel->transitionFaceState(DonutModel::FaceState::Dizzy);
 		} else if (playerID == breach->getPlayer() && diff < EPSILON_ANGLE &&
 				   donutModel->getJumpOffset() == 0.0f && breach->getHealth() > 0) {
 			if (!breach->isPlayerOn()) {
@@ -264,7 +267,7 @@ void GameMode::update(float timestep) {
 			if (donutModel->getFriction() > FIX_BREACH_FRICTION) {
 				donutModel->setFriction(FIX_BREACH_FRICTION);
 			}
-
+			donutModel->transitionFaceState(DonutModel::FaceState::Working);
 		} else if (diff > EPSILON_ANGLE && breach->isPlayerOn()) {
 			breach->setIsPlayerOn(false);
 		}
@@ -296,6 +299,7 @@ void GameMode::update(float timestep) {
 		if (abs(diff) < DOOR_ACTIVE_ANGLE) {
 			ship->getDoors().at(i)->addPlayer(playerID);
 			net->flagDualTask(i, playerID, 1);
+			donutModel->transitionFaceState(DonutModel::FaceState::Colliding);
 		} else {
 			if (ship->getDoors().at(i)->isPlayerOn(playerID)) {
 				ship->getDoors().at(i)->removePlayer(playerID);
