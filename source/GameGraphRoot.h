@@ -80,7 +80,7 @@ class GameGraphRoot : public cugl::Scene {
 	std::vector<std::shared_ptr<cugl::PolygonNode>> challengePanelArrows;
 	/** Filmstrip representing the player's animated donut */
 	std::shared_ptr<cugl::PolygonNode> healthNode;
-	std::vector<std::shared_ptr<cugl::PolygonNode>> healthNodeOverlay;
+	std::shared_ptr<cugl::PolygonNode> healthNodeOverlay;
 	/** Filmstrip representing the player's animated donut */
 	std::shared_ptr<cugl::PolygonNode> moveTutorial;
 	std::shared_ptr<cugl::PolygonNode> healthTutorial;

@@ -70,13 +70,13 @@
             "wrapT": "repeat"
         },
 		"health_green": {
-			"file": "textures/health/health_green.png"
+			"file": "textures/health/green.png"
 		},
 		"health_yellow": {
-			"file": "textures/health/health_yellow.png"
+			"file": "textures/health/yellow.png"
 		},
 		"health_red": {
-			"file": "textures/health/health_red.png"
+			"file": "textures/health/red.png"
 		},
 		"health_empty": {
 			"file": "textures/health/empty.png"
@@ -456,20 +456,13 @@
                             "scale": 0.3
                           }
                         },
-                        "healthSeg": {
+                        "health": {
                           "type": "Image",
                           "data": {
                             "texture": "health_green",
                             "anchor":   [0.5,0.5],
                             "position": [0, 0],
                             "scale": 0.3
-                          }
-                        },
-                        "healthNode": {
-                          "type": "Node",
-                          "data": {
-                            "anchor":   [0.5,0.5],
-                            "position": [0, 0]
                           }
                         },
                         "challengePanelParent": {
@@ -607,18 +600,7 @@
                                   }
                                 }
                             }
-<<<<<<< HEAD
-=======
                         },
-						"health": {
-							"type": "Image",
-							"data": {
-								"texture": "health_green",
-								"anchor":   [0.5,0.5],
-								"position": [0, 0],
-								"scale": 0.3
-							}
-						},
                         "moveTutorial" : {
                           "type": "Image",
                           "data": {
@@ -642,7 +624,6 @@
                             "position": [-200,-200],
                             "anchor":   [0.5,0.5]
                           }
->>>>>>> master
                         }
 
                     }

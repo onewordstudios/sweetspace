@@ -1,4 +1,4 @@
-﻿#include "GameGraphRoot.h"
+#include "GameGraphRoot.h"
 
 #include <cugl/cugl.h>
 
@@ -69,10 +69,10 @@ constexpr int SEG_LABEL_Y = 1113;
 constexpr int MAX_HEALTH_LABELS = 10;
 
 /** Percentage of ship health to start showing yellow */
-constexpr float SHIP_HEALTH_YELLOW_CUTOFF = 0.8f;
+constexpr float SHIP_HEALTH_YELLOW_CUTOFF = 0.5f;
 
 /** Percentage of ship health to start showing red */
-constexpr float SHIP_HEALTH_RED_CUTOFF = 0.5f;
+constexpr float SHIP_HEALTH_RED_CUTOFF = 0.3f;
 
 /** Time to stop showing health tutorial */
 constexpr int HEALTH_TUTORIAL_CUTOFF = 10;
@@ -137,8 +137,10 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	doorsNode = assets->get<Node>("game_field_near_doors");
 	unopsNode = assets->get<Node>("game_field_near_unops");
 	externalDonutsNode = assets->get<Node>("game_field_near_externaldonuts");
-	donutPos = donutNode->getPosition();
-	healthNode = dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_healthBase"));
+	healthNode =
+		dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_healthBase"));
+	healthNodeOverlay =
+		dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_health"));
 	coordHUD = std::dynamic_pointer_cast<Label>(assets->get<Node>("game_hud"));
 	timerBorder =
 		std::dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_timerBorder"));
@@ -162,8 +164,6 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	rollTutorial->setVisible(false);
 	tutorialNode = assets->get<Node>("game_field_near_tutorial");
 	buttonsNode = assets->get<Node>("game_field_near_button");
-	std::shared_ptr<Texture> image = assets->get<Texture>("health_green");
-	healthNode->setTexture(image);
 	nearSpace->setAngle(0.0f);
 	// Initialize Roll Challenge
 	challengePanelHanger = dynamic_pointer_cast<cugl::PolygonNode>(
@@ -181,13 +181,6 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 		std::shared_ptr<cugl::PolygonNode> arrow = dynamic_pointer_cast<cugl::PolygonNode>(
 			assets->get<Node>("game_field_challengePanelParent_challengePanelArrow" + s));
 		challengePanelArrows.push_back(arrow);
-	}
-
-	for(int i = 0; i < MAX_HEALTH_LABELS; i++) {
-		std::shared_ptr<cugl::PolygonNode> healthSeg =
-				dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_healthSeg"));
-		healthNodeOverlay.push_back(healthSeg);
-
 	}
 
 	// Initialize Ship Segments
@@ -578,22 +571,25 @@ void GameGraphRoot::update(float timestep) {
 	// Button Checks for Special Case Buttons
 	processButtons();
 
-//	if (ship->getHealth() < 1) {
-//		healthNodeOverlay->setVisible(false);
-//	} else if (ship->getHealth() < globals::INITIAL_SHIP_HEALTH * 0.3) {
-//		std::shared_ptr<Texture> image = assets->get<Texture>("health_red");
-//		healthNodeOverlay->setTexture(image);
-//		healthNodeOverlay->setPosition(-100, 176);
-//		healthNodeOverlay->setAngle(240 * globals::PI_180);
-//	} else if (ship->getHealth() < globals::INITIAL_SHIP_HEALTH * 0.5) {
-//		std::shared_ptr<Texture> image = assets->get<Texture>("health_yellow");
-//		healthNodeOverlay->setTexture(image);
-//		healthNodeOverlay->setPosition(-120, 118);
-//		healthNodeOverlay->setAngle(270 * globals::PI_180);
-//	} else if (ship->getHealth() < globals::INITIAL_SHIP_HEALTH * 0.8) {
-//		healthNodeOverlay->setPosition(-100, 60);
-//		healthNodeOverlay->setAngle(300 * globals::PI_180);
-//	}
+	if (ship->getHealth() < 1) {
+		healthNodeOverlay->setVisible(false);
+	} else if (ship->getHealth() < ship->getInitHealth() * SHIP_HEALTH_RED_CUTOFF) {
+		std::shared_ptr<Texture> image = assets->get<Texture>("health_red");
+		healthNodeOverlay->setTexture(image);
+		healthNodeOverlay->setPosition(-100, 176);
+		healthNodeOverlay->setAngle(240 * globals::PI_180);
+	} else if (ship->getHealth() < ship->getInitHealth() * SHIP_HEALTH_YELLOW_CUTOFF) {
+		std::shared_ptr<Texture> image = assets->get<Texture>("health_yellow");
+		healthNodeOverlay->setTexture(image);
+		healthNodeOverlay->setPosition(-120, 118);
+		healthNodeOverlay->setAngle(270 * globals::PI_180);
+	} else if (ship->getHealth() < ship->getInitHealth() * 0.7) {
+		healthNodeOverlay->setPosition(-100, 60);
+		healthNodeOverlay->setAngle(300 * globals::PI_180);
+	} else if (ship->getHealth() < ship->getInitHealth() * 0.9) {
+		healthNodeOverlay->setPosition(-75, 30);
+		healthNodeOverlay->setAngle(320 * globals::PI_180);
+	}
 
 	if (ship->getLevelNum() == tutorial::BREACH_LEVEL) {
 		if (trunc(ship->timeCtr) > BREACH_TUTORIAL_CUTOFF) {
@@ -612,16 +608,16 @@ void GameGraphRoot::update(float timestep) {
 		}
 	}
 
-	if (ship->getHealth() < 1) {
-		std::shared_ptr<Texture> image = assets->get<Texture>("health_empty");
-		healthNode->setTexture(image);
-	} else if (ship->getHealth() < ship->getInitHealth() * SHIP_HEALTH_RED_CUTOFF) {
-		std::shared_ptr<Texture> image = assets->get<Texture>("health_red");
-		healthNode->setTexture(image);
-	} else if (ship->getHealth() < ship->getInitHealth() * SHIP_HEALTH_YELLOW_CUTOFF) {
-		std::shared_ptr<Texture> image = assets->get<Texture>("health_yellow");
-		healthNode->setTexture(image);
-	}
+	//	if (ship->getHealth() < 1) {
+	//		std::shared_ptr<Texture> image = assets->get<Texture>("health_empty");
+	//		healthNode->setTexture(image);
+	//	} else if (ship->getHealth() < ship->getInitHealth() * SHIP_HEALTH_RED_CUTOFF) {
+	//		std::shared_ptr<Texture> image = assets->get<Texture>("health_red");
+	//		healthNode->setTexture(image);
+	//	} else if (ship->getHealth() < ship->getInitHealth() * SHIP_HEALTH_YELLOW_CUTOFF) {
+	//		std::shared_ptr<Texture> image = assets->get<Texture>("health_yellow");
+	//		healthNode->setTexture(image);
+	//	}
 	if (ship->getLevelNum() == tutorial::BREACH_LEVEL) {
 		if (trunc(ship->timeCtr) == HEALTH_TUTORIAL_CUTOFF) {
 			healthTutorial->setVisible(false);
