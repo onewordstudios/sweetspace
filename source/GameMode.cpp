@@ -83,6 +83,7 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 
 		// Return to main menu next frame (eventually we'd like credits)
 		isBackToMainMenu = true;
+		AudioChannels::get()->stopMusic(1);
 
 		// Initialize dummy crap so we don't crash this frame
 		ship = ShipModel::alloc(0, 0, 0, 0, 0, 0);
