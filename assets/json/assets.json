@@ -1767,7 +1767,8 @@
 								"down" : {
 									"type"   : "Image",
 									"data"   : {
-										"texture"  : "level_select_0"
+										"texture"  : "level_select_0",
+										"scale" : 0.9
 									}
 								}
 							}
@@ -1800,7 +1801,8 @@
 								"down" : {
 									"type"   : "Image",
 									"data"   : {
-										"texture"  : "level_select_1"
+										"texture"  : "level_select_1",
+										"scale" : 0.9
 									}
 								}
 							}
@@ -1832,7 +1834,8 @@
 								"down" : {
 									"type"   : "Image",
 									"data"   : {
-										"texture"  : "level_select_2"
+										"texture"  : "level_select_2",
+										"scale" : 0.9
 									}
 								}
 							}
@@ -1865,7 +1868,8 @@
 								"down" : {
 									"type"   : "Image",
 									"data"   : {
-										"texture"  : "level_select_3"
+										"texture"  : "level_select_3",
+										"scale" : 0.9
 									}
 								}
 							}
@@ -1896,133 +1900,8 @@
 								"down" : {
 									"type"   : "Image",
 									"data"   : {
-										"texture"  : "level_select_4"
-									}
-								}
-							}
-						},
-						"easybtn" : {
-							"type": "Button",
-							"format" : {
-								"type" : "Anchored"
-							},
-							"data": {
-								"upnode"   : "up",
-								"downnode" : "down",
-								"anchor"   : [0,0.5],
-								"scale" : 1
-							},
-							"layout" : {
-								"x_anchor" : "left",
-								"y_anchor" : "middle"
-							},
-							"children" : {
-								"up" : {
-									"type": "Label",
-									"data": {
-										"font"       : "mont_black_italic_big",
-										"text"       : "Easy",
-										"foreground" : [248,231,78,255],
-										"anchor"	 : [0.5,0.5],
-										"valign"     : "middle",
-										"halign"     : "center",
-										"scale" : 1
-									}
-								},
-								"down" : {
-									"type": "Label",
-									"data": {
-										"font"       : "mont_black_italic_big",
-										"text"       : "-Easy-",
-										"foreground" : [248,231,78,255],
-										"anchor"	 : [0.5,0.5],
-										"valign"     : "middle",
-										"halign"     : "center",
-										"scale" : 1
-									}
-								}
-							}
-						},
-						"medbtn" : {
-							"type": "Button",
-							"format" : {
-								"type" : "Anchored"
-							},
-							"data": {
-								"upnode"   : "up",
-								"downnode" : "down",
-								"anchor"   : [0.5,0.5],
-								"scale" : 1
-							},
-							"layout" : {
-								"x_anchor" : "center",
-								"y_anchor" : "middle"
-							},
-							"children" : {
-								"up" : {
-									"type": "Label",
-									"data": {
-										"font"       : "mont_black_italic_big",
-										"text"       : "Medium",
-										"foreground" : [248,231,78,255],
-										"anchor"	 : [0.5,0.5],
-										"valign"     : "middle",
-										"halign"     : "center",
-										"scale" : 1
-									}
-								},
-								"down" : {
-									"type": "Label",
-									"data": {
-										"font"       : "mont_black_italic_big",
-										"text"       : "-Medium-",
-										"foreground" : [248,231,78,255],
-										"anchor"	 : [0.5,0.5],
-										"valign"     : "middle",
-										"halign"     : "center",
-										"scale" : 1
-									}
-								}
-							}
-						},
-						"hardbtn" : {
-							"type": "Button",
-							"format" : {
-								"type" : "Anchored"
-							},
-							"data": {
-								"upnode"   : "up",
-								"downnode" : "down",
-								"anchor"   : [1,0.5],
-								"scale" : 1
-							},
-							"layout" : {
-								"x_anchor" : "right",
-								"y_anchor" : "middle"
-							},
-							"children" : {
-								"up" : {
-									"type": "Label",
-									"data": {
-										"font"       : "mont_black_italic_big",
-										"text"       : "Hard",
-										"foreground" : [248,231,78,255],
-										"anchor"	 : [0.5,0.5],
-										"valign"     : "middle",
-										"halign"     : "center",
-										"scale" : 1
-									}
-								},
-								"down" : {
-									"type": "Label",
-									"data": {
-										"font"       : "mont_black_italic_big",
-										"text"       : "-Hard-",
-										"foreground" : [248,231,78,255],
-										"anchor"	 : [0.5,0.5],
-										"valign"     : "middle",
-										"halign"     : "center",
-										"scale" : 1
+										"texture"  : "level_select_4",
+										"scale" : 0.9
 									}
 								}
 							}

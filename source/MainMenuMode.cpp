@@ -95,11 +95,11 @@ bool MainMenuMode::init(const std::shared_ptr<AssetManager>& assets) {
 		std::dynamic_pointer_cast<Button>(assets->get<Node>("matchmaking_client_buttons_btnclear"));
 
 	levelSelect = assets->get<Node>("matchmaking_levelselect");
-	easyBtn =
-		std::dynamic_pointer_cast<Button>(assets->get<Node>("matchmaking_levelselect_easybtn"));
-	medBtn = std::dynamic_pointer_cast<Button>(assets->get<Node>("matchmaking_levelselect_medbtn"));
-	hardBtn =
-		std::dynamic_pointer_cast<Button>(assets->get<Node>("matchmaking_levelselect_hardbtn"));
+	for (unsigned int i = 0; i < NUM_LEVEL_BTNS; i++) {
+		levelBtns.at(i) = std::dynamic_pointer_cast<Button>(
+			assets->get<Node>("matchmaking_levelselect_lvl" + std::to_string(i)));
+		buttonManager.registerButton(levelBtns.at(i));
+	}
 
 	buttonManager.registerButton(backBtn);
 	buttonManager.registerButton(hostBtn);
@@ -107,9 +107,6 @@ bool MainMenuMode::init(const std::shared_ptr<AssetManager>& assets) {
 	buttonManager.registerButton(hostBeginBtn);
 	buttonManager.registerButton(clientJoinBtn);
 	buttonManager.registerButton(clientClearBtn);
-	buttonManager.registerButton(easyBtn);
-	buttonManager.registerButton(medBtn);
-	buttonManager.registerButton(hardBtn);
 	for (unsigned int i = 0; i < NUM_DIGITS; i++) {
 		clientRoomBtns.push_back(std::dynamic_pointer_cast<Button>(
 			assets->get<Node>("matchmaking_client_buttons_btn" + std::to_string(i))));
@@ -154,9 +151,7 @@ void MainMenuMode::dispose() {
 	clientJoinBtn = nullptr;
 	clientClearBtn = nullptr;
 	levelSelect = nullptr;
-	easyBtn = nullptr;
-	medBtn = nullptr;
-	hardBtn = nullptr;
+	levelBtns.fill(nullptr);
 	buttonManager.clear();
 	clientRoomBtns.clear();
 }
@@ -425,20 +420,12 @@ void MainMenuMode::processButtons() {
 			break;
 		}
 		case HostLevelSelect: {
-			if (buttonManager.tappedButton(easyBtn, tapData)) {
-				gameReady = true;
-				net->startGame(EASY_LEVEL);
-				return;
-			}
-			if (buttonManager.tappedButton(medBtn, tapData)) {
-				gameReady = true;
-				net->startGame(MED_LEVEL);
-				return;
-			}
-			if (buttonManager.tappedButton(hardBtn, tapData)) {
-				gameReady = true;
-				net->startGame(HARD_LEVEL);
-				return;
+			for (unsigned int i = 0; i < NUM_LEVEL_BTNS; i++) {
+				if (buttonManager.tappedButton(levelBtns.at(i), tapData)) {
+					gameReady = true;
+					net->startGame(LEVEL_ENTRY_POINTS.at(i));
+					return;
+				}
 			}
 			break;
 		}

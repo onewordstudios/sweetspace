@@ -2,10 +2,12 @@
 #define __MAIN_MENU_MODE_H__
 #include <cugl/cugl.h>
 
+#include <array>
 #include <vector>
 
 #include "ButtonManager.h"
 #include "InputController.h"
+#include "LevelConstants.h"
 #include "MagicInternetBox.h"
 #include "ShipModel.h"
 
@@ -104,14 +106,11 @@ class MainMenuMode : public cugl::Scene {
 	/** Connection loading message */
 	std::shared_ptr<cugl::Label> connScreen;
 
-	/** Temporary level select */
+	/** Level select */
 	std::shared_ptr<cugl::Node> levelSelect;
-	/** Temporary level select easy mode */
-	std::shared_ptr<cugl::Button> easyBtn;
-	/** Temporary level select med mode */
-	std::shared_ptr<cugl::Button> medBtn;
-	/** Temporary level select hard mode */
-	std::shared_ptr<cugl::Button> hardBtn;
+
+	/** Level select buttons */
+	std::array<std::shared_ptr<cugl::Button>, NUM_LEVEL_BTNS> levelBtns;
 
 	/** Label for room ID (host) */
 	std::shared_ptr<cugl::Label> hostLabel;
