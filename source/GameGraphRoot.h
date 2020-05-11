@@ -48,6 +48,9 @@ class GameGraphRoot : public cugl::Scene {
 	/** Helper object to make the buttons go up and down */
 	ButtonManager buttonManager;
 
+	/** Seconds in a minute for timer display */
+	constexpr int SEC_IN_MIN = 60;
+
 	// VIEW COMPONENTS
 	/** Filmstrip representing the player's animated donut */
 	std::shared_ptr<PlayerDonutNode> donutNode;
