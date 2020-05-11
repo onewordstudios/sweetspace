@@ -94,14 +94,10 @@ class MagicInternetBox {
 	/** Current level number, or -1 if unassigned */
 	int levelNum;
 
-	/**
-	 * Number of connected players
-	 */
+	/** Number of connected players */
 	unsigned int numPlayers;
 
-	/**
-	 * Maximum number of players for this ship
-	 */
+	/** Maximum number of players for this ship */
 	unsigned int maxPlayers;
 
 	/**
@@ -125,6 +121,8 @@ class MagicInternetBox {
 		ButtonResolve,
 		AllCreate,
 		AllFail,
+		AllSucceed,
+		ForceWin,
 		StateSync,
 
 		// Connection messages that can be received during gameplay
@@ -405,6 +403,16 @@ class MagicInternetBox {
 	 * appropriate health
 	 */
 	void failAllTask();
+
+	/**
+	 * Inform the host that a task requiring all members of the ship has succeeded
+	 */
+	void succeedAllTask();
+
+	/**
+	 * Inform the clients that the level has been won
+	 */
+	void forceWinLevel();
 
 	/**
 	 * Inform other players that a player has initiated a jump.

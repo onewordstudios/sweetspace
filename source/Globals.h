@@ -13,6 +13,9 @@ namespace globals {
 /** Network tick frequency */
 constexpr unsigned int NETWORK_TICK = 12; // NOLINT
 
+/** Number of tutorial levels */
+constexpr unsigned int NUM_TUTORIAL_LEVELS = 8; // NOLINT
+
 /** Number of characters in a ship ID */
 constexpr unsigned int ROOM_LENGTH = 5; // NOLINT
 
@@ -62,6 +65,9 @@ constexpr unsigned int SCENE_WIDTH = 1024; // NOLINT
 /** Radius of the ship for the scene graph */
 constexpr unsigned int RADIUS = 550; // NOLINT
 
+/** Radius ratio for calculating spin speed */
+constexpr float SPIN_RATIO = 3.0f; // NOLINT
+
 /** Maximum number of possibly visible ship segments at a time */
 constexpr unsigned int VISIBLE_SEGS = 6; // NOLINT
 
@@ -76,6 +82,12 @@ constexpr float SEG_CUTOFF_ANGLE = 90 * PI_180; // NOLINT
 
 /** How much the player count needle is offset by */
 constexpr float NEEDLE_OFFSET = 0.9f; // NOLINT
+
+/** Music Fade-in time in seconds*/
+constexpr float MUSIC_FADE_IN = 0.2f; // NOLINT
+
+/** Music Fade-out time in seconds*/
+constexpr float MUSIC_FADE_OUT = 0.2f; // NOLINT
 
 #pragma endregion
 } // namespace globals

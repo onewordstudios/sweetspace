@@ -7,6 +7,7 @@
 #include "DonutModel.h"
 #include "DoorModel.h"
 #include "Globals.h"
+#include "Unopenable.h"
 
 class ShipModel {
    private:
@@ -17,6 +18,8 @@ class ShipModel {
 	std::vector<std::shared_ptr<BreachModel>> breaches;
 	/** Current list of doors on ship*/
 	std::vector<std::shared_ptr<DoorModel>> doors;
+	/** Current list of doors on ship*/
+	std::vector<std::shared_ptr<Unopenable>> unopenable;
 	/** Current list of doors on ship*/
 	std::vector<std::shared_ptr<ButtonModel>> buttons;
 	/** Initial health of the ship*/
@@ -29,6 +32,8 @@ class ShipModel {
 	int rollDir;
 	/** If a all player challenge is in effect*/
 	bool challenge;
+	/** If this level has no time limit*/
+	bool timeless;
 	/** Challenge progress*/
 	int challengeProg;
 	float endTime;
@@ -38,8 +43,14 @@ class ShipModel {
 	int levelNum;
 
    public:
-	/** Game timer*/
+	enum Status { INACTIVE, ACTIVE, FAILURE, SUCCESS };
+	/** Status of all player challenge. 0 = no challenge, 1 = challenge, 2 = challenge failed, 3 =
+	 * challenge success*/
+	Status status;
+	/** Game countdown timer*/
 	float timer;
+	/** Game timer*/
+	float timeCtr;
 #pragma mark Constructors
 	/*
 	 * Creates a ship.
@@ -56,10 +67,14 @@ class ShipModel {
 		  shipSize(0),
 		  rollDir(0),
 		  challenge(false),
+		  timeless(false),
 		  challengeProg(0),
 		  endTime(0),
 		  totalTime(0),
-		  timer(0) {}
+		  levelNum(0),
+		  status(INACTIVE),
+		  timer(0),
+		  timeCtr(0) {}
 
 	/**
 	 * Destroys this breach, releasing all resources.
@@ -107,6 +122,16 @@ class ShipModel {
 	 */
 	bool init(unsigned int numPlayers, unsigned int numBreaches, unsigned int numDoors,
 			  unsigned int playerID, float shipSize, int initHealth, unsigned int numButtons);
+
+	bool init(unsigned int numPlayers, unsigned int numBreaches, unsigned int numDoors,
+			  unsigned int playerID, float shipSize, int initHealth, unsigned int numButtons,
+			  int numUnop) {
+		// Instantiate door models
+		for (unsigned int i = 0; i < numUnop; i++) {
+			unopenable.push_back(std::make_shared<Unopenable>());
+		}
+		return init(numPlayers, numBreaches, numDoors, playerID, shipSize, initHealth, numButtons);
+	}
 
 	/**
 	 * Create and return a shared pointer to a new ship model.
@@ -177,6 +202,13 @@ class ShipModel {
 	std::vector<std::shared_ptr<DoorModel>>& getDoors() { return doors; }
 
 	/**
+	 * Returns the current list of doors.
+	 *
+	 * @return the current list of doors.
+	 */
+	std::vector<std::shared_ptr<Unopenable>>& getUnopenable() { return unopenable; }
+
+	/**
 	 * Returns the current list of buttons.
 	 *
 	 * @return the current list of buttons.
@@ -218,6 +250,14 @@ class ShipModel {
 	bool createDoor(float angle, int id);
 
 	/**
+	 * Create door with given id.
+	 *
+	 * @param angle	   the location to create the door.
+	 * @param id   	   the id of door to be created.
+	 */
+	bool createUnopenable(float angle, int id);
+
+	/**
 	 * Flag door with given id.
 	 *
 	 * @param id   the id of door to be opened.
@@ -225,13 +265,6 @@ class ShipModel {
 	 * @param flag   the flag to set (on or off, 1 or 0)
 	 */
 	bool flagDoor(int id, int player, int flag);
-
-	/**
-	 * Close door with given id.
-	 *
-	 * @param id   the id of door to be closed.
-	 */
-	bool closeDoor(int id);
 
 	/**
 	 * Set health of the ship
@@ -246,6 +279,9 @@ class ShipModel {
 	 * @return health  the health of the ship
 	 */
 	float getHealth() { return health; }
+
+	void setTimeless(bool t) { timeless = t; }
+	bool getTimeless() { return timeless; }
 
 	/**
 	 * Get health of the ship
@@ -270,6 +306,7 @@ class ShipModel {
 	void initTimer(float startTime) {
 		timer = startTime;
 		totalTime = startTime;
+		timeCtr = 0;
 	}
 
 	/**
@@ -277,7 +314,12 @@ class ShipModel {
 	 *
 	 * @param time amount of time to detract from timer
 	 */
-	void updateTimer(float time) { timer = timer - time; }
+	void updateTimer(float time) {
+		timeCtr += time;
+		if (!timeless) {
+			timer = totalTime - timeCtr;
+		}
+	}
 
 	/**
 	 * Get if timer has ended
@@ -287,11 +329,16 @@ class ShipModel {
 	bool timerEnded() { return timer < 1; }
 
 	/**
+	 * Returns whether the level has ended (won or lost)
+	 */
+	bool isLevelOver() { return timerEnded() || health <= 0; }
+
+	/**
 	 * Get the amount of time that has passed in the level
 	 *
 	 * @return the time that has passed
 	 */
-	float timePassed() { return totalTime - timer; }
+	float timePassed() { return timeCtr; }
 
 	/**
 	 * Set size of the ship
@@ -364,6 +411,11 @@ class ShipModel {
 	bool failAllTask();
 
 	/**
+	 * Set challenge status
+	 */
+	void setStatus(Status s);
+
+	/**
 	 * Set end time for challenge
 	 */
 	void setEndTime(float time) { endTime = time; };
@@ -405,8 +457,23 @@ class ShipModel {
 	int getLevelNum() { return levelNum; }
 
 	/**
+	 * Gets status of challenge
+	 */
+	Status getChallengeStatus() { return status; }
+
+	/**
 	 * Sets if level is tutorial
 	 */
 	void setLevelNum(int l) { levelNum = l; }
+
+	/**
+	 * Separates each donut into their own section
+	 */
+	void separateDonuts() {
+		for (int i = 0; i < getDonuts().size(); i++) {
+			float angle = getSize() * (float)i / getDonuts().size();
+			getDonuts().at(i)->setAngle(angle);
+		}
+	}
 };
 #endif /* __SHIP_MODEL_H__ */

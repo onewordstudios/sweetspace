@@ -37,6 +37,15 @@ bool MainMenuMode::init(const std::shared_ptr<AssetManager>& assets) {
 	if (assets == nullptr) {
 		return false;
 	}
+
+	// Music Initialization
+	auto source = assets->get<Sound>("menu");
+	if (AudioChannels::get()->currentMusic() == nullptr ||
+		AudioChannels::get()->currentMusic()->getFile() != source->getFile()) {
+		AudioChannels::get()->stopMusic(globals::MUSIC_FADE_OUT);
+		AudioChannels::get()->queueMusic(source, true, source->getVolume(), globals::MUSIC_FADE_IN);
+	}
+
 	// Set network controller
 	net = MagicInternetBox::getInstance();
 	input = InputController::getInstance();
@@ -54,8 +63,9 @@ bool MainMenuMode::init(const std::shared_ptr<AssetManager>& assets) {
 
 #pragma region Scene Graph Components
 	bg0stars = assets->get<Node>("matchmaking_mainmenubg2");
-	bg1land = assets->get<Node>("matchmaking_mainmenubg3");
+	bg1glow = assets->get<Node>("matchmaking_mainmenubg3");
 	bg2ship = assets->get<Node>("matchmaking_mainmenubg4");
+	bg3land = assets->get<Node>("matchmaking_mainmenubg5");
 	bg9studio = assets->get<Node>("matchmaking_studiologo");
 
 	backBtn = std::dynamic_pointer_cast<Button>(assets->get<Node>("matchmaking_backbtn"));
@@ -85,11 +95,11 @@ bool MainMenuMode::init(const std::shared_ptr<AssetManager>& assets) {
 		std::dynamic_pointer_cast<Button>(assets->get<Node>("matchmaking_client_buttons_btnclear"));
 
 	levelSelect = assets->get<Node>("matchmaking_levelselect");
-	easyBtn =
-		std::dynamic_pointer_cast<Button>(assets->get<Node>("matchmaking_levelselect_easybtn"));
-	medBtn = std::dynamic_pointer_cast<Button>(assets->get<Node>("matchmaking_levelselect_medbtn"));
-	hardBtn =
-		std::dynamic_pointer_cast<Button>(assets->get<Node>("matchmaking_levelselect_hardbtn"));
+	for (unsigned int i = 0; i < NUM_LEVEL_BTNS; i++) {
+		levelBtns.at(i) = std::dynamic_pointer_cast<Button>(
+			assets->get<Node>("matchmaking_levelselect_lvl" + std::to_string(i)));
+		buttonManager.registerButton(levelBtns.at(i));
+	}
 
 	buttonManager.registerButton(backBtn);
 	buttonManager.registerButton(hostBtn);
@@ -97,9 +107,6 @@ bool MainMenuMode::init(const std::shared_ptr<AssetManager>& assets) {
 	buttonManager.registerButton(hostBeginBtn);
 	buttonManager.registerButton(clientJoinBtn);
 	buttonManager.registerButton(clientClearBtn);
-	buttonManager.registerButton(easyBtn);
-	buttonManager.registerButton(medBtn);
-	buttonManager.registerButton(hardBtn);
 	for (unsigned int i = 0; i < NUM_DIGITS; i++) {
 		clientRoomBtns.push_back(std::dynamic_pointer_cast<Button>(
 			assets->get<Node>("matchmaking_client_buttons_btn" + std::to_string(i))));
@@ -144,9 +151,7 @@ void MainMenuMode::dispose() {
 	clientJoinBtn = nullptr;
 	clientClearBtn = nullptr;
 	levelSelect = nullptr;
-	easyBtn = nullptr;
-	medBtn = nullptr;
-	hardBtn = nullptr;
+	levelBtns.fill(nullptr);
 	buttonManager.clear();
 	clientRoomBtns.clear();
 }
@@ -158,7 +163,7 @@ void MainMenuMode::updateClientLabel() {
 	for (unsigned int i = 0; i < clientEnteredRoom.size(); i++) {
 		room.push_back('0' + clientEnteredRoom[i]);
 	}
-	for (unsigned int i = clientEnteredRoom.size(); i < globals::ROOM_LENGTH; i++) {
+	for (unsigned int i = (unsigned int)clientEnteredRoom.size(); i < globals::ROOM_LENGTH; i++) {
 		room.push_back('_');
 	}
 
@@ -208,8 +213,9 @@ void MainMenuMode::processTransition() {
 	switch (currState) {
 		case NA: {
 			if (transitionFrame == 1) {
-				bg1land->setVisible(true);
+				bg1glow->setVisible(true);
 				bg2ship->setVisible(true);
+				bg3land->setVisible(true);
 			}
 			if (transitionFrame > OPEN_TRANSITION) {
 				bg9studio->setVisible(false);
@@ -233,9 +239,11 @@ void MainMenuMode::processTransition() {
 			}
 
 			// Background pans up into view
-			bg1land->setPositionY(
+			bg1glow->setPositionY(
 				Tween::easeOut(-screenHeight, screenHeight / 2, transitionFrame, OPEN_TRANSITION));
 			bg2ship->setPositionY(
+				Tween::easeOut(-screenHeight, screenHeight / 2, transitionFrame, OPEN_TRANSITION));
+			bg3land->setPositionY(
 				Tween::easeOut(-screenHeight, screenHeight / 2, transitionFrame, OPEN_TRANSITION));
 
 			return;
@@ -278,6 +286,25 @@ void MainMenuMode::processTransition() {
 			break;
 		}
 		case HostScreen:
+			if (transitionState == HostLevelSelect) {
+				if (transitionFrame == 1) {
+					levelSelect->setVisible(true);
+				}
+				if (transitionFrame > TRANSITION_DURATION) {
+					endTransition();
+					hostScreen->setVisible(false);
+					levelSelect->setColor(Color4::WHITE);
+					return;
+				}
+
+				hostScreen->setPositionY(
+					Tween::easeIn(0, -screenHeight, transitionFrame, TRANSITION_DURATION));
+				levelSelect->setColor(
+					Tween::fade(Tween::linear(0, 1, transitionFrame, TRANSITION_DURATION)));
+
+				return;
+			}
+			// Intentional fall-through
 		case ClientScreen: {
 			if (transitionState == StartScreen) {
 				// Start transition
@@ -400,9 +427,7 @@ void MainMenuMode::processButtons() {
 		case HostScreen: {
 			if (buttonManager.tappedButton(hostBeginBtn, tapData)) {
 				if (net->getNumPlayers() >= globals::MIN_PLAYERS) {
-					currState = HostLevelSelect;
-					hostScreen->setVisible(false);
-					levelSelect->setVisible(true);
+					transitionState = HostLevelSelect;
 				}
 			} else if (buttonManager.tappedButton(backBtn, tapData)) {
 				CULog("Going Back");
@@ -412,20 +437,12 @@ void MainMenuMode::processButtons() {
 			break;
 		}
 		case HostLevelSelect: {
-			if (buttonManager.tappedButton(easyBtn, tapData)) {
-				gameReady = true;
-				net->startGame(1);
-				return;
-			}
-			if (buttonManager.tappedButton(medBtn, tapData)) {
-				gameReady = true;
-				net->startGame(4);
-				return;
-			}
-			if (buttonManager.tappedButton(hardBtn, tapData)) {
-				gameReady = true;
-				net->startGame(6); // NOLINT refactor out level constants later
-				return;
+			for (unsigned int i = 0; i < NUM_LEVEL_BTNS; i++) {
+				if (buttonManager.tappedButton(levelBtns.at(i), tapData)) {
+					gameReady = true;
+					net->startGame(LEVEL_ENTRY_POINTS.at(i));
+					return;
+				}
 			}
 			break;
 		}
@@ -515,6 +532,7 @@ void MainMenuMode::update(float timestep) {
 		case MagicInternetBox::MatchmakingStatus::ClientWaitingOnOthers:
 			if (backBtn->isVisible()) {
 				backBtn->setVisible(false);
+				clientJoinBtn->setVisible(false);
 			}
 		default:
 			net->update();

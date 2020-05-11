@@ -1,6 +1,8 @@
 ﻿#ifndef __JS_LEVEL_CONSTANTS_H__
 #define __JS_LEVEL_CONSTANTS_H__
 
+#include <array>
+
 constexpr auto MAX_BREACH_FIELD = "maxBreaches";   // NOLINT
 constexpr auto MAX_DOOR_FIELD = "maxDoors";		   // NOLINT
 constexpr auto MAX_BUTTON_FIELD = "maxButtons";	   // NOLINT
@@ -24,21 +26,34 @@ constexpr auto TIME_START_FIELD = "timeStart";	   // NOLINT
 constexpr auto TIME_STOP_FIELD = "timeStop";	   // NOLINT
 constexpr auto PROBABILITY_FIELD = "probability";  // NOLINT
 
-/** The source for our level file */
-constexpr auto LEVEL_ONE_FILE = "json/level1.owslevel";	   // NOLINT
-constexpr auto LEVEL_TWO_FILE = "json/level2.owslevel";	   // NOLINT
-constexpr auto LEVEL_THREE_FILE = "json/level3.owslevel";  // NOLINT
-constexpr auto TUT_ONE_FILE = "json/tutorial1.owslevel";   // NOLINT
-constexpr auto TUT_TWO_FILE = "json/tutorial2.owslevel";   // NOLINT
-constexpr auto TUT_THREE_FILE = "json/tutorial3.owslevel"; // NOLINT
-constexpr auto TUT_FOUR_FILE = "json/tutorial4.owslevel";  // NOLINT
-/** The key for our loaded level */
-constexpr auto LEVEL_ONE_KEY = "level1";   // NOLINT
-constexpr auto LEVEL_TWO_KEY = "level2";   // NOLINT
-constexpr auto LEVEL_THREE_KEY = "level3"; // NOLINT
-constexpr auto TUT_ONE_KEY = "tut1";	   // NOLINT
-constexpr auto TUT_TWO_KEY = "tut2";	   // NOLINT
-constexpr auto TUT_THREE_KEY = "tut3";	   // NOLINT
-constexpr auto TUT_FOUR_KEY = "tut4";	   // NOLINT
+/** Total number of levels in the game */
+constexpr unsigned int MAX_NUM_LEVELS = 12;
+
+/** Number of buttons in the level select */
+static constexpr unsigned int NUM_LEVEL_BTNS = 5;
+
+/** List of all level names, used as both keys and values NOLINTNEXTLINE */
+constexpr std::array<const char*, MAX_NUM_LEVELS> LEVEL_NAMES = {"",
+																 "json/tutorial2.owslevel",
+																 "",
+																 "json/tutorial4.owslevel",
+																 "",
+																 "json/tutorial6.owslevel",
+																 "json/tutorial7.owslevel",
+																 "",
+																 "json/level1.owslevel",
+																 "json/level2.owslevel",
+																 "json/level3.owslevel",
+																 "json/level4.owslevel"};
+
+/** List of where the buttons on the level select map */
+constexpr std::array<unsigned int, NUM_LEVEL_BTNS> LEVEL_ENTRY_POINTS = {0, 8, 9, 10, 11}; // NOLINT
+
+/** Easy level index */
+constexpr unsigned int EASY_LEVEL = 0; // NOLINT
+/** Medium level index */
+constexpr unsigned int MED_LEVEL = 8; // NOLINT
+/** Hard level index */
+constexpr unsigned int HARD_LEVEL = 9; // NOLINT
 
 #endif /* defined(__JS_LEVEL_CONSTANTS_H__) */

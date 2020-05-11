@@ -14,13 +14,15 @@ class PlayerDonutNode : public DonutNode {
 	/** The height of the game screen */
 	float screenHeight;
 
+	bool isActive() override { return false; }
+
    public:
 #pragma mark -
 #pragma mark Constructor
 	/**
 	 * Creates an node.
 	 */
-	PlayerDonutNode() : DonutNode() {}
+	PlayerDonutNode() : DonutNode(), screenHeight(0) {}
 
 	/**
 	 * Releases all resources allocated with this node.
@@ -31,28 +33,27 @@ class PlayerDonutNode : public DonutNode {
 	 */
 	~PlayerDonutNode() { dispose(); }
 
-	/**
-	 * Returns an PlayerDonutNode
-	 *
-	 * @param bodyTexture   A shared pointer to the body Texture object.
-	 *
-	 * @return a textured polygon from a Texture object.
-	 */
-	static std::shared_ptr<PlayerDonutNode> allocWithTextures(
-		const std::shared_ptr<cugl::Texture> &bodyTexture) {
+	bool init(std::shared_ptr<DonutModel> player, float screenHeight,
+			  const std::shared_ptr<cugl::Texture> &bodyTexture,
+			  const std::shared_ptr<cugl::Texture> &faceIdleTexture,
+			  const std::shared_ptr<cugl::Texture> &faceDizzyTexture,
+			  const std::shared_ptr<cugl::Texture> &faceWorkTexture, const cugl::Vec2 &position);
+
+	static std::shared_ptr<PlayerDonutNode> alloc(
+		std::shared_ptr<DonutModel> player, float screenHeight,
+		const std::shared_ptr<cugl::Texture> &bodyTexture,
+		const std::shared_ptr<cugl::Texture> &faceIdleTexture,
+		const std::shared_ptr<cugl::Texture> &faceDizzyTexture,
+		const std::shared_ptr<cugl::Texture> &faceWorkTexture, const cugl::Vec2 &position) {
 		std::shared_ptr<PlayerDonutNode> node = std::make_shared<PlayerDonutNode>();
-		if (node->init()) {
-			node->initChildren(bodyTexture);
-			return node;
-		} else {
-			return nullptr;
-		}
+		return node->init(player, screenHeight, bodyTexture, faceIdleTexture, faceDizzyTexture,
+						  faceWorkTexture, position)
+				   ? node
+				   : nullptr;
 	}
 
 #pragma mark -
 	void setInitPos(cugl::Vec2 vec) { initPos = vec; }
-
-	void setScreenHeight(float h) { screenHeight = h; }
 
 	void draw(const shared_ptr<cugl::SpriteBatch> &batch, const cugl::Mat4 &transform,
 			  cugl::Color4 tint) override;

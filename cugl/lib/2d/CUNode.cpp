@@ -221,7 +221,7 @@ bool Node::initWithData(const SceneLoader* loader, const std::shared_ptr<JsonVal
     if (data->has("angle")) {
         transform = true;
         _angle = data->getFloat("angle",0.0f);
-        _angle = M_PI/180.0f;
+        _angle *= M_PI/180.0f;
     }
     
     if (transform && !_useTransform) updateTransform();

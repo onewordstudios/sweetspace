@@ -7,6 +7,11 @@
 #include "DonutNode.h"
 
 class ExternalDonutNode : public DonutNode {
+   protected:
+	bool isActive() override;
+	void prePosition() override;
+	void postPosition() override;
+
    public:
 #pragma mark -
 #pragma mark Constructor
@@ -24,27 +29,26 @@ class ExternalDonutNode : public DonutNode {
 	 */
 	~ExternalDonutNode() { dispose(); }
 
-	/**
-	 * Returns an ExternalDonutNode
-	 *
-	 * @param bodyTexture   A shared pointer to the body Texture object.
-	 *
-	 * @return a textured polygon from a Texture object.
-	 */
-	static std::shared_ptr<ExternalDonutNode> allocWithTextures(
-		const std::shared_ptr<cugl::Texture> &bodyTexture) {
+	bool init(std::shared_ptr<DonutModel> externalDonutModel, std::shared_ptr<DonutModel> player,
+			  float shipSize, const std::shared_ptr<cugl::Texture> &bodyTexture,
+			  const std::shared_ptr<cugl::Texture> &faceIdleTexture,
+			  const std::shared_ptr<cugl::Texture> &faceDizzyTexture,
+			  const std::shared_ptr<cugl::Texture> &faceWorkTexture);
+
+	static std::shared_ptr<ExternalDonutNode> alloc(
+		std::shared_ptr<DonutModel> externalDonutModel, std::shared_ptr<DonutModel> player,
+		float shipSize, const std::shared_ptr<cugl::Texture> &bodyTexture,
+		const std::shared_ptr<cugl::Texture> &faceIdleTexture,
+		const std::shared_ptr<cugl::Texture> &faceDizzyTexture,
+		const std::shared_ptr<cugl::Texture> &faceWorkTexture) {
 		std::shared_ptr<ExternalDonutNode> node = std::make_shared<ExternalDonutNode>();
-		if (node->init()) {
-			node->initChildren(bodyTexture);
-			return node;
-		} else {
-			return nullptr;
-		}
+		return node->init(externalDonutModel, player, shipSize, bodyTexture, faceIdleTexture,
+						  faceDizzyTexture, faceWorkTexture)
+				   ? node
+				   : nullptr;
 	}
 
 #pragma mark -
-	void draw(const shared_ptr<cugl::SpriteBatch> &batch, const cugl::Mat4 &transform,
-			  cugl::Color4 tint) override;
 };
 
 #endif // SWEETSPACE_EXTERNALDONUTNODE_H

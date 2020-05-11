@@ -55,9 +55,13 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 	isBackToMainMenu = false;
 
 	// Music Initialization
-	auto source = assets->get<Sound>("theme");
-	AudioChannels::get()->playMusic(source, true, source->getVolume());
 
+	auto source = assets->get<Sound>("theme");
+	if (AudioChannels::get()->currentMusic() == nullptr ||
+		AudioChannels::get()->currentMusic()->getFile() != source->getFile()) {
+		AudioChannels::get()->stopMusic(globals::MUSIC_FADE_OUT);
+		AudioChannels::get()->queueMusic(source, true, source->getVolume(), globals::MUSIC_FADE_IN);
+	}
 	// Initialize the scene to a locked width
 	Size dimen = Application::get()->getDisplaySize();
 	dimen *= globals::SCENE_WIDTH / dimen.width; // Lock the game to a reasonable resolution
@@ -74,46 +78,45 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 	playerID = net->getPlayerID();
 	roomId = net->getRoomID();
 
-	const char* levelName = nullptr;
-	switch (net->getLevelNum()) {
-		case 1:
-			levelName = TUT_ONE_KEY;
-			break;
-		case 2:
-			levelName = TUT_TWO_KEY;
-			break;
-		case 3:
-			levelName = TUT_FOUR_KEY;
-			break;
-		case 4:
-			levelName = LEVEL_ONE_KEY;
-			break;
-		case 5: // NOLINT counting numbers
-			levelName = LEVEL_TWO_KEY;
-			break;
-		case 6: // NOLINT counting numbers
-			levelName = LEVEL_THREE_KEY;
-			break;
-		default:
-			break;
+	if (net->getLevelNum() >= MAX_NUM_LEVELS) {
+		// Reached end of game
+
+		// Return to main menu next frame (eventually we'd like credits)
+		isBackToMainMenu = true;
+		AudioChannels::get()->stopMusic(1);
+
+		// Initialize dummy crap so we don't crash this frame
+		ship = ShipModel::alloc(0, 0, 0, 0, 0, 0);
+		gm.init(ship, 0);
+
+	} else if (net->getLevelNum() >= globals::NUM_TUTORIAL_LEVELS ||
+			   std::find(std::begin(tutorial::REAL_LEVELS), std::end(tutorial::REAL_LEVELS),
+						 net->getLevelNum()) != std::end(tutorial::REAL_LEVELS)) {
+		const char* levelName = LEVEL_NAMES.at(net->getLevelNum());
+
+		CULog("Loading level %s b/c mib gave level num %d", levelName, net->getLevelNum());
+		unsigned int shipNumPlayers = net->getMaxNumPlayers();
+
+		std::shared_ptr<LevelModel> level = assets->get<LevelModel>(levelName);
+		int maxEvents = (int)(level->getMaxBreaches() * shipNumPlayers / globals::MIN_PLAYERS);
+		int maxDoors = std::min(level->getMaxDoors() * shipNumPlayers / globals::MIN_PLAYERS,
+								shipNumPlayers * 2 - 1);
+		int maxButtons = (int)(level->getMaxButtons() * shipNumPlayers / globals::MIN_PLAYERS);
+		if (maxButtons % 2 != 0) maxButtons += 1;
+		ship = ShipModel::alloc(
+			shipNumPlayers, maxEvents, maxDoors, playerID,
+			(float)level->getShipSize((int)shipNumPlayers),
+			(int)(level->getInitHealth() * shipNumPlayers / globals::MIN_PLAYERS), maxButtons);
+		ship->initTimer(level->getTime());
+		gm.init(ship, level);
+	} else {
+		// Tutorial Mode. Allocate an empty ship and let the gm do the rest.
+		// Prepare for maximum hardcoding
+		ship = ShipModel::alloc(0, 0, 0, 0, 0, 0);
+		gm.init(ship, net->getLevelNum());
 	}
 
-	CULog("Loading level %s b/c mib gave level num %d", levelName, net->getLevelNum());
-
-	std::shared_ptr<LevelModel> level = assets->get<LevelModel>(levelName);
-	int maxEvents = (int)(level->getMaxBreaches() * net->getNumPlayers() / globals::MIN_PLAYERS);
-	int maxDoors = std::min(level->getMaxDoors() * net->getNumPlayers() / globals::MIN_PLAYERS,
-							net->getNumPlayers() * 2 - 1);
-	int maxButtons = (int)(level->getMaxButtons() * net->getNumPlayers() / globals::MIN_PLAYERS);
-	if (maxButtons % 2 != 0) maxButtons += 1;
-	ship = ShipModel::alloc(
-		net->getNumPlayers(), maxEvents, maxDoors, playerID,
-		(float)level->getShipSize((int)net->getNumPlayers()),
-		(int)(level->getInitHealth() * net->getNumPlayers() / globals::MIN_PLAYERS), maxButtons);
-	gm.init(ship, level);
-
 	donutModel = ship->getDonuts().at(static_cast<unsigned long>(playerID));
-	ship->initTimer(level->getTime());
 	ship->setLevelNum(net->getLevelNum());
 
 	// Scene graph Initialization
@@ -232,12 +235,23 @@ void GameMode::update(float timestep) {
 	}
 
 	if (!(ship->timerEnded())) {
-		ship->updateTimer(timestep);
+		bool allButtonsInactive = true;
+		for (int i = 0; i < ship->getButtons().size(); i++) {
+			if (ship->getButtons().at(i)->getIsActive()) {
+				allButtonsInactive = false;
+				break;
+			}
+		}
+		if (allButtonsInactive) {
+			ship->updateTimer(timestep);
+		}
 	}
 
 	// Move the donut (MODEL ONLY)
 	float thrust = input->getRoll();
 	donutModel->applyForce(thrust);
+	// Attempt to recover to idle animation
+	donutModel->transitionFaceState(DonutModel::FaceState::Idle);
 
 	// Breach Checks
 	for (int i = 0; i < ship->getBreaches().size(); i++) {
@@ -251,6 +265,7 @@ void GameMode::update(float timestep) {
 			diff < globals::BREACH_WIDTH && breach->getHealth() != 0) {
 			// Slow player by drag factor
 			donutModel->setFriction(OTHER_BREACH_FRICTION);
+			donutModel->transitionFaceState(DonutModel::FaceState::Dizzy);
 		} else if (playerID == breach->getPlayer() && diff < EPSILON_ANGLE &&
 				   donutModel->getJumpOffset() == 0.0f && breach->getHealth() > 0) {
 			if (!breach->isPlayerOn()) {
@@ -264,7 +279,7 @@ void GameMode::update(float timestep) {
 			if (donutModel->getFriction() > FIX_BREACH_FRICTION) {
 				donutModel->setFriction(FIX_BREACH_FRICTION);
 			}
-
+			donutModel->transitionFaceState(DonutModel::FaceState::Working);
 		} else if (diff > EPSILON_ANGLE && breach->isPlayerOn()) {
 			breach->setIsPlayerOn(false);
 		}
@@ -296,6 +311,7 @@ void GameMode::update(float timestep) {
 		if (abs(diff) < DOOR_ACTIVE_ANGLE) {
 			ship->getDoors().at(i)->addPlayer(playerID);
 			net->flagDualTask(i, playerID, 1);
+			donutModel->transitionFaceState(DonutModel::FaceState::Colliding);
 		} else {
 			if (ship->getDoors().at(i)->isPlayerOn(playerID)) {
 				ship->getDoors().at(i)->removePlayer(playerID);
@@ -303,7 +319,29 @@ void GameMode::update(float timestep) {
 			}
 		}
 	}
+	// Door Checks
+	for (int i = 0; i < ship->getUnopenable().size(); i++) {
+		if (ship->getUnopenable().at(i) == nullptr || !ship->getUnopenable().at(i)->getIsActive()) {
+			continue;
+		}
+		float diff = donutModel->getAngle() - ship->getUnopenable().at(i)->getAngle();
+		float a = diff + ship->getSize() / 2;
+		diff = a - floor(a / ship->getSize()) * ship->getSize() - ship->getSize() / 2;
 
+		if (abs(diff) < globals::DOOR_WIDTH) {
+			// Stop donut and push it out if inside
+			donutModel->setVelocity(0);
+			if (diff < 0) {
+				donutModel->setAngle(donutModel->getAngle() - ANGLE_ADJUST < 0.0f
+										 ? ship->getSize()
+										 : donutModel->getAngle() - ANGLE_ADJUST);
+			} else {
+				donutModel->setAngle(donutModel->getAngle() + ANGLE_ADJUST > ship->getSize()
+										 ? 0.0f
+										 : donutModel->getAngle() + ANGLE_ADJUST);
+			}
+		}
+	}
 	for (int i = 0; i < ship->getBreaches().size(); i++) {
 		// this should be adjusted based on the level and number of players
 		if (ship->getBreaches().at(i)->getIsActive() &&
@@ -319,11 +357,12 @@ void GameMode::update(float timestep) {
 		ship->getDonuts()[i]->update(timestep);
 	}
 
-	if (ship->getChallenge() && trunc(ship->timer) <= globals::ROLL_CHALLENGE_LENGTH) {
+	if (ship->getChallenge() && !ship->getTimeless() &&
+		trunc(ship->timer) <= globals::ROLL_CHALLENGE_LENGTH) {
 		ship->setChallenge(false);
 	}
 
-	if (ship->getChallenge() && trunc(ship->timer) > globals::ROLL_CHALLENGE_LENGTH) {
+	if (ship->getChallenge()) {
 		bool allRoll = true;
 		for (unsigned int i = 0; i < ship->getDonuts().size(); i++) {
 			if (ship->getRollDir() == 0) {
@@ -342,10 +381,14 @@ void GameMode::update(float timestep) {
 			ship->updateChallengeProg();
 		}
 		if (ship->getChallengeProg() > CHALLENGE_PROGRESS_HIGH ||
-			trunc(ship->timer) == trunc(ship->getEndTime())) {
+			trunc(ship->timeCtr) == trunc(ship->getEndTime())) {
 			if (ship->getChallengeProg() < CHALLENGE_PROGRESS_LOW) {
 				gm.setChallengeFail(true);
+				ship->setStatus(ShipModel::FAILURE);
 				ship->failAllTask();
+			} else {
+				ship->setStatus(ShipModel::SUCCESS);
+				net->succeedAllTask();
 			}
 			ship->setChallenge(false);
 			ship->setChallengeProg(0);

@@ -193,6 +193,7 @@
     <ClInclude Include="..\..\source\ButtonManager.h" />
     <ClInclude Include="..\..\source\ButtonModel.h" />
     <ClInclude Include="..\..\source\ButtonNode.h" />
+    <ClInclude Include="..\..\source\CustomNode.h" />
     <ClInclude Include="..\..\source\DonutModel.h" />
     <ClInclude Include="..\..\source\DonutNode.h" />
     <ClInclude Include="..\..\source\EventModel.h" />
@@ -216,7 +217,11 @@
     <ClInclude Include="..\..\source\PlayerDonutNode.h" />
     <ClInclude Include="..\..\source\ShipModel.h" />
     <ClInclude Include="..\..\source\Sweetspace.h" />
+    <ClInclude Include="..\..\source\TutorialConstants.h" />
+    <ClInclude Include="..\..\source\TutorialNode.h" />
     <ClInclude Include="..\..\source\Tween.h" />
+    <ClInclude Include="..\..\source\Unopenable.h" />
+    <ClInclude Include="..\..\source\UnopenableNode.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
@@ -225,6 +230,7 @@
     <ClCompile Include="..\..\source\ButtonManager.cpp" />
     <ClCompile Include="..\..\source\ButtonModel.cpp" />
     <ClCompile Include="..\..\source\ButtonNode.cpp" />
+    <ClCompile Include="..\..\source\CustomNode.cpp" />
     <ClCompile Include="..\..\source\DonutModel.cpp" />
     <ClCompile Include="..\..\source\DonutNode.cpp" />
     <ClCompile Include="..\..\source\ExternalDonutModel.cpp" />
@@ -245,7 +251,9 @@
     <ClCompile Include="..\..\source\PlayerDonutNode.cpp" />
     <ClCompile Include="..\..\source\ShipModel.cpp" />
     <ClCompile Include="..\..\source\Sweetspace.cpp" />
+    <ClCompile Include="..\..\source\TutorialNode.cpp" />
     <ClCompile Include="..\..\source\Tween.cpp" />
+    <ClCompile Include="..\..\source\UnopenableNode.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Sweetspace.rc" />

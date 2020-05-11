@@ -138,6 +138,21 @@
     <ClInclude Include="..\..\source\PlayerDonutNode.h">
       <Filter>Header Files\SceneGraph</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\source\CustomNode.h">
+      <Filter>Header Files\SceneGraph</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\TutorialNode.h">
+      <Filter>Header Files\SceneGraph</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\Unopenable.h">
+      <Filter>Header Files\Models</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\TutorialConstants.h">
+      <Filter>Header Files\Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\UnopenableNode.h">
+      <Filter>Header Files\SceneGraph</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\source\main.cpp">
@@ -216,6 +231,15 @@
       <Filter>Source Files\SceneGraph</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\PlayerDonutNode.cpp">
+      <Filter>Source Files\SceneGraph</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\TutorialNode.cpp">
+      <Filter>Source Files\SceneGraph</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\CustomNode.cpp">
+      <Filter>Source Files\SceneGraph</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\UnopenableNode.cpp">
       <Filter>Source Files\SceneGraph</Filter>
     </ClCompile>
   </ItemGroup>
