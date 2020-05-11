@@ -551,7 +551,7 @@ void GameGraphRoot::update(float timestep) {
 	processButtons();
 
 	if (ship->getLevelNum() == tutorial::BREACH_LEVEL) {
-		if (trunc(ship->timeCtr) > 10) {
+		if (trunc(ship->timeCtr) > BREACH_TUTORIAL_CUTOFF) {
 			for (int i = 0; i < tutorialNode->getChildCount(); i++) {
 				shared_ptr<TutorialNode> tutorial =
 					dynamic_pointer_cast<TutorialNode>(tutorialNode->getChildByTag(i + 1));
