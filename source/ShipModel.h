@@ -336,6 +336,11 @@ class ShipModel {
 	bool timerEnded() { return timer < 1; }
 
 	/**
+	 * Returns whether the level has ended (won or lost)
+	 */
+	bool isLevelOver() { return timerEnded() || health <= 0; }
+
+	/**
 	 * Get the amount of time that has passed in the level
 	 *
 	 * @return the time that has passed
