@@ -96,19 +96,19 @@ bool ShipModel::failAllTask() {
 				float breachAngle = breaches[k]->getAngle();
 				float diff = shipSize / 2 - abs(abs(breachAngle - angle) - shipSize / 2);
 				if (breachAngle == -1 || diff > MIN_DISTANCE) {
-					goodAngle = true;
+					for (unsigned int k = 0; k < doors.size(); k++) {
+						float doorAngle = doors[k]->getAngle();
+						float diff = shipSize / 2 - abs(abs(doorAngle - angle) - shipSize / 2);
+						if (doorAngle == -1 || diff > MIN_DISTANCE) {
+							goodAngle = true;
+						} else {
+							goodAngle = false;
+							break;
+						}
+					}
 				} else {
 					goodAngle = false;
-					continue;
-				}
-			}
-			for (unsigned int k = 0; k < doors.size(); k++) {
-				float doorAngle = doors[k]->getAngle();
-				float diff = shipSize / 2 - abs(abs(doorAngle - angle) - shipSize / 2);
-				if (doorAngle == -1 || diff > MIN_DISTANCE) {
-					goodAngle = true;
-				} else {
-					goodAngle = false;
+					break;
 				}
 			}
 		}
