@@ -267,13 +267,6 @@ class ShipModel {
 	bool flagDoor(int id, int player, int flag);
 
 	/**
-	 * Close door with given id.
-	 *
-	 * @param id   the id of door to be closed.
-	 */
-	bool closeDoor(int id);
-
-	/**
 	 * Set health of the ship
 	 *
 	 * @param health   the health of the ship
