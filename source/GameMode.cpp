@@ -77,9 +77,20 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 	net = MagicInternetBox::getInstance();
 	playerID = net->getPlayerID();
 	roomId = net->getRoomID();
-	if (net->getLevelNum() >= globals::NUM_TUTORIAL_LEVELS ||
-		std::find(std::begin(tutorial::REAL_LEVELS), std::end(tutorial::REAL_LEVELS),
-				  net->getLevelNum()) != std::end(tutorial::REAL_LEVELS)) {
+
+	if (net->getLevelNum() > MAX_NUM_LEVELS) {
+		// Reached end of game
+
+		// Return to main menu next frame (eventually we'd like credits)
+		isBackToMainMenu = true;
+
+		// Initialize dummy crap so we don't crash this frame
+		ship = ShipModel::alloc(0, 0, 0, 0, 0, 0);
+		gm.init(ship, 0);
+
+	} else if (net->getLevelNum() >= globals::NUM_TUTORIAL_LEVELS ||
+			   std::find(std::begin(tutorial::REAL_LEVELS), std::end(tutorial::REAL_LEVELS),
+						 net->getLevelNum()) != std::end(tutorial::REAL_LEVELS)) {
 		const char* levelName = LEVEL_NAMES.at(net->getLevelNum());
 
 		CULog("Loading level %s b/c mib gave level num %d", levelName, net->getLevelNum());
