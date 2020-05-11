@@ -73,6 +73,10 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 	input = InputController::getInstance();
 	input->clear();
 
+	// Sound Initialization
+	soundEffects = SoundEffectController::getInstance();
+	soundEffects->init(assets);
+
 	// Network Initialization
 	net = MagicInternetBox::getInstance();
 	playerID = net->getPlayerID();
@@ -272,6 +276,7 @@ void GameMode::update(float timestep) {
 		diff = a - floor(a / ship->getSize()) * ship->getSize() - ship->getSize() / 2;
 
 		if (abs(diff) < globals::DOOR_WIDTH) {
+			soundEffects->startEvent(SoundEffectController::DOOR);
 			// Stop donut and push it out if inside
 			donutModel->setVelocity(0);
 			if (diff < 0) {
@@ -289,12 +294,13 @@ void GameMode::update(float timestep) {
 			net->flagDualTask(i, playerID, 1);
 		} else {
 			if (ship->getDoors().at(i)->isPlayerOn(playerID)) {
+				soundEffects->endEvent(SoundEffectController::DOOR);
 				ship->getDoors().at(i)->removePlayer(playerID);
 				net->flagDualTask(i, playerID, 0);
 			}
 		}
 	}
-	// Door Checks
+	// unop Checks
 	for (int i = 0; i < ship->getUnopenable().size(); i++) {
 		if (ship->getUnopenable().at(i) == nullptr || !ship->getUnopenable().at(i)->getIsActive()) {
 			continue;
@@ -304,6 +310,7 @@ void GameMode::update(float timestep) {
 		diff = a - floor(a / ship->getSize()) * ship->getSize() - ship->getSize() / 2;
 
 		if (abs(diff) < globals::DOOR_WIDTH) {
+			soundEffects->startEvent(SoundEffectController::DOOR);
 			// Stop donut and push it out if inside
 			donutModel->setVelocity(0);
 			if (diff < 0) {
@@ -315,6 +322,8 @@ void GameMode::update(float timestep) {
 										 ? 0.0f
 										 : donutModel->getAngle() + ANGLE_ADJUST);
 			}
+		} else if (abs(diff) > DOOR_ACTIVE_ANGLE) {
+			soundEffects->endEvent(SoundEffectController::DOOR);
 		}
 	}
 	for (int i = 0; i < ship->getBreaches().size(); i++) {
