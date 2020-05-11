@@ -78,7 +78,7 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 	playerID = net->getPlayerID();
 	roomId = net->getRoomID();
 
-	if (net->getLevelNum() > MAX_NUM_LEVELS) {
+	if (net->getLevelNum() >= MAX_NUM_LEVELS) {
 		// Reached end of game
 
 		// Return to main menu next frame (eventually we'd like credits)

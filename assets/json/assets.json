@@ -1758,7 +1758,7 @@
 								"anchor"	 : [0.5,0.5],
 								"valign"     : "middle",
 								"halign"     : "center",
-								"scale" : 1
+								"scale" : 0.7
 							},
 							"layout" : {
 								"x_anchor" : "center",
@@ -1776,7 +1776,7 @@
 								"anchor"	 : [0.5,0.5],
 								"valign"     : "middle",
 								"halign"     : "center",
-								"scale" : 1
+								"scale" : 0.7
 							},
 							"layout" : {
 								"x_anchor" : "center",
