@@ -286,6 +286,25 @@ void MainMenuMode::processTransition() {
 			break;
 		}
 		case HostScreen:
+			if (transitionState == HostLevelSelect) {
+				if (transitionFrame == 1) {
+					levelSelect->setVisible(true);
+				}
+				if (transitionFrame > TRANSITION_DURATION) {
+					endTransition();
+					hostScreen->setVisible(false);
+					levelSelect->setColor(Color4::WHITE);
+					return;
+				}
+
+				hostScreen->setPositionY(
+					Tween::easeIn(0, -screenHeight, transitionFrame, TRANSITION_DURATION));
+				levelSelect->setColor(
+					Tween::fade(Tween::linear(0, 1, transitionFrame, TRANSITION_DURATION)));
+
+				return;
+			}
+			// Intentional fall-through
 		case ClientScreen: {
 			if (transitionState == StartScreen) {
 				// Start transition
@@ -408,9 +427,7 @@ void MainMenuMode::processButtons() {
 		case HostScreen: {
 			if (buttonManager.tappedButton(hostBeginBtn, tapData)) {
 				if (net->getNumPlayers() >= globals::MIN_PLAYERS) {
-					currState = HostLevelSelect;
-					hostScreen->setVisible(false);
-					levelSelect->setVisible(true);
+					transitionState = HostLevelSelect;
 				}
 			} else if (buttonManager.tappedButton(backBtn, tapData)) {
 				CULog("Going Back");
