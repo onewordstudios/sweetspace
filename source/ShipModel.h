@@ -67,11 +67,14 @@ class ShipModel {
 		  shipSize(0),
 		  rollDir(0),
 		  challenge(false),
+		  timeless(false),
 		  challengeProg(0),
-		  status(INACTIVE),
 		  endTime(0),
 		  totalTime(0),
-		  timer(0) {}
+		  levelNum(0),
+		  status(INACTIVE),
+		  timer(0),
+		  timeCtr(0) {}
 
 	/**
 	 * Destroys this breach, releasing all resources.
@@ -470,7 +473,7 @@ class ShipModel {
 	 */
 	void separateDonuts() {
 		for (int i = 0; i < getDonuts().size(); i++) {
-			float angle = getSize() * i / getDonuts().size();
+			float angle = getSize() * (float)i / getDonuts().size();
 			getDonuts().at(i)->setAngle(angle);
 		}
 	}
