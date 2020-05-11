@@ -1754,7 +1754,7 @@
 							"data": {
 								"font"       : "mont_black_italic_big",
 								"text"       : "Easy",
-								"foreground" : [248,231,78,255],
+								"foreground" : [83,119,198,255],
 								"anchor"	 : [0.5,0.5],
 								"valign"     : "middle",
 								"halign"     : "center",
@@ -1772,7 +1772,7 @@
 							"data": {
 								"font"       : "mont_black_italic_big",
 								"text"       : "Hard",
-								"foreground" : [248,231,78,255],
+								"foreground" : [83,119,198,255],
 								"anchor"	 : [0.5,0.5],
 								"valign"     : "middle",
 								"halign"     : "center",
