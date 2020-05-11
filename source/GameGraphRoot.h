@@ -48,6 +48,10 @@ class GameGraphRoot : public cugl::Scene {
 	/** Helper object to make the buttons go up and down */
 	ButtonManager buttonManager;
 
+	/** Seconds in a minute for timer display */
+	static constexpr int SEC_IN_MIN = 60;
+	static constexpr int tenSeconds = 10;
+
 	// VIEW COMPONENTS
 	/** Filmstrip representing the player's animated donut */
 	std::shared_ptr<PlayerDonutNode> donutNode;
@@ -81,6 +85,7 @@ class GameGraphRoot : public cugl::Scene {
 	std::shared_ptr<cugl::PolygonNode> healthTutorial;
 	std::shared_ptr<cugl::PolygonNode> rollTutorial;
 	std::shared_ptr<cugl::Node> tutorialNode;
+	std::shared_ptr<cugl::PolygonNode> timerBorder;
 
 	// Reconnection Textures
 	/** Node to hold all of the Reconnect Overlay.*/

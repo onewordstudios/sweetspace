@@ -80,6 +80,9 @@ constexpr int HEALTH_TUTORIAL_CUTOFF = 10;
 /** Time to stop showing move tutorial */
 constexpr int MOVE_TUTORIAL_CUTOFF = 5;
 
+/** Time to show breach tutorial */
+constexpr int BREACH_TUTORIAL_CUTOFF = 10;
+
 #pragma mark -
 #pragma mark Constructors
 
@@ -136,6 +139,10 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	externalDonutsNode = assets->get<Node>("game_field_near_externaldonuts");
 	healthNode = dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_health"));
 	coordHUD = std::dynamic_pointer_cast<Label>(assets->get<Node>("game_hud"));
+	timerBorder =
+		std::dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_timerBorder"));
+	timerBorder->setVisible(true);
+	coordHUD->setVisible(true);
 	currentHealthWarningFrame = 0;
 	moveTutorial =
 		dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_moveTutorial"));
@@ -146,7 +153,7 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	healthTutorial =
 		dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_healthTutorial"));
 	healthTutorial->setVisible(false);
-	if (ship->getLevelNum() == tutorial::BREACH_LEVEL) {
+	if (ship->getLevelNum() == tutorial::REAL_LEVELS.at(0)) {
 		healthTutorial->setVisible(true);
 	}
 	rollTutorial =
@@ -204,19 +211,23 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	std::shared_ptr<DonutModel> playerModel = ship->getDonuts()[playerID];
 
 	// Initialize Players
+	std::shared_ptr<Texture> faceIdle = assets->get<Texture>("donut_face_idle");
+	std::shared_ptr<Texture> faceDizzy = assets->get<Texture>("donut_face_dizzy");
+	std::shared_ptr<Texture> faceWork = assets->get<Texture>("donut_face_work");
 	for (int i = 0; i < ship->getDonuts().size(); i++) {
 		std::shared_ptr<DonutModel> donutModel = ship->getDonuts().at((unsigned long)i);
 		string donutColor = PLAYER_COLOR.at((unsigned long)donutModel->getColorId());
-		std::shared_ptr<Texture> image = assets->get<Texture>("donut_" + donutColor);
+		std::shared_ptr<Texture> bodyTexture = assets->get<Texture>("donut_" + donutColor);
 		// Player node is handled separately
 		if (i == playerID) {
-			donutNode = PlayerDonutNode::alloc(playerModel, screenHeight, image,
-											   tempDonutNode->getPosition());
+			donutNode = PlayerDonutNode::alloc(playerModel, screenHeight, bodyTexture, faceIdle,
+											   faceDizzy, faceWork, tempDonutNode->getPosition());
 			allSpace->addChild(donutNode);
 			tempDonutNode = nullptr;
 		} else {
 			std::shared_ptr<ExternalDonutNode> newDonutNode =
-				ExternalDonutNode::alloc(donutModel, playerModel, ship->getSize(), image);
+				ExternalDonutNode::alloc(donutModel, playerModel, ship->getSize(), bodyTexture,
+										 faceIdle, faceDizzy, faceWork);
 			externalDonutsNode->addChild(newDonutNode);
 
 			Vec2 donutPos = Vec2(sin(donutModel->getAngle() * (globals::RADIUS + DONUT_OFFSET)),
@@ -243,10 +254,10 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 		// Add the breach node
 		breachesNode->addChild(breachNode);
 		if (ship->getLevelNum() == tutorial::BREACH_LEVEL) {
-			std::shared_ptr<Texture> image = assets->get<Texture>("fix_breach_tutorial0");
+			std::shared_ptr<Texture> image = assets->get<Texture>("jump_tutorial0");
 			std::shared_ptr<TutorialNode> tutorial = TutorialNode::alloc(image);
 			tutorial->setBreachNode(breachNode);
-			tutorialNode->addChild(tutorial);
+			tutorialNode->addChildWithTag(tutorial, i + 1);
 		}
 	}
 
@@ -460,6 +471,14 @@ void GameGraphRoot::reset() {
 void GameGraphRoot::update(float timestep) {
 	// "Drawing" code.  Move everything BUT the donut
 	// Update the HUD
+	for (int i = 0; i < ship->getButtons().size(); i++) {
+		if (ship->getButtons().at(i)->getIsActive()) {
+			coordHUD->setColor(cugl::Color4::RED);
+			break;
+		} else {
+			coordHUD->setColor(cugl::Color4::WHITE);
+		}
+	}
 	coordHUD->setText(positionText());
 
 	// State Check for Drawing
@@ -489,6 +508,8 @@ void GameGraphRoot::update(float timestep) {
 			healthNode->setVisible(false);
 			rollTutorial->setVisible(false);
 			moveTutorial->setVisible(false);
+			timerBorder->setVisible(false);
+			coordHUD->setVisible(false);
 			if (playerID != 0) {
 				winWaitText->setVisible(true);
 				nextBtn->setVisible(false);
@@ -539,9 +560,32 @@ void GameGraphRoot::update(float timestep) {
 		default:
 			CULog("ERROR: Uncaught DrawingStatus Value Occurred");
 	}
+	if (ship->getTimeless()) {
+		coordHUD->setVisible(false);
+		timeoutCounter->setVisible(false);
+		timeoutDisplay->setVisible(false);
+		timerBorder->setVisible(false);
+	}
 
 	// Button Checks for Special Case Buttons
 	processButtons();
+
+	if (ship->getLevelNum() == tutorial::BREACH_LEVEL) {
+		if (trunc(ship->timeCtr) > BREACH_TUTORIAL_CUTOFF) {
+			for (int i = 0; i < tutorialNode->getChildCount(); i++) {
+				shared_ptr<TutorialNode> tutorial =
+					dynamic_pointer_cast<TutorialNode>(tutorialNode->getChildByTag(i + 1));
+				if (tutorial != nullptr) {
+					tutorial->setVisible(true);
+					if (tutorial->getPlayer() == playerID) {
+						std::shared_ptr<Texture> image =
+							assets->get<Texture>("fix_breach_tutorial0");
+						tutorial->setTexture(image);
+					}
+				}
+			}
+		}
+	}
 
 	if (ship->getHealth() < 1) {
 		std::shared_ptr<Texture> image = assets->get<Texture>("health_empty");
@@ -787,6 +831,21 @@ void GameGraphRoot::setSegHealthWarning(int alpha) {
  */
 std::string GameGraphRoot::positionText() {
 	stringstream ss;
-	ss << "Time Left: " << trunc(ship->timer);
+	if (trunc(ship->timer) > SEC_IN_MIN - 1) {
+		if ((int)trunc(ship->timer) % SEC_IN_MIN < tenSeconds) {
+			ss << "0" << (int)trunc(ship->timer) / SEC_IN_MIN << " : 0"
+			   << (int)trunc(ship->timer) % SEC_IN_MIN;
+		} else {
+			ss << "0" << (int)trunc(ship->timer) / SEC_IN_MIN << " : "
+			   << (int)trunc(ship->timer) % SEC_IN_MIN;
+		}
+	} else {
+		if (trunc(ship->timer) < tenSeconds) {
+			ss << "00 : 0" << trunc(ship->timer);
+		} else {
+			ss << "00 : " << trunc(ship->timer);
+		}
+	}
+
 	return ss.str();
 }
