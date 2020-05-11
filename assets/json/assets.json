@@ -419,7 +419,7 @@
                             "type": "Image",
                             "data": {
                                 "texture":  "donut_yellow",
-                                "position": [0,-398],
+                                "position": [0,-390],
                                 "anchor":   [0.5,0.5],
                                 "scale":    0.36,
                                 "visible": false

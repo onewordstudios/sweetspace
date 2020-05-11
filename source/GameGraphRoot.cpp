@@ -56,9 +56,6 @@ constexpr int MAX_HEALTH_WARNING_FRAMES = 150;
 /** Maximum alpha value for health warning overlay */
 constexpr int MAX_HEALTH_WARNING_ALPHA = 100;
 
-/** Value of ship health that triggers flashing */
-constexpr int HEALTH_WARNING_THRESHOLD = 4;
-
 /** Max value of a color4 channel */
 constexpr int COLOR_CHANNEL_MAX = 255;
 
@@ -75,7 +72,7 @@ constexpr int MAX_HEALTH_LABELS = 10;
 constexpr float SHIP_HEALTH_YELLOW_CUTOFF = 0.8f;
 
 /** Percentage of ship health to start showing red */
-constexpr float SHIP_HEALTH_RED_CUTOFF = 0.35f;
+constexpr float SHIP_HEALTH_RED_CUTOFF = 0.5f;
 
 /** Time to stop showing health tutorial */
 constexpr int HEALTH_TUTORIAL_CUTOFF = 10;
@@ -679,7 +676,7 @@ void GameGraphRoot::update(float timestep) {
 	if (currentHealthWarningFrame != 0) {
 		currentHealthWarningFrame += 1;
 		if (currentHealthWarningFrame == MAX_HEALTH_WARNING_FRAMES) {
-			if (ship->getHealth() > HEALTH_WARNING_THRESHOLD) {
+			if (ship->getHealth() > SHIP_HEALTH_RED_CUTOFF * ship->getInitHealth()) {
 				currentHealthWarningFrame = 0;
 				shipOverlay->setColor(Color4::CLEAR);
 			} else {
@@ -701,7 +698,7 @@ void GameGraphRoot::update(float timestep) {
 			shipOverlay->setColor(
 				Color4(COLOR_CHANNEL_MAX, COLOR_CHANNEL_MAX, COLOR_CHANNEL_MAX, alpha));
 		}
-	} else if (ship->getHealth() <= HEALTH_WARNING_THRESHOLD) {
+	} else if (ship->getHealth() <= SHIP_HEALTH_RED_CUTOFF * ship->getInitHealth()) {
 		shipOverlay->setColor(Color4(COLOR_CHANNEL_MAX, COLOR_CHANNEL_MAX, COLOR_CHANNEL_MAX,
 									 MAX_HEALTH_WARNING_ALPHA / MAX_HEALTH_WARNING_FRAMES * 2));
 		currentHealthWarningFrame = 1;
