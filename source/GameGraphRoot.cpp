@@ -472,6 +472,8 @@ void GameGraphRoot::update(float timestep) {
 		if (ship->getButtons().at(i)->getIsActive()) {
 			coordHUD->setColor(cugl::Color4::RED);
 			break;
+		} else {
+			coordHUD->setColor(cugl::Color4::WHITE);
 		}
 	}
 	coordHUD->setText(positionText());
