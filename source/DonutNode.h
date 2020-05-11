@@ -5,15 +5,6 @@
 #include "DonutModel.h"
 
 class DonutNode : public CustomNode {
-   public:
-	enum FaceState {
-		/** When donut is still or rolling */
-		Idle,
-		/** When donut collides with mismatched breach */
-		Dizzy,
-		/** When donut is fixing own breach or collides with door */
-		Working
-	};
 #pragma mark Values
    protected:
 	/** Reference to the donut model this node represents */
@@ -23,10 +14,30 @@ class DonutNode : public CustomNode {
 	std::shared_ptr<cugl::Node> rotationNode;
 	/** Reference to node of donut body */
 	std::shared_ptr<cugl::PolygonNode> bodyNode;
+	/** Reference to node of donut idle face, is active by default */
+	std::shared_ptr<cugl::AnimationNode> faceNodeIdle;
+	/** Reference to node of donut idle face */
+	std::shared_ptr<cugl::AnimationNode> faceNodeDizzy;
+	/** Reference to node of donut idle face */
+	std::shared_ptr<cugl::AnimationNode> faceNodeWorking;
+	/** Counter for controlling speed of facial animation */
+	int animationCounter;
+	/** Last face state of the model */
+	DonutModel::FaceState lastFaceState;
 
    public:
 	/** The scale of the donut textures. */
 	static constexpr float DONUT_SCALE = 0.4f;
+
+	/** Spritesheet dimensions for idle face animation */
+	static constexpr int ANIMATION_IDLE_W = 4;
+	static constexpr int ANIMATION_IDLE_H = 3;
+	static constexpr int ANIMATION_IDLE_FRAMES = 10;
+
+	/** Spritesheet dimensions for non-idle face animation */
+	static constexpr int ANIMATION_NOTIDLE_W = 5;
+	static constexpr int ANIMATION_NOTIDLE_H = 4;
+	static constexpr int ANIMATION_NOTIDLE_FRAMES = 20;
 
    public:
 #pragma mark -
@@ -53,7 +64,11 @@ class DonutNode : public CustomNode {
 	/**
 	 * Init child nodes of donut node
 	 */
-	bool init(const std::shared_ptr<cugl::Texture> &bodyTexture, std::shared_ptr<DonutModel> donut);
+	bool init(const std::shared_ptr<cugl::Texture> &bodyTexture,
+			  const std::shared_ptr<cugl::Texture> &faceIdleTexture,
+			  const std::shared_ptr<cugl::Texture> &faceDizzyTexture,
+			  const std::shared_ptr<cugl::Texture> &faceWorkTexture,
+			  std::shared_ptr<DonutModel> donut);
 #pragma mark -
 #pragma mark Getters Setters
 
