@@ -555,6 +555,12 @@ void GameGraphRoot::update(float timestep) {
 		default:
 			CULog("ERROR: Uncaught DrawingStatus Value Occurred");
 	}
+	if (ship->getTimeless()) {
+		coordHUD->setVisible(false);
+		timeoutCounter->setVisible(false);
+		timeoutDisplay->setVisible(false);
+		timerBorder->setVisible(false);
+	}
 
 	// Button Checks for Special Case Buttons
 	processButtons();
