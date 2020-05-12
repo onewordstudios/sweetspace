@@ -324,6 +324,15 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 			tutorial->setScale(0.4);
 			tutorialNode->addChildWithTag(tutorial, i + 1);
 		}
+		for (int i = buttonsNode->getChildCount(); i < buttonsNode->getChildCount() * 2; i++) {
+			std::shared_ptr<Texture> image = assets->get<Texture>("engine_tutorial1");
+			std::shared_ptr<TutorialNode> tutorial = TutorialNode::alloc(image);
+			shared_ptr<ButtonNode> buttonNode =
+					dynamic_pointer_cast<ButtonNode>(buttonsNode->getChildByTag((unsigned int)(i + 1)));
+			tutorial->setButtonNode(buttonNode);
+			tutorial->setScale(0.4);
+			tutorialNode->addChildWithTag(tutorial, i + 1);
+		}
 	}
 
 	// Overlay Components
@@ -628,6 +637,10 @@ void GameGraphRoot::update(float timestep) {
 		}
     } else if (ship->getLevelNum() == tutorial::STABILIZER_LEVEL) {
 		rollTutorial->setVisible(true);
+		if(ship->getChallenge()) {
+			std::shared_ptr<Texture> image = assets->get<Texture>("stabilizer_tutorial0");
+			rollTutorial->setTexture(image);
+		}
 	}
 	// Reanchor the node at the center of the screen and rotate about center.
 	Vec2 position = farSpace->getPosition();

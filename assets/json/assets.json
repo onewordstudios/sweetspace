@@ -289,10 +289,13 @@
           "file" : "textures/tutorial/engine_0.png"
         },
         "engine_tutorial1" : {
-          "file" : "textures/tutorial/engine_1.png"
+          "file" : "textures/tutorial/engine_2.png"
         },
-        "stabilizer_tutorial" : {
-          "file" : "textures/tutorial/stabilizer_0.png"
+        "stabilizer_tutorial0" : {
+          "file" : "textures/tutorial/stabilizer_1.png"
+        },
+        "stabilizer_tutorial1" : {
+          "file" : "textures/tutorial/stabilizer_2.png"
         },
         "communicate_tutorial0" : {
           "file" : "textures/tutorial/communicate_0.png"
@@ -622,7 +625,7 @@
                         "rollTutorial" : {
                           "type": "Image",
                           "data": {
-                            "texture": "stabilizer_tutorial",
+                            "texture": "stabilizer_tutorial1",
                             "position": [-200,-200],
                             "anchor":   [0.5,0.5],
                             "scale":  0.4
@@ -641,6 +644,15 @@
                           "type": "Image",
                           "data": {
                             "texture": "timer_tutorial0",
+                            "position": [-75,-60],
+                            "anchor":   [0.5,0.5],
+                            "scale":  0.4
+                          }
+                        },
+                        "buttonLabelTutorial" : {
+                          "type": "Image",
+                          "data": {
+                            "texture": "engine_tutorial1",
                             "position": [-75,-60],
                             "anchor":   [0.5,0.5],
                             "scale":  0.4
