@@ -127,6 +127,12 @@ class SoundEffectController {
 			activeEffects[{e, id}] = false;
 		}
 	}
+
+	/**
+	 * Clears all active events
+	 */
+	void reset() { activeEffects.clear(); }
+
 	/**
 	 * Deactivates and disposes of this sound effect controller.
 	 */
