@@ -25,7 +25,8 @@ GLaDOS::GLaDOS()
 	  customEventCtr(0),
 	  sections(0),
 	  maxDoors(0),
-	  maxButtons(0) {}
+	  maxButtons(0),
+	  stabilizerStart(0) {}
 
 /**
  * Deactivates this input controller, releasing all listeners.
