@@ -290,19 +290,31 @@ void MainMenuMode::processTransition() {
 			if (transitionState == HostLevelSelect) {
 				if (transitionFrame == 1) {
 					levelSelect->setVisible(true);
+					levelSelect->setColor(Tween::fade(0));
 				}
-				if (transitionFrame > TRANSITION_DURATION) {
+
+				// Total transition duration is 1.5x standard length
+				const int halfTransition = TRANSITION_DURATION / 2;
+
+				// Finished transition
+				if (transitionFrame > TRANSITION_DURATION + halfTransition) {
 					endTransition();
 					hostScreen->setVisible(false);
 					levelSelect->setColor(Color4::WHITE);
 					return;
 				}
 
-				hostScreen->setPositionY(
-					Tween::easeIn(0, -screenHeight, transitionFrame, TRANSITION_DURATION));
-				levelSelect->setColor(
-					Tween::fade(Tween::linear(0, 1, transitionFrame, TRANSITION_DURATION)));
+				// 0x - 1x, push down license plate
+				if (transitionFrame <= TRANSITION_DURATION) {
+					hostScreen->setPositionY(
+						Tween::easeIn(0, -screenHeight, transitionFrame, TRANSITION_DURATION));
+				}
 
+				// 0.5x - 1.5x, fade in level select
+				if (transitionFrame > halfTransition) {
+					levelSelect->setColor(Tween::fade(Tween::linear(
+						0, 1, transitionFrame - halfTransition, TRANSITION_DURATION)));
+				}
 				return;
 			}
 			// Intentional fall-through
