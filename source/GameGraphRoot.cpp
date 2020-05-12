@@ -68,6 +68,12 @@ constexpr int SEG_LABEL_Y = 1113;
 /** Maximum number of health labels */
 constexpr int MAX_HEALTH_LABELS = 10;
 
+/** Percentage of ship health to start showing decrease in green */
+constexpr float SHIP_HEALTH_HIGH_GREEN_CUTOFF = 0.9f;
+
+/** Percentage of ship health to start showing more decrease in green */
+constexpr float SHIP_HEALTH_LOW_GREEN_CUTOFF = 0.7f;
+
 /** Percentage of ship health to start showing yellow */
 constexpr float SHIP_HEALTH_YELLOW_CUTOFF = 0.5f;
 
@@ -82,6 +88,30 @@ constexpr int MOVE_TUTORIAL_CUTOFF = 5;
 
 /** Time to show breach tutorial */
 constexpr int BREACH_TUTORIAL_CUTOFF = 10;
+
+/** Red health position */
+const cugl::Vec2 RED_POS = Vec2(-100, 176);
+
+/** Yellow health position */
+const cugl::Vec2 YELLOW_POS = Vec2(-120, 118);
+
+/** Low green health position */
+const cugl::Vec2 LOW_GREEN_POS = Vec2(-100, 60);
+
+/** High green health position */
+const cugl::Vec2 HIGH_GREEN_POS = Vec2(-75, 30);
+
+/** Red health angle */
+constexpr float RED_ANGLE = 240 * globals::PI_180;
+
+/** Yellow health angle */
+constexpr float YELLOW_ANGLE = 270 * globals::PI_180;
+
+/** Low green health angle */
+constexpr float LOW_GREEN_ANGLE = 300 * globals::PI_180;
+
+/** High green health angle */
+constexpr float HIGH_GREEN_ANGLE = 320 * globals::PI_180;
 
 #pragma mark -
 #pragma mark Constructors
@@ -576,19 +606,19 @@ void GameGraphRoot::update(float timestep) {
 	} else if (ship->getHealth() < ship->getInitHealth() * SHIP_HEALTH_RED_CUTOFF) {
 		std::shared_ptr<Texture> image = assets->get<Texture>("health_red");
 		healthNodeOverlay->setTexture(image);
-		healthNodeOverlay->setPosition(-100, 176);
-		healthNodeOverlay->setAngle(240 * globals::PI_180);
+		healthNodeOverlay->setPosition(RED_POS);
+		healthNodeOverlay->setAngle(RED_ANGLE);
 	} else if (ship->getHealth() < ship->getInitHealth() * SHIP_HEALTH_YELLOW_CUTOFF) {
 		std::shared_ptr<Texture> image = assets->get<Texture>("health_yellow");
 		healthNodeOverlay->setTexture(image);
-		healthNodeOverlay->setPosition(-120, 118);
-		healthNodeOverlay->setAngle(270 * globals::PI_180);
-	} else if (ship->getHealth() < ship->getInitHealth() * 0.7) {
-		healthNodeOverlay->setPosition(-100, 60);
-		healthNodeOverlay->setAngle(300 * globals::PI_180);
-	} else if (ship->getHealth() < ship->getInitHealth() * 0.9) {
-		healthNodeOverlay->setPosition(-75, 30);
-		healthNodeOverlay->setAngle(320 * globals::PI_180);
+		healthNodeOverlay->setPosition(YELLOW_POS);
+		healthNodeOverlay->setAngle(YELLOW_ANGLE);
+	} else if (ship->getHealth() < ship->getInitHealth() * SHIP_HEALTH_LOW_GREEN_CUTOFF) {
+		healthNodeOverlay->setPosition(LOW_GREEN_POS);
+		healthNodeOverlay->setAngle(LOW_GREEN_ANGLE);
+	} else if (ship->getHealth() < ship->getInitHealth() * SHIP_HEALTH_HIGH_GREEN_CUTOFF) {
+		healthNodeOverlay->setPosition(HIGH_GREEN_POS);
+		healthNodeOverlay->setAngle(HIGH_GREEN_ANGLE);
 	}
 
 	if (ship->getLevelNum() == tutorial::BREACH_LEVEL) {
@@ -608,16 +638,6 @@ void GameGraphRoot::update(float timestep) {
 		}
 	}
 
-	//	if (ship->getHealth() < 1) {
-	//		std::shared_ptr<Texture> image = assets->get<Texture>("health_empty");
-	//		healthNode->setTexture(image);
-	//	} else if (ship->getHealth() < ship->getInitHealth() * SHIP_HEALTH_RED_CUTOFF) {
-	//		std::shared_ptr<Texture> image = assets->get<Texture>("health_red");
-	//		healthNode->setTexture(image);
-	//	} else if (ship->getHealth() < ship->getInitHealth() * SHIP_HEALTH_YELLOW_CUTOFF) {
-	//		std::shared_ptr<Texture> image = assets->get<Texture>("health_yellow");
-	//		healthNode->setTexture(image);
-	//	}
 	if (ship->getLevelNum() == tutorial::BREACH_LEVEL) {
 		if (trunc(ship->timeCtr) == HEALTH_TUTORIAL_CUTOFF) {
 			healthTutorial->setVisible(false);
