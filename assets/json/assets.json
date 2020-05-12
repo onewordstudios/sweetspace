@@ -477,6 +477,24 @@
                                 "visible": false
                             }
                         },
+                        "healthBase": {
+                          "type": "Image",
+                          "data": {
+                            "texture": "health_empty",
+                            "anchor":   [0.5,0.5],
+                            "position": [0, 0],
+                            "scale": 0.3
+                          }
+                        },
+                        "health": {
+                          "type": "Image",
+                          "data": {
+                            "texture": "health_green",
+                            "anchor":   [0.5,0.5],
+                            "position": [0, 0],
+                            "scale": 0.3
+                          }
+                        },
                         "challengePanelParent": {
                             "type": "Node",
                             "data": {
@@ -613,15 +631,6 @@
                                 }
                             }
                         },
-						"health": {
-							"type": "Image",
-							"data": {
-								"texture": "health_green",
-								"anchor":   [0.5,0.5],
-								"position": [0, 0],
-								"scale": 0.3
-							}
-						},
                         "moveTutorial" : {
                           "type": "Image",
                           "data": {
