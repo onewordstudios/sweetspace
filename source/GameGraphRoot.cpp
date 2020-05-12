@@ -81,14 +81,14 @@ constexpr float SHIP_HEALTH_RED_CUTOFF = 0.3f;
 /** Time to stop showing health tutorial */
 constexpr int HEALTH_TUTORIAL_CUTOFF = 10;
 
-/** Time to stop showing communicate tutorial */
-constexpr int COMM_TUTORIAL_CUTOFF = 18;
-
 /** Time to stop showing move tutorial */
 constexpr int MOVE_TUTORIAL_CUTOFF = 5;
 
 /** Time to show breach tutorial */
 constexpr int BREACH_TUTORIAL_CUTOFF = 10;
+
+/** Time stop showing timer */
+constexpr int TIMER_TUTORIAL_CUTOFF = 18;
 
 /** Red health position */
 constexpr float RED_POS_X = -100;
@@ -212,7 +212,7 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 		dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_timerTutorial"));
 	timerTutorial->setVisible(false);
 	if (ship->getLevelNum() == tutorial::REAL_LEVELS.at(0)) {
-		healthTutorial->setVisible(true);
+		healthTutorial->setVisible(false);
 		communicateTutorial->setVisible(true);
 		timerTutorial->setVisible(true);
 	}
@@ -389,10 +389,6 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 		float posY = timerTutorial->getPositionY() - TIMER_OFFSET;
 		float posX = timerTutorial->getPositionX();
 		timerTutorial->setPosition(posX, posY);
-		timerTutorial->setVisible(true);
-		if (trunc(ship->timeCtr) > MOVE_TUTORIAL_CUTOFF) {
-			timerTutorial->setVisible(false);
-		}
 	}
 
 	// Overlay Components
@@ -711,12 +707,22 @@ void GameGraphRoot::update(float timestep) {
 			communicateTutorial->setVisible(false);
 		} else if (trunc(ship->timeCtr) == MOVE_TUTORIAL_CUTOFF) {
 			timerTutorial->setVisible(false);
+			healthTutorial->setVisible(true);
 			std::shared_ptr<Texture> image = assets->get<Texture>("communicate_tutorial1");
 			communicateTutorial->setTexture(image);
+		}
+	} else if (ship->getLevelNum() == tutorial::REAL_LEVELS.at(2)) {
+		if (trunc(ship->timeCtr) > TIMER_TUTORIAL_CUTOFF) {
+			timerTutorial->setVisible(false);
+		} else {
+			timerTutorial->setVisible(true);
 		}
 	} else if (ship->getLevelNum() == tutorial::STABILIZER_LEVEL) {
 		rollTutorial->setVisible(true);
 		if (ship->getChallenge()) {
+			std::shared_ptr<Texture> image = assets->get<Texture>("stabilizer_tutorial1");
+			rollTutorial->setTexture(image);
+		} else {
 			std::shared_ptr<Texture> image = assets->get<Texture>("stabilizer_tutorial0");
 			rollTutorial->setTexture(image);
 		}
