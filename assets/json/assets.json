@@ -120,6 +120,9 @@
         "overlay_dim": {
             "file":   "textures/misc_use/overlay_dim.png"
         },
+        "overlay_black": {
+            "file":   "textures/misc_use/overlay_black.png"
+        },
         "reconnect_bg": {
             "file":   "textures/reconnect/bg.png"
         },
@@ -527,6 +530,28 @@
                                     "position": [0, 175],
                                     "anchor":   [0.5,0.5],
                                     "scale": 0.7
+                                  }
+                                },
+                                "challengePanelFailPanel": {
+                                  "type": "Image",
+                                  "data": {
+                                    "texture": "challenge_panel",
+                                    "position": [0, 150],
+                                    "anchor":   [0.5,0.5],
+                                    "scale": [0.8, 0.3]
+                                  }
+                                },
+                                "challengePanelFailLabel": {
+                                  "type": "Label",
+                                  "data": {
+                                    "font"       : "mont_black_italic_big",
+                                    "text"       : "Stablizer Failed!",
+                                    "foreground" : [255,248,161,255],
+                                    "anchor"     : [0.5,0.5],
+                                    "valign"     : "middle",
+                                    "halign"     : "center",
+                                    "position"   : [0, 155],
+                                    "scale"      : 0.4
                                   }
                                 },
                                 "challengePanelArrow1": {
@@ -1374,7 +1399,7 @@
                         "absolute" : true
                     }
                 },
-              "timerBorder" : {
+                "timerBorder" : {
                   "type": "Image",
                   "data": {
                     "texture": "timer_border",
@@ -1382,7 +1407,22 @@
                     "anchor":   [0,0],
                     "scale": 0.2
                   }
-              }
+                },
+                "blackoutOverlay" : {
+                    "type": "Image",
+                    "format"    : {
+                        "type" : "Anchored"
+                    },
+                    "data": {
+                        "texture":  "overlay_black",
+                        "anchor":   [0.5,0.5]
+                    },
+                    "layout" : {
+                        "x_anchor" : "center",
+                        "y_anchor" : "middle",
+                        "absolute" : true
+                    }
+                }
             }
         },
         "matchmaking": {

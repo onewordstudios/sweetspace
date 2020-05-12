@@ -73,6 +73,8 @@ class DonutModel {
 	bool isActive = true;
 	/** Current animation state the player is in */
 	FaceState faceState;
+	/** New position after stablizer failure */
+	float teleportAngle;
 
 	/**
 	 * Performs state and animation updates for a jumping donut.
@@ -93,6 +95,7 @@ class DonutModel {
 	 */
 	DonutModel(void)
 		: angle(0),
+		  teleportAngle(0),
 		  shipSize(DEFAULT_SHIP_SIZE),
 		  velocity(0),
 		  friction(DEFAULT_DONUT_FRICTION_FACTOR),
@@ -167,6 +170,17 @@ class DonutModel {
 	 * @param value The donut angle in degrees
 	 */
 	virtual void setAngle(float value) { angle = value; }
+
+	/**
+	 * Sets the angle after teleportation in degrees.
+	 * @param a
+	 */
+	void setTeleportAngle(float a) { teleportAngle = a; }
+
+	/**
+	 * Teleport to new angle.
+	 */
+	void teleport() { setAngle(teleportAngle); }
 
 	/**
 	 * Returns the jump offset.

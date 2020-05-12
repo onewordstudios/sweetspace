@@ -572,16 +572,16 @@ void MagicInternetBox::update(std::shared_ptr<ShipModel> state) {
 				if (playerID == id) {
 					state->createAllTask(data1);
 				}
-				state->setStatus(ShipModel::ACTIVE);
+				state->setStablizerStatus(ShipModel::ACTIVE);
 				break;
 			}
 			case AllFail: {
 				state->failAllTask();
-				state->setStatus(ShipModel::FAILURE);
+				state->setStablizerStatus(ShipModel::FAILURE);
 				break;
 			}
 			case AllSucceed: {
-				state->setStatus(ShipModel::SUCCESS);
+				state->setStablizerStatus(ShipModel::SUCCESS);
 				break;
 			}
 			case ForceWin: {

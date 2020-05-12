@@ -8,6 +8,7 @@
 
 #include "Globals.h"
 #include "TutorialConstants.h"
+#include "Tween.h"
 
 using namespace cugl;
 using namespace std;
@@ -55,9 +56,6 @@ constexpr int MAX_HEALTH_WARNING_FRAMES = 150;
 
 /** Maximum alpha value for health warning overlay */
 constexpr int MAX_HEALTH_WARNING_ALPHA = 100;
-
-/** Max value of a color4 channel */
-constexpr int COLOR_CHANNEL_MAX = 255;
 
 /** Size of ship segment label */
 constexpr int SEG_LABEL_SIZE = 100;
@@ -224,6 +222,18 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 			assets->get<Node>("game_field_challengePanelParent_challengePanelArrow" + s));
 		challengePanelArrows.push_back(arrow);
 	}
+
+	stablizerFailText = dynamic_pointer_cast<cugl::Label>(
+		assets->get<Node>("game_field_challengePanelParent_challengePanelFailLabel"));
+	stablizerFailText->setVisible(false);
+	stablizerFailPanel = dynamic_pointer_cast<cugl::PolygonNode>(
+		assets->get<Node>("game_field_challengePanelParent_challengePanelFailPanel"));
+	stablizerFailPanel->setVisible(false);
+	blackoutOverlay =
+		dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_blackoutOverlay"));
+	blackoutOverlay->setColor(Tween::fade(0));
+	currentTeleportationFrame = 0;
+	prevIsStablizerFail = false;
 
 	// Initialize Ship Segments
 	leftMostSeg = 0;
@@ -455,6 +465,10 @@ void GameGraphRoot::dispose() {
 		challengePanelText = nullptr;
 		challengePanelArrows.clear();
 		healthNode = nullptr;
+
+		stablizerFailText = nullptr;
+		stablizerFailPanel = nullptr;
+		blackoutOverlay = nullptr;
 
 		reconnectOverlay = nullptr;
 		reconnectE2 = nullptr;
@@ -795,6 +809,9 @@ void GameGraphRoot::update(float timestep) {
 		setSegHealthWarning(MAX_HEALTH_WARNING_ALPHA / MAX_HEALTH_WARNING_FRAMES * 2);
 		currentHealthWarningFrame = 1;
 	}
+
+	// Handle teleportation
+	doTeleportAnimation();
 }
 
 void GameGraphRoot::processButtons() {
@@ -867,10 +884,44 @@ void GameGraphRoot::setSegHealthWarning(int alpha) {
 			shipSegsNode->getChildByTag((unsigned int)(i + 1)));
 		std::shared_ptr<cugl::PolygonNode> segRed = dynamic_pointer_cast<cugl::PolygonNode>(
 			segment->getChild(static_cast<unsigned int>(1)));
-		segRed->setColor(Color4(COLOR_CHANNEL_MAX, COLOR_CHANNEL_MAX, COLOR_CHANNEL_MAX, alpha));
+		segRed->setColor(Color4(globals::MAX_BYTE, globals::MAX_BYTE, globals::MAX_BYTE, alpha));
 	}
 }
 
+void GameGraphRoot::doTeleportAnimation() {
+	if (ship->getStablizerStatus() == ShipModel::StablizerStatus::FAILURE && !prevIsStablizerFail) {
+		// Start teleportation animation
+		currentTeleportationFrame = 1;
+	}
+	if (currentTeleportationFrame != 0) {
+		// Continue teleportation animation
+		if (currentTeleportationFrame <= TELEPORT_FRAMECUTOFF_FIRST) {
+			stablizerFailPanel->setVisible(true);
+			stablizerFailText->setVisible(true);
+		} else if (currentTeleportationFrame <= TELEPORT_FRAMECUTOFF_SECOND) {
+			blackoutOverlay->setColor(Tween::fade(
+				Tween::linear(0, 1, currentTeleportationFrame - TELEPORT_FRAMECUTOFF_FIRST,
+							  TELEPORT_FRAMECUTOFF_SECOND - TELEPORT_FRAMECUTOFF_FIRST)));
+		} else {
+			if (currentTeleportationFrame == TELEPORT_FRAMECUTOFF_SECOND + 1) {
+				// Teleport models
+				for (int i = 0; i < ship->getDonuts().size(); i++) {
+					std::shared_ptr<DonutModel> donutModel = ship->getDonuts().at((unsigned long)i);
+					donutModel->teleport();
+				}
+				ship->setStablizerStatus(ShipModel::StablizerStatus::INACTIVE);
+			}
+			stablizerFailPanel->setVisible(false);
+			stablizerFailText->setVisible(false);
+			blackoutOverlay->setColor(Tween::fade(
+				Tween::linear(1, 0, currentTeleportationFrame - TELEPORT_FRAMECUTOFF_SECOND,
+							  TELEPORT_FRAMECUTOFF_THIRD - TELEPORT_FRAMECUTOFF_SECOND)));
+		}
+		currentTeleportationFrame += 1;
+		if (currentTeleportationFrame > TELEPORT_FRAMECUTOFF_THIRD) currentTeleportationFrame = 0;
+	}
+	prevIsStablizerFail = ship->getStablizerStatus() == ShipModel::StablizerStatus::FAILURE;
+}
 /**
  * Returns an informative string for the position
  *

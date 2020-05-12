@@ -403,7 +403,7 @@ void GameMode::update(float timestep) {
 			trunc(ship->timeCtr) == trunc(ship->getEndTime())) {
 			if (ship->getChallengeProg() < CHALLENGE_PROGRESS_LOW) {
 				gm.setChallengeFail(true);
-				ship->setStatus(ShipModel::FAILURE);
+				ship->setStablizerStatus(ShipModel::FAILURE);
 
 				// This can't happen a second time in the duration of the sound effect, so we can
 				// just end it immediately
@@ -411,7 +411,7 @@ void GameMode::update(float timestep) {
 				soundEffects->endEvent(SoundEffectController::TELEPORT, 0);
 				ship->failAllTask();
 			} else {
-				ship->setStatus(ShipModel::SUCCESS);
+				ship->setStablizerStatus(ShipModel::SUCCESS);
 				net->succeedAllTask();
 			}
 			ship->setChallenge(false);

@@ -43,10 +43,10 @@ class ShipModel {
 	int levelNum;
 
    public:
-	enum Status { INACTIVE, ACTIVE, FAILURE, SUCCESS };
-	/** Status of all player challenge. 0 = no challenge, 1 = challenge, 2 = challenge failed, 3 =
-	 * challenge success*/
-	Status status;
+	enum StablizerStatus { INACTIVE, ACTIVE, FAILURE, SUCCESS };
+	/** StablizerStatus of all player challenge. 0 = no challenge, 1 = challenge, 2 = challenge
+	 * failed, 3 = challenge success*/
+	StablizerStatus stablizerStatus;
 	/** Game countdown timer*/
 	float timer;
 	/** Game timer*/
@@ -72,7 +72,7 @@ class ShipModel {
 		  endTime(0),
 		  totalTime(0),
 		  levelNum(0),
-		  status(INACTIVE),
+		  stablizerStatus(INACTIVE),
 		  timer(0),
 		  timeCtr(0) {}
 
@@ -413,7 +413,7 @@ class ShipModel {
 	/**
 	 * Set challenge status
 	 */
-	void setStatus(Status s);
+	void setStablizerStatus(StablizerStatus s);
 
 	/**
 	 * Set end time for challenge
@@ -459,7 +459,7 @@ class ShipModel {
 	/**
 	 * Gets status of challenge
 	 */
-	Status getChallengeStatus() { return status; }
+	StablizerStatus getStablizerStatus() { return stablizerStatus; }
 
 	/**
 	 * Sets if level is tutorial
