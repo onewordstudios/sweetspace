@@ -1,4 +1,4 @@
-#include "ButtonManager.h"
+﻿#include "ButtonManager.h"
 
 #include "InputController.h"
 
@@ -25,6 +25,12 @@ void ButtonManager::process() {
 		for (unsigned int i = 0; i < buttons.size(); i++) {
 			if (buttons[i]->containsScreen(position)) {
 				if (!buttons[i]->isDown()) {
+					// We only need to play sound effects for one button at a time, so start and end
+					// the event
+					SoundEffectController::getInstance()->startEvent(SoundEffectController::CLICK,
+																	 (int)i);
+					SoundEffectController::getInstance()->endEvent(SoundEffectController::CLICK,
+																   (int)i);
 					buttons[i]->setDown(true);
 					downBtns.push_back(buttons[i]);
 				}

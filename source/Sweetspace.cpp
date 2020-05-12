@@ -89,6 +89,8 @@ void Sweetspace::update(float timestep) {
 		}
 		case LoadToMain: {
 			loading.dispose(); // Disables the input listeners in this mode
+			SoundEffectController::getInstance()->init(
+				assets); // Prepare sound effects for the main menu
 			mainmenu.init(assets);
 			status = MainMenu;
 			return;

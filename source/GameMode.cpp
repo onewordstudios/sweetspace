@@ -73,9 +73,8 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 	input = InputController::getInstance();
 	input->clear();
 
-	// Sound Initialization
+	// Sound (should already be initialized)
 	soundEffects = SoundEffectController::getInstance();
-	soundEffects->init(assets);
 
 	// Network Initialization
 	net = MagicInternetBox::getInstance();
