@@ -123,6 +123,7 @@ bool MainMenuMode::init(const std::shared_ptr<AssetManager>& assets) {
 	hostScreen->setVisible(false);
 	clientScreen->setVisible(false);
 	clientJoinBtn->setDown(false);
+	clientJoinBtn->setVisible(true);
 	levelSelect->setVisible(false);
 	clientEnteredRoom.clear();
 
