@@ -77,6 +77,9 @@ constexpr float SHIP_HEALTH_RED_CUTOFF = 0.5f;
 /** Time to stop showing health tutorial */
 constexpr int HEALTH_TUTORIAL_CUTOFF = 10;
 
+/** Time to stop showing communicate tutorial */
+constexpr int COMM_TUTORIAL_CUTOFF = 18;
+
 /** Time to stop showing move tutorial */
 constexpr int MOVE_TUTORIAL_CUTOFF = 5;
 
@@ -153,12 +156,21 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	healthTutorial =
 		dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_healthTutorial"));
 	healthTutorial->setVisible(false);
+    communicateTutorial =
+            dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_communicateTutorial"));
+    communicateTutorial->setVisible(false);
+    timerTutorial =
+            dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_timerTutorial"));
+    timerTutorial->setVisible(false);
 	if (ship->getLevelNum() == tutorial::REAL_LEVELS.at(0)) {
 		healthTutorial->setVisible(true);
+        communicateTutorial->setVisible(true);
+        timerTutorial->setVisible(true);
 	}
 	rollTutorial =
 		dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_rollTutorial"));
 	rollTutorial->setVisible(false);
+
 	tutorialNode = assets->get<Node>("game_field_near_tutorial");
 	buttonsNode = assets->get<Node>("game_field_near_button");
 	std::shared_ptr<Texture> image = assets->get<Texture>("health_green");
@@ -256,6 +268,7 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 		if (ship->getLevelNum() == tutorial::BREACH_LEVEL) {
 			std::shared_ptr<Texture> image = assets->get<Texture>("jump_tutorial0");
 			std::shared_ptr<TutorialNode> tutorial = TutorialNode::alloc(image);
+			tutorial->setScale(0.4);
 			tutorial->setBreachNode(breachNode);
 			tutorialNode->addChildWithTag(tutorial, i + 1);
 		}
@@ -298,6 +311,7 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 			shared_ptr<DoorNode> doorNode =
 				dynamic_pointer_cast<DoorNode>(doorsNode->getChildByTag((unsigned int)(i + 1)));
 			tutorial->setDoorNode(doorNode);
+			tutorial->setScale(0.4);
 			tutorialNode->addChildWithTag(tutorial, i + 1);
 		}
 	} else if (ship->getLevelNum() == tutorial::BUTTON_LEVEL) {
@@ -307,6 +321,7 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 			shared_ptr<ButtonNode> buttonNode =
 				dynamic_pointer_cast<ButtonNode>(buttonsNode->getChildByTag((unsigned int)(i + 1)));
 			tutorial->setButtonNode(buttonNode);
+			tutorial->setScale(0.4);
 			tutorialNode->addChildWithTag(tutorial, i + 1);
 		}
 	}
@@ -508,6 +523,7 @@ void GameGraphRoot::update(float timestep) {
 			healthNode->setVisible(false);
 			rollTutorial->setVisible(false);
 			moveTutorial->setVisible(false);
+			communicateTutorial->setVisible(false);
 			timerBorder->setVisible(false);
 			coordHUD->setVisible(false);
 			if (playerID != 0) {
@@ -597,13 +613,20 @@ void GameGraphRoot::update(float timestep) {
 		std::shared_ptr<Texture> image = assets->get<Texture>("health_yellow");
 		healthNode->setTexture(image);
 	}
-	if (ship->getLevelNum() == tutorial::BREACH_LEVEL) {
+	if(ship->getLevelNum() == tutorial::BREACH_LEVEL) {
+        if (trunc(ship->timeCtr) == MOVE_TUTORIAL_CUTOFF) {
+            moveTutorial->setVisible(false);
+        }
+    } else if (ship->getLevelNum() == tutorial::REAL_LEVELS.at(0)) {
 		if (trunc(ship->timeCtr) == HEALTH_TUTORIAL_CUTOFF) {
 			healthTutorial->setVisible(false);
-		} else if (trunc(ship->timeCtr) == MOVE_TUTORIAL_CUTOFF) {
-			moveTutorial->setVisible(false);
+            communicateTutorial->setVisible(false);
+		} else if(trunc(ship->timeCtr) == MOVE_TUTORIAL_CUTOFF) {
+            timerTutorial->setVisible(false);
+            std::shared_ptr<Texture> image = assets->get<Texture>("communicate_tutorial1");
+            communicateTutorial->setTexture(image);
 		}
-	} else if (ship->getLevelNum() == tutorial::STABILIZER_LEVEL) {
+    } else if (ship->getLevelNum() == tutorial::STABILIZER_LEVEL) {
 		rollTutorial->setVisible(true);
 	}
 	// Reanchor the node at the center of the screen and rotate about center.

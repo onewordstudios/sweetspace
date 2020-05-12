@@ -84,6 +84,8 @@ class GameGraphRoot : public cugl::Scene {
 	std::shared_ptr<cugl::PolygonNode> moveTutorial;
 	std::shared_ptr<cugl::PolygonNode> healthTutorial;
 	std::shared_ptr<cugl::PolygonNode> rollTutorial;
+	std::shared_ptr<cugl::PolygonNode> communicateTutorial;
+	std::shared_ptr<cugl::PolygonNode> timerTutorial;
 	std::shared_ptr<cugl::Node> tutorialNode;
 	std::shared_ptr<cugl::PolygonNode> timerBorder;
 

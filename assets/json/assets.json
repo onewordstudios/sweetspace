@@ -294,6 +294,15 @@
         "stabilizer_tutorial" : {
           "file" : "textures/tutorial/stabilizer_0.png"
         },
+        "communicate_tutorial0" : {
+          "file" : "textures/tutorial/communicate_0.png"
+        },
+        "communicate_tutorial1" : {
+          "file" : "textures/tutorial/communicate_1.png"
+        },
+        "timer_tutorial0" : {
+          "file" : "textures/tutorial/timer_0.png"
+        },
         "level_select_0" : {
           "file" : "textures/main_menu/lvl_select/lvl0.png"
         },
@@ -597,15 +606,17 @@
                           "data": {
                             "texture": "move_tutorial0",
                             "position": [0,-250],
-                            "anchor":   [0.5,0.5]
+                            "anchor":   [0.5,0.5],
+                            "scale":  0.4
                           }
                         },
                         "healthTutorial" : {
                           "type": "Image",
                           "data": {
                             "texture": "health_tutorial",
-                            "position": [-100,-125],
-                            "anchor":   [0.5,0.5]
+                            "position": [-225,-100],
+                            "anchor":   [0.5,0.5],
+                            "scale":  0.4
                           }
                         },
                         "rollTutorial" : {
@@ -613,7 +624,26 @@
                           "data": {
                             "texture": "stabilizer_tutorial",
                             "position": [-200,-200],
-                            "anchor":   [0.5,0.5]
+                            "anchor":   [0.5,0.5],
+                            "scale":  0.4
+                          }
+                        },
+                        "communicateTutorial" : {
+                          "type": "Image",
+                          "data": {
+                            "texture": "communicate_tutorial0",
+                            "position": [0,-250],
+                            "anchor":   [0.5,0.5],
+                            "scale":  0.4
+                          }
+                        },
+                        "timerTutorial" : {
+                          "type": "Image",
+                          "data": {
+                            "texture": "timer_tutorial0",
+                            "position": [-75,-60],
+                            "anchor":   [0.5,0.5],
+                            "scale":  0.4
                           }
                         }
 
