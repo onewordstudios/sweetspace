@@ -90,16 +90,28 @@ constexpr int MOVE_TUTORIAL_CUTOFF = 5;
 constexpr int BREACH_TUTORIAL_CUTOFF = 10;
 
 /** Red health position */
-const cugl::Vec2 RED_POS = Vec2(-100, 176);
+constexpr float RED_POS_X = -100;
+
+/** Red health position */
+constexpr float RED_POS_Y = 176;
 
 /** Yellow health position */
-const cugl::Vec2 YELLOW_POS = Vec2(-120, 118);
+constexpr float YELLOW_POS_X = -120;
+
+/** Yellow health position */
+constexpr float YELLOW_POS_Y = 118;
 
 /** Low green health position */
-const cugl::Vec2 LOW_GREEN_POS = Vec2(-100, 60);
+constexpr float LOW_GREEN_POS_X = -100;
+
+/** Low green health position */
+constexpr float LOW_GREEN_POS_Y = 60;
 
 /** High green health position */
-const cugl::Vec2 HIGH_GREEN_POS = Vec2(-75, 30);
+constexpr float HIGH_GREEN_POS_X = -75;
+
+/** High green health position */
+constexpr float HIGH_GREEN_POS_Y = 30;
 
 /** Red health angle */
 constexpr float RED_ANGLE = 240 * globals::PI_180;
@@ -606,18 +618,18 @@ void GameGraphRoot::update(float timestep) {
 	} else if (ship->getHealth() < ship->getInitHealth() * SHIP_HEALTH_RED_CUTOFF) {
 		std::shared_ptr<Texture> image = assets->get<Texture>("health_red");
 		healthNodeOverlay->setTexture(image);
-		healthNodeOverlay->setPosition(RED_POS);
+		healthNodeOverlay->setPosition(RED_POS_X, RED_POS_Y);
 		healthNodeOverlay->setAngle(RED_ANGLE);
 	} else if (ship->getHealth() < ship->getInitHealth() * SHIP_HEALTH_YELLOW_CUTOFF) {
 		std::shared_ptr<Texture> image = assets->get<Texture>("health_yellow");
 		healthNodeOverlay->setTexture(image);
-		healthNodeOverlay->setPosition(YELLOW_POS);
+		healthNodeOverlay->setPosition(YELLOW_POS_X, YELLOW_POS_Y);
 		healthNodeOverlay->setAngle(YELLOW_ANGLE);
 	} else if (ship->getHealth() < ship->getInitHealth() * SHIP_HEALTH_LOW_GREEN_CUTOFF) {
-		healthNodeOverlay->setPosition(LOW_GREEN_POS);
+		healthNodeOverlay->setPosition(LOW_GREEN_POS_X, LOW_GREEN_POS_Y);
 		healthNodeOverlay->setAngle(LOW_GREEN_ANGLE);
 	} else if (ship->getHealth() < ship->getInitHealth() * SHIP_HEALTH_HIGH_GREEN_CUTOFF) {
-		healthNodeOverlay->setPosition(HIGH_GREEN_POS);
+		healthNodeOverlay->setPosition(HIGH_GREEN_POS_X, HIGH_GREEN_POS_Y);
 		healthNodeOverlay->setAngle(HIGH_GREEN_ANGLE);
 	}
 
