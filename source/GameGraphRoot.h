@@ -167,15 +167,15 @@ class GameGraphRoot : public cugl::Scene {
 
 	// TELEPORTATION ANIMATION
 	/** Reference to fail text */
-	std::shared_ptr<cugl::Label> stablizerFailText;
+	std::shared_ptr<cugl::Label> stabilizerFailText;
 	/** Reference to fail text */
-	std::shared_ptr<cugl::PolygonNode> stablizerFailPanel;
+	std::shared_ptr<cugl::PolygonNode> stabilizerFailPanel;
 	/** Reference to black image that covers all */
 	std::shared_ptr<cugl::PolygonNode> blackoutOverlay;
-	/** Current animation frame for stablizer fail teleportation */
+	/** Current animation frame for stabilizer fail teleportation */
 	int currentTeleportationFrame;
-	/** Whether stablizer is failed in last frame */
-	bool prevIsStablizerFail;
+	/** Whether stabilizer is failed in last frame */
+	bool prevIsStabilizerFail;
 
 	/** Animation constants */
 	static constexpr int TELEPORT_FRAMECUTOFF_FIRST = 40;
