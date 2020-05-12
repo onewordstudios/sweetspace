@@ -12,9 +12,13 @@ constexpr unsigned int RADIUS_OFFSET = 30;
 
 bool ExternalDonutNode::init(std::shared_ptr<DonutModel> externalDonutModel,
 							 std::shared_ptr<DonutModel> player, float shipSize,
-							 const std::shared_ptr<cugl::Texture>& bodyTexture) {
+							 const std::shared_ptr<cugl::Texture> &bodyTexture,
+							 const std::shared_ptr<cugl::Texture> &faceIdleTexture,
+							 const std::shared_ptr<cugl::Texture> &faceDizzyTexture,
+							 const std::shared_ptr<cugl::Texture> &faceWorkTexture) {
 	CustomNode::init(player, shipSize, externalDonutModel->getAngle(), globals::RADIUS);
-	DonutNode::init(bodyTexture, externalDonutModel);
+	DonutNode::init(bodyTexture, faceIdleTexture, faceDizzyTexture, faceWorkTexture,
+					externalDonutModel);
 	return true;
 }
 

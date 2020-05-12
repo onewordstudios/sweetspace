@@ -94,14 +94,10 @@ class MagicInternetBox {
 	/** Current level number, or -1 if unassigned */
 	int levelNum;
 
-	/**
-	 * Number of connected players
-	 */
+	/** Number of connected players */
 	unsigned int numPlayers;
 
-	/**
-	 * Maximum number of players for this ship
-	 */
+	/** Maximum number of players for this ship */
 	unsigned int maxPlayers;
 
 	/**

@@ -62,6 +62,7 @@ class TutorialNode : public cugl::AnimationNode {
 	void setBreachNode(std::shared_ptr<BreachNode> node) { breachNode = node; }
 	void setDoorNode(std::shared_ptr<DoorNode> node) { doorNode = node; }
 	void setButtonNode(std::shared_ptr<ButtonNode> node) { buttonNode = node; }
+	int getPlayer() { return breachNode->getModel()->getPlayer(); }
 
 	void draw(const std::shared_ptr<cugl::SpriteBatch> &batch, const cugl::Mat4 &transform,
 			  cugl::Color4 tint) override;

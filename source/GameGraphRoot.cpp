@@ -56,9 +56,6 @@ constexpr int MAX_HEALTH_WARNING_FRAMES = 150;
 /** Maximum alpha value for health warning overlay */
 constexpr int MAX_HEALTH_WARNING_ALPHA = 100;
 
-/** Value of ship health that triggers flashing */
-constexpr int HEALTH_WARNING_THRESHOLD = 4;
-
 /** Max value of a color4 channel */
 constexpr int COLOR_CHANNEL_MAX = 255;
 
@@ -75,13 +72,16 @@ constexpr int MAX_HEALTH_LABELS = 10;
 constexpr float SHIP_HEALTH_YELLOW_CUTOFF = 0.8f;
 
 /** Percentage of ship health to start showing red */
-constexpr float SHIP_HEALTH_RED_CUTOFF = 0.35f;
+constexpr float SHIP_HEALTH_RED_CUTOFF = 0.5f;
 
 /** Time to stop showing health tutorial */
 constexpr int HEALTH_TUTORIAL_CUTOFF = 10;
 
 /** Time to stop showing move tutorial */
 constexpr int MOVE_TUTORIAL_CUTOFF = 5;
+
+/** Time to show breach tutorial */
+constexpr int BREACH_TUTORIAL_CUTOFF = 10;
 
 #pragma mark -
 #pragma mark Constructors
@@ -139,9 +139,10 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	externalDonutsNode = assets->get<Node>("game_field_near_externaldonuts");
 	healthNode = dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_health"));
 	coordHUD = std::dynamic_pointer_cast<Label>(assets->get<Node>("game_hud"));
-	shipOverlay =
-		dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_near_shipoverlay"));
-	shipOverlay->setColor(Color4::CLEAR);
+	timerBorder =
+		std::dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_timerBorder"));
+	timerBorder->setVisible(true);
+	coordHUD->setVisible(true);
 	currentHealthWarningFrame = 0;
 	moveTutorial =
 		dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_moveTutorial"));
@@ -152,7 +153,7 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	healthTutorial =
 		dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_healthTutorial"));
 	healthTutorial->setVisible(false);
-	if (ship->getLevelNum() == tutorial::BREACH_LEVEL) {
+	if (ship->getLevelNum() == tutorial::REAL_LEVELS.at(0)) {
 		healthTutorial->setVisible(true);
 	}
 	rollTutorial =
@@ -186,6 +187,7 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	rightMostSeg = globals::VISIBLE_SEGS - 1;
 	std::shared_ptr<Texture> seg0 = assets->get<Texture>("shipseg0");
 	std::shared_ptr<Texture> seg1 = assets->get<Texture>("shipseg1");
+	std::shared_ptr<Texture> segRed = assets->get<Texture>("shipsegred");
 	for (int i = 0; i < globals::VISIBLE_SEGS; i++) {
 		std::shared_ptr<PolygonNode> segment =
 			cugl::PolygonNode::allocWithTexture(i % 2 == 0 ? seg0 : seg1);
@@ -200,25 +202,32 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 		segLabel->setPosition((float)segment->getTexture()->getWidth() / 2, SEG_LABEL_Y);
 		segLabel->setForeground(SHIP_LABEL_COLOR);
 		segment->addChild(segLabel);
+		std::shared_ptr<PolygonNode> segmentRed = cugl::PolygonNode::allocWithTexture(segRed);
+		segmentRed->setColor(Color4::CLEAR);
+		segment->addChild(segmentRed);
 		shipSegsNode->addChildWithTag(segment, (unsigned int)(i + 1));
 	}
 
 	std::shared_ptr<DonutModel> playerModel = ship->getDonuts()[playerID];
 
 	// Initialize Players
+	std::shared_ptr<Texture> faceIdle = assets->get<Texture>("donut_face_idle");
+	std::shared_ptr<Texture> faceDizzy = assets->get<Texture>("donut_face_dizzy");
+	std::shared_ptr<Texture> faceWork = assets->get<Texture>("donut_face_work");
 	for (int i = 0; i < ship->getDonuts().size(); i++) {
 		std::shared_ptr<DonutModel> donutModel = ship->getDonuts().at((unsigned long)i);
 		string donutColor = PLAYER_COLOR.at((unsigned long)donutModel->getColorId());
-		std::shared_ptr<Texture> image = assets->get<Texture>("donut_" + donutColor);
+		std::shared_ptr<Texture> bodyTexture = assets->get<Texture>("donut_" + donutColor);
 		// Player node is handled separately
 		if (i == playerID) {
-			donutNode = PlayerDonutNode::alloc(playerModel, screenHeight, image,
-											   tempDonutNode->getPosition());
+			donutNode = PlayerDonutNode::alloc(playerModel, screenHeight, bodyTexture, faceIdle,
+											   faceDizzy, faceWork, tempDonutNode->getPosition());
 			allSpace->addChild(donutNode);
 			tempDonutNode = nullptr;
 		} else {
 			std::shared_ptr<ExternalDonutNode> newDonutNode =
-				ExternalDonutNode::alloc(donutModel, playerModel, ship->getSize(), image);
+				ExternalDonutNode::alloc(donutModel, playerModel, ship->getSize(), bodyTexture,
+										 faceIdle, faceDizzy, faceWork);
 			externalDonutsNode->addChild(newDonutNode);
 
 			Vec2 donutPos = Vec2(sin(donutModel->getAngle() * (globals::RADIUS + DONUT_OFFSET)),
@@ -245,10 +254,10 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 		// Add the breach node
 		breachesNode->addChild(breachNode);
 		if (ship->getLevelNum() == tutorial::BREACH_LEVEL) {
-			std::shared_ptr<Texture> image = assets->get<Texture>("fix_breach_tutorial0");
+			std::shared_ptr<Texture> image = assets->get<Texture>("jump_tutorial0");
 			std::shared_ptr<TutorialNode> tutorial = TutorialNode::alloc(image);
 			tutorial->setBreachNode(breachNode);
-			tutorialNode->addChild(tutorial);
+			tutorialNode->addChildWithTag(tutorial, i + 1);
 		}
 	}
 
@@ -419,8 +428,6 @@ void GameGraphRoot::dispose() {
 		leaveBtn = nullptr;
 		needle = nullptr;
 
-		shipOverlay = nullptr;
-
 		lossScreen = nullptr;
 		restartBtn = nullptr;
 		lostWaitText = nullptr;
@@ -464,6 +471,14 @@ void GameGraphRoot::reset() {
 void GameGraphRoot::update(float timestep) {
 	// "Drawing" code.  Move everything BUT the donut
 	// Update the HUD
+	for (int i = 0; i < ship->getButtons().size(); i++) {
+		if (ship->getButtons().at(i)->getIsActive()) {
+			coordHUD->setColor(cugl::Color4::RED);
+			break;
+		} else {
+			coordHUD->setColor(cugl::Color4::WHITE);
+		}
+	}
 	coordHUD->setText(positionText());
 
 	// State Check for Drawing
@@ -493,6 +508,8 @@ void GameGraphRoot::update(float timestep) {
 			healthNode->setVisible(false);
 			rollTutorial->setVisible(false);
 			moveTutorial->setVisible(false);
+			timerBorder->setVisible(false);
+			coordHUD->setVisible(false);
 			if (playerID != 0) {
 				winWaitText->setVisible(true);
 				nextBtn->setVisible(false);
@@ -543,9 +560,32 @@ void GameGraphRoot::update(float timestep) {
 		default:
 			CULog("ERROR: Uncaught DrawingStatus Value Occurred");
 	}
+	if (ship->getTimeless()) {
+		coordHUD->setVisible(false);
+		timeoutCounter->setVisible(false);
+		timeoutDisplay->setVisible(false);
+		timerBorder->setVisible(false);
+	}
 
 	// Button Checks for Special Case Buttons
 	processButtons();
+
+	if (ship->getLevelNum() == tutorial::BREACH_LEVEL) {
+		if (trunc(ship->timeCtr) > BREACH_TUTORIAL_CUTOFF) {
+			for (int i = 0; i < tutorialNode->getChildCount(); i++) {
+				shared_ptr<TutorialNode> tutorial =
+					dynamic_pointer_cast<TutorialNode>(tutorialNode->getChildByTag(i + 1));
+				if (tutorial != nullptr) {
+					tutorial->setVisible(true);
+					if (tutorial->getPlayer() == playerID) {
+						std::shared_ptr<Texture> image =
+							assets->get<Texture>("fix_breach_tutorial0");
+						tutorial->setTexture(image);
+					}
+				}
+			}
+		}
+	}
 
 	if (ship->getHealth() < 1) {
 		std::shared_ptr<Texture> image = assets->get<Texture>("health_empty");
@@ -622,8 +662,8 @@ void GameGraphRoot::update(float timestep) {
 		segAngle = fmod(segAngle, ship->getSize() * globals::PI_180);
 		segAngle = segAngle < 0 ? segAngle + ship->getSize() * globals::PI_180 : segAngle;
 		unsigned int segNum = (unsigned int)(segAngle / globals::SEG_SIZE);
-		std::shared_ptr<cugl::Label> segLabel = dynamic_pointer_cast<cugl::Label>(
-			segment->getChild(static_cast<unsigned int>(segment->getChildCount() - 1)));
+		std::shared_ptr<cugl::Label> segLabel =
+			dynamic_pointer_cast<cugl::Label>(segment->getChild(static_cast<unsigned int>(0)));
 		segLabel->setText(std::to_string(segNum));
 	}
 
@@ -679,13 +719,11 @@ void GameGraphRoot::update(float timestep) {
 	if (currentHealthWarningFrame != 0) {
 		currentHealthWarningFrame += 1;
 		if (currentHealthWarningFrame == MAX_HEALTH_WARNING_FRAMES) {
-			if (ship->getHealth() > HEALTH_WARNING_THRESHOLD) {
+			if (ship->getHealth() > SHIP_HEALTH_RED_CUTOFF * ship->getInitHealth()) {
 				currentHealthWarningFrame = 0;
-				shipOverlay->setColor(Color4::CLEAR);
+				setSegHealthWarning(0);
 			} else {
-				shipOverlay->setColor(
-					Color4(COLOR_CHANNEL_MAX, COLOR_CHANNEL_MAX, COLOR_CHANNEL_MAX,
-						   MAX_HEALTH_WARNING_ALPHA / MAX_HEALTH_WARNING_FRAMES * 2));
+				setSegHealthWarning(MAX_HEALTH_WARNING_ALPHA / MAX_HEALTH_WARNING_FRAMES * 2);
 				currentHealthWarningFrame = 1;
 			}
 		} else {
@@ -698,12 +736,10 @@ void GameGraphRoot::update(float timestep) {
 						(MAX_HEALTH_WARNING_FRAMES - currentHealthWarningFrame) /
 						MAX_HEALTH_WARNING_FRAMES * 2;
 			}
-			shipOverlay->setColor(
-				Color4(COLOR_CHANNEL_MAX, COLOR_CHANNEL_MAX, COLOR_CHANNEL_MAX, alpha));
+			setSegHealthWarning(alpha);
 		}
-	} else if (ship->getHealth() <= HEALTH_WARNING_THRESHOLD) {
-		shipOverlay->setColor(Color4(COLOR_CHANNEL_MAX, COLOR_CHANNEL_MAX, COLOR_CHANNEL_MAX,
-									 MAX_HEALTH_WARNING_ALPHA / MAX_HEALTH_WARNING_FRAMES * 2));
+	} else if (ship->getHealth() <= SHIP_HEALTH_RED_CUTOFF * ship->getInitHealth()) {
+		setSegHealthWarning(MAX_HEALTH_WARNING_ALPHA / MAX_HEALTH_WARNING_FRAMES * 2);
 		currentHealthWarningFrame = 1;
 	}
 }
@@ -774,6 +810,16 @@ void GameGraphRoot::setNeedlePercentage(float percentage) {
 	needle->setAngle(-percentage * globals::TWO_PI * globals::NEEDLE_OFFSET);
 }
 
+void GameGraphRoot::setSegHealthWarning(int alpha) {
+	for (int i = 0; i < globals::VISIBLE_SEGS; i++) {
+		std::shared_ptr<cugl::PolygonNode> segment = dynamic_pointer_cast<cugl::PolygonNode>(
+			shipSegsNode->getChildByTag((unsigned int)(i + 1)));
+		std::shared_ptr<cugl::PolygonNode> segRed = dynamic_pointer_cast<cugl::PolygonNode>(
+			segment->getChild(static_cast<unsigned int>(1)));
+		segRed->setColor(Color4(COLOR_CHANNEL_MAX, COLOR_CHANNEL_MAX, COLOR_CHANNEL_MAX, alpha));
+	}
+}
+
 /**
  * Returns an informative string for the position
  *
@@ -785,6 +831,21 @@ void GameGraphRoot::setNeedlePercentage(float percentage) {
  */
 std::string GameGraphRoot::positionText() {
 	stringstream ss;
-	ss << "Time Left: " << trunc(ship->timer);
+	if (trunc(ship->timer) > SEC_IN_MIN - 1) {
+		if ((int)trunc(ship->timer) % SEC_IN_MIN < tenSeconds) {
+			ss << "0" << (int)trunc(ship->timer) / SEC_IN_MIN << " : 0"
+			   << (int)trunc(ship->timer) % SEC_IN_MIN;
+		} else {
+			ss << "0" << (int)trunc(ship->timer) / SEC_IN_MIN << " : "
+			   << (int)trunc(ship->timer) % SEC_IN_MIN;
+		}
+	} else {
+		if (trunc(ship->timer) < tenSeconds) {
+			ss << "00 : 0" << trunc(ship->timer);
+		} else {
+			ss << "00 : " << trunc(ship->timer);
+		}
+	}
+
 	return ss.str();
 }

@@ -18,6 +18,15 @@
         "donut_cyan": {
             "file":   "textures/donuts/donut_cyan.png"
         },
+        "donut_face_idle": {
+            "file":   "textures/donuts/blink.png"
+        },
+        "donut_face_dizzy": {
+            "file":   "textures/donuts/dizzy.png"
+        },
+        "donut_face_work": {
+            "file":   "textures/donuts/work.png"
+        },
         "breach_yellow": {
             "file":   "textures/breaches/breach_yellow.png"
         },
@@ -72,14 +81,14 @@
 		"health_empty": {
 			"file": "textures/health/empty.png"
 		},
-        "ship_overlay_red": {
-            "file":   "textures/ship/overlay_red.png"
-        },
         "shipseg0": {
             "file":   "textures/ship/seg1.png"
         },
         "shipseg1": {
             "file":   "textures/ship/seg2.png"
+        },
+        "shipsegred": {
+            "file":   "textures/ship/seg_red.png"
         },
         "create_lobby": {
             "file":   "textures/main_menu/create_up.png"
@@ -284,6 +293,24 @@
         },
         "stabilizer_tutorial" : {
           "file" : "textures/tutorial/stabilizer_0.png"
+        },
+        "level_select_0" : {
+          "file" : "textures/main_menu/lvl_select/lvl0.png"
+        },
+        "level_select_1" : {
+          "file" : "textures/main_menu/lvl_select/lvl1.png"
+        },
+        "level_select_2" : {
+          "file" : "textures/main_menu/lvl_select/lvl2.png"
+        },
+        "level_select_3" : {
+          "file" : "textures/main_menu/lvl_select/lvl3.png"
+        },
+        "level_select_4" : {
+          "file" : "textures/main_menu/lvl_select/lvl4.png"
+		},
+        "timer_border" : {
+          "file"  : "textures/timer/timer_border.png"
         }
 	},
 	"sounds": {
@@ -336,7 +363,11 @@
 		"mont_black_italic_big" : {
 			"file":     "fonts/Montserrat-BlackItalic.ttf",
 			"size":     96
-		}
+		},
+        "digital": {
+            "file":    "fonts/DigitalNormal-xO6j.otf",
+            "size":     40
+        }
 	},
     "scenes" : {
         "game": {
@@ -420,15 +451,6 @@
                                         "position": [0,0]
                                     }
                                 },
-                                "shipoverlay": {
-                                    "type": "Image",
-                                    "data": {
-                                        "texture": "ship_overlay_red",
-                                        "anchor":   [0.5,0.5],
-                                        "position": [0,0],
-                                        "scale": 1.35
-                                    }
-                                },
                                 "button": {
                                   "type": "Node",
                                   "data": {
@@ -449,7 +471,7 @@
                             "type": "Image",
                             "data": {
                                 "texture":  "donut_yellow",
-                                "position": [0,-398],
+                                "position": [0,-390],
                                 "anchor":   [0.5,0.5],
                                 "scale":    0.36,
                                 "visible": false
@@ -1328,21 +1350,30 @@
                 "hud" : {
                     "type": "Label",
                     "data": {
-                        "font"       : "mont_med",
+                        "font"       : "digital",
                         "text"       : "Coords: (128, 128)  ",
-                        "foreground" : [255,255,255,255],
+                        "foreground" : [247,230,77,255],
                         "size"       : [500,70],
                         "valign"     : "bottom",
                         "halign"     : "left"
                     },
                     "layout" : {
-                        "x_anchor" : "left",
-                        "y_anchor" : "bottom",
-                        "x_offset" : 10,
-                        "y_offset" : 10,
+                        "x_anchor" : "center",
+                        "y_anchor" : "top",
+                        "x_offset" : -40,
+                        "y_offset" : -40,
                         "absolute" : true
                     }
-                }
+                },
+              "timerBorder" : {
+                  "type": "Image",
+                  "data": {
+                    "texture": "timer_border",
+                    "position": [455,525],
+                    "anchor":   [0,0],
+                    "scale": 0.2
+                  }
+              }
             }
         },
         "matchmaking": {
@@ -1742,40 +1773,56 @@
 					}
 				},
 				"levelselect" : {
-					"type" : "Image",
+					"type" : "Node",
 					"format" : { "type" : "Anchored" },
 					"data"   : {
-						"texture"  : "purple_panel",
-						"anchor"   : [0.5,0],
-						"scale"    : 0.5,
+						"anchor"   : [0.5,0.5],
+						"scale"    : 0.4,
+						"size" : [1024,1024],
 						"visible" : false
 					},
 					"layout" : {
 						"x_anchor" : "center",
-						"y_anchor" : "bottom"
+						"y_anchor" : "middle"
 					},
 					"children" : {
-						"disclaimer": {
+						"easyLabel" : {
 							"type": "Label",
-							"format" : {
-								"type" : "Anchored"
+							"data": {
+								"font"       : "mont_black_italic_big",
+								"text"       : "Easy",
+								"foreground" : [83,119,198,255],
+								"anchor"	 : [0.5,0.5],
+								"valign"     : "middle",
+								"halign"     : "center",
+								"scale" : 0.7
 							},
 							"layout" : {
 								"x_anchor" : "center",
-								"y_anchor" : "top",
-								"y_offset" : -0.1
-							},
-							"data": {
-								"font"       : "mont_black_italic_big",
-								"text"       : "Placeholder Level Select lmao",
-								"foreground" : [248,231,78,255],
-								"anchor"	 : [0.5,1],
-								"valign"     : "middle",
-								"halign"     : "center",
-								"scale" : 0.5
+								"y_anchor" : "middle",
+								"x_offset" : -1,
+								"y_offset" : -0.25
 							}
 						},
-						"easybtn" : {
+						"hardLabel" : {
+							"type": "Label",
+							"data": {
+								"font"       : "mont_black_italic_big",
+								"text"       : "Hard",
+								"foreground" : [83,119,198,255],
+								"anchor"	 : [0.5,0.5],
+								"valign"     : "middle",
+								"halign"     : "center",
+								"scale" : 0.7
+							},
+							"layout" : {
+								"x_anchor" : "center",
+								"y_anchor" : "middle",
+								"x_offset" : 1,
+								"y_offset" : -0.25
+							}
+						},
+						"lvl0" : {
 							"type": "Button",
 							"format" : {
 								"type" : "Anchored"
@@ -1783,41 +1830,133 @@
 							"data": {
 								"upnode"   : "up",
 								"downnode" : "down",
-								"anchor"   : [0,0.5],
-								"scale" : 1
+								"anchor"   : [0.5,0.5],
+								"scale" : 1,
+								"angle" : 45
 							},
 							"layout" : {
-								"x_anchor" : "left",
-								"y_anchor" : "middle"
+								"x_anchor" : "center",
+								"y_anchor" : "middle",
+								"x_offset" : -1
 							},
 							"children" : {
 								"up" : {
-									"type": "Label",
-									"data": {
-										"font"       : "mont_black_italic_big",
-										"text"       : "Easy",
-										"foreground" : [248,231,78,255],
-										"anchor"	 : [0.5,0.5],
-										"valign"     : "middle",
-										"halign"     : "center",
-										"scale" : 1
+									"type"   : "Image",
+									"data"   : {
+										"texture"  : "level_select_0"
 									}
 								},
 								"down" : {
-									"type": "Label",
-									"data": {
-										"font"       : "mont_black_italic_big",
-										"text"       : "-Easy-",
-										"foreground" : [248,231,78,255],
-										"anchor"	 : [0.5,0.5],
-										"valign"     : "middle",
-										"halign"     : "center",
-										"scale" : 1
+									"type"   : "Image",
+									"data"   : {
+										"texture"  : "level_select_0",
+										"scale" : 0.9
 									}
 								}
 							}
 						},
-						"medbtn" : {
+						"lvl1" : {
+							"type": "Button",
+							"format" : {
+								"type" : "Anchored"
+							},
+							"data": {
+								"upnode"   : "up",
+								"downnode" : "down",
+								"anchor"   : [0.5,0.5],
+								"scale" : 1,
+								"angle" : -15
+							},
+							"layout" : {
+								"x_anchor" : "center",
+								"y_anchor" : "middle",
+								"x_offset" : -0.55,
+								"y_offset" : 0.25
+							},
+							"children" : {
+								"up" : {
+									"type"   : "Image",
+									"data"   : {
+										"texture"  : "level_select_1"
+									}
+								},
+								"down" : {
+									"type"   : "Image",
+									"data"   : {
+										"texture"  : "level_select_1",
+										"scale" : 0.9
+									}
+								}
+							}
+						},
+						"lvl2" : {
+							"type": "Button",
+							"format" : {
+								"type" : "Anchored"
+							},
+							"data": {
+								"upnode"   : "up",
+								"downnode" : "down",
+								"anchor"   : [0.5,0.5],
+								"scale" : 1,
+								"angle" : 30
+							},
+							"layout" : {
+								"x_anchor" : "center",
+								"y_anchor" : "middle",
+								"y_offset" : 0.4
+							},
+							"children" : {
+								"up" : {
+									"type"   : "Image",
+									"data"   : {
+										"texture"  : "level_select_2"
+									}
+								},
+								"down" : {
+									"type"   : "Image",
+									"data"   : {
+										"texture"  : "level_select_2",
+										"scale" : 0.9
+									}
+								}
+							}
+						},
+						"lvl3" : {
+							"type": "Button",
+							"format" : {
+								"type" : "Anchored"
+							},
+							"data": {
+								"upnode"   : "up",
+								"downnode" : "down",
+								"anchor"   : [0.5,0.5],
+								"scale" : 1,
+								"angle" : -50
+							},
+							"layout" : {
+								"x_anchor" : "center",
+								"y_anchor" : "middle",
+								"x_offset" : 0.55,
+								"y_offset" : 0.25
+							},
+							"children" : {
+								"up" : {
+									"type"   : "Image",
+									"data"   : {
+										"texture"  : "level_select_3"
+									}
+								},
+								"down" : {
+									"type"   : "Image",
+									"data"   : {
+										"texture"  : "level_select_3",
+										"scale" : 0.9
+									}
+								}
+							}
+						},
+						"lvl4" : {
 							"type": "Button",
 							"format" : {
 								"type" : "Anchored"
@@ -1830,73 +1969,21 @@
 							},
 							"layout" : {
 								"x_anchor" : "center",
-								"y_anchor" : "middle"
+								"y_anchor" : "middle",
+								"x_offset" : 1
 							},
 							"children" : {
 								"up" : {
-									"type": "Label",
-									"data": {
-										"font"       : "mont_black_italic_big",
-										"text"       : "Medium",
-										"foreground" : [248,231,78,255],
-										"anchor"	 : [0.5,0.5],
-										"valign"     : "middle",
-										"halign"     : "center",
-										"scale" : 1
+									"type"   : "Image",
+									"data"   : {
+										"texture"  : "level_select_4"
 									}
 								},
 								"down" : {
-									"type": "Label",
-									"data": {
-										"font"       : "mont_black_italic_big",
-										"text"       : "-Medium-",
-										"foreground" : [248,231,78,255],
-										"anchor"	 : [0.5,0.5],
-										"valign"     : "middle",
-										"halign"     : "center",
-										"scale" : 1
-									}
-								}
-							}
-						},
-						"hardbtn" : {
-							"type": "Button",
-							"format" : {
-								"type" : "Anchored"
-							},
-							"data": {
-								"upnode"   : "up",
-								"downnode" : "down",
-								"anchor"   : [1,0.5],
-								"scale" : 1
-							},
-							"layout" : {
-								"x_anchor" : "right",
-								"y_anchor" : "middle"
-							},
-							"children" : {
-								"up" : {
-									"type": "Label",
-									"data": {
-										"font"       : "mont_black_italic_big",
-										"text"       : "Hard",
-										"foreground" : [248,231,78,255],
-										"anchor"	 : [0.5,0.5],
-										"valign"     : "middle",
-										"halign"     : "center",
-										"scale" : 1
-									}
-								},
-								"down" : {
-									"type": "Label",
-									"data": {
-										"font"       : "mont_black_italic_big",
-										"text"       : "-Hard-",
-										"foreground" : [248,231,78,255],
-										"anchor"	 : [0.5,0.5],
-										"valign"     : "middle",
-										"halign"     : "center",
-										"scale" : 1
+									"type"   : "Image",
+									"data"   : {
+										"texture"  : "level_select_4",
+										"scale" : 0.9
 									}
 								}
 							}
