@@ -8,6 +8,7 @@
 
 #include "Globals.h"
 #include "TutorialConstants.h"
+#include "Tween.h"
 
 using namespace cugl;
 using namespace std;
@@ -182,9 +183,14 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 		challengePanelArrows.push_back(arrow);
 	}
 
-	stablizerFailText = dynamic_pointer_cast<cugl::PolygonNode>(
-		assets->get<Label>("game_field_challengePanelParent_challengePanelFailLabel"));
+	stablizerFailText = dynamic_pointer_cast<cugl::Label>(
+		assets->get<Node>("game_field_challengePanelParent_challengePanelFailLabel"));
+	stablizerFailText->setVisible(false);
+	blackoutOverlay =
+		dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_blackoutOverlay"));
+	blackoutOverlay->setColor(Tween::fade(0));
 	currentTeleportationFrame = 0;
+	prevIsStablizerFail = false;
 
 	// Initialize Ship Segments
 	leftMostSeg = 0;
@@ -416,6 +422,9 @@ void GameGraphRoot::dispose() {
 		challengePanelText = nullptr;
 		challengePanelArrows.clear();
 		healthNode = nullptr;
+
+		stablizerFailText = nullptr;
+		blackoutOverlay = nullptr;
 
 		reconnectOverlay = nullptr;
 		reconnectE2 = nullptr;
@@ -746,6 +755,9 @@ void GameGraphRoot::update(float timestep) {
 		setSegHealthWarning(MAX_HEALTH_WARNING_ALPHA / MAX_HEALTH_WARNING_FRAMES * 2);
 		currentHealthWarningFrame = 1;
 	}
+
+	// Handle teleportation
+	doTeleportAnimation();
 }
 
 void GameGraphRoot::processButtons() {
@@ -824,6 +836,36 @@ void GameGraphRoot::setSegHealthWarning(int alpha) {
 	}
 }
 
+void GameGraphRoot::doTeleportAnimation() {
+	if (ship->getStablizerStatus() == ShipModel::StablizerStatus::FAILURE && !prevIsStablizerFail) {
+		// Start teleportation animation
+		currentTeleportationFrame = 1;
+	}
+	if (currentTeleportationFrame != 0) {
+		// Continue teleportation animation
+		if (currentTeleportationFrame <= TELEPORT_FRAMECUTOFF_FIRST) {
+			challengePanel->setVisible(true);
+			stablizerFailText->setVisible(true);
+		} else if (currentTeleportationFrame <= TELEPORT_FRAMECUTOFF_SECOND) {
+			blackoutOverlay->setColor(Tween::fade(Tween::linear(
+				0, globals::MAX_BYTE, currentTeleportationFrame - TELEPORT_FRAMECUTOFF_FIRST,
+				TELEPORT_FRAMECUTOFF_SECOND - TELEPORT_FRAMECUTOFF_FIRST)));
+		} else {
+			if (currentTeleportationFrame == TELEPORT_FRAMECUTOFF_SECOND + 1) {
+				// Teleport model
+				ship->getDonuts().at(playerID)->teleport();
+			}
+			challengePanel->setVisible(false);
+			stablizerFailText->setVisible(false);
+			blackoutOverlay->setColor(Tween::fade(Tween::linear(
+				globals::MAX_BYTE, 0, currentTeleportationFrame - TELEPORT_FRAMECUTOFF_SECOND,
+				TELEPORT_FRAMECUTOFF_THIRD - TELEPORT_FRAMECUTOFF_SECOND)));
+		}
+		currentTeleportationFrame += 1;
+		if (currentTeleportationFrame > TELEPORT_FRAMECUTOFF_THIRD) currentTeleportationFrame = 0;
+	}
+	prevIsStablizerFail = ship->getStablizerStatus() == ShipModel::StablizerStatus::FAILURE;
+}
 /**
  * Returns an informative string for the position
  *

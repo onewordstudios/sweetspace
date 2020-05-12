@@ -89,7 +89,7 @@ bool ShipModel::createAllTask(int data) {
 bool ShipModel::failAllTask() {
 	for (int i = 0; i < donuts.size(); i++) {
 		float angle = (float)(rand() % (int)(getSize()));
-		donuts.at(i)->setAngle(angle);
+		donuts.at(i)->setTeleportAngle(angle);
 	}
 	return true;
 }
