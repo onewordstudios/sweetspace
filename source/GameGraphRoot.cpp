@@ -375,7 +375,7 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 		}
 	} else if (ship->getLevelNum() == tutorial::BUTTON_LEVEL) {
 		for (int i = 0; i < buttonsNode->getChildCount(); i++) {
-			std::shared_ptr<Texture> image = assets->get<Texture>("engine_tutorial0");
+			std::shared_ptr<Texture> image = assets->get<Texture>("engine_tutorial");
 			std::shared_ptr<TutorialNode> tutorial = TutorialNode::alloc(image);
 			shared_ptr<ButtonNode> buttonNode =
 				dynamic_pointer_cast<ButtonNode>(buttonsNode->getChildByTag((unsigned int)(i + 1)));

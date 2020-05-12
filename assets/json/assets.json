@@ -297,10 +297,7 @@
         "jump_tutorial1" : {
           "file" : "textures/tutorial/jump_breach_1.png"
         },
-        "engine_tutorial0" : {
-          "file" : "textures/tutorial/engine_0.png"
-        },
-        "engine_tutorial1" : {
+        "engine_tutorial" : {
           "file" : "textures/tutorial/engine_2.png"
         },
         "stabilizer_tutorial0" : {
