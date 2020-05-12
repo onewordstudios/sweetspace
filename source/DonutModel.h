@@ -73,7 +73,7 @@ class DonutModel {
 	bool isActive = true;
 	/** Current animation state the player is in */
 	FaceState faceState;
-	/** New position after stablizer failure */
+	/** New position after stabilizer failure */
 	float teleportAngle;
 
 	/**
