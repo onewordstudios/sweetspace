@@ -10,6 +10,8 @@ using namespace cugl;
 constexpr float BREACH_OFFSET_Y = 150;
 /** Position offset for indicators over buttons */
 constexpr float BUTTON_OFFSET_Y = 100;
+/** Position offset for indicators over buttons */
+constexpr float BUTTON_LABEL_OFFSET_Y = 250;
 
 void TutorialNode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch, const Mat4& transform,
 						Color4 tint) {
@@ -24,9 +26,13 @@ void TutorialNode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch, const M
 		posX = doorNode->getPositionX();
 		posY = doorNode->getPositionY();
 		angle = doorNode->getAngle();
-	} else if (buttonNode != nullptr) {
+	} else if (buttonNode != nullptr && !isLabel) {
 		posX = buttonNode->getPositionX();
 		posY = buttonNode->getPositionY() + BUTTON_OFFSET_Y;
+		angle = buttonNode->getAngle();
+	} else if (buttonNode != nullptr && isLabel) {
+		posX = buttonNode->getPositionX();
+		posY = buttonNode->getPositionY() + BUTTON_LABEL_OFFSET_Y;
 		angle = buttonNode->getAngle();
 	}
 

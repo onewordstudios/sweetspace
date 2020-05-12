@@ -279,6 +279,15 @@
         "fix_breach_tutorial1" : {
           "file" : "textures/tutorial/fix_breach_1.png"
         },
+        "fix_count3" : {
+          "file" : "textures/tutorial/fix_count_3.png"
+        },
+        "fix_count2" : {
+          "file" : "textures/tutorial/fix_count_2.png"
+        },
+        "fix_count1" : {
+          "file" : "textures/tutorial/fix_count_1.png"
+        },
         "door_tutorial" : {
           "file" : "textures/tutorial/door_0.png"
         },
@@ -288,14 +297,26 @@
         "jump_tutorial1" : {
           "file" : "textures/tutorial/jump_breach_1.png"
         },
-        "engine_tutorial0" : {
-          "file" : "textures/tutorial/engine_0.png"
+        "engine_tutorial" : {
+          "file" : "textures/tutorial/engine_2.png"
         },
-        "engine_tutorial1" : {
-          "file" : "textures/tutorial/engine_1.png"
+        "stabilizer_tutorial0" : {
+          "file" : "textures/tutorial/stabilizer_1.png"
         },
-        "stabilizer_tutorial" : {
-          "file" : "textures/tutorial/stabilizer_0.png"
+        "stabilizer_tutorial1" : {
+          "file" : "textures/tutorial/stabilizer_2.png"
+        },
+        "communicate_tutorial0" : {
+          "file" : "textures/tutorial/communicate_0.png"
+        },
+        "communicate_tutorial1" : {
+          "file" : "textures/tutorial/communicate_1.png"
+        },
+        "timer_tutorial0" : {
+          "file" : "textures/tutorial/timer_0.png"
+        },
+        "timer_tutorial1" : {
+          "file" : "textures/tutorial/timer_1.png"
         },
         "level_select_0" : {
           "file" : "textures/main_menu/lvl_select/lvl0.png"
@@ -661,23 +682,44 @@
                           "data": {
                             "texture": "move_tutorial0",
                             "position": [0,-250],
-                            "anchor":   [0.5,0.5]
+                            "anchor":   [0.5,0.5],
+                            "scale":  0.4
                           }
                         },
                         "healthTutorial" : {
                           "type": "Image",
                           "data": {
                             "texture": "health_tutorial",
-                            "position": [-100,-125],
-                            "anchor":   [0.5,0.5]
+                            "position": [-225,-100],
+                            "anchor":   [0.5,0.5],
+                            "scale":  0.4
                           }
                         },
                         "rollTutorial" : {
                           "type": "Image",
                           "data": {
-                            "texture": "stabilizer_tutorial",
+                            "texture": "stabilizer_tutorial1",
                             "position": [-200,-200],
-                            "anchor":   [0.5,0.5]
+                            "anchor":   [0.5,0.5],
+                            "scale":  0.4
+                          }
+                        },
+                        "communicateTutorial" : {
+                          "type": "Image",
+                          "data": {
+                            "texture": "communicate_tutorial0",
+                            "position": [0,-250],
+                            "anchor":   [0.5,0.5],
+                            "scale":  0.4
+                          }
+                        },
+                        "timerTutorial" : {
+                          "type": "Image",
+                          "data": {
+                            "texture": "timer_tutorial0",
+                            "position": [-75,-60],
+                            "anchor":   [0.5,0.5],
+                            "scale":  0.4
                           }
                         }
 

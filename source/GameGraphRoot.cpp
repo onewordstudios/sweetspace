@@ -87,6 +87,9 @@ constexpr int MOVE_TUTORIAL_CUTOFF = 5;
 /** Time to show breach tutorial */
 constexpr int BREACH_TUTORIAL_CUTOFF = 10;
 
+/** Time stop showing timer */
+constexpr int TIMER_TUTORIAL_CUTOFF = 18;
+
 /** Red health position */
 constexpr float RED_POS_X = -100;
 
@@ -122,6 +125,12 @@ constexpr float LOW_GREEN_ANGLE = 300 * globals::PI_180;
 
 /** High green health angle */
 constexpr float HIGH_GREEN_ANGLE = 320 * globals::PI_180;
+
+/** Tutorial asset scale */
+constexpr float TUTORIAL_SCALE = 0.4f;
+
+/** Timer offset */
+constexpr float TIMER_OFFSET = 20;
 
 #pragma mark -
 #pragma mark Constructors
@@ -197,12 +206,21 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	healthTutorial =
 		dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_healthTutorial"));
 	healthTutorial->setVisible(false);
+	communicateTutorial = dynamic_pointer_cast<cugl::PolygonNode>(
+		assets->get<Node>("game_field_communicateTutorial"));
+	communicateTutorial->setVisible(false);
+	timerTutorial =
+		dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_timerTutorial"));
+	timerTutorial->setVisible(false);
 	if (ship->getLevelNum() == tutorial::REAL_LEVELS.at(0)) {
-		healthTutorial->setVisible(true);
+		healthTutorial->setVisible(false);
+		communicateTutorial->setVisible(true);
+		timerTutorial->setVisible(true);
 	}
 	rollTutorial =
 		dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_rollTutorial"));
 	rollTutorial->setVisible(false);
+
 	tutorialNode = assets->get<Node>("game_field_near_tutorial");
 	buttonsNode = assets->get<Node>("game_field_near_button");
 	nearSpace->setAngle(0.0f);
@@ -310,6 +328,7 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 		if (ship->getLevelNum() == tutorial::BREACH_LEVEL) {
 			std::shared_ptr<Texture> image = assets->get<Texture>("jump_tutorial0");
 			std::shared_ptr<TutorialNode> tutorial = TutorialNode::alloc(image);
+			tutorial->setScale(TUTORIAL_SCALE);
 			tutorial->setBreachNode(breachNode);
 			tutorialNode->addChildWithTag(tutorial, i + 1);
 		}
@@ -352,17 +371,25 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 			shared_ptr<DoorNode> doorNode =
 				dynamic_pointer_cast<DoorNode>(doorsNode->getChildByTag((unsigned int)(i + 1)));
 			tutorial->setDoorNode(doorNode);
+			tutorial->setScale(TUTORIAL_SCALE);
 			tutorialNode->addChildWithTag(tutorial, i + 1);
 		}
 	} else if (ship->getLevelNum() == tutorial::BUTTON_LEVEL) {
 		for (int i = 0; i < buttonsNode->getChildCount(); i++) {
-			std::shared_ptr<Texture> image = assets->get<Texture>("engine_tutorial0");
+			std::shared_ptr<Texture> image = assets->get<Texture>("engine_tutorial");
 			std::shared_ptr<TutorialNode> tutorial = TutorialNode::alloc(image);
 			shared_ptr<ButtonNode> buttonNode =
 				dynamic_pointer_cast<ButtonNode>(buttonsNode->getChildByTag((unsigned int)(i + 1)));
 			tutorial->setButtonNode(buttonNode);
+			tutorial->setScale(TUTORIAL_SCALE);
 			tutorialNode->addChildWithTag(tutorial, i + 1);
 		}
+	} else if (ship->getLevelNum() == tutorial::REAL_LEVELS.at(2)) {
+		std::shared_ptr<Texture> image = assets->get<Texture>("timer_tutorial1");
+		timerTutorial->setTexture(image);
+		float posY = timerTutorial->getPositionY() - TIMER_OFFSET;
+		float posX = timerTutorial->getPositionX();
+		timerTutorial->setPosition(posX, posY);
 	}
 
 	// Overlay Components
@@ -566,6 +593,7 @@ void GameGraphRoot::update(float timestep) {
 			healthNode->setVisible(false);
 			rollTutorial->setVisible(false);
 			moveTutorial->setVisible(false);
+			communicateTutorial->setVisible(false);
 			timerBorder->setVisible(false);
 			healthNodeOverlay->setVisible(false);
 			coordHUD->setVisible(false);
@@ -662,8 +690,13 @@ void GameGraphRoot::update(float timestep) {
 				if (tutorial != nullptr) {
 					tutorial->setVisible(true);
 					if (tutorial->getPlayer() == playerID) {
-						std::shared_ptr<Texture> image =
-							assets->get<Texture>("fix_breach_tutorial0");
+						int breachHealth = tutorial->getBreachNode()->getModel()->getHealth();
+						std::shared_ptr<Texture> image = assets->get<Texture>("fix_count3");
+						if (breachHealth == 1) {
+							image = assets->get<Texture>("fix_count1");
+						} else if (breachHealth == 2) {
+							image = assets->get<Texture>("fix_count2");
+						}
 						tutorial->setTexture(image);
 					}
 				}
@@ -672,13 +705,34 @@ void GameGraphRoot::update(float timestep) {
 	}
 
 	if (ship->getLevelNum() == tutorial::BREACH_LEVEL) {
+		if (trunc(ship->timeCtr) == MOVE_TUTORIAL_CUTOFF) {
+			moveTutorial->setVisible(false);
+		}
+	} else if (ship->getLevelNum() == tutorial::REAL_LEVELS.at(0)) {
 		if (trunc(ship->timeCtr) == HEALTH_TUTORIAL_CUTOFF) {
 			healthTutorial->setVisible(false);
+			communicateTutorial->setVisible(false);
 		} else if (trunc(ship->timeCtr) == MOVE_TUTORIAL_CUTOFF) {
-			moveTutorial->setVisible(false);
+			timerTutorial->setVisible(false);
+			healthTutorial->setVisible(true);
+			std::shared_ptr<Texture> image = assets->get<Texture>("communicate_tutorial1");
+			communicateTutorial->setTexture(image);
+		}
+	} else if (ship->getLevelNum() == tutorial::REAL_LEVELS.at(2)) {
+		if (trunc(ship->timeCtr) > TIMER_TUTORIAL_CUTOFF) {
+			timerTutorial->setVisible(false);
+		} else {
+			timerTutorial->setVisible(true);
 		}
 	} else if (ship->getLevelNum() == tutorial::STABILIZER_LEVEL) {
 		rollTutorial->setVisible(true);
+		if (ship->getChallenge()) {
+			std::shared_ptr<Texture> image = assets->get<Texture>("stabilizer_tutorial1");
+			rollTutorial->setTexture(image);
+		} else {
+			std::shared_ptr<Texture> image = assets->get<Texture>("stabilizer_tutorial0");
+			rollTutorial->setTexture(image);
+		}
 	}
 	// Reanchor the node at the center of the screen and rotate about center.
 	Vec2 position = farSpace->getPosition();
