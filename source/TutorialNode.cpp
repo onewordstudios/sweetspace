@@ -28,6 +28,10 @@ void TutorialNode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch, const M
 		posX = buttonNode->getPositionX();
 		posY = buttonNode->getPositionY() + BUTTON_OFFSET_Y;
 		angle = buttonNode->getAngle();
+	}  else if (buttonNode != nullptr) {
+		posX = buttonNode->getPositionX();
+		posY = buttonNode->getPositionY() + BUTTON_OFFSET_Y;
+		angle = buttonNode->getAngle();
 	}
 
 	setPosition(posX, posY);

@@ -314,7 +314,7 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 			tutorial->setScale(0.4);
 			tutorialNode->addChildWithTag(tutorial, i + 1);
 		}
-	} else if (ship->getLevelNum() == tutorial::BUTTON_LEVEL) {
+	} else if (ship->getLevelNum() == tutorial::REAL_LEVELS.at(2)) {
 		for (int i = 0; i < buttonsNode->getChildCount(); i++) {
 			std::shared_ptr<Texture> image = assets->get<Texture>("engine_tutorial0");
 			std::shared_ptr<TutorialNode> tutorial = TutorialNode::alloc(image);
@@ -324,7 +324,7 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 			tutorial->setScale(0.4);
 			tutorialNode->addChildWithTag(tutorial, i + 1);
 		}
-		for (int i = buttonsNode->getChildCount(); i < buttonsNode->getChildCount() * 2; i++) {
+		for (int i = 0; i < buttonsNode->getChildCount(); i++) {
 			std::shared_ptr<Texture> image = assets->get<Texture>("engine_tutorial1");
 			std::shared_ptr<TutorialNode> tutorial = TutorialNode::alloc(image);
 			shared_ptr<ButtonNode> buttonNode =
