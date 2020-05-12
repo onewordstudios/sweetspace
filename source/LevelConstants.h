@@ -47,7 +47,7 @@ constexpr std::array<const char*, MAX_NUM_LEVELS> LEVEL_NAMES = {"",
 																 "json/level4.owslevel"};
 
 /** List of where the buttons on the level select map */
-constexpr std::array<unsigned int, NUM_LEVEL_BTNS> LEVEL_ENTRY_POINTS = {0, 7, 9, 10, 11}; // NOLINT
+constexpr std::array<unsigned int, NUM_LEVEL_BTNS> LEVEL_ENTRY_POINTS = {0, 8, 9, 10, 11}; // NOLINT
 
 /** Easy level index */
 constexpr unsigned int EASY_LEVEL = 0; // NOLINT
