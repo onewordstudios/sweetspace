@@ -1,7 +1,11 @@
 ﻿#ifndef __SOUND_EFFECT_CONTROLLER_H__
 #define __SOUND_EFFECT_CONTROLLER_H__
 #include <cugl/cugl.h>
+
+#include <map>
+
 using namespace cugl;
+constexpr int NUM_EFFECTS = 6;
 /**
  * This class represents sound effects
  *
@@ -13,6 +17,9 @@ class SoundEffectController {
 	 * The singleton instance of this class.
 	 */
 	static std::shared_ptr<SoundEffectController> instance;
+
+	/** List of actively playing effects. */
+	std::map<std::pair<int, int>, bool> activeEffects;
 
 	std::shared_ptr<Sound> jump;
 	std::shared_ptr<Sound> doorCollide;
@@ -37,10 +44,8 @@ class SoundEffectController {
 	SoundEffectController() {}
 
    public:
-	enum Effect { JUMP, DOOR, FIX, SLOW, CLICK, TELEPORT };
+	enum Effect { JUMP = 0, DOOR = 1, FIX = 2, SLOW = 3, CLICK = 4, TELEPORT = 5 };
 
-	/** List of actively playing effects. */
-	vector<Effect> activeEffects;
 #pragma region Constructors
 
 	/**
@@ -73,10 +78,10 @@ class SoundEffectController {
 	 *
 	 *
 	 */
-	void startEvent(Effect e) {
+	void startEvent(Effect e, int id) {
 		// Check if this event has already been registered
-		if (std::find(activeEffects.begin(), activeEffects.end(), e) == activeEffects.end()) {
-			activeEffects.push_back(e);
+		if (!activeEffects[{e, id}]) {
+			activeEffects[{e, id}] = true;
 			std::shared_ptr<Sound> sound;
 			const char* key;
 			switch (e) {
@@ -105,7 +110,10 @@ class SoundEffectController {
 					key = TELEPORT_FILE;
 					break;
 			}
-			AudioChannels::get()->playEffect(key, sound, false);
+			if (!AudioChannels::get()->isActiveEffect(key)) {
+				AudioChannels::get()->playEffect(key, sound, false);
+				AudioChannels::get()->setEffectPan(key, 0);
+			}
 		}
 	}
 
@@ -114,11 +122,9 @@ class SoundEffectController {
 	 *
 	 *
 	 */
-	void endEvent(Effect e) {
-		auto i = std::find(activeEffects.begin(), activeEffects.end(), e);
-
-		if (i != activeEffects.end()) {
-			activeEffects.erase(i, i + 1);
+	void endEvent(Effect e, int id) {
+		if (activeEffects[{e, id}]) {
+			activeEffects[{e, id}] = false;
 		}
 	}
 	/**
