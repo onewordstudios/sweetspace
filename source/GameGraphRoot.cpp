@@ -228,7 +228,7 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	stablizerFailText->setVisible(false);
 	stablizerFailPanel = dynamic_pointer_cast<cugl::PolygonNode>(
 		assets->get<Node>("game_field_challengePanelParent_challengePanelFailPanel"));
-    stablizerFailPanel->setVisible(false);
+	stablizerFailPanel->setVisible(false);
 	blackoutOverlay =
 		dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_blackoutOverlay"));
 	blackoutOverlay->setColor(Tween::fade(0));
@@ -467,7 +467,7 @@ void GameGraphRoot::dispose() {
 		healthNode = nullptr;
 
 		stablizerFailText = nullptr;
-        stablizerFailPanel = nullptr;
+		stablizerFailPanel = nullptr;
 		blackoutOverlay = nullptr;
 
 		reconnectOverlay = nullptr;
@@ -896,7 +896,7 @@ void GameGraphRoot::doTeleportAnimation() {
 	if (currentTeleportationFrame != 0) {
 		// Continue teleportation animation
 		if (currentTeleportationFrame <= TELEPORT_FRAMECUTOFF_FIRST) {
-            stablizerFailPanel->setVisible(true);
+			stablizerFailPanel->setVisible(true);
 			stablizerFailText->setVisible(true);
 		} else if (currentTeleportationFrame <= TELEPORT_FRAMECUTOFF_SECOND) {
 			blackoutOverlay->setColor(Tween::fade(
@@ -911,7 +911,7 @@ void GameGraphRoot::doTeleportAnimation() {
 				}
 				ship->setStablizerStatus(ShipModel::StablizerStatus::INACTIVE);
 			}
-            stablizerFailPanel->setVisible(false);
+			stablizerFailPanel->setVisible(false);
 			stablizerFailText->setVisible(false);
 			blackoutOverlay->setColor(Tween::fade(
 				Tween::linear(1, 0, currentTeleportationFrame - TELEPORT_FRAMECUTOFF_SECOND,
