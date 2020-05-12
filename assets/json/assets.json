@@ -323,6 +323,36 @@
             "type":     "sample",
             "file":     "sounds/menu.wav",
             "volume":   0.5
+        },
+        "click": {
+            "type":     "sample",
+            "file":     "sounds/click.wav",
+            "volume":   0.5
+        },
+        "doorCollide": {
+            "type":     "sample",
+            "file":     "sounds/door-collide.wav",
+            "volume":   0.5
+        },
+        "fixBreach": {
+            "type":     "sample",
+            "file":     "sounds/breach-fix.wav",
+            "volume":   0.8
+        },
+        "slowBreach": {
+            "type":     "sample",
+            "file":     "sounds/breach-collide.wav",
+            "volume":   0.5
+        },
+        "jump": {
+            "type":     "sample",
+            "file":     "sounds/jump.wav",
+            "volume":   0.5
+        },
+        "teleport": {
+            "type":     "sample",
+            "file":     "sounds/teleport.wav",
+            "volume":   0.5
         }
     },
 	"fonts": {

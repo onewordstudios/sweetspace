@@ -1,4 +1,4 @@
-//
+﻿//
 //  CUAudioChannels.cpp
 //  Cornell University Game Library (CUGL)
 //
@@ -63,8 +63,8 @@ AudioChannels* AudioChannels::_gEngine = nullptr;
  * The engine must be initialized before is can be used.
  */
 AudioChannels::AudioChannels() : _capacity(0) {
-    _output = nullptr;
-    _mixer  = nullptr;
+	_output = nullptr;
+	_mixer = nullptr;
 }
 
 /**
@@ -77,7 +77,7 @@ AudioChannels::AudioChannels() : _capacity(0) {
  * @return true if the audio engine was successfully initialized.
  */
 bool AudioChannels::init() {
-    return init(DEFAULT_SLOTSIZE);
+	return init(DEFAULT_SLOTSIZE);
 }
 
 /**
@@ -92,54 +92,55 @@ bool AudioChannels::init() {
  * @return true if the audio engine was successfully initialized.
  */
 bool AudioChannels::init(Uint32 channels) {
-    CUAssertLog(channels, "The number of channels must be non-zero");
-    _capacity = channels;
+	CUAssertLog(channels, "The number of channels must be non-zero");
+	_capacity = channels;
 
-    // Assume that manager has already started
-    _output = AudioManager::get()->openOutput();
-    _mixer  = AudioMixer::alloc(_capacity+1,_output->getChannels(),_output->getRate());
-    
-    for(int ii = 0; ii <= _capacity; ii++) {
-        std::shared_ptr<AudioScheduler> slot;
-        slot = audio::AudioScheduler::alloc(_mixer->getChannels(),_mixer->getRate());
-        slot->setTag(ii);
-        _channel.push_back(slot);
-        std::shared_ptr<AudioFader> cover;
-        cover = audio::AudioFader::alloc(slot);
-        cover->setTag(ii);
-        _chfader.push_back(cover);
-        _mixer->attach(ii,cover);
-        
-        if (ii == 0) {
-            slot->setCallback([=](const std::shared_ptr<cugl::audio::AudioNode>& node,
-                                     cugl::audio::AudioNode::Action action) {
-                if (action != cugl::audio::AudioNode::Action::LOOPBACK) {
-                    bool success = (action == cugl::audio::AudioNode::Action::COMPLETE);
-                    this->gcMusic(node,success);
-                }
-            });
-        } else {
-            slot->setCallback([=](const std::shared_ptr<cugl::audio::AudioNode>& node,
-                                  cugl::audio::AudioNode::Action action) {
-                if (action != cugl::audio::AudioNode::Action::LOOPBACK) {
-                    bool success = (action == cugl::audio::AudioNode::Action::COMPLETE);
-                    this->gcEffect(node,success);
-                }
-            });
-        }
-    }
-    
-    // Pool needs a fader and panner for 2 times the number of slots
-    for(int ii = 0; ii <= 2*_capacity; ii++) {
-        _fadePool.push_back(AudioFader::alloc(_mixer->getChannels(),_mixer->getRate()));
-        _pan1Pool.push_back(AudioPanner::alloc(_mixer->getChannels(),1,_mixer->getRate()));
-        _pan2Pool.push_back(AudioPanner::alloc(_mixer->getChannels(),2,_mixer->getRate()));
-    }
-    
-    // Launch and go
-    _output->attach(_mixer);
-    AudioManager::get()->activate();
-    return true;
+	// Assume that manager has already started
+	_output = AudioManager::get()->openOutput();
+	_mixer = AudioMixer::alloc(_capacity + 1, _output->getChannels(), _output->getRate());
+
+	for (int ii = 0; ii <= _capacity; ii++) {
+		std::shared_ptr<AudioScheduler> slot;
+		slot = audio::AudioScheduler::alloc(_mixer->getChannels(), _mixer->getRate());
+		slot->setTag(ii);
+		_channel.push_back(slot);
+		std::shared_ptr<AudioFader> cover;
+		cover = audio::AudioFader::alloc(slot);
+		cover->setTag(ii);
+		_chfader.push_back(cover);
+		_mixer->attach(ii, cover);
+
+		if (ii == 0) {
+			slot->setCallback([=](const std::shared_ptr<cugl::audio::AudioNode>& node,
+				cugl::audio::AudioNode::Action action) {
+					if (action != cugl::audio::AudioNode::Action::LOOPBACK) {
+						bool success = (action == cugl::audio::AudioNode::Action::COMPLETE);
+						this->gcMusic(node, success);
+					}
+				});
+		}
+		else {
+			slot->setCallback([=](const std::shared_ptr<cugl::audio::AudioNode>& node,
+				cugl::audio::AudioNode::Action action) {
+					if (action != cugl::audio::AudioNode::Action::LOOPBACK) {
+						bool success = (action == cugl::audio::AudioNode::Action::COMPLETE);
+						this->gcEffect(node, success);
+					}
+				});
+		}
+	}
+
+	// Pool needs a fader and panner for 2 times the number of slots
+	for (int ii = 0; ii <= 2 * _capacity; ii++) {
+		_fadePool.push_back(AudioFader::alloc(_mixer->getChannels(), _mixer->getRate()));
+		_pan1Pool.push_back(AudioPanner::alloc(_mixer->getChannels(), 1, _mixer->getRate()));
+		_pan2Pool.push_back(AudioPanner::alloc(_mixer->getChannels(), 2, _mixer->getRate()));
+	}
+
+	// Launch and go
+	_output->attach(_mixer);
+	AudioManager::get()->activate();
+	return true;
 }
 
 /**
@@ -149,22 +150,22 @@ bool AudioChannels::init(Uint32 channels) {
  * engine again, you must call init().
  */
 void AudioChannels::dispose() {
-    if (_capacity) {
-        AudioManager::get()->closeOutput(_output);
+	if (_capacity) {
+		AudioManager::get()->closeOutput(_output);
 		AudioManager::get()->deactivate();
 
-        _channel.clear();
-        _chfader.clear();
-        
-        _fadePool.clear();
-        _pan1Pool.clear();
-        _pan2Pool.clear();
-        _capacity = 0;
-        
+		_channel.clear();
+		_chfader.clear();
+
+		_fadePool.clear();
+		_pan1Pool.clear();
+		_pan2Pool.clear();
+		_capacity = 0;
+
 		_output->detach();
 		_output = nullptr;
-        _mixer = nullptr;
-        
+		_mixer = nullptr;
+
 		_equeue.clear();
 		_effects.clear();
 	}
@@ -186,10 +187,10 @@ void AudioChannels::dispose() {
  * @param status    True if the music terminated normally, false otherwise.
  */
 void AudioChannels::gcMusic(const std::shared_ptr<AudioNode>& node, bool status) {
-    std::shared_ptr<Sound> sound = disposeInstance(node);
-    if (_musicCB) {
-        _musicCB(sound.get(),status);
-    }
+	std::shared_ptr<Sound> sound = disposeInstance(node);
+	if (_musicCB) {
+		_musicCB(sound.get(), status);
+	}
 
 }
 
@@ -207,12 +208,12 @@ void AudioChannels::gcMusic(const std::shared_ptr<AudioNode>& node, bool status)
  * @param status    True if the music terminated normally, false otherwise.
  */
 void AudioChannels::gcEffect(const std::shared_ptr<AudioNode>& node, bool status) {
-    std::string key = node->getName();
-    std::shared_ptr<Sound> sound = disposeInstance(node);
-    removeKey(key);
-    if (_soundCB) {
-        _soundCB(key,status);
-    }
+	std::string key = node->getName();
+	std::shared_ptr<Sound> sound = disposeInstance(node);
+	removeKey(key);
+	if (_soundCB) {
+		_soundCB(key, status);
+	}
 }
 
 /**
@@ -224,15 +225,16 @@ void AudioChannels::gcEffect(const std::shared_ptr<AudioNode>& node, bool status
  * @remove key  The key to purge from the list of active effects.
  */
 void AudioChannels::removeKey(std::string key) {
-    _effects.erase(key);
-    for(auto it = _equeue.begin(); it != _equeue.end(); ) {
-        if (*it == key) {
-            it = _equeue.erase(it);
-            break;
-        } else {
-            it++;
-        }
-    }
+	_effects.erase(key);
+	for (auto it = _equeue.begin(); it != _equeue.end(); ) {
+		if (*it == key) {
+			it = _equeue.erase(it);
+			break;
+		}
+		else {
+			it++;
+		}
+	}
 }
 
 /**
@@ -248,35 +250,39 @@ void AudioChannels::removeKey(std::string key) {
  * @return a playable audio node for a given a sound instance.
  */
 std::shared_ptr<AudioFader> AudioChannels::wrapInstance(const std::shared_ptr<Sound>& asset) {
-    CUAssertLog(asset->getChannels() <= 2, "Sound asset has more than 2 channels");
-    CUAssertLog(asset->getRate() == _mixer->getRate(), "Sound asset is not encoded at %d Hz",_mixer->getRate());
-    
-    std::shared_ptr<AudioFader> fader = nullptr;
-    if (_fadePool.empty()) {
-        fader = AudioFader::alloc(_mixer->getChannels(),_mixer->getRate());
-    } else {
-        fader = _fadePool.front();
-        _fadePool.pop_front();
-    }
-    std::shared_ptr<AudioPanner> panner = nullptr;
-    if (asset->getChannels() == 1) {
-        if (_pan1Pool.empty()) {
-            panner = AudioPanner::alloc(_mixer->getChannels(),1,_mixer->getRate());
-        } else {
-            panner = _pan1Pool.front();
-            _pan1Pool.pop_front();
-        }
-    } else {
-        if (_pan2Pool.empty()) {
-            panner = AudioPanner::alloc(_mixer->getChannels(),2,_mixer->getRate());
-        } else {
-            panner = _pan2Pool.front();
-            _pan2Pool.pop_front();
-        }
-    }
-    fader->attach(panner);
-    panner->attach(asset->createNode());
-    return fader;
+	CUAssertLog(asset->getChannels() <= 2, "Sound asset has more than 2 channels");
+	CUAssertLog(asset->getRate() == _mixer->getRate(), "Sound asset is not encoded at %d Hz", _mixer->getRate());
+
+	std::shared_ptr<AudioFader> fader = nullptr;
+	if (_fadePool.empty()) {
+		fader = AudioFader::alloc(_mixer->getChannels(), _mixer->getRate());
+	}
+	else {
+		fader = _fadePool.front();
+		_fadePool.pop_front();
+	}
+	std::shared_ptr<AudioPanner> panner = nullptr;
+	if (asset->getChannels() == 1) {
+		if (_pan1Pool.empty()) {
+			panner = AudioPanner::alloc(_mixer->getChannels(), 1, _mixer->getRate());
+		}
+		else {
+			panner = _pan1Pool.front();
+			_pan1Pool.pop_front();
+		}
+	}
+	else {
+		if (_pan2Pool.empty()) {
+			panner = AudioPanner::alloc(_mixer->getChannels(), 2, _mixer->getRate());
+		}
+		else {
+			panner = _pan2Pool.front();
+			_pan2Pool.pop_front();
+		}
+	}
+	fader->attach(panner);
+	panner->attach(asset->createNode());
+	return fader;
 }
 
 /**
@@ -292,15 +298,15 @@ std::shared_ptr<AudioFader> AudioChannels::wrapInstance(const std::shared_ptr<So
  * @return the sound asset for the given playable audio node.
  */
 std::shared_ptr<Sound> AudioChannels::accessInstance(const std::shared_ptr<AudioNode>& node) const {
-    if (node) {
-        AudioFader* fader = dynamic_cast<AudioFader*>(node.get());
-        AudioPanner* panner = dynamic_cast<AudioPanner*>(fader->getInput().get());
-        AudioPlayer* player = dynamic_cast<AudioPlayer*>(panner->getInput().get());
-        if (player) {
-            return player->getSource();
-        }
-    }
-    return nullptr;
+	if (node) {
+		AudioFader* fader = dynamic_cast<AudioFader*>(node.get());
+		AudioPanner* panner = dynamic_cast<AudioPanner*>(fader->getInput().get());
+		AudioPlayer* player = dynamic_cast<AudioPlayer*>(panner->getInput().get());
+		if (player) {
+			return player->getSource();
+		}
+	}
+	return nullptr;
 }
 
 /**
@@ -316,29 +322,30 @@ std::shared_ptr<Sound> AudioChannels::accessInstance(const std::shared_ptr<Audio
  * @return the sound asset for the given playable audio node.
  */
 std::shared_ptr<Sound> AudioChannels::disposeInstance(const std::shared_ptr<audio::AudioNode>& node) {
-    if (node) {
-        std::shared_ptr<AudioFader> fader   = std::dynamic_pointer_cast<AudioFader>(node);
-        std::shared_ptr<AudioPanner> panner = std::dynamic_pointer_cast<AudioPanner>(fader->getInput());
-        if (panner) {
-            std::shared_ptr<AudioNode>   source = panner->getInput();
-            AudioPlayer* player = dynamic_cast<AudioPlayer*>(source.get());
-            fader->detach();
-            fader->fadeOut(-1);
-            fader->reset();
-            panner->detach();
-            panner->reset();
-            _fadePool.push_back(fader);
-            if (panner->getField() == 1) {
-                _pan1Pool.push_back(panner);
-            } else {
-                _pan2Pool.push_back(panner);
-            }
-            if (player) {
-                return player->getSource();
-            }
-        }
-    }
-    return nullptr;
+	if (node) {
+		std::shared_ptr<AudioFader> fader = std::dynamic_pointer_cast<AudioFader>(node);
+		std::shared_ptr<AudioPanner> panner = std::dynamic_pointer_cast<AudioPanner>(fader->getInput());
+		if (panner) {
+			std::shared_ptr<AudioNode>   source = panner->getInput();
+			AudioPlayer* player = dynamic_cast<AudioPlayer*>(source.get());
+			fader->detach();
+			fader->fadeOut(-1);
+			fader->reset();
+			panner->detach();
+			panner->reset();
+			_fadePool.push_back(fader);
+			if (panner->getField() == 1) {
+				_pan1Pool.push_back(panner);
+			}
+			else {
+				_pan2Pool.push_back(panner);
+			}
+			if (player) {
+				return player->getSource();
+			}
+		}
+	}
+	return nullptr;
 }
 
 
@@ -374,7 +381,7 @@ std::shared_ptr<Sound> AudioChannels::disposeInstance(const std::shared_ptr<audi
  * @param slots  The maximum number of sound effect channels to support
  */
 void AudioChannels::start(Uint32 channels) {
-    start(channels,AudioManager::DEFAULT_OUTPUT_BUFFER);
+	start(channels, AudioManager::DEFAULT_OUTPUT_BUFFER);
 }
 
 /**
@@ -407,17 +414,17 @@ void AudioChannels::start(Uint32 channels) {
  * @param buffer The number of samples collected at each audio poll
  */
 void AudioChannels::start(Uint32 channels, Uint32 buffer) {
-    if (_gEngine != nullptr) {
-        return;
-    }
-    AudioManager::start(buffer);
-    _gEngine = new AudioChannels();
-    if (!_gEngine->init(channels)) {
-        delete _gEngine;
-        _gEngine = nullptr;
-        AudioManager::stop();
-        CUAssertLog(false,"Audio engine failed to initialize");
-    }
+	if (_gEngine != nullptr) {
+		return;
+	}
+	AudioManager::start(buffer);
+	_gEngine = new AudioChannels();
+	if (!_gEngine->init(channels)) {
+		delete _gEngine;
+		_gEngine = nullptr;
+		AudioManager::stop();
+		CUAssertLog(false, "Audio engine failed to initialize");
+	}
 }
 
 /**
@@ -428,12 +435,12 @@ void AudioChannels::start(Uint32 channels, Uint32 buffer) {
  * no effect.
  */
 void AudioChannels::stop() {
-    if (_gEngine == nullptr) {
-        return;
-    }
-    delete _gEngine;
-    _gEngine = nullptr;
-    AudioManager::stop();
+	if (_gEngine == nullptr) {
+		return;
+	}
+	delete _gEngine;
+	_gEngine = nullptr;
+	AudioManager::stop();
 }
 
 
@@ -464,22 +471,23 @@ void AudioChannels::stop() {
  * @param fade      The number of seconds to fade in
  */
 void AudioChannels::playMusic(const std::shared_ptr<Sound>& music, bool loop, float volume, float fade) {
-    CUAssertLog(volume >= 0 && volume <= 1, "Volume %f is out of range",volume);
-    CUAssertLog(fade >= 0, "Fade-in cannot be negative");
-    std::shared_ptr<audio::AudioScheduler> slot = _channel[0];
+	CUAssertLog(volume >= 0 && volume <= 1, "Volume %f is out of range", volume);
+	CUAssertLog(fade >= 0, "Fade-in cannot be negative");
+	std::shared_ptr<audio::AudioScheduler> slot = _channel[0];
 
-    // Wrap up the music
-    std::shared_ptr<AudioFader> fader = wrapInstance(music);
-    if (volume >= 0) {
-        fader->setGain(volume);
-    } else {
-        fader->setGain(music->getVolume());
-    }
-    if (fade > 0) {
-        fader->fadeIn(fade);
-    }
-    
-    slot->play(fader, loop ? -1 : 0);
+	// Wrap up the music
+	std::shared_ptr<AudioFader> fader = wrapInstance(music);
+	if (volume >= 0) {
+		fader->setGain(volume);
+	}
+	else {
+		fader->setGain(music->getVolume());
+	}
+	if (fade > 0) {
+		fader->fadeIn(fade);
+	}
+
+	slot->play(fader, loop ? -1 : 0);
 }
 
 /**
@@ -490,9 +498,9 @@ void AudioChannels::playMusic(const std::shared_ptr<Sound>& music, bool loop, fl
  * @return the music asset currently playing
  */
 const Sound* AudioChannels::currentMusic() const {
-    std::shared_ptr<audio::AudioScheduler> slot = _channel[0];
-    std::shared_ptr<Sound> sound = accessInstance(slot->getCurrent());
-    return sound.get();
+	std::shared_ptr<audio::AudioScheduler> slot = _channel[0];
+	std::shared_ptr<Sound> sound = accessInstance(slot->getCurrent());
+	return sound.get();
 }
 
 /**
@@ -501,16 +509,16 @@ const Sound* AudioChannels::currentMusic() const {
  * @return the current state of the background music
  */
 AudioChannels::State AudioChannels::getMusicState() const {
-    std::shared_ptr<audio::AudioScheduler> slot = _channel[0];
-    if (!slot->isPlaying()) {
-        return State::INACTIVE;
-    }
-    std::shared_ptr<AudioNode> node = slot->getCurrent();
-    if (node->isPaused() || slot->isPaused()) {
-        return State::PAUSED;
-    }
-    
-    return State::PLAYING;
+	std::shared_ptr<audio::AudioScheduler> slot = _channel[0];
+	if (!slot->isPlaying()) {
+		return State::INACTIVE;
+	}
+	std::shared_ptr<AudioNode> node = slot->getCurrent();
+	if (node->isPaused() || slot->isPaused()) {
+		return State::PAUSED;
+	}
+
+	return State::PLAYING;
 }
 
 /**
@@ -521,7 +529,7 @@ AudioChannels::State AudioChannels::getMusicState() const {
  * @return true if the background music is in a continuous loop.
  */
 bool AudioChannels::isMusicLoop() const {
-    return _channel[0]->getLoops() != 0;
+	return _channel[0]->getLoops() != 0;
 }
 
 /**
@@ -536,7 +544,7 @@ bool AudioChannels::isMusicLoop() const {
  * @param  loop  whether the background music should be on a continuous loop
  */
 void AudioChannels::setMusicLoop(bool loop) {
-    _channel[0]->setLoops(loop ? -1 : 0);
+	_channel[0]->setLoops(loop ? -1 : 0);
 }
 
 /**
@@ -548,11 +556,11 @@ void AudioChannels::setMusicLoop(bool loop) {
  * @return the volume of the background music
  */
 float AudioChannels::getMusicVolume() const {
-    std::shared_ptr<AudioNode> node = _channel[0]->getCurrent();
-    if (node) {
-        return node->getGain();
-    }
-    return 0;
+	std::shared_ptr<AudioNode> node = _channel[0]->getCurrent();
+	if (node) {
+		return node->getGain();
+	}
+	return 0;
 }
 
 /**
@@ -564,11 +572,11 @@ float AudioChannels::getMusicVolume() const {
  * @param  volume   the volume of the background music
  */
 void AudioChannels::setMusicVolume(float volume) {
-    CUAssertLog(volume >= 0 && volume <= 1, "Volume %f is out of range",volume);
-    std::shared_ptr<AudioNode> node = _channel[0]->getCurrent();
-    if (node) {
-        return node->setGain(volume);
-    }
+	CUAssertLog(volume >= 0 && volume <= 1, "Volume %f is out of range", volume);
+	std::shared_ptr<AudioNode> node = _channel[0]->getCurrent();
+	if (node) {
+		return node->setGain(volume);
+	}
 }
 
 /**
@@ -586,16 +594,17 @@ void AudioChannels::setMusicVolume(float volume) {
  * @return the stereo pan of the background music
  */
 float AudioChannels::getMusicPan() const {
-    std::shared_ptr<AudioFader> fader = std::dynamic_pointer_cast<AudioFader>(_channel[0]->getCurrent());
-    if (fader) {
-        std::shared_ptr<AudioPanner> panner = std::dynamic_pointer_cast<AudioPanner>(fader->getInput());
-        if (panner->getField() == 1) {
-            return panner->getPan(0,1)-panner->getPan(0,0);
-        } else {
-            return panner->getPan(1,1)-panner->getPan(0,0);
-        }
-    }
-    return 0;
+	std::shared_ptr<AudioFader> fader = std::dynamic_pointer_cast<AudioFader>(_channel[0]->getCurrent());
+	if (fader) {
+		std::shared_ptr<AudioPanner> panner = std::dynamic_pointer_cast<AudioPanner>(fader->getInput());
+		if (panner->getField() == 1) {
+			return panner->getPan(0, 1) - panner->getPan(0, 0);
+		}
+		else {
+			return panner->getPan(1, 1) - panner->getPan(0, 0);
+		}
+	}
+	return 0;
 }
 
 /**
@@ -613,27 +622,29 @@ float AudioChannels::getMusicPan() const {
  * @param pan   The stereo pan of the background music
  */
 void AudioChannels::setMusicPan(float pan) {
-    CUAssertLog(pan >= -1 && pan <= 1, "Pan value %f is out of range",pan);
-    std::shared_ptr<AudioFader> fader = std::dynamic_pointer_cast<AudioFader>(_channel[0]->getCurrent());
-    if (fader) {
-        std::shared_ptr<AudioPanner> panner = std::dynamic_pointer_cast<AudioPanner>(fader->getInput());
-        if (panner->getField() == 1) {
-            panner->setPan(0,0,0.5-pan/2.0);
-            panner->setPan(0,1,0.5+pan/2.0);
-        } else {
-            if (pan <= 0) {
-                panner->setPan(0,0,1);
-                panner->setPan(0,1,0);
-                panner->setPan(1,0,-pan);
-                panner->setPan(1,1,1+pan);
-            } else {
-                panner->setPan(1,1,1);
-                panner->setPan(1,0,0);
-                panner->setPan(0,0,1-pan);
-                panner->setPan(0,1,pan);
-            }
-        }
-    }
+	CUAssertLog(pan >= -1 && pan <= 1, "Pan value %f is out of range", pan);
+	std::shared_ptr<AudioFader> fader = std::dynamic_pointer_cast<AudioFader>(_channel[0]->getCurrent());
+	if (fader) {
+		std::shared_ptr<AudioPanner> panner = std::dynamic_pointer_cast<AudioPanner>(fader->getInput());
+		if (panner->getField() == 1) {
+			panner->setPan(0, 0, 0.5 - pan / 2.0);
+			panner->setPan(0, 1, 0.5 + pan / 2.0);
+		}
+		else {
+			if (pan <= 0) {
+				panner->setPan(0, 0, 1);
+				panner->setPan(0, 1, 0);
+				panner->setPan(1, 0, -pan);
+				panner->setPan(1, 1, 1 + pan);
+			}
+			else {
+				panner->setPan(1, 1, 1);
+				panner->setPan(1, 0, 0);
+				panner->setPan(0, 0, 1 - pan);
+				panner->setPan(0, 1, pan);
+			}
+		}
+	}
 }
 
 /**
@@ -649,11 +660,11 @@ void AudioChannels::setMusicPan(float pan) {
  * @return the length of background music, in seconds.
  */
 float AudioChannels::getMusicDuration() const {
-    Sound* sound = accessInstance(_channel[0]->getCurrent()).get();
-    if (sound) {
-        return sound->getDuration();
-    }
-    return 0;
+	Sound* sound = accessInstance(_channel[0]->getCurrent()).get();
+	if (sound) {
+		return sound->getDuration();
+	}
+	return 0;
 }
 
 /**
@@ -672,11 +683,11 @@ float AudioChannels::getMusicDuration() const {
  * @return the elapsed time of the background music, in seconds
  */
 float AudioChannels::getMusicElapsed() const {
-    std::shared_ptr<AudioNode> node = _channel[0]->getCurrent();
-    if (node) {
-        return (float)node->getElapsed();
-    }
-    return 0;
+	std::shared_ptr<AudioNode> node = _channel[0]->getCurrent();
+	if (node) {
+		return (float)node->getElapsed();
+	}
+	return 0;
 }
 
 /**
@@ -696,11 +707,11 @@ float AudioChannels::getMusicElapsed() const {
  * @return the time remaining for the background music, in seconds
  */
 float AudioChannels::getMusicRemaining() const {
-    std::shared_ptr<AudioNode> node = _channel[0]->getCurrent();
-    if (node) {
-        return (float)node->getRemaining();
-    }
-    return 0;
+	std::shared_ptr<AudioNode> node = _channel[0]->getCurrent();
+	if (node) {
+		return (float)node->getRemaining();
+	}
+	return 0;
 }
 
 /**
@@ -720,10 +731,10 @@ float AudioChannels::getMusicRemaining() const {
  * @param  time  the new position of the background music
  */
 void AudioChannels::setMusicElapsed(float time) {
-    std::shared_ptr<AudioNode> node = _channel[0]->getCurrent();
-    if (node) {
-        node->setElapsed(time);
-    }
+	std::shared_ptr<AudioNode> node = _channel[0]->getCurrent();
+	if (node) {
+		node->setElapsed(time);
+	}
 }
 
 /**
@@ -744,10 +755,10 @@ void AudioChannels::setMusicElapsed(float time) {
  * @param  time  the new time remaining of the background music
  */
 void AudioChannels::setMusicRemaining(float time) {
-    std::shared_ptr<AudioNode> node = _channel[0]->getCurrent();
-    if (node) {
-        node->setRemaining(time);
-    }
+	std::shared_ptr<AudioNode> node = _channel[0]->getCurrent();
+	if (node) {
+		node->setRemaining(time);
+	}
 }
 
 /**
@@ -764,17 +775,18 @@ void AudioChannels::setMusicRemaining(float time) {
  * @param fade  The number of seconds to fade out
  */
 void AudioChannels::stopMusic(float fade) {
-    std::shared_ptr<audio::AudioScheduler> slot = _channel[0];
-    std::shared_ptr<AudioFader> fader = std::dynamic_pointer_cast<AudioFader>(slot->getCurrent());
-    if (fader) {
-        if (fade >= 0) {
-            slot->setLoops(0);
-            slot->trim();
-            fader->fadeOut(fade);
-        } else {
-            slot->clear();
-        }
-    }
+	std::shared_ptr<audio::AudioScheduler> slot = _channel[0];
+	std::shared_ptr<AudioFader> fader = std::dynamic_pointer_cast<AudioFader>(slot->getCurrent());
+	if (fader) {
+		if (fade >= 0) {
+			slot->setLoops(0);
+			slot->trim();
+			fader->fadeOut(fade);
+		}
+		else {
+			slot->clear();
+		}
+	}
 }
 
 /**
@@ -791,12 +803,13 @@ void AudioChannels::stopMusic(float fade) {
  * @param fade  The number of seconds to fade out
  */
 void AudioChannels::pauseMusic(float fade) {
-    std::shared_ptr<audio::AudioFader> slot = _chfader[0];
-    if (fade > 0) {
-        slot->fadePause(fade);
-    } else {
-        slot->pause();
-    }
+	std::shared_ptr<audio::AudioFader> slot = _chfader[0];
+	if (fade > 0) {
+		slot->fadePause(fade);
+	}
+	else {
+		slot->pause();
+	}
 }
 
 /**
@@ -805,10 +818,10 @@ void AudioChannels::pauseMusic(float fade) {
  * This method has no effect on the music queue.
  */
 void AudioChannels::resumeMusic() {
-    std::shared_ptr<audio::AudioFader> slot = _chfader[0];
-    if (slot->isPaused()) {
-        slot->resume();
-    }
+	std::shared_ptr<audio::AudioFader> slot = _chfader[0];
+	if (slot->isPaused()) {
+		slot->resume();
+	}
 }
 
 
@@ -839,20 +852,21 @@ void AudioChannels::resumeMusic() {
  * @param fade      The number of seconds to fade in
  */
 void AudioChannels::queueMusic(const std::shared_ptr<Sound>& music, bool loop, float volume, float fade) {
-    std::shared_ptr<audio::AudioScheduler> slot = _channel[0];
-    
-    // Wrap up the music
-    std::shared_ptr<AudioFader> fader = wrapInstance(music);
-    if (volume >= 0) {
-        fader->setGain(volume);
-    } else {
-        fader->setGain(music->getVolume());
-    }
-    if (fade > 0) {
-        fader->fadeIn(fade);
-    }
-    
-    slot->append(fader, loop ? -1 : 0);
+	std::shared_ptr<audio::AudioScheduler> slot = _channel[0];
+
+	// Wrap up the music
+	std::shared_ptr<AudioFader> fader = wrapInstance(music);
+	if (volume >= 0) {
+		fader->setGain(volume);
+	}
+	else {
+		fader->setGain(music->getVolume());
+	}
+	if (fade > 0) {
+		fader->fadeIn(fade);
+	}
+
+	slot->append(fader, loop ? -1 : 0);
 }
 
 /**
@@ -861,13 +875,13 @@ void AudioChannels::queueMusic(const std::shared_ptr<Sound>& music, bool loop, f
  * @return the list of assets for the music queue
  */
 const std::vector<Sound*> AudioChannels::getMusicQueue() const {
-    std::vector<Sound*> result;
-    std::deque<std::shared_ptr<AudioNode>> list = _channel[0]->getTail();
-    for(auto it = list.begin(); it != list.end(); ++it) {
-        std::shared_ptr<Sound> sample = accessInstance(*it);
-        result.push_back(sample.get());
-    }
-    return result;
+	std::vector<Sound*> result;
+	std::deque<std::shared_ptr<AudioNode>> list = _channel[0]->getTail();
+	for (auto it = list.begin(); it != list.end(); ++it) {
+		std::shared_ptr<Sound> sample = accessInstance(*it);
+		result.push_back(sample.get());
+	}
+	return result;
 }
 
 /**
@@ -876,7 +890,7 @@ const std::vector<Sound*> AudioChannels::getMusicQueue() const {
  * @return the size of the music queue
  */
 size_t AudioChannels::getMusicPending() const {
-    return _channel[0]->getTailSize();
+	return _channel[0]->getTailSize();
 }
 
 /**
@@ -895,7 +909,7 @@ size_t AudioChannels::getMusicPending() const {
  * @return the overlap time in seconds.
  */
 float AudioChannels::getOverlap() const {
-    return _channel[0]->getOverlap();
+	return _channel[0]->getOverlap();
 }
 
 /**
@@ -914,7 +928,7 @@ float AudioChannels::getOverlap() const {
  * @param time  The overlap time in seconds.
  */
 void AudioChannels::setOverlap(double time) {
-    _channel[0]->setOverlap(time);
+	_channel[0]->setOverlap(time);
 }
 
 /**
@@ -934,14 +948,14 @@ void AudioChannels::setOverlap(double time) {
  * @param  steps    The number of elements to skip in the queue
  */
 void AudioChannels::advanceMusicQueue(float fade, unsigned int steps) {
-    _channel[0]->setLoops(0);
-    std::shared_ptr<AudioFader> fader = std::dynamic_pointer_cast<AudioFader>(_channel[0]->getCurrent());
-    if (fader) {
-        fader->fadeOut(fade);
-    }
-    if (steps) {
-        _channel[0]->trim(steps);
-    }
+	_channel[0]->setLoops(0);
+	std::shared_ptr<AudioFader> fader = std::dynamic_pointer_cast<AudioFader>(_channel[0]->getCurrent());
+	if (fader) {
+		fader->fadeOut(fade);
+	}
+	if (steps) {
+		_channel[0]->trim(steps);
+	}
 }
 
 /**
@@ -951,7 +965,7 @@ void AudioChannels::advanceMusicQueue(float fade, unsigned int steps) {
  * only clears pending music assets from the queue.
  */
 void AudioChannels::clearMusicQueue() {
-    _channel[0]->trim();
+	_channel[0]->trim();
 }
 
 
@@ -982,59 +996,62 @@ void AudioChannels::clearMusicQueue() {
  * @return true if there was an available channel for the sound
  */
 bool AudioChannels::playEffect(const std::string& key, const std::shared_ptr<Sound>& sound,
-                             bool loop, float volume, bool force) {
-    if (isActiveEffect(key)) {
-        if (force) {
-            stopEffect(key,0);
-            removeKey(key);
-        } else {
-            CULogError("Sound effect key is in use");
-            return false;
-        }
-    }
-    
-    // Find an empty scheduler
-    int audioID = -1;
-    for(auto it = _channel.begin()+1; audioID == -1 && it != _channel.end(); ++it) {
-        if (!(*it)->isPlaying()) {
-            audioID = (*it)->getTag();
-        }
-    }
-    
-    // Try again for soon to be deleted.
-    for(auto it = _effects.begin(); audioID == -1 && it != _effects.end(); ++it) {
-        if (it->second->isFadeOut()) {
-            Uint32 tag = it->second->getTag();
-            if (!_channel[tag]->getTailSize()) {
-                audioID = tag;
-            }
-        }
-    }
-    
-    if (audioID == -1) {
-        if (force) {
-            std::string altkey = _equeue.front();
-            audioID = _effects[altkey]->getTag();
-            stopEffect(altkey);
-        } else {
-            // Fail if nothing available
-            CULogError("No available sound channels");
-            return false;
-        }
-    }
-    
-    std::shared_ptr<AudioFader> fader = wrapInstance(sound);
-    if (volume >= 0) {
-        fader->setGain(volume);
-    } else {
-        fader->setGain(sound->getVolume());
-    }
-    fader->setTag(audioID);
-    fader->setName(key);
-    _channel[audioID]->play(fader, loop ? -1 : 0);
-    _effects.emplace(key,fader);
-    _equeue.push_back(key);
-    return true;
+	bool loop, float volume, bool force) {
+	if (isActiveEffect(key)) {
+		if (force) {
+			stopEffect(key, 0);
+			removeKey(key);
+		}
+		else {
+			CULogError("Sound effect key is in use");
+			return false;
+		}
+	}
+
+	// Find an empty scheduler
+	int audioID = -1;
+	for (auto it = _channel.begin() + 1; audioID == -1 && it != _channel.end(); ++it) {
+		if (!(*it)->isPlaying()) {
+			audioID = (*it)->getTag();
+		}
+	}
+
+	// Try again for soon to be deleted.
+	for (auto it = _effects.begin(); audioID == -1 && it != _effects.end(); ++it) {
+		if (it->second->isFadeOut()) {
+			Uint32 tag = it->second->getTag();
+			if (!_channel[tag]->getTailSize()) {
+				audioID = tag;
+			}
+		}
+	}
+
+	if (audioID == -1) {
+		if (force) {
+			std::string altkey = _equeue.front();
+			audioID = _effects[altkey]->getTag();
+			stopEffect(altkey);
+		}
+		else {
+			// Fail if nothing available
+			CULogError("No available sound channels");
+			return false;
+		}
+	}
+
+	std::shared_ptr<AudioFader> fader = wrapInstance(sound);
+	if (volume >= 0) {
+		fader->setGain(volume);
+	}
+	else {
+		fader->setGain(sound->getVolume());
+	}
+	fader->setTag(audioID);
+	fader->setName(key);
+	_channel[audioID]->play(fader, loop ? -1 : 0);
+	_effects.emplace(key, fader);
+	_equeue.push_back(key);
+	return true;
 }
 
 /**
@@ -1047,19 +1064,20 @@ bool AudioChannels::playEffect(const std::string& key, const std::shared_ptr<Sou
  * @return the current state of the sound effect for the given key.
  */
 AudioChannels::State AudioChannels::getEffectState(const std::string& key) const {
-    if (_effects.find(key) == _effects.end()) {
-        return State::INACTIVE;
-    }
-    
-    std::shared_ptr<AudioNode> node = _effects.at(key);
-    std::shared_ptr<audio::AudioScheduler> slot = _channel.at(node->getTag());
-    if (!slot->isPlaying()) {
-        return State::INACTIVE;
-    } else if (node->isPaused() || slot->isPaused()) {
-        return State::PAUSED;
-    }
-    
-    return State::PLAYING;
+	if (_effects.find(key) == _effects.end()) {
+		return State::INACTIVE;
+	}
+
+	std::shared_ptr<AudioNode> node = _effects.at(key);
+	std::shared_ptr<audio::AudioScheduler> slot = _channel.at(node->getTag());
+	if (!slot->isPlaying()) {
+		return State::INACTIVE;
+	}
+	else if (node->isPaused() || slot->isPaused()) {
+		return State::PAUSED;
+	}
+
+	return State::PLAYING;
 }
 
 /**
@@ -1073,11 +1091,11 @@ AudioChannels::State AudioChannels::getEffectState(const std::string& key) const
  * @return the sound asset attached to the given key.
  */
 const Sound* AudioChannels::currentEffect(const std::string& key) const {
-    if (_effects.find(key) == _effects.end()) {
-        return nullptr;
-    }
-    std::shared_ptr<audio::AudioNode> node = _effects.at(key);
-    return accessInstance(node).get();
+	if (_effects.find(key) == _effects.end()) {
+		return nullptr;
+	}
+	std::shared_ptr<audio::AudioNode> node = _effects.at(key);
+	return accessInstance(node).get();
 }
 
 /**
@@ -1090,11 +1108,11 @@ const Sound* AudioChannels::currentEffect(const std::string& key) const {
  * @return true if the sound effect is in a continuous loop.
  */
 bool AudioChannels::isEffectLoop(const std::string& key) const {
-    if (_effects.find(key) != _effects.end()) {
-        std::shared_ptr<AudioNode> node = _effects.at(key);
-        return _channel.at(node->getTag())->getLoops() != 0;
-    }
-    return false;
+	if (_effects.find(key) != _effects.end()) {
+		std::shared_ptr<AudioNode> node = _effects.at(key);
+		return _channel.at(node->getTag())->getLoops() != 0;
+	}
+	return false;
 }
 
 /**
@@ -1106,10 +1124,10 @@ bool AudioChannels::isEffectLoop(const std::string& key) const {
  * @param  loop     whether the sound effect is in a continuous loop
  */
 void AudioChannels::setEffectLoop(const std::string& key, bool loop) {
-    if (_effects.find(key) != _effects.end()) {
-        std::shared_ptr<AudioNode> node = _effects.at(key);
-        _channel[node->getTag()]->setLoops(loop ? -1 : 0);
-    }
+	if (_effects.find(key) != _effects.end()) {
+		std::shared_ptr<AudioNode> node = _effects.at(key);
+		_channel[node->getTag()]->setLoops(loop ? -1 : 0);
+	}
 }
 
 /**
@@ -1123,12 +1141,12 @@ void AudioChannels::setEffectLoop(const std::string& key, bool loop) {
  * @return the current volume of the sound effect
  */
 float AudioChannels::getEffectVolume(const std::string& key) const {
-    if (_effects.find(key) != _effects.end()) {
-        return _effects.at(key)->getGain();
-    }
-    return 0;
+	if (_effects.find(key) != _effects.end()) {
+		return _effects.at(key)->getGain();
+	}
+	return 0;
 }
- 
+
 /**
  * Sets the current volume of the sound effect.
  *
@@ -1140,10 +1158,10 @@ float AudioChannels::getEffectVolume(const std::string& key) const {
  * @param  volume   the current volume of the sound effect
  */
 void AudioChannels::setEffectVolume(const std::string& key, float volume) {
-    CUAssertLog(volume >= 0 && volume <= 1, "Volume %f is out of range",volume);
-    if (_effects.find(key) != _effects.end()) {
-        _effects.at(key)->setGain(volume);
-    }
+	CUAssertLog(volume >= 0 && volume <= 1, "Volume %f is out of range", volume);
+	if (_effects.find(key) != _effects.end()) {
+		_effects.at(key)->setGain(volume);
+	}
 }
 
 /**
@@ -1165,18 +1183,19 @@ void AudioChannels::setEffectVolume(const std::string& key, float volume) {
  * @return the stereo pan of the sound effect
  */
 float AudioChannels::getEffectPan(const std::string& key) const {
-    if (_effects.find(key) != _effects.end()) {
-        std::shared_ptr<AudioFader> fader = std::dynamic_pointer_cast<AudioFader>(_effects.at(key));
-        if (fader) {
-            std::shared_ptr<AudioPanner> panner = std::dynamic_pointer_cast<AudioPanner>(fader->getInput());
-            if (panner->getField() == 1) {
-                return panner->getPan(0,1)-panner->getPan(0,0);
-            } else {
-                return panner->getPan(1,1)-panner->getPan(0,0);
-            }
-        }
-    }
-    return 0;
+	if (_effects.find(key) != _effects.end()) {
+		std::shared_ptr<AudioFader> fader = std::dynamic_pointer_cast<AudioFader>(_effects.at(key));
+		if (fader) {
+			std::shared_ptr<AudioPanner> panner = std::dynamic_pointer_cast<AudioPanner>(fader->getInput());
+			if (panner->getField() == 1) {
+				return panner->getPan(0, 1) - panner->getPan(0, 0);
+			}
+			else {
+				return panner->getPan(1, 1) - panner->getPan(0, 0);
+			}
+		}
+	}
+	return 0;
 }
 
 /**
@@ -1197,29 +1216,31 @@ float AudioChannels::getEffectPan(const std::string& key) const {
  * @param  pan      the stereo pan of the sound effect
  */
 void AudioChannels::setEffectPan(const std::string& key, float pan) {
-    CUAssertLog(pan >= -1 && pan <= 1, "Pan value %f is out of range",pan);
-    if (_effects.find(key) != _effects.end()) {
-        std::shared_ptr<AudioFader> fader = std::dynamic_pointer_cast<AudioFader>(_effects.at(key));
-        if (fader) {
-            std::shared_ptr<AudioPanner> panner = std::dynamic_pointer_cast<AudioPanner>(fader->getInput());
-            if (panner->getField() == 1) {
-                panner->setPan(0,0,0.5-pan/2.0);
-                panner->setPan(0,1,0.5+pan/2.0);
-            } else {
-                if (pan <= 0) {
-                    panner->setPan(0,0,1);
-                    panner->setPan(0,1,0);
-                    panner->setPan(1,0,-pan);
-                    panner->setPan(1,1,1+pan);
-                } else {
-                    panner->setPan(1,1,1);
-                    panner->setPan(1,0,0);
-                    panner->setPan(0,0,1-pan);
-                    panner->setPan(0,1,pan);
-                }
-            }
-        }
-    }
+	CUAssertLog(pan >= -1 && pan <= 1, "Pan value %f is out of range", pan);
+	if (_effects.find(key) != _effects.end()) {
+		std::shared_ptr<AudioFader> fader = std::dynamic_pointer_cast<AudioFader>(_effects.at(key));
+		if (fader) {
+			std::shared_ptr<AudioPanner> panner = std::dynamic_pointer_cast<AudioPanner>(fader->getInput());
+			if (panner->getField() == 1) {
+				panner->setPan(0, 0, 0.5 - pan / 2.0);
+				panner->setPan(0, 1, 0.5 + pan / 2.0);
+			}
+			else {
+				if (pan <= 0) {
+					panner->setPan(0, 0, 1);
+					panner->setPan(0, 1, 0);
+					panner->setPan(1, 0, -pan);
+					panner->setPan(1, 1, 1 + pan);
+				}
+				else {
+					panner->setPan(1, 1, 1);
+					panner->setPan(1, 0, 0);
+					panner->setPan(0, 0, 1 - pan);
+					panner->setPan(0, 1, pan);
+				}
+			}
+		}
+	}
 }
 
 
@@ -1236,11 +1257,11 @@ void AudioChannels::setEffectPan(const std::string& key, float pan) {
  * @return the duration of the sound effect, in seconds.
  */
 float AudioChannels::getEffectDuration(const std::string& key) const {
-    if (_effects.find(key) != _effects.end()) {
-        std::shared_ptr<Sound> sound = accessInstance(_effects.at(key));
-        return sound->getDuration();
-    }
-    return -1;
+	if (_effects.find(key) != _effects.end()) {
+		std::shared_ptr<Sound> sound = accessInstance(_effects.at(key));
+		return sound->getDuration();
+	}
+	return -1;
 }
 
 /**
@@ -1258,10 +1279,10 @@ float AudioChannels::getEffectDuration(const std::string& key) const {
  * @return the elapsed time of the sound effect, in seconds
  */
 float AudioChannels::getEffectElapsed(const std::string& key) const {
-    if (_effects.find(key) != _effects.end()) {
-        return _effects.at(key)->getElapsed();
-    }
-    return -1;
+	if (_effects.find(key) != _effects.end()) {
+		return _effects.at(key)->getElapsed();
+	}
+	return -1;
 }
 
 /**
@@ -1278,9 +1299,9 @@ float AudioChannels::getEffectElapsed(const std::string& key) const {
  * @param  time     the new position of the sound effect
  */
 void AudioChannels::setEffectElapsed(const std::string& key, float time) {
-    if (_effects.find(key) != _effects.end()) {
-        _effects.at(key)->setElapsed(time);
-    }
+	if (_effects.find(key) != _effects.end()) {
+		_effects.at(key)->setElapsed(time);
+	}
 }
 
 /**
@@ -1298,10 +1319,10 @@ void AudioChannels::setEffectElapsed(const std::string& key, float time) {
  * @return the time remaining for the sound effect, in seconds
  */
 float AudioChannels::getEffectRemaining(const std::string& key) const {
-    if (_effects.find(key) != _effects.end()) {
-        return _effects.at(key)->getRemaining();
-    }
-    return -1;
+	if (_effects.find(key) != _effects.end()) {
+		return _effects.at(key)->getRemaining();
+	}
+	return -1;
 }
 
 /**
@@ -1318,9 +1339,9 @@ float AudioChannels::getEffectRemaining(const std::string& key) const {
  * @param  time     the new time remaining for the sound effect
  */
 void AudioChannels::setEffectRemaining(const std::string& key, float time) {
-    if (_effects.find(key) != _effects.end()) {
-        _effects.at(key)->setRemaining(time);
-    }
+	if (_effects.find(key) != _effects.end()) {
+		_effects.at(key)->setRemaining(time);
+	}
 }
 
 /**
@@ -1340,12 +1361,12 @@ void AudioChannels::setEffectRemaining(const std::string& key, float time) {
  * @param  key      the reference key for the sound effect
  * @param fade      the number of seconds to fade out
  */
-void AudioChannels::stopEffect(const std::string& key,float fade) {
-    if (_effects.find(key) != _effects.end()) {
-        std::shared_ptr<AudioNode> node = _effects.at(key);
-        _channel[node->getTag()]->setLoops(0);
-        ((AudioFader*)node.get())->fadeOut(fade);
-    }
+void AudioChannels::stopEffect(const std::string& key, float fade) {
+	if (_effects.find(key) != _effects.end()) {
+		std::shared_ptr<AudioNode> node = _effects.at(key);
+		_channel[node->getTag()]->setLoops(0);
+		((AudioFader*)node.get())->fadeOut(fade);
+	}
 }
 
 /**
@@ -1363,16 +1384,17 @@ void AudioChannels::stopEffect(const std::string& key,float fade) {
  * @param fade      the number of seconds to fade out
  */
 void AudioChannels::pauseEffect(const std::string& key, float fade) {
-    if (_effects.find(key) != _effects.end()) {
-        std::shared_ptr<AudioNode> node = _effects.at(key);
-        Uint32 tag = _effects.at(key)->getTag();
-        CUAssertLog(!_chfader.at(tag)->isPaused(), "The sound for that effect is already paused");
-        if (fade) {
-            _chfader.at(tag)->fadePause(fade);
-        } else {
-            _chfader.at(tag)->pause();
-        }
-    }
+	if (_effects.find(key) != _effects.end()) {
+		std::shared_ptr<AudioNode> node = _effects.at(key);
+		Uint32 tag = _effects.at(key)->getTag();
+		CUAssertLog(!_chfader.at(tag)->isPaused(), "The sound for that effect is already paused");
+		if (fade) {
+			_chfader.at(tag)->fadePause(fade);
+		}
+		else {
+			_chfader.at(tag)->pause();
+		}
+	}
 }
 
 /**
@@ -1383,12 +1405,12 @@ void AudioChannels::pauseEffect(const std::string& key, float fade) {
  * @param  key      the reference key for the sound effect
  */
 void AudioChannels::resumeEffect(std::string key) {
-    if (_effects.find(key) != _effects.end()) {
-        std::shared_ptr<AudioNode> node = _effects.at(key);
-        Uint32 tag = _effects.at(key)->getTag();
-        CUAssertLog(_chfader.at(tag)->isPaused(), "The sound for that effect is not paused");
-        _chfader.at(tag)->resume();
-    }
+	if (_effects.find(key) != _effects.end()) {
+		std::shared_ptr<AudioNode> node = _effects.at(key);
+		Uint32 tag = _effects.at(key)->getTag();
+		CUAssertLog(_chfader.at(tag)->isPaused(), "The sound for that effect is not paused");
+		_chfader.at(tag)->resume();
+	}
 }
 
 /**
@@ -1405,11 +1427,11 @@ void AudioChannels::resumeEffect(std::string key) {
  * @param fade      the number of seconds to fade out
  */
 void AudioChannels::stopAllEffects(float fade) {
-    for(auto it = _effects.begin(); it != _effects.end(); ++it) {
-        it->second->fadeOut(fade);
-    }
-    _effects.clear();
-    _equeue.clear();
+	for (auto it = _effects.begin(); it != _effects.end(); ++it) {
+		it->second->fadeOut(fade);
+	}
+	_effects.clear();
+	_equeue.clear();
 }
 
 /**
@@ -1426,26 +1448,27 @@ void AudioChannels::stopAllEffects(float fade) {
  * @param fade      the number of seconds to fade out
  */
 void AudioChannels::pauseAllEffects(float fade) {
-    for(auto it = _chfader.begin()+1; it != _chfader.end(); ++it) {
-        if (!(*it)->isPaused()) {
-            if (fade) {
-                (*it)->fadePause(fade);
-            } else {
-                (*it)->pause();
-            }
-        }
-    }
+	for (auto it = _chfader.begin() + 1; it != _chfader.end(); ++it) {
+		if (!(*it)->isPaused()) {
+			if (fade) {
+				(*it)->fadePause(fade);
+			}
+			else {
+				(*it)->pause();
+			}
+		}
+	}
 }
 
 /**
  * Resumes all paused sound effects.
  */
 void AudioChannels::resumeAllEffects() {
-    for(auto it = _chfader.begin()+1; it != _chfader.end(); ++it) {
-        if ((*it)->isPaused()) {
-            (*it)->resume();
-        }
-    }
+	for (auto it = _chfader.begin() + 1; it != _chfader.end(); ++it) {
+		if ((*it)->isPaused()) {
+			(*it)->resume();
+		}
+	}
 }
 
 
@@ -1465,8 +1488,8 @@ void AudioChannels::resumeAllEffects() {
  * @param fade      the number of seconds to fade out
  */
 void AudioChannels::stopAll(float fade) {
-    stopAllEffects(fade);
-    stopMusic(fade);
+	stopAllEffects(fade);
+	stopMusic(fade);
 }
 
 /**
@@ -1484,8 +1507,8 @@ void AudioChannels::stopAll(float fade) {
  * @param fade      the number of seconds to fade out
  */
 void AudioChannels::pauseAll(float fade) {
-    pauseAllEffects(fade);
-    pauseMusic(fade);
+	pauseAllEffects(fade);
+	pauseMusic(fade);
 }
 
 /**
@@ -1495,6 +1518,6 @@ void AudioChannels::pauseAll(float fade) {
  * from the background.
  */
 void AudioChannels::resumeAll() {
-    resumeAllEffects();
-    resumeMusic();
+	resumeAllEffects();
+	resumeMusic();
 }

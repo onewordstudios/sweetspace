@@ -13,6 +13,9 @@ namespace globals {
 /** Network tick frequency */
 constexpr unsigned int NETWORK_TICK = 12; // NOLINT
 
+/** ID marker for unops in sound effects*/
+constexpr int UNOP_MARKER = 12;
+
 /** Number of tutorial levels */
 constexpr unsigned int NUM_TUTORIAL_LEVELS = 8; // NOLINT
 
