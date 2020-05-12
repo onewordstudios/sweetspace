@@ -22,6 +22,9 @@
 		A577C93E2438F7ED00B12ADE /* LevelModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A577C9372438F7ED00B12ADE /* LevelModel.cpp */; };
 		A577C93F2438F7ED00B12ADE /* LevelModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A577C9372438F7ED00B12ADE /* LevelModel.cpp */; };
 		A577C9402438F7ED00B12ADE /* LevelModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A577C9372438F7ED00B12ADE /* LevelModel.cpp */; };
+		A577C96A246A50AE00B12ADE /* SoundEffectController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A577C965246A50AD00B12ADE /* SoundEffectController.cpp */; };
+		A577C96B246A50AE00B12ADE /* SoundEffectController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A577C965246A50AD00B12ADE /* SoundEffectController.cpp */; };
+		A577C96C246A50AE00B12ADE /* SoundEffectController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A577C965246A50AD00B12ADE /* SoundEffectController.cpp */; };
 		C122201B849961CE6B05D3B3 /* ButtonManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C1222811A2870CE942755676 /* ButtonManager.cpp */; };
 		C122211BC4827F6D5229F659 /* Tween.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C1222CCE44B8D9EECD741BF0 /* Tween.cpp */; };
 		C12223392F6704D2EE10713A /* ExternalDonutModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C1222F4322133A83016A4F48 /* ExternalDonutModel.cpp */; };
@@ -215,6 +218,8 @@
 		A577C93C2438F7ED00B12ADE /* LevelModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LevelModel.h; sourceTree = "<group>"; };
 		A577C9572446324C00B12ADE /* EventModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventModel.h; sourceTree = "<group>"; };
 		A577C95B2446324C00B12ADE /* BuildingBlockModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BuildingBlockModel.h; sourceTree = "<group>"; };
+		A577C965246A50AD00B12ADE /* SoundEffectController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SoundEffectController.cpp; sourceTree = "<group>"; };
+		A577C969246A50AE00B12ADE /* SoundEffectController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SoundEffectController.h; sourceTree = "<group>"; };
 		C122229A6EDF1DAB4330F1B7 /* GLaDOS.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLaDOS.cpp; sourceTree = "<group>"; };
 		C122270EE9BF22663C6BDB22 /* ExternalDonutModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExternalDonutModel.h; sourceTree = "<group>"; };
 		C1222811A2870CE942755676 /* ButtonManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ButtonManager.cpp; sourceTree = "<group>"; };
@@ -516,6 +521,8 @@
 		EBBF18B11D749176008E2001 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				A577C965246A50AD00B12ADE /* SoundEffectController.cpp */,
+				A577C969246A50AE00B12ADE /* SoundEffectController.h */,
 				DF621BDB24677E3C0059D55B /* TutorialConstants.h */,
 				DF621BD724677E3C0059D55B /* Unopenable.h */,
 				DF621BDD24677E3D0059D55B /* UnopenableNode.cpp */,
@@ -769,6 +776,7 @@
 				DF3B744E2403A46B0063552F /* DonutModel.cpp in Sources */,
 				DF3B74572403A46B0063552F /* LoadingMode.cpp in Sources */,
 				7BD666F42448E8E500D68748 /* MainMenuMode.cpp in Sources */,
+				A577C96C246A50AE00B12ADE /* SoundEffectController.cpp in Sources */,
 				DF3B74662403A46B0063552F /* BreachModel.cpp in Sources */,
 				DF3B745D2403A46B0063552F /* Sweetspace.cpp in Sources */,
 				DF3B74602403A46B0063552F /* GameMode.cpp in Sources */,
@@ -807,6 +815,7 @@
 				DF3B744D2403A46B0063552F /* DonutModel.cpp in Sources */,
 				DF3B74562403A46B0063552F /* LoadingMode.cpp in Sources */,
 				7BD666F32448E8E500D68748 /* MainMenuMode.cpp in Sources */,
+				A577C96B246A50AE00B12ADE /* SoundEffectController.cpp in Sources */,
 				DF3B74652403A46B0063552F /* BreachModel.cpp in Sources */,
 				DF3B745C2403A46B0063552F /* Sweetspace.cpp in Sources */,
 				DF3B745F2403A46B0063552F /* GameMode.cpp in Sources */,
@@ -845,6 +854,7 @@
 				DF3B744C2403A46B0063552F /* DonutModel.cpp in Sources */,
 				DF3B74552403A46B0063552F /* LoadingMode.cpp in Sources */,
 				7BD666F22448E8E500D68748 /* MainMenuMode.cpp in Sources */,
+				A577C96A246A50AE00B12ADE /* SoundEffectController.cpp in Sources */,
 				DF3B74642403A46B0063552F /* BreachModel.cpp in Sources */,
 				DF3B745B2403A46B0063552F /* Sweetspace.cpp in Sources */,
 				DF3B745E2403A46B0063552F /* GameMode.cpp in Sources */,
