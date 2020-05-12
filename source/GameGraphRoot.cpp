@@ -753,8 +753,6 @@ void GameGraphRoot::processButtons() {
 		return;
 	}
 
-	// TODO: Process Buttons for Win/Loss Screens
-
 	std::tuple<Vec2, Vec2> tapData = InputController::getInstance()->getTapEndLoc();
 	// Pause button
 	if (buttonManager.tappedButton(pauseBtn, tapData)) {
@@ -792,7 +790,7 @@ void GameGraphRoot::processButtons() {
 		else if (buttonManager.tappedButton(leaveBtn, tapData)) {
 			isBackToMainMenu = true;
 		}
-	} else {
+	} else if (playerID == 0) {
 		if (winScreen->isVisible()) {
 			if (buttonManager.tappedButton(nextBtn, tapData)) {
 				lastButtonPressed = NextLevel;
