@@ -13,6 +13,8 @@ class TutorialNode : public cugl::AnimationNode {
 	std::shared_ptr<BreachNode> breachNode;
 	std::shared_ptr<DoorNode> doorNode;
 	std::shared_ptr<ButtonNode> buttonNode;
+	bool isLabel;
+	int count = 3;
 
    public:
 #pragma mark -
@@ -63,6 +65,10 @@ class TutorialNode : public cugl::AnimationNode {
 	void setDoorNode(std::shared_ptr<DoorNode> node) { doorNode = node; }
 	void setButtonNode(std::shared_ptr<ButtonNode> node) { buttonNode = node; }
 	int getPlayer() { return breachNode->getModel()->getPlayer(); }
+	std::shared_ptr<ButtonNode> getButtonNode() { return buttonNode; }
+	std::shared_ptr<BreachNode> getBreachNode() { return breachNode; }
+	void setIsLabel(bool b) { isLabel = b; }
+	int getRollsLeft() { return count; }
 
 	void draw(const std::shared_ptr<cugl::SpriteBatch> &batch, const cugl::Mat4 &transform,
 			  cugl::Color4 tint) override;

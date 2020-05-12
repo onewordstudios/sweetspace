@@ -276,6 +276,15 @@
         "fix_breach_tutorial1" : {
           "file" : "textures/tutorial/fix_breach_1.png"
         },
+        "fix_count3" : {
+          "file" : "textures/tutorial/fix_count_3.png"
+        },
+        "fix_count2" : {
+          "file" : "textures/tutorial/fix_count_2.png"
+        },
+        "fix_count1" : {
+          "file" : "textures/tutorial/fix_count_1.png"
+        },
         "door_tutorial" : {
           "file" : "textures/tutorial/door_0.png"
         },
@@ -305,6 +314,9 @@
         },
         "timer_tutorial0" : {
           "file" : "textures/tutorial/timer_0.png"
+        },
+        "timer_tutorial1" : {
+          "file" : "textures/tutorial/timer_1.png"
         },
         "level_select_0" : {
           "file" : "textures/main_menu/lvl_select/lvl0.png"

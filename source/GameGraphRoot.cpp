@@ -156,16 +156,16 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	healthTutorial =
 		dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_healthTutorial"));
 	healthTutorial->setVisible(false);
-    communicateTutorial =
-            dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_communicateTutorial"));
-    communicateTutorial->setVisible(false);
-    timerTutorial =
-            dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_timerTutorial"));
-    timerTutorial->setVisible(false);
+	communicateTutorial = dynamic_pointer_cast<cugl::PolygonNode>(
+		assets->get<Node>("game_field_communicateTutorial"));
+	communicateTutorial->setVisible(false);
+	timerTutorial =
+		dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_timerTutorial"));
+	timerTutorial->setVisible(false);
 	if (ship->getLevelNum() == tutorial::REAL_LEVELS.at(0)) {
 		healthTutorial->setVisible(true);
-        communicateTutorial->setVisible(true);
-        timerTutorial->setVisible(true);
+		communicateTutorial->setVisible(true);
+		timerTutorial->setVisible(true);
 	}
 	rollTutorial =
 		dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_rollTutorial"));
@@ -314,8 +314,8 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 			tutorial->setScale(0.4);
 			tutorialNode->addChildWithTag(tutorial, i + 1);
 		}
-	} else if (ship->getLevelNum() == tutorial::REAL_LEVELS.at(2)) {
-		for (int i = 0; i < buttonsNode->getChildCount(); i++) {
+	} else if (ship->getLevelNum() == tutorial::BUTTON_LEVEL) {
+		for (int i = 0; i < buttonsNode->getChildCount() * 2; i++) {
 			std::shared_ptr<Texture> image = assets->get<Texture>("engine_tutorial0");
 			std::shared_ptr<TutorialNode> tutorial = TutorialNode::alloc(image);
 			shared_ptr<ButtonNode> buttonNode =
@@ -323,15 +323,23 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 			tutorial->setButtonNode(buttonNode);
 			tutorial->setScale(0.4);
 			tutorialNode->addChildWithTag(tutorial, i + 1);
+
+			std::shared_ptr<Texture> image2 = assets->get<Texture>("engine_tutorial1");
+			std::shared_ptr<TutorialNode> tutorial2 = TutorialNode::alloc(image2);
+			tutorial2->setButtonNode(buttonNode);
+			tutorial2->setScale(0.4);
+			tutorialNode->addChildWithTag(tutorial2,
+										  (unsigned int)(i + 1 + buttonsNode->getChildCount()));
 		}
-		for (int i = 0; i < buttonsNode->getChildCount(); i++) {
-			std::shared_ptr<Texture> image = assets->get<Texture>("engine_tutorial1");
-			std::shared_ptr<TutorialNode> tutorial = TutorialNode::alloc(image);
-			shared_ptr<ButtonNode> buttonNode =
-					dynamic_pointer_cast<ButtonNode>(buttonsNode->getChildByTag((unsigned int)(i + 1)));
-			tutorial->setButtonNode(buttonNode);
-			tutorial->setScale(0.4);
-			tutorialNode->addChildWithTag(tutorial, i + 1);
+	} else if (ship->getLevelNum() == tutorial::REAL_LEVELS.at(2)) {
+		std::shared_ptr<Texture> image = assets->get<Texture>("timer_tutorial1");
+		timerTutorial->setTexture(image);
+		float posY = timerTutorial->getPositionY() - 20;
+		float posX = timerTutorial->getPositionX();
+		timerTutorial->setPosition(posX, posY);
+		timerTutorial->setVisible(true);
+		if (trunc(ship->timeCtr) > MOVE_TUTORIAL_CUTOFF) {
+			timerTutorial->setVisible(false);
 		}
 	}
 
@@ -603,8 +611,13 @@ void GameGraphRoot::update(float timestep) {
 				if (tutorial != nullptr) {
 					tutorial->setVisible(true);
 					if (tutorial->getPlayer() == playerID) {
-						std::shared_ptr<Texture> image =
-							assets->get<Texture>("fix_breach_tutorial0");
+						int breachHealth = tutorial->getBreachNode()->getModel()->getHealth();
+						std::shared_ptr<Texture> image = assets->get<Texture>("fix_count3");
+						if (breachHealth == 1) {
+							image = assets->get<Texture>("fix_count1");
+						} else if (breachHealth == 2) {
+							image = assets->get<Texture>("fix_count2");
+						}
 						tutorial->setTexture(image);
 					}
 				}
@@ -622,22 +635,22 @@ void GameGraphRoot::update(float timestep) {
 		std::shared_ptr<Texture> image = assets->get<Texture>("health_yellow");
 		healthNode->setTexture(image);
 	}
-	if(ship->getLevelNum() == tutorial::BREACH_LEVEL) {
-        if (trunc(ship->timeCtr) == MOVE_TUTORIAL_CUTOFF) {
-            moveTutorial->setVisible(false);
-        }
-    } else if (ship->getLevelNum() == tutorial::REAL_LEVELS.at(0)) {
+	if (ship->getLevelNum() == tutorial::BREACH_LEVEL) {
+		if (trunc(ship->timeCtr) == MOVE_TUTORIAL_CUTOFF) {
+			moveTutorial->setVisible(false);
+		}
+	} else if (ship->getLevelNum() == tutorial::REAL_LEVELS.at(0)) {
 		if (trunc(ship->timeCtr) == HEALTH_TUTORIAL_CUTOFF) {
 			healthTutorial->setVisible(false);
-            communicateTutorial->setVisible(false);
-		} else if(trunc(ship->timeCtr) == MOVE_TUTORIAL_CUTOFF) {
-            timerTutorial->setVisible(false);
-            std::shared_ptr<Texture> image = assets->get<Texture>("communicate_tutorial1");
-            communicateTutorial->setTexture(image);
+			communicateTutorial->setVisible(false);
+		} else if (trunc(ship->timeCtr) == MOVE_TUTORIAL_CUTOFF) {
+			timerTutorial->setVisible(false);
+			std::shared_ptr<Texture> image = assets->get<Texture>("communicate_tutorial1");
+			communicateTutorial->setTexture(image);
 		}
-    } else if (ship->getLevelNum() == tutorial::STABILIZER_LEVEL) {
+	} else if (ship->getLevelNum() == tutorial::STABILIZER_LEVEL) {
 		rollTutorial->setVisible(true);
-		if(ship->getChallenge()) {
+		if (ship->getChallenge()) {
 			std::shared_ptr<Texture> image = assets->get<Texture>("stabilizer_tutorial0");
 			rollTutorial->setTexture(image);
 		}
