@@ -472,7 +472,7 @@ void GLaDOS::tutorialLevels(float dt) {
 				customEventCtr = (int)mib->getNumPlayers() - 1;
 			}
 
-			switch (ship->getChallengeStatus()) {
+			switch (ship->getStablizerStatus()) {
 				case ShipModel::ACTIVE:
 					break;
 				case ShipModel::INACTIVE:
@@ -484,7 +484,7 @@ void GLaDOS::tutorialLevels(float dt) {
 					} else {
 						ship->createAllTask(dir);
 					}
-					ship->setStatus(ShipModel::ACTIVE);
+					ship->setStablizerStatus(ShipModel::ACTIVE);
 					break;
 				}
 				case ShipModel::SUCCESS: {
@@ -502,7 +502,7 @@ void GLaDOS::tutorialLevels(float dt) {
 					} else {
 						ship->createAllTask(dir);
 					}
-					ship->setStatus(ShipModel::ACTIVE);
+					ship->setStablizerStatus(ShipModel::ACTIVE);
 					break;
 				}
 			}

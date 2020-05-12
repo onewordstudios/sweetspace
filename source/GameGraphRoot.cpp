@@ -182,6 +182,10 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 		challengePanelArrows.push_back(arrow);
 	}
 
+	stablizerFailText = dynamic_pointer_cast<cugl::PolygonNode>(
+		assets->get<Label>("game_field_challengePanelParent_challengePanelFailLabel"));
+	currentTeleportationFrame = 0;
+
 	// Initialize Ship Segments
 	leftMostSeg = 0;
 	rightMostSeg = globals::VISIBLE_SEGS - 1;

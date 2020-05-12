@@ -481,6 +481,17 @@
                                     "scale": 0.7
                                   }
                                 },
+                                "challengePanelFailLabel": {
+                                  "type": "Label",
+                                  "data": {
+                                    "font"       : "mont_black_italic_big",
+                                    "text"       : "Stablizer Failed!",
+                                    "foreground" : [255,248,161,255],
+                                    "anchor"     : [0.5,0.5],
+                                    "valign"     : "middle",
+                                    "halign"     : "center"
+                                  }
+                                },
                                 "challengePanelArrow1": {
                                   "type": "Image",
                                   "data": {

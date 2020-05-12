@@ -160,6 +160,18 @@ class GameGraphRoot : public cugl::Scene {
 
 	/** Current animation frame for ship flashing red */
 	int currentHealthWarningFrame;
+
+	// TELEPORTATION ANIMATION
+	/** Reference to fail text */
+	std::vector<std::shared_ptr<cugl::Label>> stablizerFailText;
+	/** Current animation frame for stablizer fail teleportation */
+	int currentTeleportationFrame;
+
+	/** Animation constants */
+	static constexpr int TELEPORT_FRAMECUTOFF_FIRST = 20;
+	static constexpr int TELEPORT_FRAMECUTOFF_SECOND = 60;
+	static constexpr int TELEPORT_FRAMECUTOFF_THIRD = 100;
+
 	/**
 	 * Returns an informative string for the position
 	 *

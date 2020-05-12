@@ -384,10 +384,10 @@ void GameMode::update(float timestep) {
 			trunc(ship->timeCtr) == trunc(ship->getEndTime())) {
 			if (ship->getChallengeProg() < CHALLENGE_PROGRESS_LOW) {
 				gm.setChallengeFail(true);
-				ship->setStatus(ShipModel::FAILURE);
+				ship->setStablizerStatus(ShipModel::FAILURE);
 				ship->failAllTask();
 			} else {
-				ship->setStatus(ShipModel::SUCCESS);
+				ship->setStablizerStatus(ShipModel::SUCCESS);
 				net->succeedAllTask();
 			}
 			ship->setChallenge(false);
