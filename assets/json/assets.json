@@ -337,7 +337,7 @@
         "fixBreach": {
             "type":     "sample",
             "file":     "sounds/breach-fix.wav",
-            "volume":   0.5
+            "volume":   0.8
         },
         "slowBreach": {
             "type":     "sample",

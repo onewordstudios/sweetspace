@@ -25,12 +25,6 @@ void ButtonManager::process() {
 		for (unsigned int i = 0; i < buttons.size(); i++) {
 			if (buttons[i]->containsScreen(position)) {
 				if (!buttons[i]->isDown()) {
-					// We only need to play sound effects for one button at a time, so start and end
-					// the event
-					SoundEffectController::getInstance()->startEvent(SoundEffectController::CLICK,
-																	 (int)i);
-					SoundEffectController::getInstance()->endEvent(SoundEffectController::CLICK,
-																   (int)i);
 					buttons[i]->setDown(true);
 					downBtns.push_back(buttons[i]);
 				}
@@ -57,8 +51,15 @@ void ButtonManager::process() {
 
 bool ButtonManager::tappedButton(std::shared_ptr<cugl::Button> button,
 								 std::tuple<cugl::Vec2, cugl::Vec2> tapData) {
-	return button->containsScreen(std::get<0>(tapData)) &&
-		   button->containsScreen(std::get<1>(tapData));
+	if (button->containsScreen(std::get<0>(tapData)) &&
+		button->containsScreen(std::get<1>(tapData))) {
+		// We only need to play sound effects for one button at a time, so start and end
+		// the event
+		SoundEffectController::getInstance()->startEvent(SoundEffectController::CLICK, 0);
+		SoundEffectController::getInstance()->endEvent(SoundEffectController::CLICK, 0);
+		return true;
+	}
+	return false;
 }
 
 void ButtonManager::clear() {
