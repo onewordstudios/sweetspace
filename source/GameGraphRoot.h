@@ -164,6 +164,24 @@ class GameGraphRoot : public cugl::Scene {
 
 	/** Current animation frame for ship flashing red */
 	int currentHealthWarningFrame;
+
+	// TELEPORTATION ANIMATION
+	/** Reference to fail text */
+	std::shared_ptr<cugl::Label> stablizerFailText;
+	/** Reference to fail text */
+	std::shared_ptr<cugl::PolygonNode> stablizerFailPanel;
+	/** Reference to black image that covers all */
+	std::shared_ptr<cugl::PolygonNode> blackoutOverlay;
+	/** Current animation frame for stablizer fail teleportation */
+	int currentTeleportationFrame;
+	/** Whether stablizer is failed in last frame */
+	bool prevIsStablizerFail;
+
+	/** Animation constants */
+	static constexpr int TELEPORT_FRAMECUTOFF_FIRST = 40;
+	static constexpr int TELEPORT_FRAMECUTOFF_SECOND = 120;
+	static constexpr int TELEPORT_FRAMECUTOFF_THIRD = 200;
+
 	/**
 	 * Returns an informative string for the position
 	 *
@@ -287,6 +305,10 @@ class GameGraphRoot : public cugl::Scene {
 	 */
 	void setSegHealthWarning(int alpha);
 
+	/**
+	 * Do teleportation animation
+	 */
+	void doTeleportAnimation();
 #pragma mark -
 #pragma mark Accessors
 	/**
