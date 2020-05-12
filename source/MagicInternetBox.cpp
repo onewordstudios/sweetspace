@@ -576,6 +576,7 @@ void MagicInternetBox::update(std::shared_ptr<ShipModel> state) {
 				break;
 			}
 			case AllFail: {
+				CULog("failure");
 				state->failAllTask();
 				state->setStabilizerStatus(ShipModel::FAILURE);
 				break;

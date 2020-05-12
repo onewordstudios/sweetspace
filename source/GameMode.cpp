@@ -409,7 +409,6 @@ void GameMode::update(float timestep) {
 				// just end it immediately
 				soundEffects->startEvent(SoundEffectController::TELEPORT, 0);
 				soundEffects->endEvent(SoundEffectController::TELEPORT, 0);
-				ship->failAllTask();
 			} else {
 				ship->setStabilizerStatus(ShipModel::SUCCESS);
 				net->succeedAllTask();

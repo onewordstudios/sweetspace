@@ -43,7 +43,7 @@ class ShipModel {
 	int levelNum;
 
    public:
-	enum StabilizerStatus { INACTIVE, ACTIVE, FAILURE, SUCCESS };
+	enum StabilizerStatus { INACTIVE, ACTIVE, FAILURE, SUCCESS, ANIMATING };
 	/** StabilizerStatus of all player challenge. 0 = no challenge, 1 = challenge, 2 = challenge
 	 * failed, 3 = challenge success*/
 	StabilizerStatus stabilizerStatus;

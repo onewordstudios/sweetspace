@@ -893,6 +893,7 @@ void GameGraphRoot::doTeleportAnimation() {
 		!prevIsStabilizerFail) {
 		// Start teleportation animation
 		currentTeleportationFrame = 1;
+		ship->setStabilizerStatus(ShipModel::StabilizerStatus::ANIMATING);
 	}
 	if (currentTeleportationFrame != 0) {
 		// Continue teleportation animation
