@@ -181,6 +181,7 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 		dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_healthBase"));
 	healthNodeOverlay =
 		dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_health"));
+	healthNodeOverlay->setVisible(true);
 	coordHUD = std::dynamic_pointer_cast<Label>(assets->get<Node>("game_hud"));
 	timerBorder =
 		std::dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_timerBorder"));
@@ -566,6 +567,7 @@ void GameGraphRoot::update(float timestep) {
 			rollTutorial->setVisible(false);
 			moveTutorial->setVisible(false);
 			timerBorder->setVisible(false);
+			healthNodeOverlay->setVisible(false);
 			coordHUD->setVisible(false);
 			if (playerID != 0) {
 				winWaitText->setVisible(true);
@@ -645,6 +647,11 @@ void GameGraphRoot::update(float timestep) {
 	} else if (ship->getHealth() < ship->getInitHealth() * SHIP_HEALTH_HIGH_GREEN_CUTOFF) {
 		healthNodeOverlay->setPosition(HIGH_GREEN_POS_X, HIGH_GREEN_POS_Y);
 		healthNodeOverlay->setAngle(HIGH_GREEN_ANGLE);
+	} else {
+		std::shared_ptr<Texture> image = assets->get<Texture>("health_green");
+		healthNodeOverlay->setTexture(image);
+		healthNodeOverlay->setPosition(0, 0);
+		healthNodeOverlay->setAngle(0);
 	}
 
 	if (ship->getLevelNum() == tutorial::BREACH_LEVEL) {
