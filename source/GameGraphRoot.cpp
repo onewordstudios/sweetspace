@@ -128,6 +128,13 @@ constexpr float LOW_GREEN_ANGLE = 300 * globals::PI_180;
 /** High green health angle */
 constexpr float HIGH_GREEN_ANGLE = 320 * globals::PI_180;
 
+/** Tutorial asset scale */
+constexpr float TUTORIAL_SCALE = 0.4f;
+
+/** Timer offset */
+constexpr float TIMER_OFFSET = 20;
+
+
 #pragma mark -
 #pragma mark Constructors
 
@@ -311,7 +318,7 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 		if (ship->getLevelNum() == tutorial::BREACH_LEVEL) {
 			std::shared_ptr<Texture> image = assets->get<Texture>("jump_tutorial0");
 			std::shared_ptr<TutorialNode> tutorial = TutorialNode::alloc(image);
-			tutorial->setScale(0.4);
+			tutorial->setScale(TUTORIAL_SCALE);
 			tutorial->setBreachNode(breachNode);
 			tutorialNode->addChildWithTag(tutorial, i + 1);
 		}
@@ -354,7 +361,7 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 			shared_ptr<DoorNode> doorNode =
 				dynamic_pointer_cast<DoorNode>(doorsNode->getChildByTag((unsigned int)(i + 1)));
 			tutorial->setDoorNode(doorNode);
-			tutorial->setScale(0.4);
+			tutorial->setScale(TUTORIAL_SCALE);
 			tutorialNode->addChildWithTag(tutorial, i + 1);
 		}
 	} else if (ship->getLevelNum() == tutorial::BUTTON_LEVEL) {
@@ -364,20 +371,20 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 			shared_ptr<ButtonNode> buttonNode =
 				dynamic_pointer_cast<ButtonNode>(buttonsNode->getChildByTag((unsigned int)(i + 1)));
 			tutorial->setButtonNode(buttonNode);
-			tutorial->setScale(0.4);
+			tutorial->setScale(TUTORIAL_SCALE);
 			tutorialNode->addChildWithTag(tutorial, i + 1);
 
 			std::shared_ptr<Texture> image2 = assets->get<Texture>("engine_tutorial1");
 			std::shared_ptr<TutorialNode> tutorial2 = TutorialNode::alloc(image2);
 			tutorial2->setButtonNode(buttonNode);
-			tutorial2->setScale(0.4);
+			tutorial2->setScale(TUTORIAL_SCALE);
 			tutorialNode->addChildWithTag(tutorial2,
 										  (unsigned int)(i + 1 + buttonsNode->getChildCount()));
 		}
 	} else if (ship->getLevelNum() == tutorial::REAL_LEVELS.at(2)) {
 		std::shared_ptr<Texture> image = assets->get<Texture>("timer_tutorial1");
 		timerTutorial->setTexture(image);
-		float posY = timerTutorial->getPositionY() - 20;
+		float posY = timerTutorial->getPositionY() - TIMER_OFFSET;
 		float posX = timerTutorial->getPositionX();
 		timerTutorial->setPosition(posX, posY);
 		timerTutorial->setVisible(true);
