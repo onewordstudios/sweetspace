@@ -1,4 +1,4 @@
-#include "GameGraphRoot.h"
+﻿#include "GameGraphRoot.h"
 
 #include <cugl/cugl.h>
 
@@ -223,17 +223,17 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 		challengePanelArrows.push_back(arrow);
 	}
 
-	stablizerFailText = dynamic_pointer_cast<cugl::Label>(
+	stabilizerFailText = dynamic_pointer_cast<cugl::Label>(
 		assets->get<Node>("game_field_challengePanelParent_challengePanelFailLabel"));
-	stablizerFailText->setVisible(false);
-	stablizerFailPanel = dynamic_pointer_cast<cugl::PolygonNode>(
+	stabilizerFailText->setVisible(false);
+	stabilizerFailPanel = dynamic_pointer_cast<cugl::PolygonNode>(
 		assets->get<Node>("game_field_challengePanelParent_challengePanelFailPanel"));
-	stablizerFailPanel->setVisible(false);
+	stabilizerFailPanel->setVisible(false);
 	blackoutOverlay =
 		dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_blackoutOverlay"));
 	blackoutOverlay->setColor(Tween::fade(0));
 	currentTeleportationFrame = 0;
-	prevIsStablizerFail = false;
+	prevIsStabilizerFail = false;
 
 	// Initialize Ship Segments
 	leftMostSeg = 0;
@@ -466,8 +466,8 @@ void GameGraphRoot::dispose() {
 		challengePanelArrows.clear();
 		healthNode = nullptr;
 
-		stablizerFailText = nullptr;
-		stablizerFailPanel = nullptr;
+		stabilizerFailText = nullptr;
+		stabilizerFailPanel = nullptr;
 		blackoutOverlay = nullptr;
 
 		reconnectOverlay = nullptr;
@@ -889,15 +889,17 @@ void GameGraphRoot::setSegHealthWarning(int alpha) {
 }
 
 void GameGraphRoot::doTeleportAnimation() {
-	if (ship->getStablizerStatus() == ShipModel::StablizerStatus::FAILURE && !prevIsStablizerFail) {
+	if (ship->getStabilizerStatus() == ShipModel::StabilizerStatus::FAILURE &&
+		!prevIsStabilizerFail) {
 		// Start teleportation animation
 		currentTeleportationFrame = 1;
+		ship->setStabilizerStatus(ShipModel::StabilizerStatus::ANIMATING);
 	}
 	if (currentTeleportationFrame != 0) {
 		// Continue teleportation animation
 		if (currentTeleportationFrame <= TELEPORT_FRAMECUTOFF_FIRST) {
-			stablizerFailPanel->setVisible(true);
-			stablizerFailText->setVisible(true);
+			stabilizerFailPanel->setVisible(true);
+			stabilizerFailText->setVisible(true);
 		} else if (currentTeleportationFrame <= TELEPORT_FRAMECUTOFF_SECOND) {
 			blackoutOverlay->setColor(Tween::fade(
 				Tween::linear(0, 1, currentTeleportationFrame - TELEPORT_FRAMECUTOFF_FIRST,
@@ -909,10 +911,10 @@ void GameGraphRoot::doTeleportAnimation() {
 					std::shared_ptr<DonutModel> donutModel = ship->getDonuts().at((unsigned long)i);
 					donutModel->teleport();
 				}
-				ship->setStablizerStatus(ShipModel::StablizerStatus::INACTIVE);
+				ship->setStabilizerStatus(ShipModel::StabilizerStatus::INACTIVE);
 			}
-			stablizerFailPanel->setVisible(false);
-			stablizerFailText->setVisible(false);
+			stabilizerFailPanel->setVisible(false);
+			stabilizerFailText->setVisible(false);
 			blackoutOverlay->setColor(Tween::fade(
 				Tween::linear(1, 0, currentTeleportationFrame - TELEPORT_FRAMECUTOFF_SECOND,
 							  TELEPORT_FRAMECUTOFF_THIRD - TELEPORT_FRAMECUTOFF_SECOND)));
@@ -920,7 +922,7 @@ void GameGraphRoot::doTeleportAnimation() {
 		currentTeleportationFrame += 1;
 		if (currentTeleportationFrame > TELEPORT_FRAMECUTOFF_THIRD) currentTeleportationFrame = 0;
 	}
-	prevIsStablizerFail = ship->getStablizerStatus() == ShipModel::StablizerStatus::FAILURE;
+	prevIsStabilizerFail = ship->getStabilizerStatus() == ShipModel::StabilizerStatus::FAILURE;
 }
 /**
  * Returns an informative string for the position

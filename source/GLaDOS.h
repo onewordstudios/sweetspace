@@ -59,6 +59,8 @@ class GLaDOS {
 	vector<std::shared_ptr<EventModel>> events;
 	/** List of events that are ready to be executed*/
 	vector<std::shared_ptr<EventModel>> readyQueue;
+	/** Time we started the stabilizer (for tutorial only) */
+	float stabilizerStart;
 
    public:
 #pragma mark -

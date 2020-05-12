@@ -118,7 +118,6 @@ void Sweetspace::update(float timestep) {
 				status = MainMenu;
 			} else if (MagicInternetBox::getInstance()->lastNetworkEvent() !=
 					   MagicInternetBox::NetworkEvents::None) {
-				CULog("almost there");
 				MagicInternetBox::getInstance()->acknowledgeNetworkEvent();
 				CULog("Restarting Level");
 				gameplay.dispose();
