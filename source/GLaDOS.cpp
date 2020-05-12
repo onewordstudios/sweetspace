@@ -101,7 +101,7 @@ bool GLaDOS::init(std::shared_ptr<ShipModel> ship, const int levelNum) {
 	sections = unop;
 	customEventCtr = tutorial::CUSTOM_EVENTS.at(levelNum);
 	float size = (float)tutorial::SIZE_PER.at(levelNum) * (float)mib->getNumPlayers();
-	ship->init(mib->getNumPlayers(), maxEvents, maxDoors, mib->getPlayerID(), size,
+	ship->init(mib->getMaxNumPlayers(), maxEvents, maxDoors, mib->getPlayerID(), size,
 			   tutorial::HEALTH.at(levelNum), maxButtons, unop);
 	ship->setTimeless(true);
 	ship->initTimer(1);

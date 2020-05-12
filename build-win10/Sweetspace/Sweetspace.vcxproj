@@ -216,6 +216,7 @@
     <ClInclude Include="..\..\source\PlayerDonutModel.h" />
     <ClInclude Include="..\..\source\PlayerDonutNode.h" />
     <ClInclude Include="..\..\source\ShipModel.h" />
+    <ClInclude Include="..\..\source\SoundEffectController.h" />
     <ClInclude Include="..\..\source\Sweetspace.h" />
     <ClInclude Include="..\..\source\TutorialConstants.h" />
     <ClInclude Include="..\..\source\TutorialNode.h" />
@@ -250,6 +251,7 @@
     <ClCompile Include="..\..\source\PlayerDonutModel.cpp" />
     <ClCompile Include="..\..\source\PlayerDonutNode.cpp" />
     <ClCompile Include="..\..\source\ShipModel.cpp" />
+    <ClCompile Include="..\..\source\SoundEffectController.cpp" />
     <ClCompile Include="..\..\source\Sweetspace.cpp" />
     <ClCompile Include="..\..\source\TutorialNode.cpp" />
     <ClCompile Include="..\..\source\Tween.cpp" />

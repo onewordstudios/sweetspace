@@ -326,6 +326,36 @@
             "type":     "sample",
             "file":     "sounds/menu.wav",
             "volume":   0.5
+        },
+        "click": {
+            "type":     "sample",
+            "file":     "sounds/click.wav",
+            "volume":   0.5
+        },
+        "doorCollide": {
+            "type":     "sample",
+            "file":     "sounds/door-collide.wav",
+            "volume":   0.5
+        },
+        "fixBreach": {
+            "type":     "sample",
+            "file":     "sounds/breach-fix.wav",
+            "volume":   0.8
+        },
+        "slowBreach": {
+            "type":     "sample",
+            "file":     "sounds/breach-collide.wav",
+            "volume":   0.5
+        },
+        "jump": {
+            "type":     "sample",
+            "file":     "sounds/jump.wav",
+            "volume":   0.5
+        },
+        "teleport": {
+            "type":     "sample",
+            "file":     "sounds/teleport.wav",
+            "volume":   0.5
         }
     },
 	"fonts": {
@@ -450,14 +480,23 @@
                                 "visible": false
                             }
                         },
+                        "healthBase": {
+                          "type": "Image",
+                          "data": {
+                            "texture": "health_empty",
+                            "anchor":   [0.5,0.5],
+                            "position": [0, 0],
+                            "scale": 0.3
+                          }
+                        },
                         "health": {
-                            "type": "Image",
-                            "data": {
-                                "texture": "health_green",
-                                "anchor":   [0.5,0.5],
-                                "position": [0, 0],
-                                "scale": 0.3
-                            }
+                          "type": "Image",
+                          "data": {
+                            "texture": "health_green",
+                            "anchor":   [0.5,0.5],
+                            "position": [0, 0],
+                            "scale": 0.3
+                          }
                         },
                         "challengePanelParent": {
                             "type": "Node",
