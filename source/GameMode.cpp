@@ -390,7 +390,6 @@ void GameMode::update(float timestep) {
 				ship->setStablizerStatus(ShipModel::SUCCESS);
 				net->succeedAllTask();
 			}
-			CULog("======================CHALLENGE ENDED");
 			ship->setChallenge(false);
 			ship->setChallengeProg(0);
 		}
