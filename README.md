@@ -14,6 +14,16 @@ Coming August 2020 to Android and iOS.
 
 ## Current Progress
 
+### Golden Master
+
+This release was our "fix-the-tutorial" release.
+
+While other balance and polish changes were made, the biggest goal was to adapt the tutorial according to player feedback. Starting from the easiest level in the Level Select screen will now walk the players through a series of levels that individually introduce and then slowly layer in new mechanics, hopefully making the game more learnable.
+
+Numerous other small polish and UI changes can also be seen (and heard) throughout the game.
+
+Controls are the same as before. Tilt (or use arrow keys) to move left and right. Tap (or click / press space) to jump. Roll over breaches of your own color repeatedly to fix them, get two players onto a door to open them, get two players to both jump on buttons to fix them, and when told to roll in a direction, get everyone doing that. Keep the ship health out of the red until the end of the level to win.
+
 ### Beta Release
 
 With the core gameplay in place, this release was about tutorialization and polish.
