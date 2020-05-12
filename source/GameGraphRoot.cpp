@@ -134,7 +134,6 @@ constexpr float TUTORIAL_SCALE = 0.4f;
 /** Timer offset */
 constexpr float TIMER_OFFSET = 20;
 
-
 #pragma mark -
 #pragma mark Constructors
 
