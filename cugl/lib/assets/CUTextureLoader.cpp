@@ -218,6 +218,7 @@ void TextureLoader::materialize(const std::string& key, SDL_Surface* surface, Lo
     if (callback != nullptr) {
         callback(key,success);
     }
+	SDL_FreeSurface(surface);
     _queue.erase(key);
 }
                                 
@@ -277,6 +278,7 @@ void TextureLoader::materialize(const std::shared_ptr<JsonValue>& json, SDL_Surf
     if (callback != nullptr) {
         callback(key,success);
     }
+	SDL_FreeSurface(surface);
     _queue.erase(key);
 }
 

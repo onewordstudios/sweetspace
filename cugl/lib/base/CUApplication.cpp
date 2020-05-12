@@ -690,7 +690,9 @@ std::string Application::getAssetDirectory() {
 	}
 #else
     if (_assetdir.empty()) {
-		_assetdir.append(SDL_GetBasePath());
+        char* str = SDL_GetBasePath();
+        _assetdir.append(str);
+        SDL_free(str);
     }
 #endif
     return _assetdir;

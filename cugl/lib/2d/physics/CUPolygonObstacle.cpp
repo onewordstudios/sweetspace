@@ -90,6 +90,10 @@ PolygonObstacle::~PolygonObstacle() {
         delete[] _shapes;
         _shapes = nullptr;
     }
+    if (_geoms != nullptr) {
+        delete[] _geoms;
+        _geoms = nullptr;
+    }
 }
 
 
