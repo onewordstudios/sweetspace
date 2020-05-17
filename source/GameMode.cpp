@@ -260,7 +260,7 @@ void GameMode::update(float timestep) {
 	// Attempt to recover to idle animation
 	donutModel->transitionFaceState(DonutModel::FaceState::Idle);
 
-	// Breach Checks
+#pragma region Breach Collision
 	for (int i = 0; i < ship->getBreaches().size(); i++) {
 		std::shared_ptr<BreachModel> breach = ship->getBreaches().at(i);
 		if (breach == nullptr || !breach->getIsActive()) {
@@ -299,8 +299,9 @@ void GameMode::update(float timestep) {
 			}
 		}
 	}
+#pragma endregion
 
-	// Door Checks
+#pragma region Door Collision
 	for (int i = 0; i < ship->getDoors().size(); i++) {
 		if (ship->getDoors().at(i) == nullptr || ship->getDoors().at(i)->halfOpen() ||
 			!ship->getDoors().at(i)->getIsActive()) {
@@ -336,7 +337,7 @@ void GameMode::update(float timestep) {
 			}
 		}
 	}
-	// unop Checks
+	// Unopenable Door Checks
 	for (int i = 0; i < ship->getUnopenable().size(); i++) {
 		if (ship->getUnopenable().at(i) == nullptr || !ship->getUnopenable().at(i)->getIsActive()) {
 			continue;
@@ -362,6 +363,9 @@ void GameMode::update(float timestep) {
 			soundEffects->endEvent(SoundEffectController::DOOR, i + globals::UNOP_MARKER);
 		}
 	}
+#pragma endregion
+
+	// Breach health drain
 	for (int i = 0; i < ship->getBreaches().size(); i++) {
 		// this should be adjusted based on the level and number of players
 		if (ship->getBreaches().at(i)->getIsActive() &&
@@ -377,6 +381,7 @@ void GameMode::update(float timestep) {
 		ship->getDonuts()[i]->update(timestep);
 	}
 
+#pragma region Stabilizer
 	if (ship->getChallenge() && !ship->getTimeless() &&
 		trunc(ship->timer) <= globals::ROLL_CHALLENGE_LENGTH) {
 		ship->setChallenge(false);
@@ -418,7 +423,9 @@ void GameMode::update(float timestep) {
 			ship->setChallengeProg(0);
 		}
 	}
+#pragma endregion
 
+#pragma region Button Collision
 	for (int i = 0; i < ship->getButtons().size(); i++) {
 		auto button = ship->getButtons().at(i);
 
@@ -443,6 +450,7 @@ void GameMode::update(float timestep) {
 			}
 		}
 	}
+#pragma endregion
 
 	sgRoot.update(timestep);
 }
