@@ -48,6 +48,9 @@
         "breach_filmstrip": {
             "file":   "textures/breaches/breach_filmstrip.png"
         },
+        "breach_sparkle": {
+            "file":   "textures/breaches/breach_accent.png"
+        },
 	    "door": {
             "file":   "textures/doors/door.png"
         },
@@ -448,6 +451,13 @@
                                     }
                                 },
                                 "breaches": {
+                                    "type": "Node",
+                                    "data": {
+                                        "anchor":   [0,0],
+                                        "position": [0,0]
+                                    }
+                                },
+                                "breachsparkles": {
                                     "type": "Node",
                                     "data": {
                                         "anchor":   [0,0],
