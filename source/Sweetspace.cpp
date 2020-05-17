@@ -89,6 +89,8 @@ void Sweetspace::update(float timestep) {
 		}
 		case LoadToMain: {
 			loading.dispose(); // Disables the input listeners in this mode
+			SoundEffectController::getInstance()->init(
+				assets); // Prepare sound effects for the main menu
 			mainmenu.init(assets);
 			status = MainMenu;
 			return;
@@ -116,7 +118,6 @@ void Sweetspace::update(float timestep) {
 				status = MainMenu;
 			} else if (MagicInternetBox::getInstance()->lastNetworkEvent() !=
 					   MagicInternetBox::NetworkEvents::None) {
-				CULog("almost there");
 				MagicInternetBox::getInstance()->acknowledgeNetworkEvent();
 				CULog("Restarting Level");
 				gameplay.dispose();

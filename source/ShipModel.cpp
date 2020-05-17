@@ -112,12 +112,12 @@ bool ShipModel::failAllTask() {
 				}
 			}
 		}
-		donuts.at(i)->setAngle(angle);
+		donuts.at(i)->setTeleportAngle(angle);
 	}
 	return true;
 }
 
-void ShipModel::setStatus(Status b) { status = b; }
+void ShipModel::setStabilizerStatus(StabilizerStatus s) { stabilizerStatus = s; }
 
 bool ShipModel::createButton(float angle1, int id1, float angle2, int id2) {
 	buttons.at(id1)->init(angle1, buttons.at(id2), id2);

@@ -9,6 +9,7 @@
 #include "InputController.h"
 #include "MagicInternetBox.h"
 #include "ShipModel.h"
+#include "SoundEffectController.h"
 
 /**
  * The primary gameplay controller.
@@ -21,6 +22,8 @@ class GameMode {
 	// CONTROLLERS
 	/** Controller for abstracting out input across multiple platforms */
 	std::shared_ptr<InputController> input;
+	/** Controller for abstracting out sound effects */
+	std::shared_ptr<SoundEffectController> soundEffects;
 	/** Controller for GM */
 	GLaDOS gm;
 	/** Networking controller*/
@@ -52,7 +55,13 @@ class GameMode {
 	 * This constructor does not allocate any objects or start the game.
 	 * This allows us to use the object without a heap pointer.
 	 */
-	GameMode() : input(nullptr), net(nullptr), playerID(-1), roomId(""), isBackToMainMenu(false) {}
+	GameMode()
+		: input(nullptr),
+		  soundEffects(nullptr),
+		  net(nullptr),
+		  playerID(-1),
+		  roomId(""),
+		  isBackToMainMenu(false) {}
 
 	/**
 	 * Disposes of all (non-static) resources allocated to this mode.

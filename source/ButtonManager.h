@@ -1,7 +1,9 @@
-#ifndef __BUTTON_MANAGER_H__
+﻿#ifndef __BUTTON_MANAGER_H__
 #define __BUTTON_MANAGER_H__
 
 #include <cugl/cugl.h>
+
+#include "SoundEffectController.h"
 
 /**
  * This is a helper class whose job it is to switch buttons between being up and down.
@@ -33,6 +35,8 @@ class ButtonManager {
 
 	/**
 	 * Process input for a frame and update the state of all the buttons.
+	 *
+	 * Also plays the sound effect for a button click.
 	 */
 	void process();
 

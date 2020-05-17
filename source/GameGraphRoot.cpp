@@ -8,6 +8,7 @@
 
 #include "Globals.h"
 #include "TutorialConstants.h"
+#include "Tween.h"
 
 using namespace cugl;
 using namespace std;
@@ -56,9 +57,6 @@ constexpr int MAX_HEALTH_WARNING_FRAMES = 150;
 /** Maximum alpha value for health warning overlay */
 constexpr int MAX_HEALTH_WARNING_ALPHA = 100;
 
-/** Max value of a color4 channel */
-constexpr int COLOR_CHANNEL_MAX = 255;
-
 /** Size of ship segment label */
 constexpr int SEG_LABEL_SIZE = 100;
 
@@ -68,11 +66,17 @@ constexpr int SEG_LABEL_Y = 1113;
 /** Maximum number of health labels */
 constexpr int MAX_HEALTH_LABELS = 10;
 
+/** Percentage of ship health to start showing decrease in green */
+constexpr float SHIP_HEALTH_HIGH_GREEN_CUTOFF = 0.9f;
+
+/** Percentage of ship health to start showing more decrease in green */
+constexpr float SHIP_HEALTH_LOW_GREEN_CUTOFF = 0.7f;
+
 /** Percentage of ship health to start showing yellow */
-constexpr float SHIP_HEALTH_YELLOW_CUTOFF = 0.8f;
+constexpr float SHIP_HEALTH_YELLOW_CUTOFF = 0.5f;
 
 /** Percentage of ship health to start showing red */
-constexpr float SHIP_HEALTH_RED_CUTOFF = 0.5f;
+constexpr float SHIP_HEALTH_RED_CUTOFF = 0.3f;
 
 /** Time to stop showing health tutorial */
 constexpr int HEALTH_TUTORIAL_CUTOFF = 10;
@@ -82,6 +86,51 @@ constexpr int MOVE_TUTORIAL_CUTOFF = 5;
 
 /** Time to show breach tutorial */
 constexpr int BREACH_TUTORIAL_CUTOFF = 10;
+
+/** Time stop showing timer */
+constexpr int TIMER_TUTORIAL_CUTOFF = 18;
+
+/** Red health position */
+constexpr float RED_POS_X = -100;
+
+/** Red health position */
+constexpr float RED_POS_Y = 176;
+
+/** Yellow health position */
+constexpr float YELLOW_POS_X = -120;
+
+/** Yellow health position */
+constexpr float YELLOW_POS_Y = 118;
+
+/** Low green health position */
+constexpr float LOW_GREEN_POS_X = -100;
+
+/** Low green health position */
+constexpr float LOW_GREEN_POS_Y = 60;
+
+/** High green health position */
+constexpr float HIGH_GREEN_POS_X = -75;
+
+/** High green health position */
+constexpr float HIGH_GREEN_POS_Y = 30;
+
+/** Red health angle */
+constexpr float RED_ANGLE = 240 * globals::PI_180;
+
+/** Yellow health angle */
+constexpr float YELLOW_ANGLE = 270 * globals::PI_180;
+
+/** Low green health angle */
+constexpr float LOW_GREEN_ANGLE = 300 * globals::PI_180;
+
+/** High green health angle */
+constexpr float HIGH_GREEN_ANGLE = 320 * globals::PI_180;
+
+/** Tutorial asset scale */
+constexpr float TUTORIAL_SCALE = 0.4f;
+
+/** Timer offset */
+constexpr float TIMER_OFFSET = 20;
 
 #pragma mark -
 #pragma mark Constructors
@@ -137,7 +186,11 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	doorsNode = assets->get<Node>("game_field_near_doors");
 	unopsNode = assets->get<Node>("game_field_near_unops");
 	externalDonutsNode = assets->get<Node>("game_field_near_externaldonuts");
-	healthNode = dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_health"));
+	healthNode =
+		dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_healthBase"));
+	healthNodeOverlay =
+		dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_health"));
+	healthNodeOverlay->setVisible(true);
 	coordHUD = std::dynamic_pointer_cast<Label>(assets->get<Node>("game_hud"));
 	timerBorder =
 		std::dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_timerBorder"));
@@ -153,16 +206,23 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	healthTutorial =
 		dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_healthTutorial"));
 	healthTutorial->setVisible(false);
+	communicateTutorial = dynamic_pointer_cast<cugl::PolygonNode>(
+		assets->get<Node>("game_field_communicateTutorial"));
+	communicateTutorial->setVisible(false);
+	timerTutorial =
+		dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_timerTutorial"));
+	timerTutorial->setVisible(false);
 	if (ship->getLevelNum() == tutorial::REAL_LEVELS.at(0)) {
-		healthTutorial->setVisible(true);
+		healthTutorial->setVisible(false);
+		communicateTutorial->setVisible(true);
+		timerTutorial->setVisible(true);
 	}
 	rollTutorial =
 		dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_rollTutorial"));
 	rollTutorial->setVisible(false);
+
 	tutorialNode = assets->get<Node>("game_field_near_tutorial");
 	buttonsNode = assets->get<Node>("game_field_near_button");
-	std::shared_ptr<Texture> image = assets->get<Texture>("health_green");
-	healthNode->setTexture(image);
 	nearSpace->setAngle(0.0f);
 	// Initialize Roll Challenge
 	challengePanelHanger = dynamic_pointer_cast<cugl::PolygonNode>(
@@ -181,6 +241,18 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 			assets->get<Node>("game_field_challengePanelParent_challengePanelArrow" + s));
 		challengePanelArrows.push_back(arrow);
 	}
+
+	stabilizerFailText = dynamic_pointer_cast<cugl::Label>(
+		assets->get<Node>("game_field_challengePanelParent_challengePanelFailLabel"));
+	stabilizerFailText->setVisible(false);
+	stabilizerFailPanel = dynamic_pointer_cast<cugl::PolygonNode>(
+		assets->get<Node>("game_field_challengePanelParent_challengePanelFailPanel"));
+	stabilizerFailPanel->setVisible(false);
+	blackoutOverlay =
+		dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_blackoutOverlay"));
+	blackoutOverlay->setColor(Tween::fade(0));
+	currentTeleportationFrame = 0;
+	prevIsStabilizerFail = false;
 
 	// Initialize Ship Segments
 	leftMostSeg = 0;
@@ -256,6 +328,7 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 		if (ship->getLevelNum() == tutorial::BREACH_LEVEL) {
 			std::shared_ptr<Texture> image = assets->get<Texture>("jump_tutorial0");
 			std::shared_ptr<TutorialNode> tutorial = TutorialNode::alloc(image);
+			tutorial->setScale(TUTORIAL_SCALE);
 			tutorial->setBreachNode(breachNode);
 			tutorialNode->addChildWithTag(tutorial, i + 1);
 		}
@@ -298,17 +371,25 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 			shared_ptr<DoorNode> doorNode =
 				dynamic_pointer_cast<DoorNode>(doorsNode->getChildByTag((unsigned int)(i + 1)));
 			tutorial->setDoorNode(doorNode);
+			tutorial->setScale(TUTORIAL_SCALE);
 			tutorialNode->addChildWithTag(tutorial, i + 1);
 		}
 	} else if (ship->getLevelNum() == tutorial::BUTTON_LEVEL) {
 		for (int i = 0; i < buttonsNode->getChildCount(); i++) {
-			std::shared_ptr<Texture> image = assets->get<Texture>("engine_tutorial0");
+			std::shared_ptr<Texture> image = assets->get<Texture>("engine_tutorial");
 			std::shared_ptr<TutorialNode> tutorial = TutorialNode::alloc(image);
 			shared_ptr<ButtonNode> buttonNode =
 				dynamic_pointer_cast<ButtonNode>(buttonsNode->getChildByTag((unsigned int)(i + 1)));
 			tutorial->setButtonNode(buttonNode);
+			tutorial->setScale(TUTORIAL_SCALE);
 			tutorialNode->addChildWithTag(tutorial, i + 1);
 		}
+	} else if (ship->getLevelNum() == tutorial::REAL_LEVELS.at(2)) {
+		std::shared_ptr<Texture> image = assets->get<Texture>("timer_tutorial1");
+		timerTutorial->setTexture(image);
+		float posY = timerTutorial->getPositionY() - TIMER_OFFSET;
+		float posX = timerTutorial->getPositionX();
+		timerTutorial->setPosition(posX, posY);
 	}
 
 	// Overlay Components
@@ -413,6 +494,10 @@ void GameGraphRoot::dispose() {
 		challengePanelArrows.clear();
 		healthNode = nullptr;
 
+		stabilizerFailText = nullptr;
+		stabilizerFailPanel = nullptr;
+		blackoutOverlay = nullptr;
+
 		reconnectOverlay = nullptr;
 		reconnectE2 = nullptr;
 		reconnectE3 = nullptr;
@@ -508,7 +593,9 @@ void GameGraphRoot::update(float timestep) {
 			healthNode->setVisible(false);
 			rollTutorial->setVisible(false);
 			moveTutorial->setVisible(false);
+			communicateTutorial->setVisible(false);
 			timerBorder->setVisible(false);
+			healthNodeOverlay->setVisible(false);
 			coordHUD->setVisible(false);
 			if (playerID != 0) {
 				winWaitText->setVisible(true);
@@ -570,6 +657,31 @@ void GameGraphRoot::update(float timestep) {
 	// Button Checks for Special Case Buttons
 	processButtons();
 
+	if (ship->getHealth() < 1) {
+		healthNodeOverlay->setVisible(false);
+	} else if (ship->getHealth() < ship->getInitHealth() * SHIP_HEALTH_RED_CUTOFF) {
+		std::shared_ptr<Texture> image = assets->get<Texture>("health_red");
+		healthNodeOverlay->setTexture(image);
+		healthNodeOverlay->setPosition(RED_POS_X, RED_POS_Y);
+		healthNodeOverlay->setAngle(RED_ANGLE);
+	} else if (ship->getHealth() < ship->getInitHealth() * SHIP_HEALTH_YELLOW_CUTOFF) {
+		std::shared_ptr<Texture> image = assets->get<Texture>("health_yellow");
+		healthNodeOverlay->setTexture(image);
+		healthNodeOverlay->setPosition(YELLOW_POS_X, YELLOW_POS_Y);
+		healthNodeOverlay->setAngle(YELLOW_ANGLE);
+	} else if (ship->getHealth() < ship->getInitHealth() * SHIP_HEALTH_LOW_GREEN_CUTOFF) {
+		healthNodeOverlay->setPosition(LOW_GREEN_POS_X, LOW_GREEN_POS_Y);
+		healthNodeOverlay->setAngle(LOW_GREEN_ANGLE);
+	} else if (ship->getHealth() < ship->getInitHealth() * SHIP_HEALTH_HIGH_GREEN_CUTOFF) {
+		healthNodeOverlay->setPosition(HIGH_GREEN_POS_X, HIGH_GREEN_POS_Y);
+		healthNodeOverlay->setAngle(HIGH_GREEN_ANGLE);
+	} else {
+		std::shared_ptr<Texture> image = assets->get<Texture>("health_green");
+		healthNodeOverlay->setTexture(image);
+		healthNodeOverlay->setPosition(0, 0);
+		healthNodeOverlay->setAngle(0);
+	}
+
 	if (ship->getLevelNum() == tutorial::BREACH_LEVEL) {
 		if (trunc(ship->timeCtr) > BREACH_TUTORIAL_CUTOFF) {
 			for (int i = 0; i < tutorialNode->getChildCount(); i++) {
@@ -578,8 +690,13 @@ void GameGraphRoot::update(float timestep) {
 				if (tutorial != nullptr) {
 					tutorial->setVisible(true);
 					if (tutorial->getPlayer() == playerID) {
-						std::shared_ptr<Texture> image =
-							assets->get<Texture>("fix_breach_tutorial0");
+						int breachHealth = tutorial->getBreachNode()->getModel()->getHealth();
+						std::shared_ptr<Texture> image = assets->get<Texture>("fix_count3");
+						if (breachHealth == 1) {
+							image = assets->get<Texture>("fix_count1");
+						} else if (breachHealth == 2) {
+							image = assets->get<Texture>("fix_count2");
+						}
 						tutorial->setTexture(image);
 					}
 				}
@@ -587,24 +704,35 @@ void GameGraphRoot::update(float timestep) {
 		}
 	}
 
-	if (ship->getHealth() < 1) {
-		std::shared_ptr<Texture> image = assets->get<Texture>("health_empty");
-		healthNode->setTexture(image);
-	} else if (ship->getHealth() < ship->getInitHealth() * SHIP_HEALTH_RED_CUTOFF) {
-		std::shared_ptr<Texture> image = assets->get<Texture>("health_red");
-		healthNode->setTexture(image);
-	} else if (ship->getHealth() < ship->getInitHealth() * SHIP_HEALTH_YELLOW_CUTOFF) {
-		std::shared_ptr<Texture> image = assets->get<Texture>("health_yellow");
-		healthNode->setTexture(image);
-	}
 	if (ship->getLevelNum() == tutorial::BREACH_LEVEL) {
+		if (trunc(ship->timeCtr) == MOVE_TUTORIAL_CUTOFF) {
+			moveTutorial->setVisible(false);
+		}
+	} else if (ship->getLevelNum() == tutorial::REAL_LEVELS.at(0)) {
 		if (trunc(ship->timeCtr) == HEALTH_TUTORIAL_CUTOFF) {
 			healthTutorial->setVisible(false);
+			communicateTutorial->setVisible(false);
 		} else if (trunc(ship->timeCtr) == MOVE_TUTORIAL_CUTOFF) {
-			moveTutorial->setVisible(false);
+			timerTutorial->setVisible(false);
+			healthTutorial->setVisible(true);
+			std::shared_ptr<Texture> image = assets->get<Texture>("communicate_tutorial1");
+			communicateTutorial->setTexture(image);
+		}
+	} else if (ship->getLevelNum() == tutorial::REAL_LEVELS.at(2)) {
+		if (trunc(ship->timeCtr) > TIMER_TUTORIAL_CUTOFF) {
+			timerTutorial->setVisible(false);
+		} else {
+			timerTutorial->setVisible(true);
 		}
 	} else if (ship->getLevelNum() == tutorial::STABILIZER_LEVEL) {
 		rollTutorial->setVisible(true);
+		if (ship->getChallenge()) {
+			std::shared_ptr<Texture> image = assets->get<Texture>("stabilizer_tutorial1");
+			rollTutorial->setTexture(image);
+		} else {
+			std::shared_ptr<Texture> image = assets->get<Texture>("stabilizer_tutorial0");
+			rollTutorial->setTexture(image);
+		}
 	}
 	// Reanchor the node at the center of the screen and rotate about center.
 	Vec2 position = farSpace->getPosition();
@@ -742,6 +870,9 @@ void GameGraphRoot::update(float timestep) {
 		setSegHealthWarning(MAX_HEALTH_WARNING_ALPHA / MAX_HEALTH_WARNING_FRAMES * 2);
 		currentHealthWarningFrame = 1;
 	}
+
+	// Handle teleportation
+	doTeleportAnimation();
 }
 
 void GameGraphRoot::processButtons() {
@@ -752,8 +883,6 @@ void GameGraphRoot::processButtons() {
 	if (!InputController::getInstance()->isTapEndAvailable()) {
 		return;
 	}
-
-	// TODO: Process Buttons for Win/Loss Screens
 
 	std::tuple<Vec2, Vec2> tapData = InputController::getInstance()->getTapEndLoc();
 	// Pause button
@@ -792,7 +921,7 @@ void GameGraphRoot::processButtons() {
 		else if (buttonManager.tappedButton(leaveBtn, tapData)) {
 			isBackToMainMenu = true;
 		}
-	} else {
+	} else if (playerID == 0) {
 		if (winScreen->isVisible()) {
 			if (buttonManager.tappedButton(nextBtn, tapData)) {
 				lastButtonPressed = NextLevel;
@@ -816,10 +945,46 @@ void GameGraphRoot::setSegHealthWarning(int alpha) {
 			shipSegsNode->getChildByTag((unsigned int)(i + 1)));
 		std::shared_ptr<cugl::PolygonNode> segRed = dynamic_pointer_cast<cugl::PolygonNode>(
 			segment->getChild(static_cast<unsigned int>(1)));
-		segRed->setColor(Color4(COLOR_CHANNEL_MAX, COLOR_CHANNEL_MAX, COLOR_CHANNEL_MAX, alpha));
+		segRed->setColor(Color4(globals::MAX_BYTE, globals::MAX_BYTE, globals::MAX_BYTE, alpha));
 	}
 }
 
+void GameGraphRoot::doTeleportAnimation() {
+	if (ship->getStabilizerStatus() == ShipModel::StabilizerStatus::FAILURE &&
+		!prevIsStabilizerFail) {
+		// Start teleportation animation
+		currentTeleportationFrame = 1;
+		ship->setStabilizerStatus(ShipModel::StabilizerStatus::ANIMATING);
+	}
+	if (currentTeleportationFrame != 0) {
+		// Continue teleportation animation
+		if (currentTeleportationFrame <= TELEPORT_FRAMECUTOFF_FIRST) {
+			stabilizerFailPanel->setVisible(true);
+			stabilizerFailText->setVisible(true);
+		} else if (currentTeleportationFrame <= TELEPORT_FRAMECUTOFF_SECOND) {
+			blackoutOverlay->setColor(Tween::fade(
+				Tween::linear(0, 1, currentTeleportationFrame - TELEPORT_FRAMECUTOFF_FIRST,
+							  TELEPORT_FRAMECUTOFF_SECOND - TELEPORT_FRAMECUTOFF_FIRST)));
+		} else {
+			if (currentTeleportationFrame == TELEPORT_FRAMECUTOFF_SECOND + 1) {
+				// Teleport models
+				for (int i = 0; i < ship->getDonuts().size(); i++) {
+					std::shared_ptr<DonutModel> donutModel = ship->getDonuts().at((unsigned long)i);
+					donutModel->teleport();
+				}
+				ship->setStabilizerStatus(ShipModel::StabilizerStatus::INACTIVE);
+			}
+			stabilizerFailPanel->setVisible(false);
+			stabilizerFailText->setVisible(false);
+			blackoutOverlay->setColor(Tween::fade(
+				Tween::linear(1, 0, currentTeleportationFrame - TELEPORT_FRAMECUTOFF_SECOND,
+							  TELEPORT_FRAMECUTOFF_THIRD - TELEPORT_FRAMECUTOFF_SECOND)));
+		}
+		currentTeleportationFrame += 1;
+		if (currentTeleportationFrame > TELEPORT_FRAMECUTOFF_THIRD) currentTeleportationFrame = 0;
+	}
+	prevIsStabilizerFail = ship->getStabilizerStatus() == ShipModel::StabilizerStatus::FAILURE;
+}
 /**
  * Returns an informative string for the position
  *

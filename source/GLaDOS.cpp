@@ -5,6 +5,8 @@
 using namespace cugl;
 using namespace std;
 
+/** Time to wait until sending another stabilizer, in tutorial. */
+constexpr float STABILIZER_TIMEOUT = 10.0f;
 #pragma mark -
 #pragma mark GM
 /**
@@ -23,7 +25,8 @@ GLaDOS::GLaDOS()
 	  customEventCtr(0),
 	  sections(0),
 	  maxDoors(0),
-	  maxButtons(0) {}
+	  maxButtons(0),
+	  stabilizerStart(0) {}
 
 /**
  * Deactivates this input controller, releasing all listeners.
@@ -101,7 +104,7 @@ bool GLaDOS::init(std::shared_ptr<ShipModel> ship, const int levelNum) {
 	sections = unop;
 	customEventCtr = tutorial::CUSTOM_EVENTS.at(levelNum);
 	float size = (float)tutorial::SIZE_PER.at(levelNum) * (float)mib->getNumPlayers();
-	ship->init(mib->getNumPlayers(), maxEvents, maxDoors, mib->getPlayerID(), size,
+	ship->init(mib->getMaxNumPlayers(), maxEvents, maxDoors, mib->getPlayerID(), size,
 			   tutorial::HEALTH.at(levelNum), maxButtons, unop);
 	ship->setTimeless(true);
 	ship->initTimer(1);
@@ -277,6 +280,7 @@ void GLaDOS::update(float dt) {
 	}
 
 	if (fail) {
+		ship->failAllTask();
 		mib->failAllTask();
 		fail = false;
 	}
@@ -471,12 +475,22 @@ void GLaDOS::tutorialLevels(float dt) {
 			if (customEventCtr >= mib->getNumPlayers()) {
 				customEventCtr = (int)mib->getNumPlayers() - 1;
 			}
-
-			switch (ship->getChallengeStatus()) {
-				case ShipModel::ACTIVE:
+			// Don't ask inactive donuts to do anything
+			// Player 0 will never be inactive since this is player 0
+			while (!ship->getDonuts().at(customEventCtr)->getIsActive() && customEventCtr > 0) {
+				customEventCtr--;
+			}
+			switch (ship->getStabilizerStatus()) {
+				case ShipModel::ANIMATING:
+				case ShipModel::FAILURE:
 					break;
-				case ShipModel::INACTIVE:
-				case ShipModel::FAILURE: {
+				case ShipModel::ACTIVE:
+					if (ship->timeCtr - stabilizerStart > STABILIZER_TIMEOUT) {
+						ship->setStabilizerStatus(ShipModel::INACTIVE);
+					}
+					break;
+				case ShipModel::INACTIVE: {
+					// Hopefully after animation is done, it will always be set to inactive
 					int dir = (int)(rand() % 2);
 					if (customEventCtr != playerID &&
 						ship->getDonuts().at(customEventCtr)->getIsActive()) {
@@ -484,7 +498,8 @@ void GLaDOS::tutorialLevels(float dt) {
 					} else {
 						ship->createAllTask(dir);
 					}
-					ship->setStatus(ShipModel::ACTIVE);
+					stabilizerStart = ship->timeCtr;
+					ship->setStabilizerStatus(ShipModel::ACTIVE);
 					break;
 				}
 				case ShipModel::SUCCESS: {
@@ -502,7 +517,8 @@ void GLaDOS::tutorialLevels(float dt) {
 					} else {
 						ship->createAllTask(dir);
 					}
-					ship->setStatus(ShipModel::ACTIVE);
+					stabilizerStart = ship->timeCtr;
+					ship->setStabilizerStatus(ShipModel::ACTIVE);
 					break;
 				}
 			}

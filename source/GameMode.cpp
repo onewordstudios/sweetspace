@@ -73,6 +73,10 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 	input = InputController::getInstance();
 	input->clear();
 
+	// Sound (should already be initialized)
+	soundEffects = SoundEffectController::getInstance();
+	soundEffects->reset();
+
 	// Network Initialization
 	net = MagicInternetBox::getInstance();
 	playerID = net->getPlayerID();
@@ -211,8 +215,11 @@ void GameMode::update(float timestep) {
 
 	// Jump Logic. Moved here for Later Win Screen Jump support (Demi's Request)
 	if (input->hasJumped() && !donutModel->isJumping()) {
+		soundEffects->startEvent(SoundEffectController::JUMP, playerID);
 		donutModel->startJump();
 		net->jump(playerID);
+	} else {
+		soundEffects->endEvent(SoundEffectController::JUMP, playerID);
 	}
 
 	// Check for Win
@@ -263,12 +270,14 @@ void GameMode::update(float timestep) {
 					 abs(abs(donutModel->getAngle() - breach->getAngle()) - ship->getSize() / 2);
 		if (!donutModel->isJumping() && playerID != breach->getPlayer() &&
 			diff < globals::BREACH_WIDTH && breach->getHealth() != 0) {
+			soundEffects->startEvent(SoundEffectController::SLOW, i);
 			// Slow player by drag factor
 			donutModel->setFriction(OTHER_BREACH_FRICTION);
 			donutModel->transitionFaceState(DonutModel::FaceState::Dizzy);
 		} else if (playerID == breach->getPlayer() && diff < EPSILON_ANGLE &&
 				   donutModel->getJumpOffset() == 0.0f && breach->getHealth() > 0) {
 			if (!breach->isPlayerOn()) {
+				soundEffects->startEvent(SoundEffectController::FIX, i);
 				// Decrement Health
 				breach->decHealth(1);
 				breach->setIsPlayerOn(true);
@@ -282,6 +291,12 @@ void GameMode::update(float timestep) {
 			donutModel->transitionFaceState(DonutModel::FaceState::Working);
 		} else if (diff > EPSILON_ANGLE && breach->isPlayerOn()) {
 			breach->setIsPlayerOn(false);
+		} else if (diff > EPSILON_ANGLE) {
+			if (playerID == breach->getPlayer()) {
+				soundEffects->endEvent(SoundEffectController::FIX, i);
+			} else {
+				soundEffects->endEvent(SoundEffectController::SLOW, i);
+			}
 		}
 	}
 
@@ -296,6 +311,7 @@ void GameMode::update(float timestep) {
 		diff = a - floor(a / ship->getSize()) * ship->getSize() - ship->getSize() / 2;
 
 		if (abs(diff) < globals::DOOR_WIDTH) {
+			soundEffects->startEvent(SoundEffectController::DOOR, i);
 			// Stop donut and push it out if inside
 			donutModel->setVelocity(0);
 			if (diff < 0) {
@@ -314,12 +330,13 @@ void GameMode::update(float timestep) {
 			donutModel->transitionFaceState(DonutModel::FaceState::Colliding);
 		} else {
 			if (ship->getDoors().at(i)->isPlayerOn(playerID)) {
+				soundEffects->endEvent(SoundEffectController::DOOR, i);
 				ship->getDoors().at(i)->removePlayer(playerID);
 				net->flagDualTask(i, playerID, 0);
 			}
 		}
 	}
-	// Door Checks
+	// unop Checks
 	for (int i = 0; i < ship->getUnopenable().size(); i++) {
 		if (ship->getUnopenable().at(i) == nullptr || !ship->getUnopenable().at(i)->getIsActive()) {
 			continue;
@@ -327,8 +344,8 @@ void GameMode::update(float timestep) {
 		float diff = donutModel->getAngle() - ship->getUnopenable().at(i)->getAngle();
 		float a = diff + ship->getSize() / 2;
 		diff = a - floor(a / ship->getSize()) * ship->getSize() - ship->getSize() / 2;
-
 		if (abs(diff) < globals::DOOR_WIDTH) {
+			soundEffects->startEvent(SoundEffectController::DOOR, i + globals::UNOP_MARKER);
 			// Stop donut and push it out if inside
 			donutModel->setVelocity(0);
 			if (diff < 0) {
@@ -340,6 +357,9 @@ void GameMode::update(float timestep) {
 										 ? 0.0f
 										 : donutModel->getAngle() + ANGLE_ADJUST);
 			}
+		}
+		if (abs(diff) > DOOR_ACTIVE_ANGLE) {
+			soundEffects->endEvent(SoundEffectController::DOOR, i + globals::UNOP_MARKER);
 		}
 	}
 	for (int i = 0; i < ship->getBreaches().size(); i++) {
@@ -384,10 +404,14 @@ void GameMode::update(float timestep) {
 			trunc(ship->timeCtr) == trunc(ship->getEndTime())) {
 			if (ship->getChallengeProg() < CHALLENGE_PROGRESS_LOW) {
 				gm.setChallengeFail(true);
-				ship->setStatus(ShipModel::FAILURE);
-				ship->failAllTask();
+				ship->setStabilizerStatus(ShipModel::FAILURE);
+
+				// This can't happen a second time in the duration of the sound effect, so we can
+				// just end it immediately
+				soundEffects->startEvent(SoundEffectController::TELEPORT, 0);
+				soundEffects->endEvent(SoundEffectController::TELEPORT, 0);
 			} else {
-				ship->setStatus(ShipModel::SUCCESS);
+				ship->setStabilizerStatus(ShipModel::SUCCESS);
 				net->succeedAllTask();
 			}
 			ship->setChallenge(false);

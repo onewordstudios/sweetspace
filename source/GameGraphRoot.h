@@ -80,10 +80,14 @@ class GameGraphRoot : public cugl::Scene {
 	std::vector<std::shared_ptr<cugl::PolygonNode>> challengePanelArrows;
 	/** Filmstrip representing the player's animated donut */
 	std::shared_ptr<cugl::PolygonNode> healthNode;
+	std::shared_ptr<cugl::PolygonNode> healthNodeOverlay;
 	/** Filmstrip representing the player's animated donut */
 	std::shared_ptr<cugl::PolygonNode> moveTutorial;
 	std::shared_ptr<cugl::PolygonNode> healthTutorial;
 	std::shared_ptr<cugl::PolygonNode> rollTutorial;
+	std::shared_ptr<cugl::PolygonNode> communicateTutorial;
+	std::shared_ptr<cugl::PolygonNode> timerTutorial;
+	std::shared_ptr<cugl::PolygonNode> buttLabelTutorial;
 	std::shared_ptr<cugl::Node> tutorialNode;
 	std::shared_ptr<cugl::PolygonNode> timerBorder;
 
@@ -160,6 +164,24 @@ class GameGraphRoot : public cugl::Scene {
 
 	/** Current animation frame for ship flashing red */
 	int currentHealthWarningFrame;
+
+	// TELEPORTATION ANIMATION
+	/** Reference to fail text */
+	std::shared_ptr<cugl::Label> stabilizerFailText;
+	/** Reference to fail text */
+	std::shared_ptr<cugl::PolygonNode> stabilizerFailPanel;
+	/** Reference to black image that covers all */
+	std::shared_ptr<cugl::PolygonNode> blackoutOverlay;
+	/** Current animation frame for stabilizer fail teleportation */
+	int currentTeleportationFrame;
+	/** Whether stabilizer is failed in last frame */
+	bool prevIsStabilizerFail;
+
+	/** Animation constants */
+	static constexpr int TELEPORT_FRAMECUTOFF_FIRST = 40;
+	static constexpr int TELEPORT_FRAMECUTOFF_SECOND = 120;
+	static constexpr int TELEPORT_FRAMECUTOFF_THIRD = 200;
+
 	/**
 	 * Returns an informative string for the position
 	 *
@@ -283,6 +305,10 @@ class GameGraphRoot : public cugl::Scene {
 	 */
 	void setSegHealthWarning(int alpha);
 
+	/**
+	 * Do teleportation animation
+	 */
+	void doTeleportAnimation();
 #pragma mark -
 #pragma mark Accessors
 	/**

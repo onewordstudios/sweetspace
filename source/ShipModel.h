@@ -44,10 +44,10 @@ class ShipModel {
 	static constexpr int MIN_DISTANCE = 15;
 
    public:
-	enum Status { INACTIVE, ACTIVE, FAILURE, SUCCESS };
-	/** Status of all player challenge. 0 = no challenge, 1 = challenge, 2 = challenge failed, 3 =
-	 * challenge success*/
-	Status status;
+	enum StabilizerStatus { INACTIVE, ACTIVE, FAILURE, SUCCESS, ANIMATING };
+	/** StabilizerStatus of all player challenge. 0 = no challenge, 1 = challenge, 2 = challenge
+	 * failed, 3 = challenge success*/
+	StabilizerStatus stabilizerStatus;
 	/** Game countdown timer*/
 	float timer;
 	/** Game timer*/
@@ -73,7 +73,7 @@ class ShipModel {
 		  endTime(0),
 		  totalTime(0),
 		  levelNum(0),
-		  status(INACTIVE),
+		  stabilizerStatus(INACTIVE),
 		  timer(0),
 		  timeCtr(0) {}
 
@@ -414,7 +414,7 @@ class ShipModel {
 	/**
 	 * Set challenge status
 	 */
-	void setStatus(Status s);
+	void setStabilizerStatus(StabilizerStatus s);
 
 	/**
 	 * Set end time for challenge
@@ -460,7 +460,7 @@ class ShipModel {
 	/**
 	 * Gets status of challenge
 	 */
-	Status getChallengeStatus() { return status; }
+	StabilizerStatus getStabilizerStatus() { return stabilizerStatus; }
 
 	/**
 	 * Sets if level is tutorial

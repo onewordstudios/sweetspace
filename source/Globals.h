@@ -13,6 +13,9 @@ namespace globals {
 /** Network tick frequency */
 constexpr unsigned int NETWORK_TICK = 12; // NOLINT
 
+/** ID marker for unops in sound effects*/
+constexpr int UNOP_MARKER = 12;
+
 /** Number of tutorial levels */
 constexpr unsigned int NUM_TUTORIAL_LEVELS = 8; // NOLINT
 
@@ -89,6 +92,8 @@ constexpr float MUSIC_FADE_IN = 0.2f; // NOLINT
 /** Music Fade-out time in seconds*/
 constexpr float MUSIC_FADE_OUT = 0.2f; // NOLINT
 
+/** Max color channel value */
+constexpr int MAX_BYTE = 255;
 #pragma endregion
 } // namespace globals
 #endif

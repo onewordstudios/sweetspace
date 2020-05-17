@@ -120,6 +120,9 @@
         "overlay_dim": {
             "file":   "textures/misc_use/overlay_dim.png"
         },
+        "overlay_black": {
+            "file":   "textures/misc_use/overlay_black.png"
+        },
         "reconnect_bg": {
             "file":   "textures/reconnect/bg.png"
         },
@@ -276,6 +279,15 @@
         "fix_breach_tutorial1" : {
           "file" : "textures/tutorial/fix_breach_1.png"
         },
+        "fix_count3" : {
+          "file" : "textures/tutorial/fix_count_3.png"
+        },
+        "fix_count2" : {
+          "file" : "textures/tutorial/fix_count_2.png"
+        },
+        "fix_count1" : {
+          "file" : "textures/tutorial/fix_count_1.png"
+        },
         "door_tutorial" : {
           "file" : "textures/tutorial/door_0.png"
         },
@@ -285,14 +297,26 @@
         "jump_tutorial1" : {
           "file" : "textures/tutorial/jump_breach_1.png"
         },
-        "engine_tutorial0" : {
-          "file" : "textures/tutorial/engine_0.png"
+        "engine_tutorial" : {
+          "file" : "textures/tutorial/engine_2.png"
         },
-        "engine_tutorial1" : {
-          "file" : "textures/tutorial/engine_1.png"
+        "stabilizer_tutorial0" : {
+          "file" : "textures/tutorial/stabilizer_1.png"
         },
-        "stabilizer_tutorial" : {
-          "file" : "textures/tutorial/stabilizer_0.png"
+        "stabilizer_tutorial1" : {
+          "file" : "textures/tutorial/stabilizer_2.png"
+        },
+        "communicate_tutorial0" : {
+          "file" : "textures/tutorial/communicate_0.png"
+        },
+        "communicate_tutorial1" : {
+          "file" : "textures/tutorial/communicate_1.png"
+        },
+        "timer_tutorial0" : {
+          "file" : "textures/tutorial/timer_0.png"
+        },
+        "timer_tutorial1" : {
+          "file" : "textures/tutorial/timer_1.png"
         },
         "level_select_0" : {
           "file" : "textures/main_menu/lvl_select/lvl0.png"
@@ -322,6 +346,36 @@
         "menu": {
             "type":     "sample",
             "file":     "sounds/menu.wav",
+            "volume":   0.5
+        },
+        "click": {
+            "type":     "sample",
+            "file":     "sounds/click.wav",
+            "volume":   0.5
+        },
+        "doorCollide": {
+            "type":     "sample",
+            "file":     "sounds/door-collide.wav",
+            "volume":   0.5
+        },
+        "fixBreach": {
+            "type":     "sample",
+            "file":     "sounds/breach-fix.wav",
+            "volume":   0.8
+        },
+        "slowBreach": {
+            "type":     "sample",
+            "file":     "sounds/breach-collide.wav",
+            "volume":   0.5
+        },
+        "jump": {
+            "type":     "sample",
+            "file":     "sounds/jump.wav",
+            "volume":   0.5
+        },
+        "teleport": {
+            "type":     "sample",
+            "file":     "sounds/teleport.wav",
             "volume":   0.5
         }
     },
@@ -447,6 +501,24 @@
                                 "visible": false
                             }
                         },
+                        "healthBase": {
+                          "type": "Image",
+                          "data": {
+                            "texture": "health_empty",
+                            "anchor":   [0.5,0.5],
+                            "position": [0, 0],
+                            "scale": 0.3
+                          }
+                        },
+                        "health": {
+                          "type": "Image",
+                          "data": {
+                            "texture": "health_green",
+                            "anchor":   [0.5,0.5],
+                            "position": [0, 0],
+                            "scale": 0.3
+                          }
+                        },
                         "challengePanelParent": {
                             "type": "Node",
                             "data": {
@@ -479,6 +551,28 @@
                                     "position": [0, 175],
                                     "anchor":   [0.5,0.5],
                                     "scale": 0.7
+                                  }
+                                },
+                                "challengePanelFailPanel": {
+                                  "type": "Image",
+                                  "data": {
+                                    "texture": "challenge_panel",
+                                    "position": [0, 150],
+                                    "anchor":   [0.5,0.5],
+                                    "scale": [0.8, 0.3]
+                                  }
+                                },
+                                "challengePanelFailLabel": {
+                                  "type": "Label",
+                                  "data": {
+                                    "font"       : "mont_black_italic_big",
+                                    "text"       : "Stablizer Failed!",
+                                    "foreground" : [255,248,161,255],
+                                    "anchor"     : [0.5,0.5],
+                                    "valign"     : "middle",
+                                    "halign"     : "center",
+                                    "position"   : [0, 155],
+                                    "scale"      : 0.4
                                   }
                                 },
                                 "challengePanelArrow1": {
@@ -583,37 +677,49 @@
                                 }
                             }
                         },
-						"health": {
-							"type": "Image",
-							"data": {
-								"texture": "health_green",
-								"anchor":   [0.5,0.5],
-								"position": [0, 0],
-								"scale": 0.3
-							}
-						},
                         "moveTutorial" : {
                           "type": "Image",
                           "data": {
                             "texture": "move_tutorial0",
                             "position": [0,-250],
-                            "anchor":   [0.5,0.5]
+                            "anchor":   [0.5,0.5],
+                            "scale":  0.4
                           }
                         },
                         "healthTutorial" : {
                           "type": "Image",
                           "data": {
                             "texture": "health_tutorial",
-                            "position": [-100,-125],
-                            "anchor":   [0.5,0.5]
+                            "position": [-225,-100],
+                            "anchor":   [0.5,0.5],
+                            "scale":  0.4
                           }
                         },
                         "rollTutorial" : {
                           "type": "Image",
                           "data": {
-                            "texture": "stabilizer_tutorial",
+                            "texture": "stabilizer_tutorial1",
                             "position": [-200,-200],
-                            "anchor":   [0.5,0.5]
+                            "anchor":   [0.5,0.5],
+                            "scale":  0.4
+                          }
+                        },
+                        "communicateTutorial" : {
+                          "type": "Image",
+                          "data": {
+                            "texture": "communicate_tutorial0",
+                            "position": [0,-250],
+                            "anchor":   [0.5,0.5],
+                            "scale":  0.4
+                          }
+                        },
+                        "timerTutorial" : {
+                          "type": "Image",
+                          "data": {
+                            "texture": "timer_tutorial0",
+                            "position": [-75,-60],
+                            "anchor":   [0.5,0.5],
+                            "scale":  0.4
                           }
                         }
 
@@ -1330,20 +1436,40 @@
                     "layout" : {
                         "x_anchor" : "center",
                         "y_anchor" : "top",
-                        "x_offset" : -40,
+                        "x_offset" : -42,
                         "y_offset" : -40,
                         "absolute" : true
                     }
                 },
-              "timerBorder" : {
+                "timerBorder" : {
                   "type": "Image",
                   "data": {
                     "texture": "timer_border",
-                    "position": [455,525],
-                    "anchor":   [0,0],
                     "scale": 0.2
+                  },
+                  "layout" : {
+                    "x_anchor" : "center",
+                    "y_anchor" : "top",
+                    "x_offset" : -57,
+                    "y_offset" : -40,
+                    "absolute" : true
                   }
-              }
+                },
+                "blackoutOverlay" : {
+                    "type": "Image",
+                    "format"    : {
+                        "type" : "Anchored"
+                    },
+                    "data": {
+                        "texture":  "overlay_black",
+                        "anchor":   [0.5,0.5]
+                    },
+                    "layout" : {
+                        "x_anchor" : "center",
+                        "y_anchor" : "middle",
+                        "absolute" : true
+                    }
+                }
             }
         },
         "matchmaking": {
