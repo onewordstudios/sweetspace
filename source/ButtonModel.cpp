@@ -57,8 +57,8 @@ bool ButtonModel::trigger() {
 	if (jumped && frame < I_FRAMES) {
 		return false;
 	}
+	frame = jumped ? DOWN_ANIMATION_DURATION : 0;
 	jumped = true;
-	frame = 0;
 	return true;
 }
 
