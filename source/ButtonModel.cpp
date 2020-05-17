@@ -53,12 +53,13 @@ void ButtonModel::update() {
 	}
 }
 
-void ButtonModel::trigger() {
+bool ButtonModel::trigger() {
 	if (jumped && frame < I_FRAMES) {
-		return;
+		return false;
 	}
 	jumped = true;
 	frame = 0;
+	return true;
 }
 
 void ButtonModel::clear() {

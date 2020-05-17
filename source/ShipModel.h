@@ -438,11 +438,13 @@ class ShipModel {
 	/**
 	 * Flag button with given id.
 	 *
-	 * @param id   the id of door to be opened.
-	 * @param player   the player id flagging the door.
-	 * @param flag   the flag to set (on or off, 1 or 0)
+	 * @param id   the id of button to press.
+	 *
+	 * @return true iff the button was successfully
+	 * triggered (ie was not called during the
+	 * i-frames after the last call to trigger)
 	 */
-	bool flagButton(int id, int player, int flag);
+	bool flagButton(int id);
 
 	/**
 	 * Resolve a button pair

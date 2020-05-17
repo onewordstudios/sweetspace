@@ -560,7 +560,7 @@ void MagicInternetBox::update(std::shared_ptr<ShipModel> state) {
 				break;
 			}
 			case ButtonFlag: {
-				state->flagButton(id, data1, data2);
+				state->flagButton(id);
 				break;
 			}
 			case ButtonResolve: {

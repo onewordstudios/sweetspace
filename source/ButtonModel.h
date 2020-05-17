@@ -97,8 +97,11 @@ class ButtonModel {
 
 	/**
 	 * Trigger this button due to a jump.
+	 *
+	 * @return true iff the trigger was successfully registered (ie was not called during the
+	 * i-frames after the last call to trigger)
 	 */
-	void trigger();
+	bool trigger();
 
 	/**
 	 * Resolve this button
