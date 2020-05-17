@@ -28,10 +28,12 @@ constexpr int PATTERN_OFFSET = -60;
 
 bool BreachNode::init(std::shared_ptr<BreachModel> breach, std::shared_ptr<DonutModel> player,
 					  float shipSize, std::shared_ptr<cugl::Texture> filmstrip,
-					  std::shared_ptr<cugl::Texture> pattern, cugl::Color4 color) {
+					  std::shared_ptr<cugl::Texture> pattern, cugl::Color4 color,
+					  std::shared_ptr<SparkleNode> sparkle) {
 	CustomNode::init(player, shipSize, breach->getAngle(), globals::RADIUS);
 
 	breachModel = breach;
+	sparkleNode = sparkle;
 	setScale(BREACH_SCALE);
 	prevHealth = breach->getHealth();
 	setPosition(Vec2::ZERO);
