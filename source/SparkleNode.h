@@ -20,8 +20,9 @@ class SparkleNode : public CustomNode {
 	void postPosition() override;
 #pragma endregion
 
-   public:
 #pragma mark -
+	static constexpr int COLOR_OFFSET = 30;
+public:
 	static constexpr int FILMSTRIP_H = 3;
 	static constexpr int FILMSTRIP_W = 5;
 	static constexpr int FILMSTRIP_SIZE = 13;
@@ -104,7 +105,10 @@ class SparkleNode : public CustomNode {
 	 * Tint the filmstrip
 	 * @param color
 	 */
-	void setFilmstripColor(cugl::Color4 color) { filmstrip->setColor(color); }
+	void setFilmstripColor(cugl::Color4 color) {
+		color += cugl::Color4(COLOR_OFFSET, COLOR_OFFSET, COLOR_OFFSET);
+		filmstrip->setColor(color);
+	}
 
 	/**
 	 * Sets the radius of this node. Should only be called by owner game object
