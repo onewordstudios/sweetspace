@@ -182,6 +182,7 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 		dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_player1"));
 	donutPos = tempDonutNode->getPosition();
 	breachesNode = assets->get<Node>("game_field_near_breaches");
+	breachSparklesNode = assets->get<Node>("game_field_near_breachsparkles");
 	shipSegsNode = assets->get<Node>("game_field_near_shipsegments");
 	doorsNode = assets->get<Node>("game_field_near_doors");
 	unopsNode = assets->get<Node>("game_field_near_unops");
