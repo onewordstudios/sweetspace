@@ -25,6 +25,9 @@ class SparkleNode : public CustomNode {
 	static constexpr int FILMSTRIP_H = 3;
 	static constexpr int FILMSTRIP_W = 5;
 	static constexpr int FILMSTRIP_SIZE = 13;
+
+	/** Vertical offset from the breach */
+	static constexpr int POS_Y_OFFSET = -20;
 #pragma mark Constructor
 	/**
 	 * Creates an empty Sparkle with the degenerate texture.
@@ -54,7 +57,7 @@ class SparkleNode : public CustomNode {
 	 * @param filmstrip	The texture image to use
 	 */
 	virtual bool init(std::shared_ptr<DonutModel> player, float shipSize,
-					  std::shared_ptr<cugl::Texture> filmstrip);
+					  std::shared_ptr<cugl::Texture> filmstrip, cugl::Color4 color);
 
 	/**
 	 * Returns a newly allocated BreachNode at the world origin.
@@ -69,9 +72,10 @@ class SparkleNode : public CustomNode {
 	 * @return a newly allocated node at the world origin.
 	 */
 	static std::shared_ptr<SparkleNode> alloc(std::shared_ptr<DonutModel> player, float shipSize,
-											  std::shared_ptr<cugl::Texture> filmstrip) {
+											  std::shared_ptr<cugl::Texture> filmstrip,
+											  cugl::Color4 color) {
 		std::shared_ptr<SparkleNode> result = std::make_shared<SparkleNode>();
-		return (result->init(player, shipSize, filmstrip) ? result : nullptr);
+		return (result->init(player, shipSize, filmstrip, color) ? result : nullptr);
 	}
 
 #pragma mark -
@@ -82,7 +86,6 @@ class SparkleNode : public CustomNode {
 	void resetAnimation() {
 		isAnimating = false;
 		animationCounter = 0;
-		filmstrip->setFrame(0);
 	}
 
 	/**
@@ -94,6 +97,17 @@ class SparkleNode : public CustomNode {
 		filmstrip->setFrame(0);
 	}
 
+	/**
+	 * Set the in-ship angle of this sparkle. Should only be called by owner game object
+	 * @param a
+	 */
+	void setOnShipAngle(float a) { angle = a; }
+
+	/**
+	 * Tint the filmstrip
+	 * @param color
+	 */
+	void setFilmstripColor(cugl::Color4 color) { filmstrip->setColor(color); }
 #pragma mark Drawing
 
 	void draw(const shared_ptr<cugl::SpriteBatch> &batch, const cugl::Mat4 &transform,

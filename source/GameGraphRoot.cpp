@@ -323,11 +323,12 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 												 ->getColorId());
 		// Initialize sparkle node
 		std::shared_ptr<SparkleNode> sparkleNode =
-			SparkleNode::alloc(playerModel, ship->getSize(), breachSparkle);
+			SparkleNode::alloc(playerModel, ship->getSize(), breachSparkle, color);
 		breachSparklesNode->addChildWithTag(sparkleNode, (unsigned int)(i + 1));
 
-		std::shared_ptr<BreachNode> breachNode = BreachNode::alloc(
-			breachModel, playerModel, ship->getSize(), breachSparkle, pattern, color, sparkleNode);
+		std::shared_ptr<BreachNode> breachNode =
+			BreachNode::alloc(breachModel, playerModel, ship->getSize(), breachFilmstrip, pattern,
+							  color, sparkleNode);
 		breachNode->setTag((unsigned int)(i + 1));
 
 		// Add the breach node
@@ -812,14 +813,11 @@ void GameGraphRoot::update(float timestep) {
 			cugl::Color4 color = BREACH_COLOR.at((unsigned long)ship->getDonuts()
 													 .at((unsigned long)breachModel->getPlayer())
 													 ->getColorId());
-			breachNode->getShapeNode()->setColor(color);
-			breachNode->resetAnimation();
 			string breachColor = PLAYER_COLOR.at((unsigned long)ship->getDonuts()
 													 .at((unsigned long)breachModel->getPlayer())
 													 ->getColorId());
 			std::shared_ptr<Texture> image = assets->get<Texture>("breach_" + breachColor);
-			breachNode->getPatternNode()->setTexture(image);
-			breachNode->getPatternNode()->setColor(color);
+			breachNode->resetAppearance(image, color);
 			breachModel->setNeedSpriteUpdate(false);
 		}
 	}

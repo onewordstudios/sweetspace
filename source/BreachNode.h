@@ -129,6 +129,19 @@ class BreachNode : public CustomNode {
 		patternNode->setFrame(0);
 		currentFrameIdle = 0;
 	}
+
+	/**
+	 * Update appearance when breach is reused.
+	 * @param pattern
+	 * @param color
+	 */
+	void resetAppearance(std::shared_ptr<cugl::Texture> pattern, cugl::Color4 color) {
+		shapeNode->setColor(color);
+		patternNode->setTexture(pattern);
+		patternNode->setColor(color);
+		sparkleNode->setFilmstripColor(color);
+		resetAnimation();
+	}
 #pragma mark Drawing
 
 	void draw(const shared_ptr<cugl::SpriteBatch> &batch, const cugl::Mat4 &transform,

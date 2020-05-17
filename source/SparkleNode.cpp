@@ -14,7 +14,7 @@ static constexpr float SPARKLE_SCALE = 0.5f;
 static constexpr int ANIMATION_SPEED = 5;
 
 bool SparkleNode::init(std::shared_ptr<DonutModel> player, float shipSize,
-					   std::shared_ptr<cugl::Texture> texture) {
+					   std::shared_ptr<cugl::Texture> texture, cugl::Color4 color) {
 	CustomNode::init(player, shipSize, 0, globals::RADIUS);
 
 	setScale(SPARKLE_SCALE);
@@ -22,7 +22,7 @@ bool SparkleNode::init(std::shared_ptr<DonutModel> player, float shipSize,
 
 	// Add filstrip node
 	filmstrip = AnimationNode::alloc(texture, FILMSTRIP_H, FILMSTRIP_W, FILMSTRIP_SIZE);
-	filmstrip->setColor(Color4::PAPYRUS);
+	filmstrip->setColor(Color4::BLUE);
 	filmstrip->setAnchor(Vec2::ANCHOR_CENTER);
 	filmstrip->setPosition(0, 0);
 	addChildWithName(filmstrip, "filmstrip");

@@ -56,7 +56,9 @@ bool BreachNode::init(std::shared_ptr<BreachModel> breach, std::shared_ptr<Donut
 	return true;
 }
 
-bool BreachNode::isActive() { return breachModel->getHealth() > 0 || isAnimatingShrink; }
+bool BreachNode::isActive() {
+	return breachModel->getHealth() > 0 || (prevHealth == 1 && breachModel->getHealth() == 0);
+}
 
 void BreachNode::prePosition() { angle = breachModel->getAngle(); }
 
@@ -65,6 +67,12 @@ void BreachNode::postPosition() {
 		// Start breach shrinking animation
 		isAnimatingShrink = true;
 		currentFrameIdle = 0;
+		if (breachModel->getHealth() != 0) {
+			sparkleNode->setPosition(getPositionX(), getPositionY() + SparkleNode::POS_Y_OFFSET);
+			sparkleNode->setAngle(getAngle());
+			sparkleNode->setOnShipAngle(angle);
+		}
+		sparkleNode->beginAnimation();
 	}
 	if (isAnimatingShrink) {
 		// Update animation frame to shrink
