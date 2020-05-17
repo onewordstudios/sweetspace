@@ -22,7 +22,8 @@ class SparkleNode : public CustomNode {
 
 #pragma mark -
 	static constexpr int COLOR_OFFSET = 30;
-public:
+
+   public:
 	static constexpr int FILMSTRIP_H = 3;
 	static constexpr int FILMSTRIP_W = 5;
 	static constexpr int FILMSTRIP_SIZE = 13;
