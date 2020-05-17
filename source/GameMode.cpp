@@ -437,26 +437,25 @@ void GameMode::update(float timestep) {
 		}
 
 		button->update();
+		CULog("Button %d is jumped %d", i, button->isJumpedOn());
+		CULog("Button pair is jumped %d", button->getPair()->isJumpedOn());
 
 		float diff = donutModel->getAngle() - button->getAngle();
 		float shipSize = ship->getSize();
 		float a = diff + shipSize / 2;
 		diff = a - floor(a / shipSize) * shipSize - shipSize / 2;
-
-		// int flag = (abs(diff) < globals::BUTTON_ACTIVE_ANGLE && donutModel->isJumping()) ? 1 : 0;
-		// ship->flagButton(i, playerID, flag);
-		// net->flagButton(i, playerID, flag);
+		CULog("Button pair 2 is jumped %d", button->getPair()->isJumpedOn());
 
 		if (abs(diff) < globals::BUTTON_ACTIVE_ANGLE) {
 			if (donutModel->isDescending() && donutModel->getJumpOffset() < BUTTON_JUMP_HEIGHT) {
 				ship->flagButton(i, playerID, 0);
 				net->flagButton(i, playerID, 0);
-			}
-
-			if (button->getPair()->isJumpedOn()) {
-				CULog("Resolving button");
-				ship->resolveButton(i);
-				net->resolveButton(i);
+				CULog("Button pair 3 is jumped %d", button->getPair()->isJumpedOn());
+				if (button->getPair()->isJumpedOn()) {
+					CULog("Resolving button");
+					ship->resolveButton(i);
+					net->resolveButton(i);
+				}
 			}
 		}
 	}

@@ -7,10 +7,10 @@
 constexpr int DOWN_ANIMATION_DURATION = 5;
 
 /** Number of frames to animate up */
-constexpr int UP_ANIMATION_DURATION = 30;
+constexpr int UP_ANIMATION_DURATION = 10;
 
 /** Number of frames for button to stay depressed */
-constexpr int DOWN_DURATION = 120;
+constexpr int DOWN_DURATION = 45;
 
 /** Number of frames to ignore repeat jump commands */
 constexpr int I_FRAMES = 10;
@@ -36,6 +36,7 @@ void ButtonModel::update() {
 	if (!jumped) {
 		return;
 	}
+
 	frame++;
 
 	if (frame < DOWN_ANIMATION_DURATION) {
