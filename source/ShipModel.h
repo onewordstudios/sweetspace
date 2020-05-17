@@ -476,5 +476,11 @@ class ShipModel {
 			getDonuts().at(i)->setAngle(angle);
 		}
 	}
+
+#pragma mark -
+#pragma mark Helpers
+	float getAngleDifference(float angle1, float angle2) {
+		return shipSize / 2 - abs(abs(angle1 - angle2) - shipSize / 2);
+	}
 };
 #endif /* __SHIP_MODEL_H__ */

@@ -88,31 +88,34 @@ bool ShipModel::createAllTask(int data) {
 
 bool ShipModel::failAllTask() {
 	for (int i = 0; i < donuts.size(); i++) {
-		float angle = 0;
+		float newAngle = 0;
 		bool goodAngle = false;
 		while (!goodAngle) {
-			angle = (float)(rand() % (int)(getSize()));
+			// Generate random angle
+			newAngle = (float)(rand() % (int)(getSize()));
+			// Check against breaches
+			bool goodBreachAngle = true;
 			for (unsigned int k = 0; k < breaches.size(); k++) {
 				float breachAngle = breaches[k]->getAngle();
-				float diff = shipSize / 2 - abs(abs(breachAngle - angle) - shipSize / 2);
-				if (breachAngle == -1 || diff > MIN_DISTANCE) {
-					for (unsigned int k = 0; k < doors.size(); k++) {
-						float doorAngle = doors[k]->getAngle();
-						float diff = shipSize / 2 - abs(abs(doorAngle - angle) - shipSize / 2);
-						if (doorAngle == -1 || diff > MIN_DISTANCE) {
-							goodAngle = true;
-						} else {
-							goodAngle = false;
-							break;
-						}
-					}
-				} else {
-					goodAngle = false;
+				float diff = getAngleDifference(breachAngle, newAngle);
+				if (diff <= MIN_DISTANCE && breachAngle != -1) {
+					goodBreachAngle = false;
 					break;
 				}
 			}
+			// Check against doors
+			bool goodDoorAngle = true;
+			for (unsigned int k = 0; k < doors.size(); k++) {
+				float doorAngle = doors[k]->getAngle();
+				float diff = getAngleDifference(doorAngle, newAngle);
+				if (diff <= MIN_DISTANCE && doorAngle != -1) {
+					goodDoorAngle = false;
+					break;
+				}
+			}
+			goodAngle = goodBreachAngle && goodDoorAngle;
 		}
-		donuts.at(i)->setTeleportAngle(angle);
+		donuts.at(i)->setTeleportAngle(newAngle);
 	}
 	return true;
 }
