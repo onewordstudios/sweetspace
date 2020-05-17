@@ -442,6 +442,8 @@ void GameMode::update(float timestep) {
 		ship->flagButton(i, playerID, flag);
 		net->flagButton(i, playerID, flag);
 
+		button->setPlayerHeight(donutModel->getJumpOffset());
+
 		if (flag == 1) {
 			if (button->getPair()->isJumpedOn()) {
 				CULog("Resolving button");

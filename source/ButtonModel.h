@@ -8,8 +8,8 @@
 
 class ButtonModel {
    private:
-	/** The height of the button */
-	int height = 0;
+	/** The height of the button, as percentage down (0 = fully up) */
+	float height = 0;
 	/** The angle at which the button exists */
 	float angle;
 	/** Bitset of players on this button */
@@ -24,7 +24,7 @@ class ButtonModel {
 	bool isActive;
 
    public:
-#pragma mark Constructors
+#pragma region Constructors
 	/*
 	 * Creates a new, uninitialized, and unused button.
 	 *
@@ -44,8 +44,8 @@ class ButtonModel {
 	 */
 	bool init(const float a, std::shared_ptr<ButtonModel> pair, int pairID);
 
-#pragma mark -
-#pragma mark Accessors
+#pragma endregion
+#pragma region Accessors
 	/** Returns whether this model is active */
 	bool getIsActive() { return isActive; }
 
@@ -60,29 +60,15 @@ class ButtonModel {
 	int getSection();
 
 	/**
-	 * Returns the current height of the button.
+	 * Returns the current height of the button, as percentage down, where 0 = fully up and 1 =
+	 * fully down
 	 */
-	int getHeight() { return height; }
-
-	/**
-	 * Adds the given player's flag to the button.
-	 */
-	void addPlayer(int id) { playersOn.set(id); }
-
-	/**
-	 * Removes the given player's flag from the button if present. Has no effect otherwise.
-	 */
-	void removePlayer(int id) { playersOn.reset(id); }
+	float getHeight() { return height; }
 
 	/**
 	 * Returns whether this button is resolved.
 	 */
 	bool isResolved() { return resolved; }
-
-	/**
-	 * Resolve this button
-	 */
-	void resolve() { resolved = true; }
 
 	/**
 	 * Returns whether any players are jumping on this button.
@@ -99,9 +85,31 @@ class ButtonModel {
 	 */
 	int getPairID() { return pairID; }
 
+#pragma endregion
+#pragma region Mutators
+
+	/** Signals the current jump height of the player currently on the button. */
+	void setPlayerHeight(float h);
+
+	/**
+	 * Adds the given player's flag to the button.
+	 */
+	void addPlayer(int id) { playersOn.set(id); }
+
+	/**
+	 * Removes the given player's flag from the button if present. Has no effect otherwise.
+	 */
+	void removePlayer(int id) { playersOn.reset(id); }
+
+	/**
+	 * Resolve this button
+	 */
+	void resolve() { resolved = true; }
+
 	/**
 	 * Resets this button.
 	 */
 	void clear();
+#pragma endregion
 };
 #endif /* __BUTTON_MODEL_H__ */
