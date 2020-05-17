@@ -1446,7 +1446,7 @@
                     "layout" : {
                         "x_anchor" : "center",
                         "y_anchor" : "top",
-                        "x_offset" : -40,
+                        "x_offset" : -42,
                         "y_offset" : -40,
                         "absolute" : true
                     }
@@ -1455,9 +1455,14 @@
                   "type": "Image",
                   "data": {
                     "texture": "timer_border",
-                    "position": [455,525],
-                    "anchor":   [0,0],
                     "scale": 0.2
+                  },
+                  "layout" : {
+                    "x_anchor" : "center",
+                    "y_anchor" : "top",
+                    "x_offset" : -57,
+                    "y_offset" : -40,
+                    "absolute" : true
                   }
                 },
                 "blackoutOverlay" : {
