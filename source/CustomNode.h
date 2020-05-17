@@ -75,6 +75,7 @@ class CustomNode : public cugl::Node {
 						   onScreenAngle <= -globals::SEG_CUTOFF_ANGLE);
 	}
 
+   protected:
 	/**
 	 * Returns relative position to nearSpace after polar coord calculation
 	 *
@@ -87,7 +88,6 @@ class CustomNode : public cugl::Node {
 	}
 #pragma mark -
 #pragma endregion
-   protected:
 #pragma region Fields
 #pragma mark Fields
 	/** Reference to the player donut model */

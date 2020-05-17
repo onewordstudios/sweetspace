@@ -139,7 +139,6 @@ class BreachNode : public CustomNode {
 		shapeNode->setColor(color);
 		patternNode->setTexture(pattern);
 		patternNode->setColor(color);
-		sparkleNode->setFilmstripColor(color);
 		resetAnimation();
 	}
 #pragma mark Drawing

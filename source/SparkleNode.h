@@ -25,9 +25,6 @@ class SparkleNode : public CustomNode {
 	static constexpr int FILMSTRIP_H = 3;
 	static constexpr int FILMSTRIP_W = 5;
 	static constexpr int FILMSTRIP_SIZE = 13;
-
-	/** Vertical offset from the breach */
-	static constexpr int POS_Y_OFFSET = -20;
 #pragma mark Constructor
 	/**
 	 * Creates an empty Sparkle with the degenerate texture.
@@ -108,6 +105,12 @@ class SparkleNode : public CustomNode {
 	 * @param color
 	 */
 	void setFilmstripColor(cugl::Color4 color) { filmstrip->setColor(color); }
+
+	/**
+	 * Sets the radius of this node. Should only be called by owner game object
+	 * @param r
+	 */
+	void setRadius(float r) { radius = r; }
 #pragma mark Drawing
 
 	void draw(const shared_ptr<cugl::SpriteBatch> &batch, const cugl::Mat4 &transform,

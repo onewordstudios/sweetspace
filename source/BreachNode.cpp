@@ -23,8 +23,14 @@ constexpr int NUM_SKIP_FRAMES = 3;
 /** Minimum scale of pattern node */
 constexpr float PATTERN_SCALE = 0.1f;
 
-/** Horizontal position offset for pattern animation */
+/** Vertical position offset for pattern animation */
 constexpr int PATTERN_OFFSET = -60;
+
+/** Vertical position offset for pattern animation */
+constexpr int SPARKLE_OFFSET_BEGIN = 20;
+
+/** Vertical position offset for pattern animation */
+constexpr int SPARKLE_OFFSET_END = 60;
 
 bool BreachNode::init(std::shared_ptr<BreachModel> breach, std::shared_ptr<DonutModel> player,
 					  float shipSize, std::shared_ptr<cugl::Texture> filmstrip,
@@ -68,9 +74,12 @@ void BreachNode::postPosition() {
 		isAnimatingShrink = true;
 		currentFrameIdle = 0;
 		if (breachModel->getHealth() != 0) {
-			sparkleNode->setPosition(getPositionX(), getPositionY() + SparkleNode::POS_Y_OFFSET);
+			float yOffset = Tween::linear(SPARKLE_OFFSET_BEGIN, SPARKLE_OFFSET_END,
+										  (int)shapeNode->getFrame(), shapeNode->getSize());
+			sparkleNode->setRadius(radius + yOffset);
 			sparkleNode->setAngle(getAngle());
 			sparkleNode->setOnShipAngle(angle);
+			sparkleNode->setFilmstripColor(shapeNode->getColor());
 		}
 		sparkleNode->beginAnimation();
 	}
