@@ -21,6 +21,9 @@ constexpr float DOOR_ACTIVE_ANGLE = 15.0f;
 /** Angles to adjust per frame to prevent door tunneling */
 constexpr float ANGLE_ADJUST = 0.5f;
 
+/** Jump height to trigger button press */
+constexpr float BUTTON_JUMP_HEIGHT = 0.1f;
+
 // Friction
 /** The friction factor while fixing a breach */
 constexpr float FIX_BREACH_FRICTION = 0.65f;
@@ -433,18 +436,23 @@ void GameMode::update(float timestep) {
 			continue;
 		}
 
+		button->update();
+
 		float diff = donutModel->getAngle() - button->getAngle();
 		float shipSize = ship->getSize();
 		float a = diff + shipSize / 2;
 		diff = a - floor(a / shipSize) * shipSize - shipSize / 2;
 
-		int flag = (abs(diff) < globals::BUTTON_ACTIVE_ANGLE && donutModel->isJumping()) ? 1 : 0;
-		ship->flagButton(i, playerID, flag);
-		net->flagButton(i, playerID, flag);
+		// int flag = (abs(diff) < globals::BUTTON_ACTIVE_ANGLE && donutModel->isJumping()) ? 1 : 0;
+		// ship->flagButton(i, playerID, flag);
+		// net->flagButton(i, playerID, flag);
 
-		button->setPlayerHeight(donutModel->getJumpOffset());
+		if (abs(diff) < globals::BUTTON_ACTIVE_ANGLE) {
+			if (donutModel->isDescending() && donutModel->getJumpOffset() < BUTTON_JUMP_HEIGHT) {
+				ship->flagButton(i, playerID, 0);
+				net->flagButton(i, playerID, 0);
+			}
 
-		if (flag == 1) {
 			if (button->getPair()->isJumpedOn()) {
 				CULog("Resolving button");
 				ship->resolveButton(i);

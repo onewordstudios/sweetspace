@@ -9,10 +9,6 @@ class ButtonNode : public CustomNode {
 #pragma mark Values
    protected:
 	shared_ptr<ButtonModel> buttonModel;
-	/** Current animation frame of button */
-	int currentFrame;
-	/** Value of jumped on from previous frame */
-	bool prevJumpedOn;
 
 	/** Texture for activated button base */
 	std::shared_ptr<cugl::Texture> btnBaseDown;
@@ -46,7 +42,7 @@ class ButtonNode : public CustomNode {
 	 * NEVER USE A CONSTRUCTOR WITH NEW. If you want to allocate an object on
 	 * the heap, use one of the static constructors instead.
 	 */
-	ButtonNode() : CustomNode(), currentFrame(0), prevJumpedOn(false) {}
+	ButtonNode() : CustomNode() {}
 
 	/**
 	 * Releases all resources allocated with this node.
@@ -109,7 +105,6 @@ class ButtonNode : public CustomNode {
 		baseNode->setTexture(btnBaseUp);
 		bodyNode->setTexture(btnUp);
 		bodyNode->setPositionY(0);
-		currentFrame = 0;
 	}
 
 #pragma mark -

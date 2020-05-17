@@ -68,10 +68,7 @@ bool ButtonNode::init(std::shared_ptr<ButtonModel> btn, std::shared_ptr<DonutMod
 	return true;
 }
 
-bool ButtonNode::isActive() {
-	bool justJumpedOn = buttonModel->isJumpedOn() && !prevJumpedOn;
-	return buttonModel->getIsActive() || currentFrame != 0 || justJumpedOn;
-}
+bool ButtonNode::isActive() { return buttonModel->getIsActive(); }
 
 void ButtonNode::prePosition() {
 	label->setText(std::to_string(buttonModel->getPair()->getSection()));
@@ -79,39 +76,14 @@ void ButtonNode::prePosition() {
 }
 
 void ButtonNode::postPosition() {
-	bool justJumpedOn = buttonModel->isJumpedOn() && !prevJumpedOn;
-	if (justJumpedOn) {
-		// Begin depression animation
-		currentFrame = 1;
+	bodyNode->setPositionY(DEPRESSION_AMOUNT * buttonModel->getHeight());
+	if (buttonModel->isJumpedOn()) {
 		baseNode->setTexture(btnBaseDown);
 		bodyNode->setTexture(btnDown);
-	} else if (!buttonModel->isJumpedOn()) {
+	} else {
 		baseNode->setTexture(btnBaseUp);
 		bodyNode->setTexture(btnUp);
-		if (bodyNode->getPositionY() != 0 && currentFrame == 0) {
-			// No player on button, reverse depression
-			currentFrame = MAX_FRAMES - 1;
-		}
 	}
-	if (currentFrame != 0) {
-		// In the middle of animating
-		if (currentFrame >= BEGIN_FRAME) {
-			bodyNode->setPositionY(Tween::linear(0, DEPRESSION_AMOUNT, currentFrame - BEGIN_FRAME,
-												 MAX_FRAMES - BEGIN_FRAME));
-		}
-		if (!buttonModel->isJumpedOn()) {
-			// No player on button, reverse depression
-			currentFrame -= 1;
-		} else {
-			// Player is still on button, continue
-			currentFrame += 1;
-			if (currentFrame == MAX_FRAMES) {
-				// End of animation
-				currentFrame = 0;
-			}
-		}
-	}
-	prevJumpedOn = buttonModel->isJumpedOn();
 }
 
 void ButtonNode::draw(const shared_ptr<cugl::SpriteBatch>& batch, const cugl::Mat4& transform,
