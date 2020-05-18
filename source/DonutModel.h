@@ -13,11 +13,11 @@ class DonutModel {
 #pragma region Animation Constants and Functions
 
 	/** The max angular velocity (in degrees) per frame */
-	static constexpr float DONUT_MAX_TURN = 2.0f;
+	static constexpr float DONUT_MAX_TURN = 1.7f;
 	/** The max force to apply to the donut */
 	static constexpr float DONUT_MAX_FORCE = 0.5f;
 	/** The default amount the angular velocity decays by each frame */
-	static constexpr float DEFAULT_DONUT_FRICTION_FACTOR = 0.9f;
+	static constexpr float DEFAULT_DONUT_FRICTION_FACTOR = 0.95f;
 	/** The threshold below which the donut has effectively stopped rolling */
 	static constexpr float DONUT_STOP_THRESHOLD = 0.01f;
 
