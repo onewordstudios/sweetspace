@@ -93,27 +93,27 @@ bool ShipModel::failAllTask() {
 		while (!goodAngle) {
 			// Generate random angle
 			newAngle = (float)(rand() % (int)(getSize()));
+			goodAngle = true;
 			// Check against breaches
-			bool goodBreachAngle = true;
 			for (unsigned int k = 0; k < breaches.size(); k++) {
 				float breachAngle = breaches[k]->getAngle();
 				float diff = getAngleDifference(breachAngle, newAngle);
 				if (diff <= MIN_DISTANCE && breachAngle != -1) {
-					goodBreachAngle = false;
+					goodAngle = false;
 					break;
 				}
 			}
 			// Check against doors
-			bool goodDoorAngle = true;
-			for (unsigned int k = 0; k < doors.size(); k++) {
-				float doorAngle = doors[k]->getAngle();
-				float diff = getAngleDifference(doorAngle, newAngle);
-				if (diff <= MIN_DISTANCE && doorAngle != -1) {
-					goodDoorAngle = false;
-					break;
+			if (goodAngle) {
+				for (unsigned int k = 0; k < doors.size(); k++) {
+					float doorAngle = doors[k]->getAngle();
+					float diff = getAngleDifference(doorAngle, newAngle);
+					if (diff <= MIN_DISTANCE && doorAngle != -1) {
+						goodAngle = false;
+						break;
+					}
 				}
 			}
-			goodAngle = goodBreachAngle && goodDoorAngle;
 		}
 		donuts.at(i)->setTeleportAngle(newAngle);
 	}
