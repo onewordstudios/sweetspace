@@ -38,9 +38,9 @@
  * doors opening).
  *
  * 4 - {@link prePosition()}. Called before this class does its positioning
- *calculations. Used to update any variables used by this class in the event they have changed. Note
- *that this class only processes objects once as they move onto screen. If an object's state changes
- *while it is already on screen, set isDirty to true to force a redraw.
+ * calculations. Used to update any variables used by this class in the event they have changed.
+ * Note that this class only processes objects once as they move onto screen. If an object's state
+ * changes while it is already on screen, set isDirty to true to force a redraw.
  *
  * 5 - {@link postPosition()}. Called after this class does its positioning calculations. Used to
  * perform any additional custom calculations needed for each type of node. For example, if a donut
