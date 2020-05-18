@@ -18,8 +18,6 @@ using namespace std;
 constexpr float EPSILON_ANGLE = 5.2f;
 /** The Angle in degrees for which a door can be activated*/
 constexpr float DOOR_ACTIVE_ANGLE = 15.0f;
-/** Angles to adjust per frame to prevent door tunneling */
-constexpr float ANGLE_ADJUST = 0.5f;
 
 // Friction
 /** The friction factor applied when moving through other players breaches */
@@ -308,13 +306,11 @@ void GameMode::update(float timestep) {
 			// Stop donut and push it out if inside
 			donutModel->setVelocity(0);
 			if (diff < 0) {
-				donutModel->setAngle(donutModel->getAngle() - ANGLE_ADJUST < 0.0f
-										 ? ship->getSize()
-										 : donutModel->getAngle() - ANGLE_ADJUST);
+				float proposedAngle = ship->getDoors()[i]->getAngle() - globals::DOOR_WIDTH;
+				donutModel->setAngle(proposedAngle < 0 ? ship->getSize() : proposedAngle);
 			} else {
-				donutModel->setAngle(donutModel->getAngle() + ANGLE_ADJUST > ship->getSize()
-										 ? 0.0f
-										 : donutModel->getAngle() + ANGLE_ADJUST);
+				float proposedAngle = ship->getDoors()[i]->getAngle() + globals::DOOR_WIDTH;
+				donutModel->setAngle(proposedAngle > ship->getSize() ? 0 : proposedAngle);
 			}
 		}
 		if (abs(diff) < DOOR_ACTIVE_ANGLE) {
@@ -342,13 +338,11 @@ void GameMode::update(float timestep) {
 			// Stop donut and push it out if inside
 			donutModel->setVelocity(0);
 			if (diff < 0) {
-				donutModel->setAngle(donutModel->getAngle() - ANGLE_ADJUST < 0.0f
-										 ? ship->getSize()
-										 : donutModel->getAngle() - ANGLE_ADJUST);
+				float proposedAngle = ship->getUnopenable()[i]->getAngle() - globals::DOOR_WIDTH;
+				donutModel->setAngle(proposedAngle < 0 ? ship->getSize() : proposedAngle);
 			} else {
-				donutModel->setAngle(donutModel->getAngle() + ANGLE_ADJUST > ship->getSize()
-										 ? 0.0f
-										 : donutModel->getAngle() + ANGLE_ADJUST);
+				float proposedAngle = ship->getUnopenable()[i]->getAngle() + globals::DOOR_WIDTH;
+				donutModel->setAngle(proposedAngle > ship->getSize() ? 0 : proposedAngle);
 			}
 		}
 		if (abs(diff) > DOOR_ACTIVE_ANGLE) {
