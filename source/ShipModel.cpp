@@ -4,6 +4,9 @@
 #include "Globals.h"
 #include "PlayerDonutModel.h"
 
+/** Max number of attempts of generating a new teleportation angle */
+constexpr int MAX_NEW_ANGLE_ATTEMPTS = 1000;
+
 bool ShipModel::init(unsigned int numPlayers, unsigned int numBreaches, unsigned int numDoors,
 					 unsigned int playerID, float shipSize, int initHealth,
 					 unsigned int numButtons) {
@@ -90,10 +93,12 @@ bool ShipModel::failAllTask() {
 	for (int i = 0; i < donuts.size(); i++) {
 		float newAngle = 0;
 		bool goodAngle = false;
-		while (!goodAngle) {
+		int attempts = 0;
+		while (!goodAngle && attempts < MAX_NEW_ANGLE_ATTEMPTS) {
 			// Generate random angle
 			newAngle = (float)(rand() % (int)(getSize()));
 			goodAngle = true;
+			attempts += 1;
 			// Check against breaches
 			for (unsigned int k = 0; k < breaches.size(); k++) {
 				float breachAngle = breaches[k]->getAngle();
