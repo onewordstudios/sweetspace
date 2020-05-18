@@ -293,11 +293,11 @@ void GameMode::update(float timestep) {
 
 	// Door Checks
 	for (int i = 0; i < ship->getDoors().size(); i++) {
-		if (ship->getDoors().at(i) == nullptr || ship->getDoors().at(i)->halfOpen() ||
-			!ship->getDoors().at(i)->getIsActive()) {
+		auto door = ship->getDoors()[i];
+		if (door == nullptr || door->halfOpen() || !door->getIsActive()) {
 			continue;
 		}
-		float diff = donutModel->getAngle() - ship->getDoors().at(i)->getAngle();
+		float diff = donutModel->getAngle() - door->getAngle();
 		float a = diff + ship->getSize() / 2;
 		diff = a - floor(a / ship->getSize()) * ship->getSize() - ship->getSize() / 2;
 
@@ -306,21 +306,21 @@ void GameMode::update(float timestep) {
 			// Stop donut and push it out if inside
 			donutModel->setVelocity(0);
 			if (diff < 0) {
-				float proposedAngle = ship->getDoors()[i]->getAngle() - globals::DOOR_WIDTH;
+				float proposedAngle = door->getAngle() - globals::DOOR_WIDTH;
 				donutModel->setAngle(proposedAngle < 0 ? ship->getSize() : proposedAngle);
 			} else {
-				float proposedAngle = ship->getDoors()[i]->getAngle() + globals::DOOR_WIDTH;
+				float proposedAngle = door->getAngle() + globals::DOOR_WIDTH;
 				donutModel->setAngle(proposedAngle > ship->getSize() ? 0 : proposedAngle);
 			}
 		}
 		if (abs(diff) < DOOR_ACTIVE_ANGLE) {
-			ship->getDoors().at(i)->addPlayer(playerID);
+			door->addPlayer(playerID);
 			net->flagDualTask(i, playerID, 1);
 			donutModel->transitionFaceState(DonutModel::FaceState::Colliding);
 		} else {
-			if (ship->getDoors().at(i)->isPlayerOn(playerID)) {
+			if (door->isPlayerOn(playerID)) {
 				soundEffects->endEvent(SoundEffectController::DOOR, i);
-				ship->getDoors().at(i)->removePlayer(playerID);
+				door->removePlayer(playerID);
 				net->flagDualTask(i, playerID, 0);
 			}
 		}
