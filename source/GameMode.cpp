@@ -22,8 +22,6 @@ constexpr float DOOR_ACTIVE_ANGLE = 15.0f;
 constexpr float ANGLE_ADJUST = 0.5f;
 
 // Friction
-/** The friction factor while fixing a breach */
-constexpr float FIX_BREACH_FRICTION = 0.65f;
 /** The friction factor applied when moving through other players breaches */
 constexpr float OTHER_BREACH_FRICTION = 0.2f;
 
@@ -282,11 +280,6 @@ void GameMode::update(float timestep) {
 				breach->decHealth(1);
 				breach->setIsPlayerOn(true);
 				net->resolveBreach(i);
-			}
-
-			// Slow player by friction factor if not already slowed more
-			if (donutModel->getFriction() > FIX_BREACH_FRICTION) {
-				donutModel->setFriction(FIX_BREACH_FRICTION);
 			}
 			donutModel->transitionFaceState(DonutModel::FaceState::Working);
 		} else if (diff > EPSILON_ANGLE && breach->isPlayerOn()) {
