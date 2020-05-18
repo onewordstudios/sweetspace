@@ -256,6 +256,10 @@ void GameMode::update(float timestep) {
 	// Attempt to recover to idle animation
 	donutModel->transitionFaceState(DonutModel::FaceState::Idle);
 
+	for (auto donut : ship->getDonuts()) {
+		donut->update(timestep);
+	}
+
 	// Breach Checks
 	for (int i = 0; i < ship->getBreaches().size(); i++) {
 		std::shared_ptr<BreachModel> breach = ship->getBreaches().at(i);
@@ -359,10 +363,6 @@ void GameMode::update(float timestep) {
 	}
 
 	gm.update(timestep);
-
-	for (unsigned int i = 0; i < ship->getDonuts().size(); i++) {
-		ship->getDonuts()[i]->update(timestep);
-	}
 
 	if (ship->getChallenge() && !ship->getTimeless() &&
 		trunc(ship->timer) <= globals::ROLL_CHALLENGE_LENGTH) {
