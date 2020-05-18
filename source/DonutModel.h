@@ -100,6 +100,7 @@ class DonutModel {
 		  jumping(false),
 		  jumpTime(0),
 		  jumpVelocity(0),
+		  faceState(Idle),
 		  teleportAngle(0),
 		  colorId(0) {}
 
