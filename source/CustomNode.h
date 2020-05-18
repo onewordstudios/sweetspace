@@ -18,7 +18,7 @@
  * overridden by any children.
  *
  * All spawning and despawning from the screen as the player moves around the ship is handled by
- * this class's draw method. This class exposes three lifecycle methods that its children should
+ * this class's draw method. This class exposes five lifecycle methods that its children should
  * override to customize the functionality.
  *
  * 1 - {@link isActive()}. Called at the beginning of each frame. Should return true if and only if
@@ -26,17 +26,31 @@
  * and the rest of the lifecycle is skipped this frame. Is abstract and must be overriden.
  * Generally, should just query whether the associated model is active.
  *
- * 2 - {@link prePositioning()}. Called before this class does its positioning calculations. Used to
- * update any variables used by this class in the event they have changed. Note that this class only
- * processes objects once as they move onto screen. If an object's state changes while it is already
- * on screen, set isDirty to true to force a redraw.
+ * 2 - {@link becomeActive()}. Called on the first frame where {@link isActive()} returns true
+ * when it had returned false in the previous frame. Any updates that need to happen when the
+ * associated model gets reactiviated should go here.
  *
- * 3 - {@link postPositioning()}. Called after this class does its positioning calculations. Used to
+ * 3 - {@link becomeInactive()}. Called on
+ * the first frame where {@link isActive()} returns false when it had returned true in the previous
+ * frame. Any cleanup that needs to happen when the associated model gets deactiveated should go
+ * here. This method can also be used to spawn any lingering animations that occur after the model
+ * is recycled, but should not be used for animations linked directly to the model itself (such as
+ * doors opening).
+ *
+ * 4 - {@link prePosition()}. Called before this class does its positioning
+ *calculations. Used to update any variables used by this class in the event they have changed. Note
+ *that this class only processes objects once as they move onto screen. If an object's state changes
+ *while it is already on screen, set isDirty to true to force a redraw.
+ *
+ * 5 - {@link postPosition()}. Called after this class does its positioning calculations. Used to
  * perform any additional custom calculations needed for each type of node. For example, if a donut
  * model needs to jump, that should be processed here.
  */
 class CustomNode : public cugl::Node {
    private:
+	/** The return value of {@code isActive()} the previous frame */
+	bool activeCache;
+
 #pragma region Positioning
 #pragma mark Positioning Methods
 	/**
@@ -109,7 +123,14 @@ class CustomNode : public cugl::Node {
 	/**
 	 * Constructor
 	 */
-	CustomNode() : cugl::Node(), shipSize(0), isShown(false), angle(0), radius(0), isDirty(false) {}
+	CustomNode()
+		: cugl::Node(),
+		  activeCache(false),
+		  shipSize(0),
+		  isShown(false),
+		  angle(0),
+		  radius(0),
+		  isDirty(false) {}
 
 	/**
 	 * Releases all resources allocated with this node.
@@ -145,6 +166,19 @@ class CustomNode : public cugl::Node {
 #pragma region State Methods
 	/** Returns whether this node should be active. */
 	virtual bool isActive() = 0;
+
+	/**
+	 * Compute any initialization and view state updates that need to happen as the object
+	 * becomes active when previously inactive.
+	 */
+	virtual void becomeActive() {}
+
+	/**
+	 * Compute any view state updates and perform any actions that need to happen as the
+	 * object becomes inactive when previously active.
+	 */
+	virtual void becomeInactive() {}
+
 	/**
 	 * Compute any initialization and view state updates that need to happen before the object is
 	 * positioned relative to the current angle of the ship.
@@ -152,6 +186,7 @@ class CustomNode : public cugl::Node {
 	 * This method is not called if the associated model is inactive.
 	 */
 	virtual void prePosition() {}
+
 	/**
 	 * Compute any view state updates that need to happen after the object is positioned relative to
 	 * the current angle of the ship.
