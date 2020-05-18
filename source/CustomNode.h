@@ -49,7 +49,7 @@
 class CustomNode : public cugl::Node {
    private:
 	/** The return value of {@code isActive()} the previous frame */
-	bool activeCache;
+	bool wasActive;
 
 #pragma region Positioning
 #pragma mark Positioning Methods
@@ -125,7 +125,7 @@ class CustomNode : public cugl::Node {
 	 */
 	CustomNode()
 		: cugl::Node(),
-		  activeCache(false),
+		  wasActive(false),
 		  shipSize(0),
 		  isShown(false),
 		  angle(0),
