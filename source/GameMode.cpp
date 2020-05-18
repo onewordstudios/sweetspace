@@ -18,15 +18,11 @@ using namespace std;
 constexpr float EPSILON_ANGLE = 5.2f;
 /** The Angle in degrees for which a door can be activated*/
 constexpr float DOOR_ACTIVE_ANGLE = 15.0f;
-/** Angles to adjust per frame to prevent door tunneling */
-constexpr float ANGLE_ADJUST = 0.5f;
 
 /** Jump height to trigger button press */
 constexpr float BUTTON_JUMP_HEIGHT = 0.1f;
 
 // Friction
-/** The friction factor while fixing a breach */
-constexpr float FIX_BREACH_FRICTION = 0.65f;
 /** The friction factor applied when moving through other players breaches */
 constexpr float OTHER_BREACH_FRICTION = 0.2f;
 
@@ -263,6 +259,10 @@ void GameMode::update(float timestep) {
 	// Attempt to recover to idle animation
 	donutModel->transitionFaceState(DonutModel::FaceState::Idle);
 
+	for (auto donut : ship->getDonuts()) {
+		donut->update(timestep);
+	}
+
 #pragma region Breach Collision
 	for (int i = 0; i < ship->getBreaches().size(); i++) {
 		std::shared_ptr<BreachModel> breach = ship->getBreaches().at(i);
@@ -286,11 +286,6 @@ void GameMode::update(float timestep) {
 				breach->setIsPlayerOn(true);
 				net->resolveBreach(i);
 			}
-
-			// Slow player by friction factor if not already slowed more
-			if (donutModel->getFriction() > FIX_BREACH_FRICTION) {
-				donutModel->setFriction(FIX_BREACH_FRICTION);
-			}
 			donutModel->transitionFaceState(DonutModel::FaceState::Working);
 		} else if (diff > EPSILON_ANGLE && breach->isPlayerOn()) {
 			breach->setIsPlayerOn(false);
@@ -306,11 +301,11 @@ void GameMode::update(float timestep) {
 
 #pragma region Door Collision
 	for (int i = 0; i < ship->getDoors().size(); i++) {
-		if (ship->getDoors().at(i) == nullptr || ship->getDoors().at(i)->halfOpen() ||
-			!ship->getDoors().at(i)->getIsActive()) {
+		auto door = ship->getDoors()[i];
+		if (door == nullptr || door->halfOpen() || !door->getIsActive()) {
 			continue;
 		}
-		float diff = donutModel->getAngle() - ship->getDoors().at(i)->getAngle();
+		float diff = donutModel->getAngle() - door->getAngle();
 		float a = diff + ship->getSize() / 2;
 		diff = a - floor(a / ship->getSize()) * ship->getSize() - ship->getSize() / 2;
 
@@ -319,23 +314,21 @@ void GameMode::update(float timestep) {
 			// Stop donut and push it out if inside
 			donutModel->setVelocity(0);
 			if (diff < 0) {
-				donutModel->setAngle(donutModel->getAngle() - ANGLE_ADJUST < 0.0f
-										 ? ship->getSize()
-										 : donutModel->getAngle() - ANGLE_ADJUST);
+				float proposedAngle = door->getAngle() - globals::DOOR_WIDTH;
+				donutModel->setAngle(proposedAngle < 0 ? ship->getSize() : proposedAngle);
 			} else {
-				donutModel->setAngle(donutModel->getAngle() + ANGLE_ADJUST > ship->getSize()
-										 ? 0.0f
-										 : donutModel->getAngle() + ANGLE_ADJUST);
+				float proposedAngle = door->getAngle() + globals::DOOR_WIDTH;
+				donutModel->setAngle(proposedAngle > ship->getSize() ? 0 : proposedAngle);
 			}
 		}
 		if (abs(diff) < DOOR_ACTIVE_ANGLE) {
-			ship->getDoors().at(i)->addPlayer(playerID);
+			door->addPlayer(playerID);
 			net->flagDualTask(i, playerID, 1);
 			donutModel->transitionFaceState(DonutModel::FaceState::Colliding);
 		} else {
-			if (ship->getDoors().at(i)->isPlayerOn(playerID)) {
+			if (door->isPlayerOn(playerID)) {
 				soundEffects->endEvent(SoundEffectController::DOOR, i);
-				ship->getDoors().at(i)->removePlayer(playerID);
+				door->removePlayer(playerID);
 				net->flagDualTask(i, playerID, 0);
 			}
 		}
@@ -353,13 +346,11 @@ void GameMode::update(float timestep) {
 			// Stop donut and push it out if inside
 			donutModel->setVelocity(0);
 			if (diff < 0) {
-				donutModel->setAngle(donutModel->getAngle() - ANGLE_ADJUST < 0.0f
-										 ? ship->getSize()
-										 : donutModel->getAngle() - ANGLE_ADJUST);
+				float proposedAngle = ship->getUnopenable()[i]->getAngle() - globals::DOOR_WIDTH;
+				donutModel->setAngle(proposedAngle < 0 ? ship->getSize() : proposedAngle);
 			} else {
-				donutModel->setAngle(donutModel->getAngle() + ANGLE_ADJUST > ship->getSize()
-										 ? 0.0f
-										 : donutModel->getAngle() + ANGLE_ADJUST);
+				float proposedAngle = ship->getUnopenable()[i]->getAngle() + globals::DOOR_WIDTH;
+				donutModel->setAngle(proposedAngle > ship->getSize() ? 0 : proposedAngle);
 			}
 		}
 		if (abs(diff) > DOOR_ACTIVE_ANGLE) {
@@ -379,10 +370,6 @@ void GameMode::update(float timestep) {
 	}
 
 	gm.update(timestep);
-
-	for (unsigned int i = 0; i < ship->getDonuts().size(); i++) {
-		ship->getDonuts()[i]->update(timestep);
-	}
 
 #pragma region Stabilizer
 	if (ship->getChallenge() && !ship->getTimeless() &&

@@ -41,6 +41,7 @@ class ShipModel {
 	float totalTime;
 	/** If is in tutorial level*/
 	int levelNum;
+	static constexpr int MIN_DISTANCE = 15;
 
    public:
 	enum StabilizerStatus { INACTIVE, ACTIVE, FAILURE, SUCCESS, ANIMATING };
@@ -476,6 +477,12 @@ class ShipModel {
 			float angle = getSize() * (float)i / getDonuts().size();
 			getDonuts().at(i)->setAngle(angle);
 		}
+	}
+
+#pragma mark -
+#pragma mark Helpers
+	float getAngleDifference(float angle1, float angle2) {
+		return shipSize / 2 - abs(abs(angle1 - angle2) - shipSize / 2);
 	}
 };
 #endif /* __SHIP_MODEL_H__ */
