@@ -78,6 +78,12 @@ constexpr float SHIP_HEALTH_YELLOW_CUTOFF = 0.5f;
 /** Percentage of ship health to start showing red */
 constexpr float SHIP_HEALTH_RED_CUTOFF = 0.2f;
 
+/** Portion of health bar shown on screen */
+constexpr float HEALTH_RANGE = 100;
+
+/** Offset of health bar (angle of health bar when health = 0) */
+constexpr float HEALTH_OFFSET = 220;
+
 /** Time to stop showing health tutorial */
 constexpr int HEALTH_TUTORIAL_CUTOFF = 10;
 
@@ -155,6 +161,8 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	healthNodeOverlay =
 		dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_health"));
 	healthNodeOverlay->setVisible(true);
+	healthNodeNumbers =
+		dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_healthNumbers"));
 	coordHUD = std::dynamic_pointer_cast<Label>(assets->get<Node>("game_hud"));
 	timerBorder =
 		std::dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_timerBorder"));
@@ -625,11 +633,14 @@ void GameGraphRoot::update(float timestep) {
 		healthNodeOverlay->setVisible(false);
 	} else {
 		float percentHealth = ship->getHealth() / ship->getInitHealth();
-		if(percentHealth == 1) {
+		if (percentHealth == 1) {
 			healthNodeOverlay->setAngle(0);
+			std::shared_ptr<Texture> image = assets->get<Texture>("health_green");
+			healthNodeOverlay->setTexture(image);
 		} else {
 			CULog("health: %f", percentHealth);
-			healthNodeOverlay->setAngle(((percentHealth * 112) + 214) * globals::PI_180);
+			healthNodeOverlay->setAngle(((percentHealth * HEALTH_RANGE) + HEALTH_OFFSET) *
+										globals::PI_180);
 		}
 		if (ship->getHealth() < ship->getInitHealth() * SHIP_HEALTH_RED_CUTOFF) {
 			std::shared_ptr<Texture> image = assets->get<Texture>("health_red");

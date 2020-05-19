@@ -60,17 +60,20 @@
             "wrapT": "repeat"
         },
 		"health_green": {
-			"file": "textures/health/green.png"
+			"file": "textures/health/health_green.png"
 		},
 		"health_yellow": {
-			"file": "textures/health/yellow.png"
+			"file": "textures/health/health_yellow.png"
 		},
 		"health_red": {
-			"file": "textures/health/red.png"
+			"file": "textures/health/health_red.png"
 		},
 		"health_empty": {
-			"file": "textures/health/empty.png"
+			"file": "textures/health/health_empty.png"
 		},
+        "health_numbers": {
+            "file": "textures/health/health_numbers.png"
+        },
         "shipseg0": {
             "file":   "textures/ship/seg1.png"
         },
@@ -504,6 +507,15 @@
                           "type": "Image",
                           "data": {
                             "texture": "health_green",
+                            "anchor":   [0.5,1],
+                            "position": [0, 118],
+                            "scale": 0.3
+                          }
+                        },
+                        "healthNumbers": {
+                          "type": "Image",
+                          "data": {
+                            "texture": "health_numbers",
                             "anchor":   [0.5,1],
                             "position": [0, 118],
                             "scale": 0.3
