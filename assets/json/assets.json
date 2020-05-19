@@ -59,16 +59,6 @@
             "wrapS": "repeat",
             "wrapT": "repeat"
         },
-        "health": {
-            "file":  "textures/health/health.png",
-            "wrapS": "repeat",
-            "wrapT": "repeat"
-        },
-        "health_glow": {
-            "file":  "textures/health/glow.png",
-            "wrapS": "repeat",
-            "wrapT": "repeat"
-        },
 		"health_green": {
 			"file": "textures/health/green.png"
 		},
