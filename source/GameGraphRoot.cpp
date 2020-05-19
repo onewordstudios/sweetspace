@@ -85,10 +85,10 @@ constexpr float SHIP_HEALTH_YELLOW_CUTOFF = 0.5f;
 constexpr float SHIP_HEALTH_RED_CUTOFF = 0.3f;
 
 /** Time to stop showing health tutorial */
-constexpr int HEALTH_TUTORIAL_CUTOFF = 10;
+constexpr int HEALTH_TUTORIAL_CUTOFF = 20;
 
 /** Time to stop showing move tutorial */
-constexpr int MOVE_TUTORIAL_CUTOFF = 5;
+constexpr int MOVE_TUTORIAL_CUTOFF = 10;
 
 /** Time to show breach tutorial */
 constexpr int BREACH_TUTORIAL_CUTOFF = 10;
@@ -220,7 +220,7 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	timerTutorial->setVisible(false);
 	if (ship->getLevelNum() == tutorial::REAL_LEVELS.at(0)) {
 		healthTutorial->setVisible(false);
-		communicateTutorial->setVisible(true);
+		communicateTutorial->setVisible(false);
 		timerTutorial->setVisible(true);
 	}
 	rollTutorial =
@@ -721,8 +721,7 @@ void GameGraphRoot::update(float timestep) {
 		} else if (trunc(ship->timeCtr) == MOVE_TUTORIAL_CUTOFF) {
 			timerTutorial->setVisible(false);
 			healthTutorial->setVisible(true);
-			std::shared_ptr<Texture> image = assets->get<Texture>("communicate_tutorial1");
-			communicateTutorial->setTexture(image);
+			communicateTutorial->setVisible(true);
 		}
 	} else if (ship->getLevelNum() == tutorial::REAL_LEVELS.at(2)) {
 		if (trunc(ship->timeCtr) > TIMER_TUTORIAL_CUTOFF) {
