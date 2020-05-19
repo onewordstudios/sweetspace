@@ -514,8 +514,8 @@
                           "type": "Image",
                           "data": {
                             "texture": "health_green",
-                            "anchor":   [0.5,0.5],
-                            "position": [0, 0],
+                            "anchor":   [0.5,1],
+                            "position": [0, 118],
                             "scale": 0.3
                           }
                         },

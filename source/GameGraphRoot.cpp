@@ -72,17 +72,11 @@ constexpr int SEG_LABEL_Y = 1113;
 /** Maximum number of health labels */
 constexpr int MAX_HEALTH_LABELS = 10;
 
-/** Percentage of ship health to start showing decrease in green */
-constexpr float SHIP_HEALTH_HIGH_GREEN_CUTOFF = 0.9f;
-
-/** Percentage of ship health to start showing more decrease in green */
-constexpr float SHIP_HEALTH_LOW_GREEN_CUTOFF = 0.7f;
-
 /** Percentage of ship health to start showing yellow */
 constexpr float SHIP_HEALTH_YELLOW_CUTOFF = 0.5f;
 
 /** Percentage of ship health to start showing red */
-constexpr float SHIP_HEALTH_RED_CUTOFF = 0.3f;
+constexpr float SHIP_HEALTH_RED_CUTOFF = 0.2f;
 
 /** Time to stop showing health tutorial */
 constexpr int HEALTH_TUTORIAL_CUTOFF = 10;
@@ -95,42 +89,6 @@ constexpr int BREACH_TUTORIAL_CUTOFF = 10;
 
 /** Time stop showing timer */
 constexpr int TIMER_TUTORIAL_CUTOFF = 18;
-
-/** Red health position */
-constexpr float RED_POS_X = -100;
-
-/** Red health position */
-constexpr float RED_POS_Y = 176;
-
-/** Yellow health position */
-constexpr float YELLOW_POS_X = -120;
-
-/** Yellow health position */
-constexpr float YELLOW_POS_Y = 118;
-
-/** Low green health position */
-constexpr float LOW_GREEN_POS_X = -100;
-
-/** Low green health position */
-constexpr float LOW_GREEN_POS_Y = 60;
-
-/** High green health position */
-constexpr float HIGH_GREEN_POS_X = -75;
-
-/** High green health position */
-constexpr float HIGH_GREEN_POS_Y = 30;
-
-/** Red health angle */
-constexpr float RED_ANGLE = 240 * globals::PI_180;
-
-/** Yellow health angle */
-constexpr float YELLOW_ANGLE = 270 * globals::PI_180;
-
-/** Low green health angle */
-constexpr float LOW_GREEN_ANGLE = 300 * globals::PI_180;
-
-/** High green health angle */
-constexpr float HIGH_GREEN_ANGLE = 320 * globals::PI_180;
 
 /** Tutorial asset scale */
 constexpr float TUTORIAL_SCALE = 0.4f;
@@ -665,27 +623,21 @@ void GameGraphRoot::update(float timestep) {
 
 	if (ship->getHealth() < 1) {
 		healthNodeOverlay->setVisible(false);
-	} else if (ship->getHealth() < ship->getInitHealth() * SHIP_HEALTH_RED_CUTOFF) {
-		std::shared_ptr<Texture> image = assets->get<Texture>("health_red");
-		healthNodeOverlay->setTexture(image);
-		healthNodeOverlay->setPosition(RED_POS_X, RED_POS_Y);
-		healthNodeOverlay->setAngle(RED_ANGLE);
-	} else if (ship->getHealth() < ship->getInitHealth() * SHIP_HEALTH_YELLOW_CUTOFF) {
-		std::shared_ptr<Texture> image = assets->get<Texture>("health_yellow");
-		healthNodeOverlay->setTexture(image);
-		healthNodeOverlay->setPosition(YELLOW_POS_X, YELLOW_POS_Y);
-		healthNodeOverlay->setAngle(YELLOW_ANGLE);
-	} else if (ship->getHealth() < ship->getInitHealth() * SHIP_HEALTH_LOW_GREEN_CUTOFF) {
-		healthNodeOverlay->setPosition(LOW_GREEN_POS_X, LOW_GREEN_POS_Y);
-		healthNodeOverlay->setAngle(LOW_GREEN_ANGLE);
-	} else if (ship->getHealth() < ship->getInitHealth() * SHIP_HEALTH_HIGH_GREEN_CUTOFF) {
-		healthNodeOverlay->setPosition(HIGH_GREEN_POS_X, HIGH_GREEN_POS_Y);
-		healthNodeOverlay->setAngle(HIGH_GREEN_ANGLE);
 	} else {
-		std::shared_ptr<Texture> image = assets->get<Texture>("health_green");
-		healthNodeOverlay->setTexture(image);
-		healthNodeOverlay->setPosition(0, 0);
-		healthNodeOverlay->setAngle(0);
+		float percentHealth = ship->getHealth() / ship->getInitHealth();
+		if(percentHealth == 1) {
+			healthNodeOverlay->setAngle(0);
+		} else {
+			CULog("health: %f", percentHealth);
+			healthNodeOverlay->setAngle(((percentHealth * 112) + 214) * globals::PI_180);
+		}
+		if (ship->getHealth() < ship->getInitHealth() * SHIP_HEALTH_RED_CUTOFF) {
+			std::shared_ptr<Texture> image = assets->get<Texture>("health_red");
+			healthNodeOverlay->setTexture(image);
+		} else if (ship->getHealth() < ship->getInitHealth() * SHIP_HEALTH_YELLOW_CUTOFF) {
+			std::shared_ptr<Texture> image = assets->get<Texture>("health_yellow");
+			healthNodeOverlay->setTexture(image);
+		}
 	}
 
 	if (ship->getLevelNum() == tutorial::BREACH_LEVEL) {
