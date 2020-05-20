@@ -84,7 +84,6 @@ void BreachNode::postPosition() {
 		sparkleNodeSmall->setRadius(radius + yOffset);
 		sparkleNodeSmall->setAngle(getAngle());
 		sparkleNodeSmall->setOnShipAngle(angle);
-		// sparkleNodeSmall->setFilmstripColor(shapeNode->getColor());
 		sparkleNodeSmall->beginAnimation();
 	}
 	if (isAnimatingShrink) {
