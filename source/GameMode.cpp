@@ -19,6 +19,9 @@ constexpr float EPSILON_ANGLE = 5.2f;
 /** The Angle in degrees for which a door can be activated*/
 constexpr float DOOR_ACTIVE_ANGLE = 15.0f;
 
+/** Jump height to trigger button press */
+constexpr float BUTTON_JUMP_HEIGHT = 0.1f;
+
 // Friction
 /** The friction factor applied when moving through other players breaches */
 constexpr float OTHER_BREACH_FRICTION = 0.2f;
@@ -260,7 +263,7 @@ void GameMode::update(float timestep) {
 		donut->update(timestep);
 	}
 
-	// Breach Checks
+#pragma region Breach Collision
 	for (int i = 0; i < ship->getBreaches().size(); i++) {
 		std::shared_ptr<BreachModel> breach = ship->getBreaches().at(i);
 		if (breach == nullptr || !breach->getIsActive()) {
@@ -294,8 +297,9 @@ void GameMode::update(float timestep) {
 			}
 		}
 	}
+#pragma endregion
 
-	// Door Checks
+#pragma region Door Collision
 	for (int i = 0; i < ship->getDoors().size(); i++) {
 		auto door = ship->getDoors()[i];
 		if (door == nullptr || door->halfOpen() || !door->getIsActive()) {
@@ -329,7 +333,7 @@ void GameMode::update(float timestep) {
 			}
 		}
 	}
-	// unop Checks
+	// Unopenable Door Checks
 	for (int i = 0; i < ship->getUnopenable().size(); i++) {
 		if (ship->getUnopenable().at(i) == nullptr || !ship->getUnopenable().at(i)->getIsActive()) {
 			continue;
@@ -353,6 +357,9 @@ void GameMode::update(float timestep) {
 			soundEffects->endEvent(SoundEffectController::DOOR, i + globals::UNOP_MARKER);
 		}
 	}
+#pragma endregion
+
+	// Breach health drain
 	for (int i = 0; i < ship->getBreaches().size(); i++) {
 		// this should be adjusted based on the level and number of players
 		if (ship->getBreaches().at(i)->getIsActive() &&
@@ -364,6 +371,7 @@ void GameMode::update(float timestep) {
 
 	gm.update(timestep);
 
+#pragma region Stabilizer
 	if (ship->getChallenge() && !ship->getTimeless() &&
 		trunc(ship->timer) <= globals::ROLL_CHALLENGE_LENGTH) {
 		ship->setChallenge(false);
@@ -405,7 +413,9 @@ void GameMode::update(float timestep) {
 			ship->setChallengeProg(0);
 		}
 	}
+#pragma endregion
 
+#pragma region Button Collision
 	for (int i = 0; i < ship->getButtons().size(); i++) {
 		auto button = ship->getButtons().at(i);
 
@@ -413,16 +423,22 @@ void GameMode::update(float timestep) {
 			continue;
 		}
 
+		button->update();
+
 		float diff = donutModel->getAngle() - button->getAngle();
 		float shipSize = ship->getSize();
 		float a = diff + shipSize / 2;
 		diff = a - floor(a / shipSize) * shipSize - shipSize / 2;
+		if (abs(diff) > globals::BUTTON_ACTIVE_ANGLE) {
+			continue;
+		}
 
-		int flag = (abs(diff) < globals::BUTTON_ACTIVE_ANGLE && donutModel->isJumping()) ? 1 : 0;
-		ship->flagButton(i, playerID, flag);
-		net->flagButton(i, playerID, flag);
+		if (!donutModel->isDescending() || donutModel->getJumpOffset() >= BUTTON_JUMP_HEIGHT) {
+			continue;
+		}
 
-		if (flag == 1) {
+		if (ship->flagButton(i)) {
+			net->flagButton(i);
 			if (button->getPair()->isJumpedOn()) {
 				CULog("Resolving button");
 				ship->resolveButton(i);
@@ -430,6 +446,7 @@ void GameMode::update(float timestep) {
 			}
 		}
 	}
+#pragma endregion
 
 	sgRoot.update(timestep);
 }

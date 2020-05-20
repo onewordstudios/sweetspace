@@ -95,7 +95,6 @@ class DonutModel {
 	 */
 	DonutModel(void)
 		: angle(0),
-		  teleportAngle(0),
 		  shipSize(DEFAULT_SHIP_SIZE),
 		  velocity(0),
 		  friction(DEFAULT_DONUT_FRICTION_FACTOR),
@@ -103,6 +102,8 @@ class DonutModel {
 		  jumping(false),
 		  jumpTime(0),
 		  jumpVelocity(0),
+		  faceState(Idle),
+		  teleportAngle(0),
 		  colorId(0) {}
 
 	/**
@@ -209,6 +210,11 @@ class DonutModel {
 	 * @return whether the donut is currently jumping.
 	 */
 	bool isJumping() { return jumping; }
+
+	/** Returns whether the donut is currently jumping and is on the descent of the jump arc */
+	bool isDescending() {
+		return jumping && (GRAVITY / 2 * jumpTime * jumpTime > jumpVelocity * jumpTime);
+	}
 
 	/**
 	 * Returns the donut's jump time
