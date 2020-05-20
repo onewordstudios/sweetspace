@@ -93,8 +93,8 @@ constexpr int MOVE_TUTORIAL_CUTOFF = 10;
 /** Time to show breach tutorial */
 constexpr int BREACH_TUTORIAL_CUTOFF = 10;
 
-/** Time stop showing timer */
-constexpr int TIMER_TUTORIAL_CUTOFF = 18;
+/** Time to start showing timer */
+constexpr int TIMER_TUTORIAL_CUTOFF = 13;
 
 /** Red health position */
 constexpr float RED_POS_X = -100;
@@ -136,7 +136,10 @@ constexpr float HIGH_GREEN_ANGLE = 320 * globals::PI_180;
 constexpr float TUTORIAL_SCALE = 0.4f;
 
 /** Timer offset */
-constexpr float TIMER_OFFSET = 20;
+constexpr float TIMER_OFFSET_X = -30;
+
+/** Timer offset */
+constexpr float TIMER_OFFSET_Y = 50;
 
 #pragma mark -
 #pragma mark Constructors
@@ -391,10 +394,11 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 			tutorialNode->addChildWithTag(tutorial, i + 1);
 		}
 	} else if (ship->getLevelNum() == tutorial::REAL_LEVELS.at(2)) {
+		timerTutorial->setVisible(false);
 		std::shared_ptr<Texture> image = assets->get<Texture>("timer_tutorial1");
 		timerTutorial->setTexture(image);
-		float posY = timerTutorial->getPositionY() - TIMER_OFFSET;
-		float posX = timerTutorial->getPositionX();
+		float posY = timerTutorial->getPositionY() + TIMER_OFFSET_Y;
+		float posX = timerTutorial->getPositionX() + TIMER_OFFSET_X;
 		timerTutorial->setPosition(posX, posY);
 	}
 
@@ -716,7 +720,6 @@ void GameGraphRoot::update(float timestep) {
 		}
 	} else if (ship->getLevelNum() == tutorial::REAL_LEVELS.at(0)) {
 		if (trunc(ship->timeCtr) == HEALTH_TUTORIAL_CUTOFF) {
-			healthTutorial->setVisible(false);
 			communicateTutorial->setVisible(false);
 		} else if (trunc(ship->timeCtr) == MOVE_TUTORIAL_CUTOFF) {
 			timerTutorial->setVisible(false);
@@ -725,9 +728,9 @@ void GameGraphRoot::update(float timestep) {
 		}
 	} else if (ship->getLevelNum() == tutorial::REAL_LEVELS.at(2)) {
 		if (trunc(ship->timeCtr) > TIMER_TUTORIAL_CUTOFF) {
-			timerTutorial->setVisible(false);
-		} else {
 			timerTutorial->setVisible(true);
+		} else {
+			timerTutorial->setVisible(false);
 		}
 	} else if (ship->getLevelNum() == tutorial::STABILIZER_LEVEL) {
 		rollTutorial->setVisible(true);
