@@ -10,7 +10,7 @@ using namespace cugl;
 constexpr float DOOR_RADIUS = 660;
 
 /** The scale of the doors. */
-constexpr float DOOR_SCALE = 0.3f;
+constexpr float DOOR_SCALE = 0.4f;
 
 bool UnopenableNode::init(std::shared_ptr<Unopenable> unop, std::shared_ptr<DonutModel> player,
 						  float shipSize, const std::shared_ptr<cugl::Texture>& texture) {
