@@ -560,7 +560,7 @@ void MagicInternetBox::update(std::shared_ptr<ShipModel> state) {
 				break;
 			}
 			case ButtonFlag: {
-				state->flagButton(id, data1, data2);
+				state->flagButton(id);
 				break;
 			}
 			case ButtonResolve: {
@@ -605,8 +605,8 @@ void MagicInternetBox::resolveBreach(int id) {
 	CULog("Sending resolve id %d", id);
 }
 
-void MagicInternetBox::createDualTask(float angle, int player1, int player2, int id) {
-	sendData(DualCreate, angle, id, player1, player2, -1.0f);
+void MagicInternetBox::createDualTask(float angle, int id) {
+	sendData(DualCreate, angle, id, -1, -1, -1.0f);
 }
 
 void MagicInternetBox::flagDualTask(int id, int player, int flag) {
@@ -621,9 +621,7 @@ void MagicInternetBox::createButtonTask(float angle1, int id1, float angle2, int
 	sendData(ButtonCreate, angle1, id1, id2, -1, angle2);
 }
 
-void MagicInternetBox::flagButton(int id, int player, int flag) {
-	sendData(ButtonFlag, -1, id, player, flag, -1.0f);
-}
+void MagicInternetBox::flagButton(int id) { sendData(ButtonFlag, -1, id, -1, -1, -1.0f); }
 
 void MagicInternetBox::resolveButton(int id) { sendData(ButtonResolve, -1, id, -1, -1, -1.0f); }
 

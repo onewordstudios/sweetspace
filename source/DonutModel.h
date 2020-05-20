@@ -209,6 +209,11 @@ class DonutModel {
 	 */
 	bool isJumping() { return jumping; }
 
+	/** Returns whether the donut is currently jumping and is on the descent of the jump arc */
+	bool isDescending() {
+		return jumping && (GRAVITY / 2 * jumpTime * jumpTime > jumpVelocity * jumpTime);
+	}
+
 	/**
 	 * Returns the donut's jump time
 	 * @return
