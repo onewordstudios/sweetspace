@@ -194,7 +194,7 @@ void GLaDOS::placeObject(BuildingBlockModel::Object obj, float zeroAngle, int p)
 			i = doorFree.front();
 			doorFree.pop();
 			ship->createDoor((float)obj.angle + zeroAngle, i);
-			mib->createDualTask((float)obj.angle + zeroAngle, -1, -1, i);
+			mib->createDualTask((float)obj.angle + zeroAngle, i);
 			break;
 		case BuildingBlockModel::Button: {
 			// Roll for pair's angle
@@ -360,9 +360,7 @@ void GLaDOS::update(float dt) {
 		}
 		bool goodAngle = true;
 		for (int j = 0; j < ship->getDonuts().size(); j++) {
-			float diff =
-				ship->getSize() / 2 -
-				abs(abs(ship->getDonuts().at(j)->getAngle() - angle) - ship->getSize() / 2);
+			float diff = ship->getAngleDifference(ship->getDonuts().at(j)->getAngle(), angle);
 			float dist =
 				find(neededIds.begin(), neededIds.end(), j) != neededIds.end() ? 0 : (float)padding;
 			if (diff < dist + (float)block->getRange() / 2) {
@@ -373,7 +371,7 @@ void GLaDOS::update(float dt) {
 		// Make sure it's not too close to other breaches
 		for (unsigned int k = 0; k < ship->getBreaches().size(); k++) {
 			float breachAngle = ship->getBreaches()[k]->getAngle();
-			float diff = ship->getSize() / 2 - abs(abs(breachAngle - angle) - ship->getSize() / 2);
+			float diff = ship->getAngleDifference(breachAngle, angle);
 			if (ship->getBreaches()[k]->getIsActive() && diff < (float)block->getRange() / 2) {
 				goodAngle = false;
 				break;
@@ -382,7 +380,7 @@ void GLaDOS::update(float dt) {
 
 		for (unsigned int k = 0; k < ship->getDoors().size(); k++) {
 			float doorAngle = ship->getDoors()[k]->getAngle();
-			float diff = ship->getSize() / 2 - abs(abs(doorAngle - angle) - ship->getSize() / 2);
+			float diff = ship->getAngleDifference(doorAngle, angle);
 			if (ship->getDoors()[k]->getIsActive() && diff < (float)block->getRange() / 2) {
 				goodAngle = false;
 				break;
@@ -410,12 +408,10 @@ void GLaDOS::tutorialLevels(float dt) {
 					float suggestedAngle2 = mid + tutorial::B_L_LOC2;
 					if (suggestedAngle1 < 0) suggestedAngle1 += ship->getSize();
 					if (suggestedAngle2 < 0) suggestedAngle2 += ship->getSize();
-					float diff1 = ship->getSize() / 2 -
-								  abs(abs(suggestedAngle1 - ship->getDonuts().at(i)->getAngle()) -
-									  ship->getSize() / 2);
-					float diff2 = ship->getSize() / 2 -
-								  abs(abs(suggestedAngle2 - ship->getDonuts().at(i)->getAngle()) -
-									  ship->getSize() / 2);
+					float diff1 = ship->getAngleDifference(suggestedAngle1,
+														   ship->getDonuts().at(i)->getAngle());
+					float diff2 = ship->getAngleDifference(suggestedAngle2,
+														   ship->getDonuts().at(i)->getAngle());
 					if (diff1 > diff2) {
 						placeObject({BuildingBlockModel::Breach, 0, -1}, suggestedAngle1,
 									(i + 1) % (int)ship->getDonuts().size());
@@ -433,12 +429,10 @@ void GLaDOS::tutorialLevels(float dt) {
 					float suggestedAngle2 = mid + tutorial::B_L_LOC4;
 					if (suggestedAngle1 >= ship->getSize()) suggestedAngle1 -= ship->getSize();
 					if (suggestedAngle2 >= ship->getSize()) suggestedAngle2 -= ship->getSize();
-					float diff1 = ship->getSize() / 2 -
-								  abs(abs(suggestedAngle1 - ship->getDonuts().at(i)->getAngle()) -
-									  ship->getSize() / 2);
-					float diff2 = ship->getSize() / 2 -
-								  abs(abs(suggestedAngle2 - ship->getDonuts().at(i)->getAngle()) -
-									  ship->getSize() / 2);
+					float diff1 = ship->getAngleDifference(suggestedAngle1,
+														   ship->getDonuts().at(i)->getAngle());
+					float diff2 = ship->getAngleDifference(suggestedAngle2,
+														   ship->getDonuts().at(i)->getAngle());
 					if (diff1 > diff2) {
 						placeObject({BuildingBlockModel::Breach, 0, -1}, suggestedAngle1, i);
 					} else {

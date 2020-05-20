@@ -122,6 +122,7 @@ bool MainMenuMode::init(const std::shared_ptr<AssetManager>& assets) {
 	gameReady = false;
 	hostScreen->setVisible(false);
 	clientScreen->setVisible(false);
+	hostBeginBtn->setVisible(false);
 	clientJoinBtn->setDown(false);
 	clientJoinBtn->setVisible(true);
 	levelSelect->setVisible(false);
@@ -383,6 +384,7 @@ void MainMenuMode::processUpdate() {
 			if (backBtn->isVisible()) {
 				if (percentage > 0) {
 					backBtn->setVisible(false);
+					hostBeginBtn->setVisible(true);
 				}
 			}
 			break;

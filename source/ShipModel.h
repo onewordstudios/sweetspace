@@ -41,6 +41,7 @@ class ShipModel {
 	float totalTime;
 	/** If is in tutorial level*/
 	int levelNum;
+	static constexpr int MIN_DISTANCE = 15;
 
    public:
 	enum StabilizerStatus { INACTIVE, ACTIVE, FAILURE, SUCCESS, ANIMATING };
@@ -438,11 +439,13 @@ class ShipModel {
 	/**
 	 * Flag button with given id.
 	 *
-	 * @param id   the id of door to be opened.
-	 * @param player   the player id flagging the door.
-	 * @param flag   the flag to set (on or off, 1 or 0)
+	 * @param id   the id of button to press.
+	 *
+	 * @return true iff the button was successfully
+	 * triggered (ie was not called during the
+	 * i-frames after the last call to trigger)
 	 */
-	bool flagButton(int id, int player, int flag);
+	bool flagButton(int id);
 
 	/**
 	 * Resolve a button pair
@@ -474,6 +477,12 @@ class ShipModel {
 			float angle = getSize() * (float)i / getDonuts().size();
 			getDonuts().at(i)->setAngle(angle);
 		}
+	}
+
+#pragma mark -
+#pragma mark Helpers
+	float getAngleDifference(float angle1, float angle2) {
+		return shipSize / 2 - abs(abs(angle1 - angle2) - shipSize / 2);
 	}
 };
 #endif /* __SHIP_MODEL_H__ */

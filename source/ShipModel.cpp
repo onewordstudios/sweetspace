@@ -4,6 +4,9 @@
 #include "Globals.h"
 #include "PlayerDonutModel.h"
 
+/** Max number of attempts of generating a new teleportation angle */
+constexpr int MAX_NEW_ANGLE_ATTEMPTS = 1000;
+
 bool ShipModel::init(unsigned int numPlayers, unsigned int numBreaches, unsigned int numDoors,
 					 unsigned int playerID, float shipSize, int initHealth,
 					 unsigned int numButtons) {
@@ -88,8 +91,36 @@ bool ShipModel::createAllTask(int data) {
 
 bool ShipModel::failAllTask() {
 	for (int i = 0; i < donuts.size(); i++) {
-		float angle = (float)(rand() % (int)(getSize()));
-		donuts.at(i)->setTeleportAngle(angle);
+		float newAngle = 0;
+		bool goodAngle = false;
+		int attempts = 0;
+		while (!goodAngle && attempts < MAX_NEW_ANGLE_ATTEMPTS) {
+			// Generate random angle
+			newAngle = (float)(rand() % (int)(getSize()));
+			goodAngle = true;
+			attempts += 1;
+			// Check against breaches
+			for (unsigned int k = 0; k < breaches.size(); k++) {
+				float breachAngle = breaches[k]->getAngle();
+				float diff = getAngleDifference(breachAngle, newAngle);
+				if (diff <= MIN_DISTANCE && breachAngle != -1) {
+					goodAngle = false;
+					break;
+				}
+			}
+			// Check against doors
+			if (goodAngle) {
+				for (unsigned int k = 0; k < doors.size(); k++) {
+					float doorAngle = doors[k]->getAngle();
+					float diff = getAngleDifference(doorAngle, newAngle);
+					if (diff <= MIN_DISTANCE && doorAngle != -1) {
+						goodAngle = false;
+						break;
+					}
+				}
+			}
+		}
+		donuts.at(i)->setTeleportAngle(newAngle);
 	}
 	return true;
 }
@@ -102,15 +133,10 @@ bool ShipModel::createButton(float angle1, int id1, float angle2, int id2) {
 	return true;
 }
 
-bool ShipModel::flagButton(int id, int player, int flag) {
+bool ShipModel::flagButton(int id) {
 	// TODO: we shouldnt need to check this
-	if (flag >= buttons.size()) return false;
-	if (flag == 0) {
-		buttons.at(id)->removePlayer(player);
-	} else {
-		buttons.at(id)->addPlayer(player);
-	}
-	return true;
+	if (id >= buttons.size()) return false;
+	return buttons[id]->trigger();
 }
 
 void ShipModel::resolveButton(int id) {
