@@ -10,7 +10,7 @@ using namespace cugl;
 constexpr float DOOR_RADIUS = 660;
 
 /** The scale of the doors. */
-constexpr float DOOR_SCALE = 0.2f;
+constexpr float DOOR_SCALE = 0.3f;
 
 /** The frame of the animation strip to freeze on when one player is on the door */
 constexpr int ONE_PLAYER_FRAME = 16;
