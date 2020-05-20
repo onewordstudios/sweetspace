@@ -82,7 +82,7 @@ constexpr float SHIP_HEALTH_RED_CUTOFF = 0.2f;
 constexpr float HEALTH_RANGE = 100;
 
 /** Offset of health bar (angle of health bar when health = 0) */
-constexpr float HEALTH_OFFSET = 220;
+constexpr float HEALTH_OFFSET = 217;
 
 /** Time to stop showing health tutorial */
 constexpr int HEALTH_TUTORIAL_CUTOFF = 10;
@@ -634,18 +634,18 @@ void GameGraphRoot::update(float timestep) {
 	} else {
 		float percentHealth = ship->getHealth() / ship->getInitHealth();
 		if (percentHealth == 1) {
-			healthNodeOverlay->setAngle(0);
+			healthNodeOverlay->setAngle(((percentHealth * HEALTH_RANGE) + HEALTH_OFFSET + 3) *
+										globals::PI_180);
 			std::shared_ptr<Texture> image = assets->get<Texture>("health_green");
 			healthNodeOverlay->setTexture(image);
 		} else {
-			CULog("health: %f", percentHealth);
 			healthNodeOverlay->setAngle(((percentHealth * HEALTH_RANGE) + HEALTH_OFFSET) *
 										globals::PI_180);
 		}
-		if (ship->getHealth() < ship->getInitHealth() * SHIP_HEALTH_RED_CUTOFF) {
+		if (percentHealth < SHIP_HEALTH_RED_CUTOFF) {
 			std::shared_ptr<Texture> image = assets->get<Texture>("health_red");
 			healthNodeOverlay->setTexture(image);
-		} else if (ship->getHealth() < ship->getInitHealth() * SHIP_HEALTH_YELLOW_CUTOFF) {
+		} else if (percentHealth < SHIP_HEALTH_YELLOW_CUTOFF) {
 			std::shared_ptr<Texture> image = assets->get<Texture>("health_yellow");
 			healthNodeOverlay->setTexture(image);
 		}
