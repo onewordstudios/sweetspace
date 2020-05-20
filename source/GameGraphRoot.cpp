@@ -30,6 +30,12 @@ constexpr float SEG_SCALE = 0.33f;
 /** Number of animation frames of doors */
 constexpr int DOOR_FRAMES = 32;
 
+/** Number of animation rows of doors */
+constexpr int DOOR_ROWS = 5;
+
+/** Number of animation cols of doors */
+constexpr int DOOR_COLS = 7;
+
 /** Loop range of the background image */
 constexpr int BG_SCROLL_LIMIT = 256;
 
@@ -339,7 +345,7 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 		std::shared_ptr<DoorModel> doorModel = ship->getDoors().at((unsigned long)i);
 		std::shared_ptr<Texture> image = assets->get<Texture>("door");
 		std::shared_ptr<DoorNode> doorNode = DoorNode::alloc(
-			doorModel, playerModel, ship->getSize(), image, 1, DOOR_FRAMES, DOOR_FRAMES);
+			doorModel, playerModel, ship->getSize(), image, DOOR_ROWS, DOOR_COLS, DOOR_FRAMES);
 		doorsNode->addChildWithTag(doorNode, i + 1);
 	}
 
