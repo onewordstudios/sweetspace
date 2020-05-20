@@ -21,10 +21,10 @@ constexpr std::array<int, globals::NUM_TUTORIAL_LEVELS> HEALTH = {						// NOLIN
 	1000, 10, 1000, 10, 10, 10, 1000, 10, 10, 10, 1000};								// NOLINT
 constexpr std::array<int, globals::NUM_TUTORIAL_LEVELS> SIZE_PER = {180, 180, 180, 180, // NOLINT
 																	180, 180, 180, 180,
-																	180, 180, 180};	   // NOLINT
-constexpr std::array<int, globals::NUM_TUTORIAL_LEVELS> SECTIONED = {1, 0, 0, 0,	   // NOLINT
-																	 1, 0, 0, 0};	   // NOLINT
-constexpr std::array<int, globals::NUM_TUTORIAL_LEVELS> CUSTOM_EVENTS = {2,	 1,	 1, 1, // NOLINT
+																	180, 180, 180};		   // NOLINT
+constexpr std::array<int, globals::NUM_TUTORIAL_LEVELS> SECTIONED = {1, 0, 0, 0,		   // NOLINT
+																	 0, 0, 1, 0, 0, 0, 0}; // NOLINT
+constexpr std::array<int, globals::NUM_TUTORIAL_LEVELS> CUSTOM_EVENTS = {2,	 1,	 1, 1,	   // NOLINT
 																		 1,	 1,	 1, 10,
 																		 10, 10, 10}; // NOLINT
 constexpr float BUTTON_PADDING = 30.0f;												  // NOLINT
