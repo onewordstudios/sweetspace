@@ -13,13 +13,11 @@ class DonutModel {
 #pragma region Animation Constants and Functions
 
 	/** The max angular velocity (in degrees) per frame */
-	static constexpr float DONUT_MAX_TURN = 2.0f;
+	static constexpr float DONUT_MAX_TURN = 1.7f;
 	/** The max force to apply to the donut */
 	static constexpr float DONUT_MAX_FORCE = 0.5f;
 	/** The default amount the angular velocity decays by each frame */
-	static constexpr float DEFAULT_DONUT_FRICTION_FACTOR = 0.9f;
-	/** Restoration rate of friction each frame. Calculated based on wanted linger time. */
-	static constexpr float FRICTION_RESTORATION = 1.015f;
+	static constexpr float DEFAULT_DONUT_FRICTION_FACTOR = 0.95f;
 	/** The threshold below which the donut has effectively stopped rolling */
 	static constexpr float DONUT_STOP_THRESHOLD = 0.01f;
 
@@ -95,7 +93,6 @@ class DonutModel {
 	 */
 	DonutModel(void)
 		: angle(0),
-		  teleportAngle(0),
 		  shipSize(DEFAULT_SHIP_SIZE),
 		  velocity(0),
 		  friction(DEFAULT_DONUT_FRICTION_FACTOR),
@@ -103,6 +100,8 @@ class DonutModel {
 		  jumping(false),
 		  jumpTime(0),
 		  jumpVelocity(0),
+		  faceState(Idle),
+		  teleportAngle(0),
 		  colorId(0) {}
 
 	/**
@@ -209,6 +208,11 @@ class DonutModel {
 	 * @return whether the donut is currently jumping.
 	 */
 	bool isJumping() { return jumping; }
+
+	/** Returns whether the donut is currently jumping and is on the descent of the jump arc */
+	bool isDescending() {
+		return jumping && (GRAVITY / 2 * jumpTime * jumpTime > jumpVelocity * jumpTime);
+	}
 
 	/**
 	 * Returns the donut's jump time

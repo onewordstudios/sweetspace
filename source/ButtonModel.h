@@ -8,30 +8,32 @@
 
 class ButtonModel {
    private:
-	/** The height of the button */
-	int height = 0;
+	/** The height of the button, as percentage down (0 = fully up) */
+	float height = 0;
+	/** The current frame of animation */
+	int frame = 0;
 	/** The angle at which the button exists */
 	float angle;
-	/** Bitset of players on this button */
-	std::bitset<globals::MAX_PLAYERS> playersOn;
 	/** Pointer to the pair of this button */
 	std::shared_ptr<ButtonModel> pairButton;
 	/** ID of the pair of this button */
 	int pairID;
+	/** Whether this button is jumped on */
+	bool jumped;
 	/** Whether this button is resolved */
 	bool resolved;
 	/** Whether this model is active */
 	bool isActive;
 
    public:
-#pragma mark Constructors
+#pragma region Constructors
 	/*
 	 * Creates a new, uninitialized, and unused button.
 	 *
 	 * Do not call this constructor using new. These models should exclusively be allocated into an
 	 * object pool by {@code ShipModel} and accessed from there.
 	 */
-	ButtonModel(void) : angle(-1), pairID(-1), resolved(false), isActive(false) {}
+	ButtonModel(void) : angle(-1), pairID(-1), jumped(false), resolved(false), isActive(false) {}
 
 	/**
 	 * Initializes a new button with the given angle and pair.
@@ -44,8 +46,8 @@ class ButtonModel {
 	 */
 	bool init(const float a, std::shared_ptr<ButtonModel> pair, int pairID);
 
-#pragma mark -
-#pragma mark Accessors
+#pragma endregion
+#pragma region Accessors
 	/** Returns whether this model is active */
 	bool getIsActive() { return isActive; }
 
@@ -60,19 +62,10 @@ class ButtonModel {
 	int getSection();
 
 	/**
-	 * Returns the current height of the button.
+	 * Returns the current height of the button, as percentage down, where 0 = fully up and 1 =
+	 * fully down
 	 */
-	int getHeight() { return height; }
-
-	/**
-	 * Adds the given player's flag to the button.
-	 */
-	void addPlayer(int id) { playersOn.set(id); }
-
-	/**
-	 * Removes the given player's flag from the button if present. Has no effect otherwise.
-	 */
-	void removePlayer(int id) { playersOn.reset(id); }
+	float getHeight() { return height; }
 
 	/**
 	 * Returns whether this button is resolved.
@@ -80,14 +73,9 @@ class ButtonModel {
 	bool isResolved() { return resolved; }
 
 	/**
-	 * Resolve this button
-	 */
-	void resolve() { resolved = true; }
-
-	/**
 	 * Returns whether any players are jumping on this button.
 	 */
-	bool isJumpedOn() { return playersOn.any(); }
+	bool isJumpedOn() { return jumped; }
 
 	/**
 	 * Return a pointer to the pair of this button
@@ -99,9 +87,31 @@ class ButtonModel {
 	 */
 	int getPairID() { return pairID; }
 
+#pragma endregion
+#pragma region Mutators
+
+	/**
+	 * Update the state of this button each frame
+	 */
+	void update();
+
+	/**
+	 * Trigger this button due to a jump.
+	 *
+	 * @return true iff the trigger was successfully registered (ie was not called during the
+	 * i-frames after the last call to trigger)
+	 */
+	bool trigger();
+
+	/**
+	 * Resolve this button
+	 */
+	void resolve() { resolved = true; }
+
 	/**
 	 * Resets this button.
 	 */
 	void clear();
+#pragma endregion
 };
 #endif /* __BUTTON_MODEL_H__ */

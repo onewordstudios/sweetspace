@@ -342,7 +342,7 @@ class MagicInternetBox {
 	 * @param player2 The player ID of the second player that can resolve this task or -1 for anyone
 	 * @param id The dual-task ID used to identify this task in the future
 	 */
-	void createDualTask(float angle, int player1, int player2, int id);
+	void createDualTask(float angle, int id);
 
 	/**
 	 * Inform other players that at least one of the two required players has
@@ -379,7 +379,7 @@ class MagicInternetBox {
 	 * @param player The player ID who is activating the button
 	 * @param flag Whether the player is on or off the door (1 or 0)
 	 */
-	void flagButton(int id, int player, int flag);
+	void flagButton(int id);
 
 	/**
 	 * Inform other players that a pair of buttons have been resolved.
