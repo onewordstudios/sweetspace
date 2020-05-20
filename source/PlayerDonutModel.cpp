@@ -2,6 +2,9 @@
 
 using namespace cugl;
 
+/** Restoration rate of friction each frame. Calculated based on wanted linger time. */
+constexpr float FRICTION_RESTORATION = 1.05f;
+
 void PlayerDonutModel::update(float timestep) {
 	// Adjust the active forces.
 	velocity = RANGE_CLAMP(velocity, -DONUT_MAX_TURN, DONUT_MAX_TURN);
