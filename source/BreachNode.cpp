@@ -35,6 +35,9 @@ constexpr int SPARKLE_OFFSET_END = 60;
 /** Scale of big sparkle effect */
 constexpr float SPARKLE_SCALE_BIG = 1.0;
 
+/** Scale of small sparkle effect */
+constexpr float SPARKLE_SCALE_SMALL = 0.6;
+
 bool BreachNode::init(std::shared_ptr<BreachModel> breach, std::shared_ptr<DonutModel> player,
 					  float shipSize, std::shared_ptr<cugl::Texture> filmstrip,
 					  std::shared_ptr<cugl::Texture> pattern, cugl::Color4 color,
@@ -46,7 +49,7 @@ bool BreachNode::init(std::shared_ptr<BreachModel> breach, std::shared_ptr<Donut
 	sparkleNodeBig = sparkleBig;
 	sparkleNodeBig->setScale(SPARKLE_SCALE_BIG);
 	sparkleNodeSmall = sparkleSmall;
-	sparkleNodeSmall->setScale(0.6);
+	sparkleNodeSmall->setScale(SPARKLE_SCALE_SMALL);
 	setScale(BREACH_SCALE);
 	prevHealth = breach->getHealth();
 	setPosition(Vec2::ZERO);
