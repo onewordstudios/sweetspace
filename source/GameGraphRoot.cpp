@@ -568,6 +568,7 @@ void GameGraphRoot::update(float timestep) {
 			communicateTutorial->setVisible(false);
 			timerBorder->setVisible(false);
 			healthNodeOverlay->setVisible(false);
+			healthNodeNumbers->setVisible(false);
 			coordHUD->setVisible(false);
 			if (playerID != 0) {
 				winWaitText->setVisible(true);
