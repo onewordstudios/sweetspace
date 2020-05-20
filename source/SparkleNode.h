@@ -6,6 +6,15 @@
 
 class SparkleNode : public CustomNode {
 #pragma mark Values
+   public:
+	static constexpr int FILMSTRIP_H = 3;
+	static constexpr int FILMSTRIP_W = 5;
+	static constexpr int FILMSTRIP_SIZE_BIG = 13;
+	static constexpr int FILMSTRIP_SIZE_SMALL = 10;
+
+	/** The type of sparkle effect this node is */
+	enum SparkleType { Big, Small };
+
    protected:
 	/** Reference to the model of this node. */
 	std::shared_ptr<cugl::AnimationNode> filmstrip;
@@ -13,6 +22,8 @@ class SparkleNode : public CustomNode {
 	int animationCounter;
 	/** Whether this sparkle is animating */
 	bool isAnimating;
+	/** The type of this node */
+	SparkleType sparkleType;
 
 #pragma region State Methods
 	bool isActive() override;
@@ -23,11 +34,8 @@ class SparkleNode : public CustomNode {
 #pragma mark -
 	static constexpr int COLOR_OFFSET = 30;
 
-   public:
-	static constexpr int FILMSTRIP_H = 3;
-	static constexpr int FILMSTRIP_W = 5;
-	static constexpr int FILMSTRIP_SIZE = 13;
 #pragma mark Constructor
+   public:
 	/**
 	 * Creates an empty Sparkle with the degenerate texture.
 	 *
@@ -56,7 +64,8 @@ class SparkleNode : public CustomNode {
 	 * @param filmstrip	The texture image to use
 	 */
 	virtual bool init(std::shared_ptr<DonutModel> player, float shipSize,
-					  std::shared_ptr<cugl::Texture> filmstrip, cugl::Color4 color);
+					  std::shared_ptr<cugl::Texture> filmstrip, cugl::Color4 color,
+					  SparkleType type);
 
 	/**
 	 * Returns a newly allocated BreachNode at the world origin.
@@ -72,9 +81,9 @@ class SparkleNode : public CustomNode {
 	 */
 	static std::shared_ptr<SparkleNode> alloc(std::shared_ptr<DonutModel> player, float shipSize,
 											  std::shared_ptr<cugl::Texture> filmstrip,
-											  cugl::Color4 color) {
+											  cugl::Color4 color, SparkleType type) {
 		std::shared_ptr<SparkleNode> result = std::make_shared<SparkleNode>();
-		return (result->init(player, shipSize, filmstrip, color) ? result : nullptr);
+		return (result->init(player, shipSize, filmstrip, color, type) ? result : nullptr);
 	}
 
 #pragma mark -

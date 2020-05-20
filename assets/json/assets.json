@@ -48,8 +48,11 @@
         "breach_filmstrip": {
             "file":   "textures/breaches/breach_filmstrip.png"
         },
-        "breach_sparkle": {
+        "breach_sparklebig": {
             "file":   "textures/breaches/breach_accent.png"
+        },
+        "breach_sparklesmall": {
+            "file":   "textures/breaches/breach_accent_small.png"
         },
 	    "door": {
             "file":   "textures/doors/door.png"

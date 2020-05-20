@@ -32,14 +32,21 @@ constexpr int SPARKLE_OFFSET_BEGIN = 20;
 /** Vertical position offset for pattern animation */
 constexpr int SPARKLE_OFFSET_END = 60;
 
+/** Scale of big sparkle effect */
+constexpr float SPARKLE_SCALE_BIG = 1.0;
+
 bool BreachNode::init(std::shared_ptr<BreachModel> breach, std::shared_ptr<DonutModel> player,
 					  float shipSize, std::shared_ptr<cugl::Texture> filmstrip,
 					  std::shared_ptr<cugl::Texture> pattern, cugl::Color4 color,
-					  std::shared_ptr<SparkleNode> sparkle) {
+					  std::shared_ptr<SparkleNode> sparkleBig,
+					  std::shared_ptr<SparkleNode> sparkleSmall) {
 	CustomNode::init(player, shipSize, breach->getAngle(), globals::RADIUS);
 
 	breachModel = breach;
-	sparkleNode = sparkle;
+	sparkleNodeBig = sparkleBig;
+	sparkleNodeBig->setScale(SPARKLE_SCALE_BIG);
+	sparkleNodeSmall = sparkleSmall;
+	sparkleNodeSmall->setScale(0.6);
 	setScale(BREACH_SCALE);
 	prevHealth = breach->getHealth();
 	setPosition(Vec2::ZERO);
@@ -62,9 +69,7 @@ bool BreachNode::init(std::shared_ptr<BreachModel> breach, std::shared_ptr<Donut
 	return true;
 }
 
-bool BreachNode::isActive() {
-	return breachModel->getHealth() > 0 || (prevHealth == 1 && breachModel->getHealth() == 0);
-}
+bool BreachNode::isActive() { return breachModel->getIsActive(); }
 
 void BreachNode::prePosition() { angle = breachModel->getAngle(); }
 
@@ -73,15 +78,14 @@ void BreachNode::postPosition() {
 		// Start breach shrinking animation
 		isAnimatingShrink = true;
 		currentFrameIdle = 0;
-		if (breachModel->getHealth() != 0) {
-			float yOffset = Tween::linear(SPARKLE_OFFSET_BEGIN, SPARKLE_OFFSET_END,
-										  (int)shapeNode->getFrame(), shapeNode->getSize());
-			sparkleNode->setRadius(radius + yOffset);
-			sparkleNode->setAngle(getAngle());
-			sparkleNode->setOnShipAngle(angle);
-			sparkleNode->setFilmstripColor(shapeNode->getColor());
-		}
-		sparkleNode->beginAnimation();
+
+		float yOffset = Tween::linear(SPARKLE_OFFSET_BEGIN, SPARKLE_OFFSET_END,
+									  (int)shapeNode->getFrame(), shapeNode->getSize());
+		sparkleNodeSmall->setRadius(radius + yOffset);
+		sparkleNodeSmall->setAngle(getAngle());
+		sparkleNodeSmall->setOnShipAngle(angle);
+		// sparkleNodeSmall->setFilmstripColor(shapeNode->getColor());
+		sparkleNodeSmall->beginAnimation();
 	}
 	if (isAnimatingShrink) {
 		// Update animation frame to shrink
@@ -115,6 +119,13 @@ void BreachNode::postPosition() {
 		(PATTERN_SCALE + (-PATTERN_SCALE + 1) *
 							 (float)(shapeNode->getSize() - shapeNode->getFrame()) /
 							 (float)shapeNode->getSize()));
+}
+
+void BreachNode::becomeInactive() {
+	sparkleNodeBig->setRadius(radius + SPARKLE_OFFSET_BEGIN);
+	sparkleNodeBig->setAngle(getAngle());
+	sparkleNodeBig->setOnShipAngle(angle);
+	sparkleNodeBig->beginAnimation();
 }
 
 void BreachNode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch, const Mat4& transform,

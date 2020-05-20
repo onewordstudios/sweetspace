@@ -18,7 +18,9 @@ class BreachNode : public CustomNode {
 	/** Reference to the pattern node of this breach */
 	std::shared_ptr<cugl::AnimationNode> patternNode;
 	/** Reference to special resolve animation node */
-	std::shared_ptr<SparkleNode> sparkleNode;
+	std::shared_ptr<SparkleNode> sparkleNodeBig;
+	/** Reference to special resolve animation node */
+	std::shared_ptr<SparkleNode> sparkleNodeSmall;
 	/** Whether the breach is playing idle animation */
 	bool isAnimatingShrink;
 	/** Health of the breach model from previous frame */
@@ -38,6 +40,7 @@ class BreachNode : public CustomNode {
 	bool isActive() override;
 	void prePosition() override;
 	void postPosition() override;
+	void becomeInactive() override;
 #pragma endregion
 
    public:
@@ -79,7 +82,8 @@ class BreachNode : public CustomNode {
 	virtual bool init(std::shared_ptr<BreachModel> breach, std::shared_ptr<DonutModel> player,
 					  float shipSize, std::shared_ptr<cugl::Texture> filmstrip,
 					  std::shared_ptr<cugl::Texture> pattern, cugl::Color4 color,
-					  std::shared_ptr<SparkleNode> sparkle);
+					  std::shared_ptr<SparkleNode> sparkle,
+					  std::shared_ptr<SparkleNode> sparkleSmall);
 
 	/**
 	 * Returns a newly allocated BreachNode at the world origin.
@@ -98,9 +102,11 @@ class BreachNode : public CustomNode {
 											 std::shared_ptr<cugl::Texture> filmstrip,
 											 std::shared_ptr<cugl::Texture> pattern,
 											 cugl::Color4 color,
-											 std::shared_ptr<SparkleNode> sparkle) {
+											 std::shared_ptr<SparkleNode> sparkleBig,
+											 std::shared_ptr<SparkleNode> sparkleSmall) {
 		std::shared_ptr<BreachNode> result = std::make_shared<BreachNode>();
-		return (result->init(breach, player, shipSize, filmstrip, pattern, color, sparkle)
+		return (result->init(breach, player, shipSize, filmstrip, pattern, color, sparkleBig,
+							 sparkleSmall)
 					? result
 					: nullptr);
 	}

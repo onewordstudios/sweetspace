@@ -14,15 +14,17 @@ static constexpr float SPARKLE_SCALE = 0.5f;
 static constexpr int ANIMATION_SPEED = 5;
 
 bool SparkleNode::init(std::shared_ptr<DonutModel> player, float shipSize,
-					   std::shared_ptr<cugl::Texture> texture, cugl::Color4 color) {
+					   std::shared_ptr<cugl::Texture> texture, cugl::Color4 color,
+					   SparkleType type) {
 	CustomNode::init(player, shipSize, 0, globals::RADIUS);
 
 	setScale(SPARKLE_SCALE);
 	setPosition(Vec2::ZERO);
 
 	// Add filstrip node
-	filmstrip = AnimationNode::alloc(texture, FILMSTRIP_H, FILMSTRIP_W, FILMSTRIP_SIZE);
-	filmstrip->setColor(Color4::BLUE);
+	filmstrip = AnimationNode::alloc(texture, FILMSTRIP_H, FILMSTRIP_W,
+									 type == Big ? FILMSTRIP_SIZE_BIG : FILMSTRIP_SIZE_SMALL);
+	setFilmstripColor(color);
 	filmstrip->setAnchor(Vec2::ANCHOR_CENTER);
 	filmstrip->setPosition(0, 0);
 	addChildWithName(filmstrip, "filmstrip");
@@ -39,12 +41,12 @@ void SparkleNode::prePosition() {}
 void SparkleNode::postPosition() {
 	if (isAnimating) {
 		animationCounter += 1;
-		if (animationCounter == FILMSTRIP_SIZE * ANIMATION_SPEED) {
+		if (animationCounter >= filmstrip->getSize() * ANIMATION_SPEED) {
 			// End of animation
 			resetAnimation();
 		} else if (animationCounter % ANIMATION_SPEED == 0) {
 			// Advance frame
-			filmstrip->setFrame((int)(animationCounter / ANIMATION_SPEED));
+			filmstrip->setFrame((animationCounter / ANIMATION_SPEED));
 		}
 	}
 }

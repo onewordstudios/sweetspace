@@ -317,7 +317,8 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 
 	// Initialize Breaches
 	std::shared_ptr<cugl::Texture> breachFilmstrip = assets->get<Texture>("breach_filmstrip");
-	std::shared_ptr<cugl::Texture> breachSparkle = assets->get<Texture>("breach_sparkle");
+	std::shared_ptr<cugl::Texture> breachSparkleBig = assets->get<Texture>("breach_sparklebig");
+	std::shared_ptr<cugl::Texture> breachSparkleSmall = assets->get<Texture>("breach_sparklesmall");
 	for (int i = 0; i < ship->getBreaches().size(); i++) {
 		std::shared_ptr<BreachModel> breachModel = ship->getBreaches().at((unsigned long)i);
 		string breachColor = PLAYER_COLOR.at((unsigned long)ship->getDonuts()
@@ -327,14 +328,19 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 		cugl::Color4 color = BREACH_COLOR.at((unsigned long)ship->getDonuts()
 												 .at((unsigned long)breachModel->getPlayer())
 												 ->getColorId());
-		// Initialize sparkle node
-		std::shared_ptr<SparkleNode> sparkleNode =
-			SparkleNode::alloc(playerModel, ship->getSize(), breachSparkle, color);
-		breachSparklesNode->addChildWithTag(sparkleNode, (unsigned int)(i + 1));
+		// Initialize sparkle nodes
+		std::shared_ptr<SparkleNode> sparkleNodeBig =
+			SparkleNode::alloc(playerModel, ship->getSize(), breachSparkleBig, Color4::WHITE,
+							   SparkleNode::SparkleType::Big);
+		breachSparklesNode->addChild(sparkleNodeBig);
+		std::shared_ptr<SparkleNode> sparkleNodeSmall =
+			SparkleNode::alloc(playerModel, ship->getSize(), breachSparkleSmall, Color4::WHITE,
+							   SparkleNode::SparkleType::Small);
+		breachSparklesNode->addChild(sparkleNodeSmall);
 
 		std::shared_ptr<BreachNode> breachNode =
 			BreachNode::alloc(breachModel, playerModel, ship->getSize(), breachFilmstrip, pattern,
-							  color, sparkleNode);
+							  color, sparkleNodeBig, sparkleNodeSmall);
 		breachNode->setTag((unsigned int)(i + 1));
 
 		// Add the breach node
