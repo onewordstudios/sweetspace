@@ -31,10 +31,10 @@ constexpr float SEG_SCALE = 0.33f;
 constexpr int DOOR_FRAMES = 32;
 
 /** Number of animation rows of doors */
-constexpr int DOOR_ROWS = 5;
+constexpr int DOOR_ROWS = 1;
 
 /** Number of animation cols of doors */
-constexpr int DOOR_COLS = 7;
+constexpr int DOOR_COLS = 32;
 
 /** Loop range of the background image */
 constexpr int BG_SCROLL_LIMIT = 256;
