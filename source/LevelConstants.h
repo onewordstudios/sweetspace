@@ -37,13 +37,13 @@ constexpr std::array<const char*, MAX_NUM_LEVELS> LEVEL_NAMES = {"",
 																 "json/tutorial2.owslevel",
 																 "",
 																 "json/tutorial4.owslevel",
+																 "json/level1.owslevel",
+																 "json/level2.owslevel",
 																 "",
 																 "json/tutorial6.owslevel",
 																 "json/tutorial7.owslevel",
-																 "",
-																 "json/level1.owslevel",
-																 "json/level2.owslevel",
 																 "json/level3.owslevel",
+																 "",
 																 "json/level4.owslevel"};
 
 /** List of where the buttons on the level select map */
