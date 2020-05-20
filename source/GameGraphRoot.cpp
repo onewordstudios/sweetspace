@@ -163,6 +163,7 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	healthNodeOverlay->setVisible(true);
 	healthNodeNumbers =
 		dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_healthNumbers"));
+	healthNodeNumbers->setVisible(true);
 	coordHUD = std::dynamic_pointer_cast<Label>(assets->get<Node>("game_hud"));
 	timerBorder =
 		std::dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_timerBorder"));
