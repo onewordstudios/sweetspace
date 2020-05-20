@@ -17,7 +17,7 @@ constexpr unsigned int NETWORK_TICK = 12; // NOLINT
 constexpr int UNOP_MARKER = 12;
 
 /** Number of tutorial levels */
-constexpr unsigned int NUM_TUTORIAL_LEVELS = 8; // NOLINT
+constexpr unsigned int NUM_TUTORIAL_LEVELS = 11; // NOLINT
 
 /** Number of characters in a ship ID */
 constexpr unsigned int ROOM_LENGTH = 5; // NOLINT

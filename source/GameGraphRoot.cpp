@@ -371,7 +371,7 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 			tutorial->setScale(TUTORIAL_SCALE);
 			tutorialNode->addChildWithTag(tutorial, i + 1);
 		}
-	} else if (ship->getLevelNum() == tutorial::REAL_LEVELS.at(2)) {
+	} else if (ship->getLevelNum() == tutorial::REAL_LEVELS.at(4)) {
 		std::shared_ptr<Texture> image = assets->get<Texture>("timer_tutorial1");
 		timerTutorial->setTexture(image);
 		float posY = timerTutorial->getPositionY() - TIMER_OFFSET;
@@ -703,7 +703,7 @@ void GameGraphRoot::update(float timestep) {
 			std::shared_ptr<Texture> image = assets->get<Texture>("communicate_tutorial1");
 			communicateTutorial->setTexture(image);
 		}
-	} else if (ship->getLevelNum() == tutorial::REAL_LEVELS.at(2)) {
+	} else if (ship->getLevelNum() == tutorial::REAL_LEVELS.at(4)) {
 		if (trunc(ship->timeCtr) > TIMER_TUTORIAL_CUTOFF) {
 			timerTutorial->setVisible(false);
 		} else {
