@@ -9,7 +9,7 @@ class SparkleNode : public CustomNode {
    public:
 	static constexpr int FILMSTRIP_H = 3;
 	static constexpr int FILMSTRIP_W = 5;
-	static constexpr int FILMSTRIP_SIZE_BIG = 13;
+	static constexpr int FILMSTRIP_SIZE_BIG = 15;
 	static constexpr int FILMSTRIP_SIZE_SMALL = 10;
 
 	/** The type of sparkle effect this node is */
