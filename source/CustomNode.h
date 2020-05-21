@@ -51,6 +51,9 @@ class CustomNode : public cugl::Node {
 	/** The return value of {@code isActive()} the previous frame */
 	bool wasActive;
 
+	/** Set of all instantiated members of this class */
+	static std::unordered_set<CustomNode *> allActiveNodes;
+
 #pragma region Positioning
 #pragma mark Positioning Methods
 	/**
@@ -116,7 +119,9 @@ class CustomNode : public cugl::Node {
 		  isShown(false),
 		  angle(0),
 		  radius(0),
-		  isDirty(false) {}
+		  isDirty(false) {
+		allActiveNodes.insert(this);
+	}
 
 	/**
 	 * Releases all resources allocated with this node.
@@ -125,7 +130,10 @@ class CustomNode : public cugl::Node {
 	 * However, the polygon and drawing commands will be deleted and no
 	 * longer safe to use.
 	 */
-	~CustomNode() { dispose(); }
+	~CustomNode() {
+		dispose();
+		allActiveNodes.erase(this);
+	}
 
 	/**
 	 * Properly initialize this node. Do NOT use the constructors in the parent class. They will not
@@ -185,6 +193,13 @@ class CustomNode : public cugl::Node {
    public:
 	void draw(const shared_ptr<cugl::SpriteBatch> &batch, const cugl::Mat4 &transform,
 			  cugl::Color4 tint) override;
+
+	/**
+	 * Manually recompute the positions of ALL instantiated custom nodes. Should be called
+	 * after events like a stabilizer malfunction that might suddenly but drastically alter the
+	 * player's position.
+	 */
+	static void recomputeAll();
 };
 
 #endif // SWEETSPACE_CUSTOMNODE_H

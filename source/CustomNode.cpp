@@ -5,6 +5,9 @@ using namespace cugl;
 /** Position to hide stuff offscreen. */
 constexpr float OFF_SCREEN_POS = 1500;
 
+// NOLINTNEXTLINE We'd hope C++ std containers don't throw exceptions on default construction
+std::unordered_set<CustomNode*> CustomNode::allActiveNodes;
+
 #pragma region Lifecycle
 
 bool CustomNode::init(std::shared_ptr<DonutModel> player, float shipSize, float angle,
@@ -97,4 +100,10 @@ void CustomNode::draw(const shared_ptr<cugl::SpriteBatch>& batch, const cugl::Ma
 	}
 
 	Node::draw(batch, transform, tint);
+}
+
+void CustomNode::recomputeAll() {
+	for (auto node : allActiveNodes) {
+		node->isDirty = true;
+	}
 }
