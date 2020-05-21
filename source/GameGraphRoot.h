@@ -225,7 +225,7 @@ class GameGraphRoot : public cugl::Scene {
 #pragma mark -
 #pragma mark Public Consts
 	/** Possible colors for player representations */
-	const std::vector<string> PLAYER_COLOR{"yellow", "red", "purple", "green", "orange", "cyan"};
+	const std::vector<string> PLAYER_COLOR{"yellow", "red", "green", "orange", "cyan", "purple"};
 	/** Possible colors for breach representations */
 	static const std::vector<cugl::Color4> BREACH_COLOR;
 	/** Color of ship segment label text */
