@@ -65,6 +65,8 @@ class GameGraphRoot : public cugl::Scene {
 	std::shared_ptr<cugl::Node> nearSpace;
 	/** Parent node of all breaches, is child of nearSpace */
 	std::shared_ptr<cugl::Node> breachesNode;
+	/** Parent node of all breach sparkle nodes, is child of nearSpace */
+	std::shared_ptr<cugl::Node> breachSparklesNode;
 	/** Parent node of all ship segments, is child of nearSpace */
 	std::shared_ptr<cugl::Node> shipSegsNode;
 	/** Parent node of all doors, is child of nearSpace */
@@ -73,15 +75,16 @@ class GameGraphRoot : public cugl::Scene {
 	std::shared_ptr<cugl::Node> unopsNode;
 	/** Parent node of all external donuts, is child of nearSpace */
 	std::shared_ptr<cugl::Node> externalDonutsNode;
-
+	/** Roll challenge */
 	std::shared_ptr<cugl::PolygonNode> challengePanelHanger;
 	std::shared_ptr<cugl::PolygonNode> challengePanel;
 	std::shared_ptr<cugl::PolygonNode> challengePanelText;
 	std::vector<std::shared_ptr<cugl::PolygonNode>> challengePanelArrows;
-	/** Filmstrip representing the player's animated donut */
+	/** Health bar */
 	std::shared_ptr<cugl::PolygonNode> healthNode;
 	std::shared_ptr<cugl::PolygonNode> healthNodeOverlay;
-	/** Filmstrip representing the player's animated donut */
+	std::shared_ptr<cugl::PolygonNode> healthNodeNumbers;
+	/** Tutorial */
 	std::shared_ptr<cugl::PolygonNode> moveTutorial;
 	std::shared_ptr<cugl::PolygonNode> healthTutorial;
 	std::shared_ptr<cugl::PolygonNode> rollTutorial;

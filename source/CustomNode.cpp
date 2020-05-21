@@ -13,6 +13,7 @@ bool CustomNode::init(std::shared_ptr<DonutModel> player, float shipSize, float 
 	this->radius = radius;
 	isDirty = true;
 	isShown = true;
+	wasActive = false;
 	Node::init();
 	return false;
 }
@@ -26,6 +27,11 @@ void CustomNode::draw(const shared_ptr<cugl::SpriteBatch>& batch, const cugl::Ma
 					  cugl::Color4 tint) {
 	if (isActive()) {
 		// Model is currently active
+
+		if (!wasActive) {
+			becomeActive();
+			wasActive = true;
+		}
 
 		prePosition();
 
@@ -52,6 +58,10 @@ void CustomNode::draw(const shared_ptr<cugl::SpriteBatch>& batch, const cugl::Ma
 			Vec2 hidden = Vec2(OFF_SCREEN_POS, OFF_SCREEN_POS);
 			setPosition(hidden);
 			isShown = false;
+		}
+		if (wasActive) {
+			becomeInactive();
+			wasActive = false;
 		}
 	}
 

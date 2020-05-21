@@ -31,10 +31,10 @@ constexpr float SEG_SCALE = 0.33f;
 constexpr int DOOR_FRAMES = 32;
 
 /** Number of animation rows of doors */
-constexpr int DOOR_ROWS = 5;
+constexpr int DOOR_ROWS = 1;
 
 /** Number of animation cols of doors */
-constexpr int DOOR_COLS = 7;
+constexpr int DOOR_COLS = 32;
 
 /** Loop range of the background image */
 constexpr int BG_SCROLL_LIMIT = 256;
@@ -72,17 +72,17 @@ constexpr int SEG_LABEL_Y = 1113;
 /** Maximum number of health labels */
 constexpr int MAX_HEALTH_LABELS = 10;
 
-/** Percentage of ship health to start showing decrease in green */
-constexpr float SHIP_HEALTH_HIGH_GREEN_CUTOFF = 0.9f;
-
-/** Percentage of ship health to start showing more decrease in green */
-constexpr float SHIP_HEALTH_LOW_GREEN_CUTOFF = 0.7f;
-
 /** Percentage of ship health to start showing yellow */
 constexpr float SHIP_HEALTH_YELLOW_CUTOFF = 0.5f;
 
 /** Percentage of ship health to start showing red */
-constexpr float SHIP_HEALTH_RED_CUTOFF = 0.3f;
+constexpr float SHIP_HEALTH_RED_CUTOFF = 0.2f;
+
+/** Portion of health bar shown on screen */
+constexpr float HEALTH_RANGE = 100;
+
+/** Offset of health bar (angle of health bar when health = 0) */
+constexpr float HEALTH_OFFSET = 217;
 
 /** Time to stop showing health tutorial */
 constexpr int HEALTH_TUTORIAL_CUTOFF = 20;
@@ -95,42 +95,6 @@ constexpr int BREACH_TUTORIAL_CUTOFF = 10;
 
 /** Time to start showing timer */
 constexpr int TIMER_TUTORIAL_CUTOFF = 13;
-
-/** Red health position */
-constexpr float RED_POS_X = -100;
-
-/** Red health position */
-constexpr float RED_POS_Y = 176;
-
-/** Yellow health position */
-constexpr float YELLOW_POS_X = -120;
-
-/** Yellow health position */
-constexpr float YELLOW_POS_Y = 118;
-
-/** Low green health position */
-constexpr float LOW_GREEN_POS_X = -100;
-
-/** Low green health position */
-constexpr float LOW_GREEN_POS_Y = 60;
-
-/** High green health position */
-constexpr float HIGH_GREEN_POS_X = -75;
-
-/** High green health position */
-constexpr float HIGH_GREEN_POS_Y = 30;
-
-/** Red health angle */
-constexpr float RED_ANGLE = 240 * globals::PI_180;
-
-/** Yellow health angle */
-constexpr float YELLOW_ANGLE = 270 * globals::PI_180;
-
-/** Low green health angle */
-constexpr float LOW_GREEN_ANGLE = 300 * globals::PI_180;
-
-/** High green health angle */
-constexpr float HIGH_GREEN_ANGLE = 320 * globals::PI_180;
 
 /** Tutorial asset scale */
 constexpr float TUTORIAL_SCALE = 0.4f;
@@ -191,6 +155,7 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 		dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_player1"));
 	donutPos = tempDonutNode->getPosition();
 	breachesNode = assets->get<Node>("game_field_near_breaches");
+	breachSparklesNode = assets->get<Node>("game_field_near_breachsparkles");
 	shipSegsNode = assets->get<Node>("game_field_near_shipsegments");
 	doorsNode = assets->get<Node>("game_field_near_doors");
 	unopsNode = assets->get<Node>("game_field_near_unops");
@@ -200,6 +165,9 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	healthNodeOverlay =
 		dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_health"));
 	healthNodeOverlay->setVisible(true);
+	healthNodeNumbers =
+		dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_field_healthNumbers"));
+	healthNodeNumbers->setVisible(true);
 	coordHUD = std::dynamic_pointer_cast<Label>(assets->get<Node>("game_hud"));
 	timerBorder =
 		std::dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_timerBorder"));
@@ -318,18 +286,31 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	}
 
 	// Initialize Breaches
+	std::shared_ptr<cugl::Texture> breachFilmstrip = assets->get<Texture>("breach_filmstrip");
+	std::shared_ptr<cugl::Texture> breachSparkleBig = assets->get<Texture>("breach_sparklebig");
+	std::shared_ptr<cugl::Texture> breachSparkleSmall = assets->get<Texture>("breach_sparklesmall");
 	for (int i = 0; i < ship->getBreaches().size(); i++) {
 		std::shared_ptr<BreachModel> breachModel = ship->getBreaches().at((unsigned long)i);
 		string breachColor = PLAYER_COLOR.at((unsigned long)ship->getDonuts()
 												 .at((unsigned long)breachModel->getPlayer())
 												 ->getColorId());
-		std::shared_ptr<cugl::Texture> filmstrip = assets->get<Texture>("breach_filmstrip");
 		std::shared_ptr<cugl::Texture> pattern = assets->get<Texture>("breach_" + breachColor);
 		cugl::Color4 color = BREACH_COLOR.at((unsigned long)ship->getDonuts()
 												 .at((unsigned long)breachModel->getPlayer())
 												 ->getColorId());
+		// Initialize sparkle nodes
+		std::shared_ptr<SparkleNode> sparkleNodeBig =
+			SparkleNode::alloc(playerModel, ship->getSize(), breachSparkleBig, Color4::WHITE,
+							   SparkleNode::SparkleType::Big);
+		breachSparklesNode->addChild(sparkleNodeBig);
+		std::shared_ptr<SparkleNode> sparkleNodeSmall =
+			SparkleNode::alloc(playerModel, ship->getSize(), breachSparkleSmall, Color4::WHITE,
+							   SparkleNode::SparkleType::Small);
+		breachSparklesNode->addChild(sparkleNodeSmall);
+
 		std::shared_ptr<BreachNode> breachNode =
-			BreachNode::alloc(breachModel, playerModel, ship->getSize(), filmstrip, pattern, color);
+			BreachNode::alloc(breachModel, playerModel, ship->getSize(), breachFilmstrip, pattern,
+							  color, sparkleNodeBig, sparkleNodeSmall);
 		breachNode->setTag((unsigned int)(i + 1));
 
 		// Add the breach node
@@ -339,7 +320,7 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 			std::shared_ptr<TutorialNode> tutorial = TutorialNode::alloc(image);
 			tutorial->setScale(TUTORIAL_SCALE);
 			tutorial->setBreachNode(breachNode);
-			tutorialNode->addChildWithTag(tutorial, i + 1);
+			tutorialNode->addChildWithTag(tutorial, (unsigned int)(i + 1));
 		}
 	}
 
@@ -393,8 +374,7 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 			tutorial->setScale(TUTORIAL_SCALE);
 			tutorialNode->addChildWithTag(tutorial, i + 1);
 		}
-	} else if (ship->getLevelNum() == tutorial::REAL_LEVELS.at(2)) {
-		timerTutorial->setVisible(false);
+	} else if (ship->getLevelNum() == tutorial::REAL_LEVELS.at(4)) {
 		std::shared_ptr<Texture> image = assets->get<Texture>("timer_tutorial1");
 		timerTutorial->setTexture(image);
 		float posY = timerTutorial->getPositionY() + TIMER_OFFSET_Y;
@@ -606,6 +586,7 @@ void GameGraphRoot::update(float timestep) {
 			communicateTutorial->setVisible(false);
 			timerBorder->setVisible(false);
 			healthNodeOverlay->setVisible(false);
+			healthNodeNumbers->setVisible(false);
 			coordHUD->setVisible(false);
 			if (playerID != 0) {
 				winWaitText->setVisible(true);
@@ -669,27 +650,24 @@ void GameGraphRoot::update(float timestep) {
 
 	if (ship->getHealth() < 1) {
 		healthNodeOverlay->setVisible(false);
-	} else if (ship->getHealth() < ship->getInitHealth() * SHIP_HEALTH_RED_CUTOFF) {
-		std::shared_ptr<Texture> image = assets->get<Texture>("health_red");
-		healthNodeOverlay->setTexture(image);
-		healthNodeOverlay->setPosition(RED_POS_X, RED_POS_Y);
-		healthNodeOverlay->setAngle(RED_ANGLE);
-	} else if (ship->getHealth() < ship->getInitHealth() * SHIP_HEALTH_YELLOW_CUTOFF) {
-		std::shared_ptr<Texture> image = assets->get<Texture>("health_yellow");
-		healthNodeOverlay->setTexture(image);
-		healthNodeOverlay->setPosition(YELLOW_POS_X, YELLOW_POS_Y);
-		healthNodeOverlay->setAngle(YELLOW_ANGLE);
-	} else if (ship->getHealth() < ship->getInitHealth() * SHIP_HEALTH_LOW_GREEN_CUTOFF) {
-		healthNodeOverlay->setPosition(LOW_GREEN_POS_X, LOW_GREEN_POS_Y);
-		healthNodeOverlay->setAngle(LOW_GREEN_ANGLE);
-	} else if (ship->getHealth() < ship->getInitHealth() * SHIP_HEALTH_HIGH_GREEN_CUTOFF) {
-		healthNodeOverlay->setPosition(HIGH_GREEN_POS_X, HIGH_GREEN_POS_Y);
-		healthNodeOverlay->setAngle(HIGH_GREEN_ANGLE);
 	} else {
-		std::shared_ptr<Texture> image = assets->get<Texture>("health_green");
-		healthNodeOverlay->setTexture(image);
-		healthNodeOverlay->setPosition(0, 0);
-		healthNodeOverlay->setAngle(0);
+		float percentHealth = ship->getHealth() / ship->getInitHealth();
+		if (percentHealth == 1) {
+			healthNodeOverlay->setAngle(((percentHealth * HEALTH_RANGE) + HEALTH_OFFSET + 3) *
+										globals::PI_180);
+			std::shared_ptr<Texture> image = assets->get<Texture>("health_green");
+			healthNodeOverlay->setTexture(image);
+		} else {
+			healthNodeOverlay->setAngle(((percentHealth * HEALTH_RANGE) + HEALTH_OFFSET) *
+										globals::PI_180);
+		}
+		if (percentHealth < SHIP_HEALTH_RED_CUTOFF) {
+			std::shared_ptr<Texture> image = assets->get<Texture>("health_red");
+			healthNodeOverlay->setTexture(image);
+		} else if (percentHealth < SHIP_HEALTH_YELLOW_CUTOFF) {
+			std::shared_ptr<Texture> image = assets->get<Texture>("health_yellow");
+			healthNodeOverlay->setTexture(image);
+		}
 	}
 
 	if (ship->getLevelNum() == tutorial::BREACH_LEVEL) {
@@ -726,7 +704,7 @@ void GameGraphRoot::update(float timestep) {
 			healthTutorial->setVisible(true);
 			communicateTutorial->setVisible(true);
 		}
-	} else if (ship->getLevelNum() == tutorial::REAL_LEVELS.at(2)) {
+	} else if (ship->getLevelNum() == tutorial::REAL_LEVELS.at(4)) {
 		if (trunc(ship->timeCtr) > TIMER_TUTORIAL_CUTOFF) {
 			timerTutorial->setVisible(true);
 		} else {
@@ -813,14 +791,11 @@ void GameGraphRoot::update(float timestep) {
 			cugl::Color4 color = BREACH_COLOR.at((unsigned long)ship->getDonuts()
 													 .at((unsigned long)breachModel->getPlayer())
 													 ->getColorId());
-			breachNode->getShapeNode()->setColor(color);
-			breachNode->resetAnimation();
 			string breachColor = PLAYER_COLOR.at((unsigned long)ship->getDonuts()
 													 .at((unsigned long)breachModel->getPlayer())
 													 ->getColorId());
 			std::shared_ptr<Texture> image = assets->get<Texture>("breach_" + breachColor);
-			breachNode->getPatternNode()->setTexture(image);
-			breachNode->getPatternNode()->setColor(color);
+			breachNode->resetAppearance(image, color);
 			breachModel->setNeedSpriteUpdate(false);
 		}
 	}

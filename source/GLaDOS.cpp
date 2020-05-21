@@ -194,7 +194,7 @@ void GLaDOS::placeObject(BuildingBlockModel::Object obj, float zeroAngle, int p)
 			i = doorFree.front();
 			doorFree.pop();
 			ship->createDoor((float)obj.angle + zeroAngle, i);
-			mib->createDualTask((float)obj.angle + zeroAngle, -1, -1, i);
+			mib->createDualTask((float)obj.angle + zeroAngle, i);
 			break;
 		case BuildingBlockModel::Button: {
 			// Roll for pair's angle
