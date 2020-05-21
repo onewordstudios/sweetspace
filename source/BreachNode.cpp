@@ -67,6 +67,7 @@ bool BreachNode::init(std::shared_ptr<BreachModel> breach, std::shared_ptr<Donut
 	patternNode->setPosition(0, 0);
 	addChildWithName(patternNode, "pattern");
 
+	isDirty = true;
 	resetAnimation();
 
 	return true;
@@ -74,7 +75,12 @@ bool BreachNode::init(std::shared_ptr<BreachModel> breach, std::shared_ptr<Donut
 
 bool BreachNode::isActive() { return breachModel->getIsActive(); }
 
-void BreachNode::prePosition() { angle = breachModel->getAngle(); }
+void BreachNode::prePosition() {
+	if (angle != breachModel->getAngle()) {
+		isDirty = true;
+		angle = breachModel->getAngle();
+	}
+}
 
 void BreachNode::postPosition() {
 	if (prevHealth > breachModel->getHealth()) {
