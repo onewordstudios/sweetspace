@@ -37,8 +37,11 @@ constexpr float BREACH_WIDTH = 6.0f; // NOLINT
 /** The Angle in degrees for which a door can be activated*/
 constexpr float BUTTON_ACTIVE_ANGLE = 15.0f; // NOLINT
 
+/** The Angle in degrees for anything can be near a button*/
+constexpr float BUTTON_WIDTH = 30.0f; // NOLINT
+
 /** The min angle in degrees for which two buttons can be placed*/
-constexpr int BUTTON_DIST = 100; // NOLINT
+constexpr int BUTTON_DIST = 60; // NOLINT
 
 /** The duration in seconds of the everyone roll challenge*/
 constexpr int ROLL_CHALLENGE_LENGTH = 6; // NOLINT
