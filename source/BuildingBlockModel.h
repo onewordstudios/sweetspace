@@ -13,7 +13,7 @@ using namespace cugl;
 
 #pragma mark -
 #pragma mark Building Block Model
-
+constexpr float BREACH_RANGE = 15.0f;
 /**
  * Class that represents a dynamically loaded building block in the game
  *
@@ -160,13 +160,13 @@ class BuildingBlockModel {
 				maxAngle = obj.angle;
 				switch (obj.type) {
 					case Breach:
-						rightWidth = globals::BREACH_WIDTH;
+						rightWidth = BREACH_RANGE;
 						break;
 					case Door:
 						rightWidth = globals::DOOR_WIDTH;
 						break;
 					case Button:
-						rightWidth = globals::BUTTON_ACTIVE_ANGLE;
+						rightWidth = globals::BUTTON_WIDTH;
 						break;
 				};
 			}
@@ -174,13 +174,13 @@ class BuildingBlockModel {
 				minAngle = obj.angle;
 				switch (obj.type) {
 					case Breach:
-						leftWidth = globals::BREACH_WIDTH;
+						leftWidth = BREACH_RANGE;
 						break;
 					case Door:
 						leftWidth = globals::DOOR_WIDTH;
 						break;
 					case Button:
-						leftWidth = globals::BUTTON_ACTIVE_ANGLE;
+						leftWidth = globals::BUTTON_WIDTH;
 						break;
 				};
 			}
