@@ -583,6 +583,7 @@ void GameGraphRoot::update(float timestep) {
 			healthNode->setVisible(false);
 			rollTutorial->setVisible(false);
 			moveTutorial->setVisible(false);
+			healthTutorial->setVisible(false);
 			communicateTutorial->setVisible(false);
 			timerBorder->setVisible(false);
 			healthNodeOverlay->setVisible(false);
@@ -701,8 +702,10 @@ void GameGraphRoot::update(float timestep) {
 			communicateTutorial->setVisible(false);
 		} else if (trunc(ship->timeCtr) == MOVE_TUTORIAL_CUTOFF) {
 			timerTutorial->setVisible(false);
-			healthTutorial->setVisible(true);
+			healthTutorial->setVisible(false);
 			communicateTutorial->setVisible(true);
+		} else if(trunc(ship->timeCtr) == TIMER_TUTORIAL_CUTOFF) {
+			healthTutorial->setVisible(true);
 		}
 	} else if (ship->getLevelNum() == tutorial::REAL_LEVELS.at(4)) {
 		if (trunc(ship->timeCtr) > TIMER_TUTORIAL_CUTOFF) {
