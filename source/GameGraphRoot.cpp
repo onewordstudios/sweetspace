@@ -704,8 +704,9 @@ void GameGraphRoot::update(float timestep) {
 			timerTutorial->setVisible(false);
 			healthTutorial->setVisible(false);
 			communicateTutorial->setVisible(true);
-		} else if(trunc(ship->timeCtr) == TIMER_TUTORIAL_CUTOFF) {
+		} else if (trunc(ship->timeCtr) == TIMER_TUTORIAL_CUTOFF) {
 			healthTutorial->setVisible(true);
+			communicateTutorial->setVisible(false);
 		}
 	} else if (ship->getLevelNum() == tutorial::REAL_LEVELS.at(4)) {
 		if (trunc(ship->timeCtr) > TIMER_TUTORIAL_CUTOFF) {
