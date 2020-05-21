@@ -15,8 +15,8 @@ using namespace std;
 
 // NOLINTNEXTLINE Simple 4-vectors are unlikely to throw an exception
 const std::vector<Color4> GameGraphRoot::BREACH_COLOR{
-	cugl::Color4(219, 197, 52), cugl::Color4(227, 100, 159), cugl::Color4(152, 95, 204),
-	cugl::Color4(158, 212, 87), cugl::Color4(244, 150, 40),	 cugl::Color4(47, 206, 197)};
+	cugl::Color4(219, 197, 52), cugl::Color4(227, 100, 159), cugl::Color4(158, 212, 87),
+	cugl::Color4(244, 150, 40), cugl::Color4(47, 206, 197),	 cugl::Color4(152, 95, 204)};
 
 #pragma mark -
 #pragma mark Level Layout
@@ -458,6 +458,7 @@ void GameGraphRoot::dispose() {
 	if (_active) {
 		removeAllChildren();
 		buttonManager.clear();
+		allSpace->removeChild(donutNode);
 		allSpace = nullptr;
 		farSpace = nullptr;
 		nearSpace = nullptr;
@@ -477,6 +478,8 @@ void GameGraphRoot::dispose() {
 		unopsNode = nullptr;
 		externalDonutsNode->removeAllChildren();
 		externalDonutsNode = nullptr;
+		breachSparklesNode->removeAllChildren();
+		breachSparklesNode = nullptr;
 
 		challengePanelHanger = nullptr;
 		challengePanel = nullptr;
@@ -959,6 +962,7 @@ void GameGraphRoot::doTeleportAnimation() {
 					std::shared_ptr<DonutModel> donutModel = ship->getDonuts().at((unsigned long)i);
 					donutModel->teleport();
 				}
+				CustomNode::recomputeAll();
 				ship->setStabilizerStatus(ShipModel::StabilizerStatus::INACTIVE);
 			}
 			stabilizerFailPanel->setVisible(false);

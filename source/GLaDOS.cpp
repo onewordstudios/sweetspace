@@ -7,6 +7,9 @@ using namespace std;
 
 /** Time to wait until sending another stabilizer, in tutorial. */
 constexpr float STABILIZER_TIMEOUT = 10.0f;
+
+/** Time to wait until sending another stabilizer, in tutorial. */
+constexpr int MAX_ATTEMPTS = 120;
 #pragma mark -
 #pragma mark GM
 /**
@@ -183,28 +186,65 @@ void GLaDOS::placeObject(BuildingBlockModel::Object obj, float zeroAngle, vector
  */
 void GLaDOS::placeObject(BuildingBlockModel::Object obj, float zeroAngle, int p) {
 	int i = 0;
+	float objAngle = (float)obj.angle + zeroAngle;
+	if (objAngle < 0) {
+		objAngle += ship->getSize();
+	} else if (objAngle >= ship->getSize()) {
+		objAngle -= ship->getSize();
+	}
 	switch (obj.type) {
 		case BuildingBlockModel::Breach:
 			i = breachFree.front();
 			breachFree.pop();
-			ship->createBreach((float)obj.angle + zeroAngle, p, i);
-			mib->createBreach((float)obj.angle + zeroAngle, p, i);
+			ship->createBreach(objAngle, p, i);
+			mib->createBreach(objAngle, p, i);
 			break;
 		case BuildingBlockModel::Door:
 			i = doorFree.front();
 			doorFree.pop();
-			ship->createDoor((float)obj.angle + zeroAngle, i);
-			mib->createDualTask((float)obj.angle + zeroAngle, i);
+			ship->createDoor(objAngle, i);
+			mib->createDualTask(objAngle, i);
 			break;
 		case BuildingBlockModel::Button: {
 			// Roll for pair's angle
-			float origAngle = (float)obj.angle + zeroAngle;
+			float origAngle = objAngle;
 			float pairAngle = 0;
+			int attempts = 0;
+			bool goodAngle = false;
 			do {
 				pairAngle = (float)(rand() % (int)(ship->getSize()));
-			} while (abs(pairAngle - ship->getButtons().at(i)->getAngle()) < globals::BUTTON_DIST);
+				goodAngle = ship->getAngleDifference(pairAngle, origAngle) >= globals::BUTTON_WIDTH;
+				for (unsigned int k = 0; goodAngle && k < ship->getBreaches().size(); k++) {
+					float breachAngle = ship->getBreaches()[k]->getAngle();
+					float diff = ship->getAngleDifference(breachAngle, pairAngle);
+					if (ship->getBreaches()[k]->getIsActive() &&
+						diff < globals::BUTTON_ACTIVE_ANGLE) {
+						goodAngle = false;
+						break;
+					}
+				}
 
-			placeButtons(origAngle, pairAngle);
+				for (unsigned int k = 0; goodAngle && k < ship->getDoors().size(); k++) {
+					float doorAngle = ship->getDoors()[k]->getAngle();
+					float diff = ship->getAngleDifference(doorAngle, pairAngle);
+					if (ship->getDoors()[k]->getIsActive() && diff < globals::BUTTON_WIDTH) {
+						goodAngle = false;
+						break;
+					}
+				}
+				for (unsigned int k = 0; goodAngle && k < ship->getButtons().size(); k++) {
+					float buttonAngle = ship->getButtons()[k]->getAngle();
+					float diff = ship->getAngleDifference(buttonAngle, pairAngle);
+					if (ship->getButtons()[k]->getIsActive() && diff < globals::BUTTON_WIDTH) {
+						goodAngle = false;
+						break;
+					}
+				}
+				attempts++;
+			} while (attempts < MAX_ATTEMPTS && !goodAngle);
+			if (goodAngle) {
+				placeButtons(origAngle, pairAngle);
+			}
 			break;
 		}
 		case BuildingBlockModel::Roll:
@@ -359,7 +399,7 @@ void GLaDOS::update(float dt) {
 			}
 		}
 		bool goodAngle = true;
-		for (int j = 0; j < ship->getDonuts().size(); j++) {
+		for (int j = 0; goodAngle && j < ship->getDonuts().size(); j++) {
 			float diff = ship->getAngleDifference(ship->getDonuts().at(j)->getAngle(), angle);
 			float dist =
 				find(neededIds.begin(), neededIds.end(), j) != neededIds.end() ? 0 : (float)padding;
@@ -369,7 +409,7 @@ void GLaDOS::update(float dt) {
 			}
 		}
 		// Make sure it's not too close to other breaches
-		for (unsigned int k = 0; k < ship->getBreaches().size(); k++) {
+		for (unsigned int k = 0; goodAngle && k < ship->getBreaches().size(); k++) {
 			float breachAngle = ship->getBreaches()[k]->getAngle();
 			float diff = ship->getAngleDifference(breachAngle, angle);
 			if (ship->getBreaches()[k]->getIsActive() && diff < (float)block->getRange() / 2) {
@@ -378,7 +418,7 @@ void GLaDOS::update(float dt) {
 			}
 		}
 
-		for (unsigned int k = 0; k < ship->getDoors().size(); k++) {
+		for (unsigned int k = 0; goodAngle && k < ship->getDoors().size(); k++) {
 			float doorAngle = ship->getDoors()[k]->getAngle();
 			float diff = ship->getAngleDifference(doorAngle, angle);
 			if (ship->getDoors()[k]->getIsActive() && diff < (float)block->getRange() / 2) {
@@ -386,9 +426,24 @@ void GLaDOS::update(float dt) {
 				break;
 			}
 		}
+
+		for (unsigned int k = 0; goodAngle && k < ship->getButtons().size(); k++) {
+			float buttonAngle = ship->getButtons()[k]->getAngle();
+			float diff = ship->getAngleDifference(buttonAngle, angle);
+			if (ship->getButtons()[k]->getIsActive() && diff < (float)block->getRange() / 2) {
+				goodAngle = false;
+				break;
+			}
+		}
 		if (!goodAngle) continue;
 		// set angle to where zero is
 		angle = angle - (float)block->getRange() / 2 - (float)block->getMin();
+
+		if (angle < 0) {
+			angle += ship->getSize();
+		} else if (angle >= ship->getSize()) {
+			angle -= ship->getSize();
+		}
 		for (int j = 0; j < objects.size(); j++) {
 			placeObject(objects.at(j), angle, ids);
 		}

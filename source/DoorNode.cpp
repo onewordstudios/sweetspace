@@ -21,6 +21,7 @@ bool DoorNode::init(std::shared_ptr<DoorModel> door, std::shared_ptr<DonutModel>
 					float shipSize, const std::shared_ptr<cugl::Texture>& texture, int rows,
 					int cols, int size) {
 	CustomNode::init(player, shipSize, door->getAngle(), DOOR_RADIUS);
+
 	doorModel = door;
 	animationNode = cugl::AnimationNode::alloc(texture, rows, cols, size);
 	animationNode->setAnchor(Vec2::ANCHOR_BOTTOM_CENTER);
@@ -29,10 +30,18 @@ bool DoorNode::init(std::shared_ptr<DoorModel> door, std::shared_ptr<DonutModel>
 	addChild(animationNode);
 	setAnchor(Vec2::ANCHOR_BOTTOM_CENTER);
 	setScale(DOOR_SCALE);
+
+	isDirty = true;
+
 	return true;
 }
 
-void DoorNode::prePosition() { angle = doorModel->getAngle(); }
+void DoorNode::prePosition() {
+	if (angle != doorModel->getAngle()) {
+		isDirty = true;
+		angle = doorModel->getAngle();
+	}
+}
 
 void DoorNode::postPosition() {
 	frameCap = doorModel->getPlayersOn() < 2 ? doorModel->getPlayersOn() * ONE_PLAYER_FRAME
