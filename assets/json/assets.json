@@ -388,8 +388,8 @@
 			"size":     96
 		},
         "digital": {
-            "file":    "fonts/DigitalNormal-xO6j.otf",
-            "size":     40
+            "file":    "fonts/DSEG14Classic-Bold.ttf",
+            "size":     30
         }
 	},
     "scenes" : {
@@ -1465,8 +1465,8 @@
                   "layout" : {
                     "x_anchor" : "center",
                     "y_anchor" : "top",
-                    "x_offset" : -57,
-                    "y_offset" : -40,
+                    "x_offset" : -50,
+                    "y_offset" : -50,
                     "absolute" : true
                   }
                 },
