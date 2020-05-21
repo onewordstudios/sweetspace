@@ -474,6 +474,8 @@ void GameGraphRoot::dispose() {
 		unopsNode = nullptr;
 		externalDonutsNode->removeAllChildren();
 		externalDonutsNode = nullptr;
+		breachSparklesNode->removeAllChildren();
+		breachSparklesNode = nullptr;
 
 		challengePanelHanger = nullptr;
 		challengePanel = nullptr;
