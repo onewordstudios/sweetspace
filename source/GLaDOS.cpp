@@ -186,22 +186,28 @@ void GLaDOS::placeObject(BuildingBlockModel::Object obj, float zeroAngle, vector
  */
 void GLaDOS::placeObject(BuildingBlockModel::Object obj, float zeroAngle, int p) {
 	int i = 0;
+	float objAngle = (float)obj.angle + zeroAngle;
+	if (objAngle < 0) {
+		objAngle += ship->getSize();
+	} else if (objAngle >= ship->getSize()) {
+		objAngle -= ship->getSize();
+	}
 	switch (obj.type) {
 		case BuildingBlockModel::Breach:
 			i = breachFree.front();
 			breachFree.pop();
-			ship->createBreach((float)obj.angle + zeroAngle, p, i);
-			mib->createBreach((float)obj.angle + zeroAngle, p, i);
+			ship->createBreach(objAngle, p, i);
+			mib->createBreach(objAngle, p, i);
 			break;
 		case BuildingBlockModel::Door:
 			i = doorFree.front();
 			doorFree.pop();
-			ship->createDoor((float)obj.angle + zeroAngle, i);
-			mib->createDualTask((float)obj.angle + zeroAngle, i);
+			ship->createDoor(objAngle, i);
+			mib->createDualTask(objAngle, i);
 			break;
 		case BuildingBlockModel::Button: {
 			// Roll for pair's angle
-			float origAngle = (float)obj.angle + zeroAngle;
+			float origAngle = objAngle;
 			float pairAngle = 0;
 			int attempts = 0;
 			bool goodAngle = false;
