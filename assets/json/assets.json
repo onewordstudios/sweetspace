@@ -388,7 +388,7 @@
 			"size":     96
 		},
         "digital": {
-            "file":    "fonts/digital-dream.fat-narrow.ttf",
+            "file":    "fonts/DSEG14Classic-Bold.ttf",
             "size":     30
         }
 	},
@@ -1465,7 +1465,7 @@
                   "layout" : {
                     "x_anchor" : "center",
                     "y_anchor" : "top",
-                    "x_offset" : -57,
+                    "x_offset" : -50,
                     "y_offset" : -50,
                     "absolute" : true
                   }
