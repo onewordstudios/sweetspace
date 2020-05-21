@@ -300,16 +300,19 @@
           "file" : "textures/tutorial/engine_2.png"
         },
         "stabilizer_tutorial0" : {
-          "file" : "textures/tutorial/stabilizer_4_1.png"
+          "file" : "textures/tutorial/stabilizer_1.png"
         },
         "stabilizer_tutorial1" : {
-          "file" : "textures/tutorial/stabilizer_4.png"
+          "file" : "textures/tutorial/stabilizer_2.png"
         },
         "communicate_tutorial0" : {
-          "file" : "textures/tutorial/communicate_2.png"
+          "file" : "textures/tutorial/communicate_0.png"
+        },
+        "communicate_tutorial1" : {
+          "file" : "textures/tutorial/communicate_1.png"
         },
         "timer_tutorial0" : {
-          "file" : "textures/tutorial/timer_2.png"
+          "file" : "textures/tutorial/timer_0.png"
         },
         "timer_tutorial1" : {
           "file" : "textures/tutorial/timer_1.png"
@@ -713,25 +716,25 @@
                             "texture": "stabilizer_tutorial1",
                             "position": [-200,-200],
                             "anchor":   [0.5,0.5],
-                            "scale":  0.35
+                            "scale":  0.4
                           }
                         },
                         "communicateTutorial" : {
                           "type": "Image",
                           "data": {
                             "texture": "communicate_tutorial0",
-                            "position": [0,-225],
+                            "position": [0,-250],
                             "anchor":   [0.5,0.5],
-                            "scale":  0.35
+                            "scale":  0.4
                           }
                         },
                         "timerTutorial" : {
                           "type": "Image",
                           "data": {
                             "texture": "timer_tutorial0",
-                            "position": [0,-125],
+                            "position": [-75,-60],
                             "anchor":   [0.5,0.5],
-                            "scale":  0.3
+                            "scale":  0.4
                           }
                         }
 

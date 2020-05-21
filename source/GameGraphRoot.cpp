@@ -85,25 +85,22 @@ constexpr float HEALTH_RANGE = 100;
 constexpr float HEALTH_OFFSET = 217;
 
 /** Time to stop showing health tutorial */
-constexpr int HEALTH_TUTORIAL_CUTOFF = 20;
+constexpr int HEALTH_TUTORIAL_CUTOFF = 10;
 
 /** Time to stop showing move tutorial */
-constexpr int MOVE_TUTORIAL_CUTOFF = 10;
+constexpr int MOVE_TUTORIAL_CUTOFF = 5;
 
 /** Time to show breach tutorial */
 constexpr int BREACH_TUTORIAL_CUTOFF = 10;
 
-/** Time to start showing timer */
-constexpr int TIMER_TUTORIAL_CUTOFF = 13;
+/** Time stop showing timer */
+constexpr int TIMER_TUTORIAL_CUTOFF = 18;
 
 /** Tutorial asset scale */
 constexpr float TUTORIAL_SCALE = 0.4f;
 
 /** Timer offset */
-constexpr float TIMER_OFFSET_X = -30;
-
-/** Timer offset */
-constexpr float TIMER_OFFSET_Y = 50;
+constexpr float TIMER_OFFSET = 20;
 
 #pragma mark -
 #pragma mark Constructors
@@ -191,7 +188,7 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	timerTutorial->setVisible(false);
 	if (ship->getLevelNum() == tutorial::REAL_LEVELS.at(0)) {
 		healthTutorial->setVisible(false);
-		communicateTutorial->setVisible(false);
+		communicateTutorial->setVisible(true);
 		timerTutorial->setVisible(true);
 	}
 	rollTutorial =
@@ -377,8 +374,8 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	} else if (ship->getLevelNum() == tutorial::REAL_LEVELS.at(4)) {
 		std::shared_ptr<Texture> image = assets->get<Texture>("timer_tutorial1");
 		timerTutorial->setTexture(image);
-		float posY = timerTutorial->getPositionY() + TIMER_OFFSET_Y;
-		float posX = timerTutorial->getPositionX() + TIMER_OFFSET_X;
+		float posY = timerTutorial->getPositionY() - TIMER_OFFSET;
+		float posX = timerTutorial->getPositionX();
 		timerTutorial->setPosition(posX, posY);
 	}
 
@@ -586,7 +583,6 @@ void GameGraphRoot::update(float timestep) {
 			healthNode->setVisible(false);
 			rollTutorial->setVisible(false);
 			moveTutorial->setVisible(false);
-			healthTutorial->setVisible(false);
 			communicateTutorial->setVisible(false);
 			timerBorder->setVisible(false);
 			healthNodeOverlay->setVisible(false);
@@ -702,20 +698,19 @@ void GameGraphRoot::update(float timestep) {
 		}
 	} else if (ship->getLevelNum() == tutorial::REAL_LEVELS.at(0)) {
 		if (trunc(ship->timeCtr) == HEALTH_TUTORIAL_CUTOFF) {
+			healthTutorial->setVisible(false);
 			communicateTutorial->setVisible(false);
 		} else if (trunc(ship->timeCtr) == MOVE_TUTORIAL_CUTOFF) {
 			timerTutorial->setVisible(false);
-			healthTutorial->setVisible(false);
-			communicateTutorial->setVisible(true);
-		} else if (trunc(ship->timeCtr) == TIMER_TUTORIAL_CUTOFF) {
 			healthTutorial->setVisible(true);
-			communicateTutorial->setVisible(false);
+			std::shared_ptr<Texture> image = assets->get<Texture>("communicate_tutorial1");
+			communicateTutorial->setTexture(image);
 		}
 	} else if (ship->getLevelNum() == tutorial::REAL_LEVELS.at(4)) {
 		if (trunc(ship->timeCtr) > TIMER_TUTORIAL_CUTOFF) {
-			timerTutorial->setVisible(true);
-		} else {
 			timerTutorial->setVisible(false);
+		} else {
+			timerTutorial->setVisible(true);
 		}
 	} else if (ship->getLevelNum() == tutorial::STABILIZER_LEVEL) {
 		rollTutorial->setVisible(true);
