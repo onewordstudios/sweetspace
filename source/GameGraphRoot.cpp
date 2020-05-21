@@ -455,6 +455,7 @@ void GameGraphRoot::dispose() {
 	if (_active) {
 		removeAllChildren();
 		buttonManager.clear();
+		allSpace->removeChild(donutNode);
 		allSpace = nullptr;
 		farSpace = nullptr;
 		nearSpace = nullptr;
@@ -474,6 +475,8 @@ void GameGraphRoot::dispose() {
 		unopsNode = nullptr;
 		externalDonutsNode->removeAllChildren();
 		externalDonutsNode = nullptr;
+		breachSparklesNode->removeAllChildren();
+		breachSparklesNode = nullptr;
 
 		challengePanelHanger = nullptr;
 		challengePanel = nullptr;
