@@ -315,10 +315,10 @@ void GameMode::update(float timestep) {
 			donutModel->setVelocity(0);
 			if (diff < 0) {
 				float proposedAngle = door->getAngle() - globals::DOOR_WIDTH;
-				donutModel->setAngle(proposedAngle < 0 ? ship->getSize() : proposedAngle);
+				donutModel->setAngle(proposedAngle < 0 ? ship->getSize() - 1 : proposedAngle);
 			} else {
 				float proposedAngle = door->getAngle() + globals::DOOR_WIDTH;
-				donutModel->setAngle(proposedAngle > ship->getSize() ? 0 : proposedAngle);
+				donutModel->setAngle(proposedAngle >= ship->getSize() ? 0 : proposedAngle);
 			}
 		}
 		if (abs(diff) < DOOR_ACTIVE_ANGLE) {
