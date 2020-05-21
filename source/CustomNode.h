@@ -59,13 +59,7 @@ class CustomNode : public cugl::Node {
 	 * @param modelAngle Angle of this node's model
 	 * @return
 	 */
-	float getOnScreenAngle(float modelAngle) {
-		float onScreenAngle = modelAngle - playerDonutModel->getAngle();
-		onScreenAngle = onScreenAngle >= 0 ? onScreenAngle : shipSize + onScreenAngle;
-		onScreenAngle = onScreenAngle > shipSize / 2 ? onScreenAngle - shipSize : onScreenAngle;
-		onScreenAngle *= globals::PI_180;
-		return onScreenAngle;
-	}
+	float getOnScreenAngle(float modelAngle);
 
 	/**
 	 * Returns true if this node is just coming into viewing bounds
@@ -73,10 +67,7 @@ class CustomNode : public cugl::Node {
 	 * @param onScreenAngle The on-screen angle of node relative to the player avatar
 	 * @return
 	 */
-	bool isComingIntoView(float onScreenAngle) {
-		return (!isShown || isDirty) && onScreenAngle < globals::SEG_CUTOFF_ANGLE &&
-			   onScreenAngle > -globals::SEG_CUTOFF_ANGLE;
-	}
+	bool isComingIntoView(float onScreenAngle);
 
 	/**
 	 * Returns true if this node is just going out of viewing bounds
@@ -84,10 +75,7 @@ class CustomNode : public cugl::Node {
 	 * @param onScreenAngle The on-screen angle of node relative to the player avatar
 	 * @return
 	 */
-	bool isGoingOutOfView(float onScreenAngle) {
-		return isShown && (onScreenAngle >= globals::SEG_CUTOFF_ANGLE ||
-						   onScreenAngle <= -globals::SEG_CUTOFF_ANGLE);
-	}
+	bool isGoingOutOfView(float onScreenAngle);
 
 	/**
 	 * Returns relative position to nearSpace after polar coord calculation
@@ -96,9 +84,7 @@ class CustomNode : public cugl::Node {
 	 * @param radius Distance from nearSpace origin
 	 * @return
 	 */
-	cugl::Vec2 getPositionVec(float relAngle, float radius) {
-		return cugl::Vec2(radius * sin(relAngle), -radius * cos(relAngle));
-	}
+	cugl::Vec2 getPositionVec(float relAngle, float radius);
 #pragma mark -
 #pragma endregion
    protected:

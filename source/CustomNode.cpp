@@ -5,6 +5,8 @@ using namespace cugl;
 /** Position to hide stuff offscreen. */
 constexpr float OFF_SCREEN_POS = 1500;
 
+#pragma region Lifecycle
+
 bool CustomNode::init(std::shared_ptr<DonutModel> player, float shipSize, float angle,
 					  float radius) {
 	playerDonutModel = player;
@@ -23,6 +25,34 @@ void CustomNode::dispose() {
 	Node::dispose();
 }
 
+#pragma endregion
+
+#pragma region Positioning
+
+float CustomNode::getOnScreenAngle(float modelAngle) {
+	float onScreenAngle = modelAngle - playerDonutModel->getAngle();
+	onScreenAngle = onScreenAngle >= 0 ? onScreenAngle : shipSize + onScreenAngle;
+	onScreenAngle = onScreenAngle > shipSize / 2 ? onScreenAngle - shipSize : onScreenAngle;
+	onScreenAngle *= globals::PI_180;
+	return onScreenAngle;
+}
+
+bool CustomNode::isComingIntoView(float onScreenAngle) {
+	return (!isShown || isDirty) && onScreenAngle < globals::SEG_CUTOFF_ANGLE &&
+		   onScreenAngle > -globals::SEG_CUTOFF_ANGLE;
+}
+
+bool CustomNode::isGoingOutOfView(float onScreenAngle) {
+	return isShown && (onScreenAngle >= globals::SEG_CUTOFF_ANGLE ||
+					   onScreenAngle <= -globals::SEG_CUTOFF_ANGLE);
+}
+
+cugl::Vec2 CustomNode::getPositionVec(float relAngle, float radius) {
+	return cugl::Vec2(radius * sin(relAngle), -radius * cos(relAngle));
+}
+
+#pragma endregion
+
 void CustomNode::draw(const shared_ptr<cugl::SpriteBatch>& batch, const cugl::Mat4& transform,
 					  cugl::Color4 tint) {
 	if (isActive()) {
@@ -31,6 +61,7 @@ void CustomNode::draw(const shared_ptr<cugl::SpriteBatch>& batch, const cugl::Ma
 		if (!wasActive) {
 			becomeActive();
 			wasActive = true;
+			isDirty = true;
 		}
 
 		prePosition();
