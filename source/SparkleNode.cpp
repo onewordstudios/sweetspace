@@ -11,7 +11,7 @@ using namespace cugl;
 static constexpr float SPARKLE_SCALE = 0.5f;
 
 /** How often to increase frame. Inversely proportional to animation speed. */
-static constexpr int ANIMATION_SPEED = 3;
+static constexpr int ANIMATION_SPEED = 2;
 
 bool SparkleNode::init(std::shared_ptr<DonutModel> player, float shipSize,
 					   std::shared_ptr<cugl::Texture> texture, cugl::Color4 color,
