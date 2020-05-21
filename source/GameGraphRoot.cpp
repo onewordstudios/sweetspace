@@ -455,6 +455,7 @@ void GameGraphRoot::dispose() {
 	if (_active) {
 		removeAllChildren();
 		buttonManager.clear();
+		allSpace->removeChild(donutNode);
 		allSpace = nullptr;
 		farSpace = nullptr;
 		nearSpace = nullptr;
