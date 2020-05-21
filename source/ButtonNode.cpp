@@ -22,12 +22,6 @@ constexpr float BUTTON_RADIUS = 600;
 /** Amount that button body sinks when pressed on */
 constexpr int DEPRESSION_AMOUNT = -100;
 
-/** Length of animation */
-constexpr int MAX_FRAMES = 32;
-
-/** Frame marking beginning of animation */
-constexpr int BEGIN_FRAME = 27;
-
 bool ButtonNode::init(std::shared_ptr<ButtonModel> btn, std::shared_ptr<DonutModel> player,
 					  float shipSize, std::shared_ptr<cugl::Texture> baseDown,
 					  std::shared_ptr<cugl::Texture> baseUp, std::shared_ptr<cugl::Texture> btnDown,
@@ -65,14 +59,19 @@ bool ButtonNode::init(std::shared_ptr<ButtonModel> btn, std::shared_ptr<DonutMod
 	label->setAnchor(Vec2::ANCHOR_CENTER);
 	label->setPosition(0, (float)baseUp->getHeight() * BUTTON_LABEL_Y);
 
+	isDirty = true;
+
 	return true;
 }
 
 bool ButtonNode::isActive() { return buttonModel->getIsActive(); }
 
 void ButtonNode::prePosition() {
-	label->setText(std::to_string(buttonModel->getPair()->getSection()));
-	angle = buttonModel->getAngle();
+	if (angle != buttonModel->getAngle()) {
+		isDirty = true;
+		label->setText(std::to_string(buttonModel->getPair()->getSection()));
+		angle = buttonModel->getAngle();
+	}
 }
 
 void ButtonNode::postPosition() {

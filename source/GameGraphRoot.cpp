@@ -954,6 +954,7 @@ void GameGraphRoot::doTeleportAnimation() {
 					std::shared_ptr<DonutModel> donutModel = ship->getDonuts().at((unsigned long)i);
 					donutModel->teleport();
 				}
+				CustomNode::recomputeAll();
 				ship->setStabilizerStatus(ShipModel::StabilizerStatus::INACTIVE);
 			}
 			stabilizerFailPanel->setVisible(false);
