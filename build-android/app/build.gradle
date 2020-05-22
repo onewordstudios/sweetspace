@@ -7,8 +7,8 @@ android {
         applicationId "fun.onewordstudios.sweetspace"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 40001
-        versionName '0.4.0'
+        versionCode 40101
+        versionName '0.4.1'
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
