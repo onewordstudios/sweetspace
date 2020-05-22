@@ -26,7 +26,8 @@ bool ButtonNode::init(std::shared_ptr<ButtonModel> btn, std::shared_ptr<DonutMod
 					  float shipSize, std::shared_ptr<cugl::Texture> baseDown,
 					  std::shared_ptr<cugl::Texture> baseUp, std::shared_ptr<cugl::Texture> btnDown,
 					  std::shared_ptr<cugl::Texture> btnUp, std::shared_ptr<cugl::Font> labelFont) {
-	CustomNode::init(player, shipSize, btn->getAngle(), BUTTON_RADIUS);
+	CustomNode::init(player, shipSize, -1, BUTTON_RADIUS);
+	// Initialize angle to -1 to force the button to correctly process the label on first frame
 
 	buttonModel = btn;
 
