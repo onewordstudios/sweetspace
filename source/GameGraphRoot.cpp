@@ -703,13 +703,11 @@ void GameGraphRoot::update(float timestep) {
 	} else if (ship->getLevelNum() == tutorial::REAL_LEVELS.at(0)) {
 		if (trunc(ship->timeCtr) == HEALTH_TUTORIAL_CUTOFF) {
 			communicateTutorial->setVisible(false);
+			healthTutorial->setVisible(true);
 		} else if (trunc(ship->timeCtr) == MOVE_TUTORIAL_CUTOFF) {
 			timerTutorial->setVisible(false);
 			healthTutorial->setVisible(false);
 			communicateTutorial->setVisible(true);
-		} else if (trunc(ship->timeCtr) == TIMER_TUTORIAL_CUTOFF) {
-			healthTutorial->setVisible(true);
-			communicateTutorial->setVisible(false);
 		}
 	} else if (ship->getLevelNum() == tutorial::REAL_LEVELS.at(4)) {
 		if (trunc(ship->timeCtr) > TIMER_TUTORIAL_CUTOFF) {
