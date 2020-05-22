@@ -36,6 +36,7 @@ class ShipModel {
 	bool timeless;
 	/** Challenge progress*/
 	int challengeProg;
+	/** Time at which stabilizer challenge ends */
 	float endTime;
 	/** Total level time*/
 	float totalTime;
