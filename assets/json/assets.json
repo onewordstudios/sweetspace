@@ -1647,7 +1647,7 @@
 							"data"   : {
 								"texture"  : "game_title_halo",
 								"anchor"   : [0.5,0.5],
-								"scale"    : 0.4
+								"scale"    : 0.5
 							},
 							"layout" : {
 								"x_anchor" : "center",
