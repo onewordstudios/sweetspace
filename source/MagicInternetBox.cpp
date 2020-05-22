@@ -358,6 +358,7 @@ void MagicInternetBox::update() {
 				for (unsigned int i = 0; i < globals::ROOM_LENGTH; i++) {
 					newRoomId << (char)message[i + 1];
 				}
+				activePlayers[0] = true;
 				roomID = newRoomId.str();
 				CULog("Got room ID: %s", roomID.c_str());
 				status = HostWaitingOnOthers;
