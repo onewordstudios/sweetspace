@@ -1435,6 +1435,20 @@
 						}
 					}
 				},
+                "timerBorder" : {
+                    "type": "Image",
+                    "data": {
+                      "texture": "timer_border",
+                      "scale": 0.2
+                    },
+                    "layout" : {
+                      "x_anchor" : "center",
+                      "y_anchor" : "top",
+                      "x_offset" : -60,
+                      "y_offset" : -50,
+                      "absolute" : true
+                    }
+                },
                 "hud" : {
                     "type": "Label",
                     "data": {
@@ -1448,24 +1462,10 @@
                     "layout" : {
                         "x_anchor" : "center",
                         "y_anchor" : "top",
-                        "x_offset" : -42,
+                        "x_offset" : -50,
                         "y_offset" : -40,
                         "absolute" : true
                     }
-                },
-                "timerBorder" : {
-                  "type": "Image",
-                  "data": {
-                    "texture": "timer_border",
-                    "scale": 0.2
-                  },
-                  "layout" : {
-                    "x_anchor" : "center",
-                    "y_anchor" : "top",
-                    "x_offset" : -50,
-                    "y_offset" : -50,
-                    "absolute" : true
-                  }
                 },
                 "blackoutOverlay" : {
                     "type": "Image",
