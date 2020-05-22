@@ -281,6 +281,8 @@ int MagicInternetBox::getPlayerID() { return playerID; }
 
 unsigned int MagicInternetBox::getNumPlayers() { return numPlayers; }
 
+bool MagicInternetBox::isPlayerActive(unsigned int playerID) { return activePlayers.at(playerID); }
+
 void MagicInternetBox::startGame(int levelNum) {
 	switch (status) {
 		case HostWaitingOnOthers:
@@ -367,6 +369,9 @@ void MagicInternetBox::update() {
 						numPlayers = message[2];
 						playerID = (int)numPlayers - 1;
 						CULog("Join Room Success; player id %d", playerID);
+						for (unsigned int i = 0; i < numPlayers; i++) {
+							activePlayers.at(i) = true;
+						}
 						status = ClientWaitingOnOthers;
 						return;
 					}
@@ -409,6 +414,7 @@ void MagicInternetBox::update() {
 			}
 			case PlayerJoined: {
 				CULog("Player Joined");
+				activePlayers.at(numPlayers) = true;
 				numPlayers++;
 				return;
 			}
@@ -475,6 +481,7 @@ void MagicInternetBox::update(std::shared_ptr<ShipModel> state) {
 				unsigned int playerID = message[1];
 				CULog("Player has reconnected, %d", playerID);
 				state->getDonuts()[playerID]->setIsActive(true);
+				activePlayers.at(playerID) = true;
 				return;
 			}
 			case PlayerDisconnect: {
@@ -482,6 +489,7 @@ void MagicInternetBox::update(std::shared_ptr<ShipModel> state) {
 				unsigned int playerID = message[1];
 				CULog("Player has disconnected, %d", playerID);
 				state->getDonuts()[playerID]->setIsActive(false);
+				activePlayers.at(playerID) = false;
 				return;
 			}
 			case StateSync: {
@@ -654,4 +662,5 @@ void MagicInternetBox::reset() {
 	delete ws;
 	ws = nullptr;
 	status = Uninitialized;
+	activePlayers.fill(false);
 }
