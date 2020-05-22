@@ -581,7 +581,7 @@
                                   "type": "Label",
                                   "data": {
                                     "font"       : "mont_black_italic_big",
-                                    "text"       : "Stablizer Failed!",
+                                    "text"       : "Stabilizer Failed!",
                                     "foreground" : [255,248,161,255],
                                     "anchor"     : [0.5,0.5],
                                     "valign"     : "middle",
