@@ -379,7 +379,7 @@ void GameMode::update(float timestep) {
 		bool allRoll = true;
 		for (unsigned int i = 0; i < ship->getDonuts().size(); i++) {
 			if (!ship->getDonuts()[i]->getIsActive()) {
-				break;
+				continue;
 			}
 			if (ship->getRollDir() == 0) {
 				if (ship->getDonuts()[i]->getVelocity() >= 0) {
