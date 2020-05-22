@@ -671,7 +671,7 @@ void GameGraphRoot::update(float timestep) {
 	}
 
 	if (ship->getLevelNum() == tutorial::BREACH_LEVEL) {
-		if (trunc(ship->timeCtr) > BREACH_TUTORIAL_CUTOFF) {
+		if (trunc(ship->timeElapsed) > BREACH_TUTORIAL_CUTOFF) {
 			for (int i = 0; i < tutorialNode->getChildCount(); i++) {
 				shared_ptr<TutorialNode> tutorial =
 					dynamic_pointer_cast<TutorialNode>(tutorialNode->getChildByTag(i + 1));
@@ -693,21 +693,21 @@ void GameGraphRoot::update(float timestep) {
 	}
 
 	if (ship->getLevelNum() == tutorial::BREACH_LEVEL) {
-		if (trunc(ship->timeCtr) == MOVE_TUTORIAL_CUTOFF) {
+		if (trunc(ship->timeElapsed) == MOVE_TUTORIAL_CUTOFF) {
 			moveTutorial->setVisible(false);
 		}
 	} else if (ship->getLevelNum() == tutorial::REAL_LEVELS.at(0)) {
-		if (trunc(ship->timeCtr) == HEALTH_TUTORIAL_CUTOFF) {
+		if (trunc(ship->timeElapsed) == HEALTH_TUTORIAL_CUTOFF) {
 			healthTutorial->setVisible(false);
 			communicateTutorial->setVisible(false);
-		} else if (trunc(ship->timeCtr) == MOVE_TUTORIAL_CUTOFF) {
+		} else if (trunc(ship->timeElapsed) == MOVE_TUTORIAL_CUTOFF) {
 			timerTutorial->setVisible(false);
 			healthTutorial->setVisible(true);
 			std::shared_ptr<Texture> image = assets->get<Texture>("communicate_tutorial1");
 			communicateTutorial->setTexture(image);
 		}
 	} else if (ship->getLevelNum() == tutorial::REAL_LEVELS.at(4)) {
-		if (trunc(ship->timeCtr) > TIMER_TUTORIAL_CUTOFF) {
+		if (trunc(ship->timeElapsed) > TIMER_TUTORIAL_CUTOFF) {
 			timerTutorial->setVisible(false);
 		} else {
 			timerTutorial->setVisible(true);
@@ -982,19 +982,19 @@ void GameGraphRoot::doTeleportAnimation() {
  */
 std::string GameGraphRoot::positionText() {
 	stringstream ss;
-	if (trunc(ship->timer) > SEC_IN_MIN - 1) {
-		if ((int)trunc(ship->timer) % SEC_IN_MIN < tenSeconds) {
-			ss << "0" << (int)trunc(ship->timer) / SEC_IN_MIN << ":0"
-			   << (int)trunc(ship->timer) % SEC_IN_MIN;
+	if (trunc(ship->timeLeft) > SEC_IN_MIN - 1) {
+		if ((int)trunc(ship->timeLeft) % SEC_IN_MIN < tenSeconds) {
+			ss << "0" << (int)trunc(ship->timeLeft) / SEC_IN_MIN << ":0"
+			   << (int)trunc(ship->timeLeft) % SEC_IN_MIN;
 		} else {
-			ss << "0" << (int)trunc(ship->timer) / SEC_IN_MIN << ":"
-			   << (int)trunc(ship->timer) % SEC_IN_MIN;
+			ss << "0" << (int)trunc(ship->timeLeft) / SEC_IN_MIN << ":"
+			   << (int)trunc(ship->timeLeft) % SEC_IN_MIN;
 		}
 	} else {
-		if (trunc(ship->timer) < tenSeconds) {
-			ss << "00:0" << trunc(ship->timer);
+		if (trunc(ship->timeLeft) < tenSeconds) {
+			ss << "00:0" << trunc(ship->timeLeft);
 		} else {
-			ss << "00:" << trunc(ship->timer);
+			ss << "00:" << trunc(ship->timeLeft);
 		}
 	}
 

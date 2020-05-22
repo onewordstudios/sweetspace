@@ -254,7 +254,7 @@ void GLaDOS::placeObject(BuildingBlockModel::Object obj, float zeroAngle, int p)
 				mib->createAllTask(p, ship->getRollDir());
 			} else {
 				ship->setChallengeProg(0);
-				ship->setEndTime((ship->timeCtr) + globals::ROLL_CHALLENGE_LENGTH);
+				ship->setEndTime((ship->timeElapsed) + globals::ROLL_CHALLENGE_LENGTH);
 				ship->setChallenge(true);
 			}
 			break;
@@ -534,7 +534,7 @@ void GLaDOS::tutorialLevels(float dt) {
 				case ShipModel::FAILURE:
 					break;
 				case ShipModel::ACTIVE:
-					if (ship->timeCtr - stabilizerStart > STABILIZER_TIMEOUT) {
+					if (ship->timeElapsed - stabilizerStart > STABILIZER_TIMEOUT) {
 						ship->setStabilizerStatus(ShipModel::INACTIVE);
 					}
 					break;
@@ -547,7 +547,7 @@ void GLaDOS::tutorialLevels(float dt) {
 					} else {
 						ship->createAllTask(dir);
 					}
-					stabilizerStart = ship->timeCtr;
+					stabilizerStart = ship->timeElapsed;
 					ship->setStabilizerStatus(ShipModel::ACTIVE);
 					break;
 				}
@@ -566,7 +566,7 @@ void GLaDOS::tutorialLevels(float dt) {
 					} else {
 						ship->createAllTask(dir);
 					}
-					stabilizerStart = ship->timeCtr;
+					stabilizerStart = ship->timeElapsed;
 					ship->setStabilizerStatus(ShipModel::ACTIVE);
 					break;
 				}
