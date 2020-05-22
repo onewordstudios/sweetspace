@@ -50,9 +50,9 @@ class ShipModel {
 	 * failed, 3 = challenge success*/
 	StabilizerStatus stabilizerStatus;
 	/** Game countdown timer, contains time left in level */
-	float timeLeft;
+	float timeLeftInTimer;
 	/** Time elapsed since level start */
-	float timeElapsed;
+	float canonicalTimeElapsed;
 #pragma mark Constructors
 	/*
 	 * Creates a ship.
@@ -75,8 +75,8 @@ class ShipModel {
 		  totalTime(0),
 		  levelNum(0),
 		  stabilizerStatus(INACTIVE),
-		  timeLeft(0),
-		  timeElapsed(0) {}
+		  timeLeftInTimer(0),
+		  canonicalTimeElapsed(0) {}
 
 	/**
 	 * Destroys this breach, releasing all resources.
@@ -306,9 +306,9 @@ class ShipModel {
 	 * @param startTime the initial time on the timer
 	 */
 	void initTimer(float startTime) {
-		timeLeft = startTime;
+		timeLeftInTimer = startTime;
 		totalTime = startTime;
-		timeElapsed = 0;
+		canonicalTimeElapsed = 0;
 	}
 
 	/**
@@ -317,9 +317,9 @@ class ShipModel {
 	 * @param time amount of time to detract from timer
 	 */
 	void updateTimer(float time, bool isTimeLeftUpdated) {
-		timeElapsed += time;
+		canonicalTimeElapsed += time;
 		if (!timeless && isTimeLeftUpdated) {
-			timeLeft -= time;
+			timeLeftInTimer -= time;
 		}
 	}
 
@@ -328,7 +328,7 @@ class ShipModel {
 	 *
 	 * @return if timer has ended
 	 */
-	bool timerEnded() { return timeLeft < 1; }
+	bool timerEnded() { return timeLeftInTimer < 1; }
 
 	/**
 	 * Returns whether the level has ended (won or lost)
@@ -340,7 +340,7 @@ class ShipModel {
 	 *
 	 * @return the time that has passed
 	 */
-	float timePassed() { return timeElapsed; }
+	float timePassed() { return canonicalTimeElapsed; }
 
 	/**
 	 * Set size of the ship

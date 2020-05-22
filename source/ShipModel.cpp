@@ -48,12 +48,12 @@ bool ShipModel::init(unsigned int numPlayers, unsigned int numBreaches, unsigned
 }
 
 bool ShipModel::createBreach(float angle, int player, int id) {
-	breaches.at(id)->init(angle, player, timeLeft);
+	breaches.at(id)->init(angle, player, timeLeftInTimer);
 	return true;
 }
 
 bool ShipModel::createBreach(float angle, int health, int player, int id) {
-	breaches.at(id)->init(angle, health, player, timeLeft);
+	breaches.at(id)->init(angle, health, player, timeLeftInTimer);
 	return true;
 }
 
@@ -84,7 +84,7 @@ bool ShipModel::flagDoor(int id, int player, int flag) {
 bool ShipModel::createAllTask(int data) {
 	setRollDir(data);
 	challenge = true;
-	endTime = timeElapsed + globals::ROLL_CHALLENGE_LENGTH;
+	endTime = canonicalTimeElapsed + globals::ROLL_CHALLENGE_LENGTH;
 	challengeProg = 0;
 	return true;
 }

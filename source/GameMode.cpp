@@ -361,7 +361,7 @@ void GameMode::update(float timestep) {
 	for (int i = 0; i < ship->getBreaches().size(); i++) {
 		// this should be adjusted based on the level and number of players
 		if (ship->getBreaches().at(i)->getIsActive() &&
-			trunc(ship->getBreaches().at(i)->getTimeCreated()) - trunc(ship->timeLeft) >
+			trunc(ship->getBreaches().at(i)->getTimeCreated()) - trunc(ship->timeLeftInTimer) >
 				BREACH_HEALTH_GRACE_PERIOD) {
 			ship->decHealth(BREACH_HEALTH_PENALTY);
 		}
@@ -371,7 +371,7 @@ void GameMode::update(float timestep) {
 
 #pragma region Stabilizer
 	if (ship->getChallenge() && !ship->getTimeless() &&
-		trunc(ship->timeLeft) <= globals::ROLL_CHALLENGE_LENGTH) {
+		trunc(ship->timeLeftInTimer) <= globals::ROLL_CHALLENGE_LENGTH) {
 		ship->setChallenge(false);
 	}
 
@@ -397,7 +397,7 @@ void GameMode::update(float timestep) {
 			ship->updateChallengeProg();
 		}
 		if (ship->getChallengeProg() > CHALLENGE_PROGRESS_HIGH ||
-			trunc(ship->timeElapsed) == trunc(ship->getEndTime())) {
+			trunc(ship->canonicalTimeElapsed) == trunc(ship->getEndTime())) {
 			if (ship->getChallengeProg() < CHALLENGE_PROGRESS_LOW) {
 				gm.setChallengeFail(true);
 				ship->setStabilizerStatus(ShipModel::FAILURE);

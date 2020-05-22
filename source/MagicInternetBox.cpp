@@ -179,7 +179,7 @@ void MagicInternetBox::syncState(std::shared_ptr<ShipModel> state) {
 	}
 	data.push_back((uint8_t)(health % ONE_BYTE));
 	data.push_back((uint8_t)(health / ONE_BYTE));
-	int timer = (int)(FLOAT_PRECISION * state->timeLeft);
+	int timer = (int)(FLOAT_PRECISION * state->timeLeftInTimer);
 	data.push_back((uint8_t)(timer % ONE_BYTE));
 	data.push_back((uint8_t)(timer / ONE_BYTE));
 
@@ -221,8 +221,8 @@ void MagicInternetBox::resolveState(std::shared_ptr<ShipModel> state,
 	if (abs(state->getHealth() - health) > 1.0f) {
 		state->setHealth(health);
 	}
-	if (abs(state->timeLeft - timer) > 1.0f) {
-		state->timeLeft = timer;
+	if (abs(state->timeLeftInTimer - timer) > 1.0f) {
+		state->timeLeftInTimer = timer;
 	}
 
 	const auto& doors = state->getDoors();
