@@ -60,6 +60,7 @@ bool ButtonNode::init(std::shared_ptr<ButtonModel> btn, std::shared_ptr<DonutMod
 	label->setPosition(0, (float)baseUp->getHeight() * BUTTON_LABEL_Y);
 
 	isDirty = true;
+	angle = -1;
 
 	return true;
 }
