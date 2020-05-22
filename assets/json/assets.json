@@ -300,19 +300,16 @@
           "file" : "textures/tutorial/engine_2.png"
         },
         "stabilizer_tutorial0" : {
-          "file" : "textures/tutorial/stabilizer_1.png"
+          "file" : "textures/tutorial/stabilizer_4_1.png"
         },
         "stabilizer_tutorial1" : {
-          "file" : "textures/tutorial/stabilizer_2.png"
+          "file" : "textures/tutorial/stabilizer_4.png"
         },
         "communicate_tutorial0" : {
-          "file" : "textures/tutorial/communicate_0.png"
-        },
-        "communicate_tutorial1" : {
-          "file" : "textures/tutorial/communicate_1.png"
+          "file" : "textures/tutorial/communicate_2.png"
         },
         "timer_tutorial0" : {
-          "file" : "textures/tutorial/timer_0.png"
+          "file" : "textures/tutorial/timer_2.png"
         },
         "timer_tutorial1" : {
           "file" : "textures/tutorial/timer_1.png"
@@ -388,7 +385,7 @@
 			"size":     96
 		},
         "digital": {
-            "file":    "fonts/DSEG14Classic-Bold.ttf",
+            "file":    "fonts/DSEG7Classic-Bold.ttf",
             "size":     30
         }
 	},
@@ -716,25 +713,25 @@
                             "texture": "stabilizer_tutorial1",
                             "position": [-200,-200],
                             "anchor":   [0.5,0.5],
-                            "scale":  0.4
+                            "scale":  0.35
                           }
                         },
                         "communicateTutorial" : {
                           "type": "Image",
                           "data": {
                             "texture": "communicate_tutorial0",
-                            "position": [0,-250],
+                            "position": [0,-225],
                             "anchor":   [0.5,0.5],
-                            "scale":  0.4
+                            "scale":  0.35
                           }
                         },
                         "timerTutorial" : {
                           "type": "Image",
                           "data": {
                             "texture": "timer_tutorial0",
-                            "position": [-75,-60],
+                            "position": [0,-125],
                             "anchor":   [0.5,0.5],
-                            "scale":  0.4
+                            "scale":  0.3
                           }
                         }
 
@@ -1438,6 +1435,20 @@
 						}
 					}
 				},
+                "timerBorder" : {
+                    "type": "Image",
+                    "data": {
+                      "texture": "timer_border",
+                      "scale": 0.2
+                    },
+                    "layout" : {
+                      "x_anchor" : "center",
+                      "y_anchor" : "top",
+                      "x_offset" : -60,
+                      "y_offset" : -50,
+                      "absolute" : true
+                    }
+                },
                 "hud" : {
                     "type": "Label",
                     "data": {
@@ -1451,24 +1462,10 @@
                     "layout" : {
                         "x_anchor" : "center",
                         "y_anchor" : "top",
-                        "x_offset" : -42,
+                        "x_offset" : -50,
                         "y_offset" : -40,
                         "absolute" : true
                     }
-                },
-                "timerBorder" : {
-                  "type": "Image",
-                  "data": {
-                    "texture": "timer_border",
-                    "scale": 0.2
-                  },
-                  "layout" : {
-                    "x_anchor" : "center",
-                    "y_anchor" : "top",
-                    "x_offset" : -50,
-                    "y_offset" : -50,
-                    "absolute" : true
-                  }
                 },
                 "blackoutOverlay" : {
                     "type": "Image",

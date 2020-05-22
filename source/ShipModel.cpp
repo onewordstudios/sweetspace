@@ -2,6 +2,7 @@
 
 #include "ExternalDonutModel.h"
 #include "Globals.h"
+#include "MagicInternetBox.h"
 #include "PlayerDonutModel.h"
 
 /** Max number of attempts of generating a new teleportation angle */
@@ -17,6 +18,9 @@ bool ShipModel::init(unsigned int numPlayers, unsigned int numBreaches, unsigned
 									   : ExternalDonutModel::alloc(shipSize));
 		// TODO modulo max number of colors once constants are factored out
 		donuts[i]->setColorId((int)i);
+		if (!MagicInternetBox::getInstance()->isPlayerActive(i)) {
+			donuts[i]->setIsActive(false);
+		}
 	}
 
 	// Instantiate breach models

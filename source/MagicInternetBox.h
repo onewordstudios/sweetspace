@@ -3,6 +3,8 @@
 
 #include <cugl/cugl.h>
 
+#include <array>
+
 #include "ShipModel.h"
 #include "libraries/easywsclient.hpp"
 
@@ -100,6 +102,9 @@ class MagicInternetBox {
 	/** Maximum number of players for this ship */
 	unsigned int maxPlayers;
 
+	/** Array representing active and inactive players */
+	std::array<bool, globals::MAX_PLAYERS> activePlayers;
+
 	/**
 	 * Number of frames since the last inbound server message
 	 */
@@ -185,7 +190,7 @@ class MagicInternetBox {
 	 * Call one of the init methods to connect and stuff.
 	 * This constructor is private, as this class is a singleton.
 	 */
-	MagicInternetBox() {
+	MagicInternetBox() : activePlayers() {
 		ws = nullptr;
 		status = Uninitialized;
 		events = None;
@@ -195,6 +200,7 @@ class MagicInternetBox {
 		numPlayers = 0;
 		maxPlayers = 0;
 		lastConnection = 0;
+		activePlayers.fill(false);
 	};
 
    public:
@@ -283,6 +289,14 @@ class MagicInternetBox {
 	/** Returns the total number of players in this ship (including disconnected players), or 0 if
 	 * uninitialized. */
 	unsigned int getMaxNumPlayers() { return maxPlayers; }
+
+	/**
+	 * Returns whether the specified player ID is active.
+	 *
+	 * PRECONDITION: The playerID
+	 * must be valid.
+	 */
+	bool isPlayerActive(unsigned int playerID);
 
 	/**
 	 * Start the game with the current number of players.
