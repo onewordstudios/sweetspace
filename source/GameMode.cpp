@@ -380,6 +380,9 @@ void GameMode::update(float timestep) {
 	if (ship->getChallenge()) {
 		bool allRoll = true;
 		for (unsigned int i = 0; i < ship->getDonuts().size(); i++) {
+			if (!ship->getDonuts()[i]->getIsActive()) {
+				break;
+			}
 			if (ship->getRollDir() == 0) {
 				if (ship->getDonuts()[i]->getVelocity() >= 0) {
 					allRoll = false;
