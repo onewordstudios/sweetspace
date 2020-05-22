@@ -248,9 +248,7 @@ void GameMode::update(float timestep) {
 				break;
 			}
 		}
-		if (allButtonsInactive) {
-			ship->updateTimer(timestep);
-		}
+		ship->updateTimer(timestep, allButtonsInactive);
 	}
 
 	// Move the donut (MODEL ONLY)

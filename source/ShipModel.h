@@ -316,10 +316,10 @@ class ShipModel {
 	 *
 	 * @param time amount of time to detract from timer
 	 */
-	void updateTimer(float time) {
+	void updateTimer(float time, bool isTimeLeftUpdated) {
 		timeElapsed += time;
-		if (!timeless) {
-			timeLeft = totalTime - timeElapsed;
+		if (!timeless && isTimeLeftUpdated) {
+			timeLeft -= time;
 		}
 	}
 
