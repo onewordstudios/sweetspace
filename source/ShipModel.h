@@ -36,6 +36,7 @@ class ShipModel {
 	bool timeless;
 	/** Challenge progress*/
 	int challengeProg;
+	/** Time at which stabilizer challenge ends */
 	float endTime;
 	/** Total level time*/
 	float totalTime;
@@ -48,10 +49,10 @@ class ShipModel {
 	/** StabilizerStatus of all player challenge. 0 = no challenge, 1 = challenge, 2 = challenge
 	 * failed, 3 = challenge success*/
 	StabilizerStatus stabilizerStatus;
-	/** Game countdown timer*/
-	float timer;
-	/** Game timer*/
-	float timeCtr;
+	/** Game countdown timer, contains time left in level */
+	float timeLeftInTimer;
+	/** Time elapsed since level start */
+	float canonicalTimeElapsed;
 #pragma mark Constructors
 	/*
 	 * Creates a ship.
@@ -74,8 +75,8 @@ class ShipModel {
 		  totalTime(0),
 		  levelNum(0),
 		  stabilizerStatus(INACTIVE),
-		  timer(0),
-		  timeCtr(0) {}
+		  timeLeftInTimer(0),
+		  canonicalTimeElapsed(0) {}
 
 	/**
 	 * Destroys this breach, releasing all resources.
@@ -305,9 +306,9 @@ class ShipModel {
 	 * @param startTime the initial time on the timer
 	 */
 	void initTimer(float startTime) {
-		timer = startTime;
+		timeLeftInTimer = startTime;
 		totalTime = startTime;
-		timeCtr = 0;
+		canonicalTimeElapsed = 0;
 	}
 
 	/**
@@ -315,10 +316,10 @@ class ShipModel {
 	 *
 	 * @param time amount of time to detract from timer
 	 */
-	void updateTimer(float time) {
-		timeCtr += time;
-		if (!timeless) {
-			timer = totalTime - timeCtr;
+	void updateTimer(float time, bool isTimeLeftUpdated) {
+		canonicalTimeElapsed += time;
+		if (!timeless && isTimeLeftUpdated) {
+			timeLeftInTimer -= time;
 		}
 	}
 
@@ -327,7 +328,7 @@ class ShipModel {
 	 *
 	 * @return if timer has ended
 	 */
-	bool timerEnded() { return timer < 1; }
+	bool timerEnded() { return timeLeftInTimer < 1; }
 
 	/**
 	 * Returns whether the level has ended (won or lost)
@@ -339,7 +340,7 @@ class ShipModel {
 	 *
 	 * @return the time that has passed
 	 */
-	float timePassed() { return timeCtr; }
+	float timePassed() { return canonicalTimeElapsed; }
 
 	/**
 	 * Set size of the ship
