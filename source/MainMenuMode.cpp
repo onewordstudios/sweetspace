@@ -440,14 +440,14 @@ void MainMenuMode::processButtons() {
 			break;
 		}
 		case HostScreen: {
-			if (buttonManager.tappedButton(hostBeginBtn, tapData)) {
-				if (net->getNumPlayers() >= globals::MIN_PLAYERS) {
-					transitionState = HostLevelSelect;
-				}
-			} else if (buttonManager.tappedButton(backBtn, tapData)) {
+			if (buttonManager.tappedButton(backBtn, tapData)) {
 				CULog("Going Back");
 				net->forceDisconnect();
 				transitionState = StartScreen;
+			} else if (net->getNumPlayers() >= globals::MIN_PLAYERS) {
+				if (buttonManager.tappedButton(hostBeginBtn, tapData)) {
+					transitionState = HostLevelSelect;
+				}
 			}
 			break;
 		}
