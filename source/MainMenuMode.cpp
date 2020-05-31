@@ -29,7 +29,16 @@ constexpr int OPEN_TRANSITION = 120;
 constexpr int OPEN_TRANSITION_FADE = 90;
 
 /** Height of the credits scroll */
-constexpr unsigned int CREDITS_HEIGHT = 1600;
+constexpr float CREDITS_HEIGHT = 1600;
+
+/** Duration of credits scroll (in frames) */
+constexpr float CREDITS_DURATION = 10000;
+
+/**
+ * Current frame of the credits scroll (there's only ever one credits screen, so it's safe to
+ * stick this here)
+ */
+unsigned int creditsScrollFrame = 0;
 #pragma endregion
 
 #pragma region Initialization Logic
@@ -400,6 +409,16 @@ void MainMenuMode::processUpdate() {
 		default: {
 			break;
 		}
+		case Credits: {
+			float pos = ((float)(CREDITS_HEIGHT + globals::SCENE_WIDTH) *
+						 ((float)(creditsScrollFrame++) / CREDITS_DURATION));
+
+			credits->setPositionY(pos - (float)globals::SCENE_WIDTH);
+			if ((float)creditsScrollFrame > CREDITS_DURATION) {
+				creditsScrollFrame = 0;
+			}
+			break;
+		}
 	}
 }
 
@@ -417,6 +436,7 @@ void MainMenuMode::processButtons() {
 				net->forceDisconnect();
 				// Intentional fall-through
 			case ClientScreen:
+			case Credits:
 				CULog("Going Back");
 				transitionState = StartScreen;
 				return;
@@ -508,6 +528,13 @@ void MainMenuMode::processButtons() {
 				}
 				break;
 			}
+		}
+		case Credits: {
+			if (buttonManager.tappedButton(backBtn, tapData)) {
+				CULog("Going Back");
+				transitionState = StartScreen;
+			}
+			break;
 		}
 		default: {
 			break;

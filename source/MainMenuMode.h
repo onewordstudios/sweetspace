@@ -66,7 +66,10 @@ class MainMenuMode : public cugl::Scene {
 		/** Joining a game; connected */
 		ClientScreenDone,
 		/** Matchmaking complete */
-		Done
+		Done,
+
+		/** Credits screen */
+		Credits
 	};
 
 	/** The current state */
