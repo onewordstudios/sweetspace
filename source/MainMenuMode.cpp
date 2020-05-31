@@ -27,6 +27,9 @@ constexpr int OPEN_TRANSITION = 120;
 
 /** When during opening transition to fade in stuff */
 constexpr int OPEN_TRANSITION_FADE = 90;
+
+/** Height of the credits scroll */
+constexpr unsigned int CREDITS_HEIGHT = 1600;
 #pragma endregion
 
 #pragma region Initialization Logic
@@ -67,6 +70,8 @@ bool MainMenuMode::init(const std::shared_ptr<AssetManager>& assets) {
 	bg2ship = assets->get<Node>("matchmaking_mainmenubg4");
 	bg3land = assets->get<Node>("matchmaking_mainmenubg5");
 	bg9studio = assets->get<Node>("matchmaking_studiologo");
+
+	credits = assets->get<Node>("matchmaking_credits");
 
 	backBtn = std::dynamic_pointer_cast<Button>(assets->get<Node>("matchmaking_backbtn"));
 
@@ -126,6 +131,8 @@ bool MainMenuMode::init(const std::shared_ptr<AssetManager>& assets) {
 	clientJoinBtn->setDown(false);
 	clientJoinBtn->setVisible(true);
 	levelSelect->setVisible(false);
+	credits->setVisible(false);
+	credits->setPositionY(-1 * (float)globals::SCENE_WIDTH);
 	clientEnteredRoom.clear();
 
 	updateClientLabel();
@@ -153,6 +160,7 @@ void MainMenuMode::dispose() {
 	clientJoinBtn = nullptr;
 	clientClearBtn = nullptr;
 	levelSelect = nullptr;
+	credits = nullptr;
 	levelBtns.fill(nullptr);
 	buttonManager.clear();
 	clientRoomBtns.clear();

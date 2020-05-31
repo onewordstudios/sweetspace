@@ -128,6 +128,9 @@ class MainMenuMode : public cugl::Scene {
 	/** Clear button from client */
 	std::shared_ptr<cugl::Button> clientClearBtn;
 
+	/** Credits scroll */
+	std::shared_ptr<cugl::Node> credits;
+
 #pragma endregion
 
 	/**
