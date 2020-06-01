@@ -32,7 +32,7 @@ constexpr int OPEN_TRANSITION_FADE = 90;
 constexpr float CREDITS_HEIGHT = 1600;
 
 /** Duration of credits scroll (in frames) */
-constexpr float CREDITS_DURATION = 10000;
+constexpr float CREDITS_DURATION = 5000;
 
 /**
  * Current frame of the credits scroll (there's only ever one credits screen, so it's safe to
@@ -80,6 +80,8 @@ bool MainMenuMode::init(const std::shared_ptr<AssetManager>& assets) {
 	bg3land = assets->get<Node>("matchmaking_mainmenubg5");
 	bg9studio = assets->get<Node>("matchmaking_studiologo");
 
+	creditsBtn =
+		std::dynamic_pointer_cast<Button>(assets->get<Node>("matchmaking_home_btnwrap_creditsbtn"));
 	credits = assets->get<Node>("matchmaking_credits");
 
 	backBtn = std::dynamic_pointer_cast<Button>(assets->get<Node>("matchmaking_backbtn"));
@@ -121,6 +123,7 @@ bool MainMenuMode::init(const std::shared_ptr<AssetManager>& assets) {
 	buttonManager.registerButton(hostBeginBtn);
 	buttonManager.registerButton(clientJoinBtn);
 	buttonManager.registerButton(clientClearBtn);
+	buttonManager.registerButton(creditsBtn);
 	for (unsigned int i = 0; i < NUM_DIGITS; i++) {
 		clientRoomBtns.push_back(std::dynamic_pointer_cast<Button>(
 			assets->get<Node>("matchmaking_client_buttons_btn" + std::to_string(i))));
@@ -170,6 +173,7 @@ void MainMenuMode::dispose() {
 	clientClearBtn = nullptr;
 	levelSelect = nullptr;
 	credits = nullptr;
+	creditsBtn = nullptr;
 	levelBtns.fill(nullptr);
 	buttonManager.clear();
 	clientRoomBtns.clear();
@@ -274,14 +278,23 @@ void MainMenuMode::processTransition() {
 			} else {
 				mainScreen->setColor(
 					Tween::fade(Tween::linear(1.0f, 0.0f, transitionFrame, TRANSITION_DURATION)));
-				if (transitionState == ClientScreen) {
-					if (transitionFrame == 1) {
-						backBtn->setVisible(true);
+				switch (transitionState) {
+					// Host screen case unneeded b/c waiting for host room before playing transition
+					case ClientScreen: {
+						clientScreen->setPositionY(
+							Tween::easeOut(-screenHeight, 0, transitionFrame, TRANSITION_DURATION));
 					}
-					clientScreen->setPositionY(
-						Tween::easeOut(-screenHeight, 0, transitionFrame, TRANSITION_DURATION));
-					backBtn->setColor(Tween::fade(
-						Tween::linear(0.0f, 1.0f, transitionFrame, TRANSITION_DURATION)));
+					// Intentional Fall-Through
+					case Credits: {
+						if (transitionFrame == 1) {
+							backBtn->setVisible(true);
+						}
+						backBtn->setColor(Tween::fade(
+							Tween::linear(0.0f, 1.0f, transitionFrame, TRANSITION_DURATION)));
+						break;
+					}
+					default:
+						break;
 				}
 			}
 			break;
@@ -368,6 +381,25 @@ void MainMenuMode::processTransition() {
 
 				return;
 			}
+			break;
+		}
+		case Credits: {
+			if (transitionFrame == 1) {
+				mainScreen->setVisible(true);
+			}
+
+			// Transition over
+			if (transitionFrame > TRANSITION_DURATION) {
+				endTransition();
+				credits->setVisible(false);
+				backBtn->setVisible(false);
+				return;
+			}
+
+			credits->setColor(
+				Tween::fade(Tween::linear(1.0f, 0.0f, transitionFrame, TRANSITION_DURATION)));
+			mainScreen->setColor(
+				Tween::fade(Tween::linear(0.0f, 1.0f, transitionFrame, TRANSITION_DURATION)));
 		}
 		default:
 			break;
@@ -464,6 +496,12 @@ void MainMenuMode::processButtons() {
 				transitionState = ClientScreen;
 				clientScreen->setPositionY(-screenHeight);
 				clientScreen->setVisible(true);
+			} else if (buttonManager.tappedButton(creditsBtn, tapData)) {
+				transitionState = Credits;
+				credits->setVisible(true);
+				credits->setColor(Color4::WHITE);
+				credits->setPositionY(0);
+				creditsScrollFrame = 0;
 			}
 			break;
 		}
