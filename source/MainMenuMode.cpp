@@ -29,7 +29,7 @@ constexpr int OPEN_TRANSITION = 120;
 constexpr int OPEN_TRANSITION_FADE = 90;
 
 /** Height of the credits scroll */
-constexpr float CREDITS_HEIGHT = 1600;
+constexpr float CREDITS_HEIGHT = 1700;
 
 /** Duration of credits scroll (in frames) */
 constexpr float CREDITS_DURATION = 5000;
