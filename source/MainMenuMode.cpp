@@ -500,7 +500,7 @@ void MainMenuMode::processButtons() {
 				transitionState = Credits;
 				credits->setVisible(true);
 				credits->setColor(Color4::WHITE);
-				credits->setPositionY(0);
+				credits->setPositionY(-(float)globals::SCENE_WIDTH);
 				creditsScrollFrame = 0;
 			}
 			break;
