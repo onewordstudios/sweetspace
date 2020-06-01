@@ -280,16 +280,33 @@ void MainMenuMode::processTransition() {
 				switch (transitionState) {
 					// Host screen case unneeded b/c waiting for host room before playing transition
 					case ClientScreen: {
+						if (transitionFrame == 1) {
+							backBtn->setVisible(true);
+						}
+
 						clientScreen->setPositionY(
 							Tween::easeOut(-screenHeight, 0, transitionFrame, TRANSITION_DURATION));
+						backBtn->setColor(Tween::fade(
+							Tween::linear(0.0f, 1.0f, transitionFrame, TRANSITION_DURATION)));
+
+						break;
 					}
-					// Intentional Fall-Through
 					case Credits: {
 						if (transitionFrame == 1) {
 							backBtn->setVisible(true);
 						}
+
 						backBtn->setColor(Tween::fade(
 							Tween::linear(0.0f, 1.0f, transitionFrame, TRANSITION_DURATION)));
+
+						bg1glow->setColor(Tween::fade(
+							Tween::linear(1.0f, 0.0f, transitionFrame, TRANSITION_DURATION)));
+						bg2ship->setColor(Tween::fade(
+							Tween::linear(1.0f, 0.0f, transitionFrame, TRANSITION_DURATION)));
+
+						bg3land->setPositionY(Tween::easeOut(screenHeight / 2, screenHeight / 3,
+															 transitionFrame, TRANSITION_DURATION));
+
 						break;
 					}
 					default:
@@ -399,6 +416,14 @@ void MainMenuMode::processTransition() {
 				Tween::fade(Tween::linear(1.0f, 0.0f, transitionFrame, TRANSITION_DURATION)));
 			mainScreen->setColor(
 				Tween::fade(Tween::linear(0.0f, 1.0f, transitionFrame, TRANSITION_DURATION)));
+
+			bg1glow->setColor(
+				Tween::fade(Tween::linear(0.0f, 1.0f, transitionFrame, TRANSITION_DURATION)));
+			bg2ship->setColor(
+				Tween::fade(Tween::linear(0.0f, 1.0f, transitionFrame, TRANSITION_DURATION)));
+
+			bg3land->setPositionY(Tween::easeOut(screenHeight / 3, screenHeight / 2,
+												 transitionFrame, TRANSITION_DURATION));
 		}
 		default:
 			break;
