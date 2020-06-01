@@ -144,7 +144,6 @@ bool MainMenuMode::init(const std::shared_ptr<AssetManager>& assets) {
 	clientJoinBtn->setVisible(true);
 	levelSelect->setVisible(false);
 	credits->setVisible(false);
-	credits->setPositionY(-1 * (float)globals::SCENE_WIDTH);
 	clientEnteredRoom.clear();
 
 	updateClientLabel();
@@ -445,7 +444,7 @@ void MainMenuMode::processUpdate() {
 			float pos = ((float)(CREDITS_HEIGHT + globals::SCENE_WIDTH) *
 						 ((float)(creditsScrollFrame++) / CREDITS_DURATION));
 
-			credits->setPositionY(pos - (float)globals::SCENE_WIDTH);
+			credits->setPositionY(pos);
 			if ((float)creditsScrollFrame > CREDITS_DURATION) {
 				creditsScrollFrame = 0;
 			}
@@ -500,7 +499,7 @@ void MainMenuMode::processButtons() {
 				transitionState = Credits;
 				credits->setVisible(true);
 				credits->setColor(Color4::WHITE);
-				credits->setPositionY(-(float)globals::SCENE_WIDTH);
+				credits->setPositionY(0);
 				creditsScrollFrame = 0;
 			}
 			break;
