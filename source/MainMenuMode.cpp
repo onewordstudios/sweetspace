@@ -516,6 +516,7 @@ void MainMenuMode::processButtons() {
 					CULog("SEPARATE THREAD FINISHED INIT HOST");
 				}));
 				transitionState = HostScreenWait;
+				hostNeedle->setAngle(0);
 			} else if (buttonManager.tappedButton(clientBtn, tapData)) {
 				transitionState = ClientScreen;
 				clientScreen->setPositionY(-screenHeight);
