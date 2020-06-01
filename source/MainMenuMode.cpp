@@ -29,7 +29,7 @@ constexpr int OPEN_TRANSITION = 120;
 constexpr int OPEN_TRANSITION_FADE = 90;
 
 /** Height of the credits scroll */
-constexpr float CREDITS_HEIGHT = 1700;
+constexpr float CREDITS_HEIGHT = 2000;
 
 /** Duration of credits scroll (in frames) */
 constexpr float CREDITS_DURATION = 5000;
@@ -466,7 +466,7 @@ void MainMenuMode::processUpdate() {
 			break;
 		}
 		case Credits: {
-			float pos = ((float)(CREDITS_HEIGHT + globals::SCENE_WIDTH) *
+			float pos = ((float)(CREDITS_HEIGHT + screenHeight) *
 						 ((float)(creditsScrollFrame++) / CREDITS_DURATION));
 
 			credits->setPositionY(pos);
