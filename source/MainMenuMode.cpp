@@ -32,7 +32,7 @@ constexpr int OPEN_TRANSITION_FADE = 90;
 constexpr float CREDITS_HEIGHT = 2000;
 
 /** Duration of credits scroll (in frames) */
-constexpr float CREDITS_DURATION = 5000;
+constexpr float CREDITS_DURATION = 4500;
 
 /**
  * Current frame of the credits scroll (there's only ever one credits screen, so it's safe to
