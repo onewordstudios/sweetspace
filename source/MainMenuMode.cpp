@@ -34,6 +34,9 @@ constexpr float CREDITS_HEIGHT = 2000;
 /** Duration of credits scroll (in frames) */
 constexpr float CREDITS_DURATION = 4500;
 
+/** How much more to increment the credit scroll frame when tapping to go faster */
+constexpr unsigned int FAST_CREDITS_SCROLL_INCREMENT = 5;
+
 /**
  * Current frame of the credits scroll (there's only ever one credits screen, so it's safe to
  * stick this here)
@@ -468,6 +471,10 @@ void MainMenuMode::processUpdate() {
 		case Credits: {
 			float pos = ((float)(CREDITS_HEIGHT + screenHeight) *
 						 ((float)(creditsScrollFrame++) / CREDITS_DURATION));
+
+			if (InputController::getInstance()->getCurrTapLoc() != Vec2::ZERO) {
+				creditsScrollFrame += FAST_CREDITS_SCROLL_INCREMENT;
+			}
 
 			credits->setPositionY(pos);
 			if ((float)creditsScrollFrame > CREDITS_DURATION) {
