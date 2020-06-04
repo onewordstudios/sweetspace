@@ -417,6 +417,8 @@ void MainMenuMode::processTransition() {
 
 			credits->setColor(
 				Tween::fade(Tween::linear(1.0f, 0.0f, transitionFrame, TRANSITION_DURATION)));
+			backBtn->setColor(
+				Tween::fade(Tween::linear(1.0f, 0.0f, transitionFrame, TRANSITION_DURATION)));
 			mainScreen->setColor(
 				Tween::fade(Tween::linear(0.0f, 1.0f, transitionFrame, TRANSITION_DURATION)));
 
