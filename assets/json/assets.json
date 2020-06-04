@@ -176,6 +176,9 @@
 		"credits_btn" : {
 			"file": "textures/main_menu/credits_up.png"
 		},
+		"credits_btn_down" : {
+			"file": "textures/main_menu/credits_down.png"
+		},
 		"join_btn" : {
 			"file": "textures/main_menu/join_up.png"
 		},
@@ -1778,7 +1781,7 @@
 										"upnode"   : "up",
 										"downnode" : "down",
 										"anchor"   : [0.5,1],
-										"scale" : 0.2
+										"scale" : 0.5
 									},
 									"children" : {
 										"up" : {
@@ -1790,7 +1793,7 @@
 										"down" : {
 											"type"   : "Image",
 											"data"   : {
-												"texture"  : "credits_btn"
+												"texture"  : "credits_btn_down"
 											}
 										}
 									},
