@@ -83,8 +83,7 @@ bool MainMenuMode::init(const std::shared_ptr<AssetManager>& assets) {
 	bg3land = assets->get<Node>("matchmaking_mainmenubg5");
 	bg9studio = assets->get<Node>("matchmaking_studiologo");
 
-	creditsBtn =
-		std::dynamic_pointer_cast<Button>(assets->get<Node>("matchmaking_home_btnwrap_creditsbtn"));
+	creditsBtn = std::dynamic_pointer_cast<Button>(assets->get<Node>("matchmaking_creditsbtn"));
 	credits = assets->get<Node>("matchmaking_credits");
 
 	backBtn = std::dynamic_pointer_cast<Button>(assets->get<Node>("matchmaking_backbtn"));
@@ -94,7 +93,9 @@ bool MainMenuMode::init(const std::shared_ptr<AssetManager>& assets) {
 	clientBtn =
 		std::dynamic_pointer_cast<Button>(assets->get<Node>("matchmaking_home_btnwrap_clientbtn"));
 
-	mainScreen = assets->get<Node>("matchmaking_home");
+	mainScreen.push_back(assets->get<Node>("matchmaking_home"));
+	mainScreen.push_back(assets->get<Node>("matchmaking_gamelogo"));
+	mainScreen.push_back(creditsBtn);
 	hostScreen = assets->get<Node>("matchmaking_host");
 	clientScreen = assets->get<Node>("matchmaking_client");
 	connScreen = std::dynamic_pointer_cast<Label>(assets->get<Node>("matchmaking_connscreen"));
@@ -163,7 +164,7 @@ void MainMenuMode::dispose() {
 	backBtn = nullptr;
 	hostBtn = nullptr;
 	clientBtn = nullptr;
-	mainScreen = nullptr;
+	mainScreen.clear();
 	hostScreen = nullptr;
 	clientScreen = nullptr;
 	connScreen = nullptr;
@@ -183,6 +184,7 @@ void MainMenuMode::dispose() {
 #pragma endregion
 
 #pragma region Internal Helpers
+
 void MainMenuMode::updateClientLabel() {
 	std::vector<char> room;
 	for (unsigned int i = 0; i < clientEnteredRoom.size(); i++) {
@@ -244,7 +246,9 @@ void MainMenuMode::processTransition() {
 			}
 			if (transitionFrame > OPEN_TRANSITION) {
 				bg9studio->setVisible(false);
-				mainScreen->setColor(Color4::WHITE);
+				for (auto e : mainScreen) {
+					e->setColor(Color4::WHITE);
+				}
 				endTransition();
 				return;
 			}
@@ -257,10 +261,12 @@ void MainMenuMode::processTransition() {
 
 			// Fade in main menu at end
 			if (transitionFrame > OPEN_TRANSITION_FADE) {
-				mainScreen->setVisible(true);
 				int i = transitionFrame - OPEN_TRANSITION_FADE;
-				mainScreen->setColor(Tween::fade(
-					Tween::linear(0.0f, 1.0f, i, OPEN_TRANSITION - OPEN_TRANSITION_FADE)));
+				for (auto e : mainScreen) {
+					e->setVisible(true);
+					e->setColor(Tween::fade(
+						Tween::linear(0.0f, 1.0f, i, OPEN_TRANSITION - OPEN_TRANSITION_FADE)));
+				}
 			}
 
 			// Background pans up into view
@@ -276,10 +282,14 @@ void MainMenuMode::processTransition() {
 		case StartScreen: {
 			if (transitionFrame > TRANSITION_DURATION) {
 				endTransition();
-				mainScreen->setVisible(false);
+				for (auto e : mainScreen) {
+					e->setVisible(false);
+				}
 			} else {
-				mainScreen->setColor(
-					Tween::fade(Tween::linear(1.0f, 0.0f, transitionFrame, TRANSITION_DURATION)));
+				for (auto e : mainScreen) {
+					e->setColor(Tween::fade(
+						Tween::linear(1.0f, 0.0f, transitionFrame, TRANSITION_DURATION)));
+				}
 				switch (transitionState) {
 					// Host screen case unneeded b/c waiting for host room before playing transition
 					case ClientScreen: {
@@ -372,7 +382,9 @@ void MainMenuMode::processTransition() {
 			if (transitionState == StartScreen) {
 				// Start transition
 				if (transitionFrame == 1) {
-					mainScreen->setVisible(true);
+					for (auto e : mainScreen) {
+						e->setVisible(true);
+					}
 				}
 
 				// Transition over
@@ -393,8 +405,10 @@ void MainMenuMode::processTransition() {
 						Tween::easeIn(0, -screenHeight, transitionFrame, TRANSITION_DURATION));
 				}
 
-				mainScreen->setColor(
-					Tween::fade(Tween::linear(0.0f, 1.0f, transitionFrame, TRANSITION_DURATION)));
+				for (auto e : mainScreen) {
+					e->setColor(Tween::fade(
+						Tween::linear(0.0f, 1.0f, transitionFrame, TRANSITION_DURATION)));
+				}
 				backBtn->setColor(
 					Tween::fade(Tween::linear(1.0f, 0.0f, transitionFrame, TRANSITION_DURATION)));
 
@@ -404,7 +418,9 @@ void MainMenuMode::processTransition() {
 		}
 		case Credits: {
 			if (transitionFrame == 1) {
-				mainScreen->setVisible(true);
+				for (auto e : mainScreen) {
+					e->setVisible(true);
+				}
 			}
 
 			// Transition over
@@ -419,8 +435,10 @@ void MainMenuMode::processTransition() {
 				Tween::fade(Tween::linear(1.0f, 0.0f, transitionFrame, TRANSITION_DURATION)));
 			backBtn->setColor(
 				Tween::fade(Tween::linear(1.0f, 0.0f, transitionFrame, TRANSITION_DURATION)));
-			mainScreen->setColor(
-				Tween::fade(Tween::linear(0.0f, 1.0f, transitionFrame, TRANSITION_DURATION)));
+			for (auto e : mainScreen) {
+				e->setColor(
+					Tween::fade(Tween::linear(0.0f, 1.0f, transitionFrame, TRANSITION_DURATION)));
+			}
 
 			bg1glow->setColor(
 				Tween::fade(Tween::linear(0.0f, 1.0f, transitionFrame, TRANSITION_DURATION)));

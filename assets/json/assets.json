@@ -1585,6 +1585,23 @@
 						"y_anchor" : "middle"
 					}
 				},
+				"gamelogo" : {
+					"type" : "Image",
+					"format"    : {
+						"type" : "Anchored"
+					},
+					"data"   : {
+						"texture"  : "game_title",
+						"anchor"   : [0.5,0.5],
+						"scale"    : 0.5,
+						"visible"  : false
+					},
+					"layout" : {
+						"x_anchor" : "center",
+						"y_anchor" : "middle",
+						"y_offset" : 0.13
+					}
+				},
 				"mainmenubg4" : {
 					"type" : "Image",
 					"format"    : {
@@ -1666,6 +1683,38 @@
 						}
 					}
 				},
+				"creditsbtn" : {
+					"type": "Button",
+					"format" : {
+						"type" : "Anchored"
+					},
+					"data": {
+						"upnode"   : "up",
+						"downnode" : "down",
+						"anchor"   : [0,1],
+						"scale" : 0.5,
+						"visible" : false
+					},
+					"children" : {
+						"up" : {
+							"type"   : "Image",
+							"data"   : {
+								"texture"  : "credits_btn"
+							}
+						},
+						"down" : {
+							"type"   : "Image",
+							"data"   : {
+								"texture"  : "credits_btn_down"
+							}
+						}
+					},
+					"layout" : {
+						"x_anchor" : "left",
+						"y_anchor" : "top",
+						"x_offset" : 0.02
+					}
+				},
 				"home" : {
 					"type" : "Node",
 					"format" : { "type" : "Anchored" },
@@ -1680,22 +1729,6 @@
 						"y_anchor" : "middle"
 					},
 					"children" : {
-						"splash" : {
-							"type" : "Image",
-							"format"    : {
-								"type" : "Anchored"
-							},
-							"data"   : {
-								"texture"  : "game_title_halo",
-								"anchor"   : [0.5,0.5],
-								"scale"    : 0.5
-							},
-							"layout" : {
-								"x_anchor" : "center",
-								"y_anchor" : "middle",
-                                "y_offset" : 0.15
-							}
-						},
 						"btnwrap" : {
 							"type" : "Node",
 							"format" : { "type" : "Anchored" },
@@ -1770,37 +1803,6 @@
 										"x_anchor" : "center",
 										"y_anchor" : "middle",
                                         "x_offset" : 0.02
-									}
-								},
-								"creditsbtn" : {
-									"type": "Button",
-									"format" : {
-										"type" : "Anchored"
-									},
-									"data": {
-										"upnode"   : "up",
-										"downnode" : "down",
-										"anchor"   : [0.5,1],
-										"scale" : 0.5
-									},
-									"children" : {
-										"up" : {
-											"type"   : "Image",
-											"data"   : {
-												"texture"  : "credits_btn"
-											}
-										},
-										"down" : {
-											"type"   : "Image",
-											"data"   : {
-												"texture"  : "credits_btn_down"
-											}
-										}
-									},
-									"layout" : {
-										"x_anchor" : "center",
-										"y_anchor" : "middle",
-										"y_offset" : -0.3
 									}
 								}
 							}

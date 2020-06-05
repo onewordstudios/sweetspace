@@ -99,8 +99,8 @@ class MainMenuMode : public cugl::Scene {
 	/** Button to create client */
 	std::shared_ptr<cugl::Button> clientBtn;
 
-	/** The node containing all UI for the starting splash screen */
-	std::shared_ptr<cugl::Node> mainScreen;
+	/** The nodes containing all UI for the starting splash screen */
+	std::vector<std::shared_ptr<cugl::Node>> mainScreen;
 	/** The node containing all UI for the host screen */
 	std::shared_ptr<cugl::Node> hostScreen;
 	/** The node containing all UI for the client screen */
@@ -137,7 +137,6 @@ class MainMenuMode : public cugl::Scene {
 	std::shared_ptr<cugl::Node> credits;
 
 #pragma endregion
-
 	/**
 	 * Update the client room display using the contents of {@link clientEnteredRoom}
 	 */
