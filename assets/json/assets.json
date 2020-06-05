@@ -1688,7 +1688,7 @@
 					"data": {
 						"upnode"   : "up",
 						"downnode" : "down",
-						"anchor"   : [0,1],
+						"anchor"   : [0,0],
 						"scale" : 0.5,
 						"visible" : false
 					},
@@ -1708,7 +1708,7 @@
 					},
 					"layout" : {
 						"x_anchor" : "left",
-						"y_anchor" : "top",
+						"y_anchor" : "bottom",
 						"x_offset" : 0.02
 					}
 				},
