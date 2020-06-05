@@ -128,9 +128,6 @@
 		"game_title": {
 			"file": "textures/main_menu/sweetspace.png"
 		},
-        "game_title_halo": {
-            "file": "textures/main_menu/sweetspace_halo.png"
-        },
 		"main_menu_bg0": {
 			"file": "textures/main_menu/splash/0-logo.png"
 		},
