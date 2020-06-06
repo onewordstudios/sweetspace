@@ -53,11 +53,4 @@ constexpr std::array<const char*, MAX_NUM_LEVELS> LEVEL_NAMES = {"",
 /** List of where the buttons on the level select map */
 constexpr std::array<unsigned int, NUM_LEVEL_BTNS> LEVEL_ENTRY_POINTS = {0, 6, 9, 10, 11}; // NOLINT
 
-/** Easy level index */
-constexpr unsigned int EASY_LEVEL = 0; // NOLINT
-/** Medium level index */
-constexpr unsigned int MED_LEVEL = 8; // NOLINT
-/** Hard level index */
-constexpr unsigned int HARD_LEVEL = 9; // NOLINT
-
 #endif /* defined(__JS_LEVEL_CONSTANTS_H__) */

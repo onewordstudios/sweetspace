@@ -156,6 +156,15 @@ bool MainMenuMode::init(const std::shared_ptr<AssetManager>& assets) {
 	return true;
 }
 
+void MainMenuMode::triggerCredits() {
+	currState = StartScreen;
+	transitionState = Credits;
+	credits->setVisible(true);
+	credits->setColor(Color4::WHITE);
+	credits->setPositionY(0);
+	creditsScrollFrame = 0;
+}
+
 /**
  * Disposes of all (non-static) resources allocated to this mode.
  */
@@ -549,11 +558,7 @@ void MainMenuMode::processButtons() {
 				clientScreen->setPositionY(-screenHeight);
 				clientScreen->setVisible(true);
 			} else if (buttonManager.tappedButton(creditsBtn, tapData)) {
-				transitionState = Credits;
-				credits->setVisible(true);
-				credits->setColor(Color4::WHITE);
-				credits->setPositionY(0);
-				creditsScrollFrame = 0;
+				triggerCredits();
 			}
 			break;
 		}

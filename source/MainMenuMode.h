@@ -216,6 +216,9 @@ class MainMenuMode : public cugl::Scene {
 
 #pragma endregion
 
+	/** Go directly to the credits sequence */
+	void triggerCredits();
+
 	/**
 	 * The method called to update the game mode.
 	 *
