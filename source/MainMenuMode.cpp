@@ -683,6 +683,7 @@ void MainMenuMode::update(float timestep) {
 				backBtn->setVisible(false);
 				currState = ClientScreenDone;
 				hostScreen->setVisible(true);
+				hostScreen->setPositionY(0);
 				clientWaitHost->setVisible(true);
 				hostBeginBtn->setVisible(false);
 				clientScreen->setVisible(false);
