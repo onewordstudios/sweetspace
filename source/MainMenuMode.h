@@ -151,6 +151,9 @@ class MainMenuMode : public cugl::Scene {
 	 */
 	void setRoomID();
 
+	/** Query mib and update the needle for number of players */
+	void setNumPlayers();
+
 #pragma region Update Handlers
 	/**
 	 * Called during a state transition upon completing the transition.

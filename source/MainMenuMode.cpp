@@ -240,6 +240,11 @@ void MainMenuMode::setRoomID() {
 	hostLabel->setText(disp.str());
 }
 
+void MainMenuMode::setNumPlayers() {
+	float percentage = (float)(net->getNumPlayers() - 1) / (float)globals::MAX_PLAYERS;
+	hostNeedle->setAngle(-percentage * globals::TWO_PI * globals::NEEDLE_OFFSET);
+}
+
 void MainMenuMode::endTransition() {
 	currState = transitionState;
 	transitionState = NA;
@@ -428,6 +433,34 @@ void MainMenuMode::processTransition() {
 			}
 			break;
 		}
+		case ClientScreenSubmitted: {
+			if (transitionFrame == 1) {
+				hostScreen->setVisible(true);
+				hostScreen->setPositionY(-screenHeight);
+				clientWaitHost->setVisible(true);
+				hostBeginBtn->setVisible(false);
+			}
+
+			if (transitionFrame > 2 * TRANSITION_DURATION) {
+				backBtn->setVisible(false);
+				clientScreen->setVisible(false);
+				hostScreen->setPositionY(0);
+
+				endTransition();
+			}
+
+			if (transitionFrame >= TRANSITION_DURATION) {
+				hostScreen->setPositionY(Tween::easeOut(
+					-screenHeight, 0, transitionFrame - TRANSITION_DURATION, TRANSITION_DURATION));
+			} else {
+				clientScreen->setPositionY(
+					Tween::easeIn(0, -screenHeight, transitionFrame, TRANSITION_DURATION));
+				backBtn->setColor(
+					Tween::fade(Tween::linear(1, 0, transitionFrame, TRANSITION_DURATION)));
+			}
+
+			break;
+		}
 		case Credits: {
 			if (transitionFrame == 1) {
 				for (auto e : mainScreen) {
@@ -488,10 +521,9 @@ void MainMenuMode::processUpdate() {
 		}
 		case HostScreen:
 		case ClientScreenDone: {
-			float percentage = (float)(net->getNumPlayers() - 1) / (float)globals::MAX_PLAYERS;
-			hostNeedle->setAngle(-percentage * globals::TWO_PI * globals::NEEDLE_OFFSET);
+			setNumPlayers();
 			if (backBtn->isVisible()) {
-				if (percentage > 0) {
+				if (net->getNumPlayers() > 1) {
 					backBtn->setVisible(false);
 					hostBeginBtn->setVisible(true);
 				}
@@ -680,14 +712,9 @@ void MainMenuMode::update(float timestep) {
 			return;
 		case MagicInternetBox::MatchmakingStatus::ClientWaitingOnOthers:
 			if (backBtn->isVisible()) {
-				backBtn->setVisible(false);
-				currState = ClientScreenDone;
-				hostScreen->setVisible(true);
-				hostScreen->setPositionY(0);
-				clientWaitHost->setVisible(true);
-				hostBeginBtn->setVisible(false);
-				clientScreen->setVisible(false);
+				transitionState = ClientScreenDone;
 				setRoomID();
+				setNumPlayers();
 			}
 		default:
 			net->update();
