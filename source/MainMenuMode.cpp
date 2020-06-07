@@ -113,6 +113,7 @@ bool MainMenuMode::init(const std::shared_ptr<AssetManager>& assets) {
 		std::dynamic_pointer_cast<Button>(assets->get<Node>("matchmaking_client_wrap_joinbtn"));
 	clientClearBtn =
 		std::dynamic_pointer_cast<Button>(assets->get<Node>("matchmaking_client_buttons_btnclear"));
+	clientWaitHost = assets->get<Node>("matchmaking_host_wrap_waittext");
 
 	levelSelect = assets->get<Node>("matchmaking_levelselect");
 	for (unsigned int i = 0; i < NUM_LEVEL_BTNS; i++) {
@@ -149,6 +150,7 @@ bool MainMenuMode::init(const std::shared_ptr<AssetManager>& assets) {
 	levelSelect->setVisible(false);
 	credits->setVisible(false);
 	clientEnteredRoom.clear();
+	clientWaitHost->setVisible(false);
 
 	updateClientLabel();
 	addChild(scene);
@@ -183,6 +185,7 @@ void MainMenuMode::dispose() {
 	clientLabel = nullptr;
 	clientJoinBtn = nullptr;
 	clientClearBtn = nullptr;
+	clientWaitHost = nullptr;
 	levelSelect = nullptr;
 	credits = nullptr;
 	creditsBtn = nullptr;
@@ -483,7 +486,8 @@ void MainMenuMode::processUpdate() {
 			}
 			break;
 		}
-		case HostScreen: {
+		case HostScreen:
+		case ClientScreenDone: {
 			float percentage = (float)(net->getNumPlayers() - 1) / (float)globals::MAX_PLAYERS;
 			hostNeedle->setAngle(-percentage * globals::TWO_PI * globals::NEEDLE_OFFSET);
 			if (backBtn->isVisible()) {
@@ -515,7 +519,7 @@ void MainMenuMode::processUpdate() {
 }
 
 void MainMenuMode::processButtons() {
-	if (currState != ClientScreenDone) {
+	if (currState != ClientScreenSubmitted) {
 		buttonManager.process();
 	}
 
@@ -595,7 +599,7 @@ void MainMenuMode::processButtons() {
 					room << clientEnteredRoom[i];
 				}
 
-				currState = ClientScreenDone;
+				currState = ClientScreenSubmitted;
 				clientJoinBtn->setDown(true);
 				net->initClient(room.str());
 
@@ -661,7 +665,7 @@ void MainMenuMode::update(float timestep) {
 	switch (net->matchStatus()) {
 		case MagicInternetBox::MatchmakingStatus::ClientRoomInvalid:
 		case MagicInternetBox::MatchmakingStatus::ClientRoomFull:
-			if (currState == ClientScreenDone) {
+			if (currState == ClientScreenSubmitted) {
 				clientEnteredRoom.clear();
 				updateClientLabel();
 				currState = ClientScreen;
@@ -677,7 +681,12 @@ void MainMenuMode::update(float timestep) {
 		case MagicInternetBox::MatchmakingStatus::ClientWaitingOnOthers:
 			if (backBtn->isVisible()) {
 				backBtn->setVisible(false);
-				clientJoinBtn->setVisible(false);
+				currState = ClientScreenDone;
+				hostScreen->setVisible(true);
+				clientWaitHost->setVisible(true);
+				hostBeginBtn->setVisible(false);
+				clientScreen->setVisible(false);
+				setRoomID();
 			}
 		default:
 			net->update();

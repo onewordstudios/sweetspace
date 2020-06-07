@@ -63,7 +63,9 @@ class MainMenuMode : public cugl::Scene {
 		HostLevelSelect,
 		/** Joining a game; waiting on ship ID */
 		ClientScreen,
-		/** Joining a game; connected */
+		/** Joining a game; hit submit */
+		ClientScreenSubmitted,
+		/** Joining a game; actually connected */
 		ClientScreenDone,
 		/** Matchmaking complete */
 		Done,
@@ -130,6 +132,8 @@ class MainMenuMode : public cugl::Scene {
 	std::vector<std::shared_ptr<cugl::Button>> clientRoomBtns;
 	/** Clear button from client */
 	std::shared_ptr<cugl::Button> clientClearBtn;
+	/** The label on the host screen shown to the client after joining */
+	std::shared_ptr<cugl::Node> clientWaitHost;
 
 	/** Button to credits */
 	std::shared_ptr<cugl::Button> creditsBtn;
