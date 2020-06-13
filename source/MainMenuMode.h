@@ -48,7 +48,27 @@ class MainMenuMode : public cugl::Scene {
 	/** Current frame of the rotating stars */
 	int rotationFrame;
 
-	/** An enum with the current state of the matchmaking mode */
+	/**
+	 * An enum with the current state of the matchmaking mode
+	 *
+	 *
+	 * User Flow:
+	 *
+	 * NA - This mode is initialized here, and matches the loading screen exit point
+	 * StartScreen - Loading mode transitions automatically to here; main splash menu
+	 *             - Contains buttons Create, Join, and Credits
+	 *	-	HostScreenWait - Clicking Create takes users here; waiting for room ID from server
+	 *			HostScreen - Transitions here after room ID assigned; waiting for others to join
+	 *			HostLevelSelect - Transitions here after clicking start; level select screen
+	 *	-	ClientScreen - Clicking Join takes users here; waiting for room ID input
+	 *			ClientScreenSubmitted - Client entered room ID; waiting to hear from server
+	 *			ClientScreenDone - Room ID valid; join complete (invalid ID returns to ClientScreen)
+	 *	-	Credits - Credits Screen
+	 *
+	 * Back button exists on screens HostScreen, ClientScreen, and Credits. Once joined into a game,
+	 * back button is no longer available. In addition, HostScreenWait will provide a back button if
+	 * there is an error connecting to server. Back button always returns to StartScreen.
+	 */
 	enum MatchState {
 		/** Empty state; used mainly for transitions only; the main state should only be NA when
 		   uninitialized */
@@ -63,7 +83,9 @@ class MainMenuMode : public cugl::Scene {
 		HostLevelSelect,
 		/** Joining a game; waiting on ship ID */
 		ClientScreen,
-		/** Joining a game; connected */
+		/** Joining a game; hit submit */
+		ClientScreenSubmitted,
+		/** Joining a game; actually connected */
 		ClientScreenDone,
 		/** Matchmaking complete */
 		Done,
@@ -130,6 +152,8 @@ class MainMenuMode : public cugl::Scene {
 	std::vector<std::shared_ptr<cugl::Button>> clientRoomBtns;
 	/** Clear button from client */
 	std::shared_ptr<cugl::Button> clientClearBtn;
+	/** The label on the host screen shown to the client after joining */
+	std::shared_ptr<cugl::Node> clientWaitHost;
 
 	/** Button to credits */
 	std::shared_ptr<cugl::Button> creditsBtn;
@@ -146,6 +170,9 @@ class MainMenuMode : public cugl::Scene {
 	 * Query mib and update the room ID for the host accordingly
 	 */
 	void setRoomID();
+
+	/** Query mib and update the needle for number of players */
+	void setNumPlayers();
 
 #pragma region Update Handlers
 	/**

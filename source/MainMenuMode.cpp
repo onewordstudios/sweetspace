@@ -113,6 +113,7 @@ bool MainMenuMode::init(const std::shared_ptr<AssetManager>& assets) {
 		std::dynamic_pointer_cast<Button>(assets->get<Node>("matchmaking_client_wrap_joinbtn"));
 	clientClearBtn =
 		std::dynamic_pointer_cast<Button>(assets->get<Node>("matchmaking_client_buttons_btnclear"));
+	clientWaitHost = assets->get<Node>("matchmaking_host_wrap_waittext");
 
 	levelSelect = assets->get<Node>("matchmaking_levelselect");
 	for (unsigned int i = 0; i < NUM_LEVEL_BTNS; i++) {
@@ -149,6 +150,7 @@ bool MainMenuMode::init(const std::shared_ptr<AssetManager>& assets) {
 	levelSelect->setVisible(false);
 	credits->setVisible(false);
 	clientEnteredRoom.clear();
+	clientWaitHost->setVisible(false);
 
 	updateClientLabel();
 	addChild(scene);
@@ -183,6 +185,7 @@ void MainMenuMode::dispose() {
 	clientLabel = nullptr;
 	clientJoinBtn = nullptr;
 	clientClearBtn = nullptr;
+	clientWaitHost = nullptr;
 	levelSelect = nullptr;
 	credits = nullptr;
 	creditsBtn = nullptr;
@@ -235,6 +238,11 @@ void MainMenuMode::setRoomID() {
 		}
 	}
 	hostLabel->setText(disp.str());
+}
+
+void MainMenuMode::setNumPlayers() {
+	float percentage = (float)(net->getNumPlayers() - 1) / (float)globals::MAX_PLAYERS;
+	hostNeedle->setAngle(-percentage * globals::TWO_PI * globals::NEEDLE_OFFSET);
 }
 
 void MainMenuMode::endTransition() {
@@ -425,6 +433,34 @@ void MainMenuMode::processTransition() {
 			}
 			break;
 		}
+		case ClientScreenSubmitted: {
+			if (transitionFrame == 1) {
+				hostScreen->setVisible(true);
+				hostScreen->setPositionY(-screenHeight);
+				clientWaitHost->setVisible(true);
+				hostBeginBtn->setVisible(false);
+			}
+
+			if (transitionFrame > 2 * TRANSITION_DURATION) {
+				backBtn->setVisible(false);
+				clientScreen->setVisible(false);
+				hostScreen->setPositionY(0);
+
+				endTransition();
+			}
+
+			if (transitionFrame >= TRANSITION_DURATION) {
+				hostScreen->setPositionY(Tween::easeOut(
+					-screenHeight, 0, transitionFrame - TRANSITION_DURATION, TRANSITION_DURATION));
+			} else {
+				clientScreen->setPositionY(
+					Tween::easeIn(0, -screenHeight, transitionFrame, TRANSITION_DURATION));
+				backBtn->setColor(
+					Tween::fade(Tween::linear(1, 0, transitionFrame, TRANSITION_DURATION)));
+			}
+
+			break;
+		}
 		case Credits: {
 			if (transitionFrame == 1) {
 				for (auto e : mainScreen) {
@@ -483,11 +519,11 @@ void MainMenuMode::processUpdate() {
 			}
 			break;
 		}
-		case HostScreen: {
-			float percentage = (float)(net->getNumPlayers() - 1) / (float)globals::MAX_PLAYERS;
-			hostNeedle->setAngle(-percentage * globals::TWO_PI * globals::NEEDLE_OFFSET);
+		case HostScreen:
+		case ClientScreenDone: {
+			setNumPlayers();
 			if (backBtn->isVisible()) {
-				if (percentage > 0) {
+				if (net->getNumPlayers() > 1) {
 					backBtn->setVisible(false);
 					hostBeginBtn->setVisible(true);
 				}
@@ -515,7 +551,7 @@ void MainMenuMode::processUpdate() {
 }
 
 void MainMenuMode::processButtons() {
-	if (currState != ClientScreenDone) {
+	if (currState != ClientScreenSubmitted) {
 		buttonManager.process();
 	}
 
@@ -595,7 +631,7 @@ void MainMenuMode::processButtons() {
 					room << clientEnteredRoom[i];
 				}
 
-				currState = ClientScreenDone;
+				currState = ClientScreenSubmitted;
 				clientJoinBtn->setDown(true);
 				net->initClient(room.str());
 
@@ -661,7 +697,7 @@ void MainMenuMode::update(float timestep) {
 	switch (net->matchStatus()) {
 		case MagicInternetBox::MatchmakingStatus::ClientRoomInvalid:
 		case MagicInternetBox::MatchmakingStatus::ClientRoomFull:
-			if (currState == ClientScreenDone) {
+			if (currState == ClientScreenSubmitted) {
 				clientEnteredRoom.clear();
 				updateClientLabel();
 				currState = ClientScreen;
@@ -676,8 +712,9 @@ void MainMenuMode::update(float timestep) {
 			return;
 		case MagicInternetBox::MatchmakingStatus::ClientWaitingOnOthers:
 			if (backBtn->isVisible()) {
-				backBtn->setVisible(false);
-				clientJoinBtn->setVisible(false);
+				transitionState = ClientScreenDone;
+				setRoomID();
+				setNumPlayers();
 			}
 		default:
 			net->update();
