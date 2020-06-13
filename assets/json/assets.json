@@ -128,9 +128,6 @@
 		"game_title": {
 			"file": "textures/main_menu/sweetspace.png"
 		},
-        "game_title_halo": {
-            "file": "textures/main_menu/sweetspace_halo.png"
-        },
 		"main_menu_bg0": {
 			"file": "textures/main_menu/splash/0-logo.png"
 		},
@@ -172,6 +169,12 @@
 		},
 		"start_btn_down" : {
 			"file": "textures/main_menu/start_down.png"
+		},
+		"credits_btn" : {
+			"file": "textures/main_menu/credits_up.png"
+		},
+		"credits_btn_down" : {
+			"file": "textures/main_menu/credits_down.png"
 		},
 		"join_btn" : {
 			"file": "textures/main_menu/join_up.png"
@@ -331,7 +334,25 @@
 		},
         "timer_border" : {
           "file"  : "textures/timer/timer_border.png"
-        }
+        },
+		"credits_aashna" : {
+		  "file" : "textures/credits/aashna.png"
+		},
+		"credits_demi" : {
+		  "file" : "textures/credits/demi.png"
+		},
+		"credits_jeffrey" : {
+		  "file" : "textures/credits/jeffrey.png"
+		},
+		"credits_michael" : {
+		  "file" : "textures/credits/michael.png"
+		},
+		"credits_sam" : {
+		  "file" : "textures/credits/sam.png"
+		},
+		"credits_wendy" : {
+		  "file" : "textures/credits/wendy.png"
+		}
 	},
 	"sounds": {
         "theme": {
@@ -1528,6 +1549,23 @@
 						"y_anchor" : "middle"
 					}
 				},
+				"credits" : {
+					"type" : "Node",
+					"format" : { "type" : "Anchored" },
+					"data"   : {
+						"anchor"   : [0.5, 1],
+						"scale"    : 1,
+						"size" : [1024,2000],
+						"visible"  : false
+					},
+					"layout" : {
+						"x_anchor" : "center",
+						"y_anchor" : "bottom",
+						"absolute" : true
+					},
+					"children" : 
+						{"gameLogo":{"type":"Image","format":{"type":"Anchored"},"data":{"texture":"game_title","anchor":[0.5,1],"scale":0.3},"layout":{"x_anchor":"center","y_anchor":"top"}},"teamLogo":{"type":"Image","format":{"type":"Anchored"},"data":{"texture":"main_menu_bg0","anchor":[0.5,1],"scale":0.3},"layout":{"x_anchor":"center","y_anchor":"top","y_offset":0,"absolute":true}},"demi":{"type":"Node","format":{"type":"Anchored"},"data":{"anchor":[0.5,1],"scale":1,"size":[500,300]},"layout":{"x_anchor":"center","y_anchor":"top","x_offset":-75,"y_offset":-300,"absolute":true},"children":{"img":{"type":"Image","format":{"type":"Anchored"},"data":{"texture":"credits_demi","anchor":[1,0.5],"scale":0.05},"layout":{"x_anchor":"center","y_anchor":"middle"}},"text":{"type":"Label","format":{"type":"Anchored"},"data":{"font":"mont_black_italic_big","text":"Demi Chang","foreground":[248,231,78,255],"anchor":[0,0],"valign":"middle","halign":"center","scale":0.5},"layout":{"x_anchor":"center","y_anchor":"middle"}},"subtitle":{"type":"Label","format":{"type":"Anchored"},"data":{"font":"mont_black_italic_big","text":"Head Chef (Design Lead)","foreground":[248,231,78,255],"anchor":[0,1],"valign":"middle","halign":"center","scale":0.2},"layout":{"x_anchor":"center","y_anchor":"middle"}}}},"aashna":{"type":"Node","format":{"type":"Anchored"},"data":{"anchor":[0.5,1],"scale":1,"size":[500,300]},"layout":{"x_anchor":"center","y_anchor":"top","x_offset":-75,"y_offset":-500,"absolute":true},"children":{"img":{"type":"Image","format":{"type":"Anchored"},"data":{"texture":"credits_aashna","anchor":[1,0.5],"scale":0.05},"layout":{"x_anchor":"center","y_anchor":"middle"}},"text":{"type":"Label","format":{"type":"Anchored"},"data":{"font":"mont_black_italic_big","text":"Aashna Saxena","foreground":[248,231,78,255],"anchor":[0,0],"valign":"middle","halign":"center","scale":0.5},"layout":{"x_anchor":"center","y_anchor":"middle"}},"subtitle":{"type":"Label","format":{"type":"Anchored"},"data":{"font":"mont_black_italic_big","text":"Plant Master (Developer)","foreground":[248,231,78,255],"anchor":[0,1],"valign":"middle","halign":"center","scale":0.2},"layout":{"x_anchor":"center","y_anchor":"middle"}}}},"sam":{"type":"Node","format":{"type":"Anchored"},"data":{"anchor":[0.5,1],"scale":1,"size":[500,300]},"layout":{"x_anchor":"center","y_anchor":"top","x_offset":-75,"y_offset":-700,"absolute":true},"children":{"img":{"type":"Image","format":{"type":"Anchored"},"data":{"texture":"credits_sam","anchor":[1,0.5],"scale":0.05},"layout":{"x_anchor":"center","y_anchor":"middle"}},"text":{"type":"Label","format":{"type":"Anchored"},"data":{"font":"mont_black_italic_big","text":"Sam Sorenson","foreground":[248,231,78,255],"anchor":[0,0],"valign":"middle","halign":"center","scale":0.5},"layout":{"x_anchor":"center","y_anchor":"middle"}},"subtitle":{"type":"Label","format":{"type":"Anchored"},"data":{"font":"mont_black_italic_big","text":"AI Hackerman (Developer)","foreground":[248,231,78,255],"anchor":[0,1],"valign":"middle","halign":"center","scale":0.2},"layout":{"x_anchor":"center","y_anchor":"middle"}}}},"michael":{"type":"Node","format":{"type":"Anchored"},"data":{"anchor":[0.5,1],"scale":1,"size":[500,300]},"layout":{"x_anchor":"center","y_anchor":"top","x_offset":-75,"y_offset":-900,"absolute":true},"children":{"img":{"type":"Image","format":{"type":"Anchored"},"data":{"texture":"credits_michael","anchor":[1,0.5],"scale":0.05},"layout":{"x_anchor":"center","y_anchor":"middle"}},"text":{"type":"Label","format":{"type":"Anchored"},"data":{"font":"mont_black_italic_big","text":"Michael Xing","foreground":[248,231,78,255],"anchor":[0,0],"valign":"middle","halign":"center","scale":0.5},"layout":{"x_anchor":"center","y_anchor":"middle"}},"subtitle":{"type":"Label","format":{"type":"Anchored"},"data":{"font":"mont_black_italic_big","text":"Repository Despot (Development Lead)","foreground":[248,231,78,255],"anchor":[0,1],"valign":"middle","halign":"center","scale":0.2},"layout":{"x_anchor":"center","y_anchor":"middle"}}}},"jeffrey":{"type":"Node","format":{"type":"Anchored"},"data":{"anchor":[0.5,1],"scale":1,"size":[500,300]},"layout":{"x_anchor":"center","y_anchor":"top","x_offset":-75,"y_offset":-1100,"absolute":true},"children":{"img":{"type":"Image","format":{"type":"Anchored"},"data":{"texture":"credits_jeffrey","anchor":[1,0.5],"scale":0.05},"layout":{"x_anchor":"center","y_anchor":"middle"}},"text":{"type":"Label","format":{"type":"Anchored"},"data":{"font":"mont_black_italic_big","text":"Jeffrey Yao","foreground":[248,231,78,255],"anchor":[0,0],"valign":"middle","halign":"center","scale":0.5},"layout":{"x_anchor":"center","y_anchor":"middle"}},"subtitle":{"type":"Label","format":{"type":"Anchored"},"data":{"font":"mont_black_italic_big","text":"Donut Man (Developer)","foreground":[248,231,78,255],"anchor":[0,1],"valign":"middle","halign":"center","scale":0.2},"layout":{"x_anchor":"center","y_anchor":"middle"}}}},"wendy":{"type":"Node","format":{"type":"Anchored"},"data":{"anchor":[0.5,1],"scale":1,"size":[500,300]},"layout":{"x_anchor":"center","y_anchor":"top","x_offset":-75,"y_offset":-1300,"absolute":true},"children":{"img":{"type":"Image","format":{"type":"Anchored"},"data":{"texture":"credits_wendy","anchor":[1,0.5],"scale":0.05},"layout":{"x_anchor":"center","y_anchor":"middle"}},"text":{"type":"Label","format":{"type":"Anchored"},"data":{"font":"mont_black_italic_big","text":"Wendy Zhang","foreground":[248,231,78,255],"anchor":[0,0],"valign":"middle","halign":"center","scale":0.5},"layout":{"x_anchor":"center","y_anchor":"middle"}},"subtitle":{"type":"Label","format":{"type":"Anchored"},"data":{"font":"mont_black_italic_big","text":"Project Overlord (Team Lead)","foreground":[248,231,78,255],"anchor":[0,1],"valign":"middle","halign":"center","scale":0.2},"layout":{"x_anchor":"center","y_anchor":"middle"}}}},"additional2":{"type":"Label","format":{"type":"Anchored"},"data":{"font":"mont_black_italic_big","text":"Cornell University Game Library (CUGL)","foreground":[248,231,78,255],"anchor":[0.5,1],"valign":"middle","halign":"center","scale":0.2},"layout":{"x_anchor":"center","y_anchor":"top","y_offset":-1566.6666666666667,"absolute":true}},"additional3":{"type":"Label","format":{"type":"Anchored"},"data":{"font":"mont_black_italic_big","text":"Simple DirectMedia Layer (SDL)","foreground":[248,231,78,255],"anchor":[0.5,1],"valign":"middle","halign":"center","scale":0.2},"layout":{"x_anchor":"center","y_anchor":"top","y_offset":-1600,"absolute":true}},"additional4":{"type":"Label","format":{"type":"Anchored"},"data":{"font":"mont_black_italic_big","text":"EasyWSClient (C++ Library)","foreground":[248,231,78,255],"anchor":[0.5,1],"valign":"middle","halign":"center","scale":0.2},"layout":{"x_anchor":"center","y_anchor":"top","y_offset":-1633.3333333333333,"absolute":true}},"additional5":{"type":"Label","format":{"type":"Anchored"},"data":{"font":"mont_black_italic_big","text":"Heroku (Server Hosting)","foreground":[248,231,78,255],"anchor":[0.5,1],"valign":"middle","halign":"center","scale":0.2},"layout":{"x_anchor":"center","y_anchor":"top","y_offset":-1666.6666666666667,"absolute":true}},"additional6":{"type":"Label","format":{"type":"Anchored"},"data":{"font":"mont_black_italic_big","text":"Montserrat & DSeg7 (Fonts)","foreground":[248,231,78,255],"anchor":[0.5,1],"valign":"middle","halign":"center","scale":0.2},"layout":{"x_anchor":"center","y_anchor":"top","y_offset":-1700,"absolute":true}},"additional8":{"type":"Label","format":{"type":"Anchored"},"data":{"font":"mont_black_italic_big","text":"Special Thanks:","foreground":[248,231,78,255],"anchor":[0.5,1],"valign":"middle","halign":"center","scale":0.2},"layout":{"x_anchor":"center","y_anchor":"top","y_offset":-1766.6666666666667,"absolute":true}},"additional9":{"type":"Label","format":{"type":"Anchored"},"data":{"font":"mont_black_italic_big","text":"Walker White","foreground":[248,231,78,255],"anchor":[0.5,1],"valign":"middle","halign":"center","scale":0.2},"layout":{"x_anchor":"center","y_anchor":"top","y_offset":-1800,"absolute":true}},"additional10":{"type":"Label","format":{"type":"Anchored"},"data":{"font":"mont_black_italic_big","text":"Traci Nathans-Kelly","foreground":[248,231,78,255],"anchor":[0.5,1],"valign":"middle","halign":"center","scale":0.2},"layout":{"x_anchor":"center","y_anchor":"top","y_offset":-1833.3333333333333,"absolute":true}},"additional11":{"type":"Label","format":{"type":"Anchored"},"data":{"font":"mont_black_italic_big","text":"CS 4152 Course Staff","foreground":[248,231,78,255],"anchor":[0.5,1],"valign":"middle","halign":"center","scale":0.2},"layout":{"x_anchor":"center","y_anchor":"top","y_offset":-1866.6666666666665,"absolute":true}},"additional12":{"type":"Label","format":{"type":"Anchored"},"data":{"font":"mont_black_italic_big","text":"All Our Playtesters","foreground":[248,231,78,255],"anchor":[0.5,1],"valign":"middle","halign":"center","scale":0.2},"layout":{"x_anchor":"center","y_anchor":"top","y_offset":-1900,"absolute":true}},"additional14":{"type":"Label","format":{"type":"Anchored"},"data":{"font":"mont_black_italic_big","text":"And You","foreground":[248,231,78,255],"anchor":[0.5,1],"valign":"middle","halign":"center","scale":0.2},"layout":{"x_anchor":"center","y_anchor":"top","y_offset":-1966.6666666666667,"absolute":true}}}
+				},
 				"mainmenubg3" : {
 					"type" : "Image",
 					"format"    : {
@@ -1542,6 +1580,23 @@
 					"layout" : {
 						"x_anchor" : "center",
 						"y_anchor" : "middle"
+					}
+				},
+				"gamelogo" : {
+					"type" : "Image",
+					"format"    : {
+						"type" : "Anchored"
+					},
+					"data"   : {
+						"texture"  : "game_title",
+						"anchor"   : [0.5,0.5],
+						"scale"    : 0.5,
+						"visible"  : false
+					},
+					"layout" : {
+						"x_anchor" : "center",
+						"y_anchor" : "middle",
+						"y_offset" : 0.13
 					}
 				},
 				"mainmenubg4" : {
@@ -1625,6 +1680,38 @@
 						}
 					}
 				},
+				"creditsbtn" : {
+					"type": "Button",
+					"format" : {
+						"type" : "Anchored"
+					},
+					"data": {
+						"upnode"   : "up",
+						"downnode" : "down",
+						"anchor"   : [0,0],
+						"scale" : 0.5,
+						"visible" : false
+					},
+					"children" : {
+						"up" : {
+							"type"   : "Image",
+							"data"   : {
+								"texture"  : "credits_btn"
+							}
+						},
+						"down" : {
+							"type"   : "Image",
+							"data"   : {
+								"texture"  : "credits_btn_down"
+							}
+						}
+					},
+					"layout" : {
+						"x_anchor" : "left",
+						"y_anchor" : "bottom",
+						"x_offset" : 0.02
+					}
+				},
 				"home" : {
 					"type" : "Node",
 					"format" : { "type" : "Anchored" },
@@ -1639,22 +1726,6 @@
 						"y_anchor" : "middle"
 					},
 					"children" : {
-						"splash" : {
-							"type" : "Image",
-							"format"    : {
-								"type" : "Anchored"
-							},
-							"data"   : {
-								"texture"  : "game_title_halo",
-								"anchor"   : [0.5,0.5],
-								"scale"    : 0.5
-							},
-							"layout" : {
-								"x_anchor" : "center",
-								"y_anchor" : "middle",
-                                "y_offset" : 0.15
-							}
-						},
 						"btnwrap" : {
 							"type" : "Node",
 							"format" : { "type" : "Anchored" },
@@ -2209,7 +2280,7 @@
 						}
 					}
 				}
-            }
+			}
         }
     }
 }

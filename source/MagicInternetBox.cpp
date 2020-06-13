@@ -3,6 +3,7 @@
 #include <sstream>
 
 #include "Globals.h"
+#include "LevelConstants.h"
 
 using namespace cugl;
 
@@ -326,6 +327,9 @@ void MagicInternetBox::nextLevel() {
 	ws->sendBinary(data);
 	events = NextLevel;
 	levelNum++;
+	if (levelNum >= MAX_NUM_LEVELS) {
+		events = EndGame;
+	}
 }
 
 void MagicInternetBox::update() {
@@ -505,6 +509,9 @@ void MagicInternetBox::update(std::shared_ptr<ShipModel> state) {
 				} else {
 					events = NextLevel;
 					levelNum++;
+					if (levelNum >= MAX_NUM_LEVELS) {
+						events = EndGame;
+					}
 				}
 				return;
 			}

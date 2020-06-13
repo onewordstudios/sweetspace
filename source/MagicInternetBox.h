@@ -55,7 +55,7 @@ class MagicInternetBox {
 	/**
 	 * Important events from the network that the root controller needs to know about
 	 */
-	enum NetworkEvents { None, RestartLevel, NextLevel };
+	enum NetworkEvents { None, RestartLevel, NextLevel, EndGame };
 
    private:
 	/**
