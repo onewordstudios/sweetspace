@@ -352,8 +352,6 @@ class MagicInternetBox {
 	 * (eg: locked doors from nondigital)
 	 *
 	 * @param angle The angle of the ship to spawn the task
-	 * @param player1 The player ID of one player that can resolve this task or -1 for anyone
-	 * @param player2 The player ID of the second player that can resolve this task or -1 for anyone
 	 * @param id The dual-task ID used to identify this task in the future
 	 */
 	void createDualTask(float angle, int id);
