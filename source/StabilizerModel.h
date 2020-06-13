@@ -2,10 +2,9 @@
 #define __STABILIZER_MODEL_H__
 #include <cugl/cugl.h>
 class StabilizerModel {
-   public:
+   private:
 	enum class StabilizerState { Inactive, Left, Right };
 
-   private:
 	/** Current state of the challenge */
 	StabilizerModel::StabilizerState currState;
 
