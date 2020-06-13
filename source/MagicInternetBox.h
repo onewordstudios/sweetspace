@@ -403,14 +403,11 @@ class MagicInternetBox {
 	void resolveButton(int id);
 
 	/**
-	 * Inform other players that a task requiring all members of the ship has been created (eg:
-	 * stabilizer malfunction)
+	 * Inform other players that a stabilizer malfunction has been created
 	 *
 	 * @param player The player whose screen this message will appear on
-	 * @param data Data representing the nature of this task. This data will be passed directly into
-	 *             ShipModel on the receiving player's end.
 	 */
-	void createAllTask(int player, int data);
+	void createAllTask(int player);
 
 	/**
 	 * Inform the host that a task requiring all members of the ship has failed, and thus to deduct

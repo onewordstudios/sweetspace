@@ -84,7 +84,7 @@ bool ShipModel::flagDoor(int id, int player, int flag) {
 	return true;
 }
 
-bool ShipModel::createAllTask(int data) {
+bool ShipModel::createAllTask() {
 	stabilizer.startChallenge(canonicalTimeElapsed);
 	return true;
 }

@@ -251,7 +251,7 @@ void GLaDOS::placeObject(BuildingBlockModel::Object obj, float zeroAngle, int p)
 			auto& stabilizer = ship->getStabilizer();
 			if (stabilizer.getIsActive()) break;
 			if (p != playerID && ship->getDonuts().at(p)->getIsActive()) {
-				mib->createAllTask(p, 0);
+				mib->createAllTask(p);
 			} else {
 				stabilizer.startChallenge(ship->timePassed());
 			}
@@ -539,12 +539,11 @@ void GLaDOS::tutorialLevels(float dt) {
 					break;
 				case ShipModel::INACTIVE: {
 					// Hopefully after animation is done, it will always be set to inactive
-					int dir = (int)(rand() % 2);
 					if (customEventCtr != playerID &&
 						ship->getDonuts().at(customEventCtr)->getIsActive()) {
-						mib->createAllTask(customEventCtr, dir);
+						mib->createAllTask(customEventCtr);
 					} else {
-						ship->createAllTask(dir);
+						ship->createAllTask();
 					}
 					stabilizerStart = ship->canonicalTimeElapsed;
 					ship->setStabilizerStatus(ShipModel::ACTIVE);
@@ -558,12 +557,11 @@ void GLaDOS::tutorialLevels(float dt) {
 						ship->initTimer(0);
 						break;
 					}
-					int dir = (int)(rand() % 2);
 					if (customEventCtr != playerID &&
 						ship->getDonuts().at(customEventCtr)->getIsActive()) {
-						mib->createAllTask(customEventCtr, dir);
+						mib->createAllTask(customEventCtr);
 					} else {
-						ship->createAllTask(dir);
+						ship->createAllTask();
 					}
 					stabilizerStart = ship->canonicalTimeElapsed;
 					ship->setStabilizerStatus(ShipModel::ACTIVE);

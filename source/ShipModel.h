@@ -350,12 +350,12 @@ class ShipModel {
 	StabilizerModel& getStabilizer() { return stabilizer; }
 
 	/**
-	 * Set data for challenge
+	 * Start a stabilizer malfunction
 	 */
-	bool createAllTask(int data);
+	bool createAllTask();
 
 	/**
-	 * Set fail challenge
+	 * Fail a stabilizer malfunction
 	 */
 	bool failAllTask();
 
