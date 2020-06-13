@@ -820,7 +820,7 @@ void GameGraphRoot::update(float timestep) {
 				arrow->setAngle(globals::PI);
 			}
 			float progress = stabilizer.getProgress() * challengePanelArrows.size();
-			if (i < progress) {
+			if ((float)i < progress) {
 				arrow->setTexture(image);
 			}
 			arrow->setVisible(true);
