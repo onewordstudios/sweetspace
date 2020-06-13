@@ -110,18 +110,27 @@ void Sweetspace::update(float timestep) {
 		}
 		case Game: {
 			gameplay.update(timestep);
+			auto mib = MagicInternetBox::getInstance();
 			if (gameplay.getIsBackToMainMenu()) {
 				gameplay.dispose();
 				mainmenu.init(assets);
-				MagicInternetBox::getInstance()->reset();
+				mib->reset();
 				CULog("Ending");
 				status = MainMenu;
-			} else if (MagicInternetBox::getInstance()->lastNetworkEvent() !=
-					   MagicInternetBox::NetworkEvents::None) {
-				MagicInternetBox::getInstance()->acknowledgeNetworkEvent();
-				CULog("Restarting Level");
+			} else if (mib->lastNetworkEvent() != MagicInternetBox::NetworkEvents::None) {
+				auto lastEvent = mib->lastNetworkEvent();
+				mib->acknowledgeNetworkEvent();
 				gameplay.dispose();
-				gameplay.init(assets);
+				if (lastEvent == MagicInternetBox::NetworkEvents::EndGame) {
+					CULog("Winner");
+					mainmenu.init(assets);
+					mib->reset();
+					status = MainMenu;
+					mainmenu.triggerCredits();
+				} else {
+					CULog("Restarting Level");
+					gameplay.init(assets);
+				}
 				return;
 			}
 			return;

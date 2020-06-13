@@ -27,6 +27,21 @@ constexpr int OPEN_TRANSITION = 120;
 
 /** When during opening transition to fade in stuff */
 constexpr int OPEN_TRANSITION_FADE = 90;
+
+/** Height of the credits scroll */
+constexpr float CREDITS_HEIGHT = 2000;
+
+/** Duration of credits scroll (in frames) */
+constexpr float CREDITS_DURATION = 4500;
+
+/** How much more to increment the credit scroll frame when tapping to go faster */
+constexpr unsigned int FAST_CREDITS_SCROLL_INCREMENT = 5;
+
+/**
+ * Current frame of the credits scroll (there's only ever one credits screen, so it's safe to
+ * stick this here)
+ */
+unsigned int creditsScrollFrame = 0;
 #pragma endregion
 
 #pragma region Initialization Logic
@@ -68,6 +83,9 @@ bool MainMenuMode::init(const std::shared_ptr<AssetManager>& assets) {
 	bg3land = assets->get<Node>("matchmaking_mainmenubg5");
 	bg9studio = assets->get<Node>("matchmaking_studiologo");
 
+	creditsBtn = std::dynamic_pointer_cast<Button>(assets->get<Node>("matchmaking_creditsbtn"));
+	credits = assets->get<Node>("matchmaking_credits");
+
 	backBtn = std::dynamic_pointer_cast<Button>(assets->get<Node>("matchmaking_backbtn"));
 
 	hostBtn =
@@ -75,7 +93,9 @@ bool MainMenuMode::init(const std::shared_ptr<AssetManager>& assets) {
 	clientBtn =
 		std::dynamic_pointer_cast<Button>(assets->get<Node>("matchmaking_home_btnwrap_clientbtn"));
 
-	mainScreen = assets->get<Node>("matchmaking_home");
+	mainScreen.push_back(assets->get<Node>("matchmaking_home"));
+	mainScreen.push_back(assets->get<Node>("matchmaking_gamelogo"));
+	mainScreen.push_back(creditsBtn);
 	hostScreen = assets->get<Node>("matchmaking_host");
 	clientScreen = assets->get<Node>("matchmaking_client");
 	connScreen = std::dynamic_pointer_cast<Label>(assets->get<Node>("matchmaking_connscreen"));
@@ -107,6 +127,7 @@ bool MainMenuMode::init(const std::shared_ptr<AssetManager>& assets) {
 	buttonManager.registerButton(hostBeginBtn);
 	buttonManager.registerButton(clientJoinBtn);
 	buttonManager.registerButton(clientClearBtn);
+	buttonManager.registerButton(creditsBtn);
 	for (unsigned int i = 0; i < NUM_DIGITS; i++) {
 		clientRoomBtns.push_back(std::dynamic_pointer_cast<Button>(
 			assets->get<Node>("matchmaking_client_buttons_btn" + std::to_string(i))));
@@ -126,12 +147,22 @@ bool MainMenuMode::init(const std::shared_ptr<AssetManager>& assets) {
 	clientJoinBtn->setDown(false);
 	clientJoinBtn->setVisible(true);
 	levelSelect->setVisible(false);
+	credits->setVisible(false);
 	clientEnteredRoom.clear();
 
 	updateClientLabel();
 	addChild(scene);
 
 	return true;
+}
+
+void MainMenuMode::triggerCredits() {
+	currState = StartScreen;
+	transitionState = Credits;
+	credits->setVisible(true);
+	credits->setColor(Color4::WHITE);
+	credits->setPositionY(0);
+	creditsScrollFrame = 0;
 }
 
 /**
@@ -142,7 +173,7 @@ void MainMenuMode::dispose() {
 	backBtn = nullptr;
 	hostBtn = nullptr;
 	clientBtn = nullptr;
-	mainScreen = nullptr;
+	mainScreen.clear();
 	hostScreen = nullptr;
 	clientScreen = nullptr;
 	connScreen = nullptr;
@@ -153,6 +184,8 @@ void MainMenuMode::dispose() {
 	clientJoinBtn = nullptr;
 	clientClearBtn = nullptr;
 	levelSelect = nullptr;
+	credits = nullptr;
+	creditsBtn = nullptr;
 	levelBtns.fill(nullptr);
 	buttonManager.clear();
 	clientRoomBtns.clear();
@@ -160,6 +193,7 @@ void MainMenuMode::dispose() {
 #pragma endregion
 
 #pragma region Internal Helpers
+
 void MainMenuMode::updateClientLabel() {
 	std::vector<char> room;
 	for (unsigned int i = 0; i < clientEnteredRoom.size(); i++) {
@@ -221,7 +255,9 @@ void MainMenuMode::processTransition() {
 			}
 			if (transitionFrame > OPEN_TRANSITION) {
 				bg9studio->setVisible(false);
-				mainScreen->setColor(Color4::WHITE);
+				for (auto e : mainScreen) {
+					e->setColor(Color4::WHITE);
+				}
 				endTransition();
 				return;
 			}
@@ -234,10 +270,12 @@ void MainMenuMode::processTransition() {
 
 			// Fade in main menu at end
 			if (transitionFrame > OPEN_TRANSITION_FADE) {
-				mainScreen->setVisible(true);
 				int i = transitionFrame - OPEN_TRANSITION_FADE;
-				mainScreen->setColor(Tween::fade(
-					Tween::linear(0.0f, 1.0f, i, OPEN_TRANSITION - OPEN_TRANSITION_FADE)));
+				for (auto e : mainScreen) {
+					e->setVisible(true);
+					e->setColor(Tween::fade(
+						Tween::linear(0.0f, 1.0f, i, OPEN_TRANSITION - OPEN_TRANSITION_FADE)));
+				}
 			}
 
 			// Background pans up into view
@@ -253,18 +291,48 @@ void MainMenuMode::processTransition() {
 		case StartScreen: {
 			if (transitionFrame > TRANSITION_DURATION) {
 				endTransition();
-				mainScreen->setVisible(false);
+				for (auto e : mainScreen) {
+					e->setVisible(false);
+				}
 			} else {
-				mainScreen->setColor(
-					Tween::fade(Tween::linear(1.0f, 0.0f, transitionFrame, TRANSITION_DURATION)));
-				if (transitionState == ClientScreen) {
-					if (transitionFrame == 1) {
-						backBtn->setVisible(true);
+				for (auto e : mainScreen) {
+					e->setColor(Tween::fade(
+						Tween::linear(1.0f, 0.0f, transitionFrame, TRANSITION_DURATION)));
+				}
+				switch (transitionState) {
+					// Host screen case unneeded b/c waiting for host room before playing transition
+					case ClientScreen: {
+						if (transitionFrame == 1) {
+							backBtn->setVisible(true);
+						}
+
+						clientScreen->setPositionY(
+							Tween::easeOut(-screenHeight, 0, transitionFrame, TRANSITION_DURATION));
+						backBtn->setColor(Tween::fade(
+							Tween::linear(0.0f, 1.0f, transitionFrame, TRANSITION_DURATION)));
+
+						break;
 					}
-					clientScreen->setPositionY(
-						Tween::easeOut(-screenHeight, 0, transitionFrame, TRANSITION_DURATION));
-					backBtn->setColor(Tween::fade(
-						Tween::linear(0.0f, 1.0f, transitionFrame, TRANSITION_DURATION)));
+					case Credits: {
+						if (transitionFrame == 1) {
+							backBtn->setVisible(true);
+						}
+
+						backBtn->setColor(Tween::fade(
+							Tween::linear(0.0f, 1.0f, transitionFrame, TRANSITION_DURATION)));
+
+						bg1glow->setColor(Tween::fade(
+							Tween::linear(1.0f, 0.0f, transitionFrame, TRANSITION_DURATION)));
+						bg2ship->setColor(Tween::fade(
+							Tween::linear(1.0f, 0.0f, transitionFrame, TRANSITION_DURATION)));
+
+						bg3land->setPositionY(Tween::easeOut(screenHeight / 2, screenHeight / 3,
+															 transitionFrame, TRANSITION_DURATION));
+
+						break;
+					}
+					default:
+						break;
 				}
 			}
 			break;
@@ -323,7 +391,9 @@ void MainMenuMode::processTransition() {
 			if (transitionState == StartScreen) {
 				// Start transition
 				if (transitionFrame == 1) {
-					mainScreen->setVisible(true);
+					for (auto e : mainScreen) {
+						e->setVisible(true);
+					}
 				}
 
 				// Transition over
@@ -344,13 +414,48 @@ void MainMenuMode::processTransition() {
 						Tween::easeIn(0, -screenHeight, transitionFrame, TRANSITION_DURATION));
 				}
 
-				mainScreen->setColor(
-					Tween::fade(Tween::linear(0.0f, 1.0f, transitionFrame, TRANSITION_DURATION)));
+				for (auto e : mainScreen) {
+					e->setColor(Tween::fade(
+						Tween::linear(0.0f, 1.0f, transitionFrame, TRANSITION_DURATION)));
+				}
 				backBtn->setColor(
 					Tween::fade(Tween::linear(1.0f, 0.0f, transitionFrame, TRANSITION_DURATION)));
 
 				return;
 			}
+			break;
+		}
+		case Credits: {
+			if (transitionFrame == 1) {
+				for (auto e : mainScreen) {
+					e->setVisible(true);
+				}
+			}
+
+			// Transition over
+			if (transitionFrame > TRANSITION_DURATION) {
+				endTransition();
+				credits->setVisible(false);
+				backBtn->setVisible(false);
+				return;
+			}
+
+			credits->setColor(
+				Tween::fade(Tween::linear(1.0f, 0.0f, transitionFrame, TRANSITION_DURATION)));
+			backBtn->setColor(
+				Tween::fade(Tween::linear(1.0f, 0.0f, transitionFrame, TRANSITION_DURATION)));
+			for (auto e : mainScreen) {
+				e->setColor(
+					Tween::fade(Tween::linear(0.0f, 1.0f, transitionFrame, TRANSITION_DURATION)));
+			}
+
+			bg1glow->setColor(
+				Tween::fade(Tween::linear(0.0f, 1.0f, transitionFrame, TRANSITION_DURATION)));
+			bg2ship->setColor(
+				Tween::fade(Tween::linear(0.0f, 1.0f, transitionFrame, TRANSITION_DURATION)));
+
+			bg3land->setPositionY(Tween::easeOut(screenHeight / 3, screenHeight / 2,
+												 transitionFrame, TRANSITION_DURATION));
 		}
 		default:
 			break;
@@ -392,6 +497,20 @@ void MainMenuMode::processUpdate() {
 		default: {
 			break;
 		}
+		case Credits: {
+			float pos = ((float)(CREDITS_HEIGHT + screenHeight) *
+						 ((float)(creditsScrollFrame++) / CREDITS_DURATION));
+
+			if (InputController::getInstance()->getCurrTapLoc() != Vec2::ZERO) {
+				creditsScrollFrame += FAST_CREDITS_SCROLL_INCREMENT;
+			}
+
+			credits->setPositionY(pos);
+			if ((float)creditsScrollFrame > CREDITS_DURATION) {
+				creditsScrollFrame = 0;
+			}
+			break;
+		}
 	}
 }
 
@@ -409,6 +528,7 @@ void MainMenuMode::processButtons() {
 				net->forceDisconnect();
 				// Intentional fall-through
 			case ClientScreen:
+			case Credits:
 				CULog("Going Back");
 				transitionState = StartScreen;
 				return;
@@ -432,10 +552,13 @@ void MainMenuMode::processButtons() {
 					CULog("SEPARATE THREAD FINISHED INIT HOST");
 				}));
 				transitionState = HostScreenWait;
+				hostNeedle->setAngle(0);
 			} else if (buttonManager.tappedButton(clientBtn, tapData)) {
 				transitionState = ClientScreen;
 				clientScreen->setPositionY(-screenHeight);
 				clientScreen->setVisible(true);
+			} else if (buttonManager.tappedButton(creditsBtn, tapData)) {
+				triggerCredits();
 			}
 			break;
 		}
@@ -500,6 +623,13 @@ void MainMenuMode::processButtons() {
 				}
 				break;
 			}
+		}
+		case Credits: {
+			if (buttonManager.tappedButton(backBtn, tapData)) {
+				CULog("Going Back");
+				transitionState = StartScreen;
+			}
+			break;
 		}
 		default: {
 			break;
