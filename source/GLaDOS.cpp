@@ -247,17 +247,16 @@ void GLaDOS::placeObject(BuildingBlockModel::Object obj, float zeroAngle, int p)
 			}
 			break;
 		}
-		case BuildingBlockModel::Roll:
-			if (ship->getChallenge()) break;
-			((int)(rand() % 2 == 0)) ? ship->setRollDir(0) : ship->setRollDir(1);
+		case BuildingBlockModel::Roll: {
+			auto& stabilizer = ship->getStabilizer();
+			if (stabilizer.getIsActive()) break;
 			if (p != playerID && ship->getDonuts().at(p)->getIsActive()) {
-				mib->createAllTask(p, ship->getRollDir());
+				mib->createAllTask(p, 0);
 			} else {
-				ship->setChallengeProg(0);
-				ship->setEndTime((ship->canonicalTimeElapsed) + globals::ROLL_CHALLENGE_LENGTH);
-				ship->setChallenge(true);
+				stabilizer.startChallenge(ship->timePassed());
 			}
 			break;
+		}
 	}
 }
 

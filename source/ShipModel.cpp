@@ -45,8 +45,7 @@ bool ShipModel::init(unsigned int numPlayers, unsigned int numBreaches, unsigned
 	// Initialize size
 	this->shipSize = shipSize;
 
-	challenge = false;
-	challengeProg = 0;
+	stabilizer.reset();
 
 	return true;
 }
@@ -86,10 +85,7 @@ bool ShipModel::flagDoor(int id, int player, int flag) {
 }
 
 bool ShipModel::createAllTask(int data) {
-	setRollDir(data);
-	challenge = true;
-	endTime = canonicalTimeElapsed + globals::ROLL_CHALLENGE_LENGTH;
-	challengeProg = 0;
+	stabilizer.startChallenge(canonicalTimeElapsed);
 	return true;
 }
 
