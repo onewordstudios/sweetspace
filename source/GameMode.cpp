@@ -31,10 +31,6 @@ constexpr float OTHER_BREACH_FRICTION = 0.2f;
 constexpr float BREACH_HEALTH_GRACE_PERIOD = 5.0f;
 /** Amount of health to decrement each frame per breach */
 constexpr float BREACH_HEALTH_PENALTY = 0.003f;
-/** Some undocumented upper bound for challenge progress */
-constexpr int CHALLENGE_PROGRESS_HIGH = 100;
-/** Some undocumented lower bound for challenge progress */
-constexpr int CHALLENGE_PROGRESS_LOW = 10;
 
 #pragma mark -
 #pragma mark Constructors
@@ -370,18 +366,19 @@ void GameMode::update(float timestep) {
 	gm.update(timestep);
 
 #pragma region Stabilizer
-	if (ship->getChallenge() && !ship->getTimeless() &&
+	auto& stabilizer = ship->getStabilizer();
+	if (stabilizer.getIsActive() && !ship->getTimeless() &&
 		trunc(ship->timeLeftInTimer) <= globals::ROLL_CHALLENGE_LENGTH) {
-		ship->setChallenge(false);
+		stabilizer.reset();
 	}
 
-	if (ship->getChallenge()) {
+	if (stabilizer.getIsActive()) {
 		bool allRoll = true;
 		for (unsigned int i = 0; i < ship->getDonuts().size(); i++) {
 			if (!ship->getDonuts()[i]->getIsActive()) {
 				continue;
 			}
-			if (ship->getRollDir() == 0) {
+			if (stabilizer.isLeft()) {
 				if (ship->getDonuts()[i]->getVelocity() >= 0) {
 					allRoll = false;
 					break;
@@ -394,11 +391,15 @@ void GameMode::update(float timestep) {
 			}
 		}
 		if (allRoll) {
-			ship->updateChallengeProg();
+			stabilizer.incrementProgress();
 		}
-		if (ship->getChallengeProg() > CHALLENGE_PROGRESS_HIGH ||
-			trunc(ship->canonicalTimeElapsed) == trunc(ship->getEndTime())) {
-			if (ship->getChallengeProg() < CHALLENGE_PROGRESS_LOW) {
+		if (stabilizer.getIsWin() ||
+			trunc(ship->canonicalTimeElapsed) == trunc(stabilizer.getEndTime())) {
+			if (stabilizer.getIsWin()) {
+				ship->setStabilizerStatus(ShipModel::SUCCESS);
+				net->succeedAllTask();
+
+			} else {
 				gm.setChallengeFail(true);
 				ship->setStabilizerStatus(ShipModel::FAILURE);
 
@@ -406,12 +407,8 @@ void GameMode::update(float timestep) {
 				// just end it immediately
 				soundEffects->startEvent(SoundEffectController::TELEPORT, 0);
 				soundEffects->endEvent(SoundEffectController::TELEPORT, 0);
-			} else {
-				ship->setStabilizerStatus(ShipModel::SUCCESS);
-				net->succeedAllTask();
 			}
-			ship->setChallenge(false);
-			ship->setChallengeProg(0);
+			stabilizer.reset();
 		}
 	}
 #pragma endregion

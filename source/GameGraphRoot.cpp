@@ -717,7 +717,8 @@ void GameGraphRoot::update(float timestep) {
 		}
 	} else if (ship->getLevelNum() == tutorial::STABILIZER_LEVEL) {
 		rollTutorial->setVisible(true);
-		if (ship->getChallenge()) {
+		auto& stabilizer = ship->getStabilizer();
+		if (stabilizer.getIsActive()) {
 			std::shared_ptr<Texture> image = assets->get<Texture>("stabilizer_tutorial1");
 			rollTutorial->setTexture(image);
 		} else {
@@ -805,17 +806,21 @@ void GameGraphRoot::update(float timestep) {
 		}
 	}
 
-	if (ship->getChallenge()) {
+	if (ship->getStabilizer().getIsActive()) {
 		challengePanelHanger->setVisible(true);
 		challengePanel->setVisible(true);
 		challengePanelText->setVisible(true);
 		std::shared_ptr<Texture> image = assets->get<Texture>("panel_progress_1");
+
+		auto& stabilizer = ship->getStabilizer();
+
 		for (int i = 0; i < challengePanelArrows.size(); i++) {
 			std::shared_ptr<cugl::PolygonNode> arrow = challengePanelArrows.at(i);
-			if (ship->getRollDir() == 0) {
+			if (stabilizer.isLeft()) {
 				arrow->setAngle(globals::PI);
 			}
-			if (i < (ship->getChallengeProg())) {
+			float progress = stabilizer.getProgress() * challengePanelArrows.size();
+			if ((float)i < progress) {
 				arrow->setTexture(image);
 			}
 			arrow->setVisible(true);

@@ -7,11 +7,11 @@
 #include "DonutModel.h"
 #include "DoorModel.h"
 #include "Globals.h"
+#include "StabilizerModel.h"
 #include "Unopenable.h"
 
 class ShipModel {
    private:
-   protected:
 	/** Current list of breaches on ship*/
 	std::vector<std::shared_ptr<DonutModel>> donuts;
 	/** Current list of breaches on ship*/
@@ -22,26 +22,21 @@ class ShipModel {
 	std::vector<std::shared_ptr<Unopenable>> unopenable;
 	/** Current list of doors on ship*/
 	std::vector<std::shared_ptr<ButtonModel>> buttons;
+	/** Stabilizer model */
+	StabilizerModel stabilizer;
 	/** Initial health of the ship*/
 	float initHealth;
 	/** Current health of the ship*/
 	float health;
 	/** Size of the ship. Minimum value should be 360. Default value 360 */
 	float shipSize;
-	/** Roll direction of all player challenge*/
-	int rollDir;
-	/** If a all player challenge is in effect*/
-	bool challenge;
 	/** If this level has no time limit*/
 	bool timeless;
-	/** Challenge progress*/
-	int challengeProg;
-	/** Time at which stabilizer challenge ends */
-	float endTime;
 	/** Total level time*/
 	float totalTime;
 	/** If is in tutorial level*/
 	int levelNum;
+	/** Minimum distance from obstacles for stabilizer malfunction randomization */
 	static constexpr int MIN_DISTANCE = 15;
 
    public:
@@ -67,11 +62,7 @@ class ShipModel {
 		  initHealth(0),
 		  health(0),
 		  shipSize(0),
-		  rollDir(0),
-		  challenge(false),
 		  timeless(false),
-		  challengeProg(0),
-		  endTime(0),
 		  totalTime(0),
 		  levelNum(0),
 		  stabilizerStatus(INACTIVE),
@@ -356,59 +347,16 @@ class ShipModel {
 	 */
 	float getSize() { return shipSize; }
 
-	/**
-	 * Set roll direction of challenge
-	 *
-	 * @param direction of roll
-	 */
-	void setRollDir(int dir) { rollDir = dir; }
+	/** Get a reference to the stabilizer status of the ship */
+	StabilizerModel& getStabilizer() { return stabilizer; }
 
 	/**
-	 * Get roll direction of challenge
-	 *
-	 * @return direction of roll
+	 * Start a stabilizer malfunction
 	 */
-	int getRollDir() { return rollDir; }
+	bool createAllTask();
 
 	/**
-	 * Set true if challenge.
-	 *
-	 * @param if challenge
-	 */
-	void setChallenge(bool c) { challenge = c; }
-
-	/**
-	 * Get if in challenge.
-	 *
-	 * @return if in challenge
-	 */
-	bool getChallenge() { return challenge; }
-
-	/**
-	 * Set challenge progress.
-	 *
-	 * @param starting progress
-	 */
-	void setChallengeProg(int p) { challengeProg = p; }
-
-	/**
-	 * Get challenge progress
-	 *
-	 * @return challenge progress
-	 */
-	int getChallengeProg() { return challengeProg; }
-
-	/**
-	 * Update challenge progress
-	 */
-	void updateChallengeProg() { challengeProg = challengeProg + 1; }
-	/**
-	 * Set data for challenge
-	 */
-	bool createAllTask(int data);
-
-	/**
-	 * Set fail challenge
+	 * Fail a stabilizer malfunction
 	 */
 	bool failAllTask();
 
@@ -416,16 +364,6 @@ class ShipModel {
 	 * Set challenge status
 	 */
 	void setStabilizerStatus(StabilizerStatus s);
-
-	/**
-	 * Set end time for challenge
-	 */
-	void setEndTime(float time) { endTime = time; };
-
-	/**
-	 * Get end time for challenge
-	 */
-	float getEndTime() { return endTime; }
 
 	/**
 	 * Create button with given id.

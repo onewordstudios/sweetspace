@@ -586,7 +586,7 @@ void MagicInternetBox::update(std::shared_ptr<ShipModel> state) {
 			}
 			case AllCreate: {
 				if (playerID == id) {
-					state->createAllTask(data1);
+					state->createAllTask();
 				}
 				state->setStabilizerStatus(ShipModel::ACTIVE);
 				break;
@@ -629,8 +629,8 @@ void MagicInternetBox::flagDualTask(int id, int player, int flag) {
 	sendData(DualResolve, -1.0f, id, player, flag, -1.0f);
 }
 
-void MagicInternetBox::createAllTask(int player, int data) {
-	sendData(AllCreate, -1.0f, player, data, -1, -1.0f);
+void MagicInternetBox::createAllTask(int player) {
+	sendData(AllCreate, -1.0f, player, -1, -1, -1.0f);
 }
 
 void MagicInternetBox::createButtonTask(float angle1, int id1, float angle2, int id2) {
