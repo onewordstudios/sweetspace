@@ -36,6 +36,7 @@ class ShipModel {
 	float totalTime;
 	/** If is in tutorial level*/
 	int levelNum;
+	/** Minimum distance from obstacles for stabilizer malfunction randomization */
 	static constexpr int MIN_DISTANCE = 15;
 
    public:
