@@ -337,6 +337,17 @@ void GameMode::updateStabilizer() {
 }
 
 void GameMode::updateDonuts(float timestep) {
+	// Jump logic check
+	// We wanted donuts to be able to jump on the win screen, but in the absence of that happening
+	// anytime soon, I'm sticking this here for cleanliness
+	if (input->hasJumped() && !donutModel->isJumping()) {
+		soundEffects->startEvent(SoundEffectController::JUMP, playerID);
+		donutModel->startJump();
+		net->jump(playerID);
+	} else {
+		soundEffects->endEvent(SoundEffectController::JUMP, playerID);
+	}
+
 	// Move the donut (MODEL ONLY)
 	float thrust = input->getRoll();
 	donutModel->applyForce(thrust);
@@ -476,15 +487,6 @@ void GameMode::update(float timestep) {
 		return;
 	}
 
-	// Jump Logic. Moved here for Later Win Screen Jump support (Demi's Request)
-	if (input->hasJumped() && !donutModel->isJumping()) {
-		soundEffects->startEvent(SoundEffectController::JUMP, playerID);
-		donutModel->startJump();
-		net->jump(playerID);
-	} else {
-		soundEffects->endEvent(SoundEffectController::JUMP, playerID);
-	}
-
 	// Check for Win
 	if (winCheck()) {
 		sgRoot.update(timestep);
@@ -499,10 +501,9 @@ void GameMode::update(float timestep) {
 	buttonCollisions();
 
 	updateHealth();
+	updateStabilizer();
 
 	gm.update(timestep);
-
-	updateStabilizer();
 
 	sgRoot.update(timestep);
 }
