@@ -55,7 +55,13 @@ class GameMode {
 	void buttonCollisions();
 
 	/** Process and handle the stabilizer */
-	void runStabilizer();
+	void updateStabilizer();
+	/** Process and handle all donut movements */
+	void updateDonuts(float timestep);
+	/** Process and handle the timer */
+	void updateTimer(float timestep);
+	/** Process and handle breach health drain */
+	void updateHealth();
 
 	/**
 	 * Handle changes in connection status.

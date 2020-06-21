@@ -282,7 +282,7 @@ void GameMode::buttonCollisions() {
 
 #pragma endregion
 
-void GameMode::runStabilizer() {
+void GameMode::updateStabilizer() {
 	auto& stabilizer = ship->getStabilizer();
 
 	if (!stabilizer.getIsActive()) {
@@ -333,6 +333,49 @@ void GameMode::runStabilizer() {
 		soundEffects->startEvent(SoundEffectController::TELEPORT, 0);
 		soundEffects->endEvent(SoundEffectController::TELEPORT, 0);
 		stabilizer.reset();
+	}
+}
+
+void GameMode::updateDonuts(float timestep) {
+	// Move the donut (MODEL ONLY)
+	float thrust = input->getRoll();
+	donutModel->applyForce(thrust);
+	// Attempt to recover to idle animation
+	donutModel->transitionFaceState(DonutModel::FaceState::Idle);
+
+	for (auto donut : ship->getDonuts()) {
+		donut->update(timestep);
+	}
+}
+
+void GameMode::updateTimer(float timestep) {
+	if (ship->timerEnded()) {
+		return;
+	}
+
+	bool allButtonsInactive = true;
+	auto& buttons = ship->getButtons();
+
+	for (int i = 0; i < buttons.size(); i++) {
+		if (buttons[i]->getIsActive()) {
+			allButtonsInactive = false;
+			break;
+		}
+	}
+	ship->updateTimer(timestep, allButtonsInactive);
+}
+
+void GameMode::updateHealth() {
+	auto& breaches = ship->getBreaches();
+
+	// Breach health drain
+	for (int i = 0; i < breaches.size(); i++) {
+		// this should be adjusted based on the level and number of players
+		if (breaches[i]->getIsActive() &&
+			trunc(breaches[i]->getTimeCreated()) - trunc(ship->timeLeftInTimer) >
+				BREACH_HEALTH_GRACE_PERIOD) {
+			ship->decHealth(BREACH_HEALTH_PENALTY);
+		}
 	}
 }
 
@@ -448,44 +491,18 @@ void GameMode::update(float timestep) {
 		return;
 	}
 
-	if (!(ship->timerEnded())) {
-		bool allButtonsInactive = true;
-		for (int i = 0; i < ship->getButtons().size(); i++) {
-			if (ship->getButtons().at(i)->getIsActive()) {
-				allButtonsInactive = false;
-				break;
-			}
-		}
-		ship->updateTimer(timestep, allButtonsInactive);
-	}
-
-	// Move the donut (MODEL ONLY)
-	float thrust = input->getRoll();
-	donutModel->applyForce(thrust);
-	// Attempt to recover to idle animation
-	donutModel->transitionFaceState(DonutModel::FaceState::Idle);
-
-	for (auto donut : ship->getDonuts()) {
-		donut->update(timestep);
-	}
+	updateTimer(timestep);
+	updateDonuts(timestep);
 
 	breachCollisions();
 	doorCollisions();
 	buttonCollisions();
 
-	// Breach health drain
-	for (int i = 0; i < ship->getBreaches().size(); i++) {
-		// this should be adjusted based on the level and number of players
-		if (ship->getBreaches().at(i)->getIsActive() &&
-			trunc(ship->getBreaches().at(i)->getTimeCreated()) - trunc(ship->timeLeftInTimer) >
-				BREACH_HEALTH_GRACE_PERIOD) {
-			ship->decHealth(BREACH_HEALTH_PENALTY);
-		}
-	}
+	updateHealth();
 
 	gm.update(timestep);
 
-	runStabilizer();
+	updateStabilizer();
 
 	sgRoot.update(timestep);
 }
