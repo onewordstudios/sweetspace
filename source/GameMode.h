@@ -18,7 +18,7 @@
  * really a mini-GameEngine in its own right.
  */
 class GameMode {
-   protected:
+   private:
 	// CONTROLLERS
 	/** Controller for abstracting out input across multiple platforms */
 	std::shared_ptr<InputController> input;
@@ -45,6 +45,38 @@ class GameMode {
 	std::string roomId;
 	/** Whether to go back to main menu */
 	bool isBackToMainMenu;
+
+#pragma region Update Helpers
+	/** Process and handle all collisions with breaches */
+	void breachCollisions();
+	/** Process and handle all collisions with doors */
+	void doorCollisions();
+	/** Process and handle all collisions with buttons */
+	void buttonCollisions();
+
+	/** Process and handle the stabilizer */
+	void updateStabilizer();
+	/** Process and handle all donut movements */
+	void updateDonuts(float timestep);
+	/** Process and handle the timer */
+	void updateTimer(float timestep);
+	/** Process and handle breach health drain */
+	void updateHealth();
+
+	/**
+	 * Handle changes in connection status.
+	 *
+	 * @param timestep The amount of time since the last frame
+	 *
+	 * @return false iff should skip this update frame
+	 */
+	bool connectionUpdate(float timestep);
+
+	/** Handle loss. Returns true if loss. */
+	bool lossCheck();
+	/** Handle win. Returns true if won. */
+	bool winCheck();
+#pragma endregion
 
    public:
 #pragma mark -
@@ -107,12 +139,6 @@ class GameMode {
 
 #pragma mark -
 #pragma mark Accessors
-	/**
-	 * Set whether to go back to the main menu (should not be called)
-	 *
-	 * @param b whether to go back to the main menu
-	 */
-	void setIsBackToMainMenu(bool b) { isBackToMainMenu = b; }
 
 	/**
 	 * Get whether to go back to the main menu
