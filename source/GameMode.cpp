@@ -12,8 +12,7 @@
 using namespace cugl;
 using namespace std;
 
-#pragma mark -
-#pragma mark Level Layout
+#pragma region Constants
 /** The Angle in degrees for fixing a breach*/
 constexpr float EPSILON_ANGLE = 5.2f;
 /** The Angle in degrees for which a door can be activated*/
@@ -32,8 +31,8 @@ constexpr float BREACH_HEALTH_GRACE_PERIOD = 5.0f;
 /** Amount of health to decrement each frame per breach */
 constexpr float BREACH_HEALTH_PENALTY = 0.003f;
 
-#pragma mark -
-#pragma mark Constructors
+#pragma endregion
+#pragma region Constructors
 
 /**
  * Initializes the controller contents, and starts the game
@@ -50,7 +49,6 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 	isBackToMainMenu = false;
 
 	// Music Initialization
-
 	auto source = assets->get<Sound>("theme");
 	if (AudioChannels::get()->currentMusic() == nullptr ||
 		AudioChannels::get()->currentMusic()->getFile() != source->getFile()) {
@@ -133,157 +131,42 @@ void GameMode::dispose() {
 	donutModel = nullptr;
 }
 
-#pragma mark -
-#pragma mark Gameplay Handling
+#pragma endregion
+#pragma region Update Helpers
 
-/**
- * The method called to update the game mode.
- *
- * This method contains any gameplay code that is not an OpenGL call.
- *
- * @param timestep  The amount of time (in seconds) since the last frame
- */
-void GameMode::update(float timestep) {
-	// Check if need to go back to menu
-	if (!isBackToMainMenu) {
-		isBackToMainMenu = sgRoot.getIsBackToMainMenu();
-		if (isBackToMainMenu) {
-			AudioChannels::get()->stopMusic(1);
-		}
-	}
-	// Set needle percentage in pause menu
-	sgRoot.setNeedlePercentage((float)(net->getNumPlayers() - 1) / (float)globals::MAX_PLAYERS);
+#pragma region Collision Handlers
 
-	// Connection Status Checks
-	switch (net->matchStatus()) {
-		case MagicInternetBox::Disconnected:
-		case MagicInternetBox::ClientRoomInvalid:
-		case MagicInternetBox::ReconnectError:
-			if (net->reconnect(roomId)) {
-				net->update();
-			}
-			sgRoot.setStatus(GameGraphRoot::Reconnecting);
-			sgRoot.update(timestep);
-			return;
-		case MagicInternetBox::Reconnecting:
-			// Still Reconnecting
-			net->update();
-			sgRoot.setStatus(GameGraphRoot::Reconnecting);
-			sgRoot.update(timestep);
-			return;
-		case MagicInternetBox::ClientRoomFull:
-		case MagicInternetBox::GameEnded:
-			// Game Ended, Replace with Another Screen
-			CULog("Game Ended");
-			net->update(ship);
-			sgRoot.update(timestep);
-			return;
-		case MagicInternetBox::GameStart:
-			net->update(ship);
-			sgRoot.setStatus(GameGraphRoot::Normal);
-			break;
-		default:
-			CULog("ERROR: Uncaught MatchmakingStatus Value Occurred");
-	}
-
-	// Only process game logic if game is running
-	input->update(timestep);
-
-	// Check for loss
-	if (ship->getHealth() < 1) {
-		sgRoot.setStatus(GameGraphRoot::Loss);
-		sgRoot.update(timestep);
-
-		switch (sgRoot.getAndResetLastButtonPressed()) {
-			case GameGraphRoot::GameButton::Restart:
-				net->restartGame();
-				break;
-			case GameGraphRoot::GameButton::NextLevel:
-				CULog("Next Level Pressed");
-				net->nextLevel();
-				break;
-			default:
-				break;
-		}
-		return;
-	}
-
-	// Jump Logic. Moved here for Later Win Screen Jump support (Demi's Request)
-	if (input->hasJumped() && !donutModel->isJumping()) {
-		soundEffects->startEvent(SoundEffectController::JUMP, playerID);
-		donutModel->startJump();
-		net->jump(playerID);
-	} else {
-		soundEffects->endEvent(SoundEffectController::JUMP, playerID);
-	}
-
-	// Check for Win
-	if (ship->timerEnded() && ship->getHealth() > 0) {
-		sgRoot.setStatus(GameGraphRoot::Win);
-		sgRoot.update(timestep);
-
-		switch (sgRoot.getAndResetLastButtonPressed()) {
-			case GameGraphRoot::GameButton::Restart:
-				net->restartGame();
-				break;
-			case GameGraphRoot::GameButton::NextLevel:
-				CULog("Next Level Pressed");
-				net->nextLevel();
-				break;
-			default:
-				break;
-		}
-		return;
-	}
-
-	if (!(ship->timerEnded())) {
-		bool allButtonsInactive = true;
-		for (int i = 0; i < ship->getButtons().size(); i++) {
-			if (ship->getButtons().at(i)->getIsActive()) {
-				allButtonsInactive = false;
-				break;
-			}
-		}
-		ship->updateTimer(timestep, allButtonsInactive);
-	}
-
-	// Move the donut (MODEL ONLY)
-	float thrust = input->getRoll();
-	donutModel->applyForce(thrust);
-	// Attempt to recover to idle animation
-	donutModel->transitionFaceState(DonutModel::FaceState::Idle);
-
-	for (auto donut : ship->getDonuts()) {
-		donut->update(timestep);
-	}
-
-#pragma region Breach Collision
+void GameMode::breachCollisions() {
 	for (int i = 0; i < ship->getBreaches().size(); i++) {
-		std::shared_ptr<BreachModel> breach = ship->getBreaches().at(i);
+		auto breach = ship->getBreaches()[i];
 		if (breach == nullptr || !breach->getIsActive()) {
 			continue;
 		}
+
 		float diff = ship->getSize() / 2 -
 					 abs(abs(donutModel->getAngle() - breach->getAngle()) - ship->getSize() / 2);
+
+		// Rolling over other player's breach
 		if (!donutModel->isJumping() && playerID != breach->getPlayer() &&
 			diff < globals::BREACH_WIDTH && breach->getHealth() != 0) {
 			soundEffects->startEvent(SoundEffectController::SLOW, i);
-			// Slow player by drag factor
 			donutModel->setFriction(OTHER_BREACH_FRICTION);
 			donutModel->transitionFaceState(DonutModel::FaceState::Dizzy);
+
+			// Rolling over own breach
 		} else if (playerID == breach->getPlayer() && diff < EPSILON_ANGLE &&
 				   donutModel->getJumpOffset() == 0.0f && breach->getHealth() > 0) {
 			if (!breach->isPlayerOn()) {
 				soundEffects->startEvent(SoundEffectController::FIX, i);
-				// Decrement Health
 				breach->decHealth(1);
 				breach->setIsPlayerOn(true);
 				net->resolveBreach(i);
 			}
 			donutModel->transitionFaceState(DonutModel::FaceState::Working);
+
+			// Clearing breach flag
 		} else if (diff > EPSILON_ANGLE && breach->isPlayerOn()) {
 			breach->setIsPlayerOn(false);
-		} else if (diff > EPSILON_ANGLE) {
 			if (playerID == breach->getPlayer()) {
 				soundEffects->endEvent(SoundEffectController::FIX, i);
 			} else {
@@ -291,21 +174,23 @@ void GameMode::update(float timestep) {
 			}
 		}
 	}
-#pragma endregion
+}
 
-#pragma region Door Collision
+void GameMode::doorCollisions() {
+	// Normal Door
 	for (int i = 0; i < ship->getDoors().size(); i++) {
 		auto door = ship->getDoors()[i];
 		if (door == nullptr || door->halfOpen() || !door->getIsActive()) {
 			continue;
 		}
+
 		float diff = donutModel->getAngle() - door->getAngle();
 		float a = diff + ship->getSize() / 2;
 		diff = a - floor(a / ship->getSize()) * ship->getSize() - ship->getSize() / 2;
 
+		// Stop donut and push it out if inside
 		if (abs(diff) < globals::DOOR_WIDTH) {
 			soundEffects->startEvent(SoundEffectController::DOOR, i);
-			// Stop donut and push it out if inside
 			donutModel->setVelocity(0);
 			if (diff < 0) {
 				float proposedAngle = door->getAngle() - globals::DOOR_WIDTH;
@@ -315,29 +200,36 @@ void GameMode::update(float timestep) {
 				donutModel->setAngle(proposedAngle >= ship->getSize() ? 0 : proposedAngle);
 			}
 		}
+
+		// Active Door
 		if (abs(diff) < DOOR_ACTIVE_ANGLE) {
 			door->addPlayer(playerID);
 			net->flagDualTask(i, playerID, 1);
 			donutModel->transitionFaceState(DonutModel::FaceState::Colliding);
-		} else {
-			if (door->isPlayerOn(playerID)) {
-				soundEffects->endEvent(SoundEffectController::DOOR, i);
-				door->removePlayer(playerID);
-				net->flagDualTask(i, playerID, 0);
-			}
+
+			// Inactive Door
+		} else if (door->isPlayerOn(playerID)) {
+			soundEffects->endEvent(SoundEffectController::DOOR, i);
+			door->removePlayer(playerID);
+			net->flagDualTask(i, playerID, 0);
 		}
 	}
-	// Unopenable Door Checks
+
+	// Unopenable Door
 	for (int i = 0; i < ship->getUnopenable().size(); i++) {
-		if (ship->getUnopenable().at(i) == nullptr || !ship->getUnopenable().at(i)->getIsActive()) {
+		auto door = ship->getUnopenable()[i];
+		if (door == nullptr || !door->getIsActive()) {
 			continue;
 		}
-		float diff = donutModel->getAngle() - ship->getUnopenable().at(i)->getAngle();
-		float a = diff + ship->getSize() / 2;
-		diff = a - floor(a / ship->getSize()) * ship->getSize() - ship->getSize() / 2;
+
+		float diff = donutModel->getAngle() - door->getAngle();
+		float shipSize = ship->getSize();
+		float a = diff + shipSize / 2;
+		diff = a - floor(a / shipSize) * shipSize - shipSize / 2;
+
+		// Stop donut and push it out if inside
 		if (abs(diff) < globals::DOOR_WIDTH) {
 			soundEffects->startEvent(SoundEffectController::DOOR, i + globals::UNOP_MARKER);
-			// Stop donut and push it out if inside
 			donutModel->setVelocity(0);
 			if (diff < 0) {
 				float proposedAngle = ship->getUnopenable()[i]->getAngle() - globals::DOOR_WIDTH;
@@ -346,74 +238,15 @@ void GameMode::update(float timestep) {
 				float proposedAngle = ship->getUnopenable()[i]->getAngle() + globals::DOOR_WIDTH;
 				donutModel->setAngle(proposedAngle > ship->getSize() ? 0 : proposedAngle);
 			}
-		}
-		if (abs(diff) > DOOR_ACTIVE_ANGLE) {
+
+			// End sound effect otherwise
+		} else {
 			soundEffects->endEvent(SoundEffectController::DOOR, i + globals::UNOP_MARKER);
 		}
 	}
-#pragma endregion
+}
 
-	// Breach health drain
-	for (int i = 0; i < ship->getBreaches().size(); i++) {
-		// this should be adjusted based on the level and number of players
-		if (ship->getBreaches().at(i)->getIsActive() &&
-			trunc(ship->getBreaches().at(i)->getTimeCreated()) - trunc(ship->timeLeftInTimer) >
-				BREACH_HEALTH_GRACE_PERIOD) {
-			ship->decHealth(BREACH_HEALTH_PENALTY);
-		}
-	}
-
-	gm.update(timestep);
-
-#pragma region Stabilizer
-	auto& stabilizer = ship->getStabilizer();
-	if (stabilizer.getIsActive() && !ship->getTimeless() &&
-		trunc(ship->timeLeftInTimer) <= globals::ROLL_CHALLENGE_LENGTH) {
-		stabilizer.reset();
-	}
-
-	if (stabilizer.getIsActive()) {
-		bool allRoll = true;
-		for (unsigned int i = 0; i < ship->getDonuts().size(); i++) {
-			if (!ship->getDonuts()[i]->getIsActive()) {
-				continue;
-			}
-			if (stabilizer.isLeft()) {
-				if (ship->getDonuts()[i]->getVelocity() >= 0) {
-					allRoll = false;
-					break;
-				}
-			} else {
-				if (ship->getDonuts()[i]->getVelocity() <= 0) {
-					allRoll = false;
-					break;
-				}
-			}
-		}
-		if (allRoll) {
-			stabilizer.incrementProgress();
-		}
-		if (stabilizer.getIsWin() ||
-			trunc(ship->canonicalTimeElapsed) == trunc(stabilizer.getEndTime())) {
-			if (stabilizer.getIsWin()) {
-				ship->setStabilizerStatus(ShipModel::SUCCESS);
-				net->succeedAllTask();
-
-			} else {
-				gm.setChallengeFail(true);
-				ship->setStabilizerStatus(ShipModel::FAILURE);
-
-				// This can't happen a second time in the duration of the sound effect, so we can
-				// just end it immediately
-				soundEffects->startEvent(SoundEffectController::TELEPORT, 0);
-				soundEffects->endEvent(SoundEffectController::TELEPORT, 0);
-			}
-			stabilizer.reset();
-		}
-	}
-#pragma endregion
-
-#pragma region Button Collision
+void GameMode::buttonCollisions() {
 	for (int i = 0; i < ship->getButtons().size(); i++) {
 		auto button = ship->getButtons().at(i);
 
@@ -427,6 +260,7 @@ void GameMode::update(float timestep) {
 		float shipSize = ship->getSize();
 		float a = diff + shipSize / 2;
 		diff = a - floor(a / shipSize) * shipSize - shipSize / 2;
+
 		if (abs(diff) > globals::BUTTON_ACTIVE_ANGLE) {
 			continue;
 		}
@@ -444,10 +278,236 @@ void GameMode::update(float timestep) {
 			}
 		}
 	}
+}
+
 #pragma endregion
+
+void GameMode::updateStabilizer() {
+	auto& stabilizer = ship->getStabilizer();
+
+	if (!stabilizer.getIsActive()) {
+		return;
+	}
+
+	// If there's not enough time left in the level for the challenge, bail
+	if (stabilizer.getIsActive() && !ship->getTimeless() &&
+		trunc(ship->timeLeftInTimer) <= globals::ROLL_CHALLENGE_LENGTH) {
+		stabilizer.reset();
+		return;
+	}
+
+	bool allRoll = true;
+	auto& allDonuts = ship->getDonuts();
+
+	for (unsigned int i = 0; i < allDonuts.size(); i++) {
+		if (!allDonuts[i]->getIsActive()) {
+			continue;
+		}
+		if (stabilizer.isLeft()) {
+			if (allDonuts[i]->getVelocity() >= 0) {
+				allRoll = false;
+				break;
+			}
+		} else {
+			if (allDonuts[i]->getVelocity() <= 0) {
+				allRoll = false;
+				break;
+			}
+		}
+	}
+
+	if (allRoll) {
+		stabilizer.incrementProgress();
+	}
+
+	if (stabilizer.getIsWin()) {
+		ship->setStabilizerStatus(ShipModel::SUCCESS);
+		net->succeedAllTask();
+		stabilizer.reset();
+	} else if (trunc(ship->canonicalTimeElapsed) == trunc(stabilizer.getEndTime())) {
+		gm.setChallengeFail(true);
+		ship->setStabilizerStatus(ShipModel::FAILURE);
+
+		// This can't happen a second time in the duration of the sound effect, so we can
+		// just end it immediately
+		soundEffects->startEvent(SoundEffectController::TELEPORT, 0);
+		soundEffects->endEvent(SoundEffectController::TELEPORT, 0);
+		stabilizer.reset();
+	}
+}
+
+void GameMode::updateDonuts(float timestep) {
+	// Jump logic check
+	// We wanted donuts to be able to jump on the win screen, but in the absence of that happening
+	// anytime soon, I'm sticking this here for cleanliness
+	if (input->hasJumped() && !donutModel->isJumping()) {
+		soundEffects->startEvent(SoundEffectController::JUMP, playerID);
+		donutModel->startJump();
+		net->jump(playerID);
+	} else {
+		soundEffects->endEvent(SoundEffectController::JUMP, playerID);
+	}
+
+	// Move the donut (MODEL ONLY)
+	float thrust = input->getRoll();
+	donutModel->applyForce(thrust);
+	// Attempt to recover to idle animation
+	donutModel->transitionFaceState(DonutModel::FaceState::Idle);
+
+	for (auto donut : ship->getDonuts()) {
+		donut->update(timestep);
+	}
+}
+
+void GameMode::updateTimer(float timestep) {
+	if (ship->timerEnded()) {
+		return;
+	}
+
+	bool allButtonsInactive = true;
+	auto& buttons = ship->getButtons();
+
+	for (int i = 0; i < buttons.size(); i++) {
+		if (buttons[i]->getIsActive()) {
+			allButtonsInactive = false;
+			break;
+		}
+	}
+	ship->updateTimer(timestep, allButtonsInactive);
+}
+
+void GameMode::updateHealth() {
+	auto& breaches = ship->getBreaches();
+
+	// Breach health drain
+	for (int i = 0; i < breaches.size(); i++) {
+		// this should be adjusted based on the level and number of players
+		if (breaches[i]->getIsActive() &&
+			trunc(breaches[i]->getTimeCreated()) - trunc(ship->timeLeftInTimer) >
+				BREACH_HEALTH_GRACE_PERIOD) {
+			ship->decHealth(BREACH_HEALTH_PENALTY);
+		}
+	}
+}
+
+bool GameMode::lossCheck() {
+	if (ship->getHealth() >= 1) {
+		return false;
+	}
+
+	sgRoot.setStatus(GameGraphRoot::Loss);
+	if (sgRoot.getAndResetLastButtonPressed() == GameGraphRoot::GameButton::Restart) {
+		net->restartGame();
+	}
+
+	return true;
+}
+
+bool GameMode::winCheck() {
+	if (!ship->timerEnded() || ship->getHealth() <= 0) {
+		return false;
+	}
+
+	sgRoot.setStatus(GameGraphRoot::Win);
+	if (sgRoot.getAndResetLastButtonPressed() == GameGraphRoot::GameButton::NextLevel) {
+		CULog("Next Level Pressed");
+		net->nextLevel();
+	}
+
+	return true;
+}
+
+bool GameMode::connectionUpdate(float timestep) {
+	switch (net->matchStatus()) {
+		case MagicInternetBox::Disconnected:
+		case MagicInternetBox::ClientRoomInvalid:
+		case MagicInternetBox::ReconnectError:
+			if (net->reconnect(roomId)) {
+				net->update();
+			}
+			sgRoot.setStatus(GameGraphRoot::Reconnecting);
+			sgRoot.update(timestep);
+			return false;
+		case MagicInternetBox::Reconnecting:
+			// Still Reconnecting
+			net->update();
+			sgRoot.setStatus(GameGraphRoot::Reconnecting);
+			sgRoot.update(timestep);
+			return false;
+		case MagicInternetBox::ClientRoomFull:
+		case MagicInternetBox::GameEnded:
+			// Game Ended, Replace with Another Screen
+			CULog("Game Ended");
+			net->update(ship);
+			sgRoot.update(timestep);
+			return false;
+		case MagicInternetBox::GameStart:
+			net->update(ship);
+			sgRoot.setStatus(GameGraphRoot::Normal);
+			break;
+		default:
+			CULog("ERROR: Uncaught MatchmakingStatus Value Occurred");
+			break;
+	}
+	return true;
+}
+
+#pragma endregion
+#pragma region Gameplay
+
+/**
+ * The method called to update the game mode.
+ *
+ * This method contains any gameplay code that is not an OpenGL call.
+ *
+ * @param timestep  The amount of time (in seconds) since the last frame
+ */
+void GameMode::update(float timestep) {
+	// Check if need to go back to menu
+	if (!isBackToMainMenu) {
+		isBackToMainMenu = sgRoot.getIsBackToMainMenu();
+		if (isBackToMainMenu) {
+			AudioChannels::get()->stopMusic(1);
+		}
+	}
+
+	// Set needle percentage in pause menu
+	sgRoot.setNeedlePercentage((float)(net->getNumPlayers() - 1) / (float)globals::MAX_PLAYERS);
+
+	// Connection Status Checks
+	if (!connectionUpdate(timestep)) {
+		return;
+	}
+
+	input->update(timestep);
+
+	// Check for loss
+	if (lossCheck()) {
+		sgRoot.update(timestep);
+		return;
+	}
+
+	// Check for Win
+	if (winCheck()) {
+		sgRoot.update(timestep);
+		return;
+	}
+
+	updateTimer(timestep);
+	updateDonuts(timestep);
+
+	breachCollisions();
+	doorCollisions();
+	buttonCollisions();
+
+	updateHealth();
+	updateStabilizer();
+
+	gm.update(timestep);
 
 	sgRoot.update(timestep);
 }
+#pragma endregion
 
 /**
  * Draws the game.
