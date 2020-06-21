@@ -56,6 +56,20 @@ class GameMode {
 
 	/** Process and handle the stabilizer */
 	void runStabilizer();
+
+	/**
+	 * Handle changes in connection status.
+	 *
+	 * @param timestep The amount of time since the last frame
+	 *
+	 * @return false iff should skip this update frame
+	 */
+	bool connectionUpdate(float timestep);
+
+	/** Handle loss. Returns true if loss. */
+	bool lossCheck();
+	/** Handle win. Returns true if won. */
+	bool winCheck();
 #pragma endregion
 
    public:

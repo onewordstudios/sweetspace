@@ -336,6 +336,68 @@ void GameMode::runStabilizer() {
 	}
 }
 
+bool GameMode::lossCheck() {
+	if (ship->getHealth() >= 1) {
+		return false;
+	}
+
+	sgRoot.setStatus(GameGraphRoot::Loss);
+	if (sgRoot.getAndResetLastButtonPressed() == GameGraphRoot::GameButton::Restart) {
+		net->restartGame();
+	}
+
+	return true;
+}
+
+bool GameMode::winCheck() {
+	if (!ship->timerEnded() || ship->getHealth() <= 0) {
+		return false;
+	}
+
+	sgRoot.setStatus(GameGraphRoot::Win);
+	if (sgRoot.getAndResetLastButtonPressed() == GameGraphRoot::GameButton::NextLevel) {
+		CULog("Next Level Pressed");
+		net->nextLevel();
+	}
+
+	return true;
+}
+
+bool GameMode::connectionUpdate(float timestep) {
+	switch (net->matchStatus()) {
+		case MagicInternetBox::Disconnected:
+		case MagicInternetBox::ClientRoomInvalid:
+		case MagicInternetBox::ReconnectError:
+			if (net->reconnect(roomId)) {
+				net->update();
+			}
+			sgRoot.setStatus(GameGraphRoot::Reconnecting);
+			sgRoot.update(timestep);
+			return false;
+		case MagicInternetBox::Reconnecting:
+			// Still Reconnecting
+			net->update();
+			sgRoot.setStatus(GameGraphRoot::Reconnecting);
+			sgRoot.update(timestep);
+			return false;
+		case MagicInternetBox::ClientRoomFull:
+		case MagicInternetBox::GameEnded:
+			// Game Ended, Replace with Another Screen
+			CULog("Game Ended");
+			net->update(ship);
+			sgRoot.update(timestep);
+			return false;
+		case MagicInternetBox::GameStart:
+			net->update(ship);
+			sgRoot.setStatus(GameGraphRoot::Normal);
+			break;
+		default:
+			CULog("ERROR: Uncaught MatchmakingStatus Value Occurred");
+			break;
+	}
+	return true;
+}
+
 #pragma endregion
 #pragma region Gameplay
 
@@ -354,59 +416,20 @@ void GameMode::update(float timestep) {
 			AudioChannels::get()->stopMusic(1);
 		}
 	}
+
 	// Set needle percentage in pause menu
 	sgRoot.setNeedlePercentage((float)(net->getNumPlayers() - 1) / (float)globals::MAX_PLAYERS);
 
 	// Connection Status Checks
-	switch (net->matchStatus()) {
-		case MagicInternetBox::Disconnected:
-		case MagicInternetBox::ClientRoomInvalid:
-		case MagicInternetBox::ReconnectError:
-			if (net->reconnect(roomId)) {
-				net->update();
-			}
-			sgRoot.setStatus(GameGraphRoot::Reconnecting);
-			sgRoot.update(timestep);
-			return;
-		case MagicInternetBox::Reconnecting:
-			// Still Reconnecting
-			net->update();
-			sgRoot.setStatus(GameGraphRoot::Reconnecting);
-			sgRoot.update(timestep);
-			return;
-		case MagicInternetBox::ClientRoomFull:
-		case MagicInternetBox::GameEnded:
-			// Game Ended, Replace with Another Screen
-			CULog("Game Ended");
-			net->update(ship);
-			sgRoot.update(timestep);
-			return;
-		case MagicInternetBox::GameStart:
-			net->update(ship);
-			sgRoot.setStatus(GameGraphRoot::Normal);
-			break;
-		default:
-			CULog("ERROR: Uncaught MatchmakingStatus Value Occurred");
+	if (!connectionUpdate(timestep)) {
+		return;
 	}
 
 	input->update(timestep);
 
 	// Check for loss
-	if (ship->getHealth() < 1) {
-		sgRoot.setStatus(GameGraphRoot::Loss);
+	if (lossCheck()) {
 		sgRoot.update(timestep);
-
-		switch (sgRoot.getAndResetLastButtonPressed()) {
-			case GameGraphRoot::GameButton::Restart:
-				net->restartGame();
-				break;
-			case GameGraphRoot::GameButton::NextLevel:
-				CULog("Next Level Pressed");
-				net->nextLevel();
-				break;
-			default:
-				break;
-		}
 		return;
 	}
 
@@ -420,21 +443,8 @@ void GameMode::update(float timestep) {
 	}
 
 	// Check for Win
-	if (ship->timerEnded() && ship->getHealth() > 0) {
-		sgRoot.setStatus(GameGraphRoot::Win);
+	if (winCheck()) {
 		sgRoot.update(timestep);
-
-		switch (sgRoot.getAndResetLastButtonPressed()) {
-			case GameGraphRoot::GameButton::Restart:
-				net->restartGame();
-				break;
-			case GameGraphRoot::GameButton::NextLevel:
-				CULog("Next Level Pressed");
-				net->nextLevel();
-				break;
-			default:
-				break;
-		}
 		return;
 	}
 
