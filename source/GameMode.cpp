@@ -132,11 +132,13 @@ void GameMode::dispose() {
 }
 
 #pragma endregion
+#pragma region Update Helpers
+
 #pragma region Collision Handlers
 
 void GameMode::breachCollisions() {
 	for (int i = 0; i < ship->getBreaches().size(); i++) {
-		auto breach = ship->getBreaches().at(i);
+		auto breach = ship->getBreaches()[i];
 		if (breach == nullptr || !breach->getIsActive()) {
 			continue;
 		}
@@ -175,18 +177,20 @@ void GameMode::breachCollisions() {
 }
 
 void GameMode::doorCollisions() {
+	// Normal Door
 	for (int i = 0; i < ship->getDoors().size(); i++) {
 		auto door = ship->getDoors()[i];
 		if (door == nullptr || door->halfOpen() || !door->getIsActive()) {
 			continue;
 		}
+
 		float diff = donutModel->getAngle() - door->getAngle();
 		float a = diff + ship->getSize() / 2;
 		diff = a - floor(a / ship->getSize()) * ship->getSize() - ship->getSize() / 2;
 
+		// Stop donut and push it out if inside
 		if (abs(diff) < globals::DOOR_WIDTH) {
 			soundEffects->startEvent(SoundEffectController::DOOR, i);
-			// Stop donut and push it out if inside
 			donutModel->setVelocity(0);
 			if (diff < 0) {
 				float proposedAngle = door->getAngle() - globals::DOOR_WIDTH;
@@ -196,29 +200,36 @@ void GameMode::doorCollisions() {
 				donutModel->setAngle(proposedAngle >= ship->getSize() ? 0 : proposedAngle);
 			}
 		}
+
+		// Active Door
 		if (abs(diff) < DOOR_ACTIVE_ANGLE) {
 			door->addPlayer(playerID);
 			net->flagDualTask(i, playerID, 1);
 			donutModel->transitionFaceState(DonutModel::FaceState::Colliding);
-		} else {
-			if (door->isPlayerOn(playerID)) {
-				soundEffects->endEvent(SoundEffectController::DOOR, i);
-				door->removePlayer(playerID);
-				net->flagDualTask(i, playerID, 0);
-			}
+
+			// Inactive Door
+		} else if (door->isPlayerOn(playerID)) {
+			soundEffects->endEvent(SoundEffectController::DOOR, i);
+			door->removePlayer(playerID);
+			net->flagDualTask(i, playerID, 0);
 		}
 	}
-	// Unopenable Door Checks
+
+	// Unopenable Door
 	for (int i = 0; i < ship->getUnopenable().size(); i++) {
-		if (ship->getUnopenable().at(i) == nullptr || !ship->getUnopenable().at(i)->getIsActive()) {
+		auto door = ship->getUnopenable()[i];
+		if (door == nullptr || !door->getIsActive()) {
 			continue;
 		}
-		float diff = donutModel->getAngle() - ship->getUnopenable().at(i)->getAngle();
-		float a = diff + ship->getSize() / 2;
-		diff = a - floor(a / ship->getSize()) * ship->getSize() - ship->getSize() / 2;
+
+		float diff = donutModel->getAngle() - door->getAngle();
+		float shipSize = ship->getSize();
+		float a = diff + shipSize / 2;
+		diff = a - floor(a / shipSize) * shipSize - shipSize / 2;
+
+		// Stop donut and push it out if inside
 		if (abs(diff) < globals::DOOR_WIDTH) {
 			soundEffects->startEvent(SoundEffectController::DOOR, i + globals::UNOP_MARKER);
-			// Stop donut and push it out if inside
 			donutModel->setVelocity(0);
 			if (diff < 0) {
 				float proposedAngle = ship->getUnopenable()[i]->getAngle() - globals::DOOR_WIDTH;
@@ -227,8 +238,9 @@ void GameMode::doorCollisions() {
 				float proposedAngle = ship->getUnopenable()[i]->getAngle() + globals::DOOR_WIDTH;
 				donutModel->setAngle(proposedAngle > ship->getSize() ? 0 : proposedAngle);
 			}
-		}
-		if (abs(diff) > DOOR_ACTIVE_ANGLE) {
+
+			// End sound effect otherwise
+		} else {
 			soundEffects->endEvent(SoundEffectController::DOOR, i + globals::UNOP_MARKER);
 		}
 	}
@@ -248,6 +260,7 @@ void GameMode::buttonCollisions() {
 		float shipSize = ship->getSize();
 		float a = diff + shipSize / 2;
 		diff = a - floor(a / shipSize) * shipSize - shipSize / 2;
+
 		if (abs(diff) > globals::BUTTON_ACTIVE_ANGLE) {
 			continue;
 		}
@@ -264,6 +277,62 @@ void GameMode::buttonCollisions() {
 				net->resolveButton(i);
 			}
 		}
+	}
+}
+
+#pragma endregion
+
+void GameMode::runStabilizer() {
+	auto& stabilizer = ship->getStabilizer();
+
+	if (!stabilizer.getIsActive()) {
+		return;
+	}
+
+	// If there's not enough time left in the level for the challenge, bail
+	if (stabilizer.getIsActive() && !ship->getTimeless() &&
+		trunc(ship->timeLeftInTimer) <= globals::ROLL_CHALLENGE_LENGTH) {
+		stabilizer.reset();
+		return;
+	}
+
+	bool allRoll = true;
+	auto& allDonuts = ship->getDonuts();
+
+	for (unsigned int i = 0; i < allDonuts.size(); i++) {
+		if (!allDonuts[i]->getIsActive()) {
+			continue;
+		}
+		if (stabilizer.isLeft()) {
+			if (allDonuts[i]->getVelocity() >= 0) {
+				allRoll = false;
+				break;
+			}
+		} else {
+			if (allDonuts[i]->getVelocity() <= 0) {
+				allRoll = false;
+				break;
+			}
+		}
+	}
+
+	if (allRoll) {
+		stabilizer.incrementProgress();
+	}
+
+	if (stabilizer.getIsWin()) {
+		ship->setStabilizerStatus(ShipModel::SUCCESS);
+		net->succeedAllTask();
+		stabilizer.reset();
+	} else if (trunc(ship->canonicalTimeElapsed) == trunc(stabilizer.getEndTime())) {
+		gm.setChallengeFail(true);
+		ship->setStabilizerStatus(ShipModel::FAILURE);
+
+		// This can't happen a second time in the duration of the sound effect, so we can
+		// just end it immediately
+		soundEffects->startEvent(SoundEffectController::TELEPORT, 0);
+		soundEffects->endEvent(SoundEffectController::TELEPORT, 0);
+		stabilizer.reset();
 	}
 }
 
@@ -406,53 +475,7 @@ void GameMode::update(float timestep) {
 
 	gm.update(timestep);
 
-#pragma region Stabilizer
-	auto& stabilizer = ship->getStabilizer();
-	if (stabilizer.getIsActive() && !ship->getTimeless() &&
-		trunc(ship->timeLeftInTimer) <= globals::ROLL_CHALLENGE_LENGTH) {
-		stabilizer.reset();
-	}
-
-	if (stabilizer.getIsActive()) {
-		bool allRoll = true;
-		for (unsigned int i = 0; i < ship->getDonuts().size(); i++) {
-			if (!ship->getDonuts()[i]->getIsActive()) {
-				continue;
-			}
-			if (stabilizer.isLeft()) {
-				if (ship->getDonuts()[i]->getVelocity() >= 0) {
-					allRoll = false;
-					break;
-				}
-			} else {
-				if (ship->getDonuts()[i]->getVelocity() <= 0) {
-					allRoll = false;
-					break;
-				}
-			}
-		}
-		if (allRoll) {
-			stabilizer.incrementProgress();
-		}
-		if (stabilizer.getIsWin() ||
-			trunc(ship->canonicalTimeElapsed) == trunc(stabilizer.getEndTime())) {
-			if (stabilizer.getIsWin()) {
-				ship->setStabilizerStatus(ShipModel::SUCCESS);
-				net->succeedAllTask();
-
-			} else {
-				gm.setChallengeFail(true);
-				ship->setStabilizerStatus(ShipModel::FAILURE);
-
-				// This can't happen a second time in the duration of the sound effect, so we can
-				// just end it immediately
-				soundEffects->startEvent(SoundEffectController::TELEPORT, 0);
-				soundEffects->endEvent(SoundEffectController::TELEPORT, 0);
-			}
-			stabilizer.reset();
-		}
-	}
-#pragma endregion
+	runStabilizer();
 
 	sgRoot.update(timestep);
 }

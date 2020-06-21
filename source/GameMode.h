@@ -46,12 +46,17 @@ class GameMode {
 	/** Whether to go back to main menu */
 	bool isBackToMainMenu;
 
+#pragma region Update Helpers
 	/** Process and handle all collisions with breaches */
 	void breachCollisions();
 	/** Process and handle all collisions with doors */
 	void doorCollisions();
 	/** Process and handle all collisions with buttons */
 	void buttonCollisions();
+
+	/** Process and handle the stabilizer */
+	void runStabilizer();
+#pragma endregion
 
    public:
 #pragma mark -
