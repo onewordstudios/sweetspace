@@ -57,6 +57,18 @@ class Tween {
 	static float easeOut(float start, float end, int currFrame, int maxFrame);
 
 	/**
+	 * Quartic ease in & out interpolation between start and end.
+	 *
+	 * @param start The starting position
+	 * @param end The ending position
+	 * @param currFrame The current frame of the animation, >=0 and <= maxFrame
+	 * @param maxFrame The last frame of the animation, >=0
+	 *
+	 * @return The interpolated position
+	 */
+	static float easeInOut(float start, float end, int currFrame, int maxFrame);
+
+	/**
 	 * Generate a color that can be used for fading.
 	 */
 	static cugl::Color4 fade(float a);

@@ -344,11 +344,14 @@ void MainMenuMode::processTransition() {
 						bg2ship->setColor(Tween::fade(
 							Tween::linear(1.0f, 0.0f, transitionFrame, TRANSITION_DURATION)));
 
-						bg3land->setPositionY(Tween::easeOut(screenHeight / 2, screenHeight / 2.5f,
-															 transitionFrame, TRANSITION_DURATION));
+						bg2ship->setPositionY(Tween::easeIn(screenHeight / 2, screenHeight / 1.5f,
+															transitionFrame, TRANSITION_DURATION));
+						bg3land->setPositionY(Tween::easeInOut(screenHeight / 2,
+															   screenHeight / 2.5f, transitionFrame,
+															   TRANSITION_DURATION));
 						bg4landNoShip->setPositionY(
-							Tween::easeOut(screenHeight / 2, screenHeight / 2.5f, transitionFrame,
-										   TRANSITION_DURATION));
+							Tween::easeInOut(screenHeight / 2, screenHeight / 2.5f, transitionFrame,
+											 TRANSITION_DURATION));
 						bg3land->setColor(Tween::fade(
 							Tween::linear(1.0f, 0.0f, transitionFrame, TRANSITION_DURATION)));
 
@@ -486,6 +489,7 @@ void MainMenuMode::processTransition() {
 					e->setVisible(true);
 				}
 				bg3land->setVisible(true);
+				bg2ship->setPositionY(screenHeight / 2);
 			}
 
 			// Transition over
@@ -511,10 +515,10 @@ void MainMenuMode::processTransition() {
 			bg2ship->setColor(
 				Tween::fade(Tween::linear(0.0f, 1.0f, transitionFrame, TRANSITION_DURATION)));
 
-			bg3land->setPositionY(Tween::easeOut(screenHeight / 2.5f, screenHeight / 2,
-												 transitionFrame, TRANSITION_DURATION));
-			bg4landNoShip->setPositionY(Tween::easeOut(screenHeight / 2.5f, screenHeight / 2,
-													   transitionFrame, TRANSITION_DURATION));
+			bg3land->setPositionY(Tween::easeInOut(screenHeight / 2.5f, screenHeight / 2,
+												   transitionFrame, TRANSITION_DURATION));
+			bg4landNoShip->setPositionY(Tween::easeInOut(screenHeight / 2.5f, screenHeight / 2,
+														 transitionFrame, TRANSITION_DURATION));
 			bg3land->setColor(
 				Tween::fade(Tween::linear(0.0f, 1.0f, transitionFrame, TRANSITION_DURATION)));
 		}
