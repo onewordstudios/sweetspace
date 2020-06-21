@@ -110,6 +110,8 @@ class MainMenuMode : public cugl::Scene {
 	std::shared_ptr<cugl::Node> bg2ship;
 	/** Background asset with land */
 	std::shared_ptr<cugl::Node> bg3land;
+	/** Background asset for credits screen */
+	std::shared_ptr<cugl::Node> bg4landNoShip;
 	/** Background asset with studio name */
 	std::shared_ptr<cugl::Node> bg9studio;
 
