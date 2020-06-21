@@ -37,6 +37,12 @@ constexpr float CREDITS_DURATION = 4500;
 /** How much more to increment the credit scroll frame when tapping to go faster */
 constexpr unsigned int FAST_CREDITS_SCROLL_INCREMENT = 5;
 
+/** Divisor of screen height to get credits bg position */
+constexpr float CREDITS_BG_POS = 2.5;
+
+/** Divisor of screen height to get ship flight destination position */
+constexpr float SHIP_FLY_POS = 1.5;
+
 /**
  * Current frame of the credits scroll (there's only ever one credits screen, so it's safe to
  * stick this here)
@@ -344,14 +350,15 @@ void MainMenuMode::processTransition() {
 						bg2ship->setColor(Tween::fade(
 							Tween::linear(1.0f, 0.0f, transitionFrame, TRANSITION_DURATION)));
 
-						bg2ship->setPositionY(Tween::easeIn(screenHeight / 2, screenHeight / 1.5f,
+						bg2ship->setPositionY(Tween::easeIn(screenHeight / 2,
+															screenHeight / SHIP_FLY_POS,
 															transitionFrame, TRANSITION_DURATION));
-						bg3land->setPositionY(Tween::easeInOut(screenHeight / 2,
-															   screenHeight / 2.5f, transitionFrame,
-															   TRANSITION_DURATION));
+						bg3land->setPositionY(
+							Tween::easeInOut(screenHeight / 2, screenHeight / CREDITS_BG_POS,
+											 transitionFrame, TRANSITION_DURATION));
 						bg4landNoShip->setPositionY(
-							Tween::easeInOut(screenHeight / 2, screenHeight / 2.5f, transitionFrame,
-											 TRANSITION_DURATION));
+							Tween::easeInOut(screenHeight / 2, screenHeight / CREDITS_BG_POS,
+											 transitionFrame, TRANSITION_DURATION));
 						bg3land->setColor(Tween::fade(
 							Tween::linear(1.0f, 0.0f, transitionFrame, TRANSITION_DURATION)));
 
@@ -515,10 +522,11 @@ void MainMenuMode::processTransition() {
 			bg2ship->setColor(
 				Tween::fade(Tween::linear(0.0f, 1.0f, transitionFrame, TRANSITION_DURATION)));
 
-			bg3land->setPositionY(Tween::easeInOut(screenHeight / 2.5f, screenHeight / 2,
+			bg3land->setPositionY(Tween::easeInOut(screenHeight / CREDITS_BG_POS, screenHeight / 2,
 												   transitionFrame, TRANSITION_DURATION));
-			bg4landNoShip->setPositionY(Tween::easeInOut(screenHeight / 2.5f, screenHeight / 2,
-														 transitionFrame, TRANSITION_DURATION));
+			bg4landNoShip->setPositionY(Tween::easeInOut(screenHeight / CREDITS_BG_POS,
+														 screenHeight / 2, transitionFrame,
+														 TRANSITION_DURATION));
 			bg3land->setColor(
 				Tween::fade(Tween::linear(0.0f, 1.0f, transitionFrame, TRANSITION_DURATION)));
 		}

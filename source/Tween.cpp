@@ -23,13 +23,13 @@ float Tween::easeOut(float start, float end, int currFrame, int maxFrame) {
 }
 
 float Tween::easeInOut(float start, float end, int currFrame, int maxFrame) {
-	float t = (float)currFrame / (float)maxFrame;
-	const float half = ((end - start) / 2) + start;
+	const float t = (float)currFrame / (float)maxFrame;
+	const float halfPos = ((end - start) / 2) + start;
 	const int halfFrame = maxFrame / 2;
 	if (2 * t < 1) {
-		return easeIn(start, half, currFrame, halfFrame);
+		return easeIn(start, halfPos, currFrame, halfFrame);
 	}
-	return easeOut(half, end, currFrame - halfFrame, halfFrame);
+	return easeOut(halfPos, end, currFrame - halfFrame, halfFrame);
 }
 
 cugl::Color4 Tween::fade(float a) {
