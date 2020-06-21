@@ -158,6 +158,8 @@ bool MainMenuMode::init(const std::shared_ptr<AssetManager>& assets) {
 	credits->setVisible(false);
 	clientEnteredRoom.clear();
 	clientWaitHost->setVisible(false);
+	bg2ship->setColor(Color4::WHITE);
+	bg2ship->setPositionY(0);
 
 	updateClientLabel();
 	addChild(scene);
@@ -317,11 +319,17 @@ void MainMenuMode::processTransition() {
 				for (auto e : mainScreen) {
 					e->setVisible(false);
 				}
+				bg2ship->setPositionY(screenHeight / 2);
+				bg2ship->setVisible(false);
 			} else {
 				for (auto e : mainScreen) {
 					e->setColor(Tween::fade(
 						Tween::linear(1.0f, 0.0f, transitionFrame, TRANSITION_DURATION)));
 				}
+				bg2ship->setPositionY(Tween::easeIn(screenHeight / 2, screenHeight / SHIP_FLY_POS,
+													transitionFrame, TRANSITION_DURATION));
+				bg2ship->setColor(
+					Tween::fade(Tween::linear(1.0f, 0.0f, transitionFrame, TRANSITION_DURATION)));
 				switch (transitionState) {
 					// Host screen case unneeded b/c waiting for host room before playing transition
 					case ClientScreen: {
@@ -347,12 +355,7 @@ void MainMenuMode::processTransition() {
 
 						bg1glow->setColor(Tween::fade(
 							Tween::linear(1.0f, 0.0f, transitionFrame, TRANSITION_DURATION)));
-						bg2ship->setColor(Tween::fade(
-							Tween::linear(1.0f, 0.0f, transitionFrame, TRANSITION_DURATION)));
 
-						bg2ship->setPositionY(Tween::easeIn(screenHeight / 2,
-															screenHeight / SHIP_FLY_POS,
-															transitionFrame, TRANSITION_DURATION));
 						bg3land->setPositionY(
 							Tween::easeInOut(screenHeight / 2, screenHeight / CREDITS_BG_POS,
 											 transitionFrame, TRANSITION_DURATION));
@@ -431,6 +434,7 @@ void MainMenuMode::processTransition() {
 					for (auto e : mainScreen) {
 						e->setVisible(true);
 					}
+					bg2ship->setVisible(true);
 				}
 
 				// Transition over
@@ -457,6 +461,9 @@ void MainMenuMode::processTransition() {
 				}
 				backBtn->setColor(
 					Tween::fade(Tween::linear(1.0f, 0.0f, transitionFrame, TRANSITION_DURATION)));
+
+				bg2ship->setColor(
+					Tween::fade(Tween::linear(0.0f, 1.0f, transitionFrame, TRANSITION_DURATION)));
 
 				return;
 			}
@@ -496,7 +503,7 @@ void MainMenuMode::processTransition() {
 					e->setVisible(true);
 				}
 				bg3land->setVisible(true);
-				bg2ship->setPositionY(screenHeight / 2);
+				bg2ship->setVisible(true);
 			}
 
 			// Transition over
