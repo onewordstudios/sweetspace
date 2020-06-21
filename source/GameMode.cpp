@@ -12,8 +12,7 @@
 using namespace cugl;
 using namespace std;
 
-#pragma mark -
-#pragma mark Level Layout
+#pragma region Constants
 /** The Angle in degrees for fixing a breach*/
 constexpr float EPSILON_ANGLE = 5.2f;
 /** The Angle in degrees for which a door can be activated*/
@@ -32,8 +31,8 @@ constexpr float BREACH_HEALTH_GRACE_PERIOD = 5.0f;
 /** Amount of health to decrement each frame per breach */
 constexpr float BREACH_HEALTH_PENALTY = 0.003f;
 
-#pragma mark -
-#pragma mark Constructors
+#pragma endregion
+#pragma region Constructors
 
 /**
  * Initializes the controller contents, and starts the game
@@ -50,7 +49,6 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 	isBackToMainMenu = false;
 
 	// Music Initialization
-
 	auto source = assets->get<Sound>("theme");
 	if (AudioChannels::get()->currentMusic() == nullptr ||
 		AudioChannels::get()->currentMusic()->getFile() != source->getFile()) {
@@ -133,8 +131,144 @@ void GameMode::dispose() {
 	donutModel = nullptr;
 }
 
-#pragma mark -
-#pragma mark Gameplay Handling
+#pragma endregion
+#pragma region Collision Handlers
+
+void GameMode::breachCollisions() {
+	for (int i = 0; i < ship->getBreaches().size(); i++) {
+		auto breach = ship->getBreaches().at(i);
+		if (breach == nullptr || !breach->getIsActive()) {
+			continue;
+		}
+
+		float diff = ship->getSize() / 2 -
+					 abs(abs(donutModel->getAngle() - breach->getAngle()) - ship->getSize() / 2);
+
+		// Rolling over other player's breach
+		if (!donutModel->isJumping() && playerID != breach->getPlayer() &&
+			diff < globals::BREACH_WIDTH && breach->getHealth() != 0) {
+			soundEffects->startEvent(SoundEffectController::SLOW, i);
+			donutModel->setFriction(OTHER_BREACH_FRICTION);
+			donutModel->transitionFaceState(DonutModel::FaceState::Dizzy);
+
+			// Rolling over own breach
+		} else if (playerID == breach->getPlayer() && diff < EPSILON_ANGLE &&
+				   donutModel->getJumpOffset() == 0.0f && breach->getHealth() > 0) {
+			if (!breach->isPlayerOn()) {
+				soundEffects->startEvent(SoundEffectController::FIX, i);
+				breach->decHealth(1);
+				breach->setIsPlayerOn(true);
+				net->resolveBreach(i);
+			}
+			donutModel->transitionFaceState(DonutModel::FaceState::Working);
+
+			// Clearing breach flag
+		} else if (diff > EPSILON_ANGLE && breach->isPlayerOn()) {
+			breach->setIsPlayerOn(false);
+			if (playerID == breach->getPlayer()) {
+				soundEffects->endEvent(SoundEffectController::FIX, i);
+			} else {
+				soundEffects->endEvent(SoundEffectController::SLOW, i);
+			}
+		}
+	}
+}
+
+void GameMode::doorCollisions() {
+	for (int i = 0; i < ship->getDoors().size(); i++) {
+		auto door = ship->getDoors()[i];
+		if (door == nullptr || door->halfOpen() || !door->getIsActive()) {
+			continue;
+		}
+		float diff = donutModel->getAngle() - door->getAngle();
+		float a = diff + ship->getSize() / 2;
+		diff = a - floor(a / ship->getSize()) * ship->getSize() - ship->getSize() / 2;
+
+		if (abs(diff) < globals::DOOR_WIDTH) {
+			soundEffects->startEvent(SoundEffectController::DOOR, i);
+			// Stop donut and push it out if inside
+			donutModel->setVelocity(0);
+			if (diff < 0) {
+				float proposedAngle = door->getAngle() - globals::DOOR_WIDTH;
+				donutModel->setAngle(proposedAngle < 0 ? ship->getSize() - 1 : proposedAngle);
+			} else {
+				float proposedAngle = door->getAngle() + globals::DOOR_WIDTH;
+				donutModel->setAngle(proposedAngle >= ship->getSize() ? 0 : proposedAngle);
+			}
+		}
+		if (abs(diff) < DOOR_ACTIVE_ANGLE) {
+			door->addPlayer(playerID);
+			net->flagDualTask(i, playerID, 1);
+			donutModel->transitionFaceState(DonutModel::FaceState::Colliding);
+		} else {
+			if (door->isPlayerOn(playerID)) {
+				soundEffects->endEvent(SoundEffectController::DOOR, i);
+				door->removePlayer(playerID);
+				net->flagDualTask(i, playerID, 0);
+			}
+		}
+	}
+	// Unopenable Door Checks
+	for (int i = 0; i < ship->getUnopenable().size(); i++) {
+		if (ship->getUnopenable().at(i) == nullptr || !ship->getUnopenable().at(i)->getIsActive()) {
+			continue;
+		}
+		float diff = donutModel->getAngle() - ship->getUnopenable().at(i)->getAngle();
+		float a = diff + ship->getSize() / 2;
+		diff = a - floor(a / ship->getSize()) * ship->getSize() - ship->getSize() / 2;
+		if (abs(diff) < globals::DOOR_WIDTH) {
+			soundEffects->startEvent(SoundEffectController::DOOR, i + globals::UNOP_MARKER);
+			// Stop donut and push it out if inside
+			donutModel->setVelocity(0);
+			if (diff < 0) {
+				float proposedAngle = ship->getUnopenable()[i]->getAngle() - globals::DOOR_WIDTH;
+				donutModel->setAngle(proposedAngle < 0 ? ship->getSize() : proposedAngle);
+			} else {
+				float proposedAngle = ship->getUnopenable()[i]->getAngle() + globals::DOOR_WIDTH;
+				donutModel->setAngle(proposedAngle > ship->getSize() ? 0 : proposedAngle);
+			}
+		}
+		if (abs(diff) > DOOR_ACTIVE_ANGLE) {
+			soundEffects->endEvent(SoundEffectController::DOOR, i + globals::UNOP_MARKER);
+		}
+	}
+}
+
+void GameMode::buttonCollisions() {
+	for (int i = 0; i < ship->getButtons().size(); i++) {
+		auto button = ship->getButtons().at(i);
+
+		if (button == nullptr || !button->getIsActive()) {
+			continue;
+		}
+
+		button->update();
+
+		float diff = donutModel->getAngle() - button->getAngle();
+		float shipSize = ship->getSize();
+		float a = diff + shipSize / 2;
+		diff = a - floor(a / shipSize) * shipSize - shipSize / 2;
+		if (abs(diff) > globals::BUTTON_ACTIVE_ANGLE) {
+			continue;
+		}
+
+		if (!donutModel->isDescending() || donutModel->getJumpOffset() >= BUTTON_JUMP_HEIGHT) {
+			continue;
+		}
+
+		if (ship->flagButton(i)) {
+			net->flagButton(i);
+			if (button->getPair()->isJumpedOn()) {
+				CULog("Resolving button");
+				ship->resolveButton(i);
+				net->resolveButton(i);
+			}
+		}
+	}
+}
+
+#pragma endregion
+#pragma region Gameplay
 
 /**
  * The method called to update the game mode.
@@ -186,7 +320,6 @@ void GameMode::update(float timestep) {
 			CULog("ERROR: Uncaught MatchmakingStatus Value Occurred");
 	}
 
-	// Only process game logic if game is running
 	input->update(timestep);
 
 	// Check for loss
@@ -257,101 +390,9 @@ void GameMode::update(float timestep) {
 		donut->update(timestep);
 	}
 
-#pragma region Breach Collision
-	for (int i = 0; i < ship->getBreaches().size(); i++) {
-		std::shared_ptr<BreachModel> breach = ship->getBreaches().at(i);
-		if (breach == nullptr || !breach->getIsActive()) {
-			continue;
-		}
-		float diff = ship->getSize() / 2 -
-					 abs(abs(donutModel->getAngle() - breach->getAngle()) - ship->getSize() / 2);
-		if (!donutModel->isJumping() && playerID != breach->getPlayer() &&
-			diff < globals::BREACH_WIDTH && breach->getHealth() != 0) {
-			soundEffects->startEvent(SoundEffectController::SLOW, i);
-			// Slow player by drag factor
-			donutModel->setFriction(OTHER_BREACH_FRICTION);
-			donutModel->transitionFaceState(DonutModel::FaceState::Dizzy);
-		} else if (playerID == breach->getPlayer() && diff < EPSILON_ANGLE &&
-				   donutModel->getJumpOffset() == 0.0f && breach->getHealth() > 0) {
-			if (!breach->isPlayerOn()) {
-				soundEffects->startEvent(SoundEffectController::FIX, i);
-				// Decrement Health
-				breach->decHealth(1);
-				breach->setIsPlayerOn(true);
-				net->resolveBreach(i);
-			}
-			donutModel->transitionFaceState(DonutModel::FaceState::Working);
-		} else if (diff > EPSILON_ANGLE && breach->isPlayerOn()) {
-			breach->setIsPlayerOn(false);
-		} else if (diff > EPSILON_ANGLE) {
-			if (playerID == breach->getPlayer()) {
-				soundEffects->endEvent(SoundEffectController::FIX, i);
-			} else {
-				soundEffects->endEvent(SoundEffectController::SLOW, i);
-			}
-		}
-	}
-#pragma endregion
-
-#pragma region Door Collision
-	for (int i = 0; i < ship->getDoors().size(); i++) {
-		auto door = ship->getDoors()[i];
-		if (door == nullptr || door->halfOpen() || !door->getIsActive()) {
-			continue;
-		}
-		float diff = donutModel->getAngle() - door->getAngle();
-		float a = diff + ship->getSize() / 2;
-		diff = a - floor(a / ship->getSize()) * ship->getSize() - ship->getSize() / 2;
-
-		if (abs(diff) < globals::DOOR_WIDTH) {
-			soundEffects->startEvent(SoundEffectController::DOOR, i);
-			// Stop donut and push it out if inside
-			donutModel->setVelocity(0);
-			if (diff < 0) {
-				float proposedAngle = door->getAngle() - globals::DOOR_WIDTH;
-				donutModel->setAngle(proposedAngle < 0 ? ship->getSize() - 1 : proposedAngle);
-			} else {
-				float proposedAngle = door->getAngle() + globals::DOOR_WIDTH;
-				donutModel->setAngle(proposedAngle >= ship->getSize() ? 0 : proposedAngle);
-			}
-		}
-		if (abs(diff) < DOOR_ACTIVE_ANGLE) {
-			door->addPlayer(playerID);
-			net->flagDualTask(i, playerID, 1);
-			donutModel->transitionFaceState(DonutModel::FaceState::Colliding);
-		} else {
-			if (door->isPlayerOn(playerID)) {
-				soundEffects->endEvent(SoundEffectController::DOOR, i);
-				door->removePlayer(playerID);
-				net->flagDualTask(i, playerID, 0);
-			}
-		}
-	}
-	// Unopenable Door Checks
-	for (int i = 0; i < ship->getUnopenable().size(); i++) {
-		if (ship->getUnopenable().at(i) == nullptr || !ship->getUnopenable().at(i)->getIsActive()) {
-			continue;
-		}
-		float diff = donutModel->getAngle() - ship->getUnopenable().at(i)->getAngle();
-		float a = diff + ship->getSize() / 2;
-		diff = a - floor(a / ship->getSize()) * ship->getSize() - ship->getSize() / 2;
-		if (abs(diff) < globals::DOOR_WIDTH) {
-			soundEffects->startEvent(SoundEffectController::DOOR, i + globals::UNOP_MARKER);
-			// Stop donut and push it out if inside
-			donutModel->setVelocity(0);
-			if (diff < 0) {
-				float proposedAngle = ship->getUnopenable()[i]->getAngle() - globals::DOOR_WIDTH;
-				donutModel->setAngle(proposedAngle < 0 ? ship->getSize() : proposedAngle);
-			} else {
-				float proposedAngle = ship->getUnopenable()[i]->getAngle() + globals::DOOR_WIDTH;
-				donutModel->setAngle(proposedAngle > ship->getSize() ? 0 : proposedAngle);
-			}
-		}
-		if (abs(diff) > DOOR_ACTIVE_ANGLE) {
-			soundEffects->endEvent(SoundEffectController::DOOR, i + globals::UNOP_MARKER);
-		}
-	}
-#pragma endregion
+	breachCollisions();
+	doorCollisions();
+	buttonCollisions();
 
 	// Breach health drain
 	for (int i = 0; i < ship->getBreaches().size(); i++) {
@@ -413,41 +454,9 @@ void GameMode::update(float timestep) {
 	}
 #pragma endregion
 
-#pragma region Button Collision
-	for (int i = 0; i < ship->getButtons().size(); i++) {
-		auto button = ship->getButtons().at(i);
-
-		if (button == nullptr || !button->getIsActive()) {
-			continue;
-		}
-
-		button->update();
-
-		float diff = donutModel->getAngle() - button->getAngle();
-		float shipSize = ship->getSize();
-		float a = diff + shipSize / 2;
-		diff = a - floor(a / shipSize) * shipSize - shipSize / 2;
-		if (abs(diff) > globals::BUTTON_ACTIVE_ANGLE) {
-			continue;
-		}
-
-		if (!donutModel->isDescending() || donutModel->getJumpOffset() >= BUTTON_JUMP_HEIGHT) {
-			continue;
-		}
-
-		if (ship->flagButton(i)) {
-			net->flagButton(i);
-			if (button->getPair()->isJumpedOn()) {
-				CULog("Resolving button");
-				ship->resolveButton(i);
-				net->resolveButton(i);
-			}
-		}
-	}
-#pragma endregion
-
 	sgRoot.update(timestep);
 }
+#pragma endregion
 
 /**
  * Draws the game.
