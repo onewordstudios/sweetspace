@@ -516,18 +516,18 @@ void MainMenuMode::processTransition() {
 			}
 
 			credits->setColor(
-				Tween::fade(Tween::linear(1.0f, 0.0f, transitionFrame, TRANSITION_DURATION)));
+				Tween::fade(Tween::easeInOut(1.0f, 0.0f, transitionFrame, TRANSITION_DURATION)));
 			backBtn->setColor(
-				Tween::fade(Tween::linear(1.0f, 0.0f, transitionFrame, TRANSITION_DURATION)));
+				Tween::fade(Tween::easeInOut(1.0f, 0.0f, transitionFrame, TRANSITION_DURATION)));
 			for (auto e : mainScreen) {
-				e->setColor(
-					Tween::fade(Tween::linear(0.0f, 1.0f, transitionFrame, TRANSITION_DURATION)));
+				e->setColor(Tween::fade(
+					Tween::easeInOut(0.0f, 1.0f, transitionFrame, TRANSITION_DURATION)));
 			}
 
 			bg1glow->setColor(
-				Tween::fade(Tween::linear(0.0f, 1.0f, transitionFrame, TRANSITION_DURATION)));
+				Tween::fade(Tween::easeInOut(0.0f, 1.0f, transitionFrame, TRANSITION_DURATION)));
 			bg2ship->setColor(
-				Tween::fade(Tween::linear(0.0f, 1.0f, transitionFrame, TRANSITION_DURATION)));
+				Tween::fade(Tween::easeInOut(0.0f, 1.0f, transitionFrame, TRANSITION_DURATION)));
 
 			bg3land->setPositionY(Tween::easeInOut(screenHeight / CREDITS_BG_POS, screenHeight / 2,
 												   transitionFrame, TRANSITION_DURATION));
@@ -535,7 +535,7 @@ void MainMenuMode::processTransition() {
 														 screenHeight / 2, transitionFrame,
 														 TRANSITION_DURATION));
 			bg3land->setColor(
-				Tween::fade(Tween::linear(0.0f, 1.0f, transitionFrame, TRANSITION_DURATION)));
+				Tween::fade(Tween::easeInOut(0.0f, 1.0f, transitionFrame, TRANSITION_DURATION)));
 		}
 		default:
 			break;
