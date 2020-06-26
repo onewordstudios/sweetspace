@@ -37,6 +37,12 @@ constexpr float CREDITS_DURATION = 4500;
 /** How much more to increment the credit scroll frame when tapping to go faster */
 constexpr unsigned int FAST_CREDITS_SCROLL_INCREMENT = 5;
 
+/** Divisor of screen height to get credits bg position */
+constexpr float CREDITS_BG_POS = 2.5;
+
+/** Divisor of screen height to get ship flight destination position */
+constexpr float SHIP_FLY_POS = 1.5;
+
 /**
  * Current frame of the credits scroll (there's only ever one credits screen, so it's safe to
  * stick this here)
@@ -81,6 +87,7 @@ bool MainMenuMode::init(const std::shared_ptr<AssetManager>& assets) {
 	bg1glow = assets->get<Node>("matchmaking_mainmenubg3");
 	bg2ship = assets->get<Node>("matchmaking_mainmenubg4");
 	bg3land = assets->get<Node>("matchmaking_mainmenubg5");
+	bg4landNoShip = assets->get<Node>("matchmaking_mainmenubg6");
 	bg9studio = assets->get<Node>("matchmaking_studiologo");
 
 	creditsBtn = std::dynamic_pointer_cast<Button>(assets->get<Node>("matchmaking_creditsbtn"));
@@ -151,6 +158,8 @@ bool MainMenuMode::init(const std::shared_ptr<AssetManager>& assets) {
 	credits->setVisible(false);
 	clientEnteredRoom.clear();
 	clientWaitHost->setVisible(false);
+	bg2ship->setColor(Color4::WHITE);
+	bg2ship->setPositionY(0);
 
 	updateClientLabel();
 	addChild(scene);
@@ -172,6 +181,14 @@ void MainMenuMode::triggerCredits() {
  */
 void MainMenuMode::dispose() {
 	removeAllChildren();
+
+	bg0stars = nullptr;
+	bg1glow = nullptr;
+	bg2ship = nullptr;
+	bg3land = nullptr;
+	bg4landNoShip = nullptr;
+	bg9studio = nullptr;
+
 	backBtn = nullptr;
 	hostBtn = nullptr;
 	clientBtn = nullptr;
@@ -302,11 +319,17 @@ void MainMenuMode::processTransition() {
 				for (auto e : mainScreen) {
 					e->setVisible(false);
 				}
+				bg2ship->setPositionY(screenHeight / 2);
+				bg2ship->setVisible(false);
 			} else {
 				for (auto e : mainScreen) {
 					e->setColor(Tween::fade(
 						Tween::linear(1.0f, 0.0f, transitionFrame, TRANSITION_DURATION)));
 				}
+				bg2ship->setPositionY(Tween::easeIn(screenHeight / 2, screenHeight / SHIP_FLY_POS,
+													transitionFrame, TRANSITION_DURATION));
+				bg2ship->setColor(
+					Tween::fade(Tween::linear(1.0f, 0.0f, transitionFrame, TRANSITION_DURATION)));
 				switch (transitionState) {
 					// Host screen case unneeded b/c waiting for host room before playing transition
 					case ClientScreen: {
@@ -324,6 +347,7 @@ void MainMenuMode::processTransition() {
 					case Credits: {
 						if (transitionFrame == 1) {
 							backBtn->setVisible(true);
+							bg4landNoShip->setVisible(true);
 						}
 
 						backBtn->setColor(Tween::fade(
@@ -331,11 +355,19 @@ void MainMenuMode::processTransition() {
 
 						bg1glow->setColor(Tween::fade(
 							Tween::linear(1.0f, 0.0f, transitionFrame, TRANSITION_DURATION)));
-						bg2ship->setColor(Tween::fade(
+
+						bg3land->setPositionY(
+							Tween::easeInOut(screenHeight / 2, screenHeight / CREDITS_BG_POS,
+											 transitionFrame, TRANSITION_DURATION));
+						bg4landNoShip->setPositionY(
+							Tween::easeInOut(screenHeight / 2, screenHeight / CREDITS_BG_POS,
+											 transitionFrame, TRANSITION_DURATION));
+						bg3land->setColor(Tween::fade(
 							Tween::linear(1.0f, 0.0f, transitionFrame, TRANSITION_DURATION)));
 
-						bg3land->setPositionY(Tween::easeOut(screenHeight / 2, screenHeight / 3,
-															 transitionFrame, TRANSITION_DURATION));
+						if (transitionFrame == TRANSITION_DURATION) {
+							bg3land->setVisible(false);
+						}
 
 						break;
 					}
@@ -402,6 +434,7 @@ void MainMenuMode::processTransition() {
 					for (auto e : mainScreen) {
 						e->setVisible(true);
 					}
+					bg2ship->setVisible(true);
 				}
 
 				// Transition over
@@ -428,6 +461,9 @@ void MainMenuMode::processTransition() {
 				}
 				backBtn->setColor(
 					Tween::fade(Tween::linear(1.0f, 0.0f, transitionFrame, TRANSITION_DURATION)));
+
+				bg2ship->setColor(
+					Tween::fade(Tween::linear(0.0f, 1.0f, transitionFrame, TRANSITION_DURATION)));
 
 				return;
 			}
@@ -466,6 +502,8 @@ void MainMenuMode::processTransition() {
 				for (auto e : mainScreen) {
 					e->setVisible(true);
 				}
+				bg3land->setVisible(true);
+				bg2ship->setVisible(true);
 			}
 
 			// Transition over
@@ -473,25 +511,31 @@ void MainMenuMode::processTransition() {
 				endTransition();
 				credits->setVisible(false);
 				backBtn->setVisible(false);
+				bg4landNoShip->setVisible(false);
 				return;
 			}
 
 			credits->setColor(
-				Tween::fade(Tween::linear(1.0f, 0.0f, transitionFrame, TRANSITION_DURATION)));
+				Tween::fade(Tween::easeInOut(1.0f, 0.0f, transitionFrame, TRANSITION_DURATION)));
 			backBtn->setColor(
-				Tween::fade(Tween::linear(1.0f, 0.0f, transitionFrame, TRANSITION_DURATION)));
+				Tween::fade(Tween::easeInOut(1.0f, 0.0f, transitionFrame, TRANSITION_DURATION)));
 			for (auto e : mainScreen) {
-				e->setColor(
-					Tween::fade(Tween::linear(0.0f, 1.0f, transitionFrame, TRANSITION_DURATION)));
+				e->setColor(Tween::fade(
+					Tween::easeInOut(0.0f, 1.0f, transitionFrame, TRANSITION_DURATION)));
 			}
 
 			bg1glow->setColor(
-				Tween::fade(Tween::linear(0.0f, 1.0f, transitionFrame, TRANSITION_DURATION)));
+				Tween::fade(Tween::easeInOut(0.0f, 1.0f, transitionFrame, TRANSITION_DURATION)));
 			bg2ship->setColor(
-				Tween::fade(Tween::linear(0.0f, 1.0f, transitionFrame, TRANSITION_DURATION)));
+				Tween::fade(Tween::easeInOut(0.0f, 1.0f, transitionFrame, TRANSITION_DURATION)));
 
-			bg3land->setPositionY(Tween::easeOut(screenHeight / 3, screenHeight / 2,
-												 transitionFrame, TRANSITION_DURATION));
+			bg3land->setPositionY(Tween::easeInOut(screenHeight / CREDITS_BG_POS, screenHeight / 2,
+												   transitionFrame, TRANSITION_DURATION));
+			bg4landNoShip->setPositionY(Tween::easeInOut(screenHeight / CREDITS_BG_POS,
+														 screenHeight / 2, transitionFrame,
+														 TRANSITION_DURATION));
+			bg3land->setColor(
+				Tween::fade(Tween::easeInOut(0.0f, 1.0f, transitionFrame, TRANSITION_DURATION)));
 		}
 		default:
 			break;
