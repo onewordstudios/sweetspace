@@ -133,11 +133,7 @@ bool ShipModel::createButton(float angle1, int id1, float angle2, int id2) {
 	return true;
 }
 
-bool ShipModel::flagButton(int id) {
-	// TODO: we shouldnt need to check this
-	if (id >= buttons.size()) return false;
-	return buttons[id]->trigger();
-}
+bool ShipModel::flagButton(int id) { return buttons[id]->trigger(); }
 
 void ShipModel::resolveButton(int id) {
 	auto btn = buttons.at(id);
