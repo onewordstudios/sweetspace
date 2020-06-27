@@ -767,6 +767,7 @@ void MainMenuMode::update(float timestep) {
 	switch (net->matchStatus()) {
 		case MagicInternetBox::MatchmakingStatus::ClientRoomInvalid:
 		case MagicInternetBox::MatchmakingStatus::ClientRoomFull:
+		case MagicInternetBox::MatchmakingStatus::ClientError:
 			if (currState == ClientScreenSubmitted) {
 				clientEnteredRoom.clear();
 				updateClientLabel();
