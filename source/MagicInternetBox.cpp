@@ -10,7 +10,7 @@ using namespace cugl;
 #pragma region API CONSTANTS
 
 /** The networking server */
-constexpr auto GAME_SERVER = "ws://localhost:8080/";
+constexpr auto GAME_SERVER = "ws://sweetspace-server.herokuapp.com/";
 
 /** API version number. Bump this everytime a backwards incompatible API change happens. */
 constexpr uint8_t API_VER = 0;
