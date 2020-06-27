@@ -7,8 +7,15 @@
 
 using namespace cugl;
 
+#pragma region API CONSTANTS
+
 /** The networking server */
-constexpr auto GAME_SERVER = "ws://sweetspace-server.herokuapp.com/";
+constexpr auto GAME_SERVER = "ws://localhost:8080/";
+
+/** API version number. Bump this everytime a backwards incompatible API change happens. */
+constexpr uint8_t API_VER = 0;
+
+#pragma endregion
 
 /** The precision to multiply floating point numbers by */
 constexpr float FLOAT_PRECISION = 10.0f;
@@ -75,6 +82,7 @@ bool MagicInternetBox::initHost() {
 
 	std::vector<uint8_t> data;
 	data.push_back((uint8_t)NetworkDataType::AssignedRoom);
+	data.push_back(API_VER);
 	ws->sendBinary(data);
 	this->playerID = 0;
 	this->numPlayers = 1;
@@ -94,6 +102,7 @@ bool MagicInternetBox::initClient(std::string id) {
 	for (unsigned int i = 0; i < globals::ROOM_LENGTH; i++) {
 		data.push_back((uint8_t)id.at(i));
 	}
+	data.push_back(API_VER);
 	ws->sendBinary(data);
 	roomID = id;
 	status = ClientConnecting;
@@ -357,6 +366,15 @@ void MagicInternetBox::update() {
 		NetworkDataType type = static_cast<NetworkDataType>(message[0]);
 
 		switch (type) {
+			case ApiMismatch: {
+				CULog("API Mismatch Occured; Aborting");
+				if (playerID == 0) {
+					status = HostApiMismatch;
+				} else {
+					status = ClientError;
+				}
+				return;
+			}
 			case AssignedRoom: {
 				std::stringstream newRoomId;
 				for (unsigned int i = 0; i < globals::ROOM_LENGTH; i++) {

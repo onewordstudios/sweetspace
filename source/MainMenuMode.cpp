@@ -392,8 +392,9 @@ void MainMenuMode::processTransition() {
 					backBtn->setColor(Tween::fade(
 						Tween::linear(0.0f, 1.0f, transitionFrame, TRANSITION_DURATION)));
 				}
+				break;
 			}
-			break;
+			// Intentional Fall-Through (all the way down to ClientScreen)
 		}
 		case HostScreen:
 			if (transitionState == HostLevelSelect) {
@@ -425,6 +426,8 @@ void MainMenuMode::processTransition() {
 						0, 1, transitionFrame - halfTransition, TRANSITION_DURATION)));
 				}
 				return;
+			} else {
+				connScreen->setVisible(false);
 			}
 			// Intentional fall-through
 		case ClientScreen: {
@@ -556,10 +559,19 @@ void MainMenuMode::processUpdate() {
 			} else {
 				connScreen->setVisible(true);
 			}
-			if (net->matchStatus() == MagicInternetBox::MatchmakingStatus::HostError) {
-				connScreen->setText("Error Connecting :(");
-				backBtn->setVisible(true);
-				backBtn->setColor(cugl::Color4::WHITE);
+			switch (net->matchStatus()) {
+				case MagicInternetBox::MatchmakingStatus::HostError:
+					connScreen->setText("Error Connecting :(");
+					backBtn->setVisible(true);
+					backBtn->setColor(cugl::Color4::WHITE);
+					break;
+				case MagicInternetBox::MatchmakingStatus::HostApiMismatch:
+					connScreen->setText("Please update");
+					backBtn->setVisible(true);
+					backBtn->setColor(cugl::Color4::WHITE);
+					break;
+				default:
+					break;
 			}
 			break;
 		}
@@ -639,6 +651,20 @@ void MainMenuMode::processButtons() {
 				clientScreen->setVisible(true);
 			} else if (buttonManager.tappedButton(creditsBtn, tapData)) {
 				triggerCredits();
+			}
+			break;
+		}
+		case HostScreenWait: {
+			auto status = net->matchStatus();
+			if (status != MagicInternetBox::MatchmakingStatus::HostError &&
+				status != MagicInternetBox::MatchmakingStatus::HostApiMismatch) {
+				break;
+			}
+			if (buttonManager.tappedButton(backBtn, tapData)) {
+				CULog("Going Back");
+				startHostThread->detach();
+				net->forceDisconnect();
+				transitionState = StartScreen;
 			}
 			break;
 		}

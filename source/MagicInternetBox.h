@@ -30,6 +30,8 @@ class MagicInternetBox {
 		HostConnecting = 0,
 		/** Connected and room ID assigned; waiting for other players */
 		HostWaitingOnOthers,
+		/** Client API is too old for server */
+		HostApiMismatch,
 		/** Unknown error as host */
 		HostError,
 		/** Connecting to server; player ID not assigned yet */
@@ -138,7 +140,8 @@ class MagicInternetBox {
 
 		// Matchmaking messages only
 		AssignedRoom = 100, // Doubles for both creating and created
-		JoinRoom			// Doubles for both joining and join response
+		JoinRoom,			// Doubles for both joining and join response
+		ApiMismatch			// Client API version is too old
 	};
 
 	/**
