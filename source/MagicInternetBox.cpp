@@ -305,7 +305,7 @@ void MagicInternetBox::resolveState(std::shared_ptr<ShipModel> state,
 				(float)(message[index + 1] + ONE_BYTE * message[index + 2]) / FLOAT_PRECISION;
 			if (abs(btns[i]->getAngle() - angle) > FLOAT_EPSILON) {
 				CULog("Found fixed button that should be broken, id %d", i);
-				if (btnCache.find(message[index + 3]) == btnCache.end()) {
+				if (btnCache.count(message[index + 3]) == 0) {
 					// Haven't found button yet
 					btnCache[message[index + 3]] = angle;
 				} else {
@@ -316,7 +316,7 @@ void MagicInternetBox::resolveState(std::shared_ptr<ShipModel> state,
 		} else {
 			if (btns[i]->getIsActive()) {
 				CULog("Found active button that should be fixed, id %d; resolving both", i);
-				state->resolveButton(i);
+				state->resolveButton((int)i);
 			}
 		}
 
