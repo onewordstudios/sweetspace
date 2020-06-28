@@ -39,8 +39,6 @@ class GameMode {
 	/** The Ship model */
 	std::shared_ptr<ShipModel> ship;
 
-	/** Local record of Player ID */
-	int playerID;
 	/** Whether to go back to main menu */
 	bool isBackToMainMenu;
 
@@ -85,12 +83,7 @@ class GameMode {
 	 * This constructor does not allocate any objects or start the game.
 	 * This allows us to use the object without a heap pointer.
 	 */
-	GameMode()
-		: input(nullptr),
-		  soundEffects(nullptr),
-		  net(nullptr),
-		  playerID(-1),
-		  isBackToMainMenu(false) {}
+	GameMode() : input(nullptr), soundEffects(nullptr), net(nullptr), isBackToMainMenu(false) {}
 
 	/**
 	 * Disposes of all (non-static) resources allocated to this mode.
