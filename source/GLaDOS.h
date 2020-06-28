@@ -21,9 +21,6 @@ class GLaDOS {
 	/** Whether or not this input is active */
 	bool active;
 
-	/** Current player ID */
-	unsigned int playerID;
-
 	/** The state of the ship */
 	std::shared_ptr<ShipModel> ship;
 

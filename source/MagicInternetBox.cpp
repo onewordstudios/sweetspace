@@ -55,7 +55,7 @@ bool MagicInternetBox::initConnection() {
 	// I actually don't know what this stuff does but it won't run on Windows without it,
 	// so ¯\_(ツ)_/¯
 #ifdef _WIN32
-	INT rc;
+	INT rc; // NOLINT
 	WSADATA wsaData;
 
 	rc = WSAStartup(MAKEWORD(2, 2), &wsaData);
@@ -111,7 +111,7 @@ bool MagicInternetBox::initClient(std::string id) {
 }
 
 bool MagicInternetBox::reconnect(std::string id) {
-	if (!initConnection()) {
+	if (!initConnection() || playerID < 0) {
 		status = ReconnectError;
 		return false;
 	}
@@ -121,6 +121,7 @@ bool MagicInternetBox::reconnect(std::string id) {
 	for (unsigned int i = 0; i < globals::ROOM_LENGTH; i++) {
 		data.push_back((uint8_t)id.at(i));
 	}
+	data.push_back(playerID);
 	ws->sendBinary(data);
 	roomID = id;
 	status = Reconnecting;
@@ -285,6 +286,8 @@ MagicInternetBox::MatchmakingStatus MagicInternetBox::matchStatus() { return sta
 
 void MagicInternetBox::leaveRoom() {}
 
+#pragma region Getters
+
 std::string MagicInternetBox::getRoomID() { return roomID; }
 
 int MagicInternetBox::getPlayerID() { return playerID; }
@@ -292,6 +295,8 @@ int MagicInternetBox::getPlayerID() { return playerID; }
 unsigned int MagicInternetBox::getNumPlayers() { return numPlayers; }
 
 bool MagicInternetBox::isPlayerActive(unsigned int playerID) { return activePlayers.at(playerID); }
+
+#pragma endregion
 
 void MagicInternetBox::startGame(int levelNum) {
 	switch (status) {
@@ -410,27 +415,16 @@ void MagicInternetBox::update() {
 						ws->close();
 						return;
 					}
-					case 3: {
-						// Reconnecting success
-						if (status != Reconnecting) {
-							CULog(
-								"ERROR: Received reconnecting response from server when not "
-								"reconnecting");
-							return;
-						}
-						status = GameStart;
-						playerID = message[2];
-						numPlayers = message[3];
-						return;
-					}
+					case 3:
 					case 4: {
+						// Reconnecting
 						if (status != Reconnecting) {
 							CULog(
 								"ERROR: Received reconnecting response from server when not "
 								"reconnecting");
 							return;
 						}
-						status = ReconnectError;
+						status = message[1] == 3 ? GameStart : ReconnectError;
 						return;
 					}
 				}

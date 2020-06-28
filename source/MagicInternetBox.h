@@ -296,8 +296,7 @@ class MagicInternetBox {
 	/**
 	 * Returns whether the specified player ID is active.
 	 *
-	 * PRECONDITION: The playerID
-	 * must be valid.
+	 * PRECONDITION: The playerID must be valid.
 	 */
 	bool isPlayerActive(unsigned int playerID);
 

@@ -20,7 +20,6 @@ constexpr int MAX_ATTEMPTS = 120;
  */
 GLaDOS::GLaDOS()
 	: active(false),
-	  playerID(0),
 	  mib(nullptr),
 	  fail(false),
 	  maxEvents(0),
@@ -56,7 +55,6 @@ bool GLaDOS::init(std::shared_ptr<ShipModel> ship, std::shared_ptr<LevelModel> l
 	this->ship = ship;
 	this->mib = MagicInternetBox::getInstance();
 	levelNum = mib->getLevelNum();
-	this->playerID = mib->getPlayerID();
 	maxEvents = (int)ship->getBreaches().size();
 	maxDoors = (int)ship->getDoors().size();
 	maxButtons = (int)ship->getButtons().size();
@@ -99,7 +97,6 @@ bool GLaDOS::init(std::shared_ptr<ShipModel> ship, const int levelNum) {
 	this->mib = MagicInternetBox::getInstance();
 	this->levelNum = levelNum;
 	CULog("Starting level %d", levelNum);
-	this->playerID = mib->getPlayerID();
 	maxEvents = tutorial::MAX_BREACH.at(levelNum) * mib->getNumPlayers() / globals::MIN_PLAYERS;
 	maxDoors = tutorial::MAX_DOOR.at(levelNum) * mib->getNumPlayers() / globals::MIN_PLAYERS;
 	maxButtons = tutorial::MAX_BUTTON.at(levelNum) * mib->getNumPlayers() / globals::MIN_PLAYERS;
@@ -250,7 +247,7 @@ void GLaDOS::placeObject(BuildingBlockModel::Object obj, float zeroAngle, int p)
 		case BuildingBlockModel::Roll: {
 			auto& stabilizer = ship->getStabilizer();
 			if (stabilizer.getIsActive()) break;
-			if (p != playerID && ship->getDonuts().at(p)->getIsActive()) {
+			if (p != mib->getPlayerID() && ship->getDonuts().at(p)->getIsActive()) {
 				mib->createAllTask(p);
 			} else {
 				stabilizer.startChallenge(ship->timePassed());
@@ -325,7 +322,7 @@ void GLaDOS::update(float dt) {
 	}
 
 	// Check if this is the host for generating breaches and doors
-	if (playerID != 0) {
+	if (mib->getPlayerID() != 0) {
 		return;
 	}
 
@@ -539,7 +536,7 @@ void GLaDOS::tutorialLevels(float dt) {
 					break;
 				case ShipModel::INACTIVE: {
 					// Hopefully after animation is done, it will always be set to inactive
-					if (customEventCtr != playerID &&
+					if (customEventCtr != mib->getPlayerID() &&
 						ship->getDonuts().at(customEventCtr)->getIsActive()) {
 						mib->createAllTask(customEventCtr);
 					} else {
@@ -557,7 +554,7 @@ void GLaDOS::tutorialLevels(float dt) {
 						ship->initTimer(0);
 						break;
 					}
-					if (customEventCtr != playerID &&
+					if (customEventCtr != mib->getPlayerID() &&
 						ship->getDonuts().at(customEventCtr)->getIsActive()) {
 						mib->createAllTask(customEventCtr);
 					} else {
