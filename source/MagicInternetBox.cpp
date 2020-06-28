@@ -184,6 +184,7 @@ void MagicInternetBox::syncState(std::shared_ptr<ShipModel> state) {
 	data.push_back((uint8_t)(timer % ONE_BYTE));
 	data.push_back((uint8_t)(timer / ONE_BYTE));
 
+	// Send Doors
 	const auto& doors = state->getDoors();
 	data.push_back((uint8_t)doors.size());
 	for (unsigned int i = 0; i < doors.size(); i++) {
@@ -200,6 +201,7 @@ void MagicInternetBox::syncState(std::shared_ptr<ShipModel> state) {
 		}
 	}
 
+	// Send Breaches
 	const auto& breaches = state->getBreaches();
 	data.push_back((uint8_t)breaches.size());
 	for (unsigned int i = 0; i < breaches.size(); i++) {
@@ -210,6 +212,26 @@ void MagicInternetBox::syncState(std::shared_ptr<ShipModel> state) {
 		data.push_back((uint8_t)(d3 % ONE_BYTE));
 		data.push_back((uint8_t)(d3 / ONE_BYTE));
 	}
+
+	// Send Buttons
+	const auto& btns = state->getButtons();
+	data.push_back((uint8_t)btns.size());
+	for (unsigned int i = 0; i < btns.size(); i++) {
+		if (!btns[i]->getIsActive()) {
+			data.push_back(0);
+			data.push_back(0);
+			data.push_back(0);
+			data.push_back(0);
+		} else {
+			data.push_back(1);
+
+			int d3 = (int)(FLOAT_PRECISION * btns[i]->getAngle());
+			data.push_back((uint8_t)(d3 % ONE_BYTE));
+			data.push_back((uint8_t)(d3 / ONE_BYTE));
+			data.push_back((uint8_t)btns[i]->getPairID());
+		}
+	}
+
 	ws->sendBinary(data);
 }
 
@@ -266,6 +288,38 @@ void MagicInternetBox::resolveState(std::shared_ptr<ShipModel> state,
 			CULog("Found unresolved breach that should be resolved, id %d", i);
 			state->resolveBreach((int)i);
 		}
+		index += 4;
+	}
+
+	const auto& btns = state->getButtons();
+	if (btns.size() != message[index++]) {
+		CULog("ERROR: BUTTON ARRAY SIZE DISCREPANCY; local %lu but server %d", btns.size(),
+			  message[index - 1]);
+		return;
+	}
+	// Map of ID of unpaired buttons to their angles
+	std::unordered_map<int, float> btnCache;
+	for (unsigned int i = 0; i < btns.size(); i++) {
+		if (message[index]) {
+			float angle =
+				(float)(message[index + 1] + ONE_BYTE * message[index + 2]) / FLOAT_PRECISION;
+			if (abs(btns[i]->getAngle() - angle) > FLOAT_EPSILON) {
+				CULog("Found fixed button that should be broken, id %d", i);
+				if (btnCache.find(message[index + 3]) == btnCache.end()) {
+					// Haven't found button yet
+					btnCache[message[index + 3]] = angle;
+				} else {
+					int pairID = message[index + 3];
+					state->createButton(btnCache[pairID], pairID, angle, (int)i);
+				}
+			}
+		} else {
+			if (btns[i]->getIsActive()) {
+				CULog("Found active button that should be fixed, id %d; resolving both", i);
+				state->resolveButton(i);
+			}
+		}
+
 		index += 4;
 	}
 }
