@@ -73,7 +73,6 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 	// Network Initialization
 	net = MagicInternetBox::getInstance();
 	playerID = net->getPlayerID();
-	roomId = net->getRoomID();
 
 	if (net->getLevelNum() >= MAX_NUM_LEVELS) {
 		// Reached end of game
@@ -422,7 +421,7 @@ bool GameMode::connectionUpdate(float timestep) {
 		case MagicInternetBox::Disconnected:
 		case MagicInternetBox::ClientRoomInvalid:
 		case MagicInternetBox::ReconnectError:
-			if (net->reconnect(roomId)) {
+			if (net->reconnect()) {
 				net->update();
 			}
 			sgRoot.setStatus(GameGraphRoot::Reconnecting);

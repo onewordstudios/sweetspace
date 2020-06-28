@@ -145,18 +145,6 @@ class GLaDOS {
 #pragma mark Accessors
 
 	/**
-	 * Sets the current player id of this gm.
-	 *
-	 * @param health New gm player id.
-	 */
-	void setPlayerId(int value) { playerID = value; }
-
-	/**
-	 * Gets the current player id of this gm.
-	 */
-	int getPlayerId() { return (int)playerID; }
-
-	/**
 	 * Gets if all player challenge failed.
 	 */
 	bool challengeFail() { return fail; }

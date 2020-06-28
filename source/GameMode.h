@@ -41,8 +41,6 @@ class GameMode {
 
 	/** Local record of Player ID */
 	int playerID;
-	/** Local record of Room ID */
-	std::string roomId;
 	/** Whether to go back to main menu */
 	bool isBackToMainMenu;
 
@@ -92,7 +90,6 @@ class GameMode {
 		  soundEffects(nullptr),
 		  net(nullptr),
 		  playerID(-1),
-		  roomId(""),
 		  isBackToMainMenu(false) {}
 
 	/**

@@ -110,8 +110,8 @@ bool MagicInternetBox::initClient(std::string id) {
 	return true;
 }
 
-bool MagicInternetBox::reconnect(std::string id) {
-	if (!initConnection() || playerID < 0) {
+bool MagicInternetBox::reconnect() {
+	if (!initConnection() || playerID < 0 || roomID == "") {
 		status = ReconnectError;
 		return false;
 	}
@@ -119,11 +119,10 @@ bool MagicInternetBox::reconnect(std::string id) {
 	std::vector<uint8_t> data;
 	data.push_back((uint8_t)NetworkDataType::JoinRoom);
 	for (unsigned int i = 0; i < globals::ROOM_LENGTH; i++) {
-		data.push_back((uint8_t)id.at(i));
+		data.push_back((uint8_t)roomID.at(i));
 	}
 	data.push_back(playerID);
 	ws->sendBinary(data);
-	roomID = id;
 	status = Reconnecting;
 
 	return true;

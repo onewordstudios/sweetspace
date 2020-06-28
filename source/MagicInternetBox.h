@@ -240,11 +240,12 @@ class MagicInternetBox {
 	 * Will attempt to rejoin the room. Query {@link matchStatus()} over the next few frames to see
 	 * the progress. If {@code GameEnded} is returned, then the room does not have a valid game
 	 * going at this time.
+	 * Should only be called when this controller has a cached playerID and roomID. Otherwise, will
+	 * fail.
 	 *
-	 * @param id The room ID
 	 * @returns Whether a connection was successfully established
 	 */
-	bool reconnect(std::string id);
+	bool reconnect();
 
 	/**
 	 * Query the current matchmaking status
