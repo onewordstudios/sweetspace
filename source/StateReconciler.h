@@ -22,7 +22,7 @@ class StateReconciler {
 	/** Decode a float from the two bytes in the network packet */
 	constexpr float DECODE_FLOAT(uint8_t m1, uint8_t m2);
 	/** Encode a float and append it to the end of the given vector */
-	void ENCODE_FLOAT(float f, std::vector<uint8_t>& out);
+	void encodeFloat(float f, std::vector<uint8_t>& out);
 
 	/** Cache of previously unconforming breaches. Bool = active, float = position. */
 	std::unordered_map<unsigned int, bool> breachCache;

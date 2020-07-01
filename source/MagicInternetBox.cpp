@@ -179,28 +179,6 @@ void MagicInternetBox::sendData(NetworkDataType type, float angle, int id, int d
 	ws->sendBinary(data);
 }
 
-#pragma region State Sync
-
-void MagicInternetBox::syncState(std::shared_ptr<ShipModel> state) {
-	if (state->isLevelOver()) {
-		return;
-	}
-	std::vector<uint8_t> data;
-	data.push_back(StateSync);
-	stateReconciler.encode(state, data);
-	ws->sendBinary(data);
-}
-
-void MagicInternetBox::resolveState(std::shared_ptr<ShipModel> state,
-									const std::vector<uint8_t>& message) {
-	if (!stateReconciler.reconcile(state, message)) {
-		CULog("Should abort level");
-		// TODO abort level properly
-	}
-}
-
-#pragma endregion
-
 MagicInternetBox::MatchmakingStatus MagicInternetBox::matchStatus() { return status; }
 
 void MagicInternetBox::leaveRoom() {}
@@ -388,7 +366,12 @@ void MagicInternetBox::update(std::shared_ptr<ShipModel> state) {
 		// STATE SYNC (and check for server connection)
 		if (currFrame == 0) {
 			if (playerID == 0) {
-				syncState(state);
+				if (!state->isLevelOver()) {
+					std::vector<uint8_t> data;
+					data.push_back(StateSync);
+					stateReconciler.encode(state, data);
+					ws->sendBinary(data);
+				}
 			}
 			if (lastConnection > SERVER_TIMEOUT) {
 				CULog("HAS NOT RECEIVED SERVER MESSAGE IN TIMEOUT FRAMES; assuming disconnected");
@@ -432,7 +415,10 @@ void MagicInternetBox::update(std::shared_ptr<ShipModel> state) {
 			}
 			case StateSync: {
 				if (!state->isLevelOver()) {
-					resolveState(state, message);
+					if (!stateReconciler.reconcile(state, message)) {
+						CULog("Should abort level");
+						// TODO abort level properly
+					}
 				}
 				return;
 			}

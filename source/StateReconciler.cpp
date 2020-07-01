@@ -4,7 +4,7 @@ constexpr float StateReconciler::DECODE_FLOAT(uint8_t m1, uint8_t m2) {
 	return (float)(m1 + oneByte * m2) / floatPrecision;
 }
 
-void StateReconciler::ENCODE_FLOAT(float f, std::vector<uint8_t>& out) {
+void StateReconciler::encodeFloat(float f, std::vector<uint8_t>& out) {
 	int ff = (int)(f * floatPrecision);
 	out.push_back((uint8_t)(ff % oneByte));
 	out.push_back((uint8_t)(ff / oneByte));
@@ -19,8 +19,8 @@ StateReconciler::StateReconciler(unsigned int oneByte, float floatPrecision, flo
 void StateReconciler::encode(std::shared_ptr<ShipModel> state, std::vector<uint8_t>& data) {
 	// Adding health and timer
 	auto health = state->getHealth();
-	ENCODE_FLOAT(health < 0 ? 0 : health, data);
-	ENCODE_FLOAT(state->timeLeftInTimer, data);
+	encodeFloat(health < 0 ? 0 : health, data);
+	encodeFloat(state->timeLeftInTimer, data);
 
 	// Send Breaches
 	const auto& breaches = state->getBreaches();
@@ -28,7 +28,7 @@ void StateReconciler::encode(std::shared_ptr<ShipModel> state, std::vector<uint8
 	for (unsigned int i = 0; i < breaches.size(); i++) {
 		data.push_back(breaches[i]->getHealth());
 		data.push_back(breaches[i]->getPlayer());
-		ENCODE_FLOAT(breaches[i]->getAngle(), data);
+		encodeFloat(breaches[i]->getAngle(), data);
 	}
 
 	// Send Doors
@@ -41,7 +41,7 @@ void StateReconciler::encode(std::shared_ptr<ShipModel> state, std::vector<uint8
 			data.push_back(0);
 		} else {
 			data.push_back(1);
-			ENCODE_FLOAT(doors[i]->getAngle(), data);
+			encodeFloat(doors[i]->getAngle(), data);
 		}
 	}
 
@@ -56,7 +56,7 @@ void StateReconciler::encode(std::shared_ptr<ShipModel> state, std::vector<uint8
 			data.push_back(0);
 		} else {
 			data.push_back(1);
-			ENCODE_FLOAT(btns[i]->getAngle(), data);
+			encodeFloat(btns[i]->getAngle(), data);
 			data.push_back((uint8_t)btns[i]->getPairID());
 		}
 	}
