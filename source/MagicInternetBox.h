@@ -6,6 +6,7 @@
 #include <array>
 
 #include "ShipModel.h"
+#include "StateReconciler.h"
 #include "libraries/easywsclient.hpp"
 
 /**
@@ -105,6 +106,9 @@ class MagicInternetBox {
 	/** Array representing active and inactive players */
 	std::array<bool, globals::MAX_PLAYERS> activePlayers;
 
+	/** Helper controller to reconcile states during state sync */
+	StateReconciler stateReconciler;
+
 	/**
 	 * Number of frames since the last inbound server message
 	 */
@@ -190,18 +194,7 @@ class MagicInternetBox {
 	 * Call one of the init methods to connect and stuff.
 	 * This constructor is private, as this class is a singleton.
 	 */
-	MagicInternetBox() : activePlayers() {
-		ws = nullptr;
-		status = Uninitialized;
-		events = None;
-		levelNum = -1;
-		currFrame = 0;
-		playerID = -1;
-		numPlayers = 0;
-		maxPlayers = 0;
-		lastConnection = 0;
-		activePlayers.fill(false);
-	};
+	MagicInternetBox();
 
    public:
 	/**

@@ -29,6 +29,20 @@ std::shared_ptr<MagicInternetBox> MagicInternetBox::instance;
 
 #pragma region Initialization
 
+MagicInternetBox::MagicInternetBox()
+	: activePlayers(), stateReconciler(ONE_BYTE, FLOAT_PRECISION, FLOAT_EPSILON) {
+	ws = nullptr;
+	status = Uninitialized;
+	events = None;
+	levelNum = -1;
+	currFrame = 0;
+	playerID = -1;
+	numPlayers = 0;
+	maxPlayers = 0;
+	lastConnection = 0;
+	activePlayers.fill(false);
+}
+
 bool MagicInternetBox::initConnection() {
 	switch (status) {
 		case Disconnected:
@@ -64,6 +78,7 @@ bool MagicInternetBox::initConnection() {
 		return false;
 	}
 
+	stateReconciler.reset();
 	return true;
 }
 
@@ -184,6 +199,18 @@ void MagicInternetBox::syncState(std::shared_ptr<ShipModel> state) {
 	data.push_back((uint8_t)(timer % ONE_BYTE));
 	data.push_back((uint8_t)(timer / ONE_BYTE));
 
+	// Send Breaches
+	const auto& breaches = state->getBreaches();
+	data.push_back((uint8_t)breaches.size());
+	for (unsigned int i = 0; i < breaches.size(); i++) {
+		data.push_back(breaches[i]->getHealth());
+		data.push_back(breaches[i]->getPlayer());
+
+		int d3 = (int)(FLOAT_PRECISION * breaches[i]->getAngle());
+		data.push_back((uint8_t)(d3 % ONE_BYTE));
+		data.push_back((uint8_t)(d3 / ONE_BYTE));
+	}
+
 	// Send Doors
 	const auto& doors = state->getDoors();
 	data.push_back((uint8_t)doors.size());
@@ -199,18 +226,6 @@ void MagicInternetBox::syncState(std::shared_ptr<ShipModel> state) {
 			data.push_back((uint8_t)(d3 % ONE_BYTE));
 			data.push_back((uint8_t)(d3 / ONE_BYTE));
 		}
-	}
-
-	// Send Breaches
-	const auto& breaches = state->getBreaches();
-	data.push_back((uint8_t)breaches.size());
-	for (unsigned int i = 0; i < breaches.size(); i++) {
-		data.push_back(breaches[i]->getHealth());
-		data.push_back(breaches[i]->getPlayer());
-
-		int d3 = (int)(FLOAT_PRECISION * breaches[i]->getAngle());
-		data.push_back((uint8_t)(d3 % ONE_BYTE));
-		data.push_back((uint8_t)(d3 / ONE_BYTE));
 	}
 
 	// Send Buttons
@@ -237,90 +252,9 @@ void MagicInternetBox::syncState(std::shared_ptr<ShipModel> state) {
 
 void MagicInternetBox::resolveState(std::shared_ptr<ShipModel> state,
 									const std::vector<uint8_t>& message) {
-	float health = (float)(message[1] + ONE_BYTE * message[2]) / FLOAT_PRECISION;
-	float timer = (float)(message[3] + ONE_BYTE * message[4]) / FLOAT_PRECISION;
-	int index = 5; // NOLINT
-
-	if (abs(state->getHealth() - health) > 1.0f) {
-		state->setHealth(health);
-	}
-	if (abs(state->timeLeftInTimer - timer) > 1.0f) {
-		state->timeLeftInTimer = timer;
-	}
-
-	const auto& doors = state->getDoors();
-	if (doors.size() != message[index++]) {
-		CULog("ERROR: DOOR ARRAY SIZE DISCREPANCY; local %lu but server %d", doors.size(),
-			  message[index - 1]);
-		return;
-	}
-	for (unsigned int i = 0; i < doors.size(); i++) {
-		if (message[index]) {
-			float angle =
-				(float)(message[index + 1] + ONE_BYTE * message[index + 2]) / FLOAT_PRECISION;
-			if (abs(doors[i]->getAngle() - angle) > FLOAT_EPSILON) {
-				CULog("Found open door that should be closed, id %d", i);
-				state->createDoor(angle, (int)i);
-			}
-		} else {
-			if (doors[i]->getIsActive()) {
-				CULog("Found closed door that should be open, id %d", i);
-				state->getDoors()[i]->reset();
-			}
-		}
-
-		index += 3;
-	}
-
-	const auto& breaches = state->getBreaches();
-	if (breaches.size() != message[index++]) {
-		CULog("ERROR: BREACH ARRAY SIZE DISCREPANCY; local %lu but server %d", breaches.size(),
-			  message[index - 1]);
-		return;
-	}
-	for (unsigned int i = 0; i < breaches.size(); i++) {
-		if (breaches[i]->getHealth() == 0 && message[index] > 0) {
-			float angle =
-				(float)(message[index + 2] + ONE_BYTE * message[index + 3]) / FLOAT_PRECISION;
-			CULog("Found resolved breach that should be unresolved, id %d", i);
-			state->createBreach(angle, message[index], message[index + 1], (int)i);
-		} else if (breaches[i]->getHealth() > 0 && message[index] == 0) {
-			CULog("Found unresolved breach that should be resolved, id %d", i);
-			state->resolveBreach((int)i);
-		}
-		index += 4;
-	}
-
-	const auto& btns = state->getButtons();
-	if (btns.size() != message[index++]) {
-		CULog("ERROR: BUTTON ARRAY SIZE DISCREPANCY; local %lu but server %d", btns.size(),
-			  message[index - 1]);
-		return;
-	}
-	// Map of ID of unpaired buttons to their angles
-	std::unordered_map<int, float> btnCache;
-	for (unsigned int i = 0; i < btns.size(); i++) {
-		if (message[index]) {
-			float angle =
-				(float)(message[index + 1] + ONE_BYTE * message[index + 2]) / FLOAT_PRECISION;
-			if (abs(btns[i]->getAngle() - angle) > FLOAT_EPSILON) {
-				CULog("Found fixed button that should be broken, id %d", i);
-				if (btnCache.count(message[index + 3]) == 0) {
-					// Haven't found button yet
-					btnCache[message[index + 3]] = angle;
-				} else {
-					int pairID = message[index + 3];
-					state->createButton(btnCache[pairID], pairID, angle, (int)i);
-				}
-			}
-		} else {
-			if (btns[i]->getIsActive()) {
-				CULog("Found active button that should be fixed, id %d; resolving both", i);
-				state->resolveButton((int)i);
-			}
-		}
-
-		index += 4;
+	if (!stateReconciler.reconcile(state, message)) {
+		CULog("Should abort level");
+		// TODO abort level properly
 	}
 }
 
@@ -356,6 +290,7 @@ void MagicInternetBox::startGame(int levelNum) {
 
 	maxPlayers = numPlayers;
 	status = GameStart;
+	stateReconciler.reset();
 }
 
 void MagicInternetBox::restartGame() {
@@ -368,6 +303,7 @@ void MagicInternetBox::restartGame() {
 	data.push_back((uint8_t)0);
 	ws->sendBinary(data);
 	events = RestartLevel;
+	stateReconciler.reset();
 }
 
 void MagicInternetBox::nextLevel() {
@@ -381,6 +317,7 @@ void MagicInternetBox::nextLevel() {
 	ws->sendBinary(data);
 	events = NextLevel;
 	levelNum++;
+	stateReconciler.reset();
 	if (levelNum >= MAX_NUM_LEVELS) {
 		events = EndGame;
 	}
@@ -481,6 +418,7 @@ void MagicInternetBox::update() {
 				status = GameStart;
 				maxPlayers = numPlayers;
 				levelNum = message[1];
+				stateReconciler.reset();
 				return;
 			}
 			default:
@@ -567,6 +505,7 @@ void MagicInternetBox::update(std::shared_ptr<ShipModel> state) {
 						events = EndGame;
 					}
 				}
+				stateReconciler.reset();
 				return;
 			}
 			default:
@@ -725,4 +664,5 @@ void MagicInternetBox::reset() {
 	ws = nullptr;
 	status = Uninitialized;
 	activePlayers.fill(false);
+	stateReconciler.reset();
 }
