@@ -187,66 +187,7 @@ void MagicInternetBox::syncState(std::shared_ptr<ShipModel> state) {
 	}
 	std::vector<uint8_t> data;
 	data.push_back(StateSync);
-
-	// Adding health and timer
-	int health = (int)(FLOAT_PRECISION * state->getHealth());
-	if (health < 0) {
-		health = 0;
-	}
-	data.push_back((uint8_t)(health % ONE_BYTE));
-	data.push_back((uint8_t)(health / ONE_BYTE));
-	int timer = (int)(FLOAT_PRECISION * state->timeLeftInTimer);
-	data.push_back((uint8_t)(timer % ONE_BYTE));
-	data.push_back((uint8_t)(timer / ONE_BYTE));
-
-	// Send Breaches
-	const auto& breaches = state->getBreaches();
-	data.push_back((uint8_t)breaches.size());
-	for (unsigned int i = 0; i < breaches.size(); i++) {
-		data.push_back(breaches[i]->getHealth());
-		data.push_back(breaches[i]->getPlayer());
-
-		int d3 = (int)(FLOAT_PRECISION * breaches[i]->getAngle());
-		data.push_back((uint8_t)(d3 % ONE_BYTE));
-		data.push_back((uint8_t)(d3 / ONE_BYTE));
-	}
-
-	// Send Doors
-	const auto& doors = state->getDoors();
-	data.push_back((uint8_t)doors.size());
-	for (unsigned int i = 0; i < doors.size(); i++) {
-		if (!doors[i]->getIsActive()) {
-			data.push_back(0);
-			data.push_back(0);
-			data.push_back(0);
-		} else {
-			data.push_back(1);
-
-			int d3 = (int)(FLOAT_PRECISION * doors[i]->getAngle());
-			data.push_back((uint8_t)(d3 % ONE_BYTE));
-			data.push_back((uint8_t)(d3 / ONE_BYTE));
-		}
-	}
-
-	// Send Buttons
-	const auto& btns = state->getButtons();
-	data.push_back((uint8_t)btns.size());
-	for (unsigned int i = 0; i < btns.size(); i++) {
-		if (!btns[i]->getIsActive()) {
-			data.push_back(0);
-			data.push_back(0);
-			data.push_back(0);
-			data.push_back(0);
-		} else {
-			data.push_back(1);
-
-			int d3 = (int)(FLOAT_PRECISION * btns[i]->getAngle());
-			data.push_back((uint8_t)(d3 % ONE_BYTE));
-			data.push_back((uint8_t)(d3 / ONE_BYTE));
-			data.push_back((uint8_t)btns[i]->getPairID());
-		}
-	}
-
+	stateReconciler.encode(state, data);
 	ws->sendBinary(data);
 }
 

@@ -21,6 +21,8 @@ class StateReconciler {
 
 	/** Decode a float from the two bytes in the network packet */
 	constexpr float DECODE_FLOAT(uint8_t m1, uint8_t m2);
+	/** Encode a float and append it to the end of the given vector */
+	void ENCODE_FLOAT(float f, std::vector<uint8_t>& out);
 
 	/** Cache of previously unconforming breaches. Bool = active, float = position. */
 	std::unordered_map<unsigned int, bool> breachCache;
@@ -43,6 +45,15 @@ class StateReconciler {
    public:
 	/** Construct a new state reconciler */
 	StateReconciler(unsigned int oneByte, float floatPrecision, float floatEpsilon);
+
+	/**
+	 * Encode the state of the game into the specified vector.
+	 *
+	 * @param state The authoritative copy of the game state. PRECONDITION: Game must be going.
+	 * @param data The vector for the state to be output into. The first element of the vector
+	 * should be prepopulated with the appropriate network flag byte.
+	 */
+	void encode(std::shared_ptr<ShipModel> state, std::vector<uint8_t>& data);
 
 	/**
 	 * Reconcile the state of the game with the incoming message.
