@@ -6,6 +6,7 @@
 #include <array>
 
 #include "ShipModel.h"
+#include "StateReconciler.h"
 #include "libraries/easywsclient.hpp"
 
 /**
@@ -107,6 +108,9 @@ class MagicInternetBox {
 	/** Array representing active and inactive players */
 	std::array<bool, globals::MAX_PLAYERS> activePlayers;
 
+	/** Helper controller to reconcile states during state sync */
+	StateReconciler stateReconciler;
+
 	/**
 	 * Number of frames since the last inbound server message
 	 */
@@ -168,43 +172,11 @@ class MagicInternetBox {
 	void sendData(NetworkDataType type, float angle, int id, int data1, int data2, float data3);
 
 	/**
-	 * Broadcast the state of the ship as host to all other players. Will broadcast status and
-	 * location of all breaches and doors. Does NOT broadcast location and jump status of other
-	 * players, as this data will self-resolve over time and de-syncing on it will not cause issues
-	 * with the gameplay.
-	 *
-	 * Should only be called as host.
-	 *
-	 * @param state The current, definitive state of the ship
-	 */
-	void syncState(std::shared_ptr<ShipModel> state);
-
-	/**
-	 * Compare the current state of the ship with the state given by the host, and will resolve any
-	 * discrepancies in favor of the host.
-	 *
-	 * @param state The current, potentially de-synced state of the ship
-	 * @param message The actual state of the ship message from the host
-	 */
-	void resolveState(std::shared_ptr<ShipModel> state, const std::vector<uint8_t>& message);
-
-	/**
 	 * Create an empty Network Controller instance. Does no initialization.
 	 * Call one of the init methods to connect and stuff.
 	 * This constructor is private, as this class is a singleton.
 	 */
-	MagicInternetBox() : activePlayers() {
-		ws = nullptr;
-		status = Uninitialized;
-		events = None;
-		levelNum = -1;
-		currFrame = 0;
-		playerID = -1;
-		numPlayers = 0;
-		maxPlayers = 0;
-		lastConnection = 0;
-		activePlayers.fill(false);
-	};
+	MagicInternetBox();
 
    public:
 	/**
