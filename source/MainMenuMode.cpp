@@ -501,7 +501,6 @@ void MainMenuMode::processTransition() {
 					clientError->setPositionY(0);
 					clientEnteredRoom.clear();
 					updateClientLabel();
-					currState = ClientScreen;
 					clientJoinBtn->setDown(false);
 				}
 
@@ -525,6 +524,30 @@ void MainMenuMode::processTransition() {
 					Tween::fade(Tween::linear(1, 0, transitionFrame, TRANSITION_DURATION)));
 			}
 
+			break;
+		}
+		case ClientScreenError: {
+			if (transitionFrame == 1) {
+				backBtn->setVisible(true);
+				clientScreen->setVisible(true);
+				clientScreen->setPositionY(-screenHeight);
+			}
+
+			if (transitionFrame > 2 * TRANSITION_DURATION) {
+				clientError->setVisible(false);
+				endTransition();
+			}
+
+			if (transitionFrame < TRANSITION_DURATION) {
+				clientError->setPositionY(
+					Tween::easeIn(0, -screenHeight, transitionFrame, TRANSITION_DURATION));
+
+			} else {
+				clientScreen->setPositionY(Tween::easeOut(
+					-screenHeight, 0, transitionFrame - TRANSITION_DURATION, TRANSITION_DURATION));
+				backBtn->setColor(Tween::fade(Tween::linear(
+					0, 1, transitionFrame - TRANSITION_DURATION, TRANSITION_DURATION)));
+			}
 			break;
 		}
 		case Credits: {
@@ -756,6 +779,11 @@ void MainMenuMode::processButtons() {
 				}
 				break;
 			}
+			break;
+		}
+		case ClientScreenError: {
+			transitionState = ClientScreen;
+			break;
 		}
 		case Credits: {
 			if (buttonManager.tappedButton(backBtn, tapData)) {
