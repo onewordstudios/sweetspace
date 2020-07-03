@@ -7,8 +7,15 @@
 
 using namespace cugl;
 
+#pragma region API CONSTANTS
+
 /** The networking server */
 constexpr auto GAME_SERVER = "ws://sweetspace-server.herokuapp.com/";
+
+/** API version number. Bump this everytime a backwards incompatible API change happens. */
+constexpr uint8_t API_VER = 0;
+
+#pragma endregion
 
 /** The precision to multiply floating point numbers by */
 constexpr float FLOAT_PRECISION = 10.0f;
@@ -62,7 +69,7 @@ bool MagicInternetBox::initConnection() {
 	// I actually don't know what this stuff does but it won't run on Windows without it,
 	// so ¯\_(ツ)_/¯
 #ifdef _WIN32
-	INT rc;
+	INT rc; // NOLINT
 	WSADATA wsaData;
 
 	rc = WSAStartup(MAKEWORD(2, 2), &wsaData);
@@ -90,6 +97,7 @@ bool MagicInternetBox::initHost() {
 
 	std::vector<uint8_t> data;
 	data.push_back((uint8_t)NetworkDataType::AssignedRoom);
+	data.push_back(API_VER);
 	ws->sendBinary(data);
 	this->playerID = 0;
 	this->numPlayers = 1;
@@ -109,6 +117,7 @@ bool MagicInternetBox::initClient(std::string id) {
 	for (unsigned int i = 0; i < globals::ROOM_LENGTH; i++) {
 		data.push_back((uint8_t)id.at(i));
 	}
+	data.push_back(API_VER);
 	ws->sendBinary(data);
 	roomID = id;
 	status = ClientConnecting;
@@ -116,8 +125,8 @@ bool MagicInternetBox::initClient(std::string id) {
 	return true;
 }
 
-bool MagicInternetBox::reconnect(std::string id) {
-	if (!initConnection()) {
+bool MagicInternetBox::reconnect() {
+	if (!initConnection() || playerID < 0 || roomID == "") {
 		status = ReconnectError;
 		return false;
 	}
@@ -125,10 +134,10 @@ bool MagicInternetBox::reconnect(std::string id) {
 	std::vector<uint8_t> data;
 	data.push_back((uint8_t)NetworkDataType::JoinRoom);
 	for (unsigned int i = 0; i < globals::ROOM_LENGTH; i++) {
-		data.push_back((uint8_t)id.at(i));
+		data.push_back((uint8_t)roomID.at(i));
 	}
+	data.push_back(playerID);
 	ws->sendBinary(data);
-	roomID = id;
 	status = Reconnecting;
 
 	return true;
@@ -183,6 +192,8 @@ MagicInternetBox::MatchmakingStatus MagicInternetBox::matchStatus() { return sta
 
 void MagicInternetBox::leaveRoom() {}
 
+#pragma region Getters
+
 std::string MagicInternetBox::getRoomID() { return roomID; }
 
 int MagicInternetBox::getPlayerID() { return playerID; }
@@ -190,6 +201,8 @@ int MagicInternetBox::getPlayerID() { return playerID; }
 unsigned int MagicInternetBox::getNumPlayers() { return numPlayers; }
 
 bool MagicInternetBox::isPlayerActive(unsigned int playerID) { return activePlayers.at(playerID); }
+
+#pragma endregion
 
 void MagicInternetBox::startGame(int levelNum) {
 	switch (status) {
@@ -267,6 +280,15 @@ void MagicInternetBox::update() {
 		NetworkDataType type = static_cast<NetworkDataType>(message[0]);
 
 		switch (type) {
+			case ApiMismatch: {
+				CULog("API Mismatch Occured; Aborting");
+				if (playerID == 0) {
+					status = HostApiMismatch;
+				} else {
+					status = ClientError;
+				}
+				return;
+			}
 			case AssignedRoom: {
 				std::stringstream newRoomId;
 				for (unsigned int i = 0; i < globals::ROOM_LENGTH; i++) {
@@ -302,27 +324,16 @@ void MagicInternetBox::update() {
 						ws->close();
 						return;
 					}
-					case 3: {
-						// Reconnecting success
-						if (status != Reconnecting) {
-							CULog(
-								"ERROR: Received reconnecting response from server when not "
-								"reconnecting");
-							return;
-						}
-						status = GameStart;
-						playerID = message[2];
-						numPlayers = message[3];
-						return;
-					}
+					case 3:
 					case 4: {
+						// Reconnecting
 						if (status != Reconnecting) {
 							CULog(
 								"ERROR: Received reconnecting response from server when not "
 								"reconnecting");
 							return;
 						}
-						status = ReconnectError;
+						status = message[1] == 3 ? GameStart : ReconnectError;
 						return;
 					}
 				}

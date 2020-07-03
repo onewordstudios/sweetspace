@@ -72,8 +72,7 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 
 	// Network Initialization
 	net = MagicInternetBox::getInstance();
-	playerID = net->getPlayerID();
-	roomId = net->getRoomID();
+	int playerID = net->getPlayerID();
 
 	if (net->getLevelNum() >= MAX_NUM_LEVELS) {
 		// Reached end of game
@@ -137,6 +136,7 @@ void GameMode::dispose() {
 #pragma region Collision Handlers
 
 void GameMode::breachCollisions() {
+	int playerID = net->getPlayerID();
 	for (int i = 0; i < ship->getBreaches().size(); i++) {
 		auto breach = ship->getBreaches()[i];
 		if (breach == nullptr || !breach->getIsActive()) {
@@ -177,6 +177,8 @@ void GameMode::breachCollisions() {
 }
 
 void GameMode::doorCollisions() {
+	int playerID = net->getPlayerID();
+
 	// Normal Door
 	for (int i = 0; i < ship->getDoors().size(); i++) {
 		auto door = ship->getDoors()[i];
@@ -337,6 +339,8 @@ void GameMode::updateStabilizer() {
 }
 
 void GameMode::updateDonuts(float timestep) {
+	int playerID = net->getPlayerID();
+
 	// Jump logic check
 	// We wanted donuts to be able to jump on the win screen, but in the absence of that happening
 	// anytime soon, I'm sticking this here for cleanliness
@@ -422,7 +426,7 @@ bool GameMode::connectionUpdate(float timestep) {
 		case MagicInternetBox::Disconnected:
 		case MagicInternetBox::ClientRoomInvalid:
 		case MagicInternetBox::ReconnectError:
-			if (net->reconnect(roomId)) {
+			if (net->reconnect()) {
 				net->update();
 			}
 			sgRoot.setStatus(GameGraphRoot::Reconnecting);
