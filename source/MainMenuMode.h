@@ -159,6 +159,10 @@ class MainMenuMode : public cugl::Scene {
 	std::shared_ptr<cugl::Button> clientClearBtn;
 	/** The label on the host screen shown to the client after joining */
 	std::shared_ptr<cugl::Node> clientWaitHost;
+	/** Screen for client error */
+	std::shared_ptr<cugl::Node> clientError;
+	/** The label on the client error screen */
+	std::shared_ptr<cugl::Label> clientErrorLabel;
 
 	/** Button to credits */
 	std::shared_ptr<cugl::Button> creditsBtn;

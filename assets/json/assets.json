@@ -2360,7 +2360,7 @@
 							},
 							"data": {
 								"font"       : "mont_black_italic_big",
-								"text"       : "That ship ID doesn't seem to exist",
+								"text"       : "That ship ID doesn't seem to existzzzzzzzzzzzzzzzzzzz",
 								"foreground" : [248,231,78,255],
 								"anchor"	 : [0.5,0],
 								"valign"     : "middle",
