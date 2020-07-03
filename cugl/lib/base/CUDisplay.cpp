@@ -440,7 +440,7 @@ bool Display::removeOrientationListener() {
  * @return the aspect for the given aspect ratio.
  */
 Display::Aspect Display::getAspect(float ratio) {
-    const float tolerance = 0.001f;
+    const float tolerance = 0.003f;
     if (CU_MATH_APPROX(ratio, 1.0f, tolerance)) {
         return Aspect::SQUARE;
     } else if (ratio < 1) {
