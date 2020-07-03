@@ -53,6 +53,7 @@ README.md @mt-xing
 /source/main.cpp @mt-xing
 /source/MagicInternetBox.* @mt-xing
 /source/StabilizerModel.* @mt-xing
+/source/StateReconciler.* @mt-xing
 /source/Sweetspace.* @mt-xing
 /source/Tween.* @mt-xing
 
