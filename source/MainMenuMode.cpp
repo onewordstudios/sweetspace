@@ -122,6 +122,10 @@ bool MainMenuMode::init(const std::shared_ptr<AssetManager>& assets) {
 		std::dynamic_pointer_cast<Button>(assets->get<Node>("matchmaking_client_buttons_btnclear"));
 	clientWaitHost = assets->get<Node>("matchmaking_host_wrap_waittext");
 
+	clientError = assets->get<Node>("matchmaking_clienterr");
+	clientErrorLabel =
+		std::dynamic_pointer_cast<Label>(assets->get<Node>("matchmaking_clienterr_errortext"));
+
 	levelSelect = assets->get<Node>("matchmaking_levelselect");
 	for (unsigned int i = 0; i < NUM_LEVEL_BTNS; i++) {
 		levelBtns.at(i) = std::dynamic_pointer_cast<Button>(
@@ -158,6 +162,7 @@ bool MainMenuMode::init(const std::shared_ptr<AssetManager>& assets) {
 	credits->setVisible(false);
 	clientEnteredRoom.clear();
 	clientWaitHost->setVisible(false);
+	clientError->setVisible(false);
 	bg2ship->setColor(Color4::WHITE);
 	bg2ship->setPositionY(0);
 
@@ -203,6 +208,8 @@ void MainMenuMode::dispose() {
 	clientJoinBtn = nullptr;
 	clientClearBtn = nullptr;
 	clientWaitHost = nullptr;
+	clientError = nullptr;
+	clientErrorLabel = nullptr;
 	levelSelect = nullptr;
 	credits = nullptr;
 	creditsBtn = nullptr;
@@ -474,23 +481,42 @@ void MainMenuMode::processTransition() {
 		}
 		case ClientScreenSubmitted: {
 			if (transitionFrame == 1) {
-				hostScreen->setVisible(true);
-				hostScreen->setPositionY(-screenHeight);
-				clientWaitHost->setVisible(true);
+				if (transitionState == ClientScreenDone) {
+					hostScreen->setVisible(true);
+					hostScreen->setPositionY(-screenHeight);
+					clientWaitHost->setVisible(true);
+				} else {
+					clientError->setVisible(true);
+					clientError->setPositionY(-screenHeight);
+				}
 				hostBeginBtn->setVisible(false);
 			}
 
 			if (transitionFrame > 2 * TRANSITION_DURATION) {
 				backBtn->setVisible(false);
 				clientScreen->setVisible(false);
-				hostScreen->setPositionY(0);
+				if (transitionState == ClientScreenDone) {
+					hostScreen->setPositionY(0);
+				} else {
+					clientError->setPositionY(0);
+					clientEnteredRoom.clear();
+					updateClientLabel();
+					clientJoinBtn->setDown(false);
+				}
 
 				endTransition();
 			}
 
 			if (transitionFrame >= TRANSITION_DURATION) {
-				hostScreen->setPositionY(Tween::easeOut(
-					-screenHeight, 0, transitionFrame - TRANSITION_DURATION, TRANSITION_DURATION));
+				if (transitionState == ClientScreenDone) {
+					hostScreen->setPositionY(Tween::easeOut(-screenHeight, 0,
+															transitionFrame - TRANSITION_DURATION,
+															TRANSITION_DURATION));
+				} else {
+					clientError->setPositionY(Tween::easeOut(-screenHeight, 0,
+															 transitionFrame - TRANSITION_DURATION,
+															 TRANSITION_DURATION));
+				}
 			} else {
 				clientScreen->setPositionY(
 					Tween::easeIn(0, -screenHeight, transitionFrame, TRANSITION_DURATION));
@@ -498,6 +524,30 @@ void MainMenuMode::processTransition() {
 					Tween::fade(Tween::linear(1, 0, transitionFrame, TRANSITION_DURATION)));
 			}
 
+			break;
+		}
+		case ClientScreenError: {
+			if (transitionFrame == 1) {
+				backBtn->setVisible(true);
+				clientScreen->setVisible(true);
+				clientScreen->setPositionY(-screenHeight);
+			}
+
+			if (transitionFrame > 2 * TRANSITION_DURATION) {
+				clientError->setVisible(false);
+				endTransition();
+			}
+
+			if (transitionFrame < TRANSITION_DURATION) {
+				clientError->setPositionY(
+					Tween::easeIn(0, -screenHeight, transitionFrame, TRANSITION_DURATION));
+
+			} else {
+				clientScreen->setPositionY(Tween::easeOut(
+					-screenHeight, 0, transitionFrame - TRANSITION_DURATION, TRANSITION_DURATION));
+				backBtn->setColor(Tween::fade(Tween::linear(
+					0, 1, transitionFrame - TRANSITION_DURATION, TRANSITION_DURATION)));
+			}
 			break;
 		}
 		case Credits: {
@@ -729,6 +779,11 @@ void MainMenuMode::processButtons() {
 				}
 				break;
 			}
+			break;
+		}
+		case ClientScreenError: {
+			transitionState = ClientScreen;
+			break;
 		}
 		case Credits: {
 			if (buttonManager.tappedButton(backBtn, tapData)) {
@@ -769,10 +824,20 @@ void MainMenuMode::update(float timestep) {
 		case MagicInternetBox::MatchmakingStatus::ClientRoomFull:
 		case MagicInternetBox::MatchmakingStatus::ClientError:
 			if (currState == ClientScreenSubmitted) {
-				clientEnteredRoom.clear();
-				updateClientLabel();
-				currState = ClientScreen;
-				clientJoinBtn->setDown(false);
+				transitionState = ClientScreenError;
+				switch (net->matchStatus()) {
+					case MagicInternetBox::MatchmakingStatus::ClientRoomInvalid:
+						clientErrorLabel->setText("That ship ID doesn't seem to exist.");
+						break;
+					case MagicInternetBox::MatchmakingStatus::ClientRoomFull:
+						clientErrorLabel->setText("That ship is full.");
+						break;
+					case MagicInternetBox::MatchmakingStatus::ClientError:
+						clientErrorLabel->setText("Your app is out of date. Please update.");
+						break;
+					default:
+						break;
+				}
 			}
 			return;
 		case MagicInternetBox::MatchmakingStatus::Uninitialized:

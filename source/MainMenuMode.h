@@ -62,7 +62,8 @@ class MainMenuMode : public cugl::Scene {
 	 *			HostLevelSelect - Transitions here after clicking start; level select screen
 	 *	-	ClientScreen - Clicking Join takes users here; waiting for room ID input
 	 *			ClientScreenSubmitted - Client entered room ID; waiting to hear from server
-	 *			ClientScreenDone - Room ID valid; join complete (invalid ID returns to ClientScreen)
+	 *					ClientScreenDone - Room ID valid; join complete
+	 *					ClientScreenError - Something went wrong; returns to ClientScreen
 	 *	-	Credits - Credits Screen
 	 *
 	 * Back button exists on screens HostScreen, ClientScreen, and Credits. Once joined into a game,
@@ -85,6 +86,8 @@ class MainMenuMode : public cugl::Scene {
 		ClientScreen,
 		/** Joining a game; hit submit */
 		ClientScreenSubmitted,
+		/** Joining a game but something went wrong */
+		ClientScreenError,
 		/** Joining a game; actually connected */
 		ClientScreenDone,
 		/** Matchmaking complete */
@@ -156,6 +159,10 @@ class MainMenuMode : public cugl::Scene {
 	std::shared_ptr<cugl::Button> clientClearBtn;
 	/** The label on the host screen shown to the client after joining */
 	std::shared_ptr<cugl::Node> clientWaitHost;
+	/** Screen for client error */
+	std::shared_ptr<cugl::Node> clientError;
+	/** The label on the client error screen */
+	std::shared_ptr<cugl::Label> clientErrorLabel;
 
 	/** Button to credits */
 	std::shared_ptr<cugl::Button> creditsBtn;
