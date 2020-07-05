@@ -667,6 +667,9 @@ void MainMenuMode::processButtons() {
 				startHostThread->detach();
 				// Intentional fall-through
 			case HostScreen:
+				if (net->getNumPlayers() > 1) {
+					break;
+				}
 				net->forceDisconnect();
 				// Intentional fall-through
 			case ClientScreen:
