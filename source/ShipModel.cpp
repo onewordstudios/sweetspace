@@ -51,12 +51,12 @@ bool ShipModel::init(unsigned int numPlayers, unsigned int numBreaches, unsigned
 }
 
 bool ShipModel::createBreach(float angle, int player, int id) {
-	breaches.at(id)->init(angle, player, timeLeftInTimer);
+	breaches.at(id)->init(angle, player, timePassed());
 	return true;
 }
 
 bool ShipModel::createBreach(float angle, int health, int player, int id) {
-	breaches.at(id)->init(angle, health, player, timeLeftInTimer);
+	breaches.at(id)->init(angle, health, player, timePassed());
 	return true;
 }
 
