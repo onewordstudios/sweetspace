@@ -347,6 +347,13 @@ class ShipModel {
 	 */
 	float getSize() { return shipSize; }
 
+	/**
+	 * Returns the amount of time since the level has begun, ignoring any pauses due to buttons
+	 *
+	 * @return time passed according to timer
+	 */
+	float timePassedIgnoringFreeze() { return totalTime - timeLeftInTimer; }
+
 	/** Get a reference to the stabilizer status of the ship */
 	StabilizerModel& getStabilizer() { return stabilizer; }
 

@@ -338,7 +338,7 @@ void GLaDOS::update(float dt) {
 		int spawnRate =
 			(int)(globals::MIN_PLAYERS / (event->getProbability() * (float)mib->getNumPlayers()));
 		if (spawnRate < 1) spawnRate = 1;
-		if (event->isActive((int)ship->timePassed()) && rand() % spawnRate <= 1) {
+		if (event->isActive((int)ship->timePassedIgnoringFreeze()) && rand() % spawnRate <= 1) {
 			// ready up the event
 			readyQueue.push_back(event);
 			if (event->isOneTime()) {
