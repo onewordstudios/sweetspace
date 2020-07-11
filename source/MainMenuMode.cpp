@@ -667,6 +667,9 @@ void MainMenuMode::processButtons() {
 				startHostThread->detach();
 				// Intentional fall-through
 			case HostScreen:
+				if (net->getNumPlayers() > 1) {
+					break;
+				}
 				net->forceDisconnect();
 				// Intentional fall-through
 			case ClientScreen:
@@ -719,13 +722,15 @@ void MainMenuMode::processButtons() {
 			break;
 		}
 		case HostScreen: {
-			if (buttonManager.tappedButton(backBtn, tapData)) {
-				CULog("Going Back");
-				net->forceDisconnect();
-				transitionState = StartScreen;
-			} else if (net->getNumPlayers() >= globals::MIN_PLAYERS) {
+			if (net->getNumPlayers() >= globals::MIN_PLAYERS) {
 				if (buttonManager.tappedButton(hostBeginBtn, tapData)) {
 					transitionState = HostLevelSelect;
+				}
+			} else {
+				if (buttonManager.tappedButton(backBtn, tapData)) {
+					CULog("Going Back");
+					net->forceDisconnect();
+					transitionState = StartScreen;
 				}
 			}
 			break;
