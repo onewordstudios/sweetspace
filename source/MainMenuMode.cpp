@@ -43,6 +43,12 @@ constexpr float CREDITS_BG_POS = 2.5;
 /** Divisor of screen height to get ship flight destination position */
 constexpr float SHIP_FLY_POS = 1.5;
 
+/** How much the needle moves each frame to match its correct position */
+constexpr float NEEDLE_SPEED = 0.3f;
+
+/** When to just snap the needle to its correct position */
+constexpr float NEEDLE_CUTOFF = 0.01f;
+
 /**
  * Current frame of the credits scroll (there's only ever one credits screen, so it's safe to
  * stick this here)
@@ -266,7 +272,13 @@ void MainMenuMode::setRoomID() {
 
 void MainMenuMode::setNumPlayers() {
 	float percentage = (float)(net->getNumPlayers() - 1) / (float)globals::MAX_PLAYERS;
-	hostNeedle->setAngle(-percentage * globals::TWO_PI * globals::NEEDLE_OFFSET);
+	float diff = percentage - needlePos;
+	if (abs(diff) < NEEDLE_CUTOFF) {
+		needlePos = percentage;
+	} else {
+		needlePos += NEEDLE_SPEED * diff;
+	}
+	hostNeedle->setAngle(-needlePos * globals::TWO_PI * globals::NEEDLE_OFFSET);
 }
 
 void MainMenuMode::endTransition() {
@@ -698,6 +710,7 @@ void MainMenuMode::processButtons() {
 				}));
 				transitionState = HostScreenWait;
 				hostNeedle->setAngle(0);
+				needlePos = 0;
 			} else if (buttonManager.tappedButton(clientBtn, tapData)) {
 				transitionState = ClientScreen;
 				clientScreen->setPositionY(-screenHeight);
