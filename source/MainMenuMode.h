@@ -163,6 +163,8 @@ class MainMenuMode : public cugl::Scene {
 	std::shared_ptr<cugl::Node> clientError;
 	/** The label on the client error screen */
 	std::shared_ptr<cugl::Label> clientErrorLabel;
+	/** The label on the client error screen */
+	std::shared_ptr<cugl::Button> clientErrorBtn;
 
 	/** Button to credits */
 	std::shared_ptr<cugl::Button> creditsBtn;
