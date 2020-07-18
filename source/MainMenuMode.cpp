@@ -131,6 +131,8 @@ bool MainMenuMode::init(const std::shared_ptr<AssetManager>& assets) {
 	clientError = assets->get<Node>("matchmaking_clienterr");
 	clientErrorLabel =
 		std::dynamic_pointer_cast<Label>(assets->get<Node>("matchmaking_clienterr_errortext"));
+	clientErrorBtn =
+		std::dynamic_pointer_cast<Button>(assets->get<Node>("matchmaking_clienterr_retrybtn"));
 
 	levelSelect = assets->get<Node>("matchmaking_levelselect");
 	for (unsigned int i = 0; i < NUM_LEVEL_BTNS; i++) {
@@ -146,6 +148,7 @@ bool MainMenuMode::init(const std::shared_ptr<AssetManager>& assets) {
 	buttonManager.registerButton(clientJoinBtn);
 	buttonManager.registerButton(clientClearBtn);
 	buttonManager.registerButton(creditsBtn);
+	buttonManager.registerButton(clientErrorBtn);
 	for (unsigned int i = 0; i < NUM_DIGITS; i++) {
 		clientRoomBtns.push_back(std::dynamic_pointer_cast<Button>(
 			assets->get<Node>("matchmaking_client_buttons_btn" + std::to_string(i))));
@@ -216,6 +219,7 @@ void MainMenuMode::dispose() {
 	clientWaitHost = nullptr;
 	clientError = nullptr;
 	clientErrorLabel = nullptr;
+	clientErrorBtn = nullptr;
 	levelSelect = nullptr;
 	credits = nullptr;
 	creditsBtn = nullptr;
@@ -800,7 +804,9 @@ void MainMenuMode::processButtons() {
 			break;
 		}
 		case ClientScreenError: {
-			transitionState = ClientScreen;
+			if (buttonManager.tappedButton(clientErrorBtn, tapData)) {
+				transitionState = ClientScreen;
+			}
 			break;
 		}
 		case Credits: {

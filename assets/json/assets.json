@@ -203,6 +203,12 @@
 		"back_btn_down" : {
 			"file": "textures/main_menu/back_down.png"
 		},
+		"retry_btn" : {
+			"file": "textures/main_menu/retry_up.png"
+		},
+		"retry_btn_down" : {
+			"file": "textures/main_menu/retry_down.png"
+		},
         "challenge_btn_up" : {
           "file": "textures/buttons/up.png"
         },
@@ -2323,7 +2329,7 @@
 					"type" : "Image",
 					"format" : { "type" : "Anchored" },
 					"data"   : {
-						"texture"  : "purple_panel",
+						"texture"  : "blue_panel",
 						"anchor"   : [0.5,0],
 						"scale"    : 0.5,
 						"visible" : false
@@ -2350,7 +2356,7 @@
 							"layout" : {
 								"x_anchor" : "center",
 								"y_anchor" : "bottom",
-								"y_offset" : 0.5
+								"y_offset" : 0.6
 							}
 						},
 						"errortext" : {
@@ -2370,27 +2376,38 @@
 							"layout" : {
 								"x_anchor" : "center",
 								"y_anchor" : "bottom",
-								"y_offset" : 0.4
+								"y_offset" : 0.5
 							}
 						},
-						"retrytext" : {
-							"type": "Label",
+						"retrybtn" : {
+							"type": "Button",
 							"format" : {
 								"type" : "Anchored"
 							},
 							"data": {
-								"font"       : "mont_black_italic_big",
-								"text"       : "Tap anywhere to go back",
-								"foreground" : [248,231,78,255],
-								"anchor"	 : [0.5,0],
-								"valign"     : "middle",
-								"halign"     : "center",
-								"scale" : 0.5
+								"upnode"   : "up",
+								"downnode" : "down",
+								"anchor"   : [0.5,0],
+								"scale" : 1
 							},
 							"layout" : {
 								"x_anchor" : "center",
 								"y_anchor" : "bottom",
 								"y_offset" : 0.1
+							},
+							"children" : {
+								"up" : {
+									"type"   : "Image",
+									"data"   : {
+										"texture"  : "retry_btn"
+									}
+								},
+								"down" : {
+									"type"   : "Image",
+									"data"   : {
+										"texture"  : "retry_btn_down"
+									}
+								}
 							}
 						}
 					}
