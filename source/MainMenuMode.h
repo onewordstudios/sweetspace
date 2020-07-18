@@ -48,6 +48,9 @@ class MainMenuMode : public cugl::Scene {
 	/** Current frame of the rotating stars */
 	int rotationFrame;
 
+	/** Current position of the needle */
+	float needlePos;
+
 	/**
 	 * An enum with the current state of the matchmaking mode
 	 *
@@ -224,6 +227,7 @@ class MainMenuMode : public cugl::Scene {
 		  gameReady(false),
 		  transitionFrame(-1),
 		  rotationFrame(0),
+		  needlePos(0),
 		  currState(NA),
 		  transitionState(StartScreen) {}
 
