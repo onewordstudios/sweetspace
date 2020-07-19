@@ -961,9 +961,8 @@ void GameGraphRoot::doTeleportAnimation() {
 		} else {
 			if (currentTeleportationFrame == TELEPORT_FRAMECUTOFF_SECOND + 1) {
 				// Teleport models
-				for (size_t i = 0; i < ship->getDonuts().size(); i++) {
-					std::shared_ptr<DonutModel> donutModel = ship->getDonuts().at(i);
-					donutModel->teleport();
+				for (auto donut : ship->getDonuts()) {
+					donut->teleport();
 				}
 				ship->setStabilizerStatus(ShipModel::StabilizerStatus::INACTIVE);
 				stabilizerFailPanel->setVisible(false);
