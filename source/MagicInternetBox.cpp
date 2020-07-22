@@ -304,7 +304,7 @@ void MagicInternetBox::update() {
 				switch (message[1]) {
 					case 0: {
 						numPlayers = message[2];
-						playerID = (int)numPlayers - 1;
+						playerID = message[3];
 						CULog("Join Room Success; player id %d", playerID);
 						for (unsigned int i = 0; i < numPlayers; i++) {
 							activePlayers.at(i) = true;
@@ -340,8 +340,14 @@ void MagicInternetBox::update() {
 			}
 			case PlayerJoined: {
 				CULog("Player Joined");
-				activePlayers.at(numPlayers) = true;
+				activePlayers.at(message[1]) = true;
 				numPlayers++;
+				return;
+			}
+			case PlayerDisconnect: {
+				CULog("Player Left");
+				activePlayers.at(message[1]) = false;
+				numPlayers--;
 				return;
 			}
 			case StartGame: {
