@@ -649,6 +649,11 @@ void MainMenuMode::processUpdate() {
 					backBtn->setVisible(false);
 					hostBeginBtn->setVisible(true);
 				}
+			} else {
+				if (net->getNumPlayers() == 1) {
+					backBtn->setVisible(true);
+					hostBeginBtn->setVisible(false);
+				}
 			}
 			break;
 		}
