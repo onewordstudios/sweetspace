@@ -509,11 +509,11 @@ void MainMenuMode::processTransition() {
 			}
 
 			if (transitionFrame > 2 * TRANSITION_DURATION) {
-				backBtn->setVisible(false);
 				clientScreen->setVisible(false);
 				if (transitionState == ClientScreenDone) {
 					hostScreen->setPositionY(0);
 				} else {
+					backBtn->setVisible(false);
 					clientError->setPositionY(0);
 					clientEnteredRoom.clear();
 					updateClientLabel();
@@ -536,8 +536,10 @@ void MainMenuMode::processTransition() {
 			} else {
 				clientScreen->setPositionY(
 					Tween::easeIn(0, -screenHeight, transitionFrame, TRANSITION_DURATION));
-				backBtn->setColor(
-					Tween::fade(Tween::linear(1, 0, transitionFrame, TRANSITION_DURATION)));
+				if (transitionState == ClientScreenError) {
+					backBtn->setColor(
+						Tween::fade(Tween::linear(1, 0, transitionFrame, TRANSITION_DURATION)));
+				}
 			}
 
 			break;
@@ -565,6 +567,43 @@ void MainMenuMode::processTransition() {
 					0, 1, transitionFrame - TRANSITION_DURATION, TRANSITION_DURATION)));
 			}
 			break;
+		}
+		case ClientScreenDone: {
+			// Start transition
+			if (transitionFrame == 1) {
+				for (auto e : mainScreen) {
+					e->setVisible(true);
+				}
+				bg2ship->setVisible(true);
+			}
+
+			// Transition over
+			if (transitionFrame > TRANSITION_DURATION) {
+				endTransition();
+				hostScreen->setVisible(false);
+				backBtn->setVisible(false);
+				clientEnteredRoom.clear();
+				updateClientLabel();
+				clientJoinBtn->setDown(false);
+				clientWaitHost->setVisible(false);
+				return;
+			}
+
+			// Make current screen go down
+			hostScreen->setPositionY(
+				Tween::easeIn(0, -screenHeight, transitionFrame, TRANSITION_DURATION));
+
+			for (auto e : mainScreen) {
+				e->setColor(
+					Tween::fade(Tween::linear(0.0f, 1.0f, transitionFrame, TRANSITION_DURATION)));
+			}
+			backBtn->setColor(
+				Tween::fade(Tween::linear(1.0f, 0.0f, transitionFrame, TRANSITION_DURATION)));
+
+			bg2ship->setColor(
+				Tween::fade(Tween::linear(0.0f, 1.0f, transitionFrame, TRANSITION_DURATION)));
+
+			return;
 		}
 		case Credits: {
 			if (transitionFrame == 1) {
@@ -641,8 +680,7 @@ void MainMenuMode::processUpdate() {
 			}
 			break;
 		}
-		case HostScreen:
-		case ClientScreenDone: {
+		case HostScreen: {
 			setNumPlayers();
 			if (backBtn->isVisible()) {
 				if (net->getNumPlayers() > 1) {
@@ -657,7 +695,8 @@ void MainMenuMode::processUpdate() {
 			}
 			break;
 		}
-		default: {
+		case ClientScreenDone: {
+			setNumPlayers();
 			break;
 		}
 		case Credits: {
@@ -672,6 +711,9 @@ void MainMenuMode::processUpdate() {
 			if ((float)creditsScrollFrame > CREDITS_DURATION) {
 				creditsScrollFrame = 0;
 			}
+			break;
+		}
+		default: {
 			break;
 		}
 	}
@@ -691,6 +733,8 @@ void MainMenuMode::processButtons() {
 				if (net->getNumPlayers() > 1) {
 					break;
 				}
+				// Intentional fall-through
+			case ClientScreenDone:
 				net->forceDisconnect();
 				// Intentional fall-through
 			case ClientScreen:
@@ -814,6 +858,13 @@ void MainMenuMode::processButtons() {
 			}
 			break;
 		}
+		case ClientScreenDone: {
+			if (buttonManager.tappedButton(backBtn, tapData)) {
+				CULog("Going Back");
+				net->forceDisconnect();
+				transitionState = StartScreen;
+			}
+		}
 		case Credits: {
 			if (buttonManager.tappedButton(backBtn, tapData)) {
 				CULog("Going Back");
@@ -876,7 +927,7 @@ void MainMenuMode::update(float timestep) {
 			gameReady = true;
 			return;
 		case MagicInternetBox::MatchmakingStatus::ClientWaitingOnOthers:
-			if (backBtn->isVisible()) {
+			if (transitionState == NA && currState == ClientScreenSubmitted) {
 				transitionState = ClientScreenDone;
 				setRoomID();
 				setNumPlayers();
