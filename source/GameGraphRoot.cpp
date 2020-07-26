@@ -557,7 +557,7 @@ void GameGraphRoot::update(float timestep) {
 			coordHUD->setColor(cugl::Color4::WHITE);
 		}
 	}
-	std::string time = positionText();
+	std::string time = timerText();
 	if (time != coordHUD->getText()) {
 		coordHUD->setText(time);
 	}
@@ -986,7 +986,7 @@ void GameGraphRoot::doTeleportAnimation() {
 	prevIsStabilizerFail = ship->getStabilizerStatus() == ShipModel::StabilizerStatus::FAILURE;
 }
 /**
- * Returns an informative string for the position
+ * Returns an informative string for the timer
  *
  * This function is for writing the current donut position to the HUD.
  *
@@ -994,21 +994,20 @@ void GameGraphRoot::doTeleportAnimation() {
  *
  * @return an informative string for the position
  */
-std::string GameGraphRoot::positionText() {
+std::string GameGraphRoot::timerText() {
 	stringstream ss;
-	if (trunc(ship->timeLeftInTimer) > SEC_IN_MIN - 1) {
-		if ((int)trunc(ship->timeLeftInTimer) % SEC_IN_MIN < tenSeconds) {
-			ss << "0" << (int)trunc(ship->timeLeftInTimer) / SEC_IN_MIN << ":0"
-			   << (int)trunc(ship->timeLeftInTimer) % SEC_IN_MIN;
+	int time = trunc(ship->timeLeftInTimer);
+	if (time > SEC_IN_MIN - 1) {
+		if ((int)time % SEC_IN_MIN < tenSeconds) {
+			ss << "0" << (int)time / SEC_IN_MIN << ":0" << (int)time % SEC_IN_MIN;
 		} else {
-			ss << "0" << (int)trunc(ship->timeLeftInTimer) / SEC_IN_MIN << ":"
-			   << (int)trunc(ship->timeLeftInTimer) % SEC_IN_MIN;
+			ss << "0" << (int)time / SEC_IN_MIN << ":" << (int)time % SEC_IN_MIN;
 		}
 	} else {
-		if (trunc(ship->timeLeftInTimer) < tenSeconds) {
-			ss << "00:0" << trunc(ship->timeLeftInTimer);
+		if (time < tenSeconds) {
+			ss << "00:0" << time;
 		} else {
-			ss << "00:" << trunc(ship->timeLeftInTimer);
+			ss << "00:" << time;
 		}
 	}
 
