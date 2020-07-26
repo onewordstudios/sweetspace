@@ -277,27 +277,28 @@ void GLaDOS::placeButtons(float angle1, float angle2) {
 void GLaDOS::update(float dt) {
 	// Removing breaches that have 0 health left
 	for (int i = 0; i < maxEvents; i++) {
-		if (ship->getBreaches().at(i) == nullptr || !ship->getBreaches().at(i)->getIsActive()) {
+		std::shared_ptr<BreachModel> breach = ship->getBreaches().at(i);
+		if (breach == nullptr || !breach->getIsActive()) {
 			continue;
 		}
 		// check if health is zero or the assigned player is inactive
-		if (ship->getBreaches().at(i)->getHealth() == 0 ||
-			!ship->getDonuts().at(ship->getBreaches().at(i)->getPlayer())->getIsActive()) {
-			ship->getBreaches().at(i)->reset();
+		if (breach->getHealth() == 0 || !ship->getDonuts().at(breach->getPlayer())->getIsActive()) {
+			breach->reset();
 			breachFree.push(i);
 		}
 	}
 
 	// Remove doors that have been resolved and opened. Also raise doors that are resolved.
 	for (int i = 0; i < maxDoors; i++) {
-		if (ship->getDoors().at(i) == nullptr) {
+		std::shared_ptr<DoorModel> door = ship->getDoors().at(i);
+		if (door == nullptr) {
 			continue;
 		}
-		if (ship->getDoors().at(i)->resolvedAndRaised()) {
-			ship->getDoors().at(i)->reset();
+		if (door->resolvedAndRaised()) {
+			door->reset();
 			doorFree.push(i);
-		} else if (ship->getDoors().at(i)->resolved()) {
-			ship->getDoors().at(i)->raiseDoor();
+		} else if (door->resolved()) {
+			door->raiseDoor();
 		}
 	}
 
@@ -351,6 +352,7 @@ void GLaDOS::update(float dt) {
 	for (int i = 0; i < readyQueue.size(); i++) {
 		// assign the relative player ids
 		vector<int> ids;
+		ids.reserve(ship->getDonuts().size());
 		for (int j = 0; j < ship->getDonuts().size(); j++) {
 			ids.push_back(j);
 		}

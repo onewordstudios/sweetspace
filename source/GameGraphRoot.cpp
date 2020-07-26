@@ -557,7 +557,10 @@ void GameGraphRoot::update(float timestep) {
 			coordHUD->setColor(cugl::Color4::WHITE);
 		}
 	}
-	coordHUD->setText(positionText());
+	std::string time = positionText();
+	if (time != coordHUD->getText()) {
+		coordHUD->setText(time);
+	}
 
 	// State Check for Drawing
 	switch (status) {
@@ -784,7 +787,10 @@ void GameGraphRoot::update(float timestep) {
 		unsigned int segNum = (unsigned int)(segAngle / globals::SEG_SIZE);
 		std::shared_ptr<cugl::Label> segLabel =
 			dynamic_pointer_cast<cugl::Label>(segment->getChild(static_cast<unsigned int>(0)));
-		segLabel->setText(std::to_string(segNum));
+		std::string segText = std::to_string(segNum);
+		if (segLabel->getText() != segText) {
+			segLabel->setText(segText);
+		}
 	}
 
 	// Update breaches textures if recycled
