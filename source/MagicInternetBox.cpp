@@ -23,6 +23,9 @@ constexpr float FLOAT_PRECISION = 10.0f;
 /** The state synchronization frequency */
 constexpr unsigned int STATE_SYNC_FREQ = globals::NETWORK_TICK * 5;
 
+/** Minimum number of seconds to wait after a connection attempt before allowing retrys */
+constexpr double MIN_WAIT_TIME = 0.5;
+
 /** One byte */
 constexpr unsigned int ONE_BYTE = 256;
 
@@ -37,7 +40,9 @@ std::shared_ptr<MagicInternetBox> MagicInternetBox::instance;
 #pragma region Initialization
 
 MagicInternetBox::MagicInternetBox()
-	: activePlayers(), stateReconciler(ONE_BYTE, FLOAT_PRECISION, FLOAT_EPSILON) {
+	: activePlayers(),
+	  stateReconciler(ONE_BYTE, FLOAT_PRECISION, FLOAT_EPSILON),
+	  lastAttemptConnectionTime() {
 	ws = nullptr;
 	status = Uninitialized;
 	events = None;
@@ -64,6 +69,15 @@ bool MagicInternetBox::initConnection() {
 			CULog("ERROR: MIB already initialized");
 			return false;
 	}
+
+	auto currTime = std::chrono::system_clock::now();
+	std::chrono::duration<double> diff = currTime - lastAttemptConnectionTime;
+	if (diff.count() < MIN_WAIT_TIME) {
+		CULog("Reconnect attempt too fast; aborting");
+		return false;
+	}
+	lastAttemptConnectionTime = currTime;
+
 	using easywsclient::WebSocket;
 
 	// I actually don't know what this stuff does but it won't run on Windows without it,
@@ -304,7 +318,7 @@ void MagicInternetBox::update() {
 				switch (message[1]) {
 					case 0: {
 						numPlayers = message[2];
-						playerID = (int)numPlayers - 1;
+						playerID = message[3];
 						CULog("Join Room Success; player id %d", playerID);
 						for (unsigned int i = 0; i < numPlayers; i++) {
 							activePlayers.at(i) = true;
@@ -340,8 +354,14 @@ void MagicInternetBox::update() {
 			}
 			case PlayerJoined: {
 				CULog("Player Joined");
-				activePlayers.at(numPlayers) = true;
+				activePlayers.at(message[1]) = true;
 				numPlayers++;
+				return;
+			}
+			case PlayerDisconnect: {
+				CULog("Player Left");
+				activePlayers.at(message[1]) = false;
+				numPlayers--;
 				return;
 			}
 			case StartGame: {
