@@ -961,15 +961,15 @@ void GameGraphRoot::doTeleportAnimation() {
 		} else {
 			if (currentTeleportationFrame == TELEPORT_FRAMECUTOFF_SECOND + 1) {
 				// Teleport models
-				for (int i = 0; i < ship->getDonuts().size(); i++) {
-					std::shared_ptr<DonutModel> donutModel = ship->getDonuts().at((unsigned long)i);
-					donutModel->teleport();
+				for (auto donut : ship->getDonuts()) {
+					donut->teleport();
 				}
-				CustomNode::recomputeAll();
 				ship->setStabilizerStatus(ShipModel::StabilizerStatus::INACTIVE);
+				stabilizerFailPanel->setVisible(false);
+				stabilizerFailText->setVisible(false);
+			} else if (currentTeleportationFrame == TELEPORT_FRAMECUTOFF_SECOND + 2) {
+				CustomNode::recomputeAll();
 			}
-			stabilizerFailPanel->setVisible(false);
-			stabilizerFailText->setVisible(false);
 			blackoutOverlay->setColor(Tween::fade(
 				Tween::linear(1, 0, currentTeleportationFrame - TELEPORT_FRAMECUTOFF_SECOND,
 							  TELEPORT_FRAMECUTOFF_THIRD - TELEPORT_FRAMECUTOFF_SECOND)));
