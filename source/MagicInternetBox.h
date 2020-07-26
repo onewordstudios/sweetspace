@@ -116,6 +116,9 @@ class MagicInternetBox {
 	 */
 	unsigned int lastConnection;
 
+	/** Time at which the last connection was attempted */
+	std::chrono::time_point<std::chrono::system_clock> lastAttemptConnectionTime;
+
 	/**
 	 * The type of data being sent during a network packet
 	 */
