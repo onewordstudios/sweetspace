@@ -194,7 +194,7 @@ class GameGraphRoot : public cugl::Scene {
 	 *
 	 * @return an informative string for the position
 	 */
-	std::string positionText();
+	std::string timerText();
 
 	/**
 	 * The current Drawing status
