@@ -8,6 +8,9 @@ using namespace std;
 /** Time to wait until sending another stabilizer, in tutorial. */
 constexpr float STABILIZER_TIMEOUT = 10.0f;
 
+/** Time to wait until sending the first stabilizer, in tutorial. */
+constexpr float STABILIZER_START = 2.0f;
+
 /** Time to wait until sending another stabilizer, in tutorial. */
 constexpr int MAX_ATTEMPTS = 120;
 #pragma mark -
@@ -519,6 +522,7 @@ void GLaDOS::tutorialLevels(float dt) {
 			}
 			break;
 		case tutorial::STABILIZER_LEVEL:
+			if (ship->timePassed() < STABILIZER_START) break;
 			if (customEventCtr >= mib->getNumPlayers()) {
 				customEventCtr = (int)mib->getNumPlayers() - 1;
 			}

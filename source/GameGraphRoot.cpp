@@ -996,7 +996,7 @@ void GameGraphRoot::doTeleportAnimation() {
  */
 std::string GameGraphRoot::timerText() {
 	stringstream ss;
-	int time = trunc(ship->timeLeftInTimer);
+	int time = (int)trunc(ship->timeLeftInTimer);
 	if (time > SEC_IN_MIN - 1) {
 		if ((int)time % SEC_IN_MIN < tenSeconds) {
 			ss << "0" << (int)time / SEC_IN_MIN << ":0" << (int)time % SEC_IN_MIN;
