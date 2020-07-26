@@ -8,6 +8,9 @@ using namespace std;
 /** Time to wait until sending another stabilizer, in tutorial. */
 constexpr float STABILIZER_TIMEOUT = 10.0f;
 
+/** Time to wait until sending the first stabilizer, in tutorial. */
+constexpr float STABILIZER_START = 2.0f;
+
 /** Time to wait until sending another stabilizer, in tutorial. */
 constexpr int MAX_ATTEMPTS = 120;
 #pragma mark -
@@ -277,27 +280,28 @@ void GLaDOS::placeButtons(float angle1, float angle2) {
 void GLaDOS::update(float dt) {
 	// Removing breaches that have 0 health left
 	for (int i = 0; i < maxEvents; i++) {
-		if (ship->getBreaches().at(i) == nullptr || !ship->getBreaches().at(i)->getIsActive()) {
+		std::shared_ptr<BreachModel> breach = ship->getBreaches().at(i);
+		if (breach == nullptr || !breach->getIsActive()) {
 			continue;
 		}
 		// check if health is zero or the assigned player is inactive
-		if (ship->getBreaches().at(i)->getHealth() == 0 ||
-			!ship->getDonuts().at(ship->getBreaches().at(i)->getPlayer())->getIsActive()) {
-			ship->getBreaches().at(i)->reset();
+		if (breach->getHealth() == 0 || !ship->getDonuts().at(breach->getPlayer())->getIsActive()) {
+			breach->reset();
 			breachFree.push(i);
 		}
 	}
 
 	// Remove doors that have been resolved and opened. Also raise doors that are resolved.
 	for (int i = 0; i < maxDoors; i++) {
-		if (ship->getDoors().at(i) == nullptr) {
+		std::shared_ptr<DoorModel> door = ship->getDoors().at(i);
+		if (door == nullptr) {
 			continue;
 		}
-		if (ship->getDoors().at(i)->resolvedAndRaised()) {
-			ship->getDoors().at(i)->reset();
+		if (door->resolvedAndRaised()) {
+			door->reset();
 			doorFree.push(i);
-		} else if (ship->getDoors().at(i)->resolved()) {
-			ship->getDoors().at(i)->raiseDoor();
+		} else if (door->resolved()) {
+			door->raiseDoor();
 		}
 	}
 
@@ -351,6 +355,7 @@ void GLaDOS::update(float dt) {
 	for (int i = 0; i < readyQueue.size(); i++) {
 		// assign the relative player ids
 		vector<int> ids;
+		ids.reserve(ship->getDonuts().size());
 		for (int j = 0; j < ship->getDonuts().size(); j++) {
 			ids.push_back(j);
 		}
@@ -517,6 +522,7 @@ void GLaDOS::tutorialLevels(float dt) {
 			}
 			break;
 		case tutorial::STABILIZER_LEVEL:
+			if (ship->timePassed() < STABILIZER_START) break;
 			if (customEventCtr >= mib->getNumPlayers()) {
 				customEventCtr = (int)mib->getNumPlayers() - 1;
 			}

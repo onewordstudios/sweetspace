@@ -186,7 +186,7 @@ class GameGraphRoot : public cugl::Scene {
 	static constexpr int TELEPORT_FRAMECUTOFF_THIRD = 200;
 
 	/**
-	 * Returns an informative string for the position
+	 * Returns an informative string for the timer
 	 *
 	 * This function is for writing the current donut position to the HUD.
 	 *
@@ -194,7 +194,7 @@ class GameGraphRoot : public cugl::Scene {
 	 *
 	 * @return an informative string for the position
 	 */
-	std::string positionText();
+	std::string timerText();
 
 	/**
 	 * The current Drawing status
