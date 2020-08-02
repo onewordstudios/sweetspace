@@ -117,6 +117,7 @@ bool MagicInternetBox::initConnection() {
 	}
 
 	stateReconciler.reset();
+	skipTutorial = false;
 	return true;
 }
 
