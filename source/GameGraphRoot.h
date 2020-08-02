@@ -250,6 +250,8 @@ class GameGraphRoot : public cugl::Scene {
 		  playerID(0),
 		  prevPlayerAngle(0),
 		  currentHealthWarningFrame(0),
+		  currentTeleportationFrame(0),
+		  prevIsStabilizerFail(false),
 		  status(Normal),
 		  isBackToMainMenu(false),
 		  lastButtonPressed(None) {}

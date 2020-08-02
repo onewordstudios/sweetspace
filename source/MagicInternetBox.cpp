@@ -49,10 +49,27 @@ MagicInternetBox::MagicInternetBox()
 	levelNum = -1;
 	currFrame = 0;
 	playerID = -1;
+	skipTutorial = true;
 	numPlayers = 0;
 	maxPlayers = 0;
 	lastConnection = 0;
 	activePlayers.fill(false);
+}
+
+void MagicInternetBox::bumpLevel() {
+	levelNum++;
+	stateReconciler.reset();
+	if (levelNum >= MAX_NUM_LEVELS) {
+		events = EndGame;
+	} else {
+		events = NextLevel;
+		if (skipTutorial) {
+			while (strcmp(LEVEL_NAMES.at(levelNum), "") == 0) {
+				CULog("Level Num %d is a tutorial; skipping", levelNum);
+				levelNum++;
+			}
+		}
+	}
 }
 
 bool MagicInternetBox::initConnection() {
@@ -228,6 +245,12 @@ void MagicInternetBox::startGame(int levelNum) {
 			return;
 	}
 
+	if (skipTutorial) {
+		while (strcmp(LEVEL_NAMES.at(levelNum), "") == 0) {
+			CULog("Level Num %d is a tutorial; skipping", levelNum);
+			levelNum++;
+		}
+	}
 	std::vector<uint8_t> data;
 	data.push_back((uint8_t)StartGame);
 	data.push_back((uint8_t)levelNum);
@@ -261,12 +284,7 @@ void MagicInternetBox::nextLevel() {
 	data.push_back((uint8_t)ChangeGame);
 	data.push_back((uint8_t)1);
 	ws->sendBinary(data);
-	events = NextLevel;
-	levelNum++;
-	stateReconciler.reset();
-	if (levelNum >= MAX_NUM_LEVELS) {
-		events = EndGame;
-	}
+	bumpLevel();
 }
 
 void MagicInternetBox::update() {
@@ -456,14 +474,10 @@ void MagicInternetBox::update(std::shared_ptr<ShipModel> state) {
 			case ChangeGame: {
 				if (message[1] == 0) {
 					events = RestartLevel;
+					stateReconciler.reset();
 				} else {
-					events = NextLevel;
-					levelNum++;
-					if (levelNum >= MAX_NUM_LEVELS) {
-						events = EndGame;
-					}
+					bumpLevel();
 				}
-				stateReconciler.reset();
 				return;
 			}
 			default:

@@ -99,6 +99,12 @@ class MagicInternetBox {
 	/** Current level number, or -1 if unassigned */
 	int levelNum;
 
+	/** Whether to skip tutorial levels */
+	bool skipTutorial;
+
+	/** Move on to the next level in sequence */
+	void bumpLevel();
+
 	/** Number of connected players */
 	unsigned int numPlayers;
 
