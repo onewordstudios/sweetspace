@@ -49,7 +49,7 @@ MagicInternetBox::MagicInternetBox()
 	levelNum = -1;
 	currFrame = 0;
 	playerID = -1;
-	skipTutorial = true;
+	skipTutorial = false;
 	numPlayers = 0;
 	maxPlayers = 0;
 	lastConnection = 0;

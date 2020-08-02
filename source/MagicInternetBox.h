@@ -283,6 +283,11 @@ class MagicInternetBox {
 	bool isPlayerActive(unsigned int playerID);
 
 	/**
+	 * Set whether or not the tutorial should be skipped.
+	 */
+	void setSkipTutorial(bool skip) { skipTutorial = skip; }
+
+	/**
 	 * Start the game with the current number of players.
 	 * Should only be called when the matchmaking status is waiting on others
 	 *

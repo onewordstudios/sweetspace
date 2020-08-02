@@ -179,6 +179,12 @@
 		"credits_btn_down" : {
 			"file": "textures/main_menu/credits_down.png"
 		},
+		"tutorial_btn" : {
+			"file": "textures/main_menu/tutorial_up.png"
+		},
+		"tutorial_btn_down" : {
+			"file": "textures/main_menu/tutorial_down.png"
+		},
 		"join_btn" : {
 			"file": "textures/main_menu/join_up.png"
 		},
@@ -2212,6 +2218,38 @@
 								}
 							}
 						}
+					}
+				},
+				"tutorialbtn" : {
+					"type": "Button",
+					"format" : {
+						"type" : "Anchored"
+					},
+					"data": {
+						"upnode"   : "up",
+						"downnode" : "down",
+						"anchor"   : [0,0],
+						"scale" : 0.5,
+						"visible" : false
+					},
+					"children" : {
+						"up" : {
+							"type"   : "Image",
+							"data"   : {
+								"texture"  : "tutorial_btn"
+							}
+						},
+						"down" : {
+							"type"   : "Image",
+							"data"   : {
+								"texture"  : "tutorial_btn_down"
+							}
+						}
+					},
+					"layout" : {
+						"x_anchor" : "left",
+						"y_anchor" : "bottom",
+						"x_offset" : 0.02
 					}
 				},
 				"client" : {
