@@ -58,7 +58,7 @@ class MagicInternetBox {
 	/**
 	 * Important events from the network that the root controller needs to know about
 	 */
-	enum NetworkEvents { None, RestartLevel, NextLevel, EndGame };
+	enum NetworkEvents { None, LoadLevel, EndGame };
 
    private:
 	/**
@@ -102,8 +102,11 @@ class MagicInternetBox {
 	/** Whether to skip tutorial levels */
 	bool skipTutorial;
 
-	/** Move on to the next level in sequence */
-	void bumpLevel();
+	/** Start the currently assigned level */
+	void startLevel();
+
+	/** Start the given level */
+	void startLevel(int num);
 
 	/** Number of connected players */
 	unsigned int numPlayers;

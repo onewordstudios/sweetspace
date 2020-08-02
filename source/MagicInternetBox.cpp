@@ -56,19 +56,15 @@ MagicInternetBox::MagicInternetBox()
 	activePlayers.fill(false);
 }
 
-void MagicInternetBox::bumpLevel() {
-	levelNum++;
+void MagicInternetBox::startLevel() { startLevel(levelNum); }
+
+void MagicInternetBox::startLevel(int num) {
+	levelNum = num;
 	stateReconciler.reset();
-	if (levelNum >= MAX_NUM_LEVELS) {
+	if (num >= MAX_NUM_LEVELS || num < 0) {
 		events = EndGame;
 	} else {
-		events = NextLevel;
-		if (skipTutorial) {
-			while (strcmp(LEVEL_NAMES.at(levelNum), "") == 0) {
-				CULog("Level Num %d is a tutorial; skipping", levelNum);
-				levelNum++;
-			}
-		}
+		events = LoadLevel;
 	}
 }
 
@@ -272,8 +268,8 @@ void MagicInternetBox::restartGame() {
 	data.push_back((uint8_t)ChangeGame);
 	data.push_back((uint8_t)0);
 	ws->sendBinary(data);
-	events = RestartLevel;
-	stateReconciler.reset();
+
+	startLevel();
 }
 
 void MagicInternetBox::nextLevel() {
@@ -281,11 +277,21 @@ void MagicInternetBox::nextLevel() {
 		CULog("ERROR: Trying to move to next level during invalid state %d", status);
 		return;
 	}
+
+	levelNum++;
+	if (skipTutorial) {
+		while (strcmp(LEVEL_NAMES.at(levelNum), "") == 0) {
+			CULog("Level Num %d is a tutorial; skipping", levelNum);
+			levelNum++;
+		}
+	}
+	startLevel(levelNum);
+
 	std::vector<uint8_t> data;
 	data.push_back((uint8_t)ChangeGame);
 	data.push_back((uint8_t)1);
+	data.push_back((uint8_t)levelNum);
 	ws->sendBinary(data);
-	bumpLevel();
 }
 
 void MagicInternetBox::update() {
@@ -474,10 +480,9 @@ void MagicInternetBox::update(std::shared_ptr<ShipModel> state) {
 			}
 			case ChangeGame: {
 				if (message[1] == 0) {
-					events = RestartLevel;
-					stateReconciler.reset();
+					startLevel();
 				} else {
-					bumpLevel();
+					startLevel(message[2]);
 				}
 				return;
 			}
