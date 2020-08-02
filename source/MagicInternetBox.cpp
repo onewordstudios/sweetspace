@@ -278,19 +278,19 @@ void MagicInternetBox::nextLevel() {
 		return;
 	}
 
-	levelNum++;
+	int level = levelNum + 1;
 	if (skipTutorial) {
 		while (strcmp(LEVEL_NAMES.at(levelNum), "") == 0) {
 			CULog("Level Num %d is a tutorial; skipping", levelNum);
-			levelNum++;
+			level++;
 		}
 	}
-	startLevel(levelNum);
+	startLevel(level);
 
 	std::vector<uint8_t> data;
 	data.push_back((uint8_t)ChangeGame);
 	data.push_back((uint8_t)1);
-	data.push_back((uint8_t)levelNum);
+	data.push_back((uint8_t)level);
 	ws->sendBinary(data);
 }
 
