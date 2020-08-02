@@ -430,6 +430,7 @@ void MainMenuMode::processTransition() {
 					levelSelect->setColor(Tween::fade(0));
 					hostTutorialSkipBtn->setVisible(true);
 					hostTutorialSkipBtn->setColor(Tween::fade(0));
+					hostTutorialSkipBtn->setDown(false);
 				}
 
 				// Total transition duration is 1.5x standard length
@@ -817,6 +818,11 @@ void MainMenuMode::processButtons() {
 					net->startGame(LEVEL_ENTRY_POINTS.at(i));
 					return;
 				}
+			}
+			if (buttonManager.tappedButton(hostTutorialSkipBtn, tapData)) {
+				bool isDown = hostTutorialSkipBtn->isDown();
+				hostTutorialSkipBtn->setDown(!isDown);
+				net->setSkipTutorial(!isDown);
 			}
 			break;
 		}
