@@ -360,6 +360,21 @@ void MainMenuMode::setNumPlayers() {
 }
 
 void MainMenuMode::processUpdate() {
+	switch (net->matchStatus()) {
+		case MagicInternetBox::MatchmakingStatus::ClientRoomInvalid:
+		case MagicInternetBox::MatchmakingStatus::ClientRoomFull:
+		case MagicInternetBox::MatchmakingStatus::ClientError:
+		case MagicInternetBox::MatchmakingStatus::Uninitialized:
+		case MagicInternetBox::MatchmakingStatus::HostError:
+			break;
+		case MagicInternetBox::MatchmakingStatus::GameStart:
+			gameReady = true;
+			return;
+		default:
+			net->update();
+			break;
+	}
+
 	switch (currState) {
 		case HostScreenWait: {
 			if (net->getRoomID() != "") {
@@ -408,6 +423,56 @@ void MainMenuMode::processUpdate() {
 				}
 			}
 			break;
+		}
+		case ClientScreenSubmitted: {
+			auto transitionToClientError = [&]() {
+				currState = ClientScreenError;
+
+				animations.animateY("matchmaking_client", AnimationManager::TweenType::EaseIn,
+									-screenHeight, TRANSITION_DURATION);
+				animations.fadeOut("matchmaking_client", 1, TRANSITION_DURATION);
+				animations.fadeOut("matchmaking_backbtn", TRANSITION_DURATION);
+
+				animations.fadeIn("matchmaking_clienterr", 1, TRANSITION_DURATION);
+				animations.animateY("matchmaking_clienterr", AnimationManager::TweenType::EaseOut,
+									0, TRANSITION_DURATION, TRANSITION_DURATION);
+			};
+
+			switch (net->matchStatus()) {
+				case MagicInternetBox::MatchmakingStatus::ClientRoomInvalid:
+					clientErrorLabel->setText("That ship ID doesn't seem to exist.");
+					transitionToClientError();
+					break;
+				case MagicInternetBox::MatchmakingStatus::ClientRoomFull:
+					clientErrorLabel->setText("That ship is full.");
+					transitionToClientError();
+					break;
+				case MagicInternetBox::MatchmakingStatus::ClientError:
+					clientErrorLabel->setText("Your app is out of date. Please update.");
+					transitionToClientError();
+					break;
+				case MagicInternetBox::MatchmakingStatus::ClientWaitingOnOthers:
+					currState = ClientScreenDone;
+
+					hostNeedle->setAngle(0);
+					needlePos = 0;
+
+					animations.animateY("matchmaking_client", AnimationManager::TweenType::EaseIn,
+										-screenHeight, TRANSITION_DURATION);
+					animations.fadeOut("matchmaking_client", 1, TRANSITION_DURATION);
+
+					animations.fadeIn("matchmaking_host", 1, TRANSITION_DURATION);
+					animations.animateY("matchmaking_host", AnimationManager::TweenType::EaseOut, 0,
+										TRANSITION_DURATION, TRANSITION_DURATION);
+					clientWaitHost->setVisible(true);
+
+					setRoomID();
+					setNumPlayers();
+
+					break;
+				default:
+					break;
+			}
 		}
 		case ClientScreenDone: {
 			setNumPlayers();
@@ -479,6 +544,7 @@ void MainMenuMode::processButtons() {
 				currState = HostScreenWait;
 				hostNeedle->setAngle(0);
 				needlePos = 0;
+				clientWaitHost->setVisible(false);
 
 				animateOutMainMenu();
 			} else if (buttonManager.tappedButton(clientBtn, tapData)) {
@@ -658,32 +724,6 @@ void MainMenuMode::update(float timestep) {
 		case MagicInternetBox::MatchmakingStatus::ClientRoomInvalid:
 		case MagicInternetBox::MatchmakingStatus::ClientRoomFull:
 		case MagicInternetBox::MatchmakingStatus::ClientError:
-			if (currState == ClientScreenSubmitted) {
-				currState = ClientScreenError;
-
-				animations.animateY("matchmaking_client", AnimationManager::TweenType::EaseIn,
-									-screenHeight, TRANSITION_DURATION);
-				animations.fadeOut("matchmaking_client", 1, TRANSITION_DURATION);
-				animations.fadeOut("matchmaking_backbtn", TRANSITION_DURATION);
-
-				animations.fadeIn("matchmaking_clienterr", 1, TRANSITION_DURATION);
-				animations.animateY("matchmaking_clienterr", AnimationManager::TweenType::EaseOut,
-									0, TRANSITION_DURATION, TRANSITION_DURATION);
-
-				switch (net->matchStatus()) {
-					case MagicInternetBox::MatchmakingStatus::ClientRoomInvalid:
-						clientErrorLabel->setText("That ship ID doesn't seem to exist.");
-						break;
-					case MagicInternetBox::MatchmakingStatus::ClientRoomFull:
-						clientErrorLabel->setText("That ship is full.");
-						break;
-					case MagicInternetBox::MatchmakingStatus::ClientError:
-						clientErrorLabel->setText("Your app is out of date. Please update.");
-						break;
-					default:
-						break;
-				}
-			}
 			return;
 		case MagicInternetBox::MatchmakingStatus::Uninitialized:
 		case MagicInternetBox::MatchmakingStatus::HostError:
@@ -692,22 +732,6 @@ void MainMenuMode::update(float timestep) {
 			gameReady = true;
 			return;
 		case MagicInternetBox::MatchmakingStatus::ClientWaitingOnOthers:
-			if (currState == ClientScreenSubmitted) {
-				currState = ClientScreenDone;
-
-				animations.animateY("matchmaking_client", AnimationManager::TweenType::EaseIn,
-									-screenHeight, TRANSITION_DURATION);
-				animations.fadeOut("matchmaking_client", 1, TRANSITION_DURATION);
-
-				animations.fadeIn("matchmaking_host", 1, TRANSITION_DURATION);
-				animations.animateY("matchmaking_host", AnimationManager::TweenType::EaseOut, 0,
-									TRANSITION_DURATION, TRANSITION_DURATION);
-				clientWaitHost->setVisible(true);
-
-				setRoomID();
-				setNumPlayers();
-			}
-			// Intentional fall-through
 		default:
 			net->update();
 			break;

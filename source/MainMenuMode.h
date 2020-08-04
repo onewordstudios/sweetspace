@@ -154,8 +154,14 @@ class MainMenuMode : public cugl::Scene {
 	/** Credits scroll */
 	std::shared_ptr<cugl::Node> credits;
 
+	/**
+	 * Play animation that leaves the main menu
+	 */
 	void animateOutMainMenu();
 
+	/**
+	 * Play animation that returns to the main menu
+	 */
 	void returnToMainMenu();
 
 #pragma endregion
