@@ -1,5 +1,5 @@
-#ifndef __BUTTON_MANAGER_H__
-#define __BUTTON_MANAGER_H__
+#ifndef __ANIMATION_MANAGER_H__
+#define __ANIMATION_MANAGER_H__
 #include <cugl/cugl.h>
 
 #include <unordered_map>
@@ -90,7 +90,7 @@ class AnimationManager {
 	 *
 	 * @return True iff an animation is in progress
 	 */
-	bool animate();
+	bool step();
 
 	/**
 	 * Animate the x position of a node.
@@ -120,4 +120,4 @@ class AnimationManager {
 
 	void fadeOut(std::string node, unsigned int duration, unsigned int delay = 0);
 };
-#endif /* __BUTTON_MANAGER_H__ */
+#endif /* __ANIMATION_MANAGER_H__ */

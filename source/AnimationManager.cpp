@@ -28,17 +28,18 @@ void AnimationManager::registerNode(std::string name,
 	initialData.push_back(currState);
 }
 
-bool AnimationManager::animate() {
+bool AnimationManager::step() {
 	if (inProgress.empty()) {
 		currentFrame = 0;
 		return false;
 	}
 
-	for (auto i = inProgress.begin(); i != inProgress.end(); i++) {
+	for (auto i = inProgress.begin(); i != inProgress.end();) {
 		auto anim = *i;
 
 		// Ignore animations that haven't started
 		if (currentFrame < anim.startFrame) {
+			i++;
 			continue;
 		}
 
@@ -90,7 +91,9 @@ bool AnimationManager::animate() {
 
 		// Cleanup if animation is over
 		if (currentFrame == anim.endFrame) {
-			inProgress.erase(i);
+			i = inProgress.erase(i);
+		} else {
+			i++;
 		}
 	}
 
