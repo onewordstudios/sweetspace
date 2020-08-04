@@ -90,11 +90,37 @@ bool MainMenuMode::init(const std::shared_ptr<AssetManager>& assets) {
 
 #pragma region Scene Graph Components
 	bg0stars = assets->get<Node>("matchmaking_mainmenubg2");
-	bg1glow = assets->get<Node>("matchmaking_mainmenubg3");
-	bg2ship = assets->get<Node>("matchmaking_mainmenubg4");
-	bg3land = assets->get<Node>("matchmaking_mainmenubg5");
-	bg4landNoShip = assets->get<Node>("matchmaking_mainmenubg6");
-	bg9studio = assets->get<Node>("matchmaking_studiologo");
+
+	animations.registerNode("matchmaking_studiologo", assets);
+	animations.registerNode("matchmaking_mainmenubg-glow", assets);
+	animations.registerNode("matchmaking_mainmenubg-ship", assets);
+	animations.registerNode("matchmaking_mainmenubg-land", assets);
+	animations.registerNode("matchmaking_mainmenubg-landnoship", assets);
+
+	animations.fadeOut("matchmaking_studiologo", TRANSITION_DURATION * 2);
+	animations.animateY("matchmaking_mainmenubg-glow", AnimationManager::TweenType::EaseOut,
+						screenHeight / 2, OPEN_TRANSITION);
+	animations.animateY("matchmaking_mainmenubg-ship", AnimationManager::TweenType::EaseOut,
+						screenHeight / 2, OPEN_TRANSITION);
+	animations.animateY("matchmaking_mainmenubg-land", AnimationManager::TweenType::EaseOut,
+						screenHeight / 2, OPEN_TRANSITION);
+
+	for (auto e : mainScreen) {
+		animations.registerNode(e, assets);
+		animations.fadeIn(e, TRANSITION_DURATION, OPEN_TRANSITION_FADE);
+	}
+
+	animations.registerNode("matchmaking_backbtn", assets);
+
+	animations.registerNode("matchmaking_host", assets);
+	animations.registerNode("matchmaking_client", assets);
+
+	animations.registerNode("matchmaking_credits", assets);
+
+	animations.registerNode("matchmaking_levelselect", assets);
+	animations.registerNode("matchmaking_tutorialbtn", assets);
+
+	animations.registerNode("matchmaking_clienterr", assets);
 
 	creditsBtn = std::dynamic_pointer_cast<Button>(assets->get<Node>("matchmaking_creditsbtn"));
 	credits = assets->get<Node>("matchmaking_credits");
@@ -106,11 +132,6 @@ bool MainMenuMode::init(const std::shared_ptr<AssetManager>& assets) {
 	clientBtn =
 		std::dynamic_pointer_cast<Button>(assets->get<Node>("matchmaking_home_btnwrap_clientbtn"));
 
-	mainScreen.push_back(assets->get<Node>("matchmaking_home"));
-	mainScreen.push_back(assets->get<Node>("matchmaking_gamelogo"));
-	mainScreen.push_back(creditsBtn);
-	hostScreen = assets->get<Node>("matchmaking_host");
-	clientScreen = assets->get<Node>("matchmaking_client");
 	connScreen = std::dynamic_pointer_cast<Label>(assets->get<Node>("matchmaking_connscreen"));
 
 	hostLabel =
@@ -130,13 +151,11 @@ bool MainMenuMode::init(const std::shared_ptr<AssetManager>& assets) {
 		std::dynamic_pointer_cast<Button>(assets->get<Node>("matchmaking_client_buttons_btnclear"));
 	clientWaitHost = assets->get<Node>("matchmaking_host_wrap_waittext");
 
-	clientError = assets->get<Node>("matchmaking_clienterr");
 	clientErrorLabel =
 		std::dynamic_pointer_cast<Label>(assets->get<Node>("matchmaking_clienterr_errortext"));
 	clientErrorBtn =
 		std::dynamic_pointer_cast<Button>(assets->get<Node>("matchmaking_clienterr_retrybtn"));
 
-	levelSelect = assets->get<Node>("matchmaking_levelselect");
 	for (unsigned int i = 0; i < NUM_LEVEL_BTNS; i++) {
 		levelBtns.at(i) = std::dynamic_pointer_cast<Button>(
 			assets->get<Node>("matchmaking_levelselect_lvl" + std::to_string(i)));
@@ -158,24 +177,20 @@ bool MainMenuMode::init(const std::shared_ptr<AssetManager>& assets) {
 	}
 #pragma endregion
 
-	transitionFrame = 0;
-	currState = NA;
-	transitionState = StartScreen;
+	currState = StartScreen;
 
 	// Reset state in case coming back from other place
 	gameReady = false;
-	hostScreen->setVisible(false);
-	clientScreen->setVisible(false);
+	// hostScreen->setVisible(false);
+	// clientScreen->setVisible(false);
 	hostBeginBtn->setVisible(false);
 	clientJoinBtn->setDown(false);
 	clientJoinBtn->setVisible(true);
-	levelSelect->setVisible(false);
+	// levelSelect->setVisible(false);
 	credits->setVisible(false);
 	clientEnteredRoom.clear();
 	clientWaitHost->setVisible(false);
-	clientError->setVisible(false);
-	bg2ship->setColor(Color4::WHITE);
-	bg2ship->setPositionY(0);
+	// clientError->setVisible(false);
 	backBtn->setVisible(false);
 	hostTutorialSkipBtn->setVisible(false);
 
@@ -185,15 +200,6 @@ bool MainMenuMode::init(const std::shared_ptr<AssetManager>& assets) {
 	return true;
 }
 
-void MainMenuMode::triggerCredits() {
-	currState = StartScreen;
-	transitionState = Credits;
-	credits->setVisible(true);
-	credits->setColor(Color4::WHITE);
-	credits->setPositionY(0);
-	creditsScrollFrame = 0;
-}
-
 /**
  * Disposes of all (non-static) resources allocated to this mode.
  */
@@ -201,18 +207,10 @@ void MainMenuMode::dispose() {
 	removeAllChildren();
 
 	bg0stars = nullptr;
-	bg1glow = nullptr;
-	bg2ship = nullptr;
-	bg3land = nullptr;
-	bg4landNoShip = nullptr;
-	bg9studio = nullptr;
 
 	backBtn = nullptr;
 	hostBtn = nullptr;
 	clientBtn = nullptr;
-	mainScreen.clear();
-	hostScreen = nullptr;
-	clientScreen = nullptr;
 	connScreen = nullptr;
 	hostLabel = nullptr;
 	hostBeginBtn = nullptr;
@@ -221,16 +219,90 @@ void MainMenuMode::dispose() {
 	clientJoinBtn = nullptr;
 	clientClearBtn = nullptr;
 	clientWaitHost = nullptr;
-	clientError = nullptr;
 	clientErrorLabel = nullptr;
 	clientErrorBtn = nullptr;
-	levelSelect = nullptr;
 	credits = nullptr;
 	creditsBtn = nullptr;
 	levelBtns.fill(nullptr);
 	buttonManager.clear();
 	clientRoomBtns.clear();
 }
+
+#pragma endregion
+
+#pragma region Scene Transitions
+
+void MainMenuMode::triggerCredits() {
+	currState = Credits;
+	credits->setVisible(true);
+	credits->setColor(Color4::WHITE);
+	credits->setPositionY(0);
+	creditsScrollFrame = 0;
+
+	animateOutMainMenu();
+	animations.fadeOut("matchmaking_mainmenubg-glow", TRANSITION_DURATION);
+
+	animations.animateY("matchmaking_mainmenubg-land", AnimationManager::TweenType::EaseInOut,
+						screenHeight / CREDITS_BG_POS, TRANSITION_DURATION);
+	animations.fadeOut("matchmaking_mainmenubg-land", TRANSITION_DURATION);
+
+	animations.animateY("matchmaking_mainmenubg-landnoship", AnimationManager::TweenType::EaseInOut,
+						screenHeight / CREDITS_BG_POS, TRANSITION_DURATION);
+	animations.fadeIn("matchmaking_mainmenubg-landnoship", 1);
+
+	animations.fadeIn("matchmaking_backbtn", TRANSITION_DURATION);
+}
+
+void MainMenuMode::animateOutMainMenu() {
+	for (auto e : mainScreen) {
+		animations.fadeOut(e, TRANSITION_DURATION);
+	}
+	animations.animateY("matchmaking_mainmenubg-ship", AnimationManager::TweenType::EaseIn,
+						screenHeight / SHIP_FLY_POS, TRANSITION_DURATION);
+	animations.fadeOut("matchmaking_mainmenubg-ship", TRANSITION_DURATION);
+}
+
+void MainMenuMode::returnToMainMenu() {
+	for (auto e : mainScreen) {
+		animations.fadeIn(e, TRANSITION_DURATION);
+	}
+	animations.animateY("matchmaking_mainmenubg-ship", AnimationManager::TweenType::EaseIn,
+						screenHeight / 2, 1);
+	animations.fadeIn("matchmaking_mainmenubg-ship", TRANSITION_DURATION);
+	animations.fadeOut("matchmaking_backbtn", TRANSITION_DURATION);
+
+	switch (currState) {
+		case HostScreen:
+		case ClientScreenDone:
+			animations.animateY("matchmaking_host", AnimationManager::TweenType::EaseIn,
+								-screenHeight, TRANSITION_DURATION);
+			animations.fadeOut("matchmaking_host", 1, TRANSITION_DURATION);
+			break;
+		case ClientScreen:
+			animations.animateY("matchmaking_client", AnimationManager::TweenType::EaseIn,
+								-screenHeight, TRANSITION_DURATION);
+			animations.fadeOut("matchmaking_client", 1, TRANSITION_DURATION);
+			break;
+		case Credits:
+			animations.fadeIn("matchmaking_mainmenubg-glow", TRANSITION_DURATION);
+
+			animations.animateY("matchmaking_mainmenubg-landnoship",
+								AnimationManager::TweenType::EaseInOut, screenHeight / 2,
+								TRANSITION_DURATION);
+			animations.fadeOut("matchmaking_mainmenubg-landnoship", 1, TRANSITION_DURATION);
+
+			animations.animateY("matchmaking_mainmenubg-land",
+								AnimationManager::TweenType::EaseInOut, screenHeight / 2,
+								TRANSITION_DURATION);
+			animations.fadeIn("matchmaking_mainmenubg-land", TRANSITION_DURATION);
+
+			animations.fadeOut("matchmaking_credits", TRANSITION_DURATION);
+			break;
+		default:
+			break;
+	}
+}
+
 #pragma endregion
 
 #pragma region Internal Helpers
@@ -289,404 +361,38 @@ void MainMenuMode::setNumPlayers() {
 	hostNeedle->setAngle(-needlePos * globals::TWO_PI * globals::NEEDLE_OFFSET);
 }
 
-void MainMenuMode::endTransition() {
-	currState = transitionState;
-	transitionState = NA;
-	transitionFrame = -1;
-	input->clear();
-}
-
-void MainMenuMode::processTransition() {
-	transitionFrame++;
-	switch (currState) {
-		case NA: {
-			if (transitionFrame == 1) {
-				bg1glow->setVisible(true);
-				bg2ship->setVisible(true);
-				bg3land->setVisible(true);
-			}
-			if (transitionFrame > OPEN_TRANSITION) {
-				bg9studio->setVisible(false);
-				for (auto e : mainScreen) {
-					e->setColor(Color4::WHITE);
-				}
-				endTransition();
-				return;
-			}
-
-			// Fade out studio logo from loading screen
-			if (transitionFrame <= TRANSITION_DURATION * 2) {
-				bg9studio->setColor(Tween::fade(
-					Tween::linear(1.0f, 0.0f, transitionFrame, TRANSITION_DURATION * 2)));
-			}
-
-			// Fade in main menu at end
-			if (transitionFrame > OPEN_TRANSITION_FADE) {
-				int i = transitionFrame - OPEN_TRANSITION_FADE;
-				for (auto e : mainScreen) {
-					e->setVisible(true);
-					e->setColor(Tween::fade(
-						Tween::linear(0.0f, 1.0f, i, OPEN_TRANSITION - OPEN_TRANSITION_FADE)));
-				}
-			}
-
-			// Background pans up into view
-			bg1glow->setPositionY(
-				Tween::easeOut(-screenHeight, screenHeight / 2, transitionFrame, OPEN_TRANSITION));
-			bg2ship->setPositionY(
-				Tween::easeOut(-screenHeight, screenHeight / 2, transitionFrame, OPEN_TRANSITION));
-			bg3land->setPositionY(
-				Tween::easeOut(-screenHeight, screenHeight / 2, transitionFrame, OPEN_TRANSITION));
-
-			return;
-		}
-		case StartScreen: {
-			if (transitionFrame > TRANSITION_DURATION) {
-				endTransition();
-				for (auto e : mainScreen) {
-					e->setVisible(false);
-				}
-				bg2ship->setPositionY(screenHeight / 2);
-				bg2ship->setVisible(false);
-			} else {
-				for (auto e : mainScreen) {
-					e->setColor(Tween::fade(
-						Tween::linear(1.0f, 0.0f, transitionFrame, TRANSITION_DURATION)));
-				}
-				bg2ship->setPositionY(Tween::easeIn(screenHeight / 2, screenHeight / SHIP_FLY_POS,
-													transitionFrame, TRANSITION_DURATION));
-				bg2ship->setColor(
-					Tween::fade(Tween::linear(1.0f, 0.0f, transitionFrame, TRANSITION_DURATION)));
-				switch (transitionState) {
-					// Host screen case unneeded b/c waiting for host room before playing transition
-					case ClientScreen: {
-						if (transitionFrame == 1) {
-							backBtn->setVisible(true);
-						}
-
-						clientScreen->setPositionY(
-							Tween::easeOut(-screenHeight, 0, transitionFrame, TRANSITION_DURATION));
-						backBtn->setColor(Tween::fade(
-							Tween::linear(0.0f, 1.0f, transitionFrame, TRANSITION_DURATION)));
-
-						break;
-					}
-					case Credits: {
-						if (transitionFrame == 1) {
-							backBtn->setVisible(true);
-							bg4landNoShip->setVisible(true);
-						}
-
-						backBtn->setColor(Tween::fade(
-							Tween::linear(0.0f, 1.0f, transitionFrame, TRANSITION_DURATION)));
-
-						bg1glow->setColor(Tween::fade(
-							Tween::linear(1.0f, 0.0f, transitionFrame, TRANSITION_DURATION)));
-
-						bg3land->setPositionY(
-							Tween::easeInOut(screenHeight / 2, screenHeight / CREDITS_BG_POS,
-											 transitionFrame, TRANSITION_DURATION));
-						bg4landNoShip->setPositionY(
-							Tween::easeInOut(screenHeight / 2, screenHeight / CREDITS_BG_POS,
-											 transitionFrame, TRANSITION_DURATION));
-						bg3land->setColor(Tween::fade(
-							Tween::linear(1.0f, 0.0f, transitionFrame, TRANSITION_DURATION)));
-
-						if (transitionFrame == TRANSITION_DURATION) {
-							bg3land->setVisible(false);
-						}
-
-						break;
-					}
-					default:
-						break;
-				}
-			}
-			break;
-		}
-		case HostScreenWait: {
-			if (transitionState == HostScreen) {
-				if (transitionFrame >= TRANSITION_DURATION) {
-					endTransition();
-					hostScreen->setPositionY(0);
-				} else {
-					hostScreen->setPositionY(
-						Tween::easeOut(-screenHeight, 0, transitionFrame, TRANSITION_DURATION));
-
-					if (transitionFrame == 1) {
-						backBtn->setVisible(true);
-					}
-					backBtn->setColor(Tween::fade(
-						Tween::linear(0.0f, 1.0f, transitionFrame, TRANSITION_DURATION)));
-				}
-				break;
-			}
-			// Intentional Fall-Through (all the way down to ClientScreen)
-		}
-		case HostScreen:
-			if (transitionState == HostLevelSelect) {
-				if (transitionFrame == 1) {
-					levelSelect->setVisible(true);
-					levelSelect->setColor(Tween::fade(0));
-					hostTutorialSkipBtn->setVisible(true);
-					hostTutorialSkipBtn->setColor(Tween::fade(0));
-					hostTutorialSkipBtn->setDown(false);
-				}
-
-				// Total transition duration is 1.5x standard length
-				const int halfTransition = TRANSITION_DURATION / 2;
-
-				// Finished transition
-				if (transitionFrame > TRANSITION_DURATION + halfTransition) {
-					endTransition();
-					hostScreen->setVisible(false);
-					levelSelect->setColor(Color4::WHITE);
-					hostTutorialSkipBtn->setColor(Color4::WHITE);
-					return;
-				}
-
-				// 0x - 1x, push down license plate
-				if (transitionFrame <= TRANSITION_DURATION) {
-					hostScreen->setPositionY(
-						Tween::easeIn(0, -screenHeight, transitionFrame, TRANSITION_DURATION));
-				}
-
-				// 0.5x - 1.5x, fade in level select
-				if (transitionFrame > halfTransition) {
-					levelSelect->setColor(Tween::fade(Tween::linear(
-						0, 1, transitionFrame - halfTransition, TRANSITION_DURATION)));
-					hostTutorialSkipBtn->setColor(Tween::fade(Tween::linear(
-						0, 1, transitionFrame - halfTransition, TRANSITION_DURATION)));
-				}
-				return;
-			} else {
-				connScreen->setVisible(false);
-			}
-			// Intentional fall-through
-		case ClientScreen: {
-			if (transitionState == StartScreen) {
-				// Start transition
-				if (transitionFrame == 1) {
-					for (auto e : mainScreen) {
-						e->setVisible(true);
-					}
-					bg2ship->setVisible(true);
-				}
-
-				// Transition over
-				if (transitionFrame > TRANSITION_DURATION) {
-					endTransition();
-					hostScreen->setVisible(false);
-					clientScreen->setVisible(false);
-					backBtn->setVisible(false);
-					return;
-				}
-
-				// Make current screen go down
-				if (currState == HostScreen) {
-					hostScreen->setPositionY(
-						Tween::easeIn(0, -screenHeight, transitionFrame, TRANSITION_DURATION));
-				} else {
-					clientScreen->setPositionY(
-						Tween::easeIn(0, -screenHeight, transitionFrame, TRANSITION_DURATION));
-				}
-
-				for (auto e : mainScreen) {
-					e->setColor(Tween::fade(
-						Tween::linear(0.0f, 1.0f, transitionFrame, TRANSITION_DURATION)));
-				}
-				backBtn->setColor(
-					Tween::fade(Tween::linear(1.0f, 0.0f, transitionFrame, TRANSITION_DURATION)));
-
-				bg2ship->setColor(
-					Tween::fade(Tween::linear(0.0f, 1.0f, transitionFrame, TRANSITION_DURATION)));
-
-				return;
-			}
-			break;
-		}
-		case ClientScreenSubmitted: {
-			if (transitionFrame == 1) {
-				if (transitionState == ClientScreenDone) {
-					hostScreen->setVisible(true);
-					hostScreen->setPositionY(-screenHeight);
-					clientWaitHost->setVisible(true);
-				} else {
-					clientError->setVisible(true);
-					clientError->setPositionY(-screenHeight);
-				}
-				hostBeginBtn->setVisible(false);
-			}
-
-			if (transitionFrame > 2 * TRANSITION_DURATION) {
-				clientScreen->setVisible(false);
-				if (transitionState == ClientScreenDone) {
-					hostScreen->setPositionY(0);
-				} else {
-					backBtn->setVisible(false);
-					clientError->setPositionY(0);
-					clientEnteredRoom.clear();
-					updateClientLabel();
-					clientJoinBtn->setDown(false);
-				}
-
-				endTransition();
-			}
-
-			if (transitionFrame >= TRANSITION_DURATION) {
-				if (transitionState == ClientScreenDone) {
-					hostScreen->setPositionY(Tween::easeOut(-screenHeight, 0,
-															transitionFrame - TRANSITION_DURATION,
-															TRANSITION_DURATION));
-				} else {
-					clientError->setPositionY(Tween::easeOut(-screenHeight, 0,
-															 transitionFrame - TRANSITION_DURATION,
-															 TRANSITION_DURATION));
-				}
-			} else {
-				clientScreen->setPositionY(
-					Tween::easeIn(0, -screenHeight, transitionFrame, TRANSITION_DURATION));
-				if (transitionState == ClientScreenError) {
-					backBtn->setColor(
-						Tween::fade(Tween::linear(1, 0, transitionFrame, TRANSITION_DURATION)));
-				}
-			}
-
-			break;
-		}
-		case ClientScreenError: {
-			if (transitionFrame == 1) {
-				backBtn->setVisible(true);
-				clientScreen->setVisible(true);
-				clientScreen->setPositionY(-screenHeight);
-			}
-
-			if (transitionFrame > 2 * TRANSITION_DURATION) {
-				clientError->setVisible(false);
-				endTransition();
-			}
-
-			if (transitionFrame < TRANSITION_DURATION) {
-				clientError->setPositionY(
-					Tween::easeIn(0, -screenHeight, transitionFrame, TRANSITION_DURATION));
-
-			} else {
-				clientScreen->setPositionY(Tween::easeOut(
-					-screenHeight, 0, transitionFrame - TRANSITION_DURATION, TRANSITION_DURATION));
-				backBtn->setColor(Tween::fade(Tween::linear(
-					0, 1, transitionFrame - TRANSITION_DURATION, TRANSITION_DURATION)));
-			}
-			break;
-		}
-		case ClientScreenDone: {
-			// Start transition
-			if (transitionFrame == 1) {
-				for (auto e : mainScreen) {
-					e->setVisible(true);
-				}
-				bg2ship->setVisible(true);
-			}
-
-			// Transition over
-			if (transitionFrame > TRANSITION_DURATION) {
-				endTransition();
-				hostScreen->setVisible(false);
-				backBtn->setVisible(false);
-				clientEnteredRoom.clear();
-				updateClientLabel();
-				clientJoinBtn->setDown(false);
-				clientWaitHost->setVisible(false);
-				return;
-			}
-
-			// Make current screen go down
-			hostScreen->setPositionY(
-				Tween::easeIn(0, -screenHeight, transitionFrame, TRANSITION_DURATION));
-
-			for (auto e : mainScreen) {
-				e->setColor(
-					Tween::fade(Tween::linear(0.0f, 1.0f, transitionFrame, TRANSITION_DURATION)));
-			}
-			backBtn->setColor(
-				Tween::fade(Tween::linear(1.0f, 0.0f, transitionFrame, TRANSITION_DURATION)));
-
-			bg2ship->setColor(
-				Tween::fade(Tween::linear(0.0f, 1.0f, transitionFrame, TRANSITION_DURATION)));
-
-			return;
-		}
-		case Credits: {
-			if (transitionFrame == 1) {
-				for (auto e : mainScreen) {
-					e->setVisible(true);
-				}
-				bg3land->setVisible(true);
-				bg2ship->setVisible(true);
-			}
-
-			// Transition over
-			if (transitionFrame > TRANSITION_DURATION) {
-				endTransition();
-				credits->setVisible(false);
-				backBtn->setVisible(false);
-				bg4landNoShip->setVisible(false);
-				return;
-			}
-
-			credits->setColor(
-				Tween::fade(Tween::easeInOut(1.0f, 0.0f, transitionFrame, TRANSITION_DURATION)));
-			backBtn->setColor(
-				Tween::fade(Tween::easeInOut(1.0f, 0.0f, transitionFrame, TRANSITION_DURATION)));
-			for (auto e : mainScreen) {
-				e->setColor(Tween::fade(
-					Tween::easeInOut(0.0f, 1.0f, transitionFrame, TRANSITION_DURATION)));
-			}
-
-			bg1glow->setColor(
-				Tween::fade(Tween::easeInOut(0.0f, 1.0f, transitionFrame, TRANSITION_DURATION)));
-			bg2ship->setColor(
-				Tween::fade(Tween::easeInOut(0.0f, 1.0f, transitionFrame, TRANSITION_DURATION)));
-
-			bg3land->setPositionY(Tween::easeInOut(screenHeight / CREDITS_BG_POS, screenHeight / 2,
-												   transitionFrame, TRANSITION_DURATION));
-			bg4landNoShip->setPositionY(Tween::easeInOut(screenHeight / CREDITS_BG_POS,
-														 screenHeight / 2, transitionFrame,
-														 TRANSITION_DURATION));
-			bg3land->setColor(
-				Tween::fade(Tween::easeInOut(0.0f, 1.0f, transitionFrame, TRANSITION_DURATION)));
-		}
-		default:
-			break;
-	}
-}
-
 void MainMenuMode::processUpdate() {
 	switch (currState) {
 		case HostScreenWait: {
 			if (net->getRoomID() != "") {
 				setRoomID();
-				hostScreen->setVisible(true);
-				hostScreen->setPositionY(-screenHeight);
-				transitionState = HostScreen;
 				connScreen->setVisible(false);
+
+				currState = HostScreen;
+				animations.animateY("matchmaking_host", AnimationManager::TweenType::EaseOut, 0,
+									TRANSITION_DURATION);
+				animations.fadeIn("matchmaking_host", 1);
+				animations.fadeIn("matchmaking_backbtn", TRANSITION_DURATION);
 
 				startHostThread->detach();
 			} else {
-				connScreen->setVisible(true);
-			}
-			switch (net->matchStatus()) {
-				case MagicInternetBox::MatchmakingStatus::HostError:
-					connScreen->setText("Error Connecting :(");
-					backBtn->setVisible(true);
-					backBtn->setColor(cugl::Color4::WHITE);
-					break;
-				case MagicInternetBox::MatchmakingStatus::HostApiMismatch:
-					connScreen->setText("Please update");
-					backBtn->setVisible(true);
-					backBtn->setColor(cugl::Color4::WHITE);
-					break;
-				default:
-					break;
+				if (!connScreen->isVisible()) {
+					switch (net->matchStatus()) {
+						case MagicInternetBox::MatchmakingStatus::HostError:
+							connScreen->setText("Error Connecting :(");
+							backBtn->setVisible(true);
+							backBtn->setColor(cugl::Color4::WHITE);
+							break;
+						case MagicInternetBox::MatchmakingStatus::HostApiMismatch:
+							connScreen->setText("Update required :(");
+							backBtn->setVisible(true);
+							backBtn->setColor(cugl::Color4::WHITE);
+							break;
+						default:
+							break;
+					}
+					connScreen->setVisible(true);
+				}
 			}
 			break;
 		}
@@ -750,7 +456,8 @@ void MainMenuMode::processButtons() {
 			case ClientScreen:
 			case Credits:
 				CULog("Going Back");
-				transitionState = StartScreen;
+				returnToMainMenu();
+				currState = StartScreen;
 				return;
 			default:
 				break;
@@ -758,7 +465,7 @@ void MainMenuMode::processButtons() {
 	}
 
 	// Do not process inputs if a) nothing was pressed, or b) currently transitioning
-	if (!InputController::getInstance()->isTapEndAvailable() || transitionState != NA) {
+	if (!InputController::getInstance()->isTapEndAvailable()) {
 		return;
 	}
 
@@ -771,13 +478,19 @@ void MainMenuMode::processButtons() {
 					MagicInternetBox::getInstance()->initHost();
 					CULog("SEPARATE THREAD FINISHED INIT HOST");
 				}));
-				transitionState = HostScreenWait;
+				currState = HostScreenWait;
 				hostNeedle->setAngle(0);
 				needlePos = 0;
+
+				animateOutMainMenu();
 			} else if (buttonManager.tappedButton(clientBtn, tapData)) {
-				transitionState = ClientScreen;
-				clientScreen->setPositionY(-screenHeight);
-				clientScreen->setVisible(true);
+				currState = ClientScreen;
+				animateOutMainMenu();
+
+				animations.animateY("matchmaking_client", AnimationManager::TweenType::EaseOut, 0,
+									TRANSITION_DURATION);
+				animations.fadeIn("matchmaking_client", 1);
+				animations.fadeIn("matchmaking_backbtn", TRANSITION_DURATION);
 			} else if (buttonManager.tappedButton(creditsBtn, tapData)) {
 				triggerCredits();
 			}
@@ -793,20 +506,32 @@ void MainMenuMode::processButtons() {
 				CULog("Going Back");
 				startHostThread->detach();
 				net->forceDisconnect();
-				transitionState = StartScreen;
+
+				returnToMainMenu();
+				currState = StartScreen;
 			}
 			break;
 		}
 		case HostScreen: {
 			if (net->getNumPlayers() >= globals::MIN_PLAYERS) {
 				if (buttonManager.tappedButton(hostBeginBtn, tapData)) {
-					transitionState = HostLevelSelect;
+					animations.animateY("matchmaking_host", AnimationManager::TweenType::EaseIn,
+										-screenHeight, TRANSITION_DURATION);
+					animations.fadeOut("matchmaking_host", 1, TRANSITION_DURATION);
+					animations.fadeIn("matchmaking_levelselect", TRANSITION_DURATION,
+									  TRANSITION_DURATION / 2);
+					animations.fadeIn("matchmaking_tutorialbtn", TRANSITION_DURATION,
+									  TRANSITION_DURATION / 2);
+
+					currState = HostLevelSelect;
 				}
 			} else {
 				if (buttonManager.tappedButton(backBtn, tapData)) {
 					CULog("Going Back");
 					net->forceDisconnect();
-					transitionState = StartScreen;
+
+					returnToMainMenu();
+					currState = StartScreen;
 				}
 			}
 			break;
@@ -843,7 +568,8 @@ void MainMenuMode::processButtons() {
 
 				break;
 			} else if (buttonManager.tappedButton(backBtn, tapData)) {
-				transitionState = StartScreen;
+				returnToMainMenu();
+				currState = StartScreen;
 				return;
 			}
 
@@ -869,7 +595,19 @@ void MainMenuMode::processButtons() {
 		}
 		case ClientScreenError: {
 			if (buttonManager.tappedButton(clientErrorBtn, tapData)) {
-				transitionState = ClientScreen;
+				currState = ClientScreen;
+
+				animations.fadeOut("matchmaking_clienterr", 1, TRANSITION_DURATION);
+				animations.animateY("matchmaking_clienterr", AnimationManager::TweenType::EaseIn,
+									-screenHeight, TRANSITION_DURATION);
+
+				animations.animateY("matchmaking_client", AnimationManager::TweenType::EaseOut, 0,
+									TRANSITION_DURATION, TRANSITION_DURATION);
+				animations.fadeIn("matchmaking_client", 1, TRANSITION_DURATION);
+				animations.fadeIn("matchmaking_backbtn", TRANSITION_DURATION, TRANSITION_DURATION);
+
+				clientEnteredRoom.clear();
+				updateClientLabel();
 			}
 			break;
 		}
@@ -877,13 +615,15 @@ void MainMenuMode::processButtons() {
 			if (buttonManager.tappedButton(backBtn, tapData)) {
 				CULog("Going Back");
 				net->forceDisconnect();
-				transitionState = StartScreen;
+				returnToMainMenu();
+				currState = StartScreen;
 			}
 		}
 		case Credits: {
 			if (buttonManager.tappedButton(backBtn, tapData)) {
 				CULog("Going Back");
-				transitionState = StartScreen;
+				returnToMainMenu();
+				currState = StartScreen;
 			}
 			break;
 		}
@@ -907,9 +647,7 @@ void MainMenuMode::update(float timestep) {
 	rotationFrame = (rotationFrame + 1) % ROTATION_MAX;
 	bg0stars->setAngle(globals::TWO_PI * (float)rotationFrame / ROTATION_MAX);
 
-	if (transitionState != NA) {
-		processTransition();
-	} else {
+	if (!animations.step()) {
 		processUpdate();
 		processButtons();
 	}
@@ -919,7 +657,17 @@ void MainMenuMode::update(float timestep) {
 		case MagicInternetBox::MatchmakingStatus::ClientRoomFull:
 		case MagicInternetBox::MatchmakingStatus::ClientError:
 			if (currState == ClientScreenSubmitted) {
-				transitionState = ClientScreenError;
+				currState = ClientScreenError;
+
+				animations.animateY("matchmaking_client", AnimationManager::TweenType::EaseIn,
+									-screenHeight, TRANSITION_DURATION);
+				animations.fadeOut("matchmaking_client", 1, TRANSITION_DURATION);
+				animations.fadeOut("matchmaking_backbtn", TRANSITION_DURATION);
+
+				animations.fadeIn("matchmaking_clienterr", 1, TRANSITION_DURATION);
+				animations.animateY("matchmaking_clienterr", AnimationManager::TweenType::EaseOut,
+									0, TRANSITION_DURATION, TRANSITION_DURATION);
+
 				switch (net->matchStatus()) {
 					case MagicInternetBox::MatchmakingStatus::ClientRoomInvalid:
 						clientErrorLabel->setText("That ship ID doesn't seem to exist.");
@@ -942,11 +690,22 @@ void MainMenuMode::update(float timestep) {
 			gameReady = true;
 			return;
 		case MagicInternetBox::MatchmakingStatus::ClientWaitingOnOthers:
-			if (transitionState == NA && currState == ClientScreenSubmitted) {
-				transitionState = ClientScreenDone;
+			if (currState == ClientScreenSubmitted) {
+				currState = ClientScreenDone;
+
+				animations.animateY("matchmaking_client", AnimationManager::TweenType::EaseIn,
+									-screenHeight, TRANSITION_DURATION);
+				animations.fadeOut("matchmaking_client", 1, TRANSITION_DURATION);
+
+				animations.fadeIn("matchmaking_host", 1, TRANSITION_DURATION);
+				animations.animateY("matchmaking_host", AnimationManager::TweenType::EaseOut, 0,
+									TRANSITION_DURATION, TRANSITION_DURATION);
+				clientWaitHost->setVisible(true);
+
 				setRoomID();
 				setNumPlayers();
 			}
+			// Intentional fall-through
 		default:
 			net->update();
 			break;
