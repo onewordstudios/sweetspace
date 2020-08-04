@@ -117,8 +117,31 @@ class AnimationManager {
 	void animateY(std::string node, TweenType ease, float destination, unsigned int duration,
 				  unsigned int delay = 0);
 
+	/**
+	 * Fade in a node linearly
+	 *
+	 * @param node The scene graph key of the node
+	 * @param duration The number of frames to run the animation for
+	 * @param delay The number of frames to wait before starting the animation
+	 */
 	void fadeIn(std::string node, unsigned int duration, unsigned int delay = 0);
 
+	/**
+	 * Fade out a node linearly
+	 *
+	 * @param node The scene graph key of the node
+	 * @param duration The number of frames to run the animation for
+	 * @param delay The number of frames to wait before starting the animation
+	 */
 	void fadeOut(std::string node, unsigned int duration, unsigned int delay = 0);
+
+	/**
+	 * Fade out a node linearly
+	 *
+	 * @param node The scene graph key of the node
+	 * @param duration The number of frames to run the animation for
+	 * @param delay The number of frames to wait before starting the animation
+	 */
+	void fadeOut(std::shared_ptr<cugl::Node> node, unsigned int duration, unsigned int delay = 0);
 };
 #endif /* __ANIMATION_MANAGER_H__ */

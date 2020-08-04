@@ -129,5 +129,10 @@ void AnimationManager::fadeIn(std::string node, unsigned int duration, unsigned 
 }
 
 void AnimationManager::fadeOut(std::string node, unsigned int duration, unsigned int delay) {
-	queue(nodes.at(node), Visibility, AnimationManager::TweenType::Linear, 1, 0, duration, delay);
+	fadeOut(nodes.at(node), duration, delay);
+}
+
+void AnimationManager::fadeOut(std::shared_ptr<cugl::Node> node, unsigned int duration,
+							   unsigned int delay) {
+	queue(node, Visibility, AnimationManager::TweenType::Linear, 1, 0, duration, delay);
 }

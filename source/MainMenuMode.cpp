@@ -91,13 +91,14 @@ bool MainMenuMode::init(const std::shared_ptr<AssetManager>& assets) {
 #pragma region Scene Graph Components
 	bg0stars = assets->get<Node>("matchmaking_mainmenubg2");
 
-	animations.registerNode("matchmaking_studiologo", assets);
+	auto studioLogo = assets->get<Node>("matchmaking_studiologo");
+	animations.fadeOut(studioLogo, TRANSITION_DURATION * 2);
+
 	animations.registerNode("matchmaking_mainmenubg-glow", assets);
 	animations.registerNode("matchmaking_mainmenubg-ship", assets);
 	animations.registerNode("matchmaking_mainmenubg-land", assets);
 	animations.registerNode("matchmaking_mainmenubg-landnoship", assets);
 
-	animations.fadeOut("matchmaking_studiologo", TRANSITION_DURATION * 2);
 	animations.animateY("matchmaking_mainmenubg-glow", AnimationManager::TweenType::EaseOut,
 						screenHeight / 2, OPEN_TRANSITION);
 	animations.animateY("matchmaking_mainmenubg-ship", AnimationManager::TweenType::EaseOut,
@@ -222,6 +223,7 @@ void MainMenuMode::dispose() {
 	levelBtns.fill(nullptr);
 	buttonManager.clear();
 	clientRoomBtns.clear();
+	animations.reset();
 }
 
 #pragma endregion
