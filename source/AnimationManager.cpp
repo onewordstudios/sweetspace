@@ -1,5 +1,6 @@
 #include "AnimationManager.h"
 
+#include "InputController.h"
 #include "Tween.h"
 
 AnimationManager::AnimationManager() : currentFrame(0) {}
@@ -30,6 +31,9 @@ void AnimationManager::registerNode(std::string name,
 
 bool AnimationManager::step() {
 	if (inProgress.empty()) {
+		if (currentFrame != 0) {
+			InputController::getInstance()->clear();
+		}
 		currentFrame = 0;
 		return false;
 	}

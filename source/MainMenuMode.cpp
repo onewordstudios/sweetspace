@@ -181,16 +181,12 @@ bool MainMenuMode::init(const std::shared_ptr<AssetManager>& assets) {
 
 	// Reset state in case coming back from other place
 	gameReady = false;
-	// hostScreen->setVisible(false);
-	// clientScreen->setVisible(false);
 	hostBeginBtn->setVisible(false);
 	clientJoinBtn->setDown(false);
 	clientJoinBtn->setVisible(true);
-	// levelSelect->setVisible(false);
 	credits->setVisible(false);
 	clientEnteredRoom.clear();
 	clientWaitHost->setVisible(false);
-	// clientError->setVisible(false);
 	backBtn->setVisible(false);
 	hostTutorialSkipBtn->setVisible(false);
 
@@ -485,6 +481,10 @@ void MainMenuMode::processButtons() {
 				animateOutMainMenu();
 			} else if (buttonManager.tappedButton(clientBtn, tapData)) {
 				currState = ClientScreen;
+
+				clientEnteredRoom.clear();
+				updateClientLabel();
+
 				animateOutMainMenu();
 
 				animations.animateY("matchmaking_client", AnimationManager::TweenType::EaseOut, 0,

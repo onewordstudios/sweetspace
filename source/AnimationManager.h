@@ -87,6 +87,7 @@ class AnimationManager {
 
 	/**
 	 * Step the animation forward by one frame.
+	 * Clears the input controller queue if an animation has just completed.
 	 *
 	 * @return True iff an animation is in progress
 	 */
