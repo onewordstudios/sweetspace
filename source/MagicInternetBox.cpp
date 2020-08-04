@@ -643,4 +643,6 @@ void MagicInternetBox::reset() {
 	status = Uninitialized;
 	activePlayers.fill(false);
 	stateReconciler.reset();
+	roomID = "";
+	playerID = -1;
 }

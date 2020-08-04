@@ -326,6 +326,7 @@ void MainMenuMode::updateClientLabel() {
 }
 
 void MainMenuMode::setRoomID() {
+	CULog("Setting room id from %s to %s", roomID.c_str(), net->getRoomID().c_str());
 	if (roomID == net->getRoomID()) {
 		return;
 	}
@@ -514,7 +515,7 @@ void MainMenuMode::processButtons() {
 				}
 				// Intentional fall-through
 			case ClientScreenDone:
-				net->forceDisconnect();
+				net->reset();
 				// Intentional fall-through
 			case ClientScreen:
 			case Credits:
@@ -573,7 +574,7 @@ void MainMenuMode::processButtons() {
 			if (buttonManager.tappedButton(backBtn, tapData)) {
 				CULog("Going Back");
 				startHostThread->detach();
-				net->forceDisconnect();
+				net->reset();
 
 				returnToMainMenu();
 				currState = StartScreen;
@@ -596,7 +597,7 @@ void MainMenuMode::processButtons() {
 			} else {
 				if (buttonManager.tappedButton(backBtn, tapData)) {
 					CULog("Going Back");
-					net->forceDisconnect();
+					net->reset();
 
 					returnToMainMenu();
 					currState = StartScreen;
@@ -682,7 +683,7 @@ void MainMenuMode::processButtons() {
 		case ClientScreenDone: {
 			if (buttonManager.tappedButton(backBtn, tapData)) {
 				CULog("Going Back");
-				net->forceDisconnect();
+				net->reset();
 				returnToMainMenu();
 				currState = StartScreen;
 			}
@@ -715,27 +716,14 @@ void MainMenuMode::update(float timestep) {
 	rotationFrame = (rotationFrame + 1) % ROTATION_MAX;
 	bg0stars->setAngle(globals::TWO_PI * (float)rotationFrame / ROTATION_MAX);
 
-	if (!animations.step()) {
-		processUpdate();
-		processButtons();
-	}
-
-	switch (net->matchStatus()) {
-		case MagicInternetBox::MatchmakingStatus::ClientRoomInvalid:
-		case MagicInternetBox::MatchmakingStatus::ClientRoomFull:
-		case MagicInternetBox::MatchmakingStatus::ClientError:
-			return;
-		case MagicInternetBox::MatchmakingStatus::Uninitialized:
-		case MagicInternetBox::MatchmakingStatus::HostError:
-			return;
-		case MagicInternetBox::MatchmakingStatus::GameStart:
-			gameReady = true;
-			return;
-		case MagicInternetBox::MatchmakingStatus::ClientWaitingOnOthers:
-		default:
+	if (animations.step()) {
+		if (currState == HostScreenWait) {
 			net->update();
-			break;
+		}
+		return;
 	}
+	processUpdate();
+	processButtons();
 }
 
 /**
