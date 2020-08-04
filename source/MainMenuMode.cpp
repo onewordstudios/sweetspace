@@ -717,9 +717,7 @@ void MainMenuMode::update(float timestep) {
 	bg0stars->setAngle(globals::TWO_PI * (float)rotationFrame / ROTATION_MAX);
 
 	if (animations.step()) {
-		if (currState == HostScreenWait) {
-			net->update();
-		}
+		net->update();
 		return;
 	}
 	processUpdate();
