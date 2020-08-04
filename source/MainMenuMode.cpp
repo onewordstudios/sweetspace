@@ -19,15 +19,6 @@ constexpr unsigned int NUM_DIGITS = 10;
 /** Maximum rotation */
 constexpr int ROTATION_MAX = 360 * 100;
 
-/** Duration of a standard transition */
-constexpr int TRANSITION_DURATION = 30;
-
-/** Duration of opening transition */
-constexpr int OPEN_TRANSITION = 120;
-
-/** When during opening transition to fade in stuff */
-constexpr int OPEN_TRANSITION_FADE = 90;
-
 /** Height of the credits scroll */
 constexpr float CREDITS_HEIGHT = 2000;
 
@@ -37,23 +28,11 @@ constexpr float CREDITS_DURATION = 4500;
 /** How much more to increment the credit scroll frame when tapping to go faster */
 constexpr unsigned int FAST_CREDITS_SCROLL_INCREMENT = 5;
 
-/** Divisor of screen height to get credits bg position */
-constexpr float CREDITS_BG_POS = 2.5;
-
-/** Divisor of screen height to get ship flight destination position */
-constexpr float SHIP_FLY_POS = 1.5;
-
 /** How much the needle moves each frame to match its correct position */
 constexpr float NEEDLE_SPEED = 0.3f;
 
 /** When to just snap the needle to its correct position */
 constexpr float NEEDLE_CUTOFF = 0.01f;
-
-/**
- * Current frame of the credits scroll (there's only ever one credits screen, so it's safe to
- * stick this here)
- */
-unsigned int creditsScrollFrame = 0;
 #pragma endregion
 
 #pragma region Initialization Logic

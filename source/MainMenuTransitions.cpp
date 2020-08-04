@@ -101,7 +101,7 @@ void MainMenuMode::MainMenuTransitions::go(MatchState destination) {
 					parent->credits->setVisible(true);
 					parent->credits->setColor(Color4::WHITE);
 					parent->credits->setPositionY(0);
-					// parent->creditsScrollFrame = 0;
+					parent->creditsScrollFrame = 0;
 
 					animateOutMainMenu();
 					animations.fadeOut("matchmaking_mainmenubg-glow", TRANSITION_DURATION);

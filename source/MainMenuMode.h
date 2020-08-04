@@ -46,6 +46,9 @@ class MainMenuMode : public cugl::Scene {
 	/** Current frame of the rotating stars */
 	int rotationFrame;
 
+	/** Position of credits */
+	unsigned int creditsScrollFrame;
+
 	/** Current position of the needle */
 	float needlePos;
 
@@ -218,6 +221,7 @@ class MainMenuMode : public cugl::Scene {
 		  screenHeight(0),
 		  gameReady(false),
 		  rotationFrame(0),
+		  creditsScrollFrame(0),
 		  needlePos(0),
 		  currState(StartScreen),
 		  transitions(this) {}
