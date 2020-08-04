@@ -272,6 +272,9 @@
     <ClCompile Include="..\..\source\AnimationManager.cpp">
       <Filter>Source Files\Helpers</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\source\MainMenuTransitions.cpp">
+      <Filter>Source Files\Modes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Sweetspace.rc">

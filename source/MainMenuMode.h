@@ -43,9 +43,6 @@ class MainMenuMode : public cugl::Scene {
 	/** Current room ID */
 	std::string roomID;
 
-	/** Helper object to do scene graph animations */
-	AnimationManager animations;
-
 	/** Current frame of the rotating stars */
 	int rotationFrame;
 
@@ -104,6 +101,34 @@ class MainMenuMode : public cugl::Scene {
 
 #pragma region Scene Graph Nodes
 
+	class MainMenuTransitions {
+	   private:
+		MainMenuMode* parent;
+
+		/** Helper object to do scene graph animations */
+		AnimationManager animations;
+
+		/**
+		 * Play animation that leaves the main menu
+		 */
+		void animateOutMainMenu();
+
+		/**
+		 * Play animation that returns to the main menu
+		 */
+		void returnToMainMenu();
+
+	   public:
+		MainMenuTransitions(MainMenuMode* parent);
+		void init(const std::shared_ptr<AssetManager>& assets);
+		void go(MatchState destination);
+		bool step();
+		void reset();
+	};
+
+	/** Transitions helper object */
+	MainMenuTransitions transitions;
+
 	/** Background asset with stars */
 	std::shared_ptr<cugl::Node> bg0stars;
 
@@ -114,10 +139,6 @@ class MainMenuMode : public cugl::Scene {
 	std::shared_ptr<cugl::Button> hostBtn;
 	/** Button to create client */
 	std::shared_ptr<cugl::Button> clientBtn;
-
-	/** The nodes containing all UI for the starting splash screen */
-	std::array<std::string, 3> mainScreen{"matchmaking_home", "matchmaking_gamelogo",
-										  "matchmaking_creditsbtn"};
 
 	/** Connection loading message */
 	std::shared_ptr<cugl::Label> connScreen;
@@ -153,16 +174,6 @@ class MainMenuMode : public cugl::Scene {
 	std::shared_ptr<cugl::Button> creditsBtn;
 	/** Credits scroll */
 	std::shared_ptr<cugl::Node> credits;
-
-	/**
-	 * Play animation that leaves the main menu
-	 */
-	void animateOutMainMenu();
-
-	/**
-	 * Play animation that returns to the main menu
-	 */
-	void returnToMainMenu();
 
 #pragma endregion
 	/**
@@ -208,7 +219,8 @@ class MainMenuMode : public cugl::Scene {
 		  gameReady(false),
 		  rotationFrame(0),
 		  needlePos(0),
-		  currState(StartScreen) {}
+		  currState(StartScreen),
+		  transitions(this) {}
 
 	/**
 	 * Disposes of all (non-static) resources allocated to this mode.

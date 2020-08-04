@@ -253,6 +253,7 @@
     <ClCompile Include="..\..\source\InputController.cpp" />
     <ClCompile Include="..\..\source\LoadingMode.cpp" />
     <ClCompile Include="..\..\source\MainMenuMode.cpp" />
+    <ClCompile Include="..\..\source\MainMenuTransitions.cpp" />
     <ClCompile Include="..\..\source\PlayerDonutModel.cpp" />
     <ClCompile Include="..\..\source\PlayerDonutNode.cpp" />
     <ClCompile Include="..\..\source\ShipModel.cpp" />
