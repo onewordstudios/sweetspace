@@ -2,6 +2,7 @@
 #define __ANIMATION_MANAGER_H__
 #include <cugl/cugl.h>
 
+#include <list>
 #include <unordered_map>
 
 #include "Tween.h"
