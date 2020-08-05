@@ -214,6 +214,7 @@
     <ClInclude Include="..\..\source\LoadingMode.h" />
     <ClInclude Include="..\..\source\MagicInternetBox.h" />
     <ClInclude Include="..\..\source\MainMenuMode.h" />
+    <ClInclude Include="..\..\source\MainMenuTransitions.h" />
     <ClInclude Include="..\..\source\PlayerDonutModel.h" />
     <ClInclude Include="..\..\source\PlayerDonutNode.h" />
     <ClInclude Include="..\..\source\ShipModel.h" />

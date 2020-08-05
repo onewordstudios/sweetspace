@@ -104,33 +104,10 @@ class MainMenuMode : public cugl::Scene {
 
 #pragma region Scene Graph Nodes
 
-	class MainMenuTransitions {
-	   private:
-		MainMenuMode* parent;
-
-		/** Helper object to do scene graph animations */
-		AnimationManager animations;
-
-		/**
-		 * Play animation that leaves the main menu
-		 */
-		void animateOutMainMenu();
-
-		/**
-		 * Play animation that returns to the main menu
-		 */
-		void returnToMainMenu();
-
-	   public:
-		MainMenuTransitions(MainMenuMode* parent);
-		void init(const std::shared_ptr<AssetManager>& assets);
-		void go(MatchState destination);
-		bool step();
-		void reset();
-	};
+	class MainMenuTransitions;
 
 	/** Transitions helper object */
-	MainMenuTransitions transitions;
+	std::unique_ptr<MainMenuTransitions> transitions;
 
 	/** Background asset with stars */
 	std::shared_ptr<cugl::Node> bg0stars;
@@ -214,22 +191,12 @@ class MainMenuMode : public cugl::Scene {
 	 * This constructor does not allocate any objects or start the game.
 	 * This allows us to use the object without a heap pointer.
 	 */
-	MainMenuMode()
-		: Scene(),
-		  net(nullptr),
-		  startHostThread(nullptr),
-		  screenHeight(0),
-		  gameReady(false),
-		  rotationFrame(0),
-		  creditsScrollFrame(0),
-		  needlePos(0),
-		  currState(StartScreen),
-		  transitions(this) {}
+	MainMenuMode();
 
 	/**
 	 * Disposes of all (non-static) resources allocated to this mode.
 	 */
-	~MainMenuMode() { dispose(); }
+	~MainMenuMode();
 
 	/**
 	 * Disposes of all (non-static) resources allocated to this mode.

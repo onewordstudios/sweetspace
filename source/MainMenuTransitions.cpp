@@ -1,3 +1,5 @@
+#include "MainMenuTransitions.h"
+
 #include <cugl/cugl.h>
 
 #include "MainMenuMode.h"
