@@ -287,6 +287,7 @@ void MainMenuMode::processUpdate() {
 						break;
 				}
 				connScreen->setVisible(true);
+				connScreen->setColor(cugl::Color4::WHITE);
 			}
 			break;
 		}

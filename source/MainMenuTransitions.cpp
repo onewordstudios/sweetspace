@@ -129,7 +129,9 @@ void MainMenuMode::MainMenuTransitions::to(MatchState destination) {
 			switch (destination) {
 				case HostScreen:
 					parent->setRoomID();
-					parent->connScreen->setVisible(false);
+					if (parent->connScreen->isVisible()) {
+						animations.fadeOut(parent->connScreen, TRANSITION_DURATION);
+					}
 					parent->startHostThread->detach();
 
 					parent->currState = HostScreen;

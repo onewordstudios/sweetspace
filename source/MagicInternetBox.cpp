@@ -299,10 +299,8 @@ void MagicInternetBox::update() {
 		case GameStart:
 			CULog("ERROR: Matchmaking update called on MIB after game start; aborting");
 		case Uninitialized:
-			return;
 		case ClientRoomInvalid:
 		case ClientRoomFull:
-			CULog("Tried to call update() after failed client connection; aborting");
 			return;
 		default:
 			break;
