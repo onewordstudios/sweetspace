@@ -65,16 +65,16 @@ bool AnimationManager::step() {
 				e2 = (int)(anim.endFrame - anim.startFrame);
 
 			switch (anim.ease) {
-				case AnimationManager::TweenType::Linear:
+				case Tween::TweenType::Linear:
 					val = Tween::linear(s1, e1, s2, e2);
 					break;
-				case AnimationManager::TweenType::EaseIn:
+				case Tween::TweenType::EaseIn:
 					val = Tween::easeIn(s1, e1, s2, e2);
 					break;
-				case AnimationManager::TweenType::EaseOut:
+				case Tween::TweenType::EaseOut:
 					val = Tween::easeOut(s1, e1, s2, e2);
 					break;
-				case AnimationManager::TweenType::EaseInOut:
+				case Tween::TweenType::EaseInOut:
 					val = Tween::easeInOut(s1, e1, s2, e2);
 					break;
 			}
@@ -106,26 +106,26 @@ bool AnimationManager::step() {
 }
 
 void AnimationManager::queue(std::shared_ptr<cugl::Node> node, AnimationProperty property,
-							 TweenType ease, float startVal, float endVal, unsigned int duration,
-							 unsigned int delay) {
+							 Tween::TweenType ease, float startVal, float endVal,
+							 unsigned int duration, unsigned int delay) {
 	inProgress.push_back({node, property, ease, startVal, endVal, delay + currentFrame,
 						  duration + delay + currentFrame});
 }
 
-void AnimationManager::animateX(std::string node, TweenType ease, float destination,
+void AnimationManager::animateX(std::string node, Tween::TweenType ease, float destination,
 								unsigned int duration, unsigned int delay) {
 	auto n = nodes.at(node);
 	queue(n, PositionX, ease, n->getPositionX(), destination, duration, delay);
 }
 
-void AnimationManager::animateY(std::string node, TweenType ease, float destination,
+void AnimationManager::animateY(std::string node, Tween::TweenType ease, float destination,
 								unsigned int duration, unsigned int delay) {
 	auto n = nodes.at(node);
 	queue(n, PositionY, ease, n->getPositionY(), destination, duration, delay);
 }
 
 void AnimationManager::fadeIn(std::string node, unsigned int duration, unsigned int delay) {
-	queue(nodes.at(node), Visibility, AnimationManager::TweenType::Linear, 0, 1, duration, delay);
+	queue(nodes.at(node), Visibility, Tween::TweenType::Linear, 0, 1, duration, delay);
 }
 
 void AnimationManager::fadeOut(std::string node, unsigned int duration, unsigned int delay) {
@@ -134,5 +134,5 @@ void AnimationManager::fadeOut(std::string node, unsigned int duration, unsigned
 
 void AnimationManager::fadeOut(std::shared_ptr<cugl::Node> node, unsigned int duration,
 							   unsigned int delay) {
-	queue(node, Visibility, AnimationManager::TweenType::Linear, 1, 0, duration, delay);
+	queue(node, Visibility, Tween::TweenType::Linear, 1, 0, duration, delay);
 }

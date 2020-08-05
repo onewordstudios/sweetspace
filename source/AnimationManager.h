@@ -4,13 +4,15 @@
 
 #include <unordered_map>
 
-class AnimationManager {
-   public:
-	/**
-	 * Tweens that can be used.
-	 */
-	enum class TweenType { Linear, EaseIn, EaseOut, EaseInOut };
+#include "Tween.h"
 
+/**
+ * Helper class to run animations on scene graph nodes. Supports fading nodes in an out, as well as
+ * changing their x and y positions. Register a node by name with {@code registerNode}, and then
+ * call one of the animate or fade methods to queue up an animation. Call {@code step} each frame to
+ * run the animation. Also supports resetting all nodes to their initial positions.
+ */
+class AnimationManager {
    private:
 	/**
 	 * Properties that can be animated.
@@ -23,7 +25,7 @@ class AnimationManager {
 	struct AnimationTween {
 		std::shared_ptr<cugl::Node> node;
 		AnimationProperty property;
-		TweenType ease;
+		Tween::TweenType ease;
 		float startVal;
 		float endVal;
 		unsigned int startFrame;
@@ -63,7 +65,7 @@ class AnimationManager {
 	 * @param duration The number of frames to run the animation for
 	 * @param delay The number of frames to wait before starting the animation
 	 */
-	void queue(std::shared_ptr<cugl::Node> node, AnimationProperty property, TweenType ease,
+	void queue(std::shared_ptr<cugl::Node> node, AnimationProperty property, Tween::TweenType ease,
 			   float startVal, float endVal, unsigned int duration, unsigned int delay);
 
    public:
@@ -102,7 +104,7 @@ class AnimationManager {
 	 * @param duration The number of frames to run the animation for
 	 * @param delay The number of frames to wait before starting the animation
 	 */
-	void animateX(std::string node, TweenType ease, float destination, unsigned int duration,
+	void animateX(std::string node, Tween::TweenType ease, float destination, unsigned int duration,
 				  unsigned int delay = 0);
 
 	/**
@@ -114,7 +116,7 @@ class AnimationManager {
 	 * @param duration The number of frames to run the animation for
 	 * @param delay The number of frames to wait before starting the animation
 	 */
-	void animateY(std::string node, TweenType ease, float destination, unsigned int duration,
+	void animateY(std::string node, Tween::TweenType ease, float destination, unsigned int duration,
 				  unsigned int delay = 0);
 
 	/**
