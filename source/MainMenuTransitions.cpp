@@ -143,6 +143,7 @@ void MainMenuMode::MainMenuTransitions::to(MatchState destination) {
 					mainMenuIn();
 					parent->startHostThread->detach();
 					parent->net->reset();
+					animations.fadeOut(parent->connScreen, TRANSITION_DURATION);
 					break;
 				default:
 					break;

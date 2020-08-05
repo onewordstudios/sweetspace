@@ -271,24 +271,22 @@ void MainMenuMode::processUpdate() {
 		case HostScreenWait: {
 			if (net->getRoomID() != "") {
 				transition->to(HostScreen);
-			} else {
-				if (!connScreen->isVisible()) {
-					switch (net->matchStatus()) {
-						case MagicInternetBox::MatchmakingStatus::HostError:
-							connScreen->setText("Error Connecting :(");
-							backBtn->setVisible(true);
-							backBtn->setColor(cugl::Color4::WHITE);
-							break;
-						case MagicInternetBox::MatchmakingStatus::HostApiMismatch:
-							connScreen->setText("Update required :(");
-							backBtn->setVisible(true);
-							backBtn->setColor(cugl::Color4::WHITE);
-							break;
-						default:
-							break;
-					}
-					connScreen->setVisible(true);
+			} else if (!connScreen->isVisible()) {
+				switch (net->matchStatus()) {
+					case MagicInternetBox::MatchmakingStatus::HostError:
+						connScreen->setText("Error Connecting :(");
+						backBtn->setVisible(true);
+						backBtn->setColor(cugl::Color4::WHITE);
+						break;
+					case MagicInternetBox::MatchmakingStatus::HostApiMismatch:
+						connScreen->setText("Update Required :(");
+						backBtn->setVisible(true);
+						backBtn->setColor(cugl::Color4::WHITE);
+						break;
+					default:
+						break;
 				}
+				connScreen->setVisible(true);
 			}
 			break;
 		}
@@ -372,7 +370,6 @@ void MainMenuMode::processButtons() {
 				// Intentional fall-through
 			case ClientScreen:
 			case Credits:
-				CULog("Going Back");
 				transition->to(StartScreen);
 				return;
 			default:
@@ -400,13 +397,11 @@ void MainMenuMode::processButtons() {
 		}
 		case HostScreenWait: {
 			auto status = net->matchStatus();
-			if (status != MagicInternetBox::MatchmakingStatus::HostError &&
-				status != MagicInternetBox::MatchmakingStatus::HostApiMismatch) {
-				break;
-			}
-			if (buttonManager.tappedButton(backBtn, tapData)) {
-				CULog("Going Back");
-				transition->to(StartScreen);
+			if (status == MagicInternetBox::MatchmakingStatus::HostError ||
+				status == MagicInternetBox::MatchmakingStatus::HostApiMismatch) {
+				if (buttonManager.tappedButton(backBtn, tapData)) {
+					transition->to(StartScreen);
+				}
 			}
 			break;
 		}
