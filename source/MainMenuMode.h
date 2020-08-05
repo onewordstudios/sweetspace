@@ -107,7 +107,7 @@ class MainMenuMode : public cugl::Scene {
 	class MainMenuTransitions;
 
 	/** Transitions helper object */
-	std::unique_ptr<MainMenuTransitions> transitions;
+	std::unique_ptr<MainMenuTransitions> transition;
 
 	/** Background asset with stars */
 	std::shared_ptr<cugl::Node> bg0stars;

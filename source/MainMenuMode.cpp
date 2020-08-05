@@ -48,7 +48,7 @@ MainMenuMode::MainMenuMode()
 	  creditsScrollFrame(0),
 	  needlePos(0),
 	  currState(StartScreen) {
-	transitions = std::make_unique<MainMenuTransitions>(this);
+	transition = std::make_unique<MainMenuTransitions>(this);
 }
 
 MainMenuMode::~MainMenuMode() { dispose(); }
@@ -86,7 +86,7 @@ bool MainMenuMode::init(const std::shared_ptr<AssetManager>& assets) {
 
 #pragma region Scene Graph Components
 	bg0stars = assets->get<Node>("matchmaking_mainmenubg2");
-	transitions->init(assets);
+	transition->init(assets);
 
 	creditsBtn = std::dynamic_pointer_cast<Button>(assets->get<Node>("matchmaking_creditsbtn"));
 	credits = assets->get<Node>("matchmaking_credits");
@@ -188,12 +188,12 @@ void MainMenuMode::dispose() {
 	levelBtns.fill(nullptr);
 	buttonManager.clear();
 	clientRoomBtns.clear();
-	transitions->reset();
+	transition->reset();
 }
 
 #pragma endregion
 
-void MainMenuMode::triggerCredits() { transitions->go(Credits); }
+void MainMenuMode::triggerCredits() { transition->to(Credits); }
 
 #pragma region Internal Helpers
 
@@ -270,7 +270,7 @@ void MainMenuMode::processUpdate() {
 	switch (currState) {
 		case HostScreenWait: {
 			if (net->getRoomID() != "") {
-				transitions->go(HostScreen);
+				transition->to(HostScreen);
 			} else {
 				if (!connScreen->isVisible()) {
 					switch (net->matchStatus()) {
@@ -311,18 +311,18 @@ void MainMenuMode::processUpdate() {
 			switch (net->matchStatus()) {
 				case MagicInternetBox::MatchmakingStatus::ClientRoomInvalid:
 					clientErrorLabel->setText("That ship ID doesn't seem to exist.");
-					transitions->go(ClientScreenError);
+					transition->to(ClientScreenError);
 					break;
 				case MagicInternetBox::MatchmakingStatus::ClientRoomFull:
 					clientErrorLabel->setText("That ship is full.");
-					transitions->go(ClientScreenError);
+					transition->to(ClientScreenError);
 					break;
 				case MagicInternetBox::MatchmakingStatus::ClientError:
 					clientErrorLabel->setText("Your app is out of date. Please update.");
-					transitions->go(ClientScreenError);
+					transition->to(ClientScreenError);
 					break;
 				case MagicInternetBox::MatchmakingStatus::ClientWaitingOnOthers:
-					transitions->go(ClientScreenDone);
+					transition->to(ClientScreenDone);
 					break;
 				default:
 					break;
@@ -373,7 +373,7 @@ void MainMenuMode::processButtons() {
 			case ClientScreen:
 			case Credits:
 				CULog("Going Back");
-				transitions->go(StartScreen);
+				transition->to(StartScreen);
 				return;
 			default:
 				break;
@@ -390,11 +390,11 @@ void MainMenuMode::processButtons() {
 	switch (currState) {
 		case StartScreen: {
 			if (buttonManager.tappedButton(hostBtn, tapData)) {
-				transitions->go(HostScreenWait);
+				transition->to(HostScreenWait);
 			} else if (buttonManager.tappedButton(clientBtn, tapData)) {
-				transitions->go(ClientScreen);
+				transition->to(ClientScreen);
 			} else if (buttonManager.tappedButton(creditsBtn, tapData)) {
-				transitions->go(Credits);
+				transition->to(Credits);
 			}
 			break;
 		}
@@ -406,19 +406,19 @@ void MainMenuMode::processButtons() {
 			}
 			if (buttonManager.tappedButton(backBtn, tapData)) {
 				CULog("Going Back");
-				transitions->go(StartScreen);
+				transition->to(StartScreen);
 			}
 			break;
 		}
 		case HostScreen: {
 			if (net->getNumPlayers() >= globals::MIN_PLAYERS) {
 				if (buttonManager.tappedButton(hostBeginBtn, tapData)) {
-					transitions->go(HostLevelSelect);
+					transition->to(HostLevelSelect);
 				}
 			} else {
 				if (buttonManager.tappedButton(backBtn, tapData)) {
 					CULog("Going Back");
-					transitions->go(StartScreen);
+					transition->to(StartScreen);
 				}
 			}
 			break;
@@ -455,7 +455,7 @@ void MainMenuMode::processButtons() {
 
 				break;
 			} else if (buttonManager.tappedButton(backBtn, tapData)) {
-				transitions->go(StartScreen);
+				transition->to(StartScreen);
 				return;
 			}
 
@@ -481,14 +481,14 @@ void MainMenuMode::processButtons() {
 		}
 		case ClientScreenError: {
 			if (buttonManager.tappedButton(clientErrorBtn, tapData)) {
-				transitions->go(ClientScreen);
+				transition->to(ClientScreen);
 			}
 			break;
 		}
 		case ClientScreenDone:
 		case Credits: {
 			if (buttonManager.tappedButton(backBtn, tapData)) {
-				transitions->go(StartScreen);
+				transition->to(StartScreen);
 			}
 			break;
 		}
@@ -512,7 +512,7 @@ void MainMenuMode::update(float timestep) {
 	rotationFrame = (rotationFrame + 1) % ROTATION_MAX;
 	bg0stars->setAngle(globals::TWO_PI * (float)rotationFrame / ROTATION_MAX);
 
-	if (transitions->step()) {
+	if (transition->step()) {
 		net->update();
 		return;
 	}

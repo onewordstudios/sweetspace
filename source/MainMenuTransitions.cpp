@@ -22,8 +22,8 @@ constexpr float CREDITS_BG_POS = 2.5;
 constexpr float SHIP_FLY_POS = 1.5;
 
 /** The nodes containing all UI for the starting splash screen */
-constexpr std::array<const char*, 3> mainScreen = {"matchmaking_home", "matchmaking_gamelogo",
-												   "matchmaking_creditsbtn"};
+constexpr std::array<const char*, 3> MAIN_SCREEN = {"matchmaking_home", "matchmaking_gamelogo",
+													"matchmaking_creditsbtn"};
 #pragma endregion
 
 MainMenuMode::MainMenuTransitions::MainMenuTransitions(MainMenuMode* parent) {
@@ -49,7 +49,7 @@ void MainMenuMode::MainMenuTransitions::init(const std::shared_ptr<AssetManager>
 	animations.animateY("matchmaking_mainmenubg-land", AnimationManager::TweenType::EaseOut,
 						screenHeight / 2, OPEN_TRANSITION);
 
-	for (auto e : mainScreen) {
+	for (auto e : MAIN_SCREEN) {
 		animations.registerNode(e, assets);
 		animations.fadeIn(e, TRANSITION_DURATION, OPEN_TRANSITION_FADE);
 	}
@@ -67,10 +67,10 @@ void MainMenuMode::MainMenuTransitions::init(const std::shared_ptr<AssetManager>
 	animations.registerNode("matchmaking_clienterr", assets);
 }
 
-void MainMenuMode::MainMenuTransitions::go(MatchState destination) {
+void MainMenuMode::MainMenuTransitions::to(MatchState destination) {
 	auto screenHeight = parent->screenHeight;
 	switch (parent->currState) {
-		case StartScreen:
+		case StartScreen: {
 			switch (destination) {
 				case HostScreenWait:
 					parent->startHostThread = std::unique_ptr<std::thread>(new std::thread([]() {
@@ -81,7 +81,7 @@ void MainMenuMode::MainMenuTransitions::go(MatchState destination) {
 					parent->needlePos = 0;
 					parent->clientWaitHost->setVisible(false);
 
-					animateOutMainMenu();
+					mainMenuOut();
 
 					parent->currState = destination;
 					break;
@@ -89,7 +89,7 @@ void MainMenuMode::MainMenuTransitions::go(MatchState destination) {
 					parent->clientEnteredRoom.clear();
 					parent->updateClientLabel();
 
-					animateOutMainMenu();
+					mainMenuOut();
 
 					animations.animateY("matchmaking_client", AnimationManager::TweenType::EaseOut,
 										0, TRANSITION_DURATION);
@@ -105,7 +105,7 @@ void MainMenuMode::MainMenuTransitions::go(MatchState destination) {
 					parent->credits->setPositionY(0);
 					parent->creditsScrollFrame = 0;
 
-					animateOutMainMenu();
+					mainMenuOut();
 					animations.fadeOut("matchmaking_mainmenubg-glow", TRANSITION_DURATION);
 
 					animations.animateY("matchmaking_mainmenubg-land",
@@ -124,6 +124,7 @@ void MainMenuMode::MainMenuTransitions::go(MatchState destination) {
 					break;
 			}
 			break;
+		}
 		case HostScreenWait: {
 			switch (destination) {
 				case HostScreen:
@@ -139,7 +140,7 @@ void MainMenuMode::MainMenuTransitions::go(MatchState destination) {
 					animations.fadeIn("matchmaking_backbtn", TRANSITION_DURATION);
 					break;
 				case StartScreen:
-					returnToMainMenu();
+					mainMenuIn();
 					parent->startHostThread->detach();
 					parent->net->reset();
 					break;
@@ -163,7 +164,10 @@ void MainMenuMode::MainMenuTransitions::go(MatchState destination) {
 					break;
 				case StartScreen:
 					parent->net->reset();
-					returnToMainMenu();
+					animations.animateY("matchmaking_host", AnimationManager::TweenType::EaseIn,
+										-screenHeight, TRANSITION_DURATION);
+					animations.fadeOut("matchmaking_host", 1, TRANSITION_DURATION);
+					mainMenuIn();
 					break;
 				default:
 					break;
@@ -171,8 +175,11 @@ void MainMenuMode::MainMenuTransitions::go(MatchState destination) {
 			break;
 		}
 		case ClientScreen: {
-			returnToMainMenu();
+			mainMenuIn();
 			parent->currState = StartScreen;
+			animations.animateY("matchmaking_client", AnimationManager::TweenType::EaseIn,
+								-screenHeight, TRANSITION_DURATION);
+			animations.fadeOut("matchmaking_client", 1, TRANSITION_DURATION);
 			break;
 		}
 		case ClientScreenSubmitted: {
@@ -216,7 +223,12 @@ void MainMenuMode::MainMenuTransitions::go(MatchState destination) {
 		}
 		case ClientScreenDone: {
 			parent->net->reset();
-			returnToMainMenu();
+
+			animations.animateY("matchmaking_host", AnimationManager::TweenType::EaseIn,
+								-screenHeight, TRANSITION_DURATION);
+			animations.fadeOut("matchmaking_host", 1, TRANSITION_DURATION);
+
+			mainMenuIn();
 			parent->currState = StartScreen;
 			break;
 		}
@@ -237,50 +249,6 @@ void MainMenuMode::MainMenuTransitions::go(MatchState destination) {
 			break;
 		}
 		case Credits: {
-			returnToMainMenu();
-			break;
-		}
-		default:
-			break;
-	}
-}
-void MainMenuMode::MainMenuTransitions::reset() { animations.reset(); }
-
-bool MainMenuMode::MainMenuTransitions::step() { return animations.step(); }
-
-void MainMenuMode::MainMenuTransitions::animateOutMainMenu() {
-	auto screenHeight = parent->screenHeight;
-	for (auto e : mainScreen) {
-		animations.fadeOut(e, TRANSITION_DURATION);
-	}
-	animations.animateY("matchmaking_mainmenubg-ship", AnimationManager::TweenType::EaseIn,
-						screenHeight / SHIP_FLY_POS, TRANSITION_DURATION);
-	animations.fadeOut("matchmaking_mainmenubg-ship", TRANSITION_DURATION);
-}
-
-void MainMenuMode::MainMenuTransitions::returnToMainMenu() {
-	auto screenHeight = parent->screenHeight;
-	for (auto e : mainScreen) {
-		animations.fadeIn(e, TRANSITION_DURATION);
-	}
-	animations.animateY("matchmaking_mainmenubg-ship", AnimationManager::TweenType::EaseIn,
-						screenHeight / 2, 1);
-	animations.fadeIn("matchmaking_mainmenubg-ship", TRANSITION_DURATION);
-	animations.fadeOut("matchmaking_backbtn", TRANSITION_DURATION);
-
-	switch (parent->currState) {
-		case HostScreen:
-		case ClientScreenDone:
-			animations.animateY("matchmaking_host", AnimationManager::TweenType::EaseIn,
-								-screenHeight, TRANSITION_DURATION);
-			animations.fadeOut("matchmaking_host", 1, TRANSITION_DURATION);
-			break;
-		case ClientScreen:
-			animations.animateY("matchmaking_client", AnimationManager::TweenType::EaseIn,
-								-screenHeight, TRANSITION_DURATION);
-			animations.fadeOut("matchmaking_client", 1, TRANSITION_DURATION);
-			break;
-		case Credits:
 			animations.fadeIn("matchmaking_mainmenubg-glow", TRANSITION_DURATION);
 
 			animations.animateY("matchmaking_mainmenubg-landnoship",
@@ -294,9 +262,36 @@ void MainMenuMode::MainMenuTransitions::returnToMainMenu() {
 			animations.fadeIn("matchmaking_mainmenubg-land", TRANSITION_DURATION);
 
 			animations.fadeOut("matchmaking_credits", TRANSITION_DURATION);
+			mainMenuIn();
 			break;
+		}
 		default:
 			break;
 	}
+}
+void MainMenuMode::MainMenuTransitions::reset() { animations.reset(); }
+
+bool MainMenuMode::MainMenuTransitions::step() { return animations.step(); }
+
+void MainMenuMode::MainMenuTransitions::mainMenuOut() {
+	auto screenHeight = parent->screenHeight;
+	for (auto e : MAIN_SCREEN) {
+		animations.fadeOut(e, TRANSITION_DURATION);
+	}
+	animations.animateY("matchmaking_mainmenubg-ship", AnimationManager::TweenType::EaseIn,
+						screenHeight / SHIP_FLY_POS, TRANSITION_DURATION);
+	animations.fadeOut("matchmaking_mainmenubg-ship", TRANSITION_DURATION);
+}
+
+void MainMenuMode::MainMenuTransitions::mainMenuIn() {
+	auto screenHeight = parent->screenHeight;
+	for (auto e : MAIN_SCREEN) {
+		animations.fadeIn(e, TRANSITION_DURATION);
+	}
+	animations.animateY("matchmaking_mainmenubg-ship", AnimationManager::TweenType::EaseIn,
+						screenHeight / 2, 1);
+	animations.fadeIn("matchmaking_mainmenubg-ship", TRANSITION_DURATION);
+	animations.fadeOut("matchmaking_backbtn", TRANSITION_DURATION);
+
 	parent->currState = StartScreen;
 }
