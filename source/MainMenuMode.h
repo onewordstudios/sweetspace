@@ -151,6 +151,8 @@ class MainMenuMode : public cugl::Scene {
 	std::shared_ptr<cugl::Button> hostBeginBtn;
 	/** The node containing the player count needle for the host */
 	std::shared_ptr<cugl::Node> hostNeedle;
+	/** The toggle to skip the tutorial; not managed by the btn manager */
+	std::shared_ptr<cugl::Button> hostTutorialSkipBtn;
 
 	/** Label for room ID (client) */
 	std::shared_ptr<cugl::Label> clientLabel;

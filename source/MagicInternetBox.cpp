@@ -49,10 +49,23 @@ MagicInternetBox::MagicInternetBox()
 	levelNum = -1;
 	currFrame = 0;
 	playerID = -1;
+	skipTutorial = false;
 	numPlayers = 0;
 	maxPlayers = 0;
 	lastConnection = 0;
 	activePlayers.fill(false);
+}
+
+void MagicInternetBox::startLevel() { startLevel(levelNum); }
+
+void MagicInternetBox::startLevel(int num) {
+	levelNum = num;
+	stateReconciler.reset();
+	if (num >= MAX_NUM_LEVELS || num < 0) {
+		events = EndGame;
+	} else {
+		events = LoadLevel;
+	}
 }
 
 bool MagicInternetBox::initConnection() {
@@ -100,6 +113,7 @@ bool MagicInternetBox::initConnection() {
 	}
 
 	stateReconciler.reset();
+	skipTutorial = false;
 	return true;
 }
 
@@ -228,6 +242,12 @@ void MagicInternetBox::startGame(int levelNum) {
 			return;
 	}
 
+	if (skipTutorial) {
+		while (strcmp(LEVEL_NAMES.at(levelNum), "") == 0) {
+			CULog("Level Num %d is a tutorial; skipping", levelNum);
+			levelNum++;
+		}
+	}
 	std::vector<uint8_t> data;
 	data.push_back((uint8_t)StartGame);
 	data.push_back((uint8_t)levelNum);
@@ -248,8 +268,8 @@ void MagicInternetBox::restartGame() {
 	data.push_back((uint8_t)ChangeGame);
 	data.push_back((uint8_t)0);
 	ws->sendBinary(data);
-	events = RestartLevel;
-	stateReconciler.reset();
+
+	startLevel();
 }
 
 void MagicInternetBox::nextLevel() {
@@ -257,16 +277,21 @@ void MagicInternetBox::nextLevel() {
 		CULog("ERROR: Trying to move to next level during invalid state %d", status);
 		return;
 	}
+
+	int level = levelNum + 1;
+	if (skipTutorial) {
+		while (strcmp(LEVEL_NAMES.at(level), "") == 0) {
+			CULog("Level Num %d is a tutorial; skipping", level);
+			level++;
+		}
+	}
+	startLevel(level);
+
 	std::vector<uint8_t> data;
 	data.push_back((uint8_t)ChangeGame);
 	data.push_back((uint8_t)1);
+	data.push_back((uint8_t)level);
 	ws->sendBinary(data);
-	events = NextLevel;
-	levelNum++;
-	stateReconciler.reset();
-	if (levelNum >= MAX_NUM_LEVELS) {
-		events = EndGame;
-	}
 }
 
 void MagicInternetBox::update() {
@@ -455,15 +480,10 @@ void MagicInternetBox::update(std::shared_ptr<ShipModel> state) {
 			}
 			case ChangeGame: {
 				if (message[1] == 0) {
-					events = RestartLevel;
+					startLevel();
 				} else {
-					events = NextLevel;
-					levelNum++;
-					if (levelNum >= MAX_NUM_LEVELS) {
-						events = EndGame;
-					}
+					startLevel(message[2]);
 				}
-				stateReconciler.reset();
 				return;
 			}
 			default:

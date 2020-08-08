@@ -121,6 +121,8 @@ bool MainMenuMode::init(const std::shared_ptr<AssetManager>& assets) {
 	hostBeginBtn =
 		std::dynamic_pointer_cast<Button>(assets->get<Node>("matchmaking_host_wrap_startbtn"));
 	hostNeedle = assets->get<Node>("matchmaking_host_dial_hand");
+	hostTutorialSkipBtn =
+		std::dynamic_pointer_cast<Button>(assets->get<Node>("matchmaking_tutorialbtn"));
 
 	clientJoinBtn =
 		std::dynamic_pointer_cast<Button>(assets->get<Node>("matchmaking_client_wrap_joinbtn"));
@@ -174,6 +176,8 @@ bool MainMenuMode::init(const std::shared_ptr<AssetManager>& assets) {
 	clientError->setVisible(false);
 	bg2ship->setColor(Color4::WHITE);
 	bg2ship->setPositionY(0);
+	backBtn->setVisible(false);
+	hostTutorialSkipBtn->setVisible(false);
 
 	updateClientLabel();
 	addChild(scene);
@@ -424,6 +428,9 @@ void MainMenuMode::processTransition() {
 				if (transitionFrame == 1) {
 					levelSelect->setVisible(true);
 					levelSelect->setColor(Tween::fade(0));
+					hostTutorialSkipBtn->setVisible(true);
+					hostTutorialSkipBtn->setColor(Tween::fade(0));
+					hostTutorialSkipBtn->setDown(false);
 				}
 
 				// Total transition duration is 1.5x standard length
@@ -434,6 +441,7 @@ void MainMenuMode::processTransition() {
 					endTransition();
 					hostScreen->setVisible(false);
 					levelSelect->setColor(Color4::WHITE);
+					hostTutorialSkipBtn->setColor(Color4::WHITE);
 					return;
 				}
 
@@ -446,6 +454,8 @@ void MainMenuMode::processTransition() {
 				// 0.5x - 1.5x, fade in level select
 				if (transitionFrame > halfTransition) {
 					levelSelect->setColor(Tween::fade(Tween::linear(
+						0, 1, transitionFrame - halfTransition, TRANSITION_DURATION)));
+					hostTutorialSkipBtn->setColor(Tween::fade(Tween::linear(
 						0, 1, transitionFrame - halfTransition, TRANSITION_DURATION)));
 				}
 				return;
@@ -808,6 +818,11 @@ void MainMenuMode::processButtons() {
 					net->startGame(LEVEL_ENTRY_POINTS.at(i));
 					return;
 				}
+			}
+			if (buttonManager.tappedButton(hostTutorialSkipBtn, tapData)) {
+				bool isDown = hostTutorialSkipBtn->isDown();
+				hostTutorialSkipBtn->setDown(!isDown);
+				net->setSkipTutorial(!isDown);
 			}
 			break;
 		}
