@@ -21,6 +21,11 @@ class Tween {
 
    public:
 	/**
+	 * Types of easing curves that can be used in tweens
+	 */
+	enum class TweenType { Linear, EaseIn, EaseOut, EaseInOut };
+
+	/**
 	 * Linearly interpolate between start and end.
 	 *
 	 * @param start The starting position

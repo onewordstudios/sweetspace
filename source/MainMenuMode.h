@@ -5,6 +5,7 @@
 #include <array>
 #include <vector>
 
+#include "AnimationManager.h"
 #include "ButtonManager.h"
 #include "InputController.h"
 #include "LevelConstants.h"
@@ -42,11 +43,11 @@ class MainMenuMode : public cugl::Scene {
 	/** Current room ID */
 	std::string roomID;
 
-	/** The current frame of a transition; -1 if not transitioning */
-	int transitionFrame;
-
 	/** Current frame of the rotating stars */
 	int rotationFrame;
+
+	/** Position of credits */
+	unsigned int creditsScrollFrame;
 
 	/** Current position of the needle */
 	float needlePos;
@@ -74,9 +75,6 @@ class MainMenuMode : public cugl::Scene {
 	 * there is an error connecting to server. Back button always returns to StartScreen.
 	 */
 	enum MatchState {
-		/** Empty state; used mainly for transitions only; the main state should only be NA when
-		   uninitialized */
-		NA = -1,
 		/** Main menu splash screen */
 		StartScreen,
 		/** Hosting a game; waiting on ship ID */
@@ -102,24 +100,17 @@ class MainMenuMode : public cugl::Scene {
 
 	/** The current state */
 	MatchState currState;
-	/** The state we are transitioning into, or NA (-1) if not transitioning */
-	MatchState transitionState;
 #pragma endregion
 
 #pragma region Scene Graph Nodes
 
+	class MainMenuTransitions;
+
+	/** Transitions helper object */
+	std::unique_ptr<MainMenuTransitions> transition;
+
 	/** Background asset with stars */
 	std::shared_ptr<cugl::Node> bg0stars;
-	/** Background asset with ship glow */
-	std::shared_ptr<cugl::Node> bg1glow;
-	/** Background asset with donut ship */
-	std::shared_ptr<cugl::Node> bg2ship;
-	/** Background asset with land */
-	std::shared_ptr<cugl::Node> bg3land;
-	/** Background asset for credits screen */
-	std::shared_ptr<cugl::Node> bg4landNoShip;
-	/** Background asset with studio name */
-	std::shared_ptr<cugl::Node> bg9studio;
 
 	/** Back button */
 	std::shared_ptr<cugl::Button> backBtn;
@@ -129,18 +120,8 @@ class MainMenuMode : public cugl::Scene {
 	/** Button to create client */
 	std::shared_ptr<cugl::Button> clientBtn;
 
-	/** The nodes containing all UI for the starting splash screen */
-	std::vector<std::shared_ptr<cugl::Node>> mainScreen;
-	/** The node containing all UI for the host screen */
-	std::shared_ptr<cugl::Node> hostScreen;
-	/** The node containing all UI for the client screen */
-	std::shared_ptr<cugl::Node> clientScreen;
-
 	/** Connection loading message */
 	std::shared_ptr<cugl::Label> connScreen;
-
-	/** Level select */
-	std::shared_ptr<cugl::Node> levelSelect;
 
 	/** Level select buttons */
 	std::array<std::shared_ptr<cugl::Button>, NUM_LEVEL_BTNS> levelBtns;
@@ -164,8 +145,6 @@ class MainMenuMode : public cugl::Scene {
 	std::shared_ptr<cugl::Button> clientClearBtn;
 	/** The label on the host screen shown to the client after joining */
 	std::shared_ptr<cugl::Node> clientWaitHost;
-	/** Screen for client error */
-	std::shared_ptr<cugl::Node> clientError;
 	/** The label on the client error screen */
 	std::shared_ptr<cugl::Label> clientErrorLabel;
 	/** The label on the client error screen */
@@ -191,17 +170,6 @@ class MainMenuMode : public cugl::Scene {
 	void setNumPlayers();
 
 #pragma region Update Handlers
-	/**
-	 * Called during a state transition upon completing the transition.
-	 */
-	void endTransition();
-
-	/**
-	 * Handle update during a state transition. Animates the transition between states.
-	 *
-	 * PRECONDITION: transitionState != NA
-	 */
-	void processTransition();
 
 	/**
 	 * Handle normal updates during a frame. Process state updates that happen each frame.
@@ -223,22 +191,12 @@ class MainMenuMode : public cugl::Scene {
 	 * This constructor does not allocate any objects or start the game.
 	 * This allows us to use the object without a heap pointer.
 	 */
-	MainMenuMode()
-		: Scene(),
-		  net(nullptr),
-		  startHostThread(nullptr),
-		  screenHeight(0),
-		  gameReady(false),
-		  transitionFrame(-1),
-		  rotationFrame(0),
-		  needlePos(0),
-		  currState(NA),
-		  transitionState(StartScreen) {}
+	MainMenuMode();
 
 	/**
 	 * Disposes of all (non-static) resources allocated to this mode.
 	 */
-	~MainMenuMode() { dispose(); }
+	~MainMenuMode();
 
 	/**
 	 * Disposes of all (non-static) resources allocated to this mode.

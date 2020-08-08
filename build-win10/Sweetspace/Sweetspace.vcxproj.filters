@@ -165,6 +165,12 @@
     <ClInclude Include="..\..\source\StateReconciler.h">
       <Filter>Header Files\Controllers</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\source\AnimationManager.h">
+      <Filter>Header Files\Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\MainMenuTransitions.h">
+      <Filter>Header Files\Modes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\source\main.cpp">
@@ -265,6 +271,12 @@
     </ClCompile>
     <ClCompile Include="..\..\source\StateReconciler.cpp">
       <Filter>Source Files\Controllers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\AnimationManager.cpp">
+      <Filter>Source Files\Helpers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\MainMenuTransitions.cpp">
+      <Filter>Source Files\Modes</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

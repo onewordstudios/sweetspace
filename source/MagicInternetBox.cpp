@@ -296,15 +296,11 @@ void MagicInternetBox::nextLevel() {
 
 void MagicInternetBox::update() {
 	switch (status) {
-		case Uninitialized:
-			CULog("ERROR: Update called on MIB before initialization; aborting");
-			return;
 		case GameStart:
 			CULog("ERROR: Matchmaking update called on MIB after game start; aborting");
-			return;
+		case Uninitialized:
 		case ClientRoomInvalid:
 		case ClientRoomFull:
-			CULog("Tried to call update() after failed client connection; aborting");
 			return;
 		default:
 			break;
@@ -643,4 +639,6 @@ void MagicInternetBox::reset() {
 	status = Uninitialized;
 	activePlayers.fill(false);
 	stateReconciler.reset();
+	roomID = "";
+	playerID = -1;
 }
