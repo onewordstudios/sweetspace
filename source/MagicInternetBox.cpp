@@ -280,8 +280,8 @@ void MagicInternetBox::nextLevel() {
 
 	int level = levelNum + 1;
 	if (skipTutorial) {
-		while (strcmp(LEVEL_NAMES.at(levelNum), "") == 0) {
-			CULog("Level Num %d is a tutorial; skipping", levelNum);
+		while (strcmp(LEVEL_NAMES.at(level), "") == 0) {
+			CULog("Level Num %d is a tutorial; skipping", level);
 			level++;
 		}
 	}
