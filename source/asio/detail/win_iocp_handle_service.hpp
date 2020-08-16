@@ -26,13 +26,12 @@
 #include "asio/detail/memory.hpp"
 #include "asio/detail/mutex.hpp"
 #include "asio/detail/operation.hpp"
+#include "asio/detail/push_options.hpp"
 #include "asio/detail/win_iocp_handle_read_op.hpp"
 #include "asio/detail/win_iocp_handle_write_op.hpp"
 #include "asio/detail/win_iocp_io_context.hpp"
 #include "asio/error.hpp"
 #include "asio/execution_context.hpp"
-
-#include "asio/detail/push_options.hpp"
 
 namespace asio {
 namespace detail {

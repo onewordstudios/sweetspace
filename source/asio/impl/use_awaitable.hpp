@@ -17,7 +17,6 @@
 
 #include "asio/async_result.hpp"
 #include "asio/detail/config.hpp"
-
 #include "asio/detail/push_options.hpp"
 
 namespace asio {
@@ -217,7 +216,7 @@ class async_result<use_awaitable_t<Executor>, R(Args...)> {
 	template <typename Initiation, typename... InitArgs>
 	static return_type initiate(Initiation initiation, use_awaitable_t<Executor>,
 								InitArgs... args) {
-		co_await[&](auto* frame) {
+		co_await [&](auto* frame) {
 			handler_type handler(frame->detach_thread());
 			std::move(initiation)(std::move(handler), std::move(args)...);
 			return static_cast<handler_type*>(nullptr);

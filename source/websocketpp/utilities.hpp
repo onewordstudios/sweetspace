@@ -28,11 +28,10 @@
 #ifndef WEBSOCKETPP_UTILITIES_HPP
 #define WEBSOCKETPP_UTILITIES_HPP
 
-#include <websocketpp/common/stdint.hpp>
-
 #include <algorithm>
-#include <string>
 #include <locale>
+#include <string>
+#include <websocketpp/common/stdint.hpp>
 
 namespace websocketpp {
 /// Generic non-websocket specific utility functions and data structures
@@ -45,26 +44,27 @@ namespace utility {
  *
  * templated version of my_equal so it could work with both char and wchar_t
  */
-template<typename charT>
+template <typename charT>
 struct my_equal {
-    /// Construct the functor with the given locale
-    /**
-     * @param [in] loc The locale to use for determining the case of values
-     */
-    my_equal(std::locale const & loc ) : m_loc(loc) {}
+	/// Construct the functor with the given locale
+	/**
+	 * @param [in] loc The locale to use for determining the case of values
+	 */
+	my_equal(std::locale const& loc) : m_loc(loc) {}
 
-    /// Perform a case insensitive comparison
-    /**
-     * @param ch1 The first value to compare
-     * @param ch2 The second value to compare
-     * @return Whether or not the two values are equal when both are converted
-     *         to uppercase using the given locale.
-     */
-    bool operator()(charT ch1, charT ch2) {
-        return std::toupper(ch1, m_loc) == std::toupper(ch2, m_loc);
-    }
-private:
-    std::locale const & m_loc;
+	/// Perform a case insensitive comparison
+	/**
+	 * @param ch1 The first value to compare
+	 * @param ch2 The second value to compare
+	 * @return Whether or not the two values are equal when both are converted
+	 *         to uppercase using the given locale.
+	 */
+	bool operator()(charT ch1, charT ch2) {
+		return std::toupper(ch1, m_loc) == std::toupper(ch2, m_loc);
+	}
+
+   private:
+	std::locale const& m_loc;
 };
 
 /// Helper less than functor for case insensitive find
@@ -73,18 +73,17 @@ private:
  * http://stackoverflow.com/questions/3152241/case-insensitive-stdstring-find
  */
 struct ci_less {
-    // case-independent (ci) compare_less binary function
-    struct nocase_compare {
-        bool operator() (unsigned char const & c1, unsigned char const & c2) const {
-            return tolower (c1) < tolower (c2);
-        }
-    };
-    bool operator() (std::string const & s1, std::string const & s2) const {
-        return std::lexicographical_compare
-            (s1.begin (), s1.end (),   // source range
-            s2.begin (), s2.end (),   // dest range
-            nocase_compare ());  // comparison
-    }
+	// case-independent (ci) compare_less binary function
+	struct nocase_compare {
+		bool operator()(unsigned char const& c1, unsigned char const& c2) const {
+			return tolower(c1) < tolower(c2);
+		}
+	};
+	bool operator()(std::string const& s1, std::string const& s2) const {
+		return std::lexicographical_compare(s1.begin(), s1.end(), // source range
+											s2.begin(), s2.end(), // dest range
+											nocase_compare());	  // comparison
+	}
 };
 
 /// Find substring (case insensitive)
@@ -97,12 +96,11 @@ struct ci_less {
  *         haystack. If the sequence is not found, the function returns
  *         haystack.end()
  */
-template<typename T>
-typename T::const_iterator ci_find_substr(T const & haystack, T const & needle,
-    std::locale const & loc = std::locale())
-{
-    return std::search( haystack.begin(), haystack.end(),
-        needle.begin(), needle.end(), my_equal<typename T::value_type>(loc) );
+template <typename T>
+typename T::const_iterator ci_find_substr(T const& haystack, T const& needle,
+										  std::locale const& loc = std::locale()) {
+	return std::search(haystack.begin(), haystack.end(), needle.begin(), needle.end(),
+					   my_equal<typename T::value_type>(loc));
 }
 
 /// Find substring (case insensitive)
@@ -119,13 +117,12 @@ typename T::const_iterator ci_find_substr(T const & haystack, T const & needle,
  *         haystack. If the sequence is not found, the function returns
  *         haystack.end()
  */
-template<typename T>
-typename T::const_iterator ci_find_substr(T const & haystack,
-    typename T::value_type const * needle, typename T::size_type size,
-    std::locale const & loc = std::locale())
-{
-    return std::search( haystack.begin(), haystack.end(),
-        needle, needle+size, my_equal<typename T::value_type>(loc) );
+template <typename T>
+typename T::const_iterator ci_find_substr(T const& haystack, typename T::value_type const* needle,
+										  typename T::size_type size,
+										  std::locale const& loc = std::locale()) {
+	return std::search(haystack.begin(), haystack.end(), needle, needle + size,
+					   my_equal<typename T::value_type>(loc));
 }
 
 /// Convert a string to lowercase
@@ -133,7 +130,7 @@ typename T::const_iterator ci_find_substr(T const & haystack,
  * @param [in] in The string to convert
  * @return The converted string
  */
-std::string to_lower(std::string const & in);
+std::string to_lower(std::string const& in);
 
 /// Replace all occurrances of a substring with another
 /**
@@ -143,8 +140,8 @@ std::string to_lower(std::string const & in);
  * @return A copy of `subject` with all occurances of `search` replaced with
  *         `replace`
  */
-std::string string_replace_all(std::string subject, std::string const & search,
-                               std::string const & replace);
+std::string string_replace_all(std::string subject, std::string const& search,
+							   std::string const& replace);
 
 /// Convert std::string to ascii printed string of hex digits
 /**
@@ -152,7 +149,7 @@ std::string string_replace_all(std::string subject, std::string const & search,
  * @return A copy of `input` converted to the printable representation of the
  *         hex values of its data.
  */
-std::string to_hex(std::string const & input);
+std::string to_hex(std::string const& input);
 
 /// Convert byte array (uint8_t) to ascii printed string of hex digits
 /**
@@ -161,7 +158,7 @@ std::string to_hex(std::string const & input);
  * @return A copy of `input` converted to the printable representation of the
  *         hex values of its data.
  */
-std::string to_hex(uint8_t const * input, size_t length);
+std::string to_hex(uint8_t const* input, size_t length);
 
 /// Convert char array to ascii printed string of hex digits
 /**
@@ -170,7 +167,7 @@ std::string to_hex(uint8_t const * input, size_t length);
  * @return A copy of `input` converted to the printable representation of the
  *         hex values of its data.
  */
-std::string to_hex(char const * input, size_t length);
+std::string to_hex(char const* input, size_t length);
 
 } // namespace utility
 } // namespace websocketpp

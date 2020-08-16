@@ -28,13 +28,12 @@
 #include "asio/detail/fenced_block.hpp"
 #include "asio/detail/memory.hpp"
 #include "asio/detail/noncopyable.hpp"
+#include "asio/detail/push_options.hpp"
 #include "asio/detail/reactive_null_buffers_op.hpp"
 #include "asio/detail/reactive_wait_op.hpp"
 #include "asio/detail/reactor.hpp"
 #include "asio/execution_context.hpp"
 #include "asio/posix/descriptor_base.hpp"
-
-#include "asio/detail/push_options.hpp"
 
 namespace asio {
 namespace detail {

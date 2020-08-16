@@ -17,9 +17,8 @@
 
 #include "asio/detail/handler_tracking.hpp"
 #include "asio/detail/op_queue.hpp"
-#include "asio/error_code.hpp"
-
 #include "asio/detail/push_options.hpp"
+#include "asio/error_code.hpp"
 
 namespace asio {
 namespace detail {

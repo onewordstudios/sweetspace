@@ -17,9 +17,8 @@
 
 #include "asio/async_result.hpp"
 #include "asio/detail/config.hpp"
-#include "asio/detail/variadic_templates.hpp"
-
 #include "asio/detail/push_options.hpp"
+#include "asio/detail/variadic_templates.hpp"
 
 namespace asio {
 namespace detail {

@@ -23,6 +23,7 @@
 #include "asio/detail/buffer_sequence_adapter.hpp"
 #include "asio/detail/memory.hpp"
 #include "asio/detail/noncopyable.hpp"
+#include "asio/detail/push_options.hpp"
 #include "asio/detail/reactive_null_buffers_op.hpp"
 #include "asio/detail/reactive_socket_accept_op.hpp"
 #include "asio/detail/reactive_socket_connect_op.hpp"
@@ -37,8 +38,6 @@
 #include "asio/error.hpp"
 #include "asio/execution_context.hpp"
 #include "asio/socket_base.hpp"
-
-#include "asio/detail/push_options.hpp"
 
 namespace asio {
 namespace detail {

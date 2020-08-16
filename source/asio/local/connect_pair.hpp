@@ -20,12 +20,11 @@
 #if defined(ASIO_HAS_LOCAL_SOCKETS) || defined(GENERATING_DOCUMENTATION)
 
 #include "asio/basic_socket.hpp"
+#include "asio/detail/push_options.hpp"
 #include "asio/detail/socket_ops.hpp"
 #include "asio/detail/throw_error.hpp"
 #include "asio/error.hpp"
 #include "asio/local/basic_endpoint.hpp"
-
-#include "asio/detail/push_options.hpp"
 
 namespace asio {
 namespace local {

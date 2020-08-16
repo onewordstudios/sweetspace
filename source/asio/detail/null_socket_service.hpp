@@ -21,12 +21,11 @@
 
 #include "asio/buffer.hpp"
 #include "asio/detail/bind_handler.hpp"
+#include "asio/detail/push_options.hpp"
 #include "asio/error.hpp"
 #include "asio/execution_context.hpp"
 #include "asio/post.hpp"
 #include "asio/socket_base.hpp"
-
-#include "asio/detail/push_options.hpp"
 
 namespace asio {
 namespace detail {

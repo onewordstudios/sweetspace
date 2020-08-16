@@ -17,9 +17,8 @@
 
 #include "asio/detail/config.hpp"
 #include "asio/detail/noncopyable.hpp"
-#include "asio/detail/socket_ops.hpp"
-
 #include "asio/detail/push_options.hpp"
+#include "asio/detail/socket_ops.hpp"
 
 namespace asio {
 namespace detail {

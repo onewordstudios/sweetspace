@@ -19,10 +19,9 @@
 
 #if defined(ASIO_HAS_IOCP) || defined(ASIO_WINDOWS_RUNTIME)
 
+#include "asio/detail/push_options.hpp"
 #include "asio/detail/scheduler_operation.hpp"
 #include "asio/execution_context.hpp"
-
-#include "asio/detail/push_options.hpp"
 
 namespace asio {
 namespace detail {

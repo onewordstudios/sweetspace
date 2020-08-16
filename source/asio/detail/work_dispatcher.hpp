@@ -18,9 +18,8 @@
 #include "asio/associated_allocator.hpp"
 #include "asio/associated_executor.hpp"
 #include "asio/detail/config.hpp"
-#include "asio/executor_work_guard.hpp"
-
 #include "asio/detail/push_options.hpp"
+#include "asio/executor_work_guard.hpp"
 
 namespace asio {
 namespace detail {

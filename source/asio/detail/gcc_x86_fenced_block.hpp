@@ -20,7 +20,6 @@
 #if defined(__GNUC__) && (defined(__i386__) || defined(__x86_64__))
 
 #include "asio/detail/noncopyable.hpp"
-
 #include "asio/detail/push_options.hpp"
 
 namespace asio {

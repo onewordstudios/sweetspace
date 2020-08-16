@@ -28,10 +28,9 @@
 #ifndef WEBSOCKETPP_PROCESSOR_HYBI07_HPP
 #define WEBSOCKETPP_PROCESSOR_HYBI07_HPP
 
-#include <websocketpp/processors/hybi08.hpp>
-
 #include <string>
 #include <vector>
+#include <websocketpp/processors/hybi08.hpp>
 
 namespace websocketpp {
 namespace processor {

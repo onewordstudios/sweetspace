@@ -17,11 +17,10 @@
 
 #include "asio/detail/config.hpp"
 #include "asio/detail/noncopyable.hpp"
+#include "asio/detail/push_options.hpp"
 #include "asio/detail/scheduler.hpp"
 #include "asio/detail/thread_group.hpp"
 #include "asio/execution_context.hpp"
-
-#include "asio/detail/push_options.hpp"
 
 namespace asio {
 
@@ -219,7 +218,6 @@ class thread_pool::executor_type {
 } // namespace asio
 
 #include "asio/detail/pop_options.hpp"
-
 #include "asio/impl/thread_pool.hpp"
 #if defined(ASIO_HEADER_ONLY)
 #include "asio/impl/thread_pool.ipp"

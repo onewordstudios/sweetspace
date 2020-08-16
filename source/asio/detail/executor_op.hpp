@@ -19,9 +19,8 @@
 #include "asio/detail/fenced_block.hpp"
 #include "asio/detail/handler_alloc_helpers.hpp"
 #include "asio/detail/handler_invoke_helpers.hpp"
-#include "asio/detail/scheduler_operation.hpp"
-
 #include "asio/detail/push_options.hpp"
+#include "asio/detail/scheduler_operation.hpp"
 
 namespace asio {
 namespace detail {

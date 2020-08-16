@@ -20,9 +20,9 @@
 #if defined(ASIO_HAS_CO_AWAIT) || defined(GENERATING_DOCUMENTATION)
 
 #include <experimental/coroutine>
-#include "asio/executor.hpp"
 
 #include "asio/detail/push_options.hpp"
+#include "asio/executor.hpp"
 
 namespace asio {
 namespace detail {
@@ -96,7 +96,6 @@ class awaitable {
 } // namespace asio
 
 #include "asio/detail/pop_options.hpp"
-
 #include "asio/impl/awaitable.hpp"
 
 #endif // defined(ASIO_HAS_CO_AWAIT) || defined(GENERATING_DOCUMENTATION)

@@ -28,10 +28,9 @@
 #ifndef WEBSOCKETPP_MESSAGE_BUFFER_MESSAGE_HPP
 #define WEBSOCKETPP_MESSAGE_BUFFER_MESSAGE_HPP
 
+#include <string>
 #include <websocketpp/common/memory.hpp>
 #include <websocketpp/frame.hpp>
-
-#include <string>
 
 namespace websocketpp {
 namespace message_buffer {

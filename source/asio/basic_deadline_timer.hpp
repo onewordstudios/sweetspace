@@ -20,17 +20,17 @@
 #if defined(ASIO_HAS_BOOST_DATE_TIME) || defined(GENERATING_DOCUMENTATION)
 
 #include <cstddef>
+
 #include "asio/detail/deadline_timer_service.hpp"
 #include "asio/detail/handler_type_requirements.hpp"
 #include "asio/detail/io_object_impl.hpp"
 #include "asio/detail/non_const_lvalue.hpp"
+#include "asio/detail/push_options.hpp"
 #include "asio/detail/throw_error.hpp"
 #include "asio/error.hpp"
 #include "asio/execution_context.hpp"
 #include "asio/executor.hpp"
 #include "asio/time_traits.hpp"
-
-#include "asio/detail/push_options.hpp"
 
 namespace asio {
 

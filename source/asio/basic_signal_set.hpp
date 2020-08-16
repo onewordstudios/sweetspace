@@ -15,9 +15,8 @@
 #pragma once
 #endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
 
-#include "asio/detail/config.hpp"
-
 #include "asio/async_result.hpp"
+#include "asio/detail/config.hpp"
 #include "asio/detail/handler_type_requirements.hpp"
 #include "asio/detail/io_object_impl.hpp"
 #include "asio/detail/non_const_lvalue.hpp"

@@ -16,9 +16,8 @@
 #endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
 
 #include "asio/detail/op_queue.hpp"
-#include "asio/detail/thread_info_base.hpp"
-
 #include "asio/detail/push_options.hpp"
+#include "asio/detail/thread_info_base.hpp"
 
 namespace asio {
 namespace detail {

@@ -16,9 +16,8 @@
 #endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
 
 #include "asio/detail/config.hpp"
-#include "asio/ip/resolver_base.hpp"
-
 #include "asio/detail/push_options.hpp"
+#include "asio/ip/resolver_base.hpp"
 
 namespace asio {
 namespace ip {

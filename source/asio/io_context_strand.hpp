@@ -21,11 +21,10 @@
 
 #include "asio/async_result.hpp"
 #include "asio/detail/handler_type_requirements.hpp"
+#include "asio/detail/push_options.hpp"
 #include "asio/detail/strand_service.hpp"
 #include "asio/detail/wrapped_handler.hpp"
 #include "asio/io_context.hpp"
-
-#include "asio/detail/push_options.hpp"
 
 namespace asio {
 

@@ -18,10 +18,10 @@
 #include <cstddef>
 #include <cstring>
 #include <vector>
+
 #include "asio/buffer.hpp"
 #include "asio/detail/assert.hpp"
 #include "asio/detail/config.hpp"
-
 #include "asio/detail/push_options.hpp"
 
 namespace asio {

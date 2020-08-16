@@ -16,13 +16,13 @@
 #endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
 
 #include <cstddef>
+
 #include "asio/basic_socket.hpp"
 #include "asio/detail/config.hpp"
 #include "asio/detail/handler_type_requirements.hpp"
+#include "asio/detail/push_options.hpp"
 #include "asio/detail/throw_error.hpp"
 #include "asio/error.hpp"
-
-#include "asio/detail/push_options.hpp"
 
 namespace asio {
 

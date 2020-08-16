@@ -20,7 +20,6 @@
 #if defined(ASIO_HAS_CO_AWAIT) || defined(GENERATING_DOCUMENTATION)
 
 #include "asio/awaitable.hpp"
-
 #include "asio/detail/push_options.hpp"
 
 namespace asio {
@@ -91,7 +90,6 @@ __declspec(selectany) use_awaitable_t<> use_awaitable;
 } // namespace asio
 
 #include "asio/detail/pop_options.hpp"
-
 #include "asio/impl/use_awaitable.hpp"
 
 #endif // defined(ASIO_HAS_CO_AWAIT) || defined(GENERATING_DOCUMENTATION)

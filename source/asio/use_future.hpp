@@ -21,9 +21,9 @@
 #if defined(ASIO_HAS_STD_FUTURE_CLASS) || defined(GENERATING_DOCUMENTATION)
 
 #include <memory>
-#include "asio/detail/type_traits.hpp"
 
 #include "asio/detail/push_options.hpp"
+#include "asio/detail/type_traits.hpp"
 
 namespace asio {
 namespace detail {
@@ -132,7 +132,6 @@ __declspec(selectany) use_future_t<> use_future;
 } // namespace asio
 
 #include "asio/detail/pop_options.hpp"
-
 #include "asio/impl/use_future.hpp"
 
 #endif // defined(ASIO_HAS_STD_FUTURE_CLASS)

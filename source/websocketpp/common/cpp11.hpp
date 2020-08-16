@@ -33,7 +33,7 @@
  */
 
 // Hide clang feature detection from other compilers
-#ifndef __has_feature	  // Optional of course.
+#ifndef __has_feature	   // Optional of course.
 #define __has_feature(x) 0 // Compatibility with non-clang compilers.
 #endif
 #ifndef __has_extension

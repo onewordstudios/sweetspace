@@ -18,10 +18,9 @@
 #include "asio/async_result.hpp"
 #include "asio/basic_socket.hpp"
 #include "asio/detail/config.hpp"
+#include "asio/detail/push_options.hpp"
 #include "asio/detail/type_traits.hpp"
 #include "asio/error.hpp"
-
-#include "asio/detail/push_options.hpp"
 
 namespace asio {
 
@@ -1035,7 +1034,6 @@ async_connect(basic_socket<Protocol, Executor>& s, Iterator begin, Iterator end,
 } // namespace asio
 
 #include "asio/detail/pop_options.hpp"
-
 #include "asio/impl/connect.hpp"
 
 #endif

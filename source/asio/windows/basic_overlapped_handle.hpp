@@ -21,6 +21,7 @@
 	defined(GENERATING_DOCUMENTATION)
 
 #include <cstddef>
+
 #include "asio/async_result.hpp"
 #include "asio/detail/io_object_impl.hpp"
 #include "asio/detail/throw_error.hpp"

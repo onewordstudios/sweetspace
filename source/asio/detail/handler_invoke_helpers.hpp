@@ -17,9 +17,8 @@
 
 #include "asio/detail/config.hpp"
 #include "asio/detail/memory.hpp"
-#include "asio/handler_invoke_hook.hpp"
-
 #include "asio/detail/push_options.hpp"
+#include "asio/handler_invoke_hook.hpp"
 
 // Calls to asio_handler_invoke must be made from a namespace that does not
 // contain overloads of this function. The asio_handler_invoke_helpers

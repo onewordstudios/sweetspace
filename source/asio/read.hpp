@@ -16,6 +16,7 @@
 #endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
 
 #include <cstddef>
+
 #include "asio/async_result.hpp"
 #include "asio/buffer.hpp"
 #include "asio/detail/config.hpp"
@@ -1205,7 +1206,6 @@ async_read(AsyncReadStream& s, DynamicBuffer_v2 buffers, CompletionCondition com
 } // namespace asio
 
 #include "asio/detail/pop_options.hpp"
-
 #include "asio/impl/read.hpp"
 
 #endif // ASIO_READ_HPP

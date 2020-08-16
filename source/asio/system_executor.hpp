@@ -16,7 +16,6 @@
 #endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
 
 #include "asio/detail/config.hpp"
-
 #include "asio/detail/push_options.hpp"
 
 namespace asio {
@@ -114,7 +113,6 @@ class system_executor {
 } // namespace asio
 
 #include "asio/detail/pop_options.hpp"
-
 #include "asio/impl/system_executor.hpp"
 
 #endif // ASIO_SYSTEM_EXECUTOR_HPP

@@ -16,6 +16,7 @@
 #endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
 
 #include <cstddef>
+
 #include "asio/async_result.hpp"
 #include "asio/detail/config.hpp"
 #include "asio/detail/cstdint.hpp"
@@ -663,7 +664,6 @@ async_read_at(AsyncRandomAccessReadDevice& d, uint64_t offset, basic_streambuf<A
 } // namespace asio
 
 #include "asio/detail/pop_options.hpp"
-
 #include "asio/impl/read_at.hpp"
 
 #endif // ASIO_READ_AT_HPP

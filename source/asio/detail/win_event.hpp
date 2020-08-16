@@ -21,9 +21,8 @@
 
 #include "asio/detail/assert.hpp"
 #include "asio/detail/noncopyable.hpp"
-#include "asio/detail/socket_types.hpp"
-
 #include "asio/detail/push_options.hpp"
+#include "asio/detail/socket_types.hpp"
 
 namespace asio {
 namespace detail {

@@ -19,7 +19,6 @@
 #include "asio/detail/handler_alloc_helpers.hpp"
 #include "asio/detail/handler_cont_helpers.hpp"
 #include "asio/detail/handler_invoke_helpers.hpp"
-
 #include "asio/detail/push_options.hpp"
 
 namespace asio {

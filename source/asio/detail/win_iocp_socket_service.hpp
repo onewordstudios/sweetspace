@@ -20,6 +20,7 @@
 #if defined(ASIO_HAS_IOCP)
 
 #include <cstring>
+
 #include "asio/detail/bind_handler.hpp"
 #include "asio/detail/buffer_sequence_adapter.hpp"
 #include "asio/detail/fenced_block.hpp"
@@ -28,6 +29,7 @@
 #include "asio/detail/memory.hpp"
 #include "asio/detail/mutex.hpp"
 #include "asio/detail/operation.hpp"
+#include "asio/detail/push_options.hpp"
 #include "asio/detail/reactor_op.hpp"
 #include "asio/detail/select_reactor.hpp"
 #include "asio/detail/socket_holder.hpp"
@@ -43,8 +45,6 @@
 #include "asio/error.hpp"
 #include "asio/execution_context.hpp"
 #include "asio/socket_base.hpp"
-
-#include "asio/detail/push_options.hpp"
 
 namespace asio {
 namespace detail {

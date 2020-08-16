@@ -20,10 +20,10 @@
 #if !defined(ASIO_NO_DEPRECATED)
 
 #include <string>
-#include "asio/ssl/detail/openssl_types.hpp"
-#include "asio/ssl/verify_context.hpp"
 
 #include "asio/detail/push_options.hpp"
+#include "asio/ssl/detail/openssl_types.hpp"
+#include "asio/ssl/verify_context.hpp"
 
 namespace asio {
 namespace ssl {

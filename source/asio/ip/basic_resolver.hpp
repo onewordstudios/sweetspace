@@ -16,6 +16,7 @@
 #endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
 
 #include <string>
+
 #include "asio/async_result.hpp"
 #include "asio/detail/config.hpp"
 #include "asio/detail/handler_type_requirements.hpp"

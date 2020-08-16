@@ -16,11 +16,10 @@
 #endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
 
 #include "asio/detail/config.hpp"
+#include "asio/detail/push_options.hpp"
 #include "asio/detail/scheduler.hpp"
 #include "asio/detail/thread_group.hpp"
 #include "asio/execution_context.hpp"
-
-#include "asio/detail/push_options.hpp"
 
 namespace asio {
 
@@ -71,7 +70,6 @@ class system_context : public execution_context {
 } // namespace asio
 
 #include "asio/detail/pop_options.hpp"
-
 #include "asio/impl/system_context.hpp"
 #if defined(ASIO_HEADER_ONLY)
 #include "asio/impl/system_context.ipp"

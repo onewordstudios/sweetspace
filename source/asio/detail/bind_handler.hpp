@@ -21,9 +21,8 @@
 #include "asio/detail/handler_alloc_helpers.hpp"
 #include "asio/detail/handler_cont_helpers.hpp"
 #include "asio/detail/handler_invoke_helpers.hpp"
-#include "asio/detail/type_traits.hpp"
-
 #include "asio/detail/push_options.hpp"
+#include "asio/detail/type_traits.hpp"
 
 namespace asio {
 namespace detail {

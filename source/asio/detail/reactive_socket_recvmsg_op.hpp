@@ -20,11 +20,10 @@
 #include "asio/detail/config.hpp"
 #include "asio/detail/fenced_block.hpp"
 #include "asio/detail/memory.hpp"
+#include "asio/detail/push_options.hpp"
 #include "asio/detail/reactor_op.hpp"
 #include "asio/detail/socket_ops.hpp"
 #include "asio/socket_base.hpp"
-
-#include "asio/detail/push_options.hpp"
 
 namespace asio {
 namespace detail {

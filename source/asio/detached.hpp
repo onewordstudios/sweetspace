@@ -16,8 +16,8 @@
 #endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
 
 #include <memory>
-#include "asio/detail/config.hpp"
 
+#include "asio/detail/config.hpp"
 #include "asio/detail/push_options.hpp"
 
 namespace asio {
@@ -53,7 +53,6 @@ __declspec(selectany) detached_t detached;
 } // namespace asio
 
 #include "asio/detail/pop_options.hpp"
-
 #include "asio/impl/detached.hpp"
 
 #endif // ASIO_DETACHED_HPP

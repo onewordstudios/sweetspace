@@ -17,11 +17,10 @@
 
 #include "asio/async_result.hpp"
 #include "asio/detail/config.hpp"
+#include "asio/detail/push_options.hpp"
 #include "asio/detail/type_traits.hpp"
 #include "asio/execution_context.hpp"
 #include "asio/is_executor.hpp"
-
-#include "asio/detail/push_options.hpp"
 
 namespace asio {
 
@@ -108,7 +107,6 @@ dispatch(
 } // namespace asio
 
 #include "asio/detail/pop_options.hpp"
-
 #include "asio/impl/dispatch.hpp"
 
 #endif // ASIO_DISPATCH_HPP

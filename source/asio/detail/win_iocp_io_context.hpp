@@ -22,6 +22,7 @@
 #include "asio/detail/limits.hpp"
 #include "asio/detail/mutex.hpp"
 #include "asio/detail/op_queue.hpp"
+#include "asio/detail/push_options.hpp"
 #include "asio/detail/scoped_ptr.hpp"
 #include "asio/detail/socket_types.hpp"
 #include "asio/detail/thread.hpp"
@@ -32,8 +33,6 @@
 #include "asio/detail/win_iocp_operation.hpp"
 #include "asio/detail/win_iocp_thread_info.hpp"
 #include "asio/execution_context.hpp"
-
-#include "asio/detail/push_options.hpp"
 
 namespace asio {
 namespace detail {
@@ -295,9 +294,8 @@ class win_iocp_io_context : public execution_context_service_base<win_iocp_io_co
 } // namespace detail
 } // namespace asio
 
-#include "asio/detail/pop_options.hpp"
-
 #include "asio/detail/impl/win_iocp_io_context.hpp"
+#include "asio/detail/pop_options.hpp"
 #if defined(ASIO_HEADER_ONLY)
 #include "asio/detail/impl/win_iocp_io_context.ipp"
 #endif // defined(ASIO_HEADER_ONLY)

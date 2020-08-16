@@ -21,6 +21,7 @@
 #include <system_error>
 #else // defined(ASIO_HAS_STD_SYSTEM_ERROR)
 #include <string>
+
 #include "asio/detail/noncopyable.hpp"
 #if !defined(ASIO_NO_IOSTREAM)
 #include <iosfwd>

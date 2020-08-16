@@ -204,7 +204,6 @@ std::basic_ostream<Elem, Traits>& operator<<(std::basic_ostream<Elem, Traits>& o
 } // namespace asio
 
 #include "asio/detail/pop_options.hpp"
-
 #include "asio/ip/impl/basic_endpoint.hpp"
 
 #endif // ASIO_IP_BASIC_ENDPOINT_HPP

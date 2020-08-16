@@ -21,11 +21,10 @@
 #include "asio/detail/memory.hpp"
 #include "asio/detail/mutex.hpp"
 #include "asio/detail/op_queue.hpp"
+#include "asio/detail/push_options.hpp"
 #include "asio/detail/scheduler_operation.hpp"
 #include "asio/detail/scoped_ptr.hpp"
 #include "asio/execution_context.hpp"
-
-#include "asio/detail/push_options.hpp"
 
 namespace asio {
 namespace detail {
@@ -128,9 +127,8 @@ class strand_executor_service : public execution_context_service_base<strand_exe
 } // namespace detail
 } // namespace asio
 
-#include "asio/detail/pop_options.hpp"
-
 #include "asio/detail/impl/strand_executor_service.hpp"
+#include "asio/detail/pop_options.hpp"
 #if defined(ASIO_HEADER_ONLY)
 #include "asio/detail/impl/strand_executor_service.ipp"
 #endif // defined(ASIO_HEADER_ONLY)

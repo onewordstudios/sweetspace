@@ -17,10 +17,9 @@
 
 #include "asio/detail/config.hpp"
 #include "asio/detail/io_control.hpp"
+#include "asio/detail/push_options.hpp"
 #include "asio/detail/socket_option.hpp"
 #include "asio/detail/socket_types.hpp"
-
-#include "asio/detail/push_options.hpp"
 
 namespace asio {
 

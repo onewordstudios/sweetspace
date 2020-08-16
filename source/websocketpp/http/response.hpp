@@ -30,7 +30,6 @@
 
 #include <iostream>
 #include <string>
-
 #include <websocketpp/http/parser.hpp>
 
 namespace websocketpp {

@@ -26,10 +26,9 @@
 #include "asio/detail/handler_invoke_helpers.hpp"
 #include "asio/detail/memory.hpp"
 #include "asio/detail/noncopyable.hpp"
+#include "asio/detail/push_options.hpp"
 #include "asio/detail/type_traits.hpp"
 #include "asio/system_error.hpp"
-
-#include "asio/detail/push_options.hpp"
 
 namespace asio {
 namespace detail {

@@ -24,13 +24,13 @@
 #include <stdexcept>
 #include <streambuf>
 #include <vector>
+
 #include "asio/basic_streambuf_fwd.hpp"
 #include "asio/buffer.hpp"
 #include "asio/detail/limits.hpp"
 #include "asio/detail/noncopyable.hpp"
-#include "asio/detail/throw_exception.hpp"
-
 #include "asio/detail/push_options.hpp"
+#include "asio/detail/throw_exception.hpp"
 
 namespace asio {
 

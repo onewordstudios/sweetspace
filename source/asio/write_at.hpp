@@ -16,6 +16,7 @@
 #endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
 
 #include <cstddef>
+
 #include "asio/async_result.hpp"
 #include "asio/detail/config.hpp"
 #include "asio/detail/cstdint.hpp"
@@ -674,7 +675,6 @@ async_write_at(AsyncRandomAccessWriteDevice& d, uint64_t offset, basic_streambuf
 } // namespace asio
 
 #include "asio/detail/pop_options.hpp"
-
 #include "asio/impl/write_at.hpp"
 
 #endif // ASIO_WRITE_AT_HPP

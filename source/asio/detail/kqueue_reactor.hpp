@@ -23,7 +23,9 @@
 #include <sys/event.h>
 #include <sys/time.h>
 #include <sys/types.h>
+
 #include <cstddef>
+
 #include "asio/detail/limits.hpp"
 #include "asio/detail/mutex.hpp"
 #include "asio/detail/object_pool.hpp"
@@ -221,9 +223,8 @@ class kqueue_reactor : public execution_context_service_base<kqueue_reactor> {
 } // namespace detail
 } // namespace asio
 
-#include "asio/detail/pop_options.hpp"
-
 #include "asio/detail/impl/kqueue_reactor.hpp"
+#include "asio/detail/pop_options.hpp"
 #if defined(ASIO_HEADER_ONLY)
 #include "asio/detail/impl/kqueue_reactor.ipp"
 #endif // defined(ASIO_HEADER_ONLY)

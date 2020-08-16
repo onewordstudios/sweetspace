@@ -19,10 +19,9 @@
 #include "asio/detail/hash_map.hpp"
 #include "asio/detail/noncopyable.hpp"
 #include "asio/detail/op_queue.hpp"
+#include "asio/detail/push_options.hpp"
 #include "asio/detail/reactor_op.hpp"
 #include "asio/error.hpp"
-
-#include "asio/detail/push_options.hpp"
 
 namespace asio {
 namespace detail {

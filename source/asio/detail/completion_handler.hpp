@@ -21,7 +21,6 @@
 #include "asio/detail/handler_work.hpp"
 #include "asio/detail/memory.hpp"
 #include "asio/detail/operation.hpp"
-
 #include "asio/detail/push_options.hpp"
 
 namespace asio {

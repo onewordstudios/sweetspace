@@ -16,13 +16,13 @@
 #endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
 
 #include <typeinfo>
+
 #include "asio/detail/config.hpp"
 #include "asio/detail/mutex.hpp"
 #include "asio/detail/noncopyable.hpp"
+#include "asio/detail/push_options.hpp"
 #include "asio/detail/type_traits.hpp"
 #include "asio/execution_context.hpp"
-
-#include "asio/detail/push_options.hpp"
 
 namespace asio {
 
@@ -146,9 +146,8 @@ class service_registry : private noncopyable {
 } // namespace detail
 } // namespace asio
 
-#include "asio/detail/pop_options.hpp"
-
 #include "asio/detail/impl/service_registry.hpp"
+#include "asio/detail/pop_options.hpp"
 #if defined(ASIO_HEADER_ONLY)
 #include "asio/detail/impl/service_registry.ipp"
 #endif // defined(ASIO_HEADER_ONLY)

@@ -19,13 +19,12 @@
 #include "asio/detail/handler_alloc_helpers.hpp"
 #include "asio/detail/handler_cont_helpers.hpp"
 #include "asio/detail/handler_invoke_helpers.hpp"
+#include "asio/detail/push_options.hpp"
 #include "asio/detail/type_traits.hpp"
 #include "asio/detail/variadic_templates.hpp"
 #include "asio/executor_work_guard.hpp"
 #include "asio/is_executor.hpp"
 #include "asio/system_executor.hpp"
-
-#include "asio/detail/push_options.hpp"
 
 namespace asio {
 

@@ -32,7 +32,6 @@
 #include <map>
 #include <string>
 #include <utility>
-
 #include <websocketpp/http/constants.hpp>
 #include <websocketpp/utilities.hpp>
 

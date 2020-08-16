@@ -19,6 +19,7 @@
 #include <string>
 #include <utility>
 #include <vector>
+
 #include "asio/associated_allocator.hpp"
 #include "asio/associated_executor.hpp"
 #include "asio/buffer.hpp"
@@ -30,9 +31,8 @@
 #include "asio/detail/handler_type_requirements.hpp"
 #include "asio/detail/limits.hpp"
 #include "asio/detail/non_const_lvalue.hpp"
-#include "asio/detail/throw_error.hpp"
-
 #include "asio/detail/push_options.hpp"
+#include "asio/detail/throw_error.hpp"
 
 namespace asio {
 

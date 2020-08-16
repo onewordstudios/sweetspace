@@ -17,9 +17,8 @@
 
 #include "asio/detail/config.hpp"
 #include "asio/detail/operation.hpp"
-#include "asio/error.hpp"
-
 #include "asio/detail/push_options.hpp"
+#include "asio/error.hpp"
 
 namespace asio {
 namespace detail {

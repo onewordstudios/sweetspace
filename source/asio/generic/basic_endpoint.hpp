@@ -16,9 +16,8 @@
 #endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
 
 #include "asio/detail/config.hpp"
-#include "asio/generic/detail/endpoint.hpp"
-
 #include "asio/detail/push_options.hpp"
+#include "asio/generic/detail/endpoint.hpp"
 
 namespace asio {
 namespace generic {

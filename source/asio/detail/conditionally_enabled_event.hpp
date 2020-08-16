@@ -20,9 +20,8 @@
 #include "asio/detail/event.hpp"
 #include "asio/detail/noncopyable.hpp"
 #include "asio/detail/null_event.hpp"
-#include "asio/detail/scoped_lock.hpp"
-
 #include "asio/detail/push_options.hpp"
+#include "asio/detail/scoped_lock.hpp"
 
 namespace asio {
 namespace detail {

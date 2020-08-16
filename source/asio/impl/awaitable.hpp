@@ -19,15 +19,15 @@
 #include <new>
 #include <tuple>
 #include <utility>
+
 #include "asio/detail/config.hpp"
+#include "asio/detail/push_options.hpp"
 #include "asio/detail/thread_context.hpp"
 #include "asio/detail/thread_info_base.hpp"
 #include "asio/detail/type_traits.hpp"
 #include "asio/post.hpp"
 #include "asio/system_error.hpp"
 #include "asio/this_coro.hpp"
-
-#include "asio/detail/push_options.hpp"
 
 namespace asio {
 namespace detail {

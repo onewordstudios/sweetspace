@@ -15,15 +15,14 @@
 #pragma once
 #endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
 
-#include "asio/detail/config.hpp"
-
 #include <typeinfo>
+
 #include "asio/basic_seq_packet_socket.hpp"
+#include "asio/detail/config.hpp"
+#include "asio/detail/push_options.hpp"
 #include "asio/detail/socket_types.hpp"
 #include "asio/detail/throw_exception.hpp"
 #include "asio/generic/basic_endpoint.hpp"
-
-#include "asio/detail/push_options.hpp"
 
 namespace asio {
 namespace generic {

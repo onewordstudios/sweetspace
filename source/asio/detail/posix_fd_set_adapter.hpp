@@ -20,11 +20,11 @@
 #if !defined(ASIO_WINDOWS) && !defined(__CYGWIN__) && !defined(ASIO_WINDOWS_RUNTIME)
 
 #include <cstring>
+
 #include "asio/detail/noncopyable.hpp"
+#include "asio/detail/push_options.hpp"
 #include "asio/detail/reactor_op_queue.hpp"
 #include "asio/detail/socket_types.hpp"
-
-#include "asio/detail/push_options.hpp"
 
 namespace asio {
 namespace detail {

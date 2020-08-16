@@ -15,10 +15,11 @@
 #pragma once
 #endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
 
-#include "asio/detail/config.hpp"
-
 #include <signal.h>
+
 #include <cstddef>
+
+#include "asio/detail/config.hpp"
 #include "asio/detail/handler_alloc_helpers.hpp"
 #include "asio/detail/memory.hpp"
 #include "asio/detail/op_queue.hpp"

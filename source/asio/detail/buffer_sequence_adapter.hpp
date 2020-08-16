@@ -18,9 +18,8 @@
 #include "asio/buffer.hpp"
 #include "asio/detail/array_fwd.hpp"
 #include "asio/detail/config.hpp"
-#include "asio/detail/socket_types.hpp"
-
 #include "asio/detail/push_options.hpp"
+#include "asio/detail/socket_types.hpp"
 
 namespace asio {
 namespace detail {

@@ -17,11 +17,10 @@
 
 #include "asio/awaitable.hpp"
 #include "asio/detail/config.hpp"
+#include "asio/detail/push_options.hpp"
 #include "asio/dispatch.hpp"
 #include "asio/post.hpp"
 #include "asio/use_awaitable.hpp"
-
-#include "asio/detail/push_options.hpp"
 
 namespace asio {
 namespace detail {

@@ -20,6 +20,7 @@
 #if defined(ASIO_WINDOWS_RUNTIME)
 
 #include <cstddef>
+
 #include "asio/detail/event.hpp"
 #include "asio/detail/limits.hpp"
 #include "asio/detail/mutex.hpp"
@@ -133,9 +134,8 @@ class winrt_timer_scheduler : public execution_context_service_base<winrt_timer_
 } // namespace detail
 } // namespace asio
 
-#include "asio/detail/pop_options.hpp"
-
 #include "asio/detail/impl/winrt_timer_scheduler.hpp"
+#include "asio/detail/pop_options.hpp"
 #if defined(ASIO_HEADER_ONLY)
 #include "asio/detail/impl/winrt_timer_scheduler.ipp"
 #endif // defined(ASIO_HEADER_ONLY)

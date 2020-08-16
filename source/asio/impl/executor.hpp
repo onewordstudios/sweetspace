@@ -20,11 +20,10 @@
 #include "asio/detail/executor_function.hpp"
 #include "asio/detail/global.hpp"
 #include "asio/detail/memory.hpp"
+#include "asio/detail/push_options.hpp"
 #include "asio/detail/recycling_allocator.hpp"
 #include "asio/executor.hpp"
 #include "asio/system_executor.hpp"
-
-#include "asio/detail/push_options.hpp"
 
 namespace asio {
 

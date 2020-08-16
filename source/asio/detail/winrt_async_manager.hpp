@@ -20,6 +20,7 @@
 #if defined(ASIO_WINDOWS_RUNTIME)
 
 #include <future>
+
 #include "asio/detail/atomic_count.hpp"
 #include "asio/detail/winrt_async_op.hpp"
 #include "asio/error.hpp"

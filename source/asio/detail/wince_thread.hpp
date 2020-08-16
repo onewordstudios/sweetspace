@@ -20,12 +20,11 @@
 #if defined(ASIO_WINDOWS) && defined(UNDER_CE)
 
 #include "asio/detail/noncopyable.hpp"
+#include "asio/detail/push_options.hpp"
 #include "asio/detail/scoped_ptr.hpp"
 #include "asio/detail/socket_types.hpp"
 #include "asio/detail/throw_error.hpp"
 #include "asio/error.hpp"
-
-#include "asio/detail/push_options.hpp"
 
 namespace asio {
 namespace detail {

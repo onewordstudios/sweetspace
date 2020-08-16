@@ -16,10 +16,10 @@
 #endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
 
 #include <memory>
-#include "asio/detail/config.hpp"
-#include "asio/detail/type_traits.hpp"
 
+#include "asio/detail/config.hpp"
 #include "asio/detail/push_options.hpp"
+#include "asio/detail/type_traits.hpp"
 
 namespace asio {
 namespace detail {

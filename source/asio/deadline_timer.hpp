@@ -19,10 +19,10 @@
 
 #if defined(ASIO_HAS_BOOST_DATE_TIME) || defined(GENERATING_DOCUMENTATION)
 
+#include <boost/date_time/posix_time/posix_time_types.hpp>
+
 #include "asio/basic_deadline_timer.hpp"
 #include "asio/detail/socket_types.hpp" // Must come before posix_time.
-
-#include <boost/date_time/posix_time/posix_time_types.hpp>
 
 namespace asio {
 

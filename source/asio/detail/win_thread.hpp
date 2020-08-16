@@ -20,10 +20,10 @@
 #if defined(ASIO_WINDOWS) && !defined(ASIO_WINDOWS_APP) && !defined(UNDER_CE)
 
 #include <cstddef>
-#include "asio/detail/noncopyable.hpp"
-#include "asio/detail/socket_types.hpp"
 
+#include "asio/detail/noncopyable.hpp"
 #include "asio/detail/push_options.hpp"
+#include "asio/detail/socket_types.hpp"
 
 namespace asio {
 namespace detail {

@@ -21,10 +21,9 @@
 #if defined(ASIO_HAS_STD_FUTURE_CLASS) || defined(GENERATING_DOCUMENTATION)
 
 #include "asio/async_result.hpp"
+#include "asio/detail/push_options.hpp"
 #include "asio/detail/type_traits.hpp"
 #include "asio/detail/variadic_templates.hpp"
-
-#include "asio/detail/push_options.hpp"
 
 namespace asio {
 

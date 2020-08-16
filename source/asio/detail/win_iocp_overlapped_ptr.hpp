@@ -23,11 +23,10 @@
 #include "asio/detail/io_object_executor.hpp"
 #include "asio/detail/memory.hpp"
 #include "asio/detail/noncopyable.hpp"
+#include "asio/detail/push_options.hpp"
 #include "asio/detail/win_iocp_io_context.hpp"
 #include "asio/detail/win_iocp_overlapped_op.hpp"
 #include "asio/io_context.hpp"
-
-#include "asio/detail/push_options.hpp"
 
 namespace asio {
 namespace detail {

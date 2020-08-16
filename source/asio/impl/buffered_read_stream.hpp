@@ -22,9 +22,8 @@
 #include "asio/detail/handler_invoke_helpers.hpp"
 #include "asio/detail/handler_type_requirements.hpp"
 #include "asio/detail/non_const_lvalue.hpp"
-#include "asio/detail/type_traits.hpp"
-
 #include "asio/detail/push_options.hpp"
+#include "asio/detail/type_traits.hpp"
 
 namespace asio {
 

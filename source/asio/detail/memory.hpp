@@ -16,6 +16,7 @@
 #endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
 
 #include <memory>
+
 #include "asio/detail/config.hpp"
 
 #if !defined(ASIO_HAS_STD_SHARED_PTR)

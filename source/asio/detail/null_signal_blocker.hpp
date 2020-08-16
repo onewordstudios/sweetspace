@@ -21,7 +21,6 @@
 	defined(__CYGWIN__) || defined(__SYMBIAN32__)
 
 #include "asio/detail/noncopyable.hpp"
-
 #include "asio/detail/push_options.hpp"
 
 namespace asio {

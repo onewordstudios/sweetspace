@@ -20,12 +20,15 @@
 #if defined(ASIO_HAS_DEV_POLL)
 
 #include <sys/devpoll.h>
+
 #include <cstddef>
 #include <vector>
+
 #include "asio/detail/hash_map.hpp"
 #include "asio/detail/limits.hpp"
 #include "asio/detail/mutex.hpp"
 #include "asio/detail/op_queue.hpp"
+#include "asio/detail/push_options.hpp"
 #include "asio/detail/reactor_op.hpp"
 #include "asio/detail/reactor_op_queue.hpp"
 #include "asio/detail/select_interrupter.hpp"
@@ -34,8 +37,6 @@
 #include "asio/detail/timer_queue_set.hpp"
 #include "asio/detail/wait_op.hpp"
 #include "asio/execution_context.hpp"
-
-#include "asio/detail/push_options.hpp"
 
 namespace asio {
 namespace detail {
@@ -196,9 +197,8 @@ class dev_poll_reactor : public execution_context_service_base<dev_poll_reactor>
 } // namespace detail
 } // namespace asio
 
-#include "asio/detail/pop_options.hpp"
-
 #include "asio/detail/impl/dev_poll_reactor.hpp"
+#include "asio/detail/pop_options.hpp"
 #if defined(ASIO_HEADER_ONLY)
 #include "asio/detail/impl/dev_poll_reactor.ipp"
 #endif // defined(ASIO_HEADER_ONLY)

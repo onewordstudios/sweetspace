@@ -16,10 +16,9 @@
 #endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
 
 #include "asio/detail/handler_type_requirements.hpp"
+#include "asio/detail/push_options.hpp"
 #include "asio/detail/scoped_ptr.hpp"
 #include "asio/detail/service_registry.hpp"
-
-#include "asio/detail/push_options.hpp"
 
 namespace asio {
 

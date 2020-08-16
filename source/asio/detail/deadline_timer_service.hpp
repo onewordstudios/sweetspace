@@ -16,6 +16,7 @@
 #endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
 
 #include <cstddef>
+
 #include "asio/detail/bind_handler.hpp"
 #include "asio/detail/config.hpp"
 #include "asio/detail/fenced_block.hpp"

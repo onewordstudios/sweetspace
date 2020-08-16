@@ -15,10 +15,11 @@
 #pragma once
 #endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
 
-#include "asio/detail/config.hpp"
-
 #include <string>
+
 #include "asio/buffer.hpp"
+#include "asio/detail/config.hpp"
+#include "asio/detail/push_options.hpp"
 #include "asio/io_context.hpp"
 #include "asio/ssl/context_base.hpp"
 #include "asio/ssl/detail/openssl_init.hpp"
@@ -26,8 +27,6 @@
 #include "asio/ssl/detail/password_callback.hpp"
 #include "asio/ssl/detail/verify_callback.hpp"
 #include "asio/ssl/verify_mode.hpp"
-
-#include "asio/detail/push_options.hpp"
 
 namespace asio {
 namespace ssl {
@@ -723,7 +722,6 @@ class context : public context_base, private noncopyable {
 } // namespace asio
 
 #include "asio/detail/pop_options.hpp"
-
 #include "asio/ssl/impl/context.hpp"
 #if defined(ASIO_HEADER_ONLY)
 #include "asio/ssl/impl/context.ipp"

@@ -22,13 +22,13 @@
 #if !defined(ASIO_WINDOWS) && !defined(__CYGWIN__)
 
 #include <string>
+
 #include "asio/detail/descriptor_ops.hpp"
+#include "asio/detail/push_options.hpp"
 #include "asio/detail/reactive_descriptor_service.hpp"
 #include "asio/error.hpp"
 #include "asio/execution_context.hpp"
 #include "asio/serial_port_base.hpp"
-
-#include "asio/detail/push_options.hpp"
 
 namespace asio {
 namespace detail {

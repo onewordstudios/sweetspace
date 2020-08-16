@@ -19,10 +19,9 @@
 
 #if defined(ASIO_HAS_BOOST_DATE_TIME)
 
+#include "asio/detail/push_options.hpp"
 #include "asio/detail/timer_queue.hpp"
 #include "asio/time_traits.hpp"
-
-#include "asio/detail/push_options.hpp"
 
 namespace asio {
 namespace detail {

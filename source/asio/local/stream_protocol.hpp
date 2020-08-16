@@ -22,10 +22,9 @@
 #include "asio/basic_socket_acceptor.hpp"
 #include "asio/basic_socket_iostream.hpp"
 #include "asio/basic_stream_socket.hpp"
+#include "asio/detail/push_options.hpp"
 #include "asio/detail/socket_types.hpp"
 #include "asio/local/basic_endpoint.hpp"
-
-#include "asio/detail/push_options.hpp"
 
 namespace asio {
 namespace local {

@@ -16,13 +16,13 @@
 #endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
 
 #include <typeinfo>
+
 #include "asio/detail/config.hpp"
 #include "asio/detail/cstddef.hpp"
 #include "asio/detail/memory.hpp"
+#include "asio/detail/push_options.hpp"
 #include "asio/detail/throw_exception.hpp"
 #include "asio/execution_context.hpp"
-
-#include "asio/detail/push_options.hpp"
 
 namespace asio {
 
@@ -278,7 +278,6 @@ class executor {
 ASIO_USES_ALLOCATOR(asio::executor)
 
 #include "asio/detail/pop_options.hpp"
-
 #include "asio/impl/executor.hpp"
 #if defined(ASIO_HEADER_ONLY)
 #include "asio/impl/executor.ipp"

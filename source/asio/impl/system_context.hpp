@@ -15,9 +15,8 @@
 #pragma once
 #endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
 
-#include "asio/system_executor.hpp"
-
 #include "asio/detail/push_options.hpp"
+#include "asio/system_executor.hpp"
 
 namespace asio {
 

@@ -17,10 +17,9 @@
 
 #include "asio/detail/config.hpp"
 #include "asio/detail/handler_invoke_helpers.hpp"
+#include "asio/detail/push_options.hpp"
 #include "asio/detail/type_traits.hpp"
 #include "asio/io_context.hpp"
-
-#include "asio/detail/push_options.hpp"
 
 namespace asio {
 namespace detail {

@@ -301,11 +301,13 @@ class coroutine_ref {
 				break;                                      \
 		} else                                              \
 			switch (_coro_value ? 0 : 1)                    \
-				for (;;) /* fall-through */ case -1:        \
+				for (;;) /* fall-through */                 \
+				case -1:                                    \
 					if (_coro_value)                        \
 						goto terminate_coroutine;           \
 					else                                    \
-						for (;;) /* fall-through */ case 1: \
+						for (;;) /* fall-through */         \
+						case 1:                             \
 							if (_coro_value)                \
 								goto bail_out_of_coroutine; \
 							else /* fall-through */         \

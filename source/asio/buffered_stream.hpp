@@ -16,15 +16,15 @@
 #endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
 
 #include <cstddef>
+
 #include "asio/async_result.hpp"
 #include "asio/buffered_read_stream.hpp"
 #include "asio/buffered_stream_fwd.hpp"
 #include "asio/buffered_write_stream.hpp"
 #include "asio/detail/config.hpp"
 #include "asio/detail/noncopyable.hpp"
-#include "asio/error.hpp"
-
 #include "asio/detail/push_options.hpp"
+#include "asio/error.hpp"
 
 namespace asio {
 

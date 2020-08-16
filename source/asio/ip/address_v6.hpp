@@ -16,6 +16,7 @@
 #endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
 
 #include <string>
+
 #include "asio/detail/array.hpp"
 #include "asio/detail/config.hpp"
 #include "asio/detail/socket_types.hpp"
@@ -301,7 +302,6 @@ std::basic_ostream<Elem, Traits>& operator<<(std::basic_ostream<Elem, Traits>& o
 } // namespace asio
 
 #include "asio/detail/pop_options.hpp"
-
 #include "asio/ip/impl/address_v6.hpp"
 #if defined(ASIO_HEADER_ONLY)
 #include "asio/ip/impl/address_v6.ipp"

@@ -16,15 +16,15 @@
 #endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
 
 #include <tuple>
+
 #include "asio/async_result.hpp"
 #include "asio/detail/config.hpp"
 #include "asio/detail/memory.hpp"
+#include "asio/detail/push_options.hpp"
 #include "asio/error_code.hpp"
 #include "asio/packaged_task.hpp"
 #include "asio/system_error.hpp"
 #include "asio/system_executor.hpp"
-
-#include "asio/detail/push_options.hpp"
 
 namespace asio {
 namespace detail {
@@ -574,8 +574,8 @@ class packaged_async_result {
 
 template <typename Allocator>
 template <typename Function>
-inline detail::packaged_token<typename decay<Function>::type, Allocator> use_future_t<Allocator>::
-operator()(ASIO_MOVE_ARG(Function) f) const {
+inline detail::packaged_token<typename decay<Function>::type, Allocator>
+use_future_t<Allocator>::operator()(ASIO_MOVE_ARG(Function) f) const {
 	return detail::packaged_token<typename decay<Function>::type, Allocator>(
 		ASIO_MOVE_CAST(Function)(f), allocator_);
 }

@@ -17,16 +17,16 @@
 
 #include <cstddef>
 #include <vector>
+
 #include "asio/detail/config.hpp"
 #include "asio/detail/cstdint.hpp"
 #include "asio/detail/date_time_fwd.hpp"
 #include "asio/detail/limits.hpp"
 #include "asio/detail/op_queue.hpp"
+#include "asio/detail/push_options.hpp"
 #include "asio/detail/timer_queue_base.hpp"
 #include "asio/detail/wait_op.hpp"
 #include "asio/error.hpp"
-
-#include "asio/detail/push_options.hpp"
 
 namespace asio {
 namespace detail {

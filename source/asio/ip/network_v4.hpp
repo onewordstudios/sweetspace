@@ -17,12 +17,12 @@
 #endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
 
 #include <string>
+
 #include "asio/detail/config.hpp"
+#include "asio/detail/push_options.hpp"
 #include "asio/detail/string_view.hpp"
 #include "asio/error_code.hpp"
 #include "asio/ip/address_v4_range.hpp"
-
-#include "asio/detail/push_options.hpp"
 
 namespace asio {
 namespace ip {
@@ -212,7 +212,6 @@ std::basic_ostream<Elem, Traits>& operator<<(std::basic_ostream<Elem, Traits>& o
 } // namespace asio
 
 #include "asio/detail/pop_options.hpp"
-
 #include "asio/ip/impl/network_v4.hpp"
 #if defined(ASIO_HEADER_ONLY)
 #include "asio/ip/impl/network_v4.ipp"

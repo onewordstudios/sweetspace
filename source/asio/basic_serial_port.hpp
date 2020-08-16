@@ -21,6 +21,7 @@
 #if defined(ASIO_HAS_SERIAL_PORT) || defined(GENERATING_DOCUMENTATION)
 
 #include <string>
+
 #include "asio/async_result.hpp"
 #include "asio/detail/handler_type_requirements.hpp"
 #include "asio/detail/io_object_impl.hpp"

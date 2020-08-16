@@ -16,6 +16,7 @@
 #endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
 
 #include <string>
+
 #include "asio/detail/config.hpp"
 #include "asio/detail/string_view.hpp"
 #include "asio/detail/throw_exception.hpp"
@@ -231,7 +232,6 @@ std::basic_ostream<Elem, Traits>& operator<<(std::basic_ostream<Elem, Traits>& o
 } // namespace asio
 
 #include "asio/detail/pop_options.hpp"
-
 #include "asio/ip/impl/address.hpp"
 #if defined(ASIO_HEADER_ONLY)
 #include "asio/ip/impl/address.ipp"

@@ -28,16 +28,14 @@
 #ifndef WEBSOCKETPP_EXTENSION_PERMESSAGE_DEFLATE_DISABLED_HPP
 #define WEBSOCKETPP_EXTENSION_PERMESSAGE_DEFLATE_DISABLED_HPP
 
-#include <websocketpp/common/cpp11.hpp>
-#include <websocketpp/common/stdint.hpp>
-#include <websocketpp/common/system_error.hpp>
-
-#include <websocketpp/http/constants.hpp>
-#include <websocketpp/extensions/extension.hpp>
-
 #include <map>
 #include <string>
 #include <utility>
+#include <websocketpp/common/cpp11.hpp>
+#include <websocketpp/common/stdint.hpp>
+#include <websocketpp/common/system_error.hpp>
+#include <websocketpp/extensions/extension.hpp>
+#include <websocketpp/http/constants.hpp>
 
 namespace websocketpp {
 namespace extensions {
@@ -51,75 +49,67 @@ namespace permessage_deflate {
  */
 template <typename config>
 class disabled {
-    typedef std::pair<lib::error_code,std::string> err_str_pair;
+	typedef std::pair<lib::error_code, std::string> err_str_pair;
 
-public:
-    /// Negotiate extension
-    /**
-     * The disabled extension always fails the negotiation with a disabled
-     * error.
-     *
-     * @param offer Attribute from client's offer
-     * @return Status code and value to return to remote endpoint
-     */
-    err_str_pair negotiate(http::attribute_list const &) {
-        return make_pair(make_error_code(error::disabled),std::string());
-    }
+   public:
+	/// Negotiate extension
+	/**
+	 * The disabled extension always fails the negotiation with a disabled
+	 * error.
+	 *
+	 * @param offer Attribute from client's offer
+	 * @return Status code and value to return to remote endpoint
+	 */
+	err_str_pair negotiate(http::attribute_list const &) {
+		return make_pair(make_error_code(error::disabled), std::string());
+	}
 
-    /// Initialize state
-    /**
-     * For the disabled extension state initialization is a no-op.
-     *
-     * @param is_server True to initialize as a server, false for a client.
-     * @return A code representing the error that occurred, if any
-     */
-    lib::error_code init(bool) {
-        return lib::error_code();
-    }
+	/// Initialize state
+	/**
+	 * For the disabled extension state initialization is a no-op.
+	 *
+	 * @param is_server True to initialize as a server, false for a client.
+	 * @return A code representing the error that occurred, if any
+	 */
+	lib::error_code init(bool) { return lib::error_code(); }
 
-    /// Returns true if the extension is capable of providing
-    /// permessage_deflate functionality
-    bool is_implemented() const {
-        return false;
-    }
+	/// Returns true if the extension is capable of providing
+	/// permessage_deflate functionality
+	bool is_implemented() const { return false; }
 
-    /// Returns true if permessage_deflate functionality is active for this
-    /// connection
-    bool is_enabled() const {
-        return false;
-    }
+	/// Returns true if permessage_deflate functionality is active for this
+	/// connection
+	bool is_enabled() const { return false; }
 
-    /// Generate extension offer
-    /**
-     * Creates an offer string to include in the Sec-WebSocket-Extensions
-     * header of outgoing client requests.
-     *
-     * @return A WebSocket extension offer string for this extension
-     */
-    std::string generate_offer() const {
-        return "";
-    }
+	/// Generate extension offer
+	/**
+	 * Creates an offer string to include in the Sec-WebSocket-Extensions
+	 * header of outgoing client requests.
+	 *
+	 * @return A WebSocket extension offer string for this extension
+	 */
+	std::string generate_offer() const { return ""; }
 
-    /// Compress bytes
-    /**
-     * @param [in] in String to compress
-     * @param [out] out String to append compressed bytes to
-     * @return Error or status code
-     */
-    lib::error_code compress(std::string const &, std::string &) {
-        return make_error_code(error::disabled);
-    }
+	/// Compress bytes
+	/**
+	 * @param [in] in String to compress
+	 * @param [out] out String to append compressed bytes to
+	 * @return Error or status code
+	 */
+	lib::error_code compress(std::string const &, std::string &) {
+		return make_error_code(error::disabled);
+	}
 
-    /// Decompress bytes
-    /**
-     * @param buf Byte buffer to decompress
-     * @param len Length of buf
-     * @param out String to append decompressed bytes to
-     * @return Error or status code
-     */
-    lib::error_code decompress(uint8_t const *, size_t, std::string &) {
-        return make_error_code(error::disabled);
-    }
+	/// Decompress bytes
+	/**
+	 * @param buf Byte buffer to decompress
+	 * @param len Length of buf
+	 * @param out String to append decompressed bytes to
+	 * @return Error or status code
+	 */
+	lib::error_code decompress(uint8_t const *, size_t, std::string &) {
+		return make_error_code(error::disabled);
+	}
 };
 
 } // namespace permessage_deflate

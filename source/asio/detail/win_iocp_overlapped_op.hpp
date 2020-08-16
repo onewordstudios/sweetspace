@@ -25,9 +25,8 @@
 #include "asio/detail/handler_invoke_helpers.hpp"
 #include "asio/detail/memory.hpp"
 #include "asio/detail/operation.hpp"
-#include "asio/error.hpp"
-
 #include "asio/detail/push_options.hpp"
+#include "asio/error.hpp"
 
 namespace asio {
 namespace detail {

@@ -17,11 +17,11 @@
 
 #include <cstddef>
 #include <stdexcept>
+
 #include "asio/detail/config.hpp"
+#include "asio/detail/push_options.hpp"
 #include "asio/detail/socket_types.hpp"
 #include "asio/detail/throw_exception.hpp"
-
-#include "asio/detail/push_options.hpp"
 
 namespace asio {
 namespace detail {

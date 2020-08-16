@@ -17,8 +17,8 @@
 
 #include <climits>
 #include <cstddef>
-#include "asio/detail/call_stack.hpp"
 
+#include "asio/detail/call_stack.hpp"
 #include "asio/detail/push_options.hpp"
 
 namespace asio {

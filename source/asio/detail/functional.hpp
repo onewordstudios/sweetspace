@@ -15,9 +15,9 @@
 #pragma once
 #endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
 
-#include "asio/detail/config.hpp"
-
 #include <functional>
+
+#include "asio/detail/config.hpp"
 
 #if !defined(ASIO_HAS_STD_FUNCTION)
 #include <boost/function.hpp>

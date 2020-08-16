@@ -17,10 +17,9 @@
 
 #include "asio/detail/config.hpp"
 #include "asio/detail/memory.hpp"
+#include "asio/detail/push_options.hpp"
 #include "asio/detail/thread_context.hpp"
 #include "asio/detail/thread_info_base.hpp"
-
-#include "asio/detail/push_options.hpp"
 
 namespace asio {
 namespace detail {

@@ -17,11 +17,10 @@
 
 #include "asio/detail/executor_op.hpp"
 #include "asio/detail/fenced_block.hpp"
+#include "asio/detail/push_options.hpp"
 #include "asio/detail/recycling_allocator.hpp"
 #include "asio/detail/type_traits.hpp"
 #include "asio/execution_context.hpp"
-
-#include "asio/detail/push_options.hpp"
 
 namespace asio {
 

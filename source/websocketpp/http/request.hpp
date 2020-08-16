@@ -29,7 +29,6 @@
 #define HTTP_PARSER_REQUEST_HPP
 
 #include <string>
-
 #include <websocketpp/common/memory.hpp>
 #include <websocketpp/http/parser.hpp>
 

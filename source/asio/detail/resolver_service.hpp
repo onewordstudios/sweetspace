@@ -21,13 +21,12 @@
 
 #include "asio/detail/concurrency_hint.hpp"
 #include "asio/detail/memory.hpp"
+#include "asio/detail/push_options.hpp"
 #include "asio/detail/resolve_endpoint_op.hpp"
 #include "asio/detail/resolve_query_op.hpp"
 #include "asio/detail/resolver_service_base.hpp"
 #include "asio/ip/basic_resolver_query.hpp"
 #include "asio/ip/basic_resolver_results.hpp"
-
-#include "asio/detail/push_options.hpp"
 
 namespace asio {
 namespace detail {

@@ -20,9 +20,8 @@
 #if defined(ASIO_HAS_POSIX_STREAM_DESCRIPTOR) || defined(GENERATING_DOCUMENTATION)
 
 #include "asio/detail/io_control.hpp"
-#include "asio/detail/socket_option.hpp"
-
 #include "asio/detail/push_options.hpp"
+#include "asio/detail/socket_option.hpp"
 
 namespace asio {
 namespace posix {

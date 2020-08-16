@@ -21,6 +21,7 @@
 							   !defined(ASIO_HAS_KQUEUE) && !defined(ASIO_WINDOWS_RUNTIME))
 
 #include <cstddef>
+
 #include "asio/detail/fd_set_adapter.hpp"
 #include "asio/detail/limits.hpp"
 #include "asio/detail/mutex.hpp"
@@ -46,7 +47,7 @@ namespace detail {
 class select_reactor : public execution_context_service_base<select_reactor> {
    public:
 #if defined(ASIO_WINDOWS) || defined(__CYGWIN__)
-	enum op_types{read_op = 0,		  write_op = 1,   except_op = 2,
+	enum op_types{read_op = 0,		  write_op = 1,	  except_op = 2,
 				  max_select_ops = 3, connect_op = 3, max_ops = 4};
 #else  // defined(ASIO_WINDOWS) || defined(__CYGWIN__)
 	enum op_types {
@@ -217,9 +218,8 @@ class select_reactor : public execution_context_service_base<select_reactor> {
 } // namespace detail
 } // namespace asio
 
-#include "asio/detail/pop_options.hpp"
-
 #include "asio/detail/impl/select_reactor.hpp"
+#include "asio/detail/pop_options.hpp"
 #if defined(ASIO_HEADER_ONLY)
 #include "asio/detail/impl/select_reactor.ipp"
 #endif // defined(ASIO_HEADER_ONLY)

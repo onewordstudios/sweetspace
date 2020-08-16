@@ -20,10 +20,9 @@
 #if defined(ASIO_HAS_WINDOWS_OVERLAPPED_PTR) || defined(GENERATING_DOCUMENTATION)
 
 #include "asio/detail/noncopyable.hpp"
+#include "asio/detail/push_options.hpp"
 #include "asio/detail/win_iocp_overlapped_ptr.hpp"
 #include "asio/io_context.hpp"
-
-#include "asio/detail/push_options.hpp"
 
 namespace asio {
 namespace windows {

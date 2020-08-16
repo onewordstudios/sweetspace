@@ -19,10 +19,9 @@
 #include "asio/detail/mutex.hpp"
 #include "asio/detail/op_queue.hpp"
 #include "asio/detail/operation.hpp"
+#include "asio/detail/push_options.hpp"
 #include "asio/detail/scoped_ptr.hpp"
 #include "asio/io_context.hpp"
-
-#include "asio/detail/push_options.hpp"
 
 namespace asio {
 namespace detail {
@@ -124,9 +123,8 @@ class strand_service : public asio::detail::service_base<strand_service> {
 } // namespace detail
 } // namespace asio
 
-#include "asio/detail/pop_options.hpp"
-
 #include "asio/detail/impl/strand_service.hpp"
+#include "asio/detail/pop_options.hpp"
 #if defined(ASIO_HEADER_ONLY)
 #include "asio/detail/impl/strand_service.ipp"
 #endif // defined(ASIO_HEADER_ONLY)

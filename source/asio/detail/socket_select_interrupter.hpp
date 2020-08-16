@@ -21,9 +21,8 @@
 
 #if defined(ASIO_WINDOWS) || defined(__CYGWIN__) || defined(__SYMBIAN32__)
 
-#include "asio/detail/socket_types.hpp"
-
 #include "asio/detail/push_options.hpp"
+#include "asio/detail/socket_types.hpp"
 
 namespace asio {
 namespace detail {

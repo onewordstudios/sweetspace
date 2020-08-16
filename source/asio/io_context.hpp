@@ -18,6 +18,7 @@
 #include <cstddef>
 #include <stdexcept>
 #include <typeinfo>
+
 #include "asio/async_result.hpp"
 #include "asio/detail/config.hpp"
 #include "asio/detail/noncopyable.hpp"
@@ -835,7 +836,6 @@ asio::detail::service_id<Type> service_base<Type>::id;
 } // namespace asio
 
 #include "asio/detail/pop_options.hpp"
-
 #include "asio/impl/io_context.hpp"
 #if defined(ASIO_HEADER_ONLY)
 #include "asio/impl/io_context.ipp"

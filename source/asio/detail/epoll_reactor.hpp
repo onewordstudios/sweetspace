@@ -244,9 +244,8 @@ class epoll_reactor : public execution_context_service_base<epoll_reactor> {
 } // namespace detail
 } // namespace asio
 
-#include "asio/detail/pop_options.hpp"
-
 #include "asio/detail/impl/epoll_reactor.hpp"
+#include "asio/detail/pop_options.hpp"
 #if defined(ASIO_HEADER_ONLY)
 #include "asio/detail/impl/epoll_reactor.ipp"
 #endif // defined(ASIO_HEADER_ONLY)

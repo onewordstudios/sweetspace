@@ -28,22 +28,19 @@
 #ifndef WEBSOCKETPP_CONNECTION_IMPL_HPP
 #define WEBSOCKETPP_CONNECTION_IMPL_HPP
 
-#include <websocketpp/processors/hybi00.hpp>
-#include <websocketpp/processors/hybi07.hpp>
-#include <websocketpp/processors/hybi08.hpp>
-#include <websocketpp/processors/hybi13.hpp>
-
-#include <websocketpp/processors/processor.hpp>
-
-#include <websocketpp/common/platforms.hpp>
-#include <websocketpp/common/system_error.hpp>
-
 #include <algorithm>
 #include <exception>
 #include <sstream>
 #include <string>
 #include <utility>
 #include <vector>
+#include <websocketpp/common/platforms.hpp>
+#include <websocketpp/common/system_error.hpp>
+#include <websocketpp/processors/hybi00.hpp>
+#include <websocketpp/processors/hybi07.hpp>
+#include <websocketpp/processors/hybi08.hpp>
+#include <websocketpp/processors/hybi13.hpp>
+#include <websocketpp/processors/processor.hpp>
 
 namespace websocketpp {
 

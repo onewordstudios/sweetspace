@@ -19,9 +19,8 @@
 
 #if !defined(ASIO_HAS_THREADS)
 
-#include "asio/detail/scoped_lock.hpp"
-
 #include "asio/detail/push_options.hpp"
+#include "asio/detail/scoped_lock.hpp"
 
 namespace asio {
 namespace detail {

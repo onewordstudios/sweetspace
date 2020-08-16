@@ -22,16 +22,17 @@
 #include <robuffer.h>
 #include <windows.storage.streams.h>
 #include <wrl/implements.h>
+
 #include <codecvt>
 #include <cstdlib>
 #include <future>
 #include <locale>
+
 #include "asio/buffer.hpp"
 #include "asio/detail/memory.hpp"
+#include "asio/detail/push_options.hpp"
 #include "asio/detail/socket_ops.hpp"
 #include "asio/error_code.hpp"
-
-#include "asio/detail/push_options.hpp"
 
 namespace asio {
 namespace detail {

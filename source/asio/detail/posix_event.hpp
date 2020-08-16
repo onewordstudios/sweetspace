@@ -20,9 +20,9 @@
 #if defined(ASIO_HAS_PTHREADS)
 
 #include <pthread.h>
+
 #include "asio/detail/assert.hpp"
 #include "asio/detail/noncopyable.hpp"
-
 #include "asio/detail/push_options.hpp"
 
 namespace asio {
@@ -108,8 +108,8 @@ class posix_event : private noncopyable {
 			::pthread_cond_timedwait_relative_np(&cond_, &lock.mutex().mutex_,
 												 &ts); // Ignore EINVAL.
 #else												   // (defined(__MACH__) && defined(__APPLE__))
-	  // || (defined(__ANDROID__) && (__ANDROID_API__ < 21)
-	  //     && defined(HAVE_PTHREAD_COND_TIMEDWAIT_RELATIVE))
+			// || (defined(__ANDROID__) && (__ANDROID_API__ < 21)
+			//     && defined(HAVE_PTHREAD_COND_TIMEDWAIT_RELATIVE))
 			if (::clock_gettime(CLOCK_MONOTONIC, &ts) == 0) {
 				ts.tv_sec += usec / 1000000;
 				ts.tv_nsec += (usec % 1000000) * 1000;
@@ -117,9 +117,9 @@ class posix_event : private noncopyable {
 				ts.tv_nsec = ts.tv_nsec % 1000000000;
 				::pthread_cond_timedwait(&cond_, &lock.mutex().mutex_, &ts); // Ignore EINVAL.
 			}
-#endif // (defined(__MACH__) && defined(__APPLE__))
-	   // || (defined(__ANDROID__) && (__ANDROID_API__ < 21)
-	   //     && defined(HAVE_PTHREAD_COND_TIMEDWAIT_RELATIVE))
+#endif												   // (defined(__MACH__) && defined(__APPLE__))
+			// || (defined(__ANDROID__) && (__ANDROID_API__ < 21)
+			//     && defined(HAVE_PTHREAD_COND_TIMEDWAIT_RELATIVE))
 			state_ -= 2;
 		}
 		return (state_ & 1) != 0;

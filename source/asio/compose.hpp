@@ -17,7 +17,6 @@
 
 #include "asio/async_result.hpp"
 #include "asio/detail/config.hpp"
-
 #include "asio/detail/push_options.hpp"
 
 namespace asio {
@@ -128,7 +127,6 @@ ASIO_VARIADIC_GENERATE(ASIO_PRIVATE_ASYNC_COMPOSE_DEF)
 } // namespace asio
 
 #include "asio/detail/pop_options.hpp"
-
 #include "asio/impl/compose.hpp"
 
 #endif // ASIO_COMPOSE_HPP

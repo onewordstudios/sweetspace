@@ -18,11 +18,11 @@
 #include <cstddef>
 #include <stdexcept>
 #include <typeinfo>
+
 #include "asio/detail/config.hpp"
 #include "asio/detail/noncopyable.hpp"
-#include "asio/detail/variadic_templates.hpp"
-
 #include "asio/detail/push_options.hpp"
+#include "asio/detail/variadic_templates.hpp"
 
 namespace asio {
 
@@ -386,7 +386,6 @@ service_id<Type> execution_context_service_base<Type>::id;
 } // namespace asio
 
 #include "asio/detail/pop_options.hpp"
-
 #include "asio/impl/execution_context.hpp"
 #if defined(ASIO_HEADER_ONLY)
 #include "asio/impl/execution_context.ipp"

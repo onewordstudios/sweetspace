@@ -18,9 +18,8 @@
 #include "asio/detail/config.hpp"
 #include "asio/detail/mutex.hpp"
 #include "asio/detail/noncopyable.hpp"
-#include "asio/detail/scoped_lock.hpp"
-
 #include "asio/detail/push_options.hpp"
+#include "asio/detail/scoped_lock.hpp"
 
 namespace asio {
 namespace detail {

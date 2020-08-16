@@ -16,17 +16,17 @@
 #endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
 
 #include <boost/coroutine/all.hpp>
+
 #include "asio/bind_executor.hpp"
 #include "asio/detail/config.hpp"
 #include "asio/detail/memory.hpp"
+#include "asio/detail/push_options.hpp"
 #include "asio/detail/type_traits.hpp"
 #include "asio/detail/wrapped_handler.hpp"
 #include "asio/executor.hpp"
 #include "asio/io_context.hpp"
 #include "asio/is_executor.hpp"
 #include "asio/strand.hpp"
-
-#include "asio/detail/push_options.hpp"
 
 namespace asio {
 
@@ -303,7 +303,6 @@ void spawn(
 } // namespace asio
 
 #include "asio/detail/pop_options.hpp"
-
 #include "asio/impl/spawn.hpp"
 
 #endif // ASIO_SPAWN_HPP

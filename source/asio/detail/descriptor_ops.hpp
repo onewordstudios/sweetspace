@@ -20,11 +20,11 @@
 #if !defined(ASIO_WINDOWS) && !defined(ASIO_WINDOWS_RUNTIME) && !defined(__CYGWIN__)
 
 #include <cstddef>
+
+#include "asio/detail/push_options.hpp"
 #include "asio/detail/socket_types.hpp"
 #include "asio/error.hpp"
 #include "asio/error_code.hpp"
-
-#include "asio/detail/push_options.hpp"
 
 namespace asio {
 namespace detail {
