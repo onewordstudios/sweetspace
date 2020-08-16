@@ -26,6 +26,9 @@
 		7B341E612463C5E70073D4D2 /* CustomNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7B341E5D2463C5E70073D4D2 /* CustomNode.cpp */; };
 		7B341E622463C5E70073D4D2 /* CustomNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7B341E5D2463C5E70073D4D2 /* CustomNode.cpp */; };
 		7B341E632463C5E70073D4D2 /* CustomNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7B341E5D2463C5E70073D4D2 /* CustomNode.cpp */; };
+		7BB3E22224E9C180006E07CD /* CustomServer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7BB3E21D24E9C180006E07CD /* CustomServer.cpp */; };
+		7BB3E22324E9C180006E07CD /* CustomServer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7BB3E21D24E9C180006E07CD /* CustomServer.cpp */; };
+		7BB3E22424E9C180006E07CD /* CustomServer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7BB3E21D24E9C180006E07CD /* CustomServer.cpp */; };
 		7BD666F22448E8E500D68748 /* MainMenuMode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7BD666F12448E8E500D68748 /* MainMenuMode.cpp */; };
 		7BD666F32448E8E500D68748 /* MainMenuMode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7BD666F12448E8E500D68748 /* MainMenuMode.cpp */; };
 		7BD666F42448E8E500D68748 /* MainMenuMode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7BD666F12448E8E500D68748 /* MainMenuMode.cpp */; };
@@ -231,6 +234,8 @@
 		7B209DFE24395A9D00B657D2 /* ButtonManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ButtonManager.h; sourceTree = "<group>"; };
 		7B3270692425A569004A3B36 /* GLaDOS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLaDOS.h; sourceTree = "<group>"; };
 		7B341E5D2463C5E70073D4D2 /* CustomNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CustomNode.cpp; sourceTree = "<group>"; };
+		7BB3E21D24E9C180006E07CD /* CustomServer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CustomServer.cpp; sourceTree = "<group>"; };
+		7BB3E22124E9C180006E07CD /* CustomServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomServer.h; sourceTree = "<group>"; };
 		7BD666F02448E8E500D68748 /* MainMenuMode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainMenuMode.h; sourceTree = "<group>"; };
 		7BD666F12448E8E500D68748 /* MainMenuMode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MainMenuMode.cpp; sourceTree = "<group>"; };
 		7BDE1A3E243422EC0080F7CB /* Globals.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Globals.h; sourceTree = "<group>"; };
@@ -421,6 +426,8 @@
 		7B106FA324DA51A0008EFDED /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				7BB3E22124E9C180006E07CD /* CustomServer.h */,
+				7BB3E21D24E9C180006E07CD /* CustomServer.cpp */,
 				7B3270692425A569004A3B36 /* GLaDOS.h */,
 				C122229A6EDF1DAB4330F1B7 /* GLaDOS.cpp */,
 				DF3B743C2403A46A0063552F /* InputController.h */,
@@ -874,6 +881,7 @@
 				C1222A784AAFE1C7BC89BC94 /* GLaDOS.cpp in Sources */,
 				D152294B962A6F545D187713 /* BreachNode.cpp in Sources */,
 				C1222594BF979D3CB3968897 /* ButtonManager.cpp in Sources */,
+				7BB3E22424E9C180006E07CD /* CustomServer.cpp in Sources */,
 				C122211BC4827F6D5229F659 /* Tween.cpp in Sources */,
 				7B106FA124DA5167008EFDED /* AnimationManager.cpp in Sources */,
 				C58C5DD0D57B8D381A72FFD5 /* ButtonModel.cpp in Sources */,
@@ -918,6 +926,7 @@
 				C1222C87F6E3205CB0FD5628 /* GLaDOS.cpp in Sources */,
 				D1522FE380CFE13F14305356 /* BreachNode.cpp in Sources */,
 				C1222FF1F85D4E3C0634F8F8 /* ButtonManager.cpp in Sources */,
+				7BB3E22324E9C180006E07CD /* CustomServer.cpp in Sources */,
 				C122252BBBA6A3A5A6FA965C /* Tween.cpp in Sources */,
 				7B106FA024DA5167008EFDED /* AnimationManager.cpp in Sources */,
 				C58C520035DC61E2C2FDAFBE /* ButtonModel.cpp in Sources */,
@@ -962,6 +971,7 @@
 				C1222BA1DAB6BA55C0C6DEDA /* GLaDOS.cpp in Sources */,
 				D15220621F9C106302ACEBBB /* BreachNode.cpp in Sources */,
 				C122201B849961CE6B05D3B3 /* ButtonManager.cpp in Sources */,
+				7BB3E22224E9C180006E07CD /* CustomServer.cpp in Sources */,
 				C12227687FF20FC96584A686 /* Tween.cpp in Sources */,
 				7B106F9F24DA5167008EFDED /* AnimationManager.cpp in Sources */,
 				C58C5216B68A5A2C01E445BD /* ButtonModel.cpp in Sources */,
