@@ -12,7 +12,7 @@
 #define ASIO_REDIRECT_ERROR_HPP
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1200)
-# pragma once
+#pragma once
 #endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
 
 #include "asio/detail/config.hpp"
@@ -30,31 +30,24 @@ namespace asio {
  * by an asynchronous operation is captured to a specified variable.
  */
 template <typename CompletionToken>
-class redirect_error_t
-{
-public:
-  /// Constructor. 
-  template <typename T>
-  redirect_error_t(ASIO_MOVE_ARG(T) completion_token,
-      asio::error_code& ec)
-    : token_(ASIO_MOVE_CAST(T)(completion_token)),
-      ec_(ec)
-  {
-  }
+class redirect_error_t {
+   public:
+	/// Constructor.
+	template <typename T>
+	redirect_error_t(ASIO_MOVE_ARG(T) completion_token, asio::error_code& ec)
+		: token_(ASIO_MOVE_CAST(T)(completion_token)), ec_(ec) {}
 
-//private:
-  CompletionToken token_;
-  asio::error_code& ec_;
+	// private:
+	CompletionToken token_;
+	asio::error_code& ec_;
 };
 
 /// Create a completion token to capture error_code values to a variable.
 template <typename CompletionToken>
 inline redirect_error_t<typename decay<CompletionToken>::type> redirect_error(
-    ASIO_MOVE_ARG(CompletionToken) completion_token,
-    asio::error_code& ec)
-{
-  return redirect_error_t<typename decay<CompletionToken>::type>(
-      ASIO_MOVE_CAST(CompletionToken)(completion_token), ec);
+	ASIO_MOVE_ARG(CompletionToken) completion_token, asio::error_code& ec) {
+	return redirect_error_t<typename decay<CompletionToken>::type>(
+		ASIO_MOVE_CAST(CompletionToken)(completion_token), ec);
 }
 
 } // namespace asio

@@ -12,7 +12,7 @@
 #define ASIO_DETAIL_WAIT_OP_HPP
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1200)
-# pragma once
+#pragma once
 #endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
 
 #include "asio/detail/config.hpp"
@@ -23,18 +23,13 @@
 namespace asio {
 namespace detail {
 
-class wait_op
-  : public operation
-{
-public:
-  // The error code to be passed to the completion handler.
-  asio::error_code ec_;
+class wait_op : public operation {
+   public:
+	// The error code to be passed to the completion handler.
+	asio::error_code ec_;
 
-protected:
-  wait_op(func_type func)
-    : operation(func)
-  {
-  }
+   protected:
+	wait_op(func_type func) : operation(func) {}
 };
 
 } // namespace detail

@@ -12,7 +12,7 @@
 #define ASIO_DETAIL_WINAPP_THREAD_HPP
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1200)
-# pragma once
+#pragma once
 #endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
 
 #include "asio/detail/config.hpp"
@@ -32,86 +32,62 @@ namespace detail {
 
 DWORD WINAPI winapp_thread_function(LPVOID arg);
 
-class winapp_thread
-  : private noncopyable
-{
-public:
-  // Constructor.
-  template <typename Function>
-  winapp_thread(Function f, unsigned int = 0)
-  {
-    scoped_ptr<func_base> arg(new func<Function>(f));
-    DWORD thread_id = 0;
-    thread_ = ::CreateThread(0, 0, winapp_thread_function,
-        arg.get(), 0, &thread_id);
-    if (!thread_)
-    {
-      DWORD last_error = ::GetLastError();
-      asio::error_code ec(last_error,
-          asio::error::get_system_category());
-      asio::detail::throw_error(ec, "thread");
-    }
-    arg.release();
-  }
+class winapp_thread : private noncopyable {
+   public:
+	// Constructor.
+	template <typename Function>
+	winapp_thread(Function f, unsigned int = 0) {
+		scoped_ptr<func_base> arg(new func<Function>(f));
+		DWORD thread_id = 0;
+		thread_ = ::CreateThread(0, 0, winapp_thread_function, arg.get(), 0, &thread_id);
+		if (!thread_) {
+			DWORD last_error = ::GetLastError();
+			asio::error_code ec(last_error, asio::error::get_system_category());
+			asio::detail::throw_error(ec, "thread");
+		}
+		arg.release();
+	}
 
-  // Destructor.
-  ~winapp_thread()
-  {
-    ::CloseHandle(thread_);
-  }
+	// Destructor.
+	~winapp_thread() { ::CloseHandle(thread_); }
 
-  // Wait for the thread to exit.
-  void join()
-  {
-    ::WaitForSingleObjectEx(thread_, INFINITE, false);
-  }
+	// Wait for the thread to exit.
+	void join() { ::WaitForSingleObjectEx(thread_, INFINITE, false); }
 
-  // Get number of CPUs.
-  static std::size_t hardware_concurrency()
-  {
-    SYSTEM_INFO system_info;
-    ::GetNativeSystemInfo(&system_info);
-    return system_info.dwNumberOfProcessors;
-  }
+	// Get number of CPUs.
+	static std::size_t hardware_concurrency() {
+		SYSTEM_INFO system_info;
+		::GetNativeSystemInfo(&system_info);
+		return system_info.dwNumberOfProcessors;
+	}
 
-private:
-  friend DWORD WINAPI winapp_thread_function(LPVOID arg);
+   private:
+	friend DWORD WINAPI winapp_thread_function(LPVOID arg);
 
-  class func_base
-  {
-  public:
-    virtual ~func_base() {}
-    virtual void run() = 0;
-  };
+	class func_base {
+	   public:
+		virtual ~func_base() {}
+		virtual void run() = 0;
+	};
 
-  template <typename Function>
-  class func
-    : public func_base
-  {
-  public:
-    func(Function f)
-      : f_(f)
-    {
-    }
+	template <typename Function>
+	class func : public func_base {
+	   public:
+		func(Function f) : f_(f) {}
 
-    virtual void run()
-    {
-      f_();
-    }
+		virtual void run() { f_(); }
 
-  private:
-    Function f_;
-  };
+	   private:
+		Function f_;
+	};
 
-  ::HANDLE thread_;
+	::HANDLE thread_;
 };
 
-inline DWORD WINAPI winapp_thread_function(LPVOID arg)
-{
-  scoped_ptr<winapp_thread::func_base> func(
-      static_cast<winapp_thread::func_base*>(arg));
-  func->run();
-  return 0;
+inline DWORD WINAPI winapp_thread_function(LPVOID arg) {
+	scoped_ptr<winapp_thread::func_base> func(static_cast<winapp_thread::func_base*>(arg));
+	func->run();
+	return 0;
 }
 
 } // namespace detail

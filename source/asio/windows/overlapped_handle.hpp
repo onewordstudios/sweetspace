@@ -12,14 +12,13 @@
 #define ASIO_WINDOWS_OVERLAPPED_HANDLE_HPP
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1200)
-# pragma once
+#pragma once
 #endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
 
 #include "asio/detail/config.hpp"
 
-#if defined(ASIO_HAS_WINDOWS_RANDOM_ACCESS_HANDLE) \
-  || defined(ASIO_HAS_WINDOWS_STREAM_HANDLE) \
-  || defined(GENERATING_DOCUMENTATION)
+#if defined(ASIO_HAS_WINDOWS_RANDOM_ACCESS_HANDLE) || defined(ASIO_HAS_WINDOWS_STREAM_HANDLE) || \
+	defined(GENERATING_DOCUMENTATION)
 
 #include "asio/windows/basic_overlapped_handle.hpp"
 
@@ -33,7 +32,7 @@ typedef basic_overlapped_handle<> overlapped_handle;
 } // namespace asio
 
 #endif // defined(ASIO_HAS_WINDOWS_RANDOM_ACCESS_HANDLE)
-       //   || defined(ASIO_HAS_WINDOWS_STREAM_HANDLE)
-       //   || defined(GENERATING_DOCUMENTATION)
+	   //   || defined(ASIO_HAS_WINDOWS_STREAM_HANDLE)
+	   //   || defined(GENERATING_DOCUMENTATION)
 
 #endif // ASIO_WINDOWS_OVERLAPPED_HANDLE_HPP

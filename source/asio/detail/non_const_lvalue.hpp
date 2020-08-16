@@ -12,7 +12,7 @@
 #define ASIO_DETAIL_NON_CONST_LVALUE_HPP
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1200)
-# pragma once
+#pragma once
 #endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
 
 #include "asio/detail/config.hpp"
@@ -24,25 +24,18 @@ namespace asio {
 namespace detail {
 
 template <typename T>
-struct non_const_lvalue
-{
+struct non_const_lvalue {
 #if defined(ASIO_HAS_MOVE)
-  explicit non_const_lvalue(T& t)
-    : value(static_cast<typename conditional<
-        is_same<T, typename decay<T>::type>::value,
-          typename decay<T>::type&, T&&>::type>(t))
-  {
-  }
+	explicit non_const_lvalue(T& t)
+		: value(static_cast<typename conditional<is_same<T, typename decay<T>::type>::value,
+												 typename decay<T>::type&, T&&>::type>(t)) {}
 
-  typename conditional<is_same<T, typename decay<T>::type>::value,
-      typename decay<T>::type&, typename decay<T>::type>::type value;
-#else // defined(ASIO_HAS_MOVE) || defined(GENERATING_DOCUMENTATION)
-  explicit non_const_lvalue(const typename decay<T>::type& t)
-    : value(t)
-  {
-  }
+	typename conditional<is_same<T, typename decay<T>::type>::value, typename decay<T>::type&,
+						 typename decay<T>::type>::type value;
+#else  // defined(ASIO_HAS_MOVE) || defined(GENERATING_DOCUMENTATION)
+	explicit non_const_lvalue(const typename decay<T>::type& t) : value(t) {}
 
-  typename decay<T>::type value;
+	typename decay<T>::type value;
 #endif // defined(ASIO_HAS_MOVE)
 };
 

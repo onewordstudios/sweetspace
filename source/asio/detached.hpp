@@ -12,11 +12,11 @@
 #define ASIO_DETACHED_HPP
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1200)
-# pragma once
+#pragma once
 #endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
 
-#include "asio/detail/config.hpp"
 #include <memory>
+#include "asio/detail/config.hpp"
 
 #include "asio/detail/push_options.hpp"
 
@@ -34,13 +34,10 @@ namespace asio {
  * @code my_socket.async_send(my_buffer, asio::detached);
  * @endcode
  */
-class detached_t
-{
-public:
-  /// Constructor. 
-  ASIO_CONSTEXPR detached_t()
-  {
-  }
+class detached_t {
+   public:
+	/// Constructor.
+	ASIO_CONSTEXPR detached_t() {}
 };
 
 /// A special value, similar to std::nothrow.

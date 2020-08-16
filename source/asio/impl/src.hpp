@@ -16,18 +16,9 @@
 #include "asio/detail/config.hpp"
 
 #if defined(ASIO_HEADER_ONLY)
-# error Do not compile Asio library source with ASIO_HEADER_ONLY defined
+#error Do not compile Asio library source with ASIO_HEADER_ONLY defined
 #endif
 
-#include "asio/impl/error.ipp"
-#include "asio/impl/error_code.ipp"
-#include "asio/impl/execution_context.ipp"
-#include "asio/impl/executor.ipp"
-#include "asio/impl/handler_alloc_hook.ipp"
-#include "asio/impl/io_context.ipp"
-#include "asio/impl/serial_port_base.ipp"
-#include "asio/impl/system_context.ipp"
-#include "asio/impl/thread_pool.ipp"
 #include "asio/detail/impl/buffer_sequence_adapter.ipp"
 #include "asio/detail/impl/descriptor_ops.ipp"
 #include "asio/detail/impl/dev_poll_reactor.ipp"
@@ -56,11 +47,11 @@
 #include "asio/detail/impl/throw_error.ipp"
 #include "asio/detail/impl/timer_queue_ptime.ipp"
 #include "asio/detail/impl/timer_queue_set.ipp"
+#include "asio/detail/impl/win_event.ipp"
 #include "asio/detail/impl/win_iocp_handle_service.ipp"
 #include "asio/detail/impl/win_iocp_io_context.ipp"
 #include "asio/detail/impl/win_iocp_serial_port_service.ipp"
 #include "asio/detail/impl/win_iocp_socket_service_base.ipp"
-#include "asio/detail/impl/win_event.ipp"
 #include "asio/detail/impl/win_mutex.ipp"
 #include "asio/detail/impl/win_object_handle_service.ipp"
 #include "asio/detail/impl/win_static_mutex.ipp"
@@ -70,13 +61,22 @@
 #include "asio/detail/impl/winrt_timer_scheduler.ipp"
 #include "asio/detail/impl/winsock_init.ipp"
 #include "asio/generic/detail/impl/endpoint.ipp"
+#include "asio/impl/error.ipp"
+#include "asio/impl/error_code.ipp"
+#include "asio/impl/execution_context.ipp"
+#include "asio/impl/executor.ipp"
+#include "asio/impl/handler_alloc_hook.ipp"
+#include "asio/impl/io_context.ipp"
+#include "asio/impl/serial_port_base.ipp"
+#include "asio/impl/system_context.ipp"
+#include "asio/impl/thread_pool.ipp"
+#include "asio/ip/detail/impl/endpoint.ipp"
 #include "asio/ip/impl/address.ipp"
 #include "asio/ip/impl/address_v4.ipp"
 #include "asio/ip/impl/address_v6.ipp"
 #include "asio/ip/impl/host_name.ipp"
 #include "asio/ip/impl/network_v4.ipp"
 #include "asio/ip/impl/network_v6.ipp"
-#include "asio/ip/detail/impl/endpoint.ipp"
 #include "asio/local/detail/impl/endpoint.ipp"
 
 #endif // ASIO_IMPL_SRC_HPP

@@ -12,7 +12,7 @@
 #define ASIO_THIS_CORO_HPP
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1200)
-# pragma once
+#pragma once
 #endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
 
 #include "asio/detail/config.hpp"
@@ -23,11 +23,8 @@ namespace asio {
 namespace this_coro {
 
 /// Awaitable type that returns the executor of the current coroutine.
-struct executor_t
-{
-  ASIO_CONSTEXPR executor_t()
-  {
-  }
+struct executor_t {
+	ASIO_CONSTEXPR executor_t() {}
 };
 
 /// Awaitable object that returns the executor of the current coroutine.

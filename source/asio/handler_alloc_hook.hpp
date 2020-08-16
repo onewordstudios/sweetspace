@@ -12,11 +12,11 @@
 #define ASIO_HANDLER_ALLOC_HOOK_HPP
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1200)
-# pragma once
+#pragma once
 #endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
 
-#include "asio/detail/config.hpp"
 #include <cstddef>
+#include "asio/detail/config.hpp"
 
 #include "asio/detail/push_options.hpp"
 
@@ -54,8 +54,7 @@ namespace asio {
  * }
  * @endcode
  */
-ASIO_DECL void* asio_handler_allocate(
-    std::size_t size, ...);
+ASIO_DECL void* asio_handler_allocate(std::size_t size, ...);
 
 /// Default deallocation function for handlers.
 /**
@@ -67,15 +66,14 @@ ASIO_DECL void* asio_handler_allocate(
  *
  * @sa asio_handler_allocate.
  */
-ASIO_DECL void asio_handler_deallocate(
-    void* pointer, std::size_t size, ...);
+ASIO_DECL void asio_handler_deallocate(void* pointer, std::size_t size, ...);
 
 } // namespace asio
 
 #include "asio/detail/pop_options.hpp"
 
 #if defined(ASIO_HEADER_ONLY)
-# include "asio/impl/handler_alloc_hook.ipp"
+#include "asio/impl/handler_alloc_hook.ipp"
 #endif // defined(ASIO_HEADER_ONLY)
 
 #endif // ASIO_HANDLER_ALLOC_HOOK_HPP

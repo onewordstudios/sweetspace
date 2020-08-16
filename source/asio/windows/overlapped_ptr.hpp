@@ -12,13 +12,12 @@
 #define ASIO_WINDOWS_OVERLAPPED_PTR_HPP
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1200)
-# pragma once
+#pragma once
 #endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
 
 #include "asio/detail/config.hpp"
 
-#if defined(ASIO_HAS_WINDOWS_OVERLAPPED_PTR) \
-  || defined(GENERATING_DOCUMENTATION)
+#if defined(ASIO_HAS_WINDOWS_OVERLAPPED_PTR) || defined(GENERATING_DOCUMENTATION)
 
 #include "asio/detail/noncopyable.hpp"
 #include "asio/detail/win_iocp_overlapped_ptr.hpp"
@@ -38,98 +37,64 @@ namespace windows {
  * @e Distinct @e objects: Safe.@n
  * @e Shared @e objects: Unsafe.
  */
-class overlapped_ptr
-  : private noncopyable
-{
-public:
-  /// Construct an empty overlapped_ptr.
-  overlapped_ptr()
-    : impl_()
-  {
-  }
+class overlapped_ptr : private noncopyable {
+   public:
+	/// Construct an empty overlapped_ptr.
+	overlapped_ptr() : impl_() {}
 
-  /// Construct an overlapped_ptr to contain the specified handler.
-  template <typename ExecutionContext, typename Handler>
-  explicit overlapped_ptr(ExecutionContext& context,
-      ASIO_MOVE_ARG(Handler) handler,
-      typename enable_if<
-        is_convertible<ExecutionContext&, execution_context&>::value
-      >::type* = 0)
-    : impl_(context.get_executor(), ASIO_MOVE_CAST(Handler)(handler))
-  {
-  }
+	/// Construct an overlapped_ptr to contain the specified handler.
+	template <typename ExecutionContext, typename Handler>
+	explicit overlapped_ptr(
+		ExecutionContext& context, ASIO_MOVE_ARG(Handler) handler,
+		typename enable_if<is_convertible<ExecutionContext&, execution_context&>::value>::type* = 0)
+		: impl_(context.get_executor(), ASIO_MOVE_CAST(Handler)(handler)) {}
 
-  /// Construct an overlapped_ptr to contain the specified handler.
-  template <typename Executor, typename Handler>
-  explicit overlapped_ptr(const Executor& ex,
-      ASIO_MOVE_ARG(Handler) handler,
-      typename enable_if<
-        is_executor<Executor>::value
-      >::type* = 0)
-    : impl_(ex, ASIO_MOVE_CAST(Handler)(handler))
-  {
-  }
+	/// Construct an overlapped_ptr to contain the specified handler.
+	template <typename Executor, typename Handler>
+	explicit overlapped_ptr(const Executor& ex, ASIO_MOVE_ARG(Handler) handler,
+							typename enable_if<is_executor<Executor>::value>::type* = 0)
+		: impl_(ex, ASIO_MOVE_CAST(Handler)(handler)) {}
 
-  /// Destructor automatically frees the OVERLAPPED object unless released.
-  ~overlapped_ptr()
-  {
-  }
+	/// Destructor automatically frees the OVERLAPPED object unless released.
+	~overlapped_ptr() {}
 
-  /// Reset to empty.
-  void reset()
-  {
-    impl_.reset();
-  }
+	/// Reset to empty.
+	void reset() { impl_.reset(); }
 
-  /// Reset to contain the specified handler, freeing any current OVERLAPPED
-  /// object.
-  template <typename ExecutionContext, typename Handler>
-  void reset(ExecutionContext& context, ASIO_MOVE_ARG(Handler) handler,
-      typename enable_if<
-        is_convertible<ExecutionContext&, execution_context&>::value
-      >::type* = 0)
-  {
-    impl_.reset(context.get_executor(), ASIO_MOVE_CAST(Handler)(handler));
-  }
+	/// Reset to contain the specified handler, freeing any current OVERLAPPED
+	/// object.
+	template <typename ExecutionContext, typename Handler>
+	void reset(
+		ExecutionContext& context, ASIO_MOVE_ARG(Handler) handler,
+		typename enable_if<is_convertible<ExecutionContext&, execution_context&>::value>::type* =
+			0) {
+		impl_.reset(context.get_executor(), ASIO_MOVE_CAST(Handler)(handler));
+	}
 
-  /// Reset to contain the specified handler, freeing any current OVERLAPPED
-  /// object.
-  template <typename Executor, typename Handler>
-  void reset(const Executor& ex, ASIO_MOVE_ARG(Handler) handler,
-      typename enable_if<
-        is_executor<Executor>::value
-      >::type* = 0)
-  {
-    impl_.reset(ex, ASIO_MOVE_CAST(Handler)(handler));
-  }
+	/// Reset to contain the specified handler, freeing any current OVERLAPPED
+	/// object.
+	template <typename Executor, typename Handler>
+	void reset(const Executor& ex, ASIO_MOVE_ARG(Handler) handler,
+			   typename enable_if<is_executor<Executor>::value>::type* = 0) {
+		impl_.reset(ex, ASIO_MOVE_CAST(Handler)(handler));
+	}
 
-  /// Get the contained OVERLAPPED object.
-  OVERLAPPED* get()
-  {
-    return impl_.get();
-  }
+	/// Get the contained OVERLAPPED object.
+	OVERLAPPED* get() { return impl_.get(); }
 
-  /// Get the contained OVERLAPPED object.
-  const OVERLAPPED* get() const
-  {
-    return impl_.get();
-  }
+	/// Get the contained OVERLAPPED object.
+	const OVERLAPPED* get() const { return impl_.get(); }
 
-  /// Release ownership of the OVERLAPPED object.
-  OVERLAPPED* release()
-  {
-    return impl_.release();
-  }
+	/// Release ownership of the OVERLAPPED object.
+	OVERLAPPED* release() { return impl_.release(); }
 
-  /// Post completion notification for overlapped operation. Releases ownership.
-  void complete(const asio::error_code& ec,
-      std::size_t bytes_transferred)
-  {
-    impl_.complete(ec, bytes_transferred);
-  }
+	/// Post completion notification for overlapped operation. Releases ownership.
+	void complete(const asio::error_code& ec, std::size_t bytes_transferred) {
+		impl_.complete(ec, bytes_transferred);
+	}
 
-private:
-  detail::win_iocp_overlapped_ptr impl_;
+   private:
+	detail::win_iocp_overlapped_ptr impl_;
 };
 
 } // namespace windows
@@ -138,6 +103,6 @@ private:
 #include "asio/detail/pop_options.hpp"
 
 #endif // defined(ASIO_HAS_WINDOWS_OVERLAPPED_PTR)
-       //   || defined(GENERATING_DOCUMENTATION)
+	   //   || defined(GENERATING_DOCUMENTATION)
 
 #endif // ASIO_WINDOWS_OVERLAPPED_PTR_HPP

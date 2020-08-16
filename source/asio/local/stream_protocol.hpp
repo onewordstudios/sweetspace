@@ -12,13 +12,12 @@
 #define ASIO_LOCAL_STREAM_PROTOCOL_HPP
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1200)
-# pragma once
+#pragma once
 #endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
 
 #include "asio/detail/config.hpp"
 
-#if defined(ASIO_HAS_LOCAL_SOCKETS) \
-  || defined(GENERATING_DOCUMENTATION)
+#if defined(ASIO_HAS_LOCAL_SOCKETS) || defined(GENERATING_DOCUMENTATION)
 
 #include "asio/basic_socket_acceptor.hpp"
 #include "asio/basic_socket_iostream.hpp"
@@ -43,39 +42,29 @@ namespace local {
  * @par Concepts:
  * Protocol.
  */
-class stream_protocol
-{
-public:
-  /// Obtain an identifier for the type of the protocol.
-  int type() const ASIO_NOEXCEPT
-  {
-    return SOCK_STREAM;
-  }
+class stream_protocol {
+   public:
+	/// Obtain an identifier for the type of the protocol.
+	int type() const ASIO_NOEXCEPT { return SOCK_STREAM; }
 
-  /// Obtain an identifier for the protocol.
-  int protocol() const ASIO_NOEXCEPT
-  {
-    return 0;
-  }
+	/// Obtain an identifier for the protocol.
+	int protocol() const ASIO_NOEXCEPT { return 0; }
 
-  /// Obtain an identifier for the protocol family.
-  int family() const ASIO_NOEXCEPT
-  {
-    return AF_UNIX;
-  }
+	/// Obtain an identifier for the protocol family.
+	int family() const ASIO_NOEXCEPT { return AF_UNIX; }
 
-  /// The type of a UNIX domain endpoint.
-  typedef basic_endpoint<stream_protocol> endpoint;
+	/// The type of a UNIX domain endpoint.
+	typedef basic_endpoint<stream_protocol> endpoint;
 
-  /// The UNIX domain socket type.
-  typedef basic_stream_socket<stream_protocol> socket;
+	/// The UNIX domain socket type.
+	typedef basic_stream_socket<stream_protocol> socket;
 
-  /// The UNIX domain acceptor type.
-  typedef basic_socket_acceptor<stream_protocol> acceptor;
+	/// The UNIX domain acceptor type.
+	typedef basic_socket_acceptor<stream_protocol> acceptor;
 
 #if !defined(ASIO_NO_IOSTREAM)
-  /// The UNIX domain iostream type.
-  typedef basic_socket_iostream<stream_protocol> iostream;
+	/// The UNIX domain iostream type.
+	typedef basic_socket_iostream<stream_protocol> iostream;
 #endif // !defined(ASIO_NO_IOSTREAM)
 };
 
@@ -85,6 +74,6 @@ public:
 #include "asio/detail/pop_options.hpp"
 
 #endif // defined(ASIO_HAS_LOCAL_SOCKETS)
-       //   || defined(GENERATING_DOCUMENTATION)
+	   //   || defined(GENERATING_DOCUMENTATION)
 
 #endif // ASIO_LOCAL_STREAM_PROTOCOL_HPP

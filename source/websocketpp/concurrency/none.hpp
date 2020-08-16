@@ -37,16 +37,16 @@ namespace concurrency {
 namespace none_impl {
 /// A fake mutex implementation that does nothing
 class fake_mutex {
-public:
-    fake_mutex() {}
-    ~fake_mutex() {}
+   public:
+	fake_mutex() {}
+	~fake_mutex() {}
 };
 
 /// A fake lock guard implementation that does nothing
 class fake_lock_guard {
-public:
-    explicit fake_lock_guard(fake_mutex) {}
-    ~fake_lock_guard() {}
+   public:
+	explicit fake_lock_guard(fake_mutex) {}
+	~fake_lock_guard() {}
 };
 } // namespace none_impl
 
@@ -58,20 +58,20 @@ public:
  * threaded programs.
  */
 class none {
-public:
-    /// The type of a mutex primitive
-    /**
-     * std::mutex is an example.
-     */
-    typedef none_impl::fake_mutex mutex_type;
+   public:
+	/// The type of a mutex primitive
+	/**
+	 * std::mutex is an example.
+	 */
+	typedef none_impl::fake_mutex mutex_type;
 
-    /// The type of a scoped/RAII lock primitive.
-    /**
-     * The scoped lock constructor should take a mutex_type as a parameter,
-     * acquire that lock, and release it in its destructor. std::lock_guard is
-     * an example.
-     */
-    typedef none_impl::fake_lock_guard scoped_lock_type;
+	/// The type of a scoped/RAII lock primitive.
+	/**
+	 * The scoped lock constructor should take a mutex_type as a parameter,
+	 * acquire that lock, and release it in its destructor. std::lock_guard is
+	 * an example.
+	 */
+	typedef none_impl::fake_lock_guard scoped_lock_type;
 };
 
 } // namespace concurrency

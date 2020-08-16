@@ -12,7 +12,7 @@
 #define ASIO_IS_EXECUTOR_HPP
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1200)
-# pragma once
+#pragma once
 #endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
 
 #include "asio/detail/config.hpp"
@@ -32,9 +32,9 @@ namespace asio {
 template <typename T>
 struct is_executor
 #if defined(GENERATING_DOCUMENTATION)
-  : integral_constant<bool, automatically_determined>
-#else // defined(GENERATING_DOCUMENTATION)
-  : asio::detail::is_executor<T>
+	: integral_constant<bool, automatically_determined>
+#else  // defined(GENERATING_DOCUMENTATION)
+	: asio::detail::is_executor<T>
 #endif // defined(GENERATING_DOCUMENTATION)
 {
 };

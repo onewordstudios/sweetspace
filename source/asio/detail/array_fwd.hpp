@@ -12,14 +12,14 @@
 #define ASIO_DETAIL_ARRAY_FWD_HPP
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1200)
-# pragma once
+#pragma once
 #endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
 
 #include "asio/detail/config.hpp"
 
 namespace boost {
 
-template<class T, std::size_t N>
+template <class T, std::size_t N>
 class array;
 
 } // namespace boost
@@ -28,7 +28,7 @@ class array;
 // include the array header. Fortunately, it's fairly lightweight and doesn't
 // add significantly to the compile time.
 #if defined(ASIO_HAS_STD_ARRAY)
-# include <array>
+#include <array>
 #endif // defined(ASIO_HAS_STD_ARRAY)
 
 #endif // ASIO_DETAIL_ARRAY_FWD_HPP

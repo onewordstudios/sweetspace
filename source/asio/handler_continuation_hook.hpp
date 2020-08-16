@@ -12,7 +12,7 @@
 #define ASIO_HANDLER_CONTINUATION_HOOK_HPP
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1200)
-# pragma once
+#pragma once
 #endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
 
 #include "asio/detail/config.hpp"
@@ -42,10 +42,7 @@ namespace asio {
  * }
  * @endcode
  */
-inline bool asio_handler_is_continuation(...)
-{
-  return false;
-}
+inline bool asio_handler_is_continuation(...) { return false; }
 
 } // namespace asio
 

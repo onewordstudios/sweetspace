@@ -12,7 +12,7 @@
 #define ASIO_DETAIL_MACOS_FENCED_BLOCK_HPP
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1200)
-# pragma once
+#pragma once
 #endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
 
 #include "asio/detail/config.hpp"
@@ -27,29 +27,19 @@
 namespace asio {
 namespace detail {
 
-class macos_fenced_block
-  : private noncopyable
-{
-public:
-  enum half_t { half };
-  enum full_t { full };
+class macos_fenced_block : private noncopyable {
+   public:
+	enum half_t { half };
+	enum full_t { full };
 
-  // Constructor for a half fenced block.
-  explicit macos_fenced_block(half_t)
-  {
-  }
+	// Constructor for a half fenced block.
+	explicit macos_fenced_block(half_t) {}
 
-  // Constructor for a full fenced block.
-  explicit macos_fenced_block(full_t)
-  {
-    OSMemoryBarrier();
-  }
+	// Constructor for a full fenced block.
+	explicit macos_fenced_block(full_t) { OSMemoryBarrier(); }
 
-  // Destructor.
-  ~macos_fenced_block()
-  {
-    OSMemoryBarrier();
-  }
+	// Destructor.
+	~macos_fenced_block() { OSMemoryBarrier(); }
 };
 
 } // namespace detail
