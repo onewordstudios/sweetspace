@@ -171,6 +171,9 @@
     <ClInclude Include="..\..\source\MainMenuTransitions.h">
       <Filter>Header Files\Modes</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\source\CustomServer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\source\main.cpp">
@@ -277,6 +280,9 @@
     </ClCompile>
     <ClCompile Include="..\..\source\MainMenuTransitions.cpp">
       <Filter>Source Files\Modes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\CustomServer.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

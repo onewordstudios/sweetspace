@@ -16,6 +16,7 @@
 //      be misrepresented as being the original software.
 //
 //      3. This notice may not be removed or altered from any source distribution.
+#include "CustomServer.h"
 #include "Globals.h"
 #include "Sweetspace.h"
 
@@ -37,6 +38,11 @@ constexpr float FRAMERATE = 60.0f;
  * @return the exit status of the application
  */
 int main(int argc, char* argv[]) {
+	auto t = std::unique_ptr<std::thread>(new std::thread([]() {
+		CustomServer c;
+		c.run(8080); // NOLINT
+	}));
+
 	// Change this to your application class
 	Sweetspace app;
 

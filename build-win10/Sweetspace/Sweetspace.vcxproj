@@ -195,6 +195,7 @@
     <ClInclude Include="..\..\source\ButtonModel.h" />
     <ClInclude Include="..\..\source\ButtonNode.h" />
     <ClInclude Include="..\..\source\CustomNode.h" />
+    <ClInclude Include="..\..\source\CustomServer.h" />
     <ClInclude Include="..\..\source\DonutModel.h" />
     <ClInclude Include="..\..\source\DonutNode.h" />
     <ClInclude Include="..\..\source\EventModel.h" />
@@ -238,6 +239,7 @@
     <ClCompile Include="..\..\source\ButtonModel.cpp" />
     <ClCompile Include="..\..\source\ButtonNode.cpp" />
     <ClCompile Include="..\..\source\CustomNode.cpp" />
+    <ClCompile Include="..\..\source\CustomServer.cpp" />
     <ClCompile Include="..\..\source\DonutModel.cpp" />
     <ClCompile Include="..\..\source\DonutNode.cpp" />
     <ClCompile Include="..\..\source\ExternalDonutModel.cpp" />
