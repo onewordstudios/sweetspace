@@ -4,6 +4,7 @@
 #include "ButtonModel.h"
 #include "CustomNode.h"
 #include "DonutModel.h"
+#include "SparkleNode.h"
 
 class ButtonNode : public CustomNode {
 #pragma mark Values
@@ -24,6 +25,8 @@ class ButtonNode : public CustomNode {
 	std::shared_ptr<cugl::PolygonNode> baseNode;
 	/** Reference to button label */
 	std::shared_ptr<cugl::Label> label;
+	/** Reference to special resolve animation node */
+	std::shared_ptr<SparkleNode> sparkleNode;
 
 #pragma region State Methods
 	bool isActive() override;
@@ -67,7 +70,8 @@ class ButtonNode : public CustomNode {
 	virtual bool init(std::shared_ptr<ButtonModel> btn, std::shared_ptr<DonutModel> player,
 					  float shipSize, std::shared_ptr<cugl::Texture> baseDown,
 					  std::shared_ptr<cugl::Texture> baseUp, std::shared_ptr<cugl::Texture> btnDown,
-					  std::shared_ptr<cugl::Texture> btnUp, std::shared_ptr<cugl::Font> labelFont);
+					  std::shared_ptr<cugl::Texture> btnUp, std::shared_ptr<cugl::Font> labelFont,
+					  std::shared_ptr<SparkleNode> sparkleNode);
 
 	/**
 	 * Returns a newly allocated filmstrip node from the given texture.
@@ -85,15 +89,14 @@ class ButtonNode : public CustomNode {
 	 *
 	 * @return a newly allocated filmstrip node from the given texture.
 	 */
-	static std::shared_ptr<ButtonNode> alloc(std::shared_ptr<ButtonModel> btn,
-											 std::shared_ptr<DonutModel> player, float shipSize,
-											 std::shared_ptr<cugl::Texture> baseDown,
-											 std::shared_ptr<cugl::Texture> baseUp,
-											 std::shared_ptr<cugl::Texture> btnDown,
-											 std::shared_ptr<cugl::Texture> btnUp,
-											 std::shared_ptr<cugl::Font> labelFont) {
+	static std::shared_ptr<ButtonNode> alloc(
+		std::shared_ptr<ButtonModel> btn, std::shared_ptr<DonutModel> player, float shipSize,
+		std::shared_ptr<cugl::Texture> baseDown, std::shared_ptr<cugl::Texture> baseUp,
+		std::shared_ptr<cugl::Texture> btnDown, std::shared_ptr<cugl::Texture> btnUp,
+		std::shared_ptr<cugl::Font> labelFont, std::shared_ptr<SparkleNode> sparkleNode) {
 		std::shared_ptr<ButtonNode> node = std::make_shared<ButtonNode>();
-		return (node->init(btn, player, shipSize, baseDown, baseUp, btnDown, btnUp, labelFont)
+		return (node->init(btn, player, shipSize, baseDown, baseUp, btnDown, btnUp, labelFont,
+						   sparkleNode)
 					? node
 					: nullptr);
 	}
