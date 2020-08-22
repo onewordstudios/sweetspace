@@ -32,6 +32,7 @@ class ButtonNode : public CustomNode {
 	bool isActive() override;
 	void prePosition() override;
 	void postPosition() override;
+	void becomeInactive() override;
 #pragma endregion
 
    public:

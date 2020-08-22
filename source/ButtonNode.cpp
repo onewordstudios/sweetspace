@@ -93,6 +93,13 @@ void ButtonNode::postPosition() {
 	}
 }
 
+void ButtonNode::becomeInactive() {
+	sparkleNode->setRadius(radius);
+	sparkleNode->setAngle(getAngle());
+	sparkleNode->setOnShipAngle(angle);
+	sparkleNode->beginAnimation();
+}
+
 void ButtonNode::draw(const shared_ptr<cugl::SpriteBatch>& batch, const cugl::Mat4& transform,
 					  cugl::Color4 tint) {
 	CustomNode::draw(batch, transform, tint);

@@ -156,6 +156,8 @@ class GameGraphRoot : public cugl::Scene {
 	unsigned int rightMostSeg;
 	/** Parent node of all buttons, is child of nearSpace */
 	std::shared_ptr<cugl::Node> buttonsNode;
+    /** Parent node of all button sparkle nodes, is child of nearSpace */
+    std::shared_ptr<cugl::Node> buttonSparklesNode;
 
 	// MODEL INFORMATION
 	/** Id of the current client */
