@@ -22,10 +22,14 @@ constexpr float BUTTON_RADIUS = 600;
 /** Amount that button body sinks when pressed on */
 constexpr int DEPRESSION_AMOUNT = -100;
 
+/** Scale of small sparkle effect */
+constexpr float SPARKLE_SCALE_SMALL = 0.5;
+
 bool ButtonNode::init(std::shared_ptr<ButtonModel> btn, std::shared_ptr<DonutModel> player,
 					  float shipSize, std::shared_ptr<cugl::Texture> baseDown,
 					  std::shared_ptr<cugl::Texture> baseUp, std::shared_ptr<cugl::Texture> btnDown,
-					  std::shared_ptr<cugl::Texture> btnUp, std::shared_ptr<cugl::Font> labelFont) {
+					  std::shared_ptr<cugl::Texture> btnUp, std::shared_ptr<cugl::Font> labelFont,
+					  std::shared_ptr<SparkleNode> sparkle) {
 	CustomNode::init(player, shipSize, -1, BUTTON_RADIUS);
 	// Initialize angle to -1 to force the button to correctly process the label on first frame
 
@@ -49,6 +53,9 @@ bool ButtonNode::init(std::shared_ptr<ButtonModel> btn, std::shared_ptr<DonutMod
 	bodyNode->setPosition(0, 0);
 
 	label = Label::alloc("0000", labelFont);
+
+	sparkleNode = sparkle;
+	sparkleNode->setScale(SPARKLE_SCALE_SMALL);
 
 	addChild(bodyNode);
 	addChild(baseNode);
@@ -84,6 +91,13 @@ void ButtonNode::postPosition() {
 		baseNode->setTexture(btnBaseUp);
 		bodyNode->setTexture(btnUp);
 	}
+}
+
+void ButtonNode::becomeInactive() {
+	sparkleNode->setRadius(radius);
+	sparkleNode->setAngle(getAngle());
+	sparkleNode->setOnShipAngle(angle);
+	sparkleNode->beginAnimation();
 }
 
 void ButtonNode::draw(const shared_ptr<cugl::SpriteBatch>& batch, const cugl::Mat4& transform,
