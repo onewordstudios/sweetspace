@@ -156,6 +156,7 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	donutPos = tempDonutNode->getPosition();
 	breachesNode = assets->get<Node>("game_field_near_breaches");
 	breachSparklesNode = assets->get<Node>("game_field_near_breachsparkles");
+	buttonSparklesNode = assets->get<Node>("game_field_near_buttonsparkles");
 	shipSegsNode = assets->get<Node>("game_field_near_shipsegments");
 	doorsNode = assets->get<Node>("game_field_near_doors");
 	unopsNode = assets->get<Node>("game_field_near_unops");
@@ -345,12 +346,16 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	// Initialize Buttons
 	for (int i = 0; i < ship->getButtons().size(); i++) {
 		std::shared_ptr<ButtonModel> buttonModel = ship->getButtons().at((unsigned long)i);
+		std::shared_ptr<SparkleNode> sparkleNode =
+			SparkleNode::alloc(playerModel, ship->getSize(), breachSparkleBig, Color4::WHITE,
+							   SparkleNode::SparkleType::Big);
+		buttonSparklesNode->addChild(sparkleNode);
 		std::shared_ptr<ButtonNode> buttonNode = ButtonNode::alloc(
 			buttonModel, playerModel, ship->getSize(),
 			assets->get<Texture>("challenge_btn_base_down"),
 			assets->get<Texture>("challenge_btn_base_up"),
 			assets->get<Texture>("challenge_btn_down"), assets->get<Texture>("challenge_btn_up"),
-			assets->get<Font>("mont_black_italic_big"));
+			assets->get<Font>("mont_black_italic_big"), sparkleNode);
 		buttonsNode->addChildWithTag(buttonNode, i + 1);
 	}
 
