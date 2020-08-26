@@ -38,11 +38,6 @@ constexpr float FRAMERATE = 60.0f;
  * @return the exit status of the application
  */
 int main(int argc, char* argv[]) {
-	auto t = std::unique_ptr<std::thread>(new std::thread([]() {
-		CustomServer c;
-		c.run(8080); // NOLINT
-	}));
-
 	// Change this to your application class
 	Sweetspace app;
 
