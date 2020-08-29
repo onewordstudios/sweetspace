@@ -17,6 +17,7 @@
 //
 //      3. This notice may not be removed or altered from any source distribution.
 #include "Globals.h"
+#include "NetworkConnection.h"
 #include "Sweetspace.h"
 
 // This keeps us from having to write cugl:: all the time
@@ -37,6 +38,10 @@ constexpr float FRAMERATE = 60.0f;
  * @return the exit status of the application
  */
 int main(int argc, char* argv[]) {
+	//
+	NetworkConnection n{};
+	//
+
 	// Change this to your application class
 	Sweetspace app;
 

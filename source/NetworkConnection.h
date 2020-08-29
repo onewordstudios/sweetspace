@@ -4,6 +4,7 @@
 #include <string>
 #include <thread>
 
+#include "libraries/RakNet/BitStream.h"
 #include "libraries/RakNet/MessageIdentifiers.h"
 #include "libraries/RakNet/NatPunchthroughClient.h"
 #include "libraries/RakNet/RakNetTypes.h"
@@ -24,6 +25,9 @@ class NetworkConnection {
 	RakNet::NatPunchthroughClient natPunchthroughClient;
 
 	std::unique_ptr<std::thread> listenLoopThread;
+
+	RakNet::SystemAddress remotePeer;
+	bool sentNatPunchthroughRequest;
 
 	void startupConn();
 
