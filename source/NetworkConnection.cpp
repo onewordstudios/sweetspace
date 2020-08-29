@@ -48,12 +48,16 @@ void NetworkConnection::startupConn() {
 }
 
 void NetworkConnection::send(const std::vector<uint8_t>& msg) {
-	// CUAssert(msg.size() < MAX_MESSAGE_LENGTH);
 	RakNet::BitStream bs;
 	bs.Write((uint8_t)ID_USER_PACKET_ENUM);
 	bs.Write((uint8_t)msg.size());
 	bs.WriteAlignedBytes(msg.data(), msg.size());
-	// bs.WriteAlignedBytesSafe((const char*)msg.data(), msg.size(), MAX_MESSAGE_LENGTH);
+
+	if (isHost) {
+		peer->Send(&bs, MEDIUM_PRIORITY, RELIABLE, 1, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
+	} else {
+		peer->Send(&bs, MEDIUM_PRIORITY, RELIABLE, 1, remotePeer, false);
+	}
 }
 
 void NetworkConnection::receive(std::function<void(const std::vector<uint8_t>&)> dispatcher) {
@@ -104,6 +108,14 @@ void NetworkConnection::receive(std::function<void(const std::vector<uint8_t>&)>
 				// NOLINTNEXTLINE
 				std::vector<uint8_t> msgConverted(&message[0], &message[length]);
 				dispatcher(msgConverted);
+				if (isHost) {
+					// Pass it on
+					RakNet::BitStream bs;
+					bs.Write((uint8_t)ID_USER_PACKET_ENUM);
+					bs.Write((uint8_t)msgConverted.size());
+					bs.WriteAlignedBytes(msgConverted.data(), msgConverted.size());
+					peer->Send(&bs, MEDIUM_PRIORITY, RELIABLE, 1, packet->systemAddress, true);
+				}
 				delete[] message; // NOLINT
 				break;
 			}
