@@ -38,10 +38,6 @@ constexpr float FRAMERATE = 60.0f;
  * @return the exit status of the application
  */
 int main(int argc, char* argv[]) {
-	//
-	NetworkConnection n{};
-	//
-
 	// Change this to your application class
 	Sweetspace app;
 
