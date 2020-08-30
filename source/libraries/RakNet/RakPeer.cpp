@@ -4421,8 +4421,8 @@ bool ProcessOfflineNetworkPacket(SystemAddress systemAddress, const char *data, 
 							bsOut.WriteAlignedBytes((const unsigned char *)rcs->handshakeChallenge,
 													cat::EasyHandshake::CHALLENGE_BYTES);
 						}
-#else  // LIBCAT_SECURITY
-	   // Message does not contain a challenge
+#else // LIBCAT_SECURITY
+	  // Message does not contain a challenge
 						bsOut.Write((unsigned char)0);
 #endif // LIBCAT_SECURITY
 					} else {
