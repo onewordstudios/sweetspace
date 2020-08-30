@@ -8,8 +8,6 @@
 constexpr auto SERVER_ADDRESS = "35.231.212.113";
 /** Port of the NAT punchthrough server */
 constexpr unsigned short SERVER_PORT = 61111;
-/** Largest message to send */
-// constexpr unsigned int MAX_MESSAGE_LENGTH = 512;
 
 NetworkConnection::NetworkConnection() : isHost(true), room() { startupConn(); }
 
@@ -29,17 +27,14 @@ void NetworkConnection::startupConn() {
 	natPunchServerAddress =
 		std::make_unique<RakNet::SystemAddress>(RakNet::SystemAddress(SERVER_ADDRESS, SERVER_PORT));
 
-	// Use the default socket descriptor; this will make the OS assign us a
-	// random port.
+	// Use the default socket descriptor
+	// This will make the OS assign us a random port.
 	RakNet::SocketDescriptor socketDescriptor;
-	// Allow 2 connections: one for the other peer, one for the NAT server.
+	// Allow connections for each player and one for the NAT server.
 	peer->Startup(globals::MAX_PLAYERS, &socketDescriptor, 1);
 
 	CULog("Your GUID is: %s",
 		  peer->GetGuidFromSystemAddress(RakNet::UNASSIGNED_SYSTEM_ADDRESS).ToString());
-
-	// Start the thread for packet receiving
-	// listenLoopThread = std::make_unique<std::thread>(&NetworkConnection::listenLoop, this);
 
 	// Connect to the NAT Punchthrough server
 	CULog("Connecting to punchthrough server");
@@ -54,7 +49,7 @@ void NetworkConnection::send(const std::vector<uint8_t>& msg) {
 	bs.WriteAlignedBytes(msg.data(), msg.size());
 
 	if (isHost) {
-		peer->Send(&bs, MEDIUM_PRIORITY, RELIABLE, 1, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
+		peer->Send(&bs, MEDIUM_PRIORITY, RELIABLE, 1, *natPunchServerAddress, true);
 	} else {
 		peer->Send(&bs, MEDIUM_PRIORITY, RELIABLE, 1, remotePeer, false);
 	}
