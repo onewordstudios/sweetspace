@@ -128,7 +128,7 @@ class RAK_DLL_EXPORT RakNetSmartPtr {
 
 				//				deallocCount+=2;
 				//				printf("allocCount=%i deallocCount=%i Line=%i\n",allocCount,
-				//deallocCount,
+				// deallocCount,
 				//__LINE__);
 			}
 
