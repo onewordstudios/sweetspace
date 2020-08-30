@@ -124,9 +124,9 @@ int Base64Encoding(const unsigned char *inputData, int dataLength, char *outputD
 	}
 
 	// Append \r\n
-	outputData[outputOffset++]='\r';
-	outputData[outputOffset++]='\n';
-	outputData[outputOffset]=0;
+	outputData[outputOffset++] = '\r';
+	outputData[outputOffset++] = '\n';
+	outputData[outputOffset] = 0;
 
 	return outputOffset;
 }
