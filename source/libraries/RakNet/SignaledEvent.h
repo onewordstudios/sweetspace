@@ -3,7 +3,7 @@
  *  All rights reserved.
  *
  *  This source code is licensed under the BSD-style license found in the
- *  LICENSE file in the root directory of this source tree. An additional grant 
+ *  LICENSE file in the root directory of this source tree. An additional grant
  *  of patent rights can be found in the PATENTS file in the same directory.
  *
  */
@@ -11,31 +11,22 @@
 #ifndef __SIGNALED_EVENT_H
 #define __SIGNALED_EVENT_H
 
-
-
-#if   defined(_WIN32)
+#if defined(_WIN32)
 #include "WindowsIncludes.h"
 
-
-
 #else
-	#include <pthread.h>
-	#include <sys/types.h>
-	#include "SimpleMutex.h"
-
-
-
+#include <pthread.h>
+#include <sys/types.h>
+#include "SimpleMutex.h"
 
 #endif
 
 #include "Export.h"
 
-namespace RakNet
-{
+namespace RakNet {
 
-class RAK_DLL_EXPORT SignaledEvent
-{
-public:
+class RAK_DLL_EXPORT SignaledEvent {
+   public:
 	SignaledEvent();
 	~SignaledEvent();
 
@@ -44,13 +35,9 @@ public:
 	void SetEvent(void);
 	void WaitOnEvent(int timeoutMs);
 
-protected:
+   protected:
 #ifdef _WIN32
 	HANDLE eventList;
-
-
-
-
 
 #else
 	SimpleMutex isSignaledMutex;

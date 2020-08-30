@@ -3,7 +3,7 @@
  *  All rights reserved.
  *
  *  This source code is licensed under the BSD-style license found in the
- *  LICENSE file in the root directory of this source tree. An additional grant 
+ *  LICENSE file in the root directory of this source tree. An additional grant
  *  of patent rights can be found in the PATENTS file in the same directory.
  *
  */
@@ -12,31 +12,27 @@
 /// \brief Forwards UDP datagrams. Independent of RakNet's protocol.
 ///
 
-
-
 #include "NativeFeatureIncludes.h"
-#if _RAKNET_SUPPORT_UDPForwarder==1
+#if _RAKNET_SUPPORT_UDPForwarder == 1
 
 #ifndef __UDP_FORWARDER_H
 #define __UDP_FORWARDER_H
 
+#include "DS_OrderedList.h"
+#include "DS_Queue.h"
+#include "DS_ThreadsafeAllocatingQueue.h"
 #include "Export.h"
+#include "LocklessTypes.h"
 #include "RakNetTypes.h"
-#include "SocketIncludes.h"
-#include "UDPProxyCommon.h"
-#include "SimpleMutex.h"
 #include "RakString.h"
 #include "RakThread.h"
-#include "DS_Queue.h"
-#include "DS_OrderedList.h"
-#include "LocklessTypes.h"
-#include "DS_ThreadsafeAllocatingQueue.h"
+#include "SimpleMutex.h"
+#include "SocketIncludes.h"
+#include "UDPProxyCommon.h"
 
-namespace RakNet
-{
+namespace RakNet {
 
-enum UDPForwarderResult
-{
+enum UDPForwarderResult {
 	UDPFORWARDER_FORWARDING_ALREADY_EXISTS,
 	UDPFORWARDER_NO_SOCKETS,
 	UDPFORWARDER_BIND_FAILED,
@@ -48,9 +44,8 @@ enum UDPForwarderResult
 
 /// \brief Forwards UDP datagrams. Independent of RakNet's protocol.
 /// \ingroup NAT_PUNCHTHROUGH_GROUP
-class RAK_DLL_EXPORT UDPForwarder
-{
-public:
+class RAK_DLL_EXPORT UDPForwarder {
+   public:
 	UDPForwarder();
 	virtual ~UDPForwarder();
 
@@ -62,11 +57,13 @@ public:
 	void Shutdown(void);
 
 	/// Sets the maximum number of forwarding entries allowed
-	/// Set according to your available bandwidth and the estimated average bandwidth per forwarded address.
-	/// \param[in] maxEntries The maximum number of simultaneous forwarding entries. Defaults to 64 (32 connections)
+	/// Set according to your available bandwidth and the estimated average bandwidth per forwarded
+	/// address. \param[in] maxEntries The maximum number of simultaneous forwarding entries.
+	/// Defaults to 64 (32 connections)
 	void SetMaxForwardEntries(unsigned short maxEntries);
 
-	/// \return The \a maxEntries parameter passed to SetMaxForwardEntries(), or the default if it was never called
+	/// \return The \a maxEntries parameter passed to SetMaxForwardEntries(), or the default if it
+	/// was never called
 	int GetMaxForwardEntries(void) const;
 
 	/// \return How many entries have been used
@@ -75,28 +72,27 @@ public:
 	/// Forwards datagrams from source to destination, and vice-versa
 	/// Does nothing if this forward entry already exists via a previous call
 	/// \pre Call Startup()
-	/// \note RakNet's protocol will ensure a message is sent at least every 15 seconds, so if routing RakNet messages, it is a reasonable value for timeoutOnNoDataMS, plus an some extra seconds for latency
-	/// \param[in] source The source IP and port
-	/// \param[in] destination Where to forward to (and vice-versa)
-	/// \param[in] timeoutOnNoDataMS If no messages are forwarded for this many MS, then automatically remove this entry.
-	/// \param[in] forceHostAddress Force binding on a particular address. 0 to use any.
-	/// \param[in] socketFamily IP version: For IPV4, use AF_INET (default). For IPV6, use AF_INET6. To autoselect, use AF_UNSPEC.
-	/// \param[out] forwardingPort New opened port for forwarding
-	/// \param[out] forwardingSocket New opened socket for forwarding
-	/// \return UDPForwarderResult
-	UDPForwarderResult StartForwarding(
-		SystemAddress source, SystemAddress destination, RakNet::TimeMS timeoutOnNoDataMS,
-		const char *forceHostAddress, unsigned short socketFamily,
-		unsigned short *forwardingPort, __UDPSOCKET__ *forwardingSocket);
+	/// \note RakNet's protocol will ensure a message is sent at least every 15 seconds, so if
+	/// routing RakNet messages, it is a reasonable value for timeoutOnNoDataMS, plus an some extra
+	/// seconds for latency \param[in] source The source IP and port \param[in] destination Where to
+	/// forward to (and vice-versa) \param[in] timeoutOnNoDataMS If no messages are forwarded for
+	/// this many MS, then automatically remove this entry. \param[in] forceHostAddress Force
+	/// binding on a particular address. 0 to use any. \param[in] socketFamily IP version: For IPV4,
+	/// use AF_INET (default). For IPV6, use AF_INET6. To autoselect, use AF_UNSPEC. \param[out]
+	/// forwardingPort New opened port for forwarding \param[out] forwardingSocket New opened socket
+	/// for forwarding \return UDPForwarderResult
+	UDPForwarderResult StartForwarding(SystemAddress source, SystemAddress destination,
+									   RakNet::TimeMS timeoutOnNoDataMS,
+									   const char *forceHostAddress, unsigned short socketFamily,
+									   unsigned short *forwardingPort,
+									   __UDPSOCKET__ *forwardingSocket);
 
 	/// No longer forward datagrams from source to destination
 	/// \param[in] source The source IP and port
 	/// \param[in] destination Where to forward to
 	void StopForwarding(SystemAddress source, SystemAddress destination);
 
-
-	struct ForwardEntry
-	{
+	struct ForwardEntry {
 		ForwardEntry();
 		~ForwardEntry();
 		SystemAddress addr1Unconfirmed, addr2Unconfirmed, addr1Confirmed, addr2Confirmed;
@@ -106,15 +102,13 @@ public:
 		short socketFamily;
 	};
 
-
-protected:
+   protected:
 	friend RAK_THREAD_DECLARATION(UpdateUDPForwarderGlobal);
 
 	void UpdateUDPForwarder(void);
 	void RecvFrom(RakNet::TimeMS curTime, ForwardEntry *forwardEntry);
 
-	struct StartForwardingInputStruct
-	{
+	struct StartForwardingInputStruct {
 		SystemAddress source;
 		SystemAddress destination;
 		RakNet::TimeMS timeoutOnNoDataMS;
@@ -125,8 +119,7 @@ protected:
 
 	DataStructures::ThreadsafeAllocatingQueue<StartForwardingInputStruct> startForwardingInput;
 
-	struct StartForwardingOutputStruct
-	{
+	struct StartForwardingOutputStruct {
 		unsigned short forwardingPort;
 		__UDPSOCKET__ forwardingSocket;
 		UDPForwarderResult result;
@@ -135,8 +128,7 @@ protected:
 	DataStructures::Queue<StartForwardingOutputStruct> startForwardingOutput;
 	SimpleMutex startForwardingOutputMutex;
 
-	struct StopForwardingStruct
-	{
+	struct StopForwardingStruct {
 		SystemAddress source;
 		SystemAddress destination;
 	};
@@ -144,15 +136,14 @@ protected:
 	unsigned int nextInputId;
 
 	// New entries are added to forwardListNotUpdated
-	DataStructures::List<ForwardEntry*> forwardListNotUpdated;
-//	SimpleMutex forwardListNotUpdatedMutex;
+	DataStructures::List<ForwardEntry *> forwardListNotUpdated;
+	//	SimpleMutex forwardListNotUpdatedMutex;
 
 	unsigned short maxForwardEntries;
 	RakNet::LocklessUint32_t isRunning, threadRunning;
-
 };
 
-} // End namespace
+} // namespace RakNet
 
 #endif
 

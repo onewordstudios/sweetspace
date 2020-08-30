@@ -5,23 +5,23 @@
 
   Version 2.1 - 2012-06-19
   - Deconstructor (resetting internal variables) is now only
-    implemented if SHA1_WIPE_VARIABLES is defined (which is the
-    default).
+	implemented if SHA1_WIPE_VARIABLES is defined (which is the
+	default).
   - Renamed inclusion guard to contain a GUID.
   - Demo application is now using C++/STL objects and functions.
   - Unicode build of the demo application now outputs the hashes of both
-    the ANSI and Unicode representations of strings.
+	the ANSI and Unicode representations of strings.
   - Various other demo application improvements.
 
   Version 2.0 - 2012-06-14
   - Added 'limits.h' include.
   - Renamed inclusion guard and macros for compliancy (names beginning
-    with an underscore are reserved).
+	with an underscore are reserved).
 
   Version 1.9 - 2011-11-10
   - Added Unicode test vectors.
   - Improved support for hashing files using the HashFile method that
-    are larger than 4 GB.
+	are larger than 4 GB.
   - Improved file hashing performance (by using a larger buffer).
   - Disabled unnecessary compiler warnings.
   - Internal variables are now private.
@@ -30,9 +30,9 @@
   - Converted project files to Visual Studio 2008 format.
   - Added Unicode support for HashFile utility method.
   - Added support for hashing files using the HashFile method that are
-    larger than 2 GB.
+	larger than 2 GB.
   - HashFile now returns an error code instead of copying an error
-    message into the output buffer.
+	message into the output buffer.
   - GetHash now returns an error code and validates the input parameter.
   - Added ReportHashStl STL utility method.
   - Added REPORT_HEX_SHORT reporting mode.
@@ -40,20 +40,20 @@
 
   Version 1.7 - 2006-12-21
   - Fixed buffer underrun warning that appeared when compiling with
-    Borland C Builder (thanks to Rex Bloom and Tim Gallagher for the
-    patch).
+	Borland C Builder (thanks to Rex Bloom and Tim Gallagher for the
+	patch).
   - Breaking change: ReportHash writes the final hash to the start
-    of the buffer, i.e. it's not appending it to the string anymore.
+	of the buffer, i.e. it's not appending it to the string anymore.
   - Made some function parameters const.
   - Added Visual Studio 2005 project files to demo project.
 
   Version 1.6 - 2005-02-07 (thanks to Howard Kapustein for patches)
   - You can set the endianness in your files, no need to modify the
-    header file of the CSHA1 class anymore.
+	header file of the CSHA1 class anymore.
   - Aligned data support.
   - Made support/compilation of the utility functions (ReportHash and
-    HashFile) optional (useful when bytes count, for example in embedded
-    environments).
+	HashFile) optional (useful when bytes count, for example in embedded
+	environments).
 
   Version 1.5 - 2005-01-01
   - 64-bit compiler compatibility added.
@@ -63,21 +63,21 @@
 
   Version 1.4 - 2004-07-22
   - CSHA1 now compiles fine with GCC 3.3 under Mac OS X (thanks to Larry
-    Hastings).
+	Hastings).
 
   Version 1.3 - 2003-08-17
   - Fixed a small memory bug and made a buffer array a class member to
-    ensure correct working when using multiple CSHA1 class instances at
-    one time.
+	ensure correct working when using multiple CSHA1 class instances at
+	one time.
 
   Version 1.2 - 2002-11-16
   - Borlands C++ compiler seems to have problems with string addition
-    using sprintf. Fixed the bug which caused the digest report function
-    not to work properly. CSHA1 is now Borland compatible.
+	using sprintf. Fixed the bug which caused the digest report function
+	not to work properly. CSHA1 is now Borland compatible.
 
   Version 1.1 - 2002-10-11
   - Removed two unnecessary header file includes and changed BOOL to
-    bool. Fixed some minor bugs in the web page contents.
+	bool. Fixed some minor bugs in the web page contents.
 
   Version 1.0 - 2002-06-20
   - First official release.
@@ -85,38 +85,35 @@
   ================ Test Vectors ================
 
   SHA1("abc" in ANSI) =
-    A9993E36 4706816A BA3E2571 7850C26C 9CD0D89D
+	A9993E36 4706816A BA3E2571 7850C26C 9CD0D89D
   SHA1("abc" in Unicode LE) =
-    9F04F41A 84851416 2050E3D6 8C1A7ABB 441DC2B5
+	9F04F41A 84851416 2050E3D6 8C1A7ABB 441DC2B5
 
   SHA1("abcdbcdecdefdefgefghfghighijhijkijkljklmklmnlmnomnopnopq"
-    in ANSI) =
-    84983E44 1C3BD26E BAAE4AA1 F95129E5 E54670F1
+	in ANSI) =
+	84983E44 1C3BD26E BAAE4AA1 F95129E5 E54670F1
   SHA1("abcdbcdecdefdefgefghfghighijhijkijkljklmklmnlmnomnopnopq"
-    in Unicode LE) =
-    51D7D876 9AC72C40 9C5B0E3F 69C60ADC 9A039014
+	in Unicode LE) =
+	51D7D876 9AC72C40 9C5B0E3F 69C60ADC 9A039014
 
   SHA1(A million repetitions of "a" in ANSI) =
-    34AA973C D4C4DAA4 F61EEB2B DBAD2731 6534016F
+	34AA973C D4C4DAA4 F61EEB2B DBAD2731 6534016F
   SHA1(A million repetitions of "a" in Unicode LE) =
-    C4609560 A108A0C6 26AA7F2B 38A65566 739353C5
+	C4609560 A108A0C6 26AA7F2B 38A65566 739353C5
 */
 
 #ifndef SHA1_H_A545E61D43E9404E8D736869AB3CBFE7
 #define SHA1_H_A545E61D43E9404E8D736869AB3CBFE7
 
 // KevinJ:
-#include "RakMemoryOverride.h"
-#include <stdio.h> // Needed for file access
-
 #include <memory.h> // Needed for memset and memcpy
-
+#include <stdio.h>	// Needed for file access
 #include <string.h> // Needed for strcat and strcpy
+
 #include "Export.h"
-//#define MAX_FILE_READ_BUFFER 8000 
+#include "RakMemoryOverride.h"
+//#define MAX_FILE_READ_BUFFER 8000
 #define SHA1_LENGTH 20
-
-
 
 #if !defined(SHA1_UTILITY_FUNCTIONS) && !defined(SHA1_NO_UTILITY_FUNCTIONS)
 #define SHA1_UTILITY_FUNCTIONS
@@ -129,10 +126,8 @@
 #endif
 #endif
 
-
-#include <memory.h>
-
 #include <limits.h>
+#include <memory.h>
 
 #ifdef SHA1_UTILITY_FUNCTIONS
 #include <stdio.h>
@@ -227,23 +222,16 @@
 ///////////////////////////////////////////////////////////////////////////
 // Declare SHA-1 workspace
 
-typedef union
-{
+typedef union {
 	UINT_8 c[64];
 	UINT_32 l[16];
 } SHA1_WORKSPACE_BLOCK;
 
-class RAK_DLL_EXPORT CSHA1
-{
-public:
+class RAK_DLL_EXPORT CSHA1 {
+   public:
 #ifdef SHA1_UTILITY_FUNCTIONS
 	// Different formats for ReportHash(Stl)
-	enum REPORT_TYPE
-	{
-		REPORT_HEX = 0,
-		REPORT_DIGIT = 1,
-		REPORT_HEX_SHORT = 2
-	};
+	enum REPORT_TYPE { REPORT_HEX = 0, REPORT_DIGIT = 1, REPORT_HEX_SHORT = 2 };
 #endif
 
 	// Constructor and destructor
@@ -271,18 +259,19 @@ public:
 #endif
 
 #ifdef SHA1_STL_FUNCTIONS
-	bool ReportHashStl(std::basic_string<TCHAR>& strOut, REPORT_TYPE rtReportType =
-		REPORT_HEX) const;
+	bool ReportHashStl(std::basic_string<TCHAR>& strOut,
+					   REPORT_TYPE rtReportType = REPORT_HEX) const;
 #endif
 
 	// Get the raw message digest (20 bytes)
 	bool GetHash(UINT_8* pbDest20) const;
 
-unsigned char * GetHash( void ) const;
-// KevinJ: http://cseweb.ucsd.edu/~mihir/papers/hmac-cb.pdf
-	static void HMAC(unsigned char *sharedKey, int sharedKeyLength, unsigned char *data, int dataLength, unsigned char output[SHA1_LENGTH]);
+	unsigned char* GetHash(void) const;
+	// KevinJ: http://cseweb.ucsd.edu/~mihir/papers/hmac-cb.pdf
+	static void HMAC(unsigned char* sharedKey, int sharedKeyLength, unsigned char* data,
+					 int dataLength, unsigned char output[SHA1_LENGTH]);
 
-private:
+   private:
 	// Private SHA-1 transformation
 	void Transform(UINT_32* pState, const UINT_8* pBuffer);
 
