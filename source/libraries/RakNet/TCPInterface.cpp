@@ -841,7 +841,7 @@ RAK_THREAD_DECLARATION(RakNet::UpdateTCPInterfaceLoop) {
 			for (i = 0; i < (unsigned int)sts->remoteClientsLength; i++) {
 				sts->remoteClients[i].isActiveMutex.Lock();
 				if (sts->remoteClients[i].isActive) {
-					// calling FD_ISSET with -1 as socket (that’s what 0 is set to) produces a bus
+					// calling FD_ISSET with -1 as socket (thatâ€™s what 0 is set to) produces a bus
 					// error under Linux 64-Bit
 					__TCPSOCKET__ socketCopy = sts->remoteClients[i].socket;
 					if (socketCopy != 0) {
@@ -940,7 +940,7 @@ RAK_THREAD_DECLARATION(RakNet::UpdateTCPInterfaceLoop) {
 						i++;
 						continue;
 					}
-					// calling FD_ISSET with -1 as socket (that’s what 0 is set to) produces a bus
+					// calling FD_ISSET with -1 as socket (thatâ€™s what 0 is set to) produces a bus
 					// error under Linux 64-Bit
 					__TCPSOCKET__ socketCopy = sts->remoteClients[i].socket;
 					if (socketCopy == 0) {
