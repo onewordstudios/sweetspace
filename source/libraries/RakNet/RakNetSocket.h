@@ -3,7 +3,7 @@
  *  All rights reserved.
  *
  *  This source code is licensed under the BSD-style license found in the
- *  LICENSE file in the root directory of this source tree. An additional grant 
+ *  LICENSE file in the root directory of this source tree. An additional grant
  *  of patent rights can be found in the PATENTS file in the same directory.
  *
  */
@@ -12,13 +12,13 @@
 #ifndef __RAKNET_SOCKET_H
 #define __RAKNET_SOCKET_H
 
-#include "RakNetTypes.h"
-#include "RakNetDefines.h"
 #include "Export.h"
-#include "SocketIncludes.h"
-#include "RakAssert.h"
-#include "SocketDefines.h"
 #include "MTUSize.h"
+#include "RakAssert.h"
+#include "RakNetDefines.h"
+#include "RakNetTypes.h"
+#include "SocketDefines.h"
+#include "SocketIncludes.h"
 
 namespace RakNet
 {
@@ -46,11 +46,11 @@ public:
 		int protocol);
 #endif
 
-	int Bind(		
+	int Bind(
 		const struct sockaddr *addr,
 		int namelen);
 
-	inline int GetSockName(		
+	inline int GetSockName(
 		struct sockaddr *name,
 			socklen_t * namelen) {return getsockname__(s,name,namelen);}
 
@@ -61,19 +61,19 @@ public:
 		socklen_t *optlen) {return getsockopt__(s,level,optname,optval,optlen);}
 
 
-	int IOCTLSocket(		
+	int IOCTLSocket(
 		long cmd,
 		unsigned long *argp);
 
-	int Listen (		
+	int Listen (
 		int backlog);
 
-	inline int Recv(		
+	inline int Recv(
 		char * buf,
 		int len,
 		int flags) {return recv__(s,buf,len,flags);}
 
-	inline int RecvFrom(		
+	inline int RecvFrom(
 		char * buf,
 		int len,
 		int flags,
@@ -87,12 +87,12 @@ public:
 // 		fd_set *exceptfds,
 // 		struct timeval *timeout) {return select__(nfds,readfds,writefds,exceptfds,timeout);}
 
-	inline int Send(		
+	inline int Send(
 		const char * buf,
 		int len,
 		int flags) {return send__(s,buf,len,flags);}
 
-	inline int SendTo(		
+	inline int SendTo(
 		const char * buf,
 		int len,
 		int flags,
@@ -100,49 +100,47 @@ public:
 		int tolen) {return sendto__(s,buf,len,flags,to,tolen);}
 
 	#ifdef _WIN32
-	#elif defined(_PS3) || defined(__PS3__) || defined(SN_TARGET_PS3) || defined(_PS4) || defined(SN_TARGET_PSP2)
-	#else
-	inline int Fcntl(int cmd, int arg) {return fcntl(s,cmd,arg);}
-	#endif
+	#elif defined(_PS3) || defined(__PS3__) || defined(SN_TARGET_PS3) || defined(_PS4) ||
+defined(SN_TARGET_PSP2) #else inline int Fcntl(int cmd, int arg) {return fcntl(s,cmd,arg);} #endif
 
 
 #if defined(_WIN32) && !defined(WINDOWS_STORE_RT)
 	inline int _WSASendTo(
-    LPWSABUF lpBuffers,
-    DWORD dwBufferCount,
-    LPDWORD lpNumberOfBytesSent,
-    DWORD dwFlags,
-    const struct sockaddr FAR * lpTo,
-    int iTolen,
-    LPWSAOVERLAPPED lpOverlapped,
-    LPWSAOVERLAPPED_COMPLETION_ROUTINE lpCompletionRoutine
-    )
-	{ return WSASendTo(s,lpBuffers,dwBufferCount,lpNumberOfBytesSent,dwFlags,lpTo,iTolen,lpOverlapped,lpCompletionRoutine);}
+	LPWSABUF lpBuffers,
+	DWORD dwBufferCount,
+	LPDWORD lpNumberOfBytesSent,
+	DWORD dwFlags,
+	const struct sockaddr FAR * lpTo,
+	int iTolen,
+	LPWSAOVERLAPPED lpOverlapped,
+	LPWSAOVERLAPPED_COMPLETION_ROUTINE lpCompletionRoutine
+	)
+	{ return
+WSASendTo(s,lpBuffers,dwBufferCount,lpNumberOfBytesSent,dwFlags,lpTo,iTolen,lpOverlapped,lpCompletionRoutine);}
 
 #endif
-	
-	int SetSockOpt(		
+
+	int SetSockOpt(
 		int level,
 		int optname,
 		const char * optval,
 		int optlen);
 
-	int Shutdown(		
+	int Shutdown(
 		int how);
 
 
-	inline void SetRemotePortRakNetWasStartedOn(unsigned short i) {remotePortRakNetWasStartedOn_PS3_PSP2=i;}
-	inline void SetUserConnectionSocketIndex(unsigned int i) {userConnectionSocketIndex=i;}
-	inline void SetBoundAddress(SystemAddress i) {boundAddress=i;}
-	inline void SetSocketFamily(unsigned short i) {socketFamily=i;}
-	inline void SetBlockingSocket(bool i) {blockingSocket=i;}
-	inline void SetExtraSocketOptions(unsigned int i) {extraSocketOptions=i;}
-	inline void SetChromeInstance(_PP_Instance_ i) {chromeInstance=i;}
-	inline void SetBoundAddressToLoopback(unsigned char ipVersion) {boundAddress.SetToLoopback(ipVersion);}
+	inline void SetRemotePortRakNetWasStartedOn(unsigned short i)
+{remotePortRakNetWasStartedOn_PS3_PSP2=i;} inline void SetUserConnectionSocketIndex(unsigned int i)
+{userConnectionSocketIndex=i;} inline void SetBoundAddress(SystemAddress i) {boundAddress=i;} inline
+void SetSocketFamily(unsigned short i) {socketFamily=i;} inline void SetBlockingSocket(bool i)
+{blockingSocket=i;} inline void SetExtraSocketOptions(unsigned int i) {extraSocketOptions=i;} inline
+void SetChromeInstance(_PP_Instance_ i) {chromeInstance=i;} inline void
+SetBoundAddressToLoopback(unsigned char ipVersion) {boundAddress.SetToLoopback(ipVersion);}
 
 	inline SystemAddress GetBoundAddress(void) const {return boundAddress;}
-	inline unsigned short GetRemotePortRakNetWasStartedOn(void) const {return remotePortRakNetWasStartedOn_PS3_PSP2;}
-	inline bool GetBlockingSocket(void) {return blockingSocket;}
+	inline unsigned short GetRemotePortRakNetWasStartedOn(void) const {return
+remotePortRakNetWasStartedOn_PS3_PSP2;} inline bool GetBlockingSocket(void) {return blockingSocket;}
 	inline unsigned int GetExtraSocketOptions(void) const {return extraSocketOptions;}
 	inline unsigned short GetSocketFamily(void) const {return socketFamily;}
 	inline _PP_Instance_ GetChromeInstance(void) const {return chromeInstance;}
@@ -173,10 +171,12 @@ protected:
 	void* recvEvent;
 #endif
 
-	#if defined(_PS3) || defined(__PS3__) || defined(SN_TARGET_PS3) || defined(_PS4) || defined(SN_TARGET_PSP2)
+	#if defined(_PS3) || defined(__PS3__) || defined(SN_TARGET_PS3) || defined(_PS4) ||
+defined(SN_TARGET_PSP2)
 	/// PS3: Set for the PS3, when using signaling.
-	/// PS3: Connect with the port returned by signaling. Set this to whatever port RakNet was actually started on
-	/// PSP2: Set non-zero to use SCE_NET_SOCK_DGRAM_P2P. This should be done for ad-hoc or with 
+	/// PS3: Connect with the port returned by signaling. Set this to whatever port RakNet was
+actually started on
+	/// PSP2: Set non-zero to use SCE_NET_SOCK_DGRAM_P2P. This should be done for ad-hoc or with
 	#endif
 
 	unsigned short remotePortRakNetWasStartedOn_PS3_PSP2;

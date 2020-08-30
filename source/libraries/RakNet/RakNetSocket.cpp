@@ -3,13 +3,14 @@
  *  All rights reserved.
  *
  *  This source code is licensed under the BSD-style license found in the
- *  LICENSE file in the root directory of this source tree. An additional grant 
+ *  LICENSE file in the root directory of this source tree. An additional grant
  *  of patent rights can be found in the PATENTS file in the same directory.
  *
  */
 
 /*
 #include "RakNetSocket.h"
+
 #include "RakMemoryOverride.h"
 
 using namespace RakNet;
@@ -39,18 +40,14 @@ RakNetSocket::RakNetSocket() {
 		nextSendSize = 0;
 	#endif
 }
-RakNetSocket::~RakNetSocket() 
+RakNetSocket::~RakNetSocket()
 {
 	#ifdef __native_client__
 		if(s != 0)
-			((PPB_UDPSocket_Private_0_4*) pp::Module::Get()->GetBrowserInterface(PPB_UDPSOCKET_PRIVATE_INTERFACE_0_4))->Close(s);
-#elif defined(WINDOWS_STORE_RT)
-		WinRTClose(s);
-	#else
-		if ((__UDPSOCKET__)s != 0)
-			closesocket__(s);
-	#endif
-	
+			((PPB_UDPSocket_Private_0_4*)
+pp::Module::Get()->GetBrowserInterface(PPB_UDPSOCKET_PRIVATE_INTERFACE_0_4))->Close(s); #elif
+defined(WINDOWS_STORE_RT) WinRTClose(s); #else if ((__UDPSOCKET__)s != 0) closesocket__(s); #endif
+
 
 #if defined (_WIN32) && defined(USE_WAIT_FOR_MULTIPLE_EVENTS)
 	if (recvEvent!=INVALID_HANDLE_VALUE)
@@ -60,7 +57,7 @@ RakNetSocket::~RakNetSocket()
 	}
 #endif
 }
-// 
+//
 // void RakNetSocket::Accept(
 // struct sockaddr *addr,
 // 	int *addrlen)
@@ -68,7 +65,7 @@ RakNetSocket::~RakNetSocket()
 // 	accept__(s, addr, addrlen);
 // }
 
-// 
+//
 // void RakNetSocket::Close( void )
 // {
 // 	closesocket__(s);
@@ -90,7 +87,8 @@ RakNetSocket* RakNetSocket::Create
 	#endif
 
 	#ifdef __native_client__
-		sock = ((PPB_UDPSocket_Private_0_4*) Module::Get()->GetBrowserInterface(PPB_UDPSOCKET_PRIVATE_INTERFACE_0_4))->Create(_chromeInstance);
+		sock = ((PPB_UDPSocket_Private_0_4*)
+Module::Get()->GetBrowserInterface(PPB_UDPSOCKET_PRIVATE_INTERFACE_0_4))->Create(_chromeInstance);
 	#elif defined(SN_TARGET_PSP2)
 		sock = sceNetSocket( "RakNetSocket::Create", SCE_NET_AF_INET, SCE_NET_SOCK_DGRAM_P2P, 0 );
 	#elif defined(WINDOWS_STORE_RT)
@@ -113,14 +111,14 @@ RakNetSocket* RakNetSocket::Create
 	return rns;
 }
 
-int RakNetSocket::Bind(		
+int RakNetSocket::Bind(
 		  const struct sockaddr *addr,
 		  int namelen)
 {
 	return bind__(s,addr,namelen);
 }
 
-int RakNetSocket::IOCTLSocket(		
+int RakNetSocket::IOCTLSocket(
 				 long cmd,
 				 unsigned long *argp)
 {
@@ -131,13 +129,13 @@ int RakNetSocket::IOCTLSocket(
 	#endif
 }
 
-int RakNetSocket::Listen (		
+int RakNetSocket::Listen (
 			 int backlog)
 {
 	return listen__(s,backlog);
 }
 
-int RakNetSocket::SetSockOpt(		
+int RakNetSocket::SetSockOpt(
 				int level,
 				int optname,
 				const char * optval,
@@ -146,7 +144,7 @@ int RakNetSocket::SetSockOpt(
 	return setsockopt__(s,level,optname,optval,optlen);
 }
 
-int RakNetSocket::Shutdown(		
+int RakNetSocket::Shutdown(
 			  int how)
 {
 	#ifndef SN_TARGET_PSP2

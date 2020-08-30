@@ -3,7 +3,7 @@
  *  All rights reserved.
  *
  *  This source code is licensed under the BSD-style license found in the
- *  LICENSE file in the root directory of this source tree. An additional grant 
+ *  LICENSE file in the root directory of this source tree. An additional grant
  *  of patent rights can be found in the PATENTS file in the same directory.
  *
  */
@@ -12,13 +12,13 @@
 /// \brief \b [Internal] Defines the default maximum transfer unit.
 ///
 
-
 #ifndef MAXIMUM_MTU_SIZE
 
 /// \li \em 17914 16 Mbit/Sec Token Ring
 /// \li \em 4464 4 Mbits/Sec Token Ring
 /// \li \em 4352 FDDI
-/// \li \em 1500. The largest Ethernet packet size \b recommended. This is the typical setting for non-PPPoE, non-VPN connections. The default value for NETGEAR routers, adapters and switches.
+/// \li \em 1500. The largest Ethernet packet size \b recommended. This is the typical setting for
+/// non-PPPoE, non-VPN connections. The default value for NETGEAR routers, adapters and switches.
 /// \li \em 1492. The size PPPoE prefers.
 /// \li \em 1472. Maximum size to use for pinging. (Bigger packets are fragmented.)
 /// \li \em 1468. The size DHCP prefers.
@@ -28,10 +28,7 @@
 /// \li \em 576. Typical value to connect to dial-up ISPs.
 /// The largest value for an UDP datagram
 
-
-
 #define MAXIMUM_MTU_SIZE 1492
-
 
 #define MINIMUM_MTU_SIZE 400
 
