@@ -302,7 +302,7 @@ PluginReceiveResult Router2::OnReceive(Packet *packet) {
 
 					//						packet->systemAddress.ToString(true,buff2);
 					//						debugInterface->ShowDiagnostic(FormatStringTS(buff,"Got
-					//ID_ROUTER_2_REPLY_TO_SENDER_PORT on address %s (%I64d), "
+					// ID_ROUTER_2_REPLY_TO_SENDER_PORT on address %s (%I64d), "
 					//                                       "replying with
 					//                                       ID_ROUTER_2_MINI_PUNCH_REPLY at
 					//                                       %s:%i\n", buff2,packet->guid.g,

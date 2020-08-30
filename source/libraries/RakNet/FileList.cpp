@@ -283,9 +283,8 @@ void FileList::AddFilesFromDirectory(const char *applicationDirectory, const cha
 
 						//					sha1.Reset();
 						//					sha1.Update( ( unsigned char* ) fileData+HASH_LENGTH,
-						//fileInfo.size ); 					sha1.Final(); 					memcpy(fileData, sha1.GetHash(),
-						//HASH_LENGTH);
-						// File data and hash
+						// fileInfo.size ); 					sha1.Final();
+						// memcpy(fileData, sha1.GetHash(), HASH_LENGTH); File data and hash
 						AddFile((const char *)fullPath + rootLen, fullPath, fileData,
 								fileInfo.size + HASH_LENGTH, fileInfo.size, context);
 					}
@@ -301,7 +300,7 @@ void FileList::AddFilesFromDirectory(const char *applicationDirectory, const cha
 
 					// Hash only
 					//	AddFile((const char*)fullPath+rootLen, (const char*)sha1.GetHash(),
-					//HASH_LENGTH, fileInfo.size, context);
+					// HASH_LENGTH, fileInfo.size, context);
 					AddFile((const char *)fullPath + rootLen, fullPath, (const char *)&hash,
 							HASH_LENGTH, fileInfo.size, context);
 				} else if (writeData) {
@@ -537,7 +536,7 @@ void FileList::ListMissingOrChangedFiles(const char *applicationDirectory,
 					memcmp(&hash, fileList[i].data, HASH_LENGTH) != 0) {
 					if (neverWriteHash == false)
 						//	missingOrChangedFiles->AddFile((const char*)fileList[i].filename, (const
-						//char*)sha1.GetHash(), HASH_LENGTH, fileLength, 0);
+						// char*)sha1.GetHash(), HASH_LENGTH, fileLength, 0);
 						missingOrChangedFiles->AddFile((const char *)fileList[i].filename,
 													   (const char *)fileList[i].fullPathToFile,
 													   (const char *)&hash, HASH_LENGTH, fileLength,
@@ -580,15 +579,16 @@ void FileList::PopulateDataFromDisk(const char *applicationDirectory, bool write
 						RakAssert(fileList[i].data);
 						fread(fileList[i].data + HASH_LENGTH, fileList[i].fileLengthBytes, 1, fp);
 						//						sha1.Reset();
-						//						sha1.Update((unsigned char*)fileList[i].data+HASH_LENGTH,
-						//fileList[i].fileLength); 						sha1.Final();
+						//						sha1.Update((unsigned
+						// char*)fileList[i].data+HASH_LENGTH, fileList[i].fileLength);
+						// sha1.Final();
 						unsigned int hash = SuperFastHash(fileList[i].data + HASH_LENGTH,
 														  fileList[i].fileLengthBytes);
 						if (RakNet::BitStream::DoEndianSwap())
 							RakNet::BitStream::ReverseBytesInPlace((unsigned char *)&hash,
 																   sizeof(hash));
 						//						memcpy(fileList[i].data, sha1.GetHash(),
-						//HASH_LENGTH);
+						// HASH_LENGTH);
 						memcpy(fileList[i].data, &hash, HASH_LENGTH);
 					} else {
 						// Hash only
@@ -602,7 +602,7 @@ void FileList::PopulateDataFromDisk(const char *applicationDirectory, bool write
 						fread(fileList[i].data, fileList[i].fileLengthBytes, 1, fp);
 						//		sha1.Reset();
 						//		sha1.Update((unsigned char*)fileList[i].data,
-						//fileList[i].fileLength); 		sha1.Final();
+						// fileList[i].fileLength); 		sha1.Final();
 						unsigned int hash =
 							SuperFastHash(fileList[i].data, fileList[i].fileLengthBytes);
 						if (RakNet::BitStream::DoEndianSwap())

@@ -182,7 +182,7 @@ class RAK_DLL_EXPORT TCPInterface {
 	//	DataStructures::SingleProducerConsumer<OutgoingMessage> outgoingMessages;
 	//	DataStructures::SingleProducerConsumer<Packet> incomingMessages;
 	//	DataStructures::SingleProducerConsumer<SystemAddress> newIncomingConnections,
-	//lostConnections, requestedCloseConnections;
+	// lostConnections, requestedCloseConnections;
 	//	DataStructures::SingleProducerConsumer<RemoteClient*> newRemoteClients;
 	//	DataStructures::ThreadsafeAllocatingQueue<OutgoingMessage> outgoingMessages;
 	DataStructures::ThreadsafeAllocatingQueue<Packet> incomingMessages;

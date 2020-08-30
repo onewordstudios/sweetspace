@@ -50,7 +50,7 @@ NetworkID NetworkIDManager::GetNewNetworkID(void) {
 }
 unsigned int NetworkIDManager::NetworkIDToHashIndex(NetworkID networkId) {
 	//	return SuperFastHash((const char*) &networkId.guid.g,sizeof(networkId.guid.g)) %
-	//NETWORK_ID_MANAGER_HASH_LENGTH;
+	// NETWORK_ID_MANAGER_HASH_LENGTH;
 	return (unsigned int)(networkId % NETWORK_ID_MANAGER_HASH_LENGTH);
 }
 void NetworkIDManager::TrackNetworkIDObject(NetworkIDObject *networkIdObject) {
@@ -62,7 +62,7 @@ void NetworkIDManager::TrackNetworkIDObject(NetworkIDObject *networkIdObject) {
 
 	unsigned int hashIndex = NetworkIDToHashIndex(rawId);
 	//	printf("TrackNetworkIDObject hashIndex=%i guid=%s\n",hashIndex,
-	//networkIdObject->GetNetworkID().guid.ToString()); // removeme
+	// networkIdObject->GetNetworkID().guid.ToString()); // removeme
 	if (networkIdHash[hashIndex] == 0) {
 		networkIdHash[hashIndex] = networkIdObject;
 		return;

@@ -139,10 +139,10 @@ struct PacketFollowedByData {
 Packet *RakPeer::AllocPacket(unsigned dataSize, const char *file, unsigned int line) {
 	// Crashes when dataSize is 4 bytes - not sure why
 	// 	unsigned char *data = (unsigned char *) rakMalloc_Ex(sizeof(PacketFollowedByData)+dataSize,
-	// file, line); 	Packet *p = &((PacketFollowedByData *)data)->p; 	p->data=((PacketFollowedByData
-	// *)data)->data; 	p->length=dataSize; 	p->bitSize=BYTES_TO_BITS(dataSize); 	p->deleteData=false;
-	// 	p->guid=UNASSIGNED_RAKNET_GUID;
-	// 	return p;
+	// file, line); 	Packet *p = &((PacketFollowedByData *)data)->p;
+	// p->data=((PacketFollowedByData
+	// *)data)->data; 	p->length=dataSize; 	p->bitSize=BYTES_TO_BITS(dataSize);
+	// p->deleteData=false; 	p->guid=UNASSIGNED_RAKNET_GUID; 	return p;
 
 	RakNet::Packet *p;
 	packetAllocationPoolMutex.Lock();
@@ -894,7 +894,7 @@ ConnectionAttemptResult RakPeer::Connect(const char *host, unsigned short remote
 	// 04/02/09 - Can't remember why I disabled connecting to self, but it seems to work
 	// Connecting to ourselves in the same instance of the program?
 	//	if ( ( strcmp( host, "127.0.0.1" ) == 0 || strcmp( host, "0.0.0.0" ) == 0 ) && remotePort ==
-	//mySystemAddress[0].port ) 		return false;
+	// mySystemAddress[0].port ) 		return false;
 
 	return SendConnectionRequest(host, remotePort, passwordData, passwordDataLength, publicKey,
 								 connectionSocketIndex, 0, sendConnectionAttemptCount,
@@ -4029,7 +4029,7 @@ void RakPeer::OnConnectedPong(RakNet::Time sendPingTime, RakNet::Time sendPongTi
 		ping = 0;
 
 	//	lastPing = remoteSystem->pingAndClockDifferential[
-	//remoteSystem->pingAndClockDifferentialWriteIndex ].pingTime;
+	// remoteSystem->pingAndClockDifferentialWriteIndex ].pingTime;
 
 	remoteSystem->pingAndClockDifferential[remoteSystem->pingAndClockDifferentialWriteIndex]
 		.pingTime = (unsigned short)ping;
@@ -5499,7 +5499,7 @@ bool RakPeer::RunUpdateCycle(BitStream &updateBitStream) {
 			  timeMS > remoteSystem->connectionTime &&
 			  timeMS - remoteSystem->connectionTime > 10000))) {
 			//	RAKNET_DEBUG_PRINTF("timeMS=%i remoteSystem->connectionTime=%i\n", timeMS,
-			//remoteSystem->connectionTime );
+			// remoteSystem->connectionTime );
 
 			// Failed.  Inform the user?
 			// TODO - RakNet 4.0 - Return a different message identifier for
@@ -5514,7 +5514,7 @@ bool RakPeer::RunUpdateCycle(BitStream &updateBitStream) {
 				//					remoteSystem->reliabilityLayer.GetUndeliveredMessages(&undeliveredMessages,remoteSystem->MTUSize);
 
 				//					packet=AllocPacket(sizeof( char ) +
-				//undeliveredMessages.GetNumberOfBytesUsed());
+				// undeliveredMessages.GetNumberOfBytesUsed());
 				packet = AllocPacket(sizeof(char), _FILE_AND_LINE_);
 				if (remoteSystem->connectMode == RemoteSystemStruct::REQUESTED_CONNECTION)
 					packet->data[0] =
@@ -5525,7 +5525,7 @@ bool RakPeer::RunUpdateCycle(BitStream &updateBitStream) {
 					packet->data[0] = ID_DISCONNECTION_NOTIFICATION; // DeadConnection
 
 				//					memcpy(packet->data+1, undeliveredMessages.GetData(),
-				//undeliveredMessages.GetNumberOfBytesUsed());
+				// undeliveredMessages.GetNumberOfBytesUsed());
 
 				packet->guid = remoteSystem->guid;
 				packet->systemAddress = systemAddress;
@@ -5646,7 +5646,7 @@ bool RakPeer::RunUpdateCycle(BitStream &updateBitStream) {
 						// Overwrite the data in the packet
 						//					NewIncomingConnectionStruct newIncomingConnectionStruct;
 						//					RakNet::BitStream nICS_BS( data,
-						//NewIncomingConnectionStruct_Size, false );
+						// NewIncomingConnectionStruct_Size, false );
 						//					newIncomingConnectionStruct.Deserialize( nICS_BS );
 
 						remoteSystem->myExternalSystemAddress = bsSystemAddress;
@@ -5777,8 +5777,8 @@ bool RakPeer::RunUpdateCycle(BitStream &updateBitStream) {
 
 							// Find a free remote system struct to use
 							//						RakNet::BitStream casBitS(data, byteSize,
-							//false); 						ConnectionAcceptStruct cas; 						cas.Deserialize(casBitS);
-							//	systemAddress.GetPort() = remotePort;
+							// false); 						ConnectionAcceptStruct cas;
+							// cas.Deserialize(casBitS); 	systemAddress.GetPort() = remotePort;
 
 							// The remote system told us our external IP, so save it
 							remoteSystem->myExternalSystemAddress = externalID;
@@ -5940,9 +5940,8 @@ RAK_THREAD_DECLARATION(RakNet::UpdateNetworkLoop) {
 	while (rakPeer->endThreads == false) {
 		// #ifdef _DEBUG
 		// 		// Sanity check, make sure RunUpdateCycle does not block or not otherwise get called
-		// for a long time 		RakNetTime thisCall=RakNet::GetTime(); 		RakAssert(thisCall-lastCall<250);
-		// 		lastCall=thisCall;
-		// #endif
+		// for a long time 		RakNetTime thisCall=RakNet::GetTime();
+		// RakAssert(thisCall-lastCall<250); 		lastCall=thisCall; #endif
 		if (rakPeer->userUpdateThreadPtr)
 			rakPeer->userUpdateThreadPtr(rakPeer, rakPeer->userUpdateThreadData);
 

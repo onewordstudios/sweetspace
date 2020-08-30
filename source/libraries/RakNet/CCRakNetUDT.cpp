@@ -467,7 +467,7 @@ bool CCRakNetUDT::OnGotPacket(DatagramSequenceNumberType datagramSequenceNumber,
 			//		if (mostRecentPacketArrivalHistory < (BytesPerMicrosecond)0.0035)
 			//		{
 			//			printf("%s:%i LIKELY BUG: Calculated packetArrivalHistory is below 28.8 Kbps
-			//modem\nReport to rakkar@jenkinssoftware.com with file and line number\n",
+			// modem\nReport to rakkar@jenkinssoftware.com with file and line number\n",
 			//_FILE_AND_LINE_);
 			//		}
 

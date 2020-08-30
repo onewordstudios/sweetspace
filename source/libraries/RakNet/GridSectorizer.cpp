@@ -41,7 +41,7 @@ void GridSectorizer::Init(const float _maxCellWidth, const float _maxCellHeight,
 		gridCellWidthCount * gridCellHeightCount, _FILE_AND_LINE_);
 	DataStructures::OrderedList<void *, void *>::IMPLEMENT_DEFAULT_COMPARISON();
 #else
-	grid = RakNet::OP_NEW_ARRAY<DataStructures::List<void*>>(
+	grid = RakNet::OP_NEW_ARRAY<DataStructures::List<void *>>(
 		gridCellWidthCount * gridCellHeightCount, _FILE_AND_LINE_);
 #endif
 }
@@ -133,7 +133,7 @@ void GridSectorizer::GetEntries(DataStructures::List<void *> &intersectionList, 
 #ifdef _USE_ORDERED_LIST
 	DataStructures::OrderedList<void *, void *> *cell;
 #else
-	DataStructures::List<void*>* cell;
+	DataStructures::List<void *> *cell;
 #endif
 	int xStart, yStart, xEnd, yEnd, xCur, yCur;
 	unsigned index;
