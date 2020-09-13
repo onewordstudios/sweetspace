@@ -86,7 +86,6 @@ void NetworkConnection::receive(
 						[&](HostPeers& h) {
 							CULog("Accepting connections now");
 							peer->SetMaximumIncomingConnections(globals::MAX_PLAYERS - 1);
-							dispatcher({NetworkDataType::AssignedRoom, '0', '0', '0', '0', '0'});
 						},
 						[&](ClientPeer& c) {
 							CULog("Trying to connect to %s", c.room.c_str());
