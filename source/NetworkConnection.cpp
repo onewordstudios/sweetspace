@@ -18,11 +18,12 @@ NetworkConnection::NetworkConnection() {
 NetworkConnection::NetworkConnection(std::string roomID) {
 	startupConn();
 	remotePeer = ClientPeer(roomID);
+	peer->SetMaximumIncomingConnections(1);
 }
 
 NetworkConnection::~NetworkConnection() {
 	peer->Shutdown(0);
-	RakNet::RakPeerInterface::DestroyInstance(peer.get());
+	RakNet::RakPeerInterface::DestroyInstance(peer.release());
 }
 
 void NetworkConnection::startupConn() {
@@ -45,6 +46,14 @@ void NetworkConnection::startupConn() {
 	CULog("Connecting to punchthrough server");
 	peer->Connect(this->natPunchServerAddress->ToString(false),
 				  this->natPunchServerAddress->GetPort(), 0, 0);
+}
+
+void NetworkConnection::broadcast(const std::vector<uint8_t>& msg, RakNet::SystemAddress& ignore) {
+	RakNet::BitStream bs;
+	bs.Write((uint8_t)ID_USER_PACKET_ENUM);
+	bs.Write((uint8_t)msg.size());
+	bs.WriteAlignedBytes(msg.data(), msg.size());
+	peer->Send(&bs, MEDIUM_PRIORITY, RELIABLE, 1, ignore, true);
 }
 
 void NetworkConnection::send(const std::vector<uint8_t>& msg) {
@@ -76,8 +85,8 @@ void NetworkConnection::receive(
 					remotePeer.match(
 						[&](HostPeers& h) {
 							CULog("Accepting connections now");
-							peer->SetMaximumIncomingConnections(globals::MAX_PLAYERS);
-							dispatcher({NetworkDataType::AssignedRoom, 0, 0, 0, 0, 0});
+							peer->SetMaximumIncomingConnections(globals::MAX_PLAYERS - 1);
+							dispatcher({NetworkDataType::AssignedRoom, '0', '0', '0', '0', '0'});
 						},
 						[&](ClientPeer& c) {
 							CULog("Trying to connect to %s", c.room.c_str());
@@ -87,27 +96,59 @@ void NetworkConnection::receive(
 																*(this->natPunchServerAddress));
 						});
 				} else {
-					// packet->systemAddress
-					CULog("Connected to a peer");
+					remotePeer.match(
+						[&](HostPeers& h) {
+							for (uint8_t i = 0; i < h.peers.size(); i++) {
+								if (*h.peers.at(i) == packet->systemAddress) {
+									uint8_t pID = i + 1;
+									CULog("Player %d accepted connection request", pID);
+									std::vector<uint8_t> joinMsg = {NetworkDataType::PlayerJoined,
+																	pID};
+									dispatcher(joinMsg);
+									broadcast(joinMsg, packet->systemAddress);
+
+									RakNet::BitStream bs;
+									std::vector<uint8_t> connMsg = {NetworkDataType::JoinRoom, 0,
+																	h.numPlayers, pID};
+									bs.Write((uint8_t)ID_USER_PACKET_ENUM);
+									bs.Write((uint8_t)connMsg.size());
+									bs.WriteAlignedBytes(connMsg.data(), connMsg.size());
+									peer->Send(&bs, MEDIUM_PRIORITY, RELIABLE, 1,
+											   packet->systemAddress, false);
+									break;
+								}
+							}
+						},
+						[&](ClientPeer& c) {
+							CULogError(
+								"A connection request you sent was accepted despite being client?");
+						});
 				}
 				break;
 			case ID_NEW_INCOMING_CONNECTION: // Someone connected to you
 				CULog("A peer connected");
+				remotePeer.match(
+					[&](HostPeers& h) { CULogError("How did that happen? You're the host"); },
+					[&](ClientPeer& c) {
+						if (packet->systemAddress == *c.addr) {
+							CULog("Connected to host :D");
+						}
+					});
 				break;
 			case ID_NAT_PUNCHTHROUGH_SUCCEEDED: // Punchthrough succeeded
 				CULog("Punchthrough success");
 
 				remotePeer.match(
 					[&](HostPeers& h) {
-						// CULog("Connecting to peer");
-
 						auto p = packet->systemAddress;
 
 						bool hasRoom = false;
-						for (size_t i = 0; i < h.size(); i++) {
-							if (h[i] == nullptr) {
+						for (size_t i = 0; i < h.peers.size(); i++) {
+							if (h.peers.at(i) == nullptr) {
 								hasRoom = true;
-								h[i] = std::make_unique<RakNet::SystemAddress>(p);
+								h.peers.at(i) = std::make_unique<RakNet::SystemAddress>(p);
+								h.numPlayers++;
+								break;
 							}
 						}
 
@@ -115,12 +156,14 @@ void NetworkConnection::receive(
 							CULog("Connecting to client now");
 							peer->Connect(p.ToString(false), p.GetPort(), 0, 0);
 						} else {
-							CULog("Client attempted to join but room was full");
+							CULogError(
+								"Client attempted to join but room was full - if you're seeing "
+								"this error, that means somehow there are ghost clients not "
+								"actually connected even though mib thinks they are");
 						}
 					},
 					[&](ClientPeer& c) {
 						c.addr = std::make_unique<RakNet::SystemAddress>(packet->systemAddress);
-						peer->SetMaximumIncomingConnections(1);
 					});
 				break;
 			case ID_USER_PACKET_ENUM: {
@@ -136,16 +179,8 @@ void NetworkConnection::receive(
 				dispatcher(msgConverted);
 
 				remotePeer.match(
-					[&](HostPeers& h) {
-						RakNet::BitStream bs;
-						bs.Write((uint8_t)ID_USER_PACKET_ENUM);
-						bs.Write((uint8_t)msgConverted.size());
-						bs.WriteAlignedBytes(msgConverted.data(), msgConverted.size());
-						peer->Send(&bs, MEDIUM_PRIORITY, RELIABLE, 1, packet->systemAddress, true);
-					},
-					[&](ClientPeer& c) {
-
-					});
+					[&](HostPeers& h) { broadcast(msgConverted, packet->systemAddress); },
+					[&](ClientPeer& c) {});
 
 				delete[] message; // NOLINT
 				break;
@@ -155,9 +190,36 @@ void NetworkConnection::receive(
 			case ID_DISCONNECTION_NOTIFICATION:
 			case ID_CONNECTION_LOST:
 				CULog("A disconnect occured");
+				remotePeer.match(
+					[&](HostPeers& h) {
+						for (uint8_t i = 0; i < h.peers.size(); i++) {
+							if (*h.peers.at(i) == packet->systemAddress) {
+								CULog("Lost connection to player %d", i);
+								std::vector<uint8_t> disconnMsg{NetworkDataType::PlayerDisconnect,
+																i};
+								h.peers.at(i) = nullptr;
+								h.numPlayers--;
+								dispatcher(disconnMsg);
+								send(disconnMsg);
+								return;
+							}
+						}
+					},
+					[&](ClientPeer& c) {
+						if (packet->systemAddress == *c.addr) {
+							CULog("Lost connection to host");
+							dispatcher({NetworkDataType::PlayerDisconnect, 0});
+						}
+					});
+
 				break;
 			case ID_NAT_PUNCHTHROUGH_FAILED:
 				CULog("Punchthrough failure");
+				dispatcher({NetworkDataType::GenericError});
+				break;
+			case ID_NO_FREE_INCOMING_CONNECTIONS:
+				CULog("Room full");
+				dispatcher({NetworkDataType::JoinRoom, 2});
 				break;
 			default:
 				CULog("Received unknown message: %d", packet->data[0]); // NOLINT

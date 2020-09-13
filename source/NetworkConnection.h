@@ -47,8 +47,12 @@ class NetworkConnection {
 	RakNet::NatPunchthroughClient natPunchthroughClient;
 #pragma endregion
 
-	/** Array of peers for the host */
-	typedef std::array<std::unique_ptr<RakNet::SystemAddress>, globals::MAX_PLAYERS - 1> HostPeers;
+	struct HostPeers {
+		uint8_t numPlayers;
+		std::array<std::unique_ptr<RakNet::SystemAddress>, globals::MAX_PLAYERS - 1> peers;
+
+		HostPeers() { numPlayers = 1; };
+	};
 
 	/** Connection to host and room ID for client */
 	struct ClientPeer {
@@ -63,7 +67,18 @@ class NetworkConnection {
 	 */
 	mapbox::util::variant<HostPeers, ClientPeer> remotePeer;
 
+	/** Initialize the connection */
 	void startupConn();
+
+	/**
+	 * Broadcast a message to everyone except the specified connection.
+	 *
+	 * PRECONDITION: This player MUST be the host
+	 *
+	 * @param msg The message to send
+	 * @param ignore The address to not send to
+	 */
+	void broadcast(const std::vector<uint8_t>& msg, RakNet::SystemAddress& ignore);
 };
 
 #endif /* __NETWORK_CONNECTION_H__ */

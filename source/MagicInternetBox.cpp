@@ -115,10 +115,6 @@ bool MagicInternetBox::initHost() {
 
 	conn = std::make_unique<NetworkConnection>();
 
-	// std::vector<uint8_t> data;
-	// data.push_back((uint8_t)NetworkDataType::AssignedRoom);
-	// data.push_back(API_VER);
-	// ws->sendBinary(data);
 	this->playerID = 0;
 	this->numPlayers = 1;
 	status = HostConnecting;
@@ -132,7 +128,7 @@ bool MagicInternetBox::initClient(std::string id) {
 		return false;
 	}
 
-	conn = std::make_unique<NetworkConnection>();
+	conn = std::make_unique<NetworkConnection>(id);
 
 	roomID = id;
 	status = ClientConnecting;
@@ -301,6 +297,14 @@ void MagicInternetBox::update() {
 		NetworkDataType type = static_cast<NetworkDataType>(message[0]);
 
 		switch (type) {
+			case GenericError: {
+				if (playerID == 0) {
+					status = HostError;
+				} else {
+					status = ClientError;
+				}
+				return;
+			}
 			case ApiMismatch: {
 				CULog("API Mismatch Occured; Aborting");
 				if (playerID == 0) {
@@ -326,7 +330,8 @@ void MagicInternetBox::update() {
 					case 0: {
 						numPlayers = message[2];
 						playerID = message[3];
-						CULog("Join Room Success; player id %d", playerID);
+						CULog("Join Room Success; player id %d out of %d players", playerID,
+							  numPlayers);
 						for (unsigned int i = 0; i < numPlayers; i++) {
 							activePlayers.at(i) = true;
 						}
@@ -603,24 +608,16 @@ void MagicInternetBox::jump(int player) { sendData(Jump, -1.0f, player, -1, -1, 
 
 void MagicInternetBox::forceDisconnect() {
 	CULog("Force disconnecting");
-	// if (ws == nullptr) {
-	//	return;
-	//}
 
 	std::vector<uint8_t> data;
 	data.push_back((uint8_t)PlayerDisconnect);
-	// ws->sendBinary(data);
-	// ws->poll();
 
-	// ws->close();
 	status = Disconnected;
 	lastConnection = 0;
 }
 
 void MagicInternetBox::reset() {
 	forceDisconnect();
-	// delete ws;
-	// ws = nullptr;
 	conn = nullptr;
 	status = Uninitialized;
 	activePlayers.fill(false);

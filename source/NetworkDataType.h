@@ -30,7 +30,8 @@ enum NetworkDataType {
 	// Matchmaking messages only
 	AssignedRoom = 100, // Doubles for both creating and created
 	JoinRoom,			// Doubles for both joining and join response
-	ApiMismatch			// Client API version is too old
+	ApiMismatch,		// Client API version is too old
+	GenericError		// Something broke
 };
 
 #endif /* __NETWORK_DATA_TYPE_H__ */
