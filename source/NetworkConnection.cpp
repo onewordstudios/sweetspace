@@ -193,9 +193,10 @@ void NetworkConnection::receive(
 					[&](HostPeers& h) {
 						for (uint8_t i = 0; i < h.peers.size(); i++) {
 							if (*h.peers.at(i) == packet->systemAddress) {
-								CULog("Lost connection to player %d", i);
+								uint8_t pID = i + 1;
+								CULog("Lost connection to player %d", pID);
 								std::vector<uint8_t> disconnMsg{NetworkDataType::PlayerDisconnect,
-																i};
+																pID};
 								h.peers.at(i) = nullptr;
 								h.numPlayers--;
 								dispatcher(disconnMsg);
