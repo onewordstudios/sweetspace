@@ -12,9 +12,6 @@ using namespace cugl;
 
 #pragma region API CONSTANTS
 
-/** The networking server */
-constexpr auto GAME_SERVER = "ws://sweetspace-server.herokuapp.com/";
-
 /** API version number. Bump this everytime a backwards incompatible API change happens. */
 constexpr uint8_t API_VER = 0;
 
@@ -46,7 +43,18 @@ MagicInternetBox::MagicInternetBox()
 	: activePlayers(),
 	  stateReconciler(ONE_BYTE, FLOAT_PRECISION, FLOAT_EPSILON),
 	  lastAttemptConnectionTime() {
-	ws = nullptr;
+#ifdef _WIN32
+	INT rc; // NOLINT
+	WSADATA wsaData;
+
+	rc = WSAStartup(MAKEWORD(2, 2), &wsaData);
+	if (rc) {
+		CULogError("WSAStartup Failed");
+		throw "WSA Startup Failed";
+	}
+#endif
+
+	conn = nullptr;
 	status = Uninitialized;
 	events = None;
 	levelNum = -1;
@@ -94,27 +102,6 @@ bool MagicInternetBox::initConnection() {
 	}
 	lastAttemptConnectionTime = currTime;
 
-	using easywsclient::WebSocket;
-
-	// I actually don't know what this stuff does but it won't run on Windows without it,
-	// so ¯\_(ツ)_/¯
-#ifdef _WIN32
-	INT rc; // NOLINT
-	WSADATA wsaData;
-
-	rc = WSAStartup(MAKEWORD(2, 2), &wsaData);
-	if (rc) {
-		CULog("WSAStartup Failed");
-		return false;
-	}
-#endif
-
-	ws = WebSocket::from_url(GAME_SERVER);
-	if (!ws) {
-		CULog("FAILED TO CONNECT");
-		return false;
-	}
-
 	stateReconciler.reset();
 	skipTutorial = false;
 	return true;
@@ -126,10 +113,12 @@ bool MagicInternetBox::initHost() {
 		return false;
 	}
 
-	std::vector<uint8_t> data;
-	data.push_back((uint8_t)NetworkDataType::AssignedRoom);
-	data.push_back(API_VER);
-	ws->sendBinary(data);
+	conn = std::make_unique<NetworkConnection>();
+
+	// std::vector<uint8_t> data;
+	// data.push_back((uint8_t)NetworkDataType::AssignedRoom);
+	// data.push_back(API_VER);
+	// ws->sendBinary(data);
 	this->playerID = 0;
 	this->numPlayers = 1;
 	status = HostConnecting;
@@ -143,13 +132,8 @@ bool MagicInternetBox::initClient(std::string id) {
 		return false;
 	}
 
-	std::vector<uint8_t> data;
-	data.push_back((uint8_t)NetworkDataType::JoinRoom);
-	for (unsigned int i = 0; i < globals::ROOM_LENGTH; i++) {
-		data.push_back((uint8_t)id.at(i));
-	}
-	data.push_back(API_VER);
-	ws->sendBinary(data);
+	conn = std::make_unique<NetworkConnection>();
+
 	roomID = id;
 	status = ClientConnecting;
 
@@ -168,7 +152,7 @@ bool MagicInternetBox::reconnect() {
 		data.push_back((uint8_t)roomID.at(i));
 	}
 	data.push_back(playerID);
-	ws->sendBinary(data);
+	conn->send(data);
 	status = Reconnecting;
 
 	return true;
@@ -216,7 +200,7 @@ void MagicInternetBox::sendData(NetworkDataType type, float angle, int id, int d
 	data.push_back((uint8_t)(d3 % ONE_BYTE));
 	data.push_back((uint8_t)(d3 / ONE_BYTE));
 
-	ws->sendBinary(data);
+	conn->send(data);
 }
 
 MagicInternetBox::MatchmakingStatus MagicInternetBox::matchStatus() { return status; }
@@ -255,7 +239,7 @@ void MagicInternetBox::startGame(int levelNum) {
 	data.push_back((uint8_t)StartGame);
 	data.push_back((uint8_t)levelNum);
 	this->levelNum = levelNum;
-	ws->sendBinary(data);
+	conn->send(data);
 
 	maxPlayers = numPlayers;
 	status = GameStart;
@@ -270,7 +254,7 @@ void MagicInternetBox::restartGame() {
 	std::vector<uint8_t> data;
 	data.push_back((uint8_t)ChangeGame);
 	data.push_back((uint8_t)0);
-	ws->sendBinary(data);
+	conn->send(data);
 
 	startLevel();
 }
@@ -294,7 +278,7 @@ void MagicInternetBox::nextLevel() {
 	data.push_back((uint8_t)ChangeGame);
 	data.push_back((uint8_t)1);
 	data.push_back((uint8_t)level);
-	ws->sendBinary(data);
+	conn->send(data);
 }
 
 void MagicInternetBox::update() {
@@ -309,8 +293,7 @@ void MagicInternetBox::update() {
 			break;
 	}
 
-	ws->poll();
-	ws->dispatchBinary([this](const std::vector<uint8_t>& message) {
+	conn->receive([this](const std::vector<uint8_t>& message) {
 		if (message.size() == 0) {
 			return;
 		}
@@ -353,13 +336,13 @@ void MagicInternetBox::update() {
 					case 1: {
 						CULog("Room Does Not Exist");
 						status = ClientRoomInvalid;
-						ws->close();
+						conn = nullptr;
 						return;
 					}
 					case 2: {
 						CULog("Room Full");
 						status = ClientRoomFull;
-						ws->close();
+						conn = nullptr;
 						return;
 					}
 					case 3:
@@ -425,7 +408,7 @@ void MagicInternetBox::update(std::shared_ptr<ShipModel> state) {
 					std::vector<uint8_t> data;
 					data.push_back(StateSync);
 					stateReconciler.encode(state, data);
-					ws->sendBinary(data);
+					conn->send(data);
 				}
 			}
 			if (lastConnection > SERVER_TIMEOUT) {
@@ -436,8 +419,7 @@ void MagicInternetBox::update(std::shared_ptr<ShipModel> state) {
 		}
 	}
 
-	ws->poll();
-	ws->dispatchBinary([&state, this](const std::vector<uint8_t>& message) {
+	conn->receive([&state, this](const std::vector<uint8_t>& message) {
 		if (message.size() == 0) {
 			return;
 		}
@@ -621,24 +603,25 @@ void MagicInternetBox::jump(int player) { sendData(Jump, -1.0f, player, -1, -1, 
 
 void MagicInternetBox::forceDisconnect() {
 	CULog("Force disconnecting");
-	if (ws == nullptr) {
-		return;
-	}
+	// if (ws == nullptr) {
+	//	return;
+	//}
 
 	std::vector<uint8_t> data;
 	data.push_back((uint8_t)PlayerDisconnect);
-	ws->sendBinary(data);
-	ws->poll();
+	// ws->sendBinary(data);
+	// ws->poll();
 
-	ws->close();
+	// ws->close();
 	status = Disconnected;
 	lastConnection = 0;
 }
 
 void MagicInternetBox::reset() {
 	forceDisconnect();
-	delete ws;
-	ws = nullptr;
+	// delete ws;
+	// ws = nullptr;
+	conn = nullptr;
 	status = Uninitialized;
 	activePlayers.fill(false);
 	stateReconciler.reset();

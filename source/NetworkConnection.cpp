@@ -3,16 +3,21 @@
 #include <cugl/cugl.h>
 
 #include "Globals.h"
+#include "NetworkDataType.h"
 
 /** IP of the NAT punchthrough server */
 constexpr auto SERVER_ADDRESS = "35.231.212.113";
 /** Port of the NAT punchthrough server */
 constexpr unsigned short SERVER_PORT = 61111;
 
-NetworkConnection::NetworkConnection() : isHost(true), room() { startupConn(); }
-
-NetworkConnection::NetworkConnection(std::string roomID) : isHost(false), room(roomID) {
+NetworkConnection::NetworkConnection() {
 	startupConn();
+	remotePeer = HostPeers();
+}
+
+NetworkConnection::NetworkConnection(std::string roomID) {
+	startupConn();
+	remotePeer = ClientPeer(roomID);
 }
 
 NetworkConnection::~NetworkConnection() {
@@ -48,14 +53,15 @@ void NetworkConnection::send(const std::vector<uint8_t>& msg) {
 	bs.Write((uint8_t)msg.size());
 	bs.WriteAlignedBytes(msg.data(), msg.size());
 
-	if (isHost) {
-		peer->Send(&bs, MEDIUM_PRIORITY, RELIABLE, 1, *natPunchServerAddress, true);
-	} else {
-		peer->Send(&bs, MEDIUM_PRIORITY, RELIABLE, 1, remotePeer, false);
-	}
+	remotePeer.match(
+		[&](HostPeers& h) {
+			peer->Send(&bs, MEDIUM_PRIORITY, RELIABLE, 1, *natPunchServerAddress, true);
+		},
+		[&](ClientPeer& c) { peer->Send(&bs, MEDIUM_PRIORITY, RELIABLE, 1, *c.addr, false); });
 }
 
-void NetworkConnection::receive(std::function<void(const std::vector<uint8_t>&)> dispatcher) {
+void NetworkConnection::receive(
+	const std::function<void(const std::vector<uint8_t>&)>& dispatcher) {
 	RakNet::Packet* packet = nullptr;
 	for (packet = peer->Receive(); packet != nullptr;
 		 peer->DeallocatePacket(packet), packet = peer->Receive()) {
@@ -63,34 +69,59 @@ void NetworkConnection::receive(std::function<void(const std::vector<uint8_t>&)>
 
 		// NOLINTNEXTLINE Dealing with an old 2000s era C++ library here
 		switch (packet->data[0]) {
-			case ID_CONNECTION_REQUEST_ACCEPTED:
+			case ID_CONNECTION_REQUEST_ACCEPTED: // Connected to some remote server
 				if (packet->systemAddress == *(this->natPunchServerAddress)) {
 					CULog("Connected to punchthrough server");
-					if (isHost) {
-						CULog("Accepting connections now");
-						peer->SetMaximumIncomingConnections(globals::MAX_PLAYERS);
-					} else {
-						CULog("Trying to connect to %s", room.c_str());
-						RakNet::RakNetGUID remote;
-						remote.FromString(room.c_str());
-						this->natPunchthroughClient.OpenNAT(remote, *(this->natPunchServerAddress));
-					}
-				} else if (packet->systemAddress == this->remotePeer) {
-					CULog("Connected to peer");
+
+					remotePeer.match(
+						[&](HostPeers& h) {
+							CULog("Accepting connections now");
+							peer->SetMaximumIncomingConnections(globals::MAX_PLAYERS);
+							dispatcher({NetworkDataType::AssignedRoom, 0, 0, 0, 0, 0});
+						},
+						[&](ClientPeer& c) {
+							CULog("Trying to connect to %s", c.room.c_str());
+							RakNet::RakNetGUID remote;
+							remote.FromString(c.room.c_str());
+							this->natPunchthroughClient.OpenNAT(remote,
+																*(this->natPunchServerAddress));
+						});
+				} else {
+					// packet->systemAddress
+					CULog("Connected to a peer");
 				}
 				break;
-			case ID_NEW_INCOMING_CONNECTION:
+			case ID_NEW_INCOMING_CONNECTION: // Someone connected to you
 				CULog("A peer connected");
 				break;
-			case ID_NAT_PUNCHTHROUGH_SUCCEEDED:
+			case ID_NAT_PUNCHTHROUGH_SUCCEEDED: // Punchthrough succeeded
 				CULog("Punchthrough success");
-				this->remotePeer = packet->systemAddress;
 
-				if (isHost) {
-					CULog("Connecting to peer");
-					peer->Connect(this->remotePeer.ToString(false), this->remotePeer.GetPort(), 0,
-								  0);
-				}
+				remotePeer.match(
+					[&](HostPeers& h) {
+						// CULog("Connecting to peer");
+
+						auto p = packet->systemAddress;
+
+						bool hasRoom = false;
+						for (size_t i = 0; i < h.size(); i++) {
+							if (h[i] == nullptr) {
+								hasRoom = true;
+								h[i] = std::make_unique<RakNet::SystemAddress>(p);
+							}
+						}
+
+						if (hasRoom) {
+							CULog("Connecting to client now");
+							peer->Connect(p.ToString(false), p.GetPort(), 0, 0);
+						} else {
+							CULog("Client attempted to join but room was full");
+						}
+					},
+					[&](ClientPeer& c) {
+						c.addr = std::make_unique<RakNet::SystemAddress>(packet->systemAddress);
+						peer->SetMaximumIncomingConnections(1);
+					});
 				break;
 			case ID_USER_PACKET_ENUM: {
 				// More Old C++ Library Shenanigans
@@ -103,14 +134,19 @@ void NetworkConnection::receive(std::function<void(const std::vector<uint8_t>&)>
 				// NOLINTNEXTLINE
 				std::vector<uint8_t> msgConverted(&message[0], &message[length]);
 				dispatcher(msgConverted);
-				if (isHost) {
-					// Pass it on
-					RakNet::BitStream bs;
-					bs.Write((uint8_t)ID_USER_PACKET_ENUM);
-					bs.Write((uint8_t)msgConverted.size());
-					bs.WriteAlignedBytes(msgConverted.data(), msgConverted.size());
-					peer->Send(&bs, MEDIUM_PRIORITY, RELIABLE, 1, packet->systemAddress, true);
-				}
+
+				remotePeer.match(
+					[&](HostPeers& h) {
+						RakNet::BitStream bs;
+						bs.Write((uint8_t)ID_USER_PACKET_ENUM);
+						bs.Write((uint8_t)msgConverted.size());
+						bs.WriteAlignedBytes(msgConverted.data(), msgConverted.size());
+						peer->Send(&bs, MEDIUM_PRIORITY, RELIABLE, 1, packet->systemAddress, true);
+					},
+					[&](ClientPeer& c) {
+
+					});
+
 				delete[] message; // NOLINT
 				break;
 			}
@@ -124,7 +160,7 @@ void NetworkConnection::receive(std::function<void(const std::vector<uint8_t>&)>
 				CULog("Punchthrough failure");
 				break;
 			default:
-				CULog("Received unknown message");
+				CULog("Received unknown message: %d", packet->data[0]); // NOLINT
 				break;
 		}
 	}

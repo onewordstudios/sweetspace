@@ -370,6 +370,7 @@
     <ClInclude Include="..\..\source\MainMenuMode.h" />
     <ClInclude Include="..\..\source\MainMenuTransitions.h" />
     <ClInclude Include="..\..\source\NetworkConnection.h" />
+    <ClInclude Include="..\..\source\NetworkDataType.h" />
     <ClInclude Include="..\..\source\PlayerDonutModel.h" />
     <ClInclude Include="..\..\source\PlayerDonutNode.h" />
     <ClInclude Include="..\..\source\ShipModel.h" />

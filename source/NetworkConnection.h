@@ -1,11 +1,14 @@
 #ifndef __NETWORK_CONNECTION_H__
 #define __NETWORK_CONNECTION_H__
 
+#include <array>
 #include <functional>
+#include <mapbox/variant.hpp>
 #include <string>
 #include <thread>
 #include <vector>
 
+#include "Globals.h"
 #include "libraries/RakNet/BitStream.h"
 #include "libraries/RakNet/MessageIdentifiers.h"
 #include "libraries/RakNet/NatPunchthroughClient.h"
@@ -31,16 +34,11 @@ class NetworkConnection {
 
 	void send(const std::vector<uint8_t>& msg);
 
-	void receive(std::function<void(const std::vector<uint8_t>&)> dispatcher);
+	void receive(const std::function<void(const std::vector<uint8_t>&)>& dispatcher);
 
    private:
 	/** Connection object */
 	std::unique_ptr<RakNet::RakPeerInterface> peer;
-
-	/** Whether this user is a host */
-	bool isHost;
-	/** Room ID, defined only if isHost == false */
-	std::string room;
 
 #pragma region Punchthrough
 	/** Address of punchthrough server */
@@ -49,7 +47,21 @@ class NetworkConnection {
 	RakNet::NatPunchthroughClient natPunchthroughClient;
 #pragma endregion
 
-	RakNet::SystemAddress remotePeer;
+	/** Array of peers for the host */
+	typedef std::array<std::unique_ptr<RakNet::SystemAddress>, globals::MAX_PLAYERS - 1> HostPeers;
+
+	/** Connection to host and room ID for client */
+	struct ClientPeer {
+		std::unique_ptr<RakNet::SystemAddress> addr;
+		std::string room;
+
+		ClientPeer(std::string roomID) { room = roomID; }
+	};
+
+	/**
+	 * Collection of peers for the host, or the host for clients
+	 */
+	mapbox::util::variant<HostPeers, ClientPeer> remotePeer;
 
 	void startupConn();
 };

@@ -648,6 +648,9 @@
     <ClInclude Include="..\..\source\NetworkConnection.h">
       <Filter>Header Files\Controllers\Networking</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\source\NetworkDataType.h">
+      <Filter>Header Files\Controllers\Networking</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\source\main.cpp">
