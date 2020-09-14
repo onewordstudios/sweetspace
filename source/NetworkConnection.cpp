@@ -186,6 +186,9 @@ void NetworkConnection::receive(
 				delete[] message; // NOLINT
 				break;
 			}
+			case ID_NAT_TARGET_NOT_CONNECTED:
+				dispatcher({NetworkDataType::JoinRoom, 1});
+				break;
 			case ID_REMOTE_DISCONNECTION_NOTIFICATION:
 			case ID_REMOTE_CONNECTION_LOST:
 			case ID_DISCONNECTION_NOTIFICATION:
