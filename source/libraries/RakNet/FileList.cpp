@@ -16,7 +16,7 @@
 
 #include "RakAssert.h"
 #if defined(ANDROID)
-#include <asm/io.h>
+// #include <asm/io.h>
 #elif defined(_WIN32) || defined(__CYGWIN__)
 #include <io.h>
 

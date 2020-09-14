@@ -358,7 +358,7 @@ RectCugl Display::getUsableBounds(bool display) {
 #if CU_PLATFORM == CU_PLATFORM_ANDROID
 		// This is a hack for now until I get something better
 		// Otherwise, we have to make the Display stuff stateful
-		Rect result;
+		RectCugl result;
 		switch (_deviceOrientation) {
 			case Orientation::LANDSCAPE:
 			case Orientation::LANDSCAPE_REVERSED:
