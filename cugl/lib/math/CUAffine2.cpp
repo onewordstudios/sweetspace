@@ -588,7 +588,7 @@ Vec2* Affine2::transform(const Affine2& aff, const Vec2& point, Vec2* dst) {
  *
  * @return A reference to dst for chaining
  */
-cugl::Rect* Affine2::transform(const Affine2& aff, const Rect& rect, Rect* dst) {
+cugl::RectCugl* Affine2::transform(const Affine2& aff, const RectCugl& rect, RectCugl* dst) {
     Vec2 point1(rect.getMinX(),rect.getMinY());
     Vec2 point2(rect.getMinX(),rect.getMaxY());
     Vec2 point3(rect.getMaxX(),rect.getMinY());
@@ -619,8 +619,8 @@ cugl::Rect* Affine2::transform(const Affine2& aff, const Rect& rect, Rect* dst) 
  *
  * @return A reference to dst for chaining
  */
-cugl::Rect Affine2::transform(const Rect& rect) const {
-    Rect result;
+cugl::RectCugl Affine2::transform(const RectCugl& rect) const {
+    RectCugl result;
     return *(transform(*this,rect,&result));
 }
 

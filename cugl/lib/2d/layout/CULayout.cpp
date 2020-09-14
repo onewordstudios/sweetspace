@@ -105,7 +105,7 @@ Layout::Anchor Layout::getAnchor(const std::string& x_anchor, const std::string&
  * @param bounds    The area to compute the position from
  * @param offset    The offset from the computed anchor position
  */
-void Layout::placeNode(Node* node, Anchor anchor, const Rect& bounds, const Vec2& offset) {
+void Layout::placeNode(Node* node, Anchor anchor, const RectCugl& bounds, const Vec2& offset) {
     Vec2 spot;
     Vec2 adjust = offset;
     switch (anchor) {

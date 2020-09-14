@@ -708,7 +708,7 @@ public:
      *
      * @return the bounding box for the input vertices
      */
-    Rect getBoundingBox() const;
+    RectCugl getBoundingBox() const;
     
     /**
      * Calculates the Delaunay triangulation.
@@ -717,7 +717,7 @@ public:
      *
      * @param rect the bounding box for the input vertices
      */
-    void computeDelaunay(const Rect& rect);
+    void computeDelaunay(const RectCugl& rect);
 
     /**
      * Calculates the Voronoi diagram.
@@ -726,7 +726,7 @@ public:
      *
      * @param rect the bounding box for the input vertices
      */
-    void computeVoronoi(const Rect& rect);
+    void computeVoronoi(const RectCugl& rect);
     
     /**
      * Sorts the edges of the Voronoi cell so that they are adjacent.
@@ -737,7 +737,7 @@ public:
      & @param index the index of the Voronoi cell
      * @param rect  the bounding box for the input vertices
      */
-    void sortCell(size_t index, const Rect& rect);
+    void sortCell(size_t index, const RectCugl& rect);
 };
   
     

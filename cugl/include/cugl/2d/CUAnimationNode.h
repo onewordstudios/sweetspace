@@ -83,7 +83,7 @@ protected:
     /** The active animation frame */
     int _frame;
     /** The size of a single animation frame (different from active polygon) */
-    Rect _bounds;
+    RectCugl _bounds;
    
 #pragma mark -
 #pragma mark Constructors

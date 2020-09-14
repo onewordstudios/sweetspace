@@ -369,7 +369,7 @@ Size Font::getSize(const std::string& text, bool utf8) const {
  *
  * @return the size of the quad sequence generated for this string.
  */
-Rect Font::getInternalBounds(const std::string& text, bool utf8) const {
+RectCugl Font::getInternalBounds(const std::string& text, bool utf8) const {
     if (utf8) {
         return getInternalBoundsUTF8(text);
     }
@@ -504,7 +504,7 @@ const std::shared_ptr<Texture>& Font::getAtlas() {
  */
 std::shared_ptr<Texture> Font::getQuads(const std::string& text, const Vec2& origin,
                                             std::vector<Vertex2>& vertices, bool utf8) {
-    Rect bounds(origin,getSize(text));
+    RectCugl bounds(origin,getSize(text));
     if (_hasAtlas) {
         getAtlasQuads(text,origin,bounds,vertices,utf8);
         return _texture;
@@ -549,7 +549,7 @@ std::shared_ptr<Texture> Font::getQuads(const std::string& text, const Vec2& ori
  *
  * @return the texture associated with the quads
  */
-std::shared_ptr<Texture> Font::getQuads(const std::string& text, const Vec2& origin, const Rect& rect,
+std::shared_ptr<Texture> Font::getQuads(const std::string& text, const Vec2& origin, const RectCugl& rect,
                                             std::vector<Vertex2>& vertices,  bool utf8) {
     if (_hasAtlas) {
         getAtlasQuads(text,origin,rect,vertices,utf8);
@@ -581,7 +581,7 @@ std::shared_ptr<Texture> Font::getQuads(const std::string& text, const Vec2& ori
  * @return the texture associated with the quad
  */
 std::shared_ptr<Texture> Font::getQuad(Uint32 thechar, Vec2& offset, std::vector<Vertex2>& vertices) {
-    Rect bounds(offset.x,offset.y, (float)getMetrics(thechar).advance, (float)_fontHeight);
+    RectCugl bounds(offset.x,offset.y, (float)getMetrics(thechar).advance, (float)_fontHeight);
     if (_hasAtlas) {
         getAtlasQuad(thechar,offset,bounds,vertices);
         return _texture;
@@ -614,7 +614,7 @@ std::shared_ptr<Texture> Font::getQuad(Uint32 thechar, Vec2& offset, std::vector
  *
  * @return the texture associated with the quad
  */
-std::shared_ptr<Texture> Font::getQuad(Uint32 thechar, Vec2& offset, const Rect& rect,
+std::shared_ptr<Texture> Font::getQuad(Uint32 thechar, Vec2& offset, const RectCugl& rect,
                                            std::vector<Vertex2>& vertices) {
     if (_hasAtlas) {
         getAtlasQuad(thechar,offset,rect,vertices);
@@ -658,7 +658,7 @@ std::shared_ptr<Texture> Font::getQuad(Uint32 thechar, Vec2& offset, const Rect&
  * @param vertices  The list to append the vertices to.
  * @param utf8      Whether the string is a UTF8 that must be decoded.
  */
-void Font::getAtlasQuads(const std::string& text, const Vec2& origin, const Rect& rect,
+void Font::getAtlasQuads(const std::string& text, const Vec2& origin, const RectCugl& rect,
                              std::vector<Vertex2>& vertices, bool utf8) {
     getAtlas(); // Make sure we have the texture
     std::string line = text;
@@ -720,7 +720,7 @@ void Font::getAtlasQuads(const std::string& text, const Vec2& origin, const Rect
  *
  * @return the texture associated with the quads
  */
-std::shared_ptr<Texture> Font::getRenderedQuads(const std::string& text, const Vec2& origin, const Rect& rect,
+std::shared_ptr<Texture> Font::getRenderedQuads(const std::string& text, const Vec2& origin, const RectCugl& rect,
                                                     std::vector<Vertex2>& vertices, bool utf8) {
     SDL_Color color;
     color.r = color.g = color.b = color.a = 255;
@@ -756,7 +756,7 @@ std::shared_ptr<Texture> Font::getRenderedQuads(const std::string& text, const V
     if (surf1 == nullptr) { return nullptr; }
     std::shared_ptr<Texture> result = Texture::allocWithData(surf1->pixels,surf1->w,surf1->h);
 
-    Rect quad(origin.x,origin.y, (float)surf1->w, (float)surf1->h);
+    RectCugl quad(origin.x,origin.y, (float)surf1->w, (float)surf1->h);
     quad.intersect(rect);
     
     Vertex2 temp;
@@ -814,13 +814,13 @@ std::shared_ptr<Texture> Font::getRenderedQuads(const std::string& text, const V
  *
  * @return true if the right edge of the glyph was generated
  */
-bool Font::getAtlasQuad(Uint32 thechar, Vec2& offset, const Rect& rect,
+bool Font::getAtlasQuad(Uint32 thechar, Vec2& offset, const RectCugl& rect,
                             std::vector<Vertex2>& vertices) {
     // Technically, this answer is correct
     if (!hasGlyph(thechar)) { return true; }
     
-    Rect bounds = _glyphmap[thechar];
-    Rect quad(offset,bounds.size);
+    RectCugl bounds = _glyphmap[thechar];
+    RectCugl quad(offset,bounds.size);
     
     // Skip over glyph, but recognize we may have later glyphs
     if (!rect.doesIntersect(quad)) {
@@ -897,7 +897,7 @@ bool Font::getAtlasQuad(Uint32 thechar, Vec2& offset, const Rect& rect,
  *
  * @return the texture associated with the quads
  */
-std::shared_ptr<Texture> Font::getRenderedQuad(Uint32 thechar, Vec2& offset, const Rect& rect,
+std::shared_ptr<Texture> Font::getRenderedQuad(Uint32 thechar, Vec2& offset, const RectCugl& rect,
                                                    std::vector<Vertex2>& vertices) {
     SDL_Color color;
     color.r = color.g = color.b = color.a = 255;
@@ -930,7 +930,7 @@ std::shared_ptr<Texture> Font::getRenderedQuad(Uint32 thechar, Vec2& offset, con
     if (surf1 == nullptr) { return nullptr; }
     std::shared_ptr<Texture> result = Texture::allocWithData(surf1->pixels,surf1->w,surf1->h);
     
-    Rect quad(offset.x,offset.y, (float)surf1->w, (float)surf1->h);
+    RectCugl quad(offset.x,offset.y, (float)surf1->w, (float)surf1->h);
     quad.intersect(rect);
 
     Vertex2 temp;
@@ -1083,8 +1083,8 @@ Size Font::getSizeUTF8(const std::string& text) const {
  *
  * @return the size of the quad sequence generated for this string.
  */
-Rect Font::getInternalBoundsASCII(const std::string& text) const {
-    Rect result;
+RectCugl Font::getInternalBoundsASCII(const std::string& text) const {
+    RectCugl result;
     Metrics metrics;
     
     // These values allow us to skip over characters
@@ -1165,8 +1165,8 @@ Rect Font::getInternalBoundsASCII(const std::string& text) const {
  *
  * @return the size of the quad sequence generated for this string.
  */
-Rect Font::getInternalBoundsUTF8(const std::string& text) const {
-    Rect result;
+RectCugl Font::getInternalBoundsUTF8(const std::string& text) const {
+    RectCugl result;
     Metrics metrics;
     
     // These values allow us to skip over characters
@@ -1243,7 +1243,7 @@ int Font::prepareAtlas() {
         if (TTF_GlyphIsProvided(_data, (Uint16)ii)) {
             Metrics metrics = computeMetrics(ii);
             _glyphsize.emplace(ii,metrics);
-            _glyphmap.emplace(ii,Rect(0,0, (float)(metrics.advance+GLYPH_BORDER), (float)(_fontHeight+GLYPH_BORDER)));
+            _glyphmap.emplace(ii,RectCugl(0,0, (float)(metrics.advance+GLYPH_BORDER), (float)(_fontHeight+GLYPH_BORDER)));
             _glyphset.push_back(ii);
             if (metrics.advance > maxwidth) {
                 maxwidth = metrics.advance;
@@ -1284,7 +1284,7 @@ int Font::prepareAtlas(std::string charset) {
         if (_glyphmap.find(thechar) == _glyphmap.end() && TTF_GlyphIsProvided(_data, (Uint16)thechar)) {
             Metrics metrics = computeMetrics(thechar);
             _glyphsize.emplace(thechar,metrics);
-            _glyphmap.emplace(thechar,Rect(0,0, (float)(metrics.advance+GLYPH_BORDER), (float)(_fontHeight+GLYPH_BORDER)));
+            _glyphmap.emplace(thechar,RectCugl(0,0, (float)(metrics.advance+GLYPH_BORDER), (float)(_fontHeight+GLYPH_BORDER)));
             _glyphset.push_back(thechar);
             if (metrics.advance > maxwidth) {
                 maxwidth = metrics.advance;

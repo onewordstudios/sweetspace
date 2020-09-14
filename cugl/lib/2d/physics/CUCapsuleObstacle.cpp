@@ -215,7 +215,7 @@ void CapsuleObstacle::resize(const Size& size) {
  * of relying on the transforms in the scene graph.
  */
 void CapsuleObstacle::resetDebug() {
-    Rect bounds;
+    RectCugl bounds;
     
     // Create a capsule polygon
     const float coef = (float)M_PI/BODY_DEBUG_SEGS;

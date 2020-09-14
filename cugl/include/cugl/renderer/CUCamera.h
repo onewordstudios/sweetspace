@@ -78,7 +78,7 @@ protected:
     float _far;
     
     /** The Window viewport **/
-    Rect _viewport;
+    RectCugl _viewport;
     
 #pragma mark -
 #pragma mark Constructor
@@ -175,7 +175,7 @@ public:
      *
      * @return the viewport size
      */
-    const Rect& getViewport() const { return _viewport; }
+    const RectCugl& getViewport() const { return _viewport; }
 
     /**
      * Returns the projection matrix
@@ -473,7 +473,7 @@ public:
 	 *
 	 * @return the world space equivalent of a point in window coordinates.
 	 */
-	Vec3 unproject(const Vec3& windowCoords, const Rect& viewport) const;
+	Vec3 unproject(const Vec3& windowCoords, const RectCugl& viewport) const;
 
     /**
      * Returns the world space equivalent of a point in screen coordinates.
@@ -533,7 +533,7 @@ public:
 	 *
 	 * @return the window space equivalent of a point in world coordinates.
  	 */
-	Vec3 project(const Vec3& worldCoords, const Rect& viewport) const;
+	Vec3 project(const Vec3& worldCoords, const RectCugl& viewport) const;
 
     /**
      * Returns the screen space equivalent of a point in world coordinates.
@@ -597,7 +597,7 @@ public:
 	 *
 	 * Returns a picking Ray from the coordinates given in window coordinates.
 	 */
-	Ray getPickRay(const Vec3& windowCoords, const Rect& viewport) const;
+	Ray getPickRay(const Vec3& windowCoords, const RectCugl& viewport) const;
 
     /**
      * Returns a picking Ray from the coordinates given in screen coordinates.
@@ -647,7 +647,7 @@ public:
 	 * @param windowCoords  The point in window coordinates
 	 * @param viewport      The screen viewport
 	 */
-	Vec2 windowToScreenCoords(const Vec3& windowCoords, const Rect& viewport) const;
+	Vec2 windowToScreenCoords(const Vec3& windowCoords, const RectCugl& viewport) const;
 
     /**
      * Returns the screen space equivalent of a point in window coordinates.
@@ -686,7 +686,7 @@ public:
 	 * @param screenCoords  The point in screen coordinates
 	 * @param viewport      The screen viewport
 	 */
-	Vec3 screenToWindowCoords(const Vec2& screenCoords, const Rect& viewport) const;
+	Vec3 screenToWindowCoords(const Vec2& screenCoords, const RectCugl& viewport) const;
 };
     
 }

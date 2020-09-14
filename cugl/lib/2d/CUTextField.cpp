@@ -588,7 +588,7 @@ void TextField::updateKey(const KeyEvent& Event, bool focus, bool down) {
  */
 void TextField::updatePress(Vec2 pos, bool focus) {
 	Vec2 cooPos = screenToNodeCoords(pos);
-	if (!Rect(Vec2::ZERO, getContentSize()).contains(cooPos)) {
+	if (!RectCugl(Vec2::ZERO, getContentSize()).contains(cooPos)) {
         if (_focused) {
             releaseFocus();
         }

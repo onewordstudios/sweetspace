@@ -1,4 +1,4 @@
-﻿#include "GameGraphRoot.h"
+#include "GameGraphRoot.h"
 
 #include <cugl/cugl.h>
 
@@ -129,7 +129,7 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	currentEllipsesFrame = 0;
 
 	// Initialize the scene to a locked width
-	Size dimen = Application::get()->getDisplaySize();
+	cugl::Size dimen = Application::get()->getDisplaySize();
 	dimen *= globals::SCENE_WIDTH / dimen.width; // Lock the game to a reasonable resolution
 	screenHeight = dimen.height;
 	// Initialize the scene to a locked width
@@ -246,7 +246,7 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 		segment->setPosition(Vec2(0, 0));
 		segment->setAngle(globals::SEG_SIZE * ((float)i - 2));
 		std::shared_ptr<cugl::Label> segLabel = cugl::Label::alloc(
-			Size(SEG_LABEL_SIZE, SEG_LABEL_SIZE), assets->get<Font>("mont_black_italic_big"));
+			cugl::Size(SEG_LABEL_SIZE, SEG_LABEL_SIZE), assets->get<Font>("mont_black_italic_big"));
 		segLabel->setAnchor(Vec2::ANCHOR_CENTER);
 		segLabel->setHorizontalAlignment(Label::HAlign::CENTER);
 		segLabel->setPosition((float)segment->getTexture()->getWidth() / 2, SEG_LABEL_Y);

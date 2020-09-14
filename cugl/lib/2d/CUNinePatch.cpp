@@ -81,7 +81,7 @@ _dstFactor(GL_ONE_MINUS_SRC_ALPHA) {
  */
 void NinePatch::dispose() {
     _texture = nullptr;
-    _interior = Rect::ZERO;
+    _interior = RectCugl::ZERO;
     _blendEquation = GL_FUNC_ADD;
     _srcFactor = GL_SRC_ALPHA;
     _dstFactor = GL_ONE_MINUS_SRC_ALPHA;
@@ -106,7 +106,7 @@ bool NinePatch::initWithFile(const std::string& filename) {
     std::shared_ptr<Texture> texture =  Texture::allocWithFile(filename);
     if (texture != nullptr) {
         Size size = texture->getSize();
-        Rect bounds((float)(((int)size.width)/2),(float)(((int)size.height)/2),1,1);
+        RectCugl bounds((float)(((int)size.width)/2),(float)(((int)size.height)/2),1,1);
         return initWithTexture(texture, bounds);
     }
     
@@ -129,7 +129,7 @@ bool NinePatch::initWithFile(const std::string& filename) {
  *
  * @return  true if the node is initialized properly, false otherwise.
  */
-bool NinePatch::initWithFile(const std::string &filename, const Rect& interior) {
+bool NinePatch::initWithFile(const std::string &filename, const RectCugl& interior) {
     CUAssertLog(filename.size() > 0, "Invalid filename for sprite");
     
     std::shared_ptr<Texture> texture =  Texture::allocWithFile(filename);
@@ -154,7 +154,7 @@ bool NinePatch::initWithFile(const std::string &filename, const Rect& interior) 
 bool NinePatch::initWithTexture(const std::shared_ptr<Texture>& texture) {
     CUAssertLog(texture != nullptr, "Invalid texture for sprite");
     Size size = texture->getSize();
-    Rect bounds((float)(((int)size.width)/2),(float)(((int)size.height)/2),1,1);
+    RectCugl bounds((float)(((int)size.width)/2),(float)(((int)size.height)/2),1,1);
     return initWithTexture(texture, bounds);
 }
 
@@ -174,7 +174,7 @@ bool NinePatch::initWithTexture(const std::shared_ptr<Texture>& texture) {
  *
  * @return  true if the node is initialized properly, false otherwise.
  */
-bool NinePatch::initWithTexture(const std::shared_ptr<Texture>& texture, const Rect& interior) {
+bool NinePatch::initWithTexture(const std::shared_ptr<Texture>& texture, const RectCugl& interior) {
     if (_texture != nullptr) {
         CUAssertLog(false, "NinePatch is already initialized");
         return false;
@@ -229,7 +229,7 @@ bool NinePatch::initWithData(const SceneLoader* loader, const std::shared_ptr<Js
     std::string key = data->getString("texture",UNKNOWN_TEXTURE);
     setTexture(assets->get<Texture>(key));
     
-    Rect interior;
+    RectCugl interior;
     if (data->has("interior")) {
         JsonValue* rect = data->get("interior").get();
         CUAssertLog(rect->size() == 4, "'interior' must be a 4-element list of numbers");
@@ -311,7 +311,7 @@ void NinePatch::setTexture(const std::shared_ptr<Texture>& texture) {
  *
  * @param intertior The NinePatch interior
  */
-void NinePatch::setInterior(const Rect& interior) {
+void NinePatch::setInterior(const RectCugl& interior) {
     _interior = interior;
     clearRenderData();
 }
@@ -377,7 +377,7 @@ void NinePatch::generateRenderData() {
     corner.x = _contentSize.width-(_texture->getWidth()-_interior.size.width-_interior.origin.x);
     corner.y = _contentSize.height-(_texture->getHeight()-_interior.size.height-_interior.origin.y);
 
-    Rect dst, src;
+    RectCugl dst, src;
     
     // Bottom left corner
     dst.origin.x = 0;
@@ -489,7 +489,7 @@ void NinePatch::generateRenderData() {
  * @return the next available vertex index
  */
 
-unsigned short NinePatch::generatePatch(const Rect& src, const Rect& dst, unsigned short offset) {
+unsigned short NinePatch::generatePatch(const RectCugl& src, const RectCugl& dst, unsigned short offset) {
     Size tsize = _texture->getSize();
     Vertex2 temp;
     temp.color = Color4::WHITE;

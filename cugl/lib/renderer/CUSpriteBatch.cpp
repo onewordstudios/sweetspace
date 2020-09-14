@@ -463,7 +463,7 @@ void SpriteBatch::flush() {
  *
  * @param rect      The rectangle to draw
  */
-void SpriteBatch::fill(const Rect& rect) {
+void SpriteBatch::fill(const RectCugl& rect) {
     setCommand(GL_TRIANGLES);
     prepare(rect,true);
 }
@@ -489,7 +489,7 @@ void SpriteBatch::fill(const Rect& rect) {
  * @param angle     The amount to rotate the rectangle
  * @param offset    The rectangle offset
  */
-void SpriteBatch::fill(const Rect& rect,  const Vec2& origin, const Vec2& scale,
+void SpriteBatch::fill(const RectCugl& rect,  const Vec2& origin, const Vec2& scale,
                        float angle, const Vec2& offset) {
     setCommand(GL_TRIANGLES);
     unsigned int count = prepare(rect,true);
@@ -523,7 +523,7 @@ void SpriteBatch::fill(const Rect& rect,  const Vec2& origin, const Vec2& scale,
  * @param origin    The coordinate origin
  * @param transform The coordinate transform
  */
-void SpriteBatch::fill(const Rect& rect, const Vec2& origin, const Mat4& transform) {
+void SpriteBatch::fill(const RectCugl& rect, const Vec2& origin, const Mat4& transform) {
     setCommand(GL_TRIANGLES);
     unsigned int count = prepare(rect,true);
 
@@ -555,7 +555,7 @@ void SpriteBatch::fill(const Rect& rect, const Vec2& origin, const Mat4& transfo
  * @param origin    The coordinate origin
  * @param transform The coordinate transform
  */
-void SpriteBatch::fill(const Rect& rect, const Vec2& origin, const Affine2& transform) {
+void SpriteBatch::fill(const RectCugl& rect, const Vec2& origin, const Affine2& transform) {
     setCommand(GL_TRIANGLES);
     unsigned int count = prepare(rect,true);
     
@@ -846,7 +846,7 @@ void SpriteBatch::fill(const Vertex2* vertices, unsigned int vsize, unsigned int
  *
  * @param rect      The rectangle to outline
  */
-void SpriteBatch::outline(const Rect& rect) {
+void SpriteBatch::outline(const RectCugl& rect) {
     setCommand(GL_LINES);
     prepare(rect,false);
     
@@ -874,7 +874,7 @@ void SpriteBatch::outline(const Rect& rect) {
  * @param angle     The amount to rotate the rectangle
  * @param offset    The rectangle offset
  */
-void SpriteBatch::outline(const Rect& rect, const Vec2& origin, const Vec2& scale,
+void SpriteBatch::outline(const RectCugl& rect, const Vec2& origin, const Vec2& scale,
                           float angle, const Vec2& offset) {
     setCommand(GL_LINES);
     unsigned int count = prepare(rect,false);
@@ -909,7 +909,7 @@ void SpriteBatch::outline(const Rect& rect, const Vec2& origin, const Vec2& scal
  * @param origin    The coordinate origin
  * @param transform The coordinate transform
  */
-void SpriteBatch::outline(const Rect& rect, const Vec2& origin, const Mat4& transform) {
+void SpriteBatch::outline(const RectCugl& rect, const Vec2& origin, const Mat4& transform) {
     setCommand(GL_LINES);
     unsigned int count = prepare(rect,false);
     
@@ -942,7 +942,7 @@ void SpriteBatch::outline(const Rect& rect, const Vec2& origin, const Mat4& tran
  * @param origin    The coordinate origin
  * @param transform The coordinate transform
  */
-void SpriteBatch::outline(const Rect& rect, const Vec2& origin, const Affine2& transform) {
+void SpriteBatch::outline(const RectCugl& rect, const Vec2& origin, const Affine2& transform) {
     setCommand(GL_LINES);
     unsigned int count = prepare(rect,false);
     
@@ -1236,7 +1236,7 @@ void SpriteBatch::outline(const Vertex2* vertices, unsigned int vsize, unsigned 
  */
 void SpriteBatch::draw(const std::shared_ptr<Texture>& texture, const Vec2& position) {
     setTexture(texture); setColor(Color4::WHITE);
-    fill(Rect(position.x,position.y, (float)texture->getWidth(), (float)texture->getHeight()));
+    fill(RectCugl(position.x,position.y, (float)texture->getWidth(), (float)texture->getHeight()));
 }
 
 /**
@@ -1253,7 +1253,7 @@ void SpriteBatch::draw(const std::shared_ptr<Texture>& texture, const Vec2& posi
  */
 void SpriteBatch::draw(const std::shared_ptr<Texture>& texture, Color4 color, const Vec2& position) {
     setTexture(texture); setColor(color);
-    fill(Rect(position.x,position.y, (float)texture->getWidth(), (float)texture->getHeight()));
+    fill(RectCugl(position.x,position.y, (float)texture->getWidth(), (float)texture->getHeight()));
 }
 
 /**
@@ -1279,7 +1279,7 @@ void SpriteBatch::draw(const std::shared_ptr<Texture>& texture, Color4 color, co
 void SpriteBatch::draw(const std::shared_ptr<Texture>& texture,
                        const Vec2& origin, const Vec2& scale, float angle, const Vec2& offset) {
     setTexture(texture); setColor(Color4::WHITE);
-    fill(Rect(0,0, (float)texture->getWidth(), (float)texture->getHeight()), origin, scale, angle, offset);
+    fill(RectCugl(0,0, (float)texture->getWidth(), (float)texture->getHeight()), origin, scale, angle, offset);
 }
 
 /**
@@ -1306,7 +1306,7 @@ void SpriteBatch::draw(const std::shared_ptr<Texture>& texture,
 void SpriteBatch::draw(const std::shared_ptr<Texture>& texture, Color4 color,
                        const Vec2& origin, const Vec2& scale, float angle, const Vec2& offset) {
     setTexture(texture); setColor(color);
-    fill(Rect(0,0, (float)texture->getWidth(), (float)texture->getHeight()), origin, scale, angle, offset);
+    fill(RectCugl(0,0, (float)texture->getWidth(), (float)texture->getHeight()), origin, scale, angle, offset);
 }
 
 /**
@@ -1327,7 +1327,7 @@ void SpriteBatch::draw(const std::shared_ptr<Texture>& texture, Color4 color,
  */
 void SpriteBatch::draw(const std::shared_ptr<Texture>& texture, const Vec2& origin, const Mat4& transform) {
     setTexture(texture); setColor(Color4::WHITE);
-    fill(Rect(0,0, (float)texture->getWidth(), (float)texture->getHeight()), origin, transform);
+    fill(RectCugl(0,0, (float)texture->getWidth(), (float)texture->getHeight()), origin, transform);
 }
 
 /**
@@ -1350,7 +1350,7 @@ void SpriteBatch::draw(const std::shared_ptr<Texture>& texture, const Vec2& orig
 void SpriteBatch::draw(const std::shared_ptr<Texture>& texture, Color4 color,
                        const Vec2& origin, const Mat4& transform)  {
     setTexture(texture); setColor(color);
-    fill(Rect(0,0, (float)texture->getWidth(), (float)texture->getHeight()), origin, transform);
+    fill(RectCugl(0,0, (float)texture->getWidth(), (float)texture->getHeight()), origin, transform);
 }
 
 /**
@@ -1371,7 +1371,7 @@ void SpriteBatch::draw(const std::shared_ptr<Texture>& texture, Color4 color,
  */
 void SpriteBatch::draw(const std::shared_ptr<Texture>& texture, const Vec2& origin, const Affine2& transform) {
     setTexture(texture); setColor(Color4::WHITE);
-    fill(Rect(0,0, (float)texture->getWidth(), (float)texture->getHeight()), origin, transform);
+    fill(RectCugl(0,0, (float)texture->getWidth(), (float)texture->getHeight()), origin, transform);
 }
 
 /**
@@ -1394,7 +1394,7 @@ void SpriteBatch::draw(const std::shared_ptr<Texture>& texture, const Vec2& orig
 void SpriteBatch::draw(const std::shared_ptr<Texture>& texture, Color4 color,
                        const Vec2& origin, const Affine2& transform)  {
     setTexture(texture); setColor(color);
-    fill(Rect(0,0, (float)texture->getWidth(), (float)texture->getHeight()), origin, transform);
+    fill(RectCugl(0,0, (float)texture->getWidth(), (float)texture->getHeight()), origin, transform);
 }
 
 #pragma mark -
@@ -1428,7 +1428,7 @@ bool SpriteBatch::validateBuffer(GLuint buffer, const char* message) {
  *
  * @return the number of vertices added to the drawing buffer.
  */
-unsigned int SpriteBatch::prepare(const Rect& rect, bool solid) {
+unsigned int SpriteBatch::prepare(const RectCugl& rect, bool solid) {
     if (_vertSize+4 > _vertMax ||  _indxSize+8 > _indxMax) {
         flush();
     }

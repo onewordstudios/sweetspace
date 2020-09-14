@@ -107,7 +107,7 @@ void BoxObstacle::resize(const Size& size) {
  * of relying on the transforms in the scene graph.
  */
 void BoxObstacle::resetDebug() {
-    Poly2 poly(Rect(Vec2::ZERO,_dimension));
+    Poly2 poly(RectCugl(Vec2::ZERO,_dimension));
 
     unsigned short indx[8] = { 0, 1, 1, 2, 2, 3, 3, 0 };
     poly.setIndices(indx, 8);

@@ -1,4 +1,4 @@
-﻿#include "GameMode.h"
+#include "GameMode.h"
 
 #include <cugl/cugl.h>
 
@@ -56,7 +56,7 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 		AudioChannels::get()->queueMusic(source, true, source->getVolume(), globals::MUSIC_FADE_IN);
 	}
 	// Initialize the scene to a locked width
-	Size dimen = Application::get()->getDisplaySize();
+	cugl::Size dimen = Application::get()->getDisplaySize();
 	dimen *= globals::SCENE_WIDTH / dimen.width; // Lock the game to a reasonable resolution
 	if (assets == nullptr) {
 		return false;

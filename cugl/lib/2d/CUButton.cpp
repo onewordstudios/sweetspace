@@ -519,7 +519,7 @@ bool Button::containsScreen(const Vec2& point) {
     if (_bounds.getType() == Poly2::Type::SOLID) {
         return _bounds.contains(local);
     }
-    return Rect(Vec2::ZERO, getContentSize()).contains(local);
+    return RectCugl(Vec2::ZERO, getContentSize()).contains(local);
 }
 
 #pragma mark -

@@ -124,9 +124,9 @@ protected:
 	/** The background widget for this slider */
 	std::shared_ptr<Node> _path;
     /** The slider path, defined relative to the background widget  */
-    Rect _bounds;
+    RectCugl _bounds;
     /** The adjusted slider path, if padding is necessary  */
-    Rect _adjust;
+    RectCugl _adjust;
     
     /** The (optional) )tick period for this slider */
     float _tick;
@@ -183,7 +183,7 @@ public:
      * @return true if the button is initialized properly, false otherwise.
      */
     virtual bool init() override {
-        return init(Vec2(DEFAULT_MIN,DEFAULT_MAX),Rect(DEFAULT_MIN,DEFAULT_RADIUS,DEFAULT_MAX,0));
+        return init(Vec2(DEFAULT_MIN,DEFAULT_MAX),RectCugl(DEFAULT_MIN,DEFAULT_RADIUS,DEFAULT_MAX,0));
     }
 
     /**
@@ -204,7 +204,7 @@ public:
      *
      * @return true if the slider is initialized properly, false otherwise.
      */
-    bool init(const Vec2& range, const Rect& bounds);
+    bool init(const Vec2& range, const RectCugl& bounds);
 
     /**
      * Initializes a slider with given scene graph nodes.
@@ -226,7 +226,7 @@ public:
      *
      * @return true if the slider is initialized properly, false otherwise.
      */
-    bool initWithUI(const Vec2& range, const Rect& bounds,
+    bool initWithUI(const Vec2& range, const RectCugl& bounds,
                     const std::shared_ptr<Node>& path,
                     const std::shared_ptr<Button>& knob);
 
@@ -290,7 +290,7 @@ public:
      *
      * @return a newly allocated slider with given bounds.
      */
-    static std::shared_ptr<Slider> alloc(const Vec2& range, const Rect& bounds) {
+    static std::shared_ptr<Slider> alloc(const Vec2& range, const RectCugl& bounds) {
         std::shared_ptr<Slider> node = std::make_shared<Slider>();
         return (node->init(range,bounds) ? node : nullptr);
     }
@@ -315,7 +315,7 @@ public:
      *
      * @return a newly allocated slider with given scene graph nodes.
      */
-    static std::shared_ptr<Slider> allocWithUI(const Vec2& range, const Rect& bounds,
+    static std::shared_ptr<Slider> allocWithUI(const Vec2& range, const RectCugl& bounds,
                                                const std::shared_ptr<Node>& path,
                                                const std::shared_ptr<Button>& knob) {
         std::shared_ptr<Slider> node = std::make_shared<Slider>();
@@ -507,7 +507,7 @@ public:
      *
      * @return the sliding bounds
      */
-    const Rect& getBounds() const { return _bounds; }
+    const RectCugl& getBounds() const { return _bounds; }
 
     /**
      * Sets the sliding bounds
@@ -522,7 +522,7 @@ public:
      *
      * @param value The new sliding bounds
      */
-    void getBounds(const Rect& value) { _bounds = value; reconfigure(); }
+    void getBounds(const RectCugl& value) { _bounds = value; reconfigure(); }
     
 #pragma mark -
 #pragma mark Tick Support

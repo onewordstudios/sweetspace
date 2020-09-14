@@ -279,7 +279,7 @@ public:
      *
      * @return  An autoreleased wireframe node
      */
-    static std::shared_ptr<WireNode> allocWithRect(const Rect& rect) {
+    static std::shared_ptr<WireNode> allocWithRect(const RectCugl& rect) {
         std::shared_ptr<WireNode> node = std::make_shared<WireNode>();
         return (node->init(rect) ? node : nullptr);
     }
@@ -410,7 +410,7 @@ public:
      *
      * @param rect  The rectangle to draw
      */
-    virtual void setPolygon(const Rect& rect) override;
+    virtual void setPolygon(const RectCugl& rect) override;
 
     /**
      * Sets the wireframe polygon to be the line from origin to destination.

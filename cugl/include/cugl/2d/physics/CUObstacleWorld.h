@@ -96,7 +96,7 @@ protected:
     std::vector<std::shared_ptr<Obstacle>> _objects;
     
     /** The boundary of the world */
-    Rect _bounds;
+    RectCugl _bounds;
     
     /** Whether or not to activate the collision listener */
     bool _collide;
@@ -146,7 +146,7 @@ public:
      *
      * @return  true if the controller is initialized properly, false otherwise.
      */
-    bool init(const Rect& bounds);
+    bool init(const RectCugl& bounds);
     
     /**
      * Initializes a new physics world
@@ -160,7 +160,7 @@ public:
      *
      * @return  true if the controller is initialized properly, false otherwise.
      */
-    bool init(const Rect& bounds, const Vec2& gravity);
+    bool init(const RectCugl& bounds, const Vec2& gravity);
 
     
 #pragma mark -
@@ -178,7 +178,7 @@ public:
      *
      * @return a newly allocated physics world
      */
-    static std::shared_ptr<ObstacleWorld> alloc(const Rect& bounds) {
+    static std::shared_ptr<ObstacleWorld> alloc(const RectCugl& bounds) {
         std::shared_ptr<ObstacleWorld> result = std::make_shared<ObstacleWorld>();
         return (result->init(bounds) ? result : nullptr);
     }
@@ -195,7 +195,7 @@ public:
      *
      * @return a newly allocated physics world
      */
-    static std::shared_ptr<ObstacleWorld> alloc(const Rect& bounds, const Vec2& gravity) {
+    static std::shared_ptr<ObstacleWorld> alloc(const RectCugl& bounds, const Vec2& gravity) {
         std::shared_ptr<ObstacleWorld> result = std::make_shared<ObstacleWorld>();
         return (result->init(bounds,gravity) ? result : nullptr);
     }
@@ -325,7 +325,7 @@ public:
      *
      * @return the bounds for the world controller.
      */
-    const Rect& getBounds() const { return _bounds; }
+    const RectCugl& getBounds() const { return _bounds; }
     
     /**
      * Returns true if the object is in bounds.
@@ -702,7 +702,7 @@ public:
      * @param  callback A user implemented callback function.
      * @param  aabb     The axis-aligned bounding box
      */
-    void queryAABB(std::function<bool(b2Fixture* fixture)> callback, const Rect& aabb) const;
+    void queryAABB(std::function<bool(b2Fixture* fixture)> callback, const RectCugl& aabb) const;
 
     /**
      * Ray-cast the world for all fixtures in the path of the ray.

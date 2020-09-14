@@ -74,7 +74,7 @@ protected:
     std::shared_ptr<Texture> _texture;
 
     /** The internal grid square in pixel space */
-    Rect _interior;
+    RectCugl _interior;
     
     /** Whether we have generated render data for this node */
     bool _rendered;
@@ -163,7 +163,7 @@ public:
      *
      * @return  true if the node is initialized properly, false otherwise.
      */
-    bool initWithFile(const std::string& filename, const Rect& interior);
+    bool initWithFile(const std::string& filename, const RectCugl& interior);
     
     /**
      * Initializes a degenerate NinePatch from a Texture object.
@@ -194,7 +194,7 @@ public:
      *
      * @return  true if the node is initialized properly, false otherwise.
      */
-    bool initWithTexture(const std::shared_ptr<Texture>&  texture, const Rect& interior);
+    bool initWithTexture(const std::shared_ptr<Texture>&  texture, const RectCugl& interior);
     
     /**
      * Initializes a node with the given JSON specificaton.
@@ -270,7 +270,7 @@ public:
      *
      * @return a newly allocated NinePatch with the given interior from the image filename.
      */
-    static std::shared_ptr<NinePatch> allocWithFile(const std::string& filename, const Rect& interior) {
+    static std::shared_ptr<NinePatch> allocWithFile(const std::string& filename, const RectCugl& interior) {
         std::shared_ptr<NinePatch> node = std::make_shared<NinePatch>();
         return (node->initWithFile(filename,interior) ? node : nullptr);
     }
@@ -308,7 +308,7 @@ public:
      * @return a newly allocated NinePatch with the given interior from a Texture object.
      */
     static std::shared_ptr<NinePatch> allocWithTexture(const std::shared_ptr<Texture>& texture,
-                                                       const Rect& interior) {
+                                                       const RectCugl& interior) {
         std::shared_ptr<NinePatch> node = std::make_shared<NinePatch>();
         return (node->initWithTexture(texture,interior) ? node : nullptr);
     }
@@ -409,7 +409,7 @@ public:
      *
      * @param interior The NinePatch interior
      */
-    void setInterior(const Rect& interior);
+    void setInterior(const RectCugl& interior);
     
     /**
      * Returns interior rectangle defining the NinePatch.
@@ -424,7 +424,7 @@ public:
      *
      * @returns interior rectangle defining the NinePatch.
      */
-    const Rect& getInterior() const { return _interior; }
+    const RectCugl& getInterior() const { return _interior; }
     
     /**
      * Sets the blending function for this texture node.
@@ -582,7 +582,7 @@ protected:
      *
      * @return the next available vertex index
      */
-    unsigned short generatePatch(const Rect& src, const Rect& dst, unsigned short offset);
+    unsigned short generatePatch(const RectCugl& src, const RectCugl& dst, unsigned short offset);
     
     /** This macro disables the copy constructor (not allowed on scene graphs) */
     CU_DISALLOW_COPY_AND_ASSIGN(NinePatch);

@@ -48,7 +48,7 @@ using namespace cugl;
  *
  * @return True if this rect properly fits inside of the given rect.
  */
-bool Rect::operator<(const Rect& rect) const {
+bool RectCugl::operator<(const RectCugl& rect) const {
     bool horz = rect.getMinX() < getMinX() && getMaxX() < rect.getMaxX();
     bool vert = rect.getMinY() < getMinY() && getMaxY() < rect.getMaxY();
     return horz && vert;
@@ -66,7 +66,7 @@ bool Rect::operator<(const Rect& rect) const {
  *
  * @return True if this rect can properly hold the given rect.
  */
-bool Rect::operator>(const Rect& rect) const {
+bool RectCugl::operator>(const RectCugl& rect) const {
     bool horz = getMinX() < rect.getMinX() && rect.getMaxX() < getMaxX();
     bool vert = getMinY() < rect.getMinY() && rect.getMaxY() < getMaxY();
     return horz && vert;
@@ -82,7 +82,7 @@ bool Rect::operator>(const Rect& rect) const {
  *
  * @return True if this rect fits inside of the given rect.
  */
-bool Rect::inside(const Rect& rect) const {
+bool RectCugl::inside(const RectCugl& rect) const {
     bool horz = rect.getMinX() <= getMinX() && getMaxX() <= rect.getMaxX();
     bool vert = rect.getMinY() <= getMinY() && getMaxY() <= rect.getMaxY();
     return horz && vert;
@@ -98,7 +98,7 @@ bool Rect::inside(const Rect& rect) const {
  *
  * @return True if this rect can hold the given rect.
  */
-bool Rect::contains(const Rect& rect) const {
+bool RectCugl::contains(const RectCugl& rect) const {
     bool horz = getMinX() <= rect.getMinX() && rect.getMaxX() <= getMaxX();
     bool vert = getMinY() <= rect.getMinY() && rect.getMaxY() <= getMaxY();
     return horz && vert;
@@ -115,7 +115,7 @@ bool Rect::contains(const Rect& rect) const {
  *
  * @return True if the given point is on the boundar of this rect.
  */
-bool Rect::touches(const Vec2& point) const {
+bool RectCugl::touches(const Vec2& point) const {
     bool horz = (getMinX() == point.x || getMaxX() == point.x) && getMinY() <= point.y && point.y <= getMaxY();
     bool vert = (getMinY() == point.y || getMaxY() == point.y) && getMinX() <= point.x && point.x <= getMaxX();
     return horz || vert;
@@ -132,7 +132,7 @@ bool Rect::touches(const Vec2& point) const {
  *
  * @return True if this rect contains the given point.
  */
-bool Rect::contains(const Vec2& point) const {
+bool RectCugl::contains(const Vec2& point) const {
     return  (getMinX() <= point.x && point.x <= getMaxX() &&
              getMinY() <= point.y && point.y <= getMaxY());
 }
@@ -148,8 +148,8 @@ bool Rect::contains(const Vec2& point) const {
  *
  * @return True if this rect contains the given circle.
  */
-bool Rect::contains(const Vec2& center, float radius) const {
-    Rect bounds(center.x-radius,center.y-radius,2*radius,2*radius);
+bool RectCugl::contains(const Vec2& center, float radius) const {
+    RectCugl bounds(center.x-radius,center.y-radius,2*radius,2*radius);
     return contains(bounds);
 }
 
@@ -163,7 +163,7 @@ bool Rect::contains(const Vec2& center, float radius) const {
  *
  * @return true if this rect intersects the other.
  */
-bool Rect::doesIntersect(const Rect& rect) const {
+bool RectCugl::doesIntersect(const RectCugl& rect) const {
     return !(getMaxX() < rect.getMinX() || rect.getMaxX() < getMinX() ||
              getMaxY() < rect.getMinY() || rect.getMaxY() < getMinY());
 }
@@ -179,7 +179,7 @@ bool Rect::doesIntersect(const Rect& rect) const {
  *
  * @return true if this rect intersects the given circle.
  */
-bool Rect::doesIntersect(const Vec2& center, float radius) const {
+bool RectCugl::doesIntersect(const Vec2& center, float radius) const {
     Vec2 rectangleCenter((origin.x + size.width / 2),
                          (origin.y + size.height / 2));
     
@@ -219,7 +219,7 @@ bool Rect::doesIntersect(const Vec2& center, float radius) const {
  *
  * @return This rect, after the union operation.
  */
-Rect& Rect::merge(const Rect & rect) {
+RectCugl& RectCugl::merge(const RectCugl & rect) {
     float minX = std::min(getMinX(), rect.getMinX());
     float minY = std::min(getMinY(), rect.getMinY());
     float maxX = std::max(getMaxX(), rect.getMaxX());
@@ -237,7 +237,7 @@ Rect& Rect::merge(const Rect & rect) {
  *
  * @return This rect, after the intersection operation.
  */
-Rect& Rect::intersect(const Rect & rect) {
+RectCugl& RectCugl::intersect(const RectCugl & rect) {
     float minX = std::max(getMinX(), rect.getMinX());
     float minY = std::max(getMinY(), rect.getMinY());
     float maxX = std::min(getMaxX(), rect.getMaxX());
@@ -260,7 +260,7 @@ Rect& Rect::intersect(const Rect & rect) {
  *
  * @return This rect, after the expansion.
  */
-Rect& Rect::expand(float factor) {
+RectCugl& RectCugl::expand(float factor) {
     origin.set(origin.x-factor,origin.y-factor);
     size.set(size.width+factor,size.height+factor);
     return *this;
@@ -275,7 +275,7 @@ Rect& Rect::expand(float factor) {
  *
  * @return This rect, after the expansion.
  */
-Rect& Rect::expand(const Vec2& point) {
+RectCugl& RectCugl::expand(const Vec2& point) {
     if (point.x < origin.x) {
         size.width += origin.x - point.x;
         origin.x = point.x;
@@ -295,6 +295,6 @@ Rect& Rect::expand(const Vec2& point) {
 #pragma mark Constants
 
 /** The zero vector Vec2(0,0) */
-const Rect Rect::ZERO(Vec2::ZERO,Size::ZERO);
+const RectCugl RectCugl::ZERO(Vec2::ZERO,Size::ZERO);
 /** The unit vector Vec2(1,1) */
-const Rect Rect::UNIT(Vec2::ZERO,Size(1.0f,1.0f));
+const RectCugl RectCugl::UNIT(Vec2::ZERO,Size(1.0f,1.0f));

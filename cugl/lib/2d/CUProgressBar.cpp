@@ -147,7 +147,7 @@ bool ProgressBar::initWithCaps(const std::shared_ptr<Texture>& background,
         _foresize.height /= scale.y;
     }
 
-    _foreground->setPolygon(Rect(0,0,0,_foresize.height));
+    _foreground->setPolygon(RectCugl(0,0,0,_foresize.height));
     _foreground->setContentSize(Size(0,_foresize.height));
 
     _foreground->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
@@ -266,7 +266,7 @@ bool ProgressBar::initWithData(const SceneLoader* loader, const std::shared_ptr<
         _foresize.height /= scale.y;
     }
     
-    _foreground->setPolygon(Rect(0,0,0,_foresize.height));
+    _foreground->setPolygon(RectCugl(0,0,0,_foresize.height));
     _foreground->setContentSize(Size(0,_foresize.height));
     
     _foreground->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
@@ -314,7 +314,7 @@ void ProgressBar::dispose() {
 void ProgressBar::setProgress(float progress) {
     _progress = progress;
     
-    _foreground->setPolygon(Rect(0,0,progress*_foresize.width,_foresize.height));
+    _foreground->setPolygon(RectCugl(0,0,progress*_foresize.width,_foresize.height));
     _foreground->setContentSize(Size(progress*_foresize.width,_foresize.height));
     if (_finalcap != nullptr) {
         _finalcap->setPosition(_foreground->getBoundingBox().getMaxX(),0);

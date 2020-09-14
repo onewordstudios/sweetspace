@@ -61,7 +61,7 @@ using namespace cugl;
  *
  * @return the point of intersection of a ray with the bounding box
  */
-Vec2 get_intersection(const Vec2& start, const Vec2& dir, const Rect& box) {
+Vec2 get_intersection(const Vec2& start, const Vec2& dir, const RectCugl& box) {
     float s = -1;
     float t = -1;
     
@@ -100,7 +100,7 @@ Vec2 get_intersection(const Vec2& start, const Vec2& dir, const Rect& box) {
  *
  * @return he corner vertex between two boundary points.
  */
-Vec2 get_interior(const Vec2& start, const Vec2& end, const Rect& box) {
+Vec2 get_interior(const Vec2& start, const Vec2& end, const RectCugl& box) {
     Vec2 result;
     if (start.x == box.origin.x || end.x == box.origin.x) {
         result.x = box.origin.x;
@@ -431,7 +431,7 @@ void DelaunayTriangulator::calculate() {
     if (_input.size() == 0) { return; }
 
     // Compute the bounding box and super triangle
-    Rect box = getBoundingBox();
+    RectCugl box = getBoundingBox();
     computeDelaunay(box);
     _calculated = true;
 }
@@ -573,7 +573,7 @@ void DelaunayTriangulator::calculateDual() {
     }
     
     // Compute the bounding box and super triangle
-    Rect box = getBoundingBox();
+    RectCugl box = getBoundingBox();
     computeVoronoi(box);
     _dualated = true;
 }
@@ -731,7 +731,7 @@ Poly2* DelaunayTriangulator::getVoronoiFrame(Poly2* buffer) const {
  *
  * @return the bounding box for the input vertices
  */
-Rect DelaunayTriangulator::getBoundingBox() const {
+RectCugl DelaunayTriangulator::getBoundingBox() const {
     CUAssertLog(_input.size() > 0, "Calculating bounding box on empty input");
     
     float minX = _input[0].x;
@@ -746,7 +746,7 @@ Rect DelaunayTriangulator::getBoundingBox() const {
         if (it->y > maxY) maxY = it->y;
     }
     
-    return Rect(Vec2(minX,minY),Size(maxX-minX,maxY-minY));
+    return RectCugl(Vec2(minX,minY),Size(maxX-minX,maxY-minY));
 }
 
 /**
@@ -756,7 +756,7 @@ Rect DelaunayTriangulator::getBoundingBox() const {
  *
  * @param rect the bounding box for the input vertices
  */
-void DelaunayTriangulator::computeDelaunay(const Rect& rect) {
+void DelaunayTriangulator::computeDelaunay(const RectCugl& rect) {
     Vec2 one(rect.origin.x-rect.size.height*EPSILON_ADJ,rect.origin.y);
     Vec2 two(rect.origin.x+rect.size.width+rect.size.height*EPSILON_ADJ,rect.origin.y);
     Vec2 tre(rect.origin.x+rect.size.width/2.0f,rect.size.height+rect.size.width*(EPSILON_ADJ/2.0f));
@@ -815,7 +815,7 @@ void DelaunayTriangulator::computeDelaunay(const Rect& rect) {
  *
  * @param rect the bounding box for the input vertices
  */
-void DelaunayTriangulator::computeVoronoi(const Rect& rect) {
+void DelaunayTriangulator::computeVoronoi(const RectCugl& rect) {
     std::vector<std::unordered_set<Sint64>> neighbors;
     neighbors.resize(_input.size());
     
@@ -902,7 +902,7 @@ void DelaunayTriangulator::computeVoronoi(const Rect& rect) {
  & @param index the index of the Voronoi cell
  * @param rect  the bounding box for the input vertices
  */
-void DelaunayTriangulator::sortCell(size_t index, const Rect& rect) {
+void DelaunayTriangulator::sortCell(size_t index, const RectCugl& rect) {
     
     // First edge determines direction
     bool goon = true;

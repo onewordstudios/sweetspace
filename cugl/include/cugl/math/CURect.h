@@ -42,7 +42,7 @@ namespace cugl {
  *
  * It is generally safe to manipulate the fields directly.
  */
-class Rect {
+class RectCugl {
 #pragma mark Values
 public:
     /** The bottom left point of rect.      */
@@ -51,9 +51,9 @@ public:
     Size  size;
     
     /** The empty Rect.*/
-    static const Rect ZERO;
+    static const RectCugl ZERO;
     /** The unit square. */
-    static const Rect UNIT;
+    static const RectCugl UNIT;
 
 
 #pragma mark -
@@ -62,7 +62,7 @@ public:
     /**
      * Creates an empty Rect at the origin
      */
-    Rect() : Rect(Vec2::ZERO,Size::ZERO) {}
+    RectCugl() : RectCugl(Vec2::ZERO,Size::ZERO) {}
 
     /**
      * Creates a rect with the given origin and dimensions.
@@ -72,15 +72,15 @@ public:
      * @param width  The width of the rect
      * @param height The width of the rect
      */
-    Rect(float x, float y, float width, float height) :
-        Rect(Vec2(x,y),Size(width,height)) {}
+    RectCugl(float x, float y, float width, float height) :
+        RectCugl(Vec2(x,y),Size(width,height)) {}
 
     /**
      * Creates a rect from the given float array.
      *
      * @param array An array containing the attributes in the order origin, size.
      */
-    Rect(float* array) : Rect(Vec2(array),Size(&array[2])) {}
+    RectCugl(float* array) : RectCugl(Vec2(array),Size(&array[2])) {}
 
     
     /**
@@ -89,7 +89,7 @@ public:
      * @param pos   The position the bottom left corner
      * @param dimen The size of the rect
      */
-    Rect(const Vec2& pos, const Size& dimen) {
+    RectCugl(const Vec2& pos, const Size& dimen) {
         origin = pos; size = dimen;
     }
 
@@ -103,7 +103,7 @@ public:
      *
      * @return This rectangle, after assignment
      */
-    Rect& operator=(const float* array) {
+    RectCugl& operator=(const float* array) {
         return set(array);
     }
     
@@ -117,7 +117,7 @@ public:
      *
      * @return This rectangle, after assignment
      */
-    Rect& set(float x, float y, float width, float height) {
+    RectCugl& set(float x, float y, float width, float height) {
         origin.set(x,y); size.set(width,height);
         return *this;
     }
@@ -129,7 +129,7 @@ public:
      *
      * @return This rectangle, after assignment
      */
-    Rect& set(const float* array) {
+    RectCugl& set(const float* array) {
         origin = &array[0]; size = &array[2];
         return *this;
     }
@@ -141,7 +141,7 @@ public:
      *
      * @return This rectangle, after assignment
      */
-    Rect& set(const Vec2& pos, const Size& dimen) {
+    RectCugl& set(const Vec2& pos, const Size& dimen) {
         origin.set(pos); size.set(dimen);
         return *this;
     }
@@ -153,7 +153,7 @@ public:
      *
      * @return This rectangle, after assignment
      */
-    Rect& set(const Rect& other) {
+    RectCugl& set(const RectCugl& other) {
         origin.set(other.origin); size.set(other.size);
         return *this;
     }
@@ -223,7 +223,7 @@ public:
      *
      * @return true if the rects are equal to each other.
      */
-    bool operator==(const Rect& rect) const {
+    bool operator==(const RectCugl& rect) const {
         return origin == rect.origin && size == rect.size;
     }
     
@@ -236,7 +236,7 @@ public:
      *
      * @return true if the rects are not equal to each other.
      */
-    bool operator!=(const Rect& rect) const {
+    bool operator!=(const RectCugl& rect) const {
         return origin != rect.origin || size != rect.size;
     }
 
@@ -250,7 +250,7 @@ public:
      *
      * @return true if the rects are within tolerance of each other.
      */
-    bool equals(const Rect& rect, float variance=CU_MATH_EPSILON) const {
+    bool equals(const RectCugl& rect, float variance=CU_MATH_EPSILON) const {
         return origin.equals(rect.origin,variance) && size.equals(rect.size,variance);
     }
     
@@ -264,7 +264,7 @@ public:
      *
      * @return True if this rect fits inside of the given rect.
      */
-    bool operator<=(const Rect& rect) const {
+    bool operator<=(const RectCugl& rect) const {
         return inside(rect);
     }
     
@@ -280,7 +280,7 @@ public:
      *
      * @return True if this rect properly fits inside of the given rect.
      */
-    bool operator<(const Rect& rect) const;
+    bool operator<(const RectCugl& rect) const;
     
     /**
      * Returns true if this rect can hold the given rect.
@@ -292,7 +292,7 @@ public:
      *
      * @return True if this rect can hold the given rect.
      */
-    bool operator>=(const Rect& rect) const {
+    bool operator>=(const RectCugl& rect) const {
         return contains(rect);
     }
 
@@ -308,7 +308,7 @@ public:
      *
      * @return True if this rect can properly hold the given rect.
      */
-    bool operator>(const Rect& rect) const;
+    bool operator>(const RectCugl& rect) const;
     
     /**
      * Returns true if this rect fits inside of the given rect.
@@ -320,7 +320,7 @@ public:
      *
      * @return True if this rect fits inside of the given rect.
      */
-    bool inside(const Rect& rect) const;
+    bool inside(const RectCugl& rect) const;
     
     /**
      * Returns true if this rect can hold the given rect.
@@ -332,7 +332,7 @@ public:
      *
      * @return True if this rect can hold the given rect.
      */
-    bool contains(const Rect& rect) const;
+    bool contains(const RectCugl& rect) const;
 
     /**
      * Returns true if the given point is on the boundar of this rect.
@@ -382,7 +382,7 @@ public:
      *
      * @return true if this rect intersects the other.
      */
-    bool doesIntersect(const Rect& rect) const;
+    bool doesIntersect(const RectCugl& rect) const;
 
     /**
      * Returns true if this rect intersects the given circle.
@@ -407,7 +407,7 @@ public:
      *
      * @return This rect, after the union operation.
      */
-    Rect& merge(const Rect & rect);
+    RectCugl& merge(const RectCugl & rect);
 
     /**
      * Computes the intersection of this rect and the other, assigning it in place.
@@ -418,7 +418,7 @@ public:
      *
      * @return This rect, after the intersection operation.
      */
-    Rect& intersect(const Rect & rect);
+    RectCugl& intersect(const RectCugl & rect);
 
     /**
      * Expands this rectangle uniformly from its center.
@@ -431,7 +431,7 @@ public:
      *
      * @return This rect, after the expansion.
      */
-    Rect& expand(float factor);
+    RectCugl& expand(float factor);
     
     /**
      * Expands this rectangle to the minimal one containing the given point.
@@ -442,7 +442,7 @@ public:
      *
      * @return This rect, after the expansion.
      */
-    Rect& expand(const Vec2& point);
+    RectCugl& expand(const Vec2& point);
     
     /**
      * Returns the union of this rect and the other.
@@ -453,8 +453,8 @@ public:
      *
      * @return the union of this rect and the other.
      */
-    Rect getMerge(const Rect & rect) const {
-        Rect result(*this);
+    RectCugl getMerge(const RectCugl & rect) const {
+        RectCugl result(*this);
         return result.merge(rect);
     }
     
@@ -469,8 +469,8 @@ public:
      *
      * @return the intersection of this rect and the other.
      */
-    Rect getIntersection(const Rect & rect) const {
-        Rect result(*this);
+    RectCugl getIntersection(const RectCugl & rect) const {
+        RectCugl result(*this);
         return result.intersect(rect);
     }
     
@@ -487,8 +487,8 @@ public:
      *
      * @return a copy of this rect, expanded uniformly from its center.
      */
-    Rect getExpansion(float factor) const {
-        Rect result(*this);
+    RectCugl getExpansion(float factor) const {
+        RectCugl result(*this);
         return result.expand(factor);
     }
     
@@ -502,8 +502,8 @@ public:
      *
      * @return a copy of this rect, expanded to contain the given point.
      */
-    Rect getExpansion(const Vec2& point) const {
-        Rect result(*this);
+    RectCugl getExpansion(const Vec2& point) const {
+        RectCugl result(*this);
         return result.expand(point);
     }
 
