@@ -1,4 +1,4 @@
-﻿#ifndef __JS_LEVEL_MODEL_H__
+#ifndef __JS_LEVEL_MODEL_H__
 #define __JS_LEVEL_MODEL_H__
 #include <cugl/2d/physics/CUObstacleWorld.h>
 #include <cugl/assets/CUAsset.h>
@@ -11,8 +11,6 @@
 #include "BuildingBlockModel.h"
 #include "EventModel.h"
 #include "LevelConstants.h"
-
-using namespace cugl;
 
 #pragma mark -
 #pragma mark Level Model

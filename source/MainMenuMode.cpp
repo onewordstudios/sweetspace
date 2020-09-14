@@ -1,4 +1,4 @@
-﻿#include "MainMenuMode.h"
+#include "MainMenuMode.h"
 
 #include <cugl/cugl.h>
 
@@ -10,8 +10,6 @@
 #include "LevelConstants.h"
 #include "MainMenuTransitions.h"
 #include "Tween.h"
-
-using namespace cugl;
 
 /** Number of buttons for room ID entry */
 constexpr unsigned int NUM_DIGITS = 10;
@@ -55,7 +53,7 @@ MainMenuMode::~MainMenuMode() { dispose(); }
 
 bool MainMenuMode::init(const std::shared_ptr<AssetManager>& assets) {
 	// Initialize the scene to a locked width
-	Size dimen = Application::get()->getDisplaySize();
+	cugl::Size dimen = Application::get()->getDisplaySize();
 	dimen *= globals::SCENE_WIDTH / dimen.width; // Lock the game to a reasonable resolution
 	if (assets == nullptr) {
 		return false;

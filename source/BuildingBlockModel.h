@@ -1,4 +1,4 @@
-﻿#ifndef __JS_BUILDING_BLOCK_MODEL_H__
+#ifndef __JS_BUILDING_BLOCK_MODEL_H__
 #define __JS_BUILDING_BLOCK_MODEL_H__
 #include <cugl/assets/CUAsset.h>
 #include <cugl/cugl.h>
@@ -8,8 +8,6 @@
 
 #include "Globals.h"
 #include "LevelConstants.h"
-
-using namespace cugl;
 
 #pragma mark -
 #pragma mark Building Block Model

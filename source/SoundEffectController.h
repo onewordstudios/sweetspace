@@ -1,10 +1,11 @@
-﻿#ifndef __SOUND_EFFECT_CONTROLLER_H__
+#ifndef __SOUND_EFFECT_CONTROLLER_H__
 #define __SOUND_EFFECT_CONTROLLER_H__
 #include <cugl/cugl.h>
 
 #include <map>
 
 using namespace cugl;
+
 constexpr int NUM_EFFECTS = 6;
 /**
  * This class represents sound effects
@@ -21,12 +22,12 @@ class SoundEffectController {
 	/** List of actively playing effects. */
 	std::map<std::pair<int, int>, bool> activeEffects;
 
-	std::shared_ptr<Sound> jump;
-	std::shared_ptr<Sound> doorCollide;
-	std::shared_ptr<Sound> fixBreach;
-	std::shared_ptr<Sound> slowBreach;
-	std::shared_ptr<Sound> click;
-	std::shared_ptr<Sound> teleport;
+	std::shared_ptr<cugl::Sound> jump;
+	std::shared_ptr<cugl::Sound> doorCollide;
+	std::shared_ptr<cugl::Sound> fixBreach;
+	std::shared_ptr<cugl::Sound> slowBreach;
+	std::shared_ptr<cugl::Sound> click;
+	std::shared_ptr<cugl::Sound> teleport;
 
 	static constexpr auto JUMP_FILE = "jump";
 	static constexpr auto DOOR_FILE = "doorCollide";
@@ -64,10 +65,10 @@ class SoundEffectController {
 	 *
 	 */
 	void init(const std::shared_ptr<cugl::AssetManager>& assets) {
-		jump = assets->get<Sound>(JUMP_FILE);
-		doorCollide = assets->get<Sound>(DOOR_FILE);
-		fixBreach = assets->get<Sound>(FIX_FILE);
-		slowBreach = assets->get<Sound>(SLOW_FILE);
+		jump = assets->get<cugl::Sound>(JUMP_FILE);
+		doorCollide = assets->get<cugl::Sound>(DOOR_FILE);
+		fixBreach = assets->get<cugl::Sound>(FIX_FILE);
+		slowBreach = assets->get<cugl::Sound>(SLOW_FILE);
 		click = assets->get<Sound>(CLICK_FILE);
 		teleport = assets->get<Sound>(TELEPORT_FILE);
 	}

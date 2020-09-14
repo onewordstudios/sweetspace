@@ -1,4 +1,4 @@
-﻿#ifndef __JS_EVENT_MODEL_H__
+#ifndef __JS_EVENT_MODEL_H__
 #define __JS_EVENT_MODEL_H__
 #include <cugl/cugl.h>
 #include <cugl/io/CUJsonReader.h>
@@ -6,8 +6,6 @@
 #include <vector>
 
 #include "LevelConstants.h"
-
-using namespace cugl;
 
 #pragma mark -
 #pragma mark Event Model
