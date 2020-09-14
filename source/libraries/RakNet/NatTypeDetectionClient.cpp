@@ -167,7 +167,7 @@ void NatTypeDetectionClient::OnTestPortRestricted(Packet *packet) {
 	bsOut.Write((MessageID)NAT_TYPE_PORT_RESTRICTED);
 	bsOut.Write(rakPeerInterface->GetGuidFromSystemAddress(UNASSIGNED_SYSTEM_ADDRESS));
 	//	SocketLayer::SendTo_PC( sockets[0], (const char*) bsOut.GetData(),
-	//bsOut.GetNumberOfBytesUsed(), s3p4Addr, __FILE__, __LINE__ );
+	// bsOut.GetNumberOfBytesUsed(), s3p4Addr, __FILE__, __LINE__ );
 
 	RNS2_SendParameters bsp;
 	bsp.data = (char *)bsOut.GetData();

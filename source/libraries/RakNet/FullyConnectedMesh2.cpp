@@ -859,8 +859,8 @@ PluginReceiveResult FullyConnectedMesh2::OnVerifiedJoinStart(Packet *packet) {
 		// 		if (vjip->sentResults==false)
 		// 		{
 		// 			// Got ID_FCM2_VERIFIED_JOIN_START twice before sending
-		// ID_FCM2_VERIFIED_JOIN_CAPABLE 			RakAssert(vjip->sentResults!=false); 			return
-		// RR_STOP_PROCESSING_AND_DEALLOCATE;
+		// ID_FCM2_VERIFIED_JOIN_CAPABLE 			RakAssert(vjip->sentResults!=false);
+		// return RR_STOP_PROCESSING_AND_DEALLOCATE;
 		// 		}
 
 		for (unsigned int i = 0; i < vjip->vjipMembers.Size(); i++) {

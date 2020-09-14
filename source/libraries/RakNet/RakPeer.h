@@ -509,8 +509,8 @@ class RAK_DLL_EXPORT RakPeer : public RakPeerInterface, public RNS2EventHandler 
 	void GetOfflinePingResponse(char **data, unsigned int *length);
 
 	//--------------------------------------------------------------------------------------------Network
-	//Functions - Functions dealing with the network in
-	//general--------------------------------------------------------------------------------------------
+	// Functions - Functions dealing with the network in
+	// general--------------------------------------------------------------------------------------------
 	/// \brief Returns the unique address identifier that represents you or another system on the
 	/// the network \note Not supported by the XBOX \param[in] systemAddress Use
 	/// UNASSIGNED_SYSTEM_ADDRESS to get your behind-LAN address. Use a connected system to get
@@ -658,7 +658,7 @@ class RAK_DLL_EXPORT RakPeer : public RakPeerInterface, public RNS2EventHandler 
 	/// \brief Detaches a Plugin interface from the instance of the base class (RakPeer or
 	/// PacketizedTCP) it is attached to.
 	///	\details This method disables the plugin code from running automatically on base class's
-	///updates or message receipt.
+	/// updates or message receipt.
 	/// If the plugin returns false from PluginInterface::UsesReliabilityLayer(), which is the case
 	/// for all plugins except PacketLogger, you can call AttachPlugin() and DetachPlugin() for this
 	/// plugin while RakPeer is active. \param[in] messageHandler Pointer to a plugin to detach.
@@ -759,7 +759,7 @@ class RAK_DLL_EXPORT RakPeer : public RakPeerInterface, public RNS2EventHandler 
 	/// \brief Returns the network statistics of the system at the given index in the
 	/// remoteSystemList.
 	///	\return True if the index is less than the maximum number of peers allowed and the system is
-	///active. False otherwise.
+	/// active. False otherwise.
 	bool GetStatistics(const unsigned int index, RakNetStatistics *rns);
 	/// \brief Returns the list of systems, and statistics for each of those systems
 	/// Each system has one entry in each of the lists, in the same order

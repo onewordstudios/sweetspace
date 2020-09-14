@@ -77,7 +77,7 @@ class GridSectorizer {
 #ifdef _USE_ORDERED_LIST
 	DataStructures::OrderedList<void *, void *> *grid;
 #else
-	DataStructures::List<void*>* grid;
+	DataStructures::List<void *> *grid;
 #endif
 };
 

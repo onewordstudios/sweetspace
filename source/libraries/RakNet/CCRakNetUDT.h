@@ -381,7 +381,7 @@ class CCRakNetUDT {
 		const BytesPerMicrosecond inputList[CC_RAKNET_UDT_PACKET_HISTORY_LENGTH],
 		int inputListLength, int lessThanSum, int greaterThanSum);
 	//	static uint32_t CalculateListMedianRecursive(const uint32_t inputList[RTT_HISTORY_LENGTH],
-	//int inputListLength, int lessThanSum, int greaterThanSum);
+	// int inputListLength, int lessThanSum, int greaterThanSum);
 
 	/// Same as GetRTOForRetransmission, but does not factor in ExpCount
 	/// This is because the receiver does not know ExpCount for the sender, and even if it did, acks

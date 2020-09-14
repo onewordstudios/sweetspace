@@ -127,7 +127,8 @@ class RAK_DLL_EXPORT RakNetSmartPtr {
 				RakNet::OP_DELETE(reference, _FILE_AND_LINE_);
 
 				//				deallocCount+=2;
-				//				printf("allocCount=%i deallocCount=%i Line=%i\n",allocCount, deallocCount,
+				//				printf("allocCount=%i deallocCount=%i Line=%i\n",allocCount,
+				// deallocCount,
 				//__LINE__);
 			}
 

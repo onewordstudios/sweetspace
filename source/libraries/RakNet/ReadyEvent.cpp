@@ -133,7 +133,7 @@ bool ReadyEvent::AddToWaitList(int eventId, RakNetGUID guid) {
 	// player to hit ready if the first two players have already done so
 	// if (IsLocked(eventIndex))
 	//	return false; // Not in the list, but event is already completed, or is starting to
-	//complete, and adding more waiters would fail this.
+	// complete, and adding more waiters would fail this.
 
 	unsigned i;
 	unsigned numAdded = 0;
@@ -227,16 +227,16 @@ PluginReceiveResult ReadyEvent::OnReceive(Packet *packet) {
 	packetIdentifier = (unsigned char)packet->data[0];
 
 	//	bool doPrint = packet->systemAddress.GetPort()==60002 ||
-	//rakPeerInterface->GetInternalID(UNASSIGNED_SYSTEM_ADDRESS).GetPort()==60002;
+	// rakPeerInterface->GetInternalID(UNASSIGNED_SYSTEM_ADDRESS).GetPort()==60002;
 
 	switch (packetIdentifier) {
 		case ID_READY_EVENT_UNSET:
 		case ID_READY_EVENT_SET:
 		case ID_READY_EVENT_ALL_SET:
 			//		if (doPrint) {if (packet->systemAddress.GetPort()==60002)
-			//RAKNET_DEBUG_PRINTF("FROM 60002: "); else if
+			// RAKNET_DEBUG_PRINTF("FROM 60002: "); else if
 			//(rakPeerInterface->GetInternalID(UNASSIGNED_SYSTEM_ADDRESS).port==60002)
-			//RAKNET_DEBUG_PRINTF("TO 60002: "); RAKNET_DEBUG_PRINTF("ID_READY_EVENT_SET\n");}
+			// RAKNET_DEBUG_PRINTF("TO 60002: "); RAKNET_DEBUG_PRINTF("ID_READY_EVENT_SET\n");}
 			OnReadyEventPacketUpdate(packet);
 			return RR_CONTINUE_PROCESSING;
 		case ID_READY_EVENT_FORCE_ALL_SET:
@@ -244,9 +244,9 @@ PluginReceiveResult ReadyEvent::OnReceive(Packet *packet) {
 			return RR_CONTINUE_PROCESSING;
 		case ID_READY_EVENT_QUERY:
 			//		if (doPrint) {if (packet->systemAddress.GetPort()==60002)
-			//RAKNET_DEBUG_PRINTF("FROM 60002: "); else if
+			// RAKNET_DEBUG_PRINTF("FROM 60002: "); else if
 			//(rakPeerInterface->GetInternalID(UNASSIGNED_SYSTEM_ADDRESS).port==60002)
-			//RAKNET_DEBUG_PRINTF("TO 60002: "); RAKNET_DEBUG_PRINTF("ID_READY_EVENT_QUERY\n");}
+			// RAKNET_DEBUG_PRINTF("TO 60002: "); RAKNET_DEBUG_PRINTF("ID_READY_EVENT_QUERY\n");}
 			OnReadyEventQuery(packet);
 			return RR_STOP_PROCESSING_AND_DEALLOCATE;
 	}

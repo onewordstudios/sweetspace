@@ -144,11 +144,11 @@ void NatTypeDetectionServer::Update(void) {
 					natDetectionAttempts.RemoveAtIndexFast(i);
 				} else {
 					//		RakAssert("i==0 in Update when looking up GUID in
-					//NatTypeDetectionServer.cpp. Either a bug or a late resend" && 0);
+					// NatTypeDetectionServer.cpp. Either a bug or a late resend" && 0);
 				}
 			} else {
 				//	RakAssert("Didn't read GUID in Update in NatTypeDetectionServer.cpp. Message
-				//format error" && 0);
+				// format error" && 0);
 			}
 		}
 

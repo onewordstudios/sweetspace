@@ -113,7 +113,7 @@ socketFamily); #endif
 //*bytesReadOut, SystemAddress *systemAddressOut, RakNet::TimeUS *timeRead );
 #if defined(WINDOWS_STORE_RT)
 //	static void RecvFromBlocking_WindowsStore8( RakNetSocket *s, RakPeer *rakPeer, char *dataOut,
-//int *bytesReadOut, SystemAddress *systemAddressOut, RakNet::TimeUS *timeRead );
+// int *bytesReadOut, SystemAddress *systemAddressOut, RakNet::TimeUS *timeRead );
 #endif
 
 	/// Given a socket and IP, retrieves the subnet mask, on linux the socket is unused
@@ -140,8 +140,8 @@ socketFamily); #endif
 	/// \param[in] port The port number to send to.
 	/// \return 0 on success, nonzero on failure.
 	//	static int SendTo( UDPSOCKET s, const char *data, int length, const char ip[ 16 ], unsigned
-	//short port, unsigned short remotePortRakNetWasStartedOn_PS3, unsigned int extraSocketOptions,
-	//const char *file, const long line );
+	// short port, unsigned short remotePortRakNetWasStartedOn_PS3, unsigned int extraSocketOptions,
+	// const char *file, const long line );
 
 	/// Call sendto' (UDP obviously)
 	/// It won't reach the recipient, except on a LAN
@@ -164,7 +164,7 @@ socketFamily); #endif
 	/// \param[in] port The port number to send to.
 	/// \return 0 on success, nonzero on failure.
 	//	static int SendTo( RakNetSocket *s, const char *data, int length, SystemAddress
-	//systemAddress, const char *file, const long line );
+	// systemAddress, const char *file, const long line );
 
 	//	static unsigned short GetLocalPort(RakNetSocket *s);
 	static unsigned short GetLocalPort(__UDPSOCKET__ s);
@@ -180,10 +180,11 @@ socketFamily); #endif
 	// SystemAddress &systemAddress ); 	static int SendTo_PSP2( RakNetSocket *s, const char *data,
 	// int length, const SystemAddress &systemAddress ); 	static int SendTo_360( RakNetSocket *s,
 	// const char *data, int length, const char *voiceData, int voiceLength, const SystemAddress
-	// &systemAddress ); 	static int SendTo_PC( RakNetSocket *s, const char *data, int length, const
-	// SystemAddress &systemAddress, const char *file, const long line ); #if
-	// defined(WINDOWS_STORE_RT) 	static int SendTo_WindowsStore8( RakNetSocket *s, const char *data,
-	// int length, const SystemAddress &systemAddress, const char *file, const long line ); #endif
+	// &systemAddress ); 	static int SendTo_PC( RakNetSocket *s, const char *data, int length,
+	// const SystemAddress &systemAddress, const char *file, const long line ); #if
+	// defined(WINDOWS_STORE_RT) 	static int SendTo_WindowsStore8( RakNetSocket *s, const char
+	// *data, int length, const SystemAddress &systemAddress, const char *file, const long line );
+	// #endif
 	//
 	// 	static void SetDoNotFragment( RakNetSocket* listenSocket, int opt );
 	// 	static void SetSocketOptions( RakNetSocket* listenSocket, bool blockingSocket, bool

@@ -343,14 +343,14 @@ void RNS2_Berkley::RecvFromBlockingIPV4And6(RNS2RecvStruct *recvFromStruct) {
 			recvFromStruct->systemAddress.debugPort =
 				ntohs(recvFromStruct->systemAddress.address.addr4.sin_port);
 			//	systemAddressOut->address.addr4.sin_port=ntohs(
-			//systemAddressOut->address.addr4.sin_port );
+			// systemAddressOut->address.addr4.sin_port );
 		} else {
 			memcpy(&recvFromStruct->systemAddress.address.addr6, (sockaddr_in6 *)&their_addr,
 				   sizeof(sockaddr_in6));
 			recvFromStruct->systemAddress.debugPort =
 				ntohs(recvFromStruct->systemAddress.address.addr6.sin6_port);
 			//	systemAddressOut->address.addr6.sin6_port=ntohs(
-			//systemAddressOut->address.addr6.sin6_port );
+			// systemAddressOut->address.addr6.sin6_port );
 		}
 	}
 

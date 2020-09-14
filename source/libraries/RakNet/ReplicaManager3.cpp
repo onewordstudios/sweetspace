@@ -116,7 +116,7 @@ void ReplicaManager3::AutoCreateConnectionList(
 	DataStructures::List<RakNetGUID> &participantListIn,
 	DataStructures::List<Connection_RM3 *> &participantListOut, WorldId worldId) {
 	for (unsigned int index = 0; index < participantListIn.Size(); index++) {
-		if (GetConnectionByGUID(participantListIn[index], worldId) == false) {
+		if (!(GetConnectionByGUID(participantListIn[index], worldId))) {
 			Connection_RM3 *connection = AllocConnection(
 				rakPeerInterface->GetSystemAddressFromGuid(participantListIn[index]),
 				participantListIn[index]);

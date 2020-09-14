@@ -23,7 +23,8 @@ bool RakNet::CanConnect(NATTypeDetectionResult type1, NATTypeDetectionResult typ
 	/// If one system is NAT_TYPE_PORT_RESTRICTED, the other must be NAT_TYPE_PORT_RESTRICTED or
 	/// less
 	bool connectionGraph[NAT_TYPE_COUNT][NAT_TYPE_COUNT] = {
-		// None,	Full Cone,	Address Restricted,		Port Restricted,	Symmetric,	Unknown,	InProgress,
+		// None,	Full Cone,	Address Restricted,		Port Restricted,	Symmetric,	Unknown,
+		// InProgress,
 		// Supports_UPNP
 		{true, true, true, true, true, false, false, true},		  // None
 		{true, true, true, true, true, false, false, true},		  // Full Cone

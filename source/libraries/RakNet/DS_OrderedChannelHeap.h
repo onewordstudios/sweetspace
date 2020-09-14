@@ -227,9 +227,9 @@ unsigned OrderedChannelHeap<channel_key_type, heap_data_type, channel_key_compar
 
 template <class channel_key_type, class heap_data_type,
 		  int (*channel_key_comparison_func)(const channel_key_type &, const channel_key_type &)>
-heap_data_type
-	&OrderedChannelHeap<channel_key_type, heap_data_type, channel_key_comparison_func>::operator[](
-		const unsigned int position) const {
+heap_data_type &
+OrderedChannelHeap<channel_key_type, heap_data_type, channel_key_comparison_func>::operator[](
+	const unsigned int position) const {
 	return heap[position].data;
 }
 

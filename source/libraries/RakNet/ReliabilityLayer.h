@@ -281,12 +281,12 @@ class ReliabilityLayer //<ReliabilityLayer>
 	/// Search the specified list for sequenced packets on the specified ordering channel,
 	/// optionally skipping those with splitPacketId, and delete them
 	//	void DeleteSequencedPacketsInList( unsigned char orderingChannel,
-	//DataStructures::List<InternalPacket*>&theList, int splitPacketId = -1 );
+	// DataStructures::List<InternalPacket*>&theList, int splitPacketId = -1 );
 
 	/// Search the specified list for sequenced packets with a value less than orderingIndex and
 	/// delete them
 	//	void DeleteSequencedPacketsInList( unsigned char orderingChannel,
-	//DataStructures::Queue<InternalPacket*>&theList );
+	// DataStructures::Queue<InternalPacket*>&theList );
 
 	/// Returns true if newPacketOrderingIndex is older than the waitingForPacketOrderingIndex
 	bool IsOlderOrderedPacket(OrderingIndexType newPacketOrderingIndex,
@@ -452,7 +452,7 @@ class ReliabilityLayer //<ReliabilityLayer>
 	RakNet::TimeMS timeoutTime; // How long to wait in MS before timing someone out
 	// int MAX_AVERAGE_PACKETS_PER_SECOND; // Name says it all
 	//	int RECEIVED_PACKET_LOG_LENGTH, requestedReceivedPacketLogLength; // How big the
-	//receivedPackets array is 	unsigned int *receivedPackets;
+	// receivedPackets array is 	unsigned int *receivedPackets;
 	RakNetStatistics statistics;
 
 	// Algorithm for blending ordered and sequenced on the same channel:
@@ -517,7 +517,7 @@ class ReliabilityLayer //<ReliabilityLayer>
 	CCTimeType ackPing;
 #endif
 	//	CCTimeType ackPingSamples[ACK_PING_SAMPLES_SIZE]; // Must be range of unsigned char to wrap
-	//ackPingIndex properly
+	// ackPingIndex properly
 	CCTimeType ackPingSum;
 	unsigned char ackPingIndex;
 	// CCTimeType nextLowestPingReset;
