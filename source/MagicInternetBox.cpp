@@ -315,6 +315,9 @@ void MagicInternetBox::update() {
 				return;
 			}
 			case AssignedRoom: {
+				if (playerID != 0) {
+					break;
+				}
 				std::stringstream newRoomId;
 				for (unsigned int i = 0; i < globals::ROOM_LENGTH; i++) {
 					newRoomId << (char)message[i + 1];
