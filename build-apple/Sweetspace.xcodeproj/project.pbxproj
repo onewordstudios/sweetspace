@@ -359,6 +359,9 @@
 		7B341E612463C5E70073D4D2 /* CustomNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7B341E5D2463C5E70073D4D2 /* CustomNode.cpp */; };
 		7B341E622463C5E70073D4D2 /* CustomNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7B341E5D2463C5E70073D4D2 /* CustomNode.cpp */; };
 		7B341E632463C5E70073D4D2 /* CustomNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7B341E5D2463C5E70073D4D2 /* CustomNode.cpp */; };
+		7B999C9B250F8E9F00649EFB /* NetworkConnection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7B999C9A250F8E9E00649EFB /* NetworkConnection.cpp */; };
+		7B999C9C250F8E9F00649EFB /* NetworkConnection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7B999C9A250F8E9E00649EFB /* NetworkConnection.cpp */; };
+		7B999C9D250F8E9F00649EFB /* NetworkConnection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7B999C9A250F8E9E00649EFB /* NetworkConnection.cpp */; };
 		7BD666F22448E8E500D68748 /* MainMenuMode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7BD666F12448E8E500D68748 /* MainMenuMode.cpp */; };
 		7BD666F32448E8E500D68748 /* MainMenuMode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7BD666F12448E8E500D68748 /* MainMenuMode.cpp */; };
 		7BD666F42448E8E500D68748 /* MainMenuMode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7BD666F12448E8E500D68748 /* MainMenuMode.cpp */; };
@@ -829,6 +832,9 @@
 		7B209DFE24395A9D00B657D2 /* ButtonManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ButtonManager.h; sourceTree = "<group>"; };
 		7B3270692425A569004A3B36 /* GLaDOS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLaDOS.h; sourceTree = "<group>"; };
 		7B341E5D2463C5E70073D4D2 /* CustomNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CustomNode.cpp; sourceTree = "<group>"; };
+		7B999C95250F8E8B00649EFB /* NetworkDataType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NetworkDataType.h; sourceTree = "<group>"; };
+		7B999C99250F8E9E00649EFB /* NetworkConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NetworkConnection.h; sourceTree = "<group>"; };
+		7B999C9A250F8E9E00649EFB /* NetworkConnection.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NetworkConnection.cpp; sourceTree = "<group>"; };
 		7BD666F02448E8E500D68748 /* MainMenuMode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainMenuMode.h; sourceTree = "<group>"; };
 		7BD666F12448E8E500D68748 /* MainMenuMode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MainMenuMode.cpp; sourceTree = "<group>"; };
 		7BDE1A3E243422EC0080F7CB /* Globals.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Globals.h; sourceTree = "<group>"; };
@@ -1019,6 +1025,9 @@
 		7B0FBB0424FBBB6E0026067D /* Networking */ = {
 			isa = PBXGroup;
 			children = (
+				7B999C99250F8E9E00649EFB /* NetworkConnection.h */,
+				7B999C9A250F8E9E00649EFB /* NetworkConnection.cpp */,
+				7B999C95250F8E8B00649EFB /* NetworkDataType.h */,
 				D15227FD0DE8BAD86857197F /* MagicInternetBox.h */,
 				D15228511721431DE5C3F8BF /* MagicInternetBox.cpp */,
 			);
@@ -1785,6 +1794,7 @@
 				C58C5B82A24C809F0E12DEFF /* ShipModel.cpp in Sources */,
 				7B0FBD2524FBBC160026067D /* NatPunchthroughClient.cpp in Sources */,
 				7B0FBDD324FBBC170026067D /* SuperFastHash.cpp in Sources */,
+				7B999C9D250F8E9F00649EFB /* NetworkConnection.cpp in Sources */,
 				7B106F9E24DA5167008EFDED /* MainMenuTransitions.cpp in Sources */,
 				7B0FBE1824FBBC170026067D /* RakNetSocket2_PS3_PS4.cpp in Sources */,
 				D15225B5047A9F0742257B0F /* ExternalDonutNode.cpp in Sources */,
@@ -1939,6 +1949,7 @@
 				DF3B74532403A46B0063552F /* InputController.cpp in Sources */,
 				7B0FBD2424FBBC160026067D /* NatPunchthroughClient.cpp in Sources */,
 				7B0FBDD224FBBC170026067D /* SuperFastHash.cpp in Sources */,
+				7B999C9C250F8E9F00649EFB /* NetworkConnection.cpp in Sources */,
 				7B106F9D24DA5167008EFDED /* MainMenuTransitions.cpp in Sources */,
 				7B0FBE1724FBBC170026067D /* RakNetSocket2_PS3_PS4.cpp in Sources */,
 				C58C5561B66760E8D1E3FC80 /* ShipModel.cpp in Sources */,
@@ -2093,6 +2104,7 @@
 				DF3B74522403A46B0063552F /* InputController.cpp in Sources */,
 				7B0FBD2324FBBC160026067D /* NatPunchthroughClient.cpp in Sources */,
 				7B0FBDD124FBBC170026067D /* SuperFastHash.cpp in Sources */,
+				7B999C9B250F8E9F00649EFB /* NetworkConnection.cpp in Sources */,
 				7B106F9C24DA5167008EFDED /* MainMenuTransitions.cpp in Sources */,
 				7B0FBE1624FBBC170026067D /* RakNetSocket2_PS3_PS4.cpp in Sources */,
 				C58C509B5D08FC65641A630E /* ShipModel.cpp in Sources */,
