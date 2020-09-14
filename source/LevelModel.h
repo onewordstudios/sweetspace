@@ -28,7 +28,7 @@ const float DEFAULT_TIME = 45;
  *
  * This class is a subclass of Asset so that we can use it with a GenericLoader.
  */
-class LevelModel : public Asset {
+class LevelModel : public cugl::Asset {
    private:
 	/** The maximum number of breaches on ship at any one time. This will probably need to scale
 	 * with the number of players*/
@@ -150,7 +150,7 @@ class LevelModel : public Asset {
 	 * @return true if successfully loaded the asset from a file
 	 */
 	bool preload(const std::string& file) override {
-		std::shared_ptr<JsonReader> reader = JsonReader::allocWithAsset(file);
+		std::shared_ptr<cugl::JsonReader> reader = cugl::JsonReader::allocWithAsset(file);
 		return preload(reader->readJson());
 	}
 
