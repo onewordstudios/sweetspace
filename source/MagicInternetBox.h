@@ -9,7 +9,6 @@
 #include "NetworkDataType.h"
 #include "ShipModel.h"
 #include "StateReconciler.h"
-#include "libraries/easywsclient.hpp"
 
 /**
  * The controller that handles all communication between clients and the server.
