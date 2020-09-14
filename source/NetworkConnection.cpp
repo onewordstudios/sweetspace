@@ -9,6 +9,8 @@
 constexpr auto SERVER_ADDRESS = "35.231.212.113";
 /** Port of the NAT punchthrough server */
 constexpr unsigned short SERVER_PORT = 61111;
+/** How long to block on shutdown */
+constexpr unsigned int SHUTDOWN_BLOCK = 10;
 
 NetworkConnection::NetworkConnection() {
 	startupConn();
@@ -22,7 +24,7 @@ NetworkConnection::NetworkConnection(std::string roomID) {
 }
 
 NetworkConnection::~NetworkConnection() {
-	peer->Shutdown(0);
+	peer->Shutdown(SHUTDOWN_BLOCK);
 	RakNet::RakPeerInterface::DestroyInstance(peer.release());
 }
 
