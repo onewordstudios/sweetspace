@@ -20,6 +20,10 @@
 
 #include "Itoa.h"
 
+#ifdef __APPLE__
+#include <netdb.h>
+#endif
+
 // Shared on most platforms, but excluded from the listed
 
 void DomainNameToIP_Berkley_IPV4And6(const char *domainName, char ip[65]) {
