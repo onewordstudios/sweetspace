@@ -1,6 +1,9 @@
 #include "MagicInternetBox.h"
 
 #include <sstream>
+#ifdef _WIN32
+#include <WinSock2.h>
+#endif
 
 #include "Globals.h"
 #include "LevelConstants.h"

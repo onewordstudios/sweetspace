@@ -107,6 +107,7 @@
     #define CU_GL_PLATFORM   CU_GL_OPENGL
 #elif defined (__WINDOWS__)
 	#define NOMINMAX
+	#define WIN32_LEAN_AND_MEAN
 	#include <windows.h>
 	#include <GL/glew.h>
 	#include <SDL/SDL_opengl.h>
