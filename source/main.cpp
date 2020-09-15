@@ -17,7 +17,6 @@
 //
 //      3. This notice may not be removed or altered from any source distribution.
 #include "Globals.h"
-#include "NetworkConnection.h"
 #include "Sweetspace.h"
 
 // This keeps us from having to write cugl:: all the time
