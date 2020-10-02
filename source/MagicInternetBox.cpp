@@ -333,6 +333,7 @@ void MagicInternetBox::update() {
 						if (message[4] > globals::API_VER) {
 							CULog("Error API out of date; current is %d but server is %d",
 								  globals::API_VER, message[4]);
+							status = ClientError;
 							return;
 						}
 						CULog("Join Room Success; player id %d out of %d players", playerID,
