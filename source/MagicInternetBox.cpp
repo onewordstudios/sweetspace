@@ -12,9 +12,6 @@ using namespace cugl;
 
 #pragma region API CONSTANTS
 
-/** API version number. Bump this everytime a backwards incompatible API change happens. */
-constexpr uint8_t API_VER = 0;
-
 #pragma endregion
 
 /** The precision to multiply floating point numbers by */
@@ -333,6 +330,11 @@ void MagicInternetBox::update() {
 					case 0: {
 						numPlayers = message[2];
 						playerID = message[3];
+						if (message[4] > globals::API_VER) {
+							CULog("Error API out of date; current is %d but server is %d",
+								  globals::API_VER, message[4]);
+							return;
+						}
 						CULog("Join Room Success; player id %d out of %d players", playerID,
 							  numPlayers);
 						for (unsigned int i = 0; i < numPlayers; i++) {

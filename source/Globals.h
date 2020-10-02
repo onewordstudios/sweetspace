@@ -1,6 +1,8 @@
 ﻿#ifndef __GLOBALS_H__
 #define __GLOBALS_H__
 
+#include <stdint.h>
+
 /**
  * A namespace for storing constants that are useful across the program.
  *
@@ -13,8 +15,11 @@ namespace globals {
 /** Network tick frequency */
 constexpr unsigned int NETWORK_TICK = 12; // NOLINT
 
+/** API version number. Bump this everytime a backwards incompatible API change happens. */
+constexpr uint8_t API_VER = 0; // NOLINT
+
 /** ID marker for unops in sound effects*/
-constexpr int UNOP_MARKER = 12;
+constexpr int UNOP_MARKER = 12; // NOLINT
 
 /** Number of tutorial levels */
 constexpr unsigned int NUM_TUTORIAL_LEVELS = 11; // NOLINT
@@ -96,7 +101,7 @@ constexpr float MUSIC_FADE_IN = 0.2f; // NOLINT
 constexpr float MUSIC_FADE_OUT = 0.2f; // NOLINT
 
 /** Max color channel value */
-constexpr int MAX_BYTE = 255;
+constexpr int MAX_BYTE = 255; // NOLINT
 #pragma endregion
 } // namespace globals
 #endif
