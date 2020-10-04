@@ -191,7 +191,7 @@ bool WireNode::initWithData(const SceneLoader* loader, const std::shared_ptr<Jso
     }
     
     if (vertices.empty() && indices.empty()) {
-        Rect bounds = Rect::ZERO;
+        RectCugl bounds = RectCugl::ZERO;
         bounds.size = _texture->getSize();
         setPolygon(bounds);
     } else if (indices.empty()) {
@@ -309,7 +309,7 @@ void WireNode::setPolygon(const Poly2& poly) {
  *
  * @param rect  The rectangle to draw
  */
-void WireNode::setPolygon(const Rect& rect) {
+void WireNode::setPolygon(const RectCugl& rect) {
     _polygon.set(rect,false);
     _traversal = PathTraversal::CLOSED;
     setContentSize(_polygon.getBounds().size);

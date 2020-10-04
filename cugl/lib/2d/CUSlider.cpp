@@ -68,8 +68,8 @@ using namespace cugl;
  */
 Slider::Slider() :
 _range(Vec2::ZERO),
-_bounds(Rect::ZERO),
-_adjust(Rect::ZERO),
+_bounds(RectCugl::ZERO),
+_adjust(RectCugl::ZERO),
 _tick(0),
 _value(0),
 _snap(false),
@@ -99,7 +99,7 @@ _listener(nullptr) {
  *
  * @return true if the slider is initialized properly, false otherwise.
  */
-bool Slider::init(const Vec2& range, const Rect& bounds) {
+bool Slider::init(const Vec2& range, const RectCugl& bounds) {
     _range  = range;
     _bounds = bounds;
     placePath(nullptr);
@@ -130,7 +130,7 @@ bool Slider::init(const Vec2& range, const Rect& bounds) {
  *
  * @return true if the slider is initialized properly, false otherwise.
  */
-bool Slider::initWithUI(const Vec2& range, const Rect& bounds,
+bool Slider::initWithUI(const Vec2& range, const RectCugl& bounds,
                         const std::shared_ptr<Node>& path, const std::shared_ptr<Button>& knob) {
     _range  = range;
     _bounds = bounds;
@@ -237,8 +237,8 @@ void Slider::dispose() {
     _tick = 0;
     _snap = false;
     _range  = Vec2::ZERO;
-    _bounds = Rect::ZERO;
-    _adjust = Rect::ZERO;
+    _bounds = RectCugl::ZERO;
+    _adjust = RectCugl::ZERO;
     _active = false;
     _mouse  = false;
     _knob   = nullptr;

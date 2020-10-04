@@ -105,7 +105,7 @@ bool TexturedNode::initWithFile(const std::string& filename) {
     
     std::shared_ptr<Texture> texture =  Texture::allocWithFile(filename);
     if (texture != nullptr) {
-        Rect bounds = Rect::ZERO;
+        RectCugl bounds = RectCugl::ZERO;
         bounds.size = texture->getSize();
         return initWithTexture(texture, bounds);
     }
@@ -146,7 +146,7 @@ bool TexturedNode::initWithFile(const std::string &filename, const Poly2& poly) 
  * @retain  a reference to the newly loaded texture
  * @return  true if the sprite is initialized properly, false otherwise.
  */
-bool TexturedNode::initWithFile(const std::string &filename, const Rect& rect) {
+bool TexturedNode::initWithFile(const std::string &filename, const RectCugl& rect) {
     CUAssertLog(filename.size() > 0, "Invalid filename for sprite");
     
     std::shared_ptr<Texture> texture =  Texture::allocWithFile(filename);
@@ -171,7 +171,7 @@ bool TexturedNode::initWithFile(const std::string &filename, const Rect& rect) {
 bool TexturedNode::initWithTexture(const std::shared_ptr<Texture>& texture) {
     CUAssertLog(texture != nullptr, "Invalid texture for sprite");
     
-    Rect bounds = Rect::ZERO;
+    RectCugl bounds = RectCugl::ZERO;
     bounds.size = texture->getSize();
     return initWithTexture(texture, bounds);
 }
@@ -219,7 +219,7 @@ bool TexturedNode::initWithTexture(const std::shared_ptr<Texture>& texture, cons
  * @retain  a reference to this texture
  * @return  true if the sprite is initialized properly, false otherwise.
  */
-bool TexturedNode::initWithTexture(const std::shared_ptr<Texture>& texture, const Rect& rect) {
+bool TexturedNode::initWithTexture(const std::shared_ptr<Texture>& texture, const RectCugl& rect) {
     if (_texture != nullptr) {
         CUAssertLog(false, "%s is already initialized",_classname.c_str());
         return false;
@@ -306,7 +306,7 @@ bool TexturedNode::initWithData(const SceneLoader* loader, const std::shared_ptr
     Size size = getSize();
     
     if (vertices.empty() && indices.empty()) {
-        Rect bounds = Rect::ZERO;
+        RectCugl bounds = RectCugl::ZERO;
         bounds.size = _texture->getSize();
         setPolygon(bounds);
     } else if (indices.empty()) {

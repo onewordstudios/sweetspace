@@ -50,8 +50,8 @@
  *
  * @return the full screen resolution for this display in points
  */
-cugl::Rect cugl::impl::DisplayBounds() {
-	cugl::Rect result;
+cugl::RectCugl cugl::impl::DisplayBounds() {
+	cugl::RectCugl result;
 	SDL_Rect bounds;
 	SDL_GetDisplayBounds(0,&bounds);
 	Vec2 scale = DisplayPixelDensity();
@@ -87,8 +87,8 @@ cugl::Rect cugl::impl::DisplayBounds() {
  *
  * @return the usable full screen resolution for this display in points
  */
-cugl::Rect cugl::impl::DisplayUsableBounds(cugl::Display::Orientation orientation) {
-    cugl::Rect result;
+cugl::RectCugl cugl::impl::DisplayUsableBounds(cugl::Display::Orientation orientation) {
+    cugl::RectCugl result;
     SDL_Rect bounds;
     SDL_GetDisplayBounds(0,&bounds);
     Vec2 scale = DisplayPixelDensity();

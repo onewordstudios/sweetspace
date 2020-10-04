@@ -173,7 +173,7 @@ public:
      *
      * @return a solid polygon with the given rect.
      */
-    static std::shared_ptr<PolygonNode> alloc(const Rect& rect) {
+    static std::shared_ptr<PolygonNode> alloc(const RectCugl& rect) {
         std::shared_ptr<PolygonNode> node = std::make_shared<PolygonNode>();
         return (node->init(rect) ? node : nullptr);
     }
@@ -235,7 +235,7 @@ public:
      *
      * @return a textured polygon from the image filename and the given rect.
      */
-    static std::shared_ptr<PolygonNode> allocWithFile(const std::string& filename, const Rect& rect) {
+    static std::shared_ptr<PolygonNode> allocWithFile(const std::string& filename, const RectCugl& rect) {
         std::shared_ptr<PolygonNode> node = std::make_shared<PolygonNode>();
         return (node->initWithFile(filename,rect) ? node : nullptr);
     }
@@ -298,7 +298,7 @@ public:
      * @return a textured polygon from a Texture object and the given rect.
      */
     static std::shared_ptr<PolygonNode> allocWithTexture(const std::shared_ptr<Texture>& texture,
-                                                         const Rect& rect)  {
+                                                         const RectCugl& rect)  {
         std::shared_ptr<PolygonNode> node = std::make_shared<PolygonNode>();
         return (node->initWithTexture(texture,rect) ? node : nullptr);
     }
@@ -363,7 +363,7 @@ public:
      *
      * @param rect  The rectangle to texture
      */
-    virtual void setPolygon(const Rect& rect) override;
+    virtual void setPolygon(const RectCugl& rect) override;
     
 #pragma mark -
 #pragma mark Rendering

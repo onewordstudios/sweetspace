@@ -314,7 +314,7 @@ public:
      *
      * @return true if initialization was successful.
      */
-    virtual bool initWithBounds(const Rect& rect);
+    virtual bool initWithBounds(const RectCugl& rect);
     
     /**
      * Initializes a node with the given bounds.
@@ -335,7 +335,7 @@ public:
      * @return true if initialization was successful.
      */
     bool initWithBounds(float x, float y, float width, float height) {
-        return initWithBounds(Rect(x,y,width,height));
+        return initWithBounds(RectCugl(x,y,width,height));
     }
 
     /**
@@ -472,7 +472,7 @@ public:
      *
      * @return a newly allocated node with the given bounds.
      */
-    static std::shared_ptr<Node> allocWithBounds(const Rect& rect) {
+    static std::shared_ptr<Node> allocWithBounds(const RectCugl& rect) {
         std::shared_ptr<Node> result = std::make_shared<Node>();
         return (result->initWithBounds(rect) ? result : nullptr);
     }
@@ -833,8 +833,8 @@ public:
      *
      * @return An AABB (axis-aligned bounding-box) in the parent's coordinates.
      */
-    Rect getBoundingBox() const {
-        return getNodeToParentTransform().transform(Rect(Vec2::ZERO, getContentSize()));
+    RectCugl getBoundingBox() const {
+        return getNodeToParentTransform().transform(RectCugl(Vec2::ZERO, getContentSize()));
     }
     
 #pragma mark -

@@ -1412,7 +1412,7 @@ public:
      *
      * @return A reference to dst for chaining
      */
-    static Rect* transform(const Mat4& mat, const Rect& rect, Rect* dst);
+    static RectCugl* transform(const Mat4& mat, const RectCugl& rect, RectCugl* dst);
     
     /**
      * Transforms the vector by the given matrix, and stores the result in dst.
@@ -1516,7 +1516,7 @@ public:
      *
      * @return A reference to dst for chaining
      */
-    Rect transform(const Rect& rect) const;
+    RectCugl transform(const RectCugl& rect) const;
 
     /**
      * Returns a copy of this vector transformed by the matrix.

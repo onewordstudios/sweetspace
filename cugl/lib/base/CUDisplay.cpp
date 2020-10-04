@@ -94,7 +94,7 @@ _aspect(Aspect::UNKNOWN) {}
  *
  * @return true if initialization was successful.
  */
-bool Display::init(std::string title, Rect bounds, Uint32 flags) {
+bool Display::init(std::string title, RectCugl bounds, Uint32 flags) {
     if (SDL_Init(SDL_INIT_EVERYTHING) < 0) {
         CULogError("Could not initialize display: %s",SDL_GetError());
         return false;
@@ -263,7 +263,7 @@ void Display::dispose() {
  *
  * @return true if the display was successfully initialized
  */
-bool Display::start(std::string name, Rect bounds, Uint32 flags) {
+bool Display::start(std::string name, RectCugl bounds, Uint32 flags) {
     if (_thedisplay != nullptr) {
         CUAssertLog(false, "The display is already initialized");
         return false;
@@ -351,14 +351,14 @@ void Display::hide() {
  *
  * @return the usable full screen resolution for this display in points.
  */
-Rect Display::getUsableBounds(bool display) {
+RectCugl Display::getUsableBounds(bool display) {
     if (display) {
 		return _usable;
     } else {
 #if CU_PLATFORM == CU_PLATFORM_ANDROID
 		// This is a hack for now until I get something better
 		// Otherwise, we have to make the Display stuff stateful
-		Rect result;
+		RectCugl result;
 		switch (_deviceOrientation) {
 			case Orientation::LANDSCAPE:
 			case Orientation::LANDSCAPE_REVERSED:

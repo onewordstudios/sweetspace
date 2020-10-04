@@ -118,7 +118,7 @@ protected:
     /** The extrusion polygon, when the stroke > 0 */
     Poly2 _extrusion;
     /** The bounds of the extruded shape */
-    Rect _extrbounds;
+    RectCugl _extrbounds;
     
     /** Whether or not the polygon path is closed. */
     bool _closed;
@@ -303,7 +303,7 @@ public:
      *
      * @return a path with the given rect and stroke width.
      */
-    static std::shared_ptr<PathNode> allocWithRect(const Rect& rect, float stroke,
+    static std::shared_ptr<PathNode> allocWithRect(const RectCugl& rect, float stroke,
                                                    PathJoint joint = PathJoint::NONE,
                                                    PathCap cap = PathCap::NONE) {
         std::shared_ptr<PathNode> node = std::make_shared<PathNode>();
@@ -495,7 +495,7 @@ public:
      *
      * @param rect  The rectangle to texture
      */
-    virtual void setPolygon(const Rect& rect) override;
+    virtual void setPolygon(const RectCugl& rect) override;
     
     /**
      * Returns the width of the extruded content.
@@ -546,7 +546,7 @@ public:
      *
      * @return the bounding box of the extruded content.
      */
-    const Rect& getExtrudedContentBounds() const { return _extrbounds; }
+    const RectCugl& getExtrudedContentBounds() const { return _extrbounds; }
 
     
 #pragma mark Rendering

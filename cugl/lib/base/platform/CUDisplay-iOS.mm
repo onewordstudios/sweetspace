@@ -83,8 +83,8 @@ NSDictionary* device_info() {
  * size.  In particular, this is what you should assign the OpenGL viewport
  * when using fullscreen.
  */
-cugl::Rect cugl::impl::DisplayBounds() {
-    cugl::Rect result;
+cugl::RectCugl cugl::impl::DisplayBounds() {
+    cugl::RectCugl result;
     CGRect displayRect = [[UIScreen mainScreen] bounds];
     result.origin.x = displayRect.origin.x;
     result.origin.y = displayRect.origin.y;
@@ -117,8 +117,8 @@ cugl::Rect cugl::impl::DisplayBounds() {
  *
  * @return the usable full screen resolution for this display
  */
-cugl::Rect cugl::impl::DisplayUsableBounds(cugl::Display::Orientation orientation) {
-    cugl::Rect result;
+cugl::RectCugl cugl::impl::DisplayUsableBounds(cugl::Display::Orientation orientation) {
+    cugl::RectCugl result;
     CGRect displayRect = [[UIScreen mainScreen] bounds];
     
     // Convert to CUGL Rect

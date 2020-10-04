@@ -360,9 +360,9 @@ protected:
     Aspect _aspect;
     
     /** The full screen resolution of this device */
-    Rect _bounds;
+    RectCugl _bounds;
     /** The full screen resolution minus menu bars and other features */
-    Rect _usable;
+    RectCugl _usable;
     /** The pixel density of the device */
     Vec2 _scale;
     
@@ -413,7 +413,7 @@ protected:
      *
      * @return true if initialization was successful.
      */
-    bool init(std::string title, Rect bounds, Uint32 flags);
+    bool init(std::string title, RectCugl bounds, Uint32 flags);
     
     /**
      * Uninitializes this object, releasing all resources.
@@ -460,7 +460,7 @@ public:
      *
      * @return true if the display was successfully initialized
      */
-    static bool start(std::string title, Rect bounds, Uint32 flags);
+    static bool start(std::string title, RectCugl bounds, Uint32 flags);
 
     /**
      * Shuts down the SDL display and video system.
@@ -549,7 +549,7 @@ public:
      *
      * @return the full screen resolution for this display in points.
      */
-    Rect getBounds() const { return _bounds;   }
+    RectCugl getBounds() const { return _bounds;   }
     
     /**
      * Returns the full screen resolution for this display in pixels.
@@ -565,7 +565,7 @@ public:
      *
      * @return the full screen resolution for this display in pixels.
      */
-    Rect getPixelBounds() const { return Rect(_bounds.origin*_scale,_bounds.size*_scale);   }
+    RectCugl getPixelBounds() const { return RectCugl(_bounds.origin*_scale,_bounds.size*_scale);   }
     
     /**
      * Returns the usable full screen resolution for this display in points.
@@ -592,7 +592,7 @@ public:
      *
      * @return the usable full screen resolution for this display in points.
      */
-    Rect getUsableBounds(bool display=true);
+    RectCugl getUsableBounds(bool display=true);
     
     /**
      * Returns the number of pixels for each point.

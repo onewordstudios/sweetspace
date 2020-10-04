@@ -200,7 +200,7 @@ void GridLayout::layout(Node* node) {
         auto jt = _entries.find((*it)->getName());
         if (jt != _entries.end()) {
             Entry entry = jt->second;
-            Rect bounds(Vec2(entry.x*grid.width,entry.y*grid.height),grid);
+            RectCugl bounds(Vec2(entry.x*grid.width,entry.y*grid.height),grid);
             reanchor(it->get(), entry.anchor);
             placeNode(it->get(), entry.anchor, bounds, Vec2::ZERO);
         }

@@ -259,7 +259,7 @@ protected:
     /** The set of (unicode) glyphs supported by this atlas */
     std::vector<Uint32> _glyphset;
     /** The location of each glyph in the atlas texture */
-    std::unordered_map<Uint32, Rect> _glyphmap;
+    std::unordered_map<Uint32, RectCugl> _glyphmap;
     /** The cached metrics for each font glyph */
     std::unordered_map<Uint32, Metrics> _glyphsize;
     /** The kerning for each pair of characters */
@@ -757,7 +757,7 @@ public:
      *
      * @return the size of the quad sequence generated for this string.
      */
-    Rect getInternalBounds(const std::string& text, bool utf8=true) const;
+    RectCugl getInternalBounds(const std::string& text, bool utf8=true) const;
     
     /**
      * Returns the pixel offset of the glyphs inside a rendered string.
@@ -794,7 +794,7 @@ public:
      *
      * @return the size of the quad sequence generated for this string.
      */
-    Rect getInternalBounds(const char* text, bool utf8=true) const {
+    RectCugl getInternalBounds(const char* text, bool utf8=true) const {
         return getInternalBounds(std::string(text), utf8);
     }
 
@@ -1069,7 +1069,7 @@ public:
      *
      * @return the texture associated with the quads
      */
-    std::shared_ptr<Texture> getQuads(const std::string& text, const Vec2& origin, const Rect& rect,
+    std::shared_ptr<Texture> getQuads(const std::string& text, const Vec2& origin, const RectCugl& rect,
                                       std::vector<Vertex2>& vertices,  bool utf8=true);
     
     /**
@@ -1108,7 +1108,7 @@ public:
      *
      * @return the texture associated with the quads
      */
-    std::shared_ptr<Texture> getQuads(const char* text, const Vec2& origin, const Rect& rect,
+    std::shared_ptr<Texture> getQuads(const char* text, const Vec2& origin, const RectCugl& rect,
                                       std::vector<Vertex2>& vertices, bool utf8=true) {
         return getQuads(std::string(text),origin,rect,vertices,utf8);
     }
@@ -1159,7 +1159,7 @@ public:
      *
      * @return the texture associated with the quad
      */
-    std::shared_ptr<Texture> getQuad(Uint32 thechar, Vec2& offset, const Rect& rect,
+    std::shared_ptr<Texture> getQuad(Uint32 thechar, Vec2& offset, const RectCugl& rect,
                                      std::vector<Vertex2>& vertices);
     
     
@@ -1196,7 +1196,7 @@ protected:
      * @param vertices  The list to append the vertices to.
      * @param utf8      Whether the string is a UTF8 that must be decoded.
      */
-    void getAtlasQuads(const std::string& text, const Vec2& origin, const Rect& rect,
+    void getAtlasQuads(const std::string& text, const Vec2& origin, const RectCugl& rect,
                        std::vector<Vertex2>& vertices, bool utf8);
     
     /**
@@ -1232,7 +1232,7 @@ protected:
      *
      * @return the texture associated with the quads
      */
-    std::shared_ptr<Texture> getRenderedQuads(const std::string& text, const Vec2& origin, const Rect& rect,
+    std::shared_ptr<Texture> getRenderedQuads(const std::string& text, const Vec2& origin, const RectCugl& rect,
                                               std::vector<Vertex2>& vertices, bool utf8);
     
     /**
@@ -1254,7 +1254,7 @@ protected:
      *
      * @return true if the right edge of the glyph was generated
      */
-    bool getAtlasQuad(Uint32 thechar, Vec2& offset, const Rect& rect, std::vector<Vertex2>& vertices);
+    bool getAtlasQuad(Uint32 thechar, Vec2& offset, const RectCugl& rect, std::vector<Vertex2>& vertices);
     
     /**
      * Creates a single quad to render this character and stores it in vertices
@@ -1277,7 +1277,7 @@ protected:
      *
      * @return the texture associated with the quads
      */
-    std::shared_ptr<Texture> getRenderedQuad(Uint32 thechar, Vec2& offset, const Rect& rect,
+    std::shared_ptr<Texture> getRenderedQuad(Uint32 thechar, Vec2& offset, const RectCugl& rect,
                                              std::vector<Vertex2>& vertices);
     
     /**
@@ -1347,7 +1347,7 @@ protected:
      *
      * @return the size of the quad sequence generated for this string.
      */
-    Rect getInternalBoundsASCII(const std::string& text) const;
+    RectCugl getInternalBoundsASCII(const std::string& text) const;
 
     /**
      * Returns the pixel offset of the glyphs inside a rendered string.
@@ -1378,7 +1378,7 @@ protected:
      *
      * @return the size of the quad sequence generated for this string.
      */
-    Rect getInternalBoundsUTF8(const std::string& text) const;
+    RectCugl getInternalBoundsUTF8(const std::string& text) const;
 
 #pragma mark -
 #pragma mark Atlas Preparation

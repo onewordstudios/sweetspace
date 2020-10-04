@@ -152,7 +152,7 @@ public:
      * @return  true if the sprite is initialized properly, false otherwise.
      */
     virtual bool init() override {
-        return initWithTexture(nullptr, Rect::ZERO);
+        return initWithTexture(nullptr, RectCugl::ZERO);
     }
     
     /**
@@ -200,7 +200,7 @@ public:
      *
      * @return  true if the sprite is initialized properly, false otherwise.
      */
-    bool  init(const Rect& rect) {
+    bool  init(const RectCugl& rect) {
         return initWithTexture(nullptr, rect);
     }
     
@@ -251,7 +251,7 @@ public:
      *
      * @return  true if the sprite is initialized properly, false otherwise.
      */
-    bool initWithFile(const std::string& filename, const Rect& rect);
+    bool initWithFile(const std::string& filename, const RectCugl& rect);
     
     /**
      * Initializes a textured polygon from a Texture object.
@@ -300,7 +300,7 @@ public:
      *
      * @return  true if the sprite is initialized properly, false otherwise.
      */
-    bool initWithTexture(const std::shared_ptr<Texture>& texture, const Rect& rect);
+    bool initWithTexture(const std::shared_ptr<Texture>& texture, const RectCugl& rect);
     
     /**
      * Initializes a node with the given JSON specificaton.
@@ -389,7 +389,7 @@ public:
      *
      * @param rect  The rectangle to texture
      */
-    virtual void setPolygon(const Rect& rect) = 0;
+    virtual void setPolygon(const RectCugl& rect) = 0;
     
     /**
      * Returns the texture polygon for this scene graph node
@@ -424,7 +424,7 @@ public:
      * polygon will be shifted so that its bounding rect is centered
      * at the node center.
      */
-    const Rect& getBoundingRect() const { return _polygon.getBounds(); }
+    const RectCugl& getBoundingRect() const { return _polygon.getBounds(); }
     
     /**
      * Sets the blending function for this texture node.

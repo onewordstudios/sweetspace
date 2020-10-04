@@ -139,7 +139,7 @@ public:
      *
      * @return true if initialization was successful.
      */
-    bool initOffset(const Rect& rect, bool yDown=false) {
+    bool initOffset(const RectCugl& rect, bool yDown=false) {
         return initOffset(rect.origin.x,rect.origin.y,rect.size.width,rect.size.height,yDown);
     }
 
@@ -245,7 +245,7 @@ public:
      *
      * @return a newly allocated OrthographicCamera for the given viewport.
      */
-    static std::shared_ptr<OrthographicCamera> allocOffset(const Rect& rect, bool yDown=false) {
+    static std::shared_ptr<OrthographicCamera> allocOffset(const RectCugl& rect, bool yDown=false) {
         std::shared_ptr<OrthographicCamera> result = std::make_shared<OrthographicCamera>();
         return (result->initOffset(rect,yDown) ? result : nullptr);
     }
@@ -350,7 +350,7 @@ public:
      * @param rect      The viewport bounding box
      * @param yDown     Whether to put the origin in the top left corner
      */
-    void set(const Rect& rect, bool yDown=false) {
+    void set(const RectCugl& rect, bool yDown=false) {
         set(rect.origin.x,rect.origin.y,rect.size.width,rect.size.height,yDown);
     }
     

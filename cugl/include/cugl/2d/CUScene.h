@@ -153,7 +153,7 @@ public:
      *
      * @return true if initialization was successful.
      */
-    virtual bool init(const Rect& rect) {
+    virtual bool init(const RectCugl& rect) {
         return init(rect.origin.x,rect.origin.y,rect.size.width, rect.size.height);
     }
     
@@ -233,7 +233,7 @@ public:
      *
      * @return a newly allocated Scene for the given viewport.
      */
-    static std::shared_ptr<Scene> alloc(const Rect& rect) {
+    static std::shared_ptr<Scene> alloc(const RectCugl& rect) {
         std::shared_ptr<Scene> result = std::make_shared<Scene>();
         return (result->init(rect) ? result : nullptr);
     }
@@ -397,7 +397,7 @@ public:
      *
      * @param rect      The viewport bounding box
      */
-    void setBounds(const Rect& rect) {
+    void setBounds(const RectCugl& rect) {
         _camera->set(rect);
     }
     

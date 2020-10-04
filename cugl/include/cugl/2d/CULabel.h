@@ -193,9 +193,9 @@ protected:
     /** The label text */
     std::string  _text;
     /** The bounds of this rendered text */
-    Rect _textbounds;
+    RectCugl _textbounds;
     /** The true bounds of this rendered text, ignoring any natural spacing */
-    Rect _truebounds;
+    RectCugl _truebounds;
     
     /** The padding offset */
     Vec2 _padding;
@@ -655,7 +655,7 @@ public:
      *
      * @return the bounds of the rendered text.
      */
-    const Rect& getTextBounds() const { return _textbounds; }
+    const RectCugl& getTextBounds() const { return _textbounds; }
 
     /**
      * Returns the tightest bounds of the rendered text.
@@ -674,8 +674,8 @@ public:
      *
      * @return the bounds of the rendered text.
      */
-    const Rect getTrueBounds() const  {
-        return Rect(_textbounds.origin+_truebounds.origin,_truebounds.size);
+    const RectCugl getTrueBounds() const  {
+        return RectCugl(_textbounds.origin+_truebounds.origin,_truebounds.size);
     }
     
     /**

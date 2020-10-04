@@ -106,7 +106,7 @@ protected:
 #pragma mark -
 #pragma mark Values
     /** The current cursor rectangle, */
-    Rect _cursor;
+    RectCugl _cursor;
     /** Timer for blinking the cursor. */
     int _cursorBlink;
     /** Cursor position indexed from the end of text. 0 means the end. */

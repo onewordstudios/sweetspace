@@ -62,7 +62,7 @@ AnimationNode::AnimationNode() :
 _cols(0),
 _size(0),
 _frame(0),
-_bounds(Rect::ZERO) {
+_bounds(RectCugl::ZERO) {
     _name = "AnimationNode";
 }
 

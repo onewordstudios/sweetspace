@@ -565,7 +565,7 @@ void Label::computeSize() {
  */
 void Label::generateRenderData() {
     // Make the backdrop
-    Rect bounds(Vec2::ZERO,getContentSize());
+    RectCugl bounds(Vec2::ZERO,getContentSize());
     unsigned int vsize = 0;
     if (_background != Color4::CLEAR) {
         Vertex2 temp;

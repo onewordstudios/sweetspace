@@ -212,7 +212,7 @@ void ObstacleWorld::dispose() {
  *
  * @return  true if the controller is initialized properly, false otherwise.
  */
-bool ObstacleWorld::init(const Rect& bounds) {
+bool ObstacleWorld::init(const RectCugl& bounds) {
     return init(bounds,_gravity);
 }
 
@@ -228,7 +228,7 @@ bool ObstacleWorld::init(const Rect& bounds) {
  *
  * @return  true if the controller is initialized properly, false otherwise.
  */
-bool ObstacleWorld::init(const Rect& bounds, const Vec2& gravity) {
+bool ObstacleWorld::init(const RectCugl& bounds, const Vec2& gravity) {
     CUAssertLog(!_world,"Attempt to reinitialize and active world");
     _bounds = bounds;
     _world = new b2World(b2Vec2(gravity.x,gravity.y));
@@ -453,7 +453,7 @@ void ObstacleWorld::activateDestructionCallbacks(bool flag) {
  * @param  callback a user implemented callback function.
  * @param  rect     the axis-aligned bounding box
  */
-void ObstacleWorld::queryAABB(std::function<bool(b2Fixture* fixture)> callback, const Rect& aabb) const {
+void ObstacleWorld::queryAABB(std::function<bool(b2Fixture* fixture)> callback, const RectCugl& aabb) const {
     b2AABB b2box;
     b2box.lowerBound.Set(aabb.origin.x, aabb.origin.y);
     b2box.upperBound.Set(aabb.origin.x+aabb.size.width, aabb.origin.y+aabb.size.height);

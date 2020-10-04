@@ -144,7 +144,7 @@ void Camera::rotateAround(const Vec3& point, const Vec3& axis, float angle) {
  * @return the world space equivalent of a point in window coordinates.
  */
 Vec3 Camera::unproject(const Vec3& windowCoords) const {
-    return unproject(windowCoords, Rect(Vec2::ZERO,Application::get()->getDisplaySize()));
+    return unproject(windowCoords, RectCugl(Vec2::ZERO,Application::get()->getDisplaySize()));
 }
 
 /**
@@ -165,7 +165,7 @@ Vec3 Camera::unproject(const Vec3& windowCoords) const {
  *
  * @return the world space equivalent of a point in window coordinates.
  */
-Vec3 Camera::unproject(const Vec3& windowCoords, const Rect& viewport) const {
+Vec3 Camera::unproject(const Vec3& windowCoords, const RectCugl& viewport) const {
     Vec4 temp;
     temp.x = 2*(windowCoords.x-viewport.origin.x) / (viewport.size.width) - 1;
     temp.y = 2*(windowCoords.y-viewport.origin.y) / (viewport.size.height) - 1;
@@ -194,7 +194,7 @@ Vec3 Camera::unproject(const Vec3& windowCoords, const Rect& viewport) const {
  * @return the window space equivalent of a point in world coordinates.
  */
 Vec3 Camera::project(const Vec3& worldCoords) const {
-    return project(worldCoords, Rect(Vec2::ZERO,Application::get()->getDisplaySize()));
+    return project(worldCoords, RectCugl(Vec2::ZERO,Application::get()->getDisplaySize()));
 }
 
 /**
@@ -214,7 +214,7 @@ Vec3 Camera::project(const Vec3& worldCoords) const {
  *
  * @return the window space equivalent of a point in world coordinates.
  */
-Vec3 Camera::project(const Vec3& worldCoords, const Rect& viewport) const {
+Vec3 Camera::project(const Vec3& worldCoords, const RectCugl& viewport) const {
     Vec4 temp(worldCoords,1);
     temp *= _combined;
     
@@ -246,7 +246,7 @@ Vec3 Camera::project(const Vec3& worldCoords, const Rect& viewport) const {
  *
  * Returns a picking Ray from the coordinates given in window coordinates.
  */
-Ray Camera::getPickRay(const Vec3& windowCoords, const Rect& viewport) const {
+Ray Camera::getPickRay(const Vec3& windowCoords, const RectCugl& viewport) const {
     Ray result;
     Vec3 temp = windowCoords; temp.z = 0;
     result.origin    = unproject(temp,viewport);
@@ -271,7 +271,7 @@ Ray Camera::getPickRay(const Vec3& windowCoords, const Rect& viewport) const {
  * @param windowCoords  The point in window coordinates
  */
 Vec2 Camera::windowToScreenCoords(const Vec3& windowCoords) const {
-    return windowToScreenCoords(windowCoords, Rect(Vec2::ZERO,Application::get()->getDisplaySize()));
+    return windowToScreenCoords(windowCoords, RectCugl(Vec2::ZERO,Application::get()->getDisplaySize()));
 }
 
 /**
@@ -288,7 +288,7 @@ Vec2 Camera::windowToScreenCoords(const Vec3& windowCoords) const {
  * @param windowCoords  The point in window coordinates
  * @param viewport      The screen viewport
  */
-Vec2 Camera::windowToScreenCoords(const Vec3& windowCoords, const Rect& viewport) const {
+Vec2 Camera::windowToScreenCoords(const Vec3& windowCoords, const RectCugl& viewport) const {
     Vec2 result = windowCoords;
     result.y = viewport.size.height-result.y;
     return result;
@@ -312,7 +312,7 @@ Vec2 Camera::windowToScreenCoords(const Vec3& windowCoords, const Rect& viewport
  * @param screenCoords  The point in screen coordinates
  */
 Vec3 Camera::screenToWindowCoords(const Vec2& screenCoords) const {
-    return screenToWindowCoords(screenCoords, Rect(Vec2::ZERO,Application::get()->getDisplaySize()));
+    return screenToWindowCoords(screenCoords, RectCugl(Vec2::ZERO,Application::get()->getDisplaySize()));
 }
 
 /**
@@ -333,7 +333,7 @@ Vec3 Camera::screenToWindowCoords(const Vec2& screenCoords) const {
  * @param screenCoords  The point in screen coordinates
  * @param viewport      The screen viewport
  */
-Vec3 Camera::screenToWindowCoords(const Vec2& screenCoords, const Rect& viewport) const {
+Vec3 Camera::screenToWindowCoords(const Vec2& screenCoords, const RectCugl& viewport) const {
     Vec3 result(screenCoords.x,screenCoords.y,_near);
     result.y = viewport.size.height-result.y;
     return result;

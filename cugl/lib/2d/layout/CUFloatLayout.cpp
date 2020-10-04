@@ -251,7 +251,7 @@ void FloatLayout::layout(Node* node) {
 void FloatLayout::layoutHorizontal(Node* node) {
     Size size = node->getContentSize();
     Vec2 pos;
-    Rect bounds;
+    RectCugl bounds;
     
     // Running calculations of size
     std::vector<float> height;
@@ -431,7 +431,7 @@ void FloatLayout::layoutHorizontal(Node* node) {
 void FloatLayout::layoutVertical(Node* node) {
     Size size = node->getContentSize();
     Vec2 pos;
-    Rect bounds;
+    RectCugl bounds;
     
     // Running calculations of size
     std::vector<float> height;

@@ -23,6 +23,9 @@
 #ifdef __APPLE__
 #include <netdb.h>
 #endif
+#if defined(ANDROID)
+#include <netdb.h>
+#endif
 
 // Shared on most platforms, but excluded from the listed
 

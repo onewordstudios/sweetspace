@@ -127,7 +127,7 @@ bool Node::initWithBounds(const Size& size) {
  *
  * @return true if initialization was successful.
  */
-bool Node::initWithBounds(const Rect& rect) {
+bool Node::initWithBounds(const RectCugl& rect) {
     CUAssertLog(_childOffset == -2, "Attempting to reinitialize a Node");
     _position = rect.origin + 0.5f*rect.size;
     _contentSize = rect.size;
@@ -402,7 +402,7 @@ std::string Node::toString(bool verbose) const {
  * @return the transformed size of the node.
  */
 Size Node::getSize() const {
-    Rect bounds = getBoundingBox();
+    RectCugl bounds = getBoundingBox();
     return bounds.size;
 }
 

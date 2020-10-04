@@ -57,7 +57,7 @@ namespace cugl {
 class SpriteShader;
 class Affine2;
 class Texture;
-class Rect;
+class RectCugl;
 class Poly2;
     
 /**
@@ -529,7 +529,7 @@ public:
      *
      * @param rect      The rectangle to draw
      */
-    void fill(const Rect& rect);
+    void fill(const RectCugl& rect);
     
     /**
      * Draws the given rectangle filled with the current color and texture.
@@ -552,7 +552,7 @@ public:
      * @param angle     The amount to rotate the rectangle
      * @param offset    The rectangle offset
      */
-    void fill(const Rect& rect, const Vec2& origin, const Vec2& scale, float angle, const Vec2& offset);
+    void fill(const RectCugl& rect, const Vec2& origin, const Vec2& scale, float angle, const Vec2& offset);
     
     /**
      * Draws the given rectangle filled with the current color and texture.
@@ -572,7 +572,7 @@ public:
      * @param origin    The coordinate origin
      * @param transform The coordinate transform
      */
-    void fill(const Rect& rect, const Vec2& origin, const Mat4& transform);
+    void fill(const RectCugl& rect, const Vec2& origin, const Mat4& transform);
     
     /**
      * Draws the given rectangle filled with the current color and texture.
@@ -592,7 +592,7 @@ public:
      * @param origin    The coordinate origin
      * @param transform The coordinate transform
      */
-    void fill(const Rect& rect, const Vec2& origin, const Affine2& transform);
+    void fill(const RectCugl& rect, const Vec2& origin, const Affine2& transform);
 
     /**
      * Draws the given polygon filled with the current color and texture.
@@ -861,7 +861,7 @@ public:
      *
      * @param rect      The rectangle to outline
      */
-    void outline(const Rect& rect);
+    void outline(const RectCugl& rect);
  
     /**
      * Outlines the given rectangle with the current color and texture.
@@ -885,7 +885,7 @@ public:
      * @param angle     The amount to rotate the rectangle
      * @param offset    The rectangle offset
      */
-    void outline(const Rect& rect, const Vec2& origin, const Vec2& scale, float angle, const Vec2& offset);
+    void outline(const RectCugl& rect, const Vec2& origin, const Vec2& scale, float angle, const Vec2& offset);
     
     /**
      * Outlines the given rectangle with the current color and texture.
@@ -906,7 +906,7 @@ public:
      * @param origin    The coordinate origin
      * @param transform The coordinate transform
      */
-    void outline(const Rect& rect, const Vec2& origin, const Mat4& transform);
+    void outline(const RectCugl& rect, const Vec2& origin, const Mat4& transform);
     
     /**
      * Outlines the given rectangle with the current color and texture.
@@ -927,7 +927,7 @@ public:
      * @param origin    The coordinate origin
      * @param transform The coordinate transform
      */
-    void outline(const Rect& rect, const Vec2& origin, const Affine2& transform);
+    void outline(const RectCugl& rect, const Vec2& origin, const Affine2& transform);
     
     /**
      * Outlines the given polygon with the current color and texture.
@@ -1221,7 +1221,7 @@ public:
      * @param texture   The new active texture
      * @param bounds    The rectangle to texture
      */
-    void draw(const std::shared_ptr<Texture>& texture, const Rect& bounds) {
+    void draw(const std::shared_ptr<Texture>& texture, const RectCugl& bounds) {
         setTexture(texture); setColor(Color4::WHITE);
         fill(bounds);
     }
@@ -1237,7 +1237,7 @@ public:
      * @param color     The new active color
      * @param bounds    The rectangle to texture
      */
-    void draw(const std::shared_ptr<Texture>& texture, Color4 color, const Rect& bounds) {
+    void draw(const std::shared_ptr<Texture>& texture, Color4 color, const RectCugl& bounds) {
         setTexture(texture); setColor(color);
         fill(bounds);
     }
@@ -1310,7 +1310,7 @@ public:
      * @param angle     The amount to rotate the texture
      * @param offset    The texture origin offset
      */
-    void draw(const std::shared_ptr<Texture>& texture, const Rect& bounds,
+    void draw(const std::shared_ptr<Texture>& texture, const RectCugl& bounds,
               const Vec2& origin, const Vec2& scale, float angle, const Vec2& offset) {
         setTexture(texture); setColor(Color4::WHITE);
         fill(bounds, origin, scale, angle, offset);
@@ -1338,7 +1338,7 @@ public:
      * @param angle     The amount to rotate the texture
      * @param offset    The texture origin offset
      */
-    void draw(const std::shared_ptr<Texture>& texture, Color4 color, const Rect& bounds,
+    void draw(const std::shared_ptr<Texture>& texture, Color4 color, const RectCugl& bounds,
               const Vec2& origin, const Vec2& scale, float angle, const Vec2& offset) {
         setTexture(texture); setColor(color);
         fill(bounds, origin, scale, angle, offset);
@@ -1398,7 +1398,7 @@ public:
      * @param origin    The coordinate origin
      * @param transform The coordinate transform
      */
-    void draw(const std::shared_ptr<Texture>& texture, const Rect& bounds,
+    void draw(const std::shared_ptr<Texture>& texture, const RectCugl& bounds,
               const Vec2& origin, const Mat4& transform) {
         setTexture(texture); setColor(Color4::WHITE);
         fill(bounds, origin, transform);
@@ -1422,7 +1422,7 @@ public:
      * @param origin    The coordinate origin
      * @param transform The coordinate transform
      */
-    void draw(const std::shared_ptr<Texture>& texture, Color4 color, const Rect& bounds,
+    void draw(const std::shared_ptr<Texture>& texture, Color4 color, const RectCugl& bounds,
               const Vec2& origin, const Mat4& transform) {
         setTexture(texture); setColor(color);
         fill(bounds, origin, transform);
@@ -1483,7 +1483,7 @@ public:
      * @param origin    The coordinate origin
      * @param transform The coordinate transform
      */
-    void draw(const std::shared_ptr<Texture>& texture, const Rect& bounds,
+    void draw(const std::shared_ptr<Texture>& texture, const RectCugl& bounds,
               const Vec2& origin, const Affine2& transform) {
         setTexture(texture); setColor(Color4::WHITE);
         fill(bounds, origin, transform);
@@ -1507,7 +1507,7 @@ public:
      * @param origin    The coordinate origin
      * @param transform The coordinate transform
      */
-    void draw(const std::shared_ptr<Texture>& texture, Color4 color, const Rect& bounds,
+    void draw(const std::shared_ptr<Texture>& texture, Color4 color, const RectCugl& bounds,
               const Vec2& origin, const Affine2& transform) {
         setTexture(texture); setColor(color);
         fill(bounds, origin, transform);
@@ -1871,7 +1871,7 @@ private:
      *
      * @return the number of vertices added to the drawing buffer.
      */
-    unsigned int prepare(const Rect& rect,  bool solid);
+    unsigned int prepare(const RectCugl& rect,  bool solid);
 
     /**
      * Returns the number of vertices added to the drawing buffer.

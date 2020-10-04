@@ -568,7 +568,7 @@ Poly2& Poly2::set(const Poly2& poly) {
  *
  * @return This polygon, returned for chaining
  */
-Poly2& Poly2::set(const Rect& rect, bool solid) {
+Poly2& Poly2::set(const RectCugl& rect, bool solid) {
     _vertices.resize(4,Vec2::ZERO);
     
     _vertices[0] = rect.origin;

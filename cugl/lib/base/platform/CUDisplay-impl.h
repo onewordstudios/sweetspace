@@ -55,7 +55,7 @@ namespace cugl {
  * size.  In particular, this is what you should assign the OpenGL viewport
  * when using fullscreen.
  */
-cugl::Rect DisplayBounds();
+cugl::RectCugl DisplayBounds();
 
 /**
  * Returns the usable full screen resolution for this display
@@ -80,7 +80,7 @@ cugl::Rect DisplayBounds();
  *
  * @return the usable full screen resolution for this display
  */
-cugl::Rect DisplayUsableBounds(cugl::Display::Orientation orientation=cugl::Display::Orientation::UNKNOWN);
+cugl::RectCugl DisplayUsableBounds(cugl::Display::Orientation orientation=cugl::Display::Orientation::UNKNOWN);
 
 /**
  * Returns the number of pixels for each point.

@@ -1694,8 +1694,8 @@ Vec4 Mat4::transform(const Vec4& vec) const {
  *
  * @return A reference to dst for chaining
  */
-Rect Mat4::transform(const Rect& rect) const {
-    Rect result;
+RectCugl Mat4::transform(const RectCugl& rect) const {
+    RectCugl result;
     return *(transform(*this,rect,&result));
 }
 
@@ -2145,7 +2145,7 @@ Mat4* Mat4::invert(const Mat4& m1, Mat4* dst) {
  *
  * @return A reference to dst for chaining
  */
-cugl::Rect* Mat4::transform(const Mat4& mat, const Rect& rect, Rect* dst) {
+cugl::RectCugl* Mat4::transform(const Mat4& mat, const RectCugl& rect, RectCugl* dst) {
     Vec2 input1(rect.getMinX(),rect.getMinY());
     Vec2 input2(rect.getMinX(),rect.getMaxY());
     Vec2 input3(rect.getMaxX(),rect.getMinY());

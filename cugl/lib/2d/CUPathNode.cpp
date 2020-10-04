@@ -343,7 +343,7 @@ void PathNode::setPolygon(const Poly2& poly) {
  *
  * @param rect  The rectangle to texture
  */
-void PathNode::setPolygon(const Rect& rect) {
+void PathNode::setPolygon(const RectCugl& rect) {
     setPolygon(Poly2(rect,false));
 }
 

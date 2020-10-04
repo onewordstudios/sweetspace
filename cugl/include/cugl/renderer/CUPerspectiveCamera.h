@@ -147,7 +147,7 @@ public:
      *
      * @return true if initialization was successful.
      */
-    bool init(const Rect& rect, float fieldOfView = DEFAULT_CAMERA_FOV) {
+    bool init(const RectCugl& rect, float fieldOfView = DEFAULT_CAMERA_FOV) {
         return init(rect.origin.x, rect.origin.y, rect.size.width, rect.size.height,fieldOfView);
     }
 
@@ -259,7 +259,7 @@ public:
      *
      * @return true if initialization was successful.
      */
-    static std::shared_ptr<PerspectiveCamera> alloc(const Rect& rect, float fieldOfView = DEFAULT_CAMERA_FOV) {
+    static std::shared_ptr<PerspectiveCamera> alloc(const RectCugl& rect, float fieldOfView = DEFAULT_CAMERA_FOV) {
         std::shared_ptr<PerspectiveCamera> result = std::make_shared<PerspectiveCamera>();
         return (result->init(rect,fieldOfView) ? result : nullptr);
     }
@@ -369,7 +369,7 @@ public:
      * @param rect          The viewport bounding box
      * @param fieldOfView   The field of view of the height, in degrees
      */
-    void set(const Rect& rect, float fieldOfView = DEFAULT_CAMERA_FOV) {
+    void set(const RectCugl& rect, float fieldOfView = DEFAULT_CAMERA_FOV) {
         set(rect.origin.x, rect.origin.y, rect.size.width, rect.size.height, fieldOfView);
     }
     

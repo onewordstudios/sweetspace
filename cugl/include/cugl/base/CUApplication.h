@@ -146,9 +146,9 @@ namespace cugl {
 		State _state;
 
 		/** The display bounds of this application */
-		Rect _display;
+		RectCugl _display;
 		/** The SAFE display bounds of this application */
-		Rect _safearea;
+		RectCugl _safearea;
 		/** Whether this application is running in fullscreen */
 		bool _fullscreen;
 		/** Whether this application supports high dpi resolution */
@@ -513,7 +513,7 @@ namespace cugl {
 		 *
 		 * @return the screen bounds of this application.
 		 */
-		Rect getDisplayBounds() const { return _display; }
+		RectCugl getDisplayBounds() const { return _display; }
 
 		/**
 		 * Returns the safe area of this application.
@@ -529,7 +529,7 @@ namespace cugl {
 		 *
 		 * @return the safe area of this application.
 		 */
-		Rect getSafeArea() const { return _safearea; }
+		RectCugl getSafeArea() const { return _safearea; }
 
 		/**
 		 * Sets whether this application is running fullscreen

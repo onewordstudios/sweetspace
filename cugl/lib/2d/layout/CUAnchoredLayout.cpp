@@ -213,7 +213,7 @@ void AnchoredLayout::layout(Node* node) {
             Vec2 offset;
             offset.x = entry.absolute ? entry.x_offset : entry.x_offset*size.width;
             offset.y = entry.absolute ? entry.y_offset : entry.y_offset*size.height;
-            placeNode(it->get(), entry.anchor, Rect(Vec2::ZERO,size), offset);
+            placeNode(it->get(), entry.anchor, RectCugl(Vec2::ZERO,size), offset);
         }
     }
 }

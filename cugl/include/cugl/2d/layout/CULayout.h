@@ -232,7 +232,7 @@ public:
      * @param bounds    The area to compute the position from
      * @param offset    The offset from the computed anchor position
      */
-    static void placeNode(Node* node, Anchor anchor, const Rect& bounds, const Vec2& offset);
+    static void placeNode(Node* node, Anchor anchor, const RectCugl& bounds, const Vec2& offset);
     
     /**
      * Resets the node anchor to agree with the layout anchor

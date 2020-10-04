@@ -142,7 +142,7 @@ bool ObstacleSelector::select() {
         return onQuery(fixture);
     };
     
-    Rect pointer(_position.x-_size.width/2.0f, _position.y-_size.height/2.0f,
+    RectCugl pointer(_position.x-_size.width/2.0f, _position.y-_size.height/2.0f,
                  _size.width,_size.height);
     _controller->queryAABB(callback,pointer);
     if (_selection != nullptr) {

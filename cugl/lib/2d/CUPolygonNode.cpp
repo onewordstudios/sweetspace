@@ -90,7 +90,7 @@ void PolygonNode::setPolygon(const Poly2& poly) {
  *
  * @param rect  The rectangle to texture
  */
-void PolygonNode::setPolygon(const Rect& rect) {
+void PolygonNode::setPolygon(const RectCugl& rect) {
     _polygon.set(rect);
     setContentSize(_polygon.getBounds().size);
 }

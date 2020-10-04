@@ -821,7 +821,7 @@ public:
      *
      * @return A reference to dst for chaining
      */
-    static Rect* transform(const Affine2& aff, const Rect& rect, Rect* dst);
+    static RectCugl* transform(const Affine2& aff, const RectCugl& rect, RectCugl* dst);
     
     /**
      * Returns a copy of the given point transformed.
@@ -851,7 +851,7 @@ public:
      *
      * @return A reference to dst for chaining
      */
-    Rect transform(const Rect& rect) const;
+    RectCugl transform(const RectCugl& rect) const;
     
     
 #pragma mark -

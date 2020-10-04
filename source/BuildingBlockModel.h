@@ -1,4 +1,4 @@
-﻿#ifndef __JS_BUILDING_BLOCK_MODEL_H__
+#ifndef __JS_BUILDING_BLOCK_MODEL_H__
 #define __JS_BUILDING_BLOCK_MODEL_H__
 #include <cugl/assets/CUAsset.h>
 #include <cugl/cugl.h>
@@ -8,8 +8,6 @@
 
 #include "Globals.h"
 #include "LevelConstants.h"
-
-using namespace cugl;
 
 #pragma mark -
 #pragma mark Building Block Model
@@ -43,7 +41,7 @@ class BuildingBlockModel {
 	int range = 0;
 
 	/** The minimum relative angle used */
-	int min = 0;
+	int minRelAngle = 0;
 
 	/** The number of breaches needed for this block*/
 	int breachesNeeded = 0;
@@ -109,7 +107,7 @@ class BuildingBlockModel {
 	 *
 	 * @return min
 	 */
-	int getMin() { return min; }
+	int getMin() { return minRelAngle; }
 	int getBreachesNeeded() { return breachesNeeded; }
 	int getDoorsNeeded() { return doorsNeeded; }
 	int getButtonsNeeded() { return buttonsNeeded; }
@@ -124,7 +122,7 @@ class BuildingBlockModel {
 		  player(0),
 		  distance(-1),
 		  range(0),
-		  min(0),
+		  minRelAngle(0),
 		  breachesNeeded(0),
 		  buttonsNeeded(0),
 		  doorsNeeded(0){};
@@ -184,8 +182,8 @@ class BuildingBlockModel {
 						break;
 				};
 			}
-			min = minAngle - leftWidth;
-			range = maxAngle + rightWidth - min;
+			minRelAngle = minAngle - leftWidth;
+			range = maxAngle + rightWidth - minRelAngle;
 		}
 		breachesNeeded = (int)count_if(
 			objects.begin(), objects.end(),

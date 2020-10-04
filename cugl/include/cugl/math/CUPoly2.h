@@ -139,7 +139,7 @@ private:
     /** The vector of indices in the triangulation */
     std::vector<unsigned short> _indices;
     /** The bounding box for this polygon */
-    Rect _bounds;
+    RectCugl _bounds;
     /** The indexing style of polygon (determines normal form) */
     Type _type;
     
@@ -340,7 +340,7 @@ public:
      * @param rect  The rectangle to copy
      * @param solid Whether to treat this rectangle as a solid polygon
      */
-    Poly2(const Rect& rect, bool solid=true) { set(rect,solid); }
+    Poly2(const RectCugl& rect, bool solid=true) { set(rect,solid); }
     
     /**
      * Deletes the given polygon, freeing all resources.
@@ -486,7 +486,7 @@ public:
      *
      * @return This polygon, returned for chaining
      */
-    Poly2& operator= (const Rect& rect) { return set(rect); }
+    Poly2& operator= (const RectCugl& rect) { return set(rect); }
 
     /**
      * Sets the polygon to have the given vertices
@@ -692,7 +692,7 @@ public:
      *
      * @return This polygon, returned for chaining
      */
-    Poly2& set(const Rect& rect, bool solid=true);
+    Poly2& set(const RectCugl& rect, bool solid=true);
     
     /**
      * Clears the contents of this polygon and sets the type to UNDEFINED
@@ -703,7 +703,7 @@ public:
         _vertices.clear();
         _indices.clear();
         _type = Type::UNDEFINED;
-        _bounds = Rect::ZERO;
+        _bounds = RectCugl::ZERO;
         return *this;
     }
 
@@ -864,7 +864,7 @@ public:
      *
      * @return the bounding box for the polygon
      */
-    const Rect& getBounds() const { return _bounds; }
+    const RectCugl& getBounds() const { return _bounds; }
     
     /**
      * Returns the type of this polygon.

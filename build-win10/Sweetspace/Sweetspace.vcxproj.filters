@@ -43,10 +43,16 @@
     <Filter Include="Source Files\Helpers">
       <UniqueIdentifier>{d2dfc50d-1a28-41ee-b9e9-8350a89f8a5f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Controllers\RakNet">
+    <Filter Include="Header Files\Controllers\Networking">
+      <UniqueIdentifier>{892f7898-00ed-4801-81f2-2b1eb8659a8a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Controllers\Networking\RakNet">
       <UniqueIdentifier>{2db01282-97ab-4cd4-a851-7cc6fc728278}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Controllers\RakNet">
+    <Filter Include="Source Files\Controllers\Networking">
+      <UniqueIdentifier>{4e06dbe6-8387-4d9c-a0b6-33ac113b2e98}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Controllers\Networking\RakNet">
       <UniqueIdentifier>{860b75d5-b054-4944-93d9-1c5224027f0a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -73,12 +79,6 @@
       <Filter>Header Files\Models</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\InputController.h">
-      <Filter>Header Files\Controllers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\source\MagicInternetBox.h">
-      <Filter>Header Files\Controllers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\source\libraries\easywsclient.hpp">
       <Filter>Header Files\Controllers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\ShipModel.h">
@@ -178,466 +178,478 @@
       <Filter>Header Files\Modes</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\_FindFirst.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\AutopatcherPatchContext.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\AutopatcherRepositoryInterface.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\Base64Encoder.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\BitStream.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\CCRakNetSlidingWindow.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\CCRakNetUDT.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\CheckSum.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\CloudClient.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\CloudCommon.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\CloudServer.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\CommandParserInterface.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\ConnectionGraph2.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\ConsoleServer.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\DataCompressor.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\DirectoryDeltaTransfer.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\DR_SHA1.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\DS_BinarySearchTree.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\DS_BPlusTree.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\DS_BytePool.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\DS_ByteQueue.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\DS_Hash.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\DS_Heap.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\DS_HuffmanEncodingTree.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\DS_HuffmanEncodingTreeFactory.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\DS_HuffmanEncodingTreeNode.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\DS_LinkedList.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\DS_List.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\DS_Map.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\DS_MemoryPool.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\DS_Multilist.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\DS_OrderedChannelHeap.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\DS_OrderedList.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\DS_Queue.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\DS_QueueLinkedList.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\DS_RangeList.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\DS_Table.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\DS_ThreadsafeAllocatingQueue.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\DS_Tree.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\DS_WeightedGraph.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\DynDNS.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\EmailSender.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\EmptyHeader.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\EpochTimeToString.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\Export.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\FileList.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\FileListNodeContext.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\FileListTransfer.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\FileListTransferCBInterface.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\FileOperations.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\FormatString.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\FullyConnectedMesh2.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\Getche.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\Gets.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\GetTime.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\gettimeofday.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\GridSectorizer.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\HTTPConnection.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\HTTPConnection2.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\IncrementalReadInterface.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\InternalPacket.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\Itoa.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\Kbhit.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\LinuxStrings.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\LocklessTypes.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\LogCommandParser.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\MessageFilter.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\MessageIdentifiers.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\MTUSize.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\NativeFeatureIncludes.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\NativeFeatureIncludesOverrides.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\NativeTypes.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\NatPunchthroughClient.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\NatPunchthroughServer.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\NatTypeDetectionClient.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\NatTypeDetectionCommon.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\NatTypeDetectionServer.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\NetworkIDManager.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\NetworkIDObject.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\PacketConsoleLogger.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\PacketFileLogger.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\PacketizedTCP.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\PacketLogger.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\PacketOutputWindowLogger.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\PacketPool.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\PacketPriority.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\PluginInterface2.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\PS3Includes.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\PS4Includes.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\Rackspace.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\RakAlloca.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\RakAssert.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\RakMemoryOverride.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\RakNetCommandParser.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\RakNetDefines.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\RakNetDefinesOverrides.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\RakNetSmartPtr.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\RakNetSocket.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\RakNetSocket2.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\RakNetStatistics.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\RakNetTime.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\RakNetTransport2.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\RakNetTypes.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\RakNetVersion.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\RakPeer.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\RakPeerInterface.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\RakSleep.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\RakString.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\RakThread.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\RakWString.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\Rand.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\RandSync.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\ReadyEvent.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\RefCountedObj.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\RelayPlugin.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\ReliabilityLayer.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\ReplicaEnums.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\ReplicaManager3.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\Router2.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\RPC4Plugin.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\SecureHandshake.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\SendToThread.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\SignaledEvent.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\SimpleMutex.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\SimpleTCPServer.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\SingleProducerConsumer.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\SocketDefines.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\SocketIncludes.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\SocketLayer.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\StatisticsHistory.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\StringCompressor.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\StringTable.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\SuperFastHash.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\TableSerializer.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\TCPInterface.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\TeamBalancer.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\TeamManager.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\TelnetTransport.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\ThreadPool.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\ThreadsafePacketLogger.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\TransportInterface.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\TwoWayAuthentication.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\UDPForwarder.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\UDPProxyClient.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\UDPProxyCommon.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\UDPProxyCoordinator.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\UDPProxyServer.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\VariableDeltaSerializer.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\VariableListDeltaTracker.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\VariadicSQLParser.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\VitaIncludes.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\WindowsIncludes.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\WSAStartupSingleton.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\libraries\RakNet\XBox360Includes.h">
-      <Filter>Header Files\Controllers\RakNet</Filter>
+      <Filter>Header Files\Controllers\Networking\RakNet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\libraries\easywsclient.hpp">
+      <Filter>Header Files\Controllers\Networking</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\MagicInternetBox.h">
+      <Filter>Header Files\Controllers\Networking</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\NetworkConnection.h">
+      <Filter>Header Files\Controllers\Networking</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\NetworkDataType.h">
+      <Filter>Header Files\Controllers\Networking</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -664,12 +676,6 @@
     </ClCompile>
     <ClCompile Include="..\..\source\GameGraphRoot.cpp">
       <Filter>Source Files\SceneGraph</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\MagicInternetBox.cpp">
-      <Filter>Source Files\Controllers</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\libraries\easywsclient.cpp">
-      <Filter>Source Files\Controllers</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\ShipModel.cpp">
       <Filter>Source Files\Models</Filter>
@@ -747,334 +753,343 @@
       <Filter>Source Files\Modes</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\libraries\RakNet\WSAStartupSingleton.cpp">
-      <Filter>Source Files\Controllers\RakNet</Filter>
+      <Filter>Source Files\Controllers\Networking\RakNet</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\libraries\RakNet\TableSerializer.cpp">
-      <Filter>Source Files\Controllers\RakNet</Filter>
+      <Filter>Source Files\Controllers\Networking\RakNet</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\libraries\RakNet\TCPInterface.cpp">
-      <Filter>Source Files\Controllers\RakNet</Filter>
+      <Filter>Source Files\Controllers\Networking\RakNet</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\libraries\RakNet\TeamBalancer.cpp">
-      <Filter>Source Files\Controllers\RakNet</Filter>
+      <Filter>Source Files\Controllers\Networking\RakNet</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\libraries\RakNet\TeamManager.cpp">
-      <Filter>Source Files\Controllers\RakNet</Filter>
+      <Filter>Source Files\Controllers\Networking\RakNet</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\libraries\RakNet\TelnetTransport.cpp">
-      <Filter>Source Files\Controllers\RakNet</Filter>
+      <Filter>Source Files\Controllers\Networking\RakNet</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\libraries\RakNet\ThreadsafePacketLogger.cpp">
-      <Filter>Source Files\Controllers\RakNet</Filter>
+      <Filter>Source Files\Controllers\Networking\RakNet</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\libraries\RakNet\TwoWayAuthentication.cpp">
-      <Filter>Source Files\Controllers\RakNet</Filter>
+      <Filter>Source Files\Controllers\Networking\RakNet</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\libraries\RakNet\UDPForwarder.cpp">
-      <Filter>Source Files\Controllers\RakNet</Filter>
+      <Filter>Source Files\Controllers\Networking\RakNet</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\libraries\RakNet\UDPProxyClient.cpp">
-      <Filter>Source Files\Controllers\RakNet</Filter>
+      <Filter>Source Files\Controllers\Networking\RakNet</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\libraries\RakNet\UDPProxyCoordinator.cpp">
-      <Filter>Source Files\Controllers\RakNet</Filter>
+      <Filter>Source Files\Controllers\Networking\RakNet</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\libraries\RakNet\UDPProxyServer.cpp">
-      <Filter>Source Files\Controllers\RakNet</Filter>
+      <Filter>Source Files\Controllers\Networking\RakNet</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\libraries\RakNet\VariableDeltaSerializer.cpp">
-      <Filter>Source Files\Controllers\RakNet</Filter>
+      <Filter>Source Files\Controllers\Networking\RakNet</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\libraries\RakNet\VariableListDeltaTracker.cpp">
-      <Filter>Source Files\Controllers\RakNet</Filter>
+      <Filter>Source Files\Controllers\Networking\RakNet</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\libraries\RakNet\VariadicSQLParser.cpp">
-      <Filter>Source Files\Controllers\RakNet</Filter>
+      <Filter>Source Files\Controllers\Networking\RakNet</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\libraries\RakNet\VitaIncludes.cpp">
-      <Filter>Source Files\Controllers\RakNet</Filter>
+      <Filter>Source Files\Controllers\Networking\RakNet</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\libraries\RakNet\_FindFirst.cpp">
-      <Filter>Source Files\Controllers\RakNet</Filter>
+      <Filter>Source Files\Controllers\Networking\RakNet</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\libraries\RakNet\Base64Encoder.cpp">
-      <Filter>Source Files\Controllers\RakNet</Filter>
+      <Filter>Source Files\Controllers\Networking\RakNet</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\libraries\RakNet\BitStream.cpp">
-      <Filter>Source Files\Controllers\RakNet</Filter>
+      <Filter>Source Files\Controllers\Networking\RakNet</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\libraries\RakNet\CCRakNetSlidingWindow.cpp">
-      <Filter>Source Files\Controllers\RakNet</Filter>
+      <Filter>Source Files\Controllers\Networking\RakNet</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\libraries\RakNet\CCRakNetUDT.cpp">
-      <Filter>Source Files\Controllers\RakNet</Filter>
+      <Filter>Source Files\Controllers\Networking\RakNet</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\libraries\RakNet\CheckSum.cpp">
-      <Filter>Source Files\Controllers\RakNet</Filter>
+      <Filter>Source Files\Controllers\Networking\RakNet</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\libraries\RakNet\CloudClient.cpp">
-      <Filter>Source Files\Controllers\RakNet</Filter>
+      <Filter>Source Files\Controllers\Networking\RakNet</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\libraries\RakNet\CloudCommon.cpp">
-      <Filter>Source Files\Controllers\RakNet</Filter>
+      <Filter>Source Files\Controllers\Networking\RakNet</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\libraries\RakNet\CloudServer.cpp">
-      <Filter>Source Files\Controllers\RakNet</Filter>
+      <Filter>Source Files\Controllers\Networking\RakNet</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\libraries\RakNet\CommandParserInterface.cpp">
-      <Filter>Source Files\Controllers\RakNet</Filter>
+      <Filter>Source Files\Controllers\Networking\RakNet</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\libraries\RakNet\ConnectionGraph2.cpp">
-      <Filter>Source Files\Controllers\RakNet</Filter>
+      <Filter>Source Files\Controllers\Networking\RakNet</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\libraries\RakNet\ConsoleServer.cpp">
-      <Filter>Source Files\Controllers\RakNet</Filter>
+      <Filter>Source Files\Controllers\Networking\RakNet</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\libraries\RakNet\DataCompressor.cpp">
-      <Filter>Source Files\Controllers\RakNet</Filter>
+      <Filter>Source Files\Controllers\Networking\RakNet</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\libraries\RakNet\DirectoryDeltaTransfer.cpp">
-      <Filter>Source Files\Controllers\RakNet</Filter>
+      <Filter>Source Files\Controllers\Networking\RakNet</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\libraries\RakNet\DR_SHA1.cpp">
-      <Filter>Source Files\Controllers\RakNet</Filter>
+      <Filter>Source Files\Controllers\Networking\RakNet</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\libraries\RakNet\DS_BytePool.cpp">
-      <Filter>Source Files\Controllers\RakNet</Filter>
+      <Filter>Source Files\Controllers\Networking\RakNet</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\libraries\RakNet\DS_ByteQueue.cpp">
-      <Filter>Source Files\Controllers\RakNet</Filter>
+      <Filter>Source Files\Controllers\Networking\RakNet</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\libraries\RakNet\DS_HuffmanEncodingTree.cpp">
-      <Filter>Source Files\Controllers\RakNet</Filter>
+      <Filter>Source Files\Controllers\Networking\RakNet</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\libraries\RakNet\DS_Table.cpp">
-      <Filter>Source Files\Controllers\RakNet</Filter>
+      <Filter>Source Files\Controllers\Networking\RakNet</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\libraries\RakNet\DynDNS.cpp">
-      <Filter>Source Files\Controllers\RakNet</Filter>
+      <Filter>Source Files\Controllers\Networking\RakNet</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\libraries\RakNet\EmailSender.cpp">
-      <Filter>Source Files\Controllers\RakNet</Filter>
+      <Filter>Source Files\Controllers\Networking\RakNet</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\libraries\RakNet\EpochTimeToString.cpp">
-      <Filter>Source Files\Controllers\RakNet</Filter>
+      <Filter>Source Files\Controllers\Networking\RakNet</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\libraries\RakNet\FileList.cpp">
-      <Filter>Source Files\Controllers\RakNet</Filter>
+      <Filter>Source Files\Controllers\Networking\RakNet</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\libraries\RakNet\FileListTransfer.cpp">
-      <Filter>Source Files\Controllers\RakNet</Filter>
+      <Filter>Source Files\Controllers\Networking\RakNet</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\libraries\RakNet\FileOperations.cpp">
-      <Filter>Source Files\Controllers\RakNet</Filter>
+      <Filter>Source Files\Controllers\Networking\RakNet</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\libraries\RakNet\FormatString.cpp">
-      <Filter>Source Files\Controllers\RakNet</Filter>
+      <Filter>Source Files\Controllers\Networking\RakNet</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\libraries\RakNet\FullyConnectedMesh2.cpp">
-      <Filter>Source Files\Controllers\RakNet</Filter>
+      <Filter>Source Files\Controllers\Networking\RakNet</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\libraries\RakNet\Getche.cpp">
-      <Filter>Source Files\Controllers\RakNet</Filter>
+      <Filter>Source Files\Controllers\Networking\RakNet</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\libraries\RakNet\Gets.cpp">
-      <Filter>Source Files\Controllers\RakNet</Filter>
+      <Filter>Source Files\Controllers\Networking\RakNet</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\libraries\RakNet\GetTime.cpp">
-      <Filter>Source Files\Controllers\RakNet</Filter>
+      <Filter>Source Files\Controllers\Networking\RakNet</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\libraries\RakNet\gettimeofday.cpp">
-      <Filter>Source Files\Controllers\RakNet</Filter>
+      <Filter>Source Files\Controllers\Networking\RakNet</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\libraries\RakNet\GridSectorizer.cpp">
-      <Filter>Source Files\Controllers\RakNet</Filter>
+      <Filter>Source Files\Controllers\Networking\RakNet</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\libraries\RakNet\HTTPConnection.cpp">
-      <Filter>Source Files\Controllers\RakNet</Filter>
+      <Filter>Source Files\Controllers\Networking\RakNet</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\libraries\RakNet\HTTPConnection2.cpp">
-      <Filter>Source Files\Controllers\RakNet</Filter>
+      <Filter>Source Files\Controllers\Networking\RakNet</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\libraries\RakNet\IncrementalReadInterface.cpp">
-      <Filter>Source Files\Controllers\RakNet</Filter>
+      <Filter>Source Files\Controllers\Networking\RakNet</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\libraries\RakNet\Itoa.cpp">
-      <Filter>Source Files\Controllers\RakNet</Filter>
+      <Filter>Source Files\Controllers\Networking\RakNet</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\libraries\RakNet\LinuxStrings.cpp">
-      <Filter>Source Files\Controllers\RakNet</Filter>
+      <Filter>Source Files\Controllers\Networking\RakNet</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\libraries\RakNet\LocklessTypes.cpp">
-      <Filter>Source Files\Controllers\RakNet</Filter>
+      <Filter>Source Files\Controllers\Networking\RakNet</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\libraries\RakNet\LogCommandParser.cpp">
-      <Filter>Source Files\Controllers\RakNet</Filter>
+      <Filter>Source Files\Controllers\Networking\RakNet</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\libraries\RakNet\MessageFilter.cpp">
-      <Filter>Source Files\Controllers\RakNet</Filter>
+      <Filter>Source Files\Controllers\Networking\RakNet</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\libraries\RakNet\NatPunchthroughClient.cpp">
-      <Filter>Source Files\Controllers\RakNet</Filter>
+      <Filter>Source Files\Controllers\Networking\RakNet</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\libraries\RakNet\NatPunchthroughServer.cpp">
-      <Filter>Source Files\Controllers\RakNet</Filter>
+      <Filter>Source Files\Controllers\Networking\RakNet</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\libraries\RakNet\NatTypeDetectionClient.cpp">
-      <Filter>Source Files\Controllers\RakNet</Filter>
+      <Filter>Source Files\Controllers\Networking\RakNet</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\libraries\RakNet\NatTypeDetectionCommon.cpp">
-      <Filter>Source Files\Controllers\RakNet</Filter>
+      <Filter>Source Files\Controllers\Networking\RakNet</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\libraries\RakNet\NatTypeDetectionServer.cpp">
-      <Filter>Source Files\Controllers\RakNet</Filter>
+      <Filter>Source Files\Controllers\Networking\RakNet</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\libraries\RakNet\NetworkIDManager.cpp">
-      <Filter>Source Files\Controllers\RakNet</Filter>
+      <Filter>Source Files\Controllers\Networking\RakNet</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\libraries\RakNet\NetworkIDObject.cpp">
-      <Filter>Source Files\Controllers\RakNet</Filter>
+      <Filter>Source Files\Controllers\Networking\RakNet</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\libraries\RakNet\PacketConsoleLogger.cpp">
-      <Filter>Source Files\Controllers\RakNet</Filter>
+      <Filter>Source Files\Controllers\Networking\RakNet</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\libraries\RakNet\PacketFileLogger.cpp">
-      <Filter>Source Files\Controllers\RakNet</Filter>
+      <Filter>Source Files\Controllers\Networking\RakNet</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\libraries\RakNet\PacketizedTCP.cpp">
-      <Filter>Source Files\Controllers\RakNet</Filter>
+      <Filter>Source Files\Controllers\Networking\RakNet</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\libraries\RakNet\PacketLogger.cpp">
-      <Filter>Source Files\Controllers\RakNet</Filter>
+      <Filter>Source Files\Controllers\Networking\RakNet</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\libraries\RakNet\PacketOutputWindowLogger.cpp">
-      <Filter>Source Files\Controllers\RakNet</Filter>
+      <Filter>Source Files\Controllers\Networking\RakNet</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\libraries\RakNet\PluginInterface2.cpp">
-      <Filter>Source Files\Controllers\RakNet</Filter>
+      <Filter>Source Files\Controllers\Networking\RakNet</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\libraries\RakNet\PS4Includes.cpp">
-      <Filter>Source Files\Controllers\RakNet</Filter>
+      <Filter>Source Files\Controllers\Networking\RakNet</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\libraries\RakNet\Rackspace.cpp">
-      <Filter>Source Files\Controllers\RakNet</Filter>
+      <Filter>Source Files\Controllers\Networking\RakNet</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\libraries\RakNet\RakMemoryOverride.cpp">
-      <Filter>Source Files\Controllers\RakNet</Filter>
+      <Filter>Source Files\Controllers\Networking\RakNet</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\libraries\RakNet\RakNetCommandParser.cpp">
-      <Filter>Source Files\Controllers\RakNet</Filter>
+      <Filter>Source Files\Controllers\Networking\RakNet</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\libraries\RakNet\RakNetSocket.cpp">
-      <Filter>Source Files\Controllers\RakNet</Filter>
+      <Filter>Source Files\Controllers\Networking\RakNet</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\libraries\RakNet\RakNetSocket2.cpp">
-      <Filter>Source Files\Controllers\RakNet</Filter>
+      <Filter>Source Files\Controllers\Networking\RakNet</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\libraries\RakNet\RakNetSocket2_360_720.cpp">
-      <Filter>Source Files\Controllers\RakNet</Filter>
+      <Filter>Source Files\Controllers\Networking\RakNet</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\libraries\RakNet\RakNetSocket2_Berkley.cpp">
-      <Filter>Source Files\Controllers\RakNet</Filter>
+      <Filter>Source Files\Controllers\Networking\RakNet</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\libraries\RakNet\RakNetSocket2_Berkley_NativeClient.cpp">
-      <Filter>Source Files\Controllers\RakNet</Filter>
+      <Filter>Source Files\Controllers\Networking\RakNet</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\libraries\RakNet\RakNetSocket2_NativeClient.cpp">
-      <Filter>Source Files\Controllers\RakNet</Filter>
+      <Filter>Source Files\Controllers\Networking\RakNet</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\libraries\RakNet\RakNetSocket2_PS3_PS4.cpp">
-      <Filter>Source Files\Controllers\RakNet</Filter>
+      <Filter>Source Files\Controllers\Networking\RakNet</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\libraries\RakNet\RakNetSocket2_PS4.cpp">
-      <Filter>Source Files\Controllers\RakNet</Filter>
+      <Filter>Source Files\Controllers\Networking\RakNet</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\libraries\RakNet\RakNetSocket2_Vita.cpp">
-      <Filter>Source Files\Controllers\RakNet</Filter>
+      <Filter>Source Files\Controllers\Networking\RakNet</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\libraries\RakNet\RakNetSocket2_Windows_Linux.cpp">
-      <Filter>Source Files\Controllers\RakNet</Filter>
+      <Filter>Source Files\Controllers\Networking\RakNet</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\libraries\RakNet\RakNetSocket2_Windows_Linux_360.cpp">
-      <Filter>Source Files\Controllers\RakNet</Filter>
+      <Filter>Source Files\Controllers\Networking\RakNet</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\libraries\RakNet\RakNetSocket2_WindowsStore8.cpp">
-      <Filter>Source Files\Controllers\RakNet</Filter>
+      <Filter>Source Files\Controllers\Networking\RakNet</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\libraries\RakNet\RakNetStatistics.cpp">
-      <Filter>Source Files\Controllers\RakNet</Filter>
+      <Filter>Source Files\Controllers\Networking\RakNet</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\libraries\RakNet\RakNetTransport2.cpp">
-      <Filter>Source Files\Controllers\RakNet</Filter>
+      <Filter>Source Files\Controllers\Networking\RakNet</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\libraries\RakNet\RakNetTypes.cpp">
-      <Filter>Source Files\Controllers\RakNet</Filter>
+      <Filter>Source Files\Controllers\Networking\RakNet</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\libraries\RakNet\RakPeer.cpp">
-      <Filter>Source Files\Controllers\RakNet</Filter>
+      <Filter>Source Files\Controllers\Networking\RakNet</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\libraries\RakNet\RakSleep.cpp">
-      <Filter>Source Files\Controllers\RakNet</Filter>
+      <Filter>Source Files\Controllers\Networking\RakNet</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\libraries\RakNet\RakString.cpp">
-      <Filter>Source Files\Controllers\RakNet</Filter>
+      <Filter>Source Files\Controllers\Networking\RakNet</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\libraries\RakNet\RakThread.cpp">
-      <Filter>Source Files\Controllers\RakNet</Filter>
+      <Filter>Source Files\Controllers\Networking\RakNet</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\libraries\RakNet\RakWString.cpp">
-      <Filter>Source Files\Controllers\RakNet</Filter>
+      <Filter>Source Files\Controllers\Networking\RakNet</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\libraries\RakNet\Rand.cpp">
-      <Filter>Source Files\Controllers\RakNet</Filter>
+      <Filter>Source Files\Controllers\Networking\RakNet</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\libraries\RakNet\RandSync.cpp">
-      <Filter>Source Files\Controllers\RakNet</Filter>
+      <Filter>Source Files\Controllers\Networking\RakNet</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\libraries\RakNet\ReadyEvent.cpp">
-      <Filter>Source Files\Controllers\RakNet</Filter>
+      <Filter>Source Files\Controllers\Networking\RakNet</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\libraries\RakNet\RelayPlugin.cpp">
-      <Filter>Source Files\Controllers\RakNet</Filter>
+      <Filter>Source Files\Controllers\Networking\RakNet</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\libraries\RakNet\ReliabilityLayer.cpp">
-      <Filter>Source Files\Controllers\RakNet</Filter>
+      <Filter>Source Files\Controllers\Networking\RakNet</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\libraries\RakNet\ReplicaManager3.cpp">
-      <Filter>Source Files\Controllers\RakNet</Filter>
+      <Filter>Source Files\Controllers\Networking\RakNet</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\libraries\RakNet\Router2.cpp">
-      <Filter>Source Files\Controllers\RakNet</Filter>
+      <Filter>Source Files\Controllers\Networking\RakNet</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\libraries\RakNet\RPC4Plugin.cpp">
-      <Filter>Source Files\Controllers\RakNet</Filter>
+      <Filter>Source Files\Controllers\Networking\RakNet</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\libraries\RakNet\SecureHandshake.cpp">
-      <Filter>Source Files\Controllers\RakNet</Filter>
+      <Filter>Source Files\Controllers\Networking\RakNet</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\libraries\RakNet\SendToThread.cpp">
-      <Filter>Source Files\Controllers\RakNet</Filter>
+      <Filter>Source Files\Controllers\Networking\RakNet</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\libraries\RakNet\SignaledEvent.cpp">
-      <Filter>Source Files\Controllers\RakNet</Filter>
+      <Filter>Source Files\Controllers\Networking\RakNet</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\libraries\RakNet\SimpleMutex.cpp">
-      <Filter>Source Files\Controllers\RakNet</Filter>
+      <Filter>Source Files\Controllers\Networking\RakNet</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\libraries\RakNet\SocketLayer.cpp">
-      <Filter>Source Files\Controllers\RakNet</Filter>
+      <Filter>Source Files\Controllers\Networking\RakNet</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\libraries\RakNet\StatisticsHistory.cpp">
-      <Filter>Source Files\Controllers\RakNet</Filter>
+      <Filter>Source Files\Controllers\Networking\RakNet</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\libraries\RakNet\StringCompressor.cpp">
-      <Filter>Source Files\Controllers\RakNet</Filter>
+      <Filter>Source Files\Controllers\Networking\RakNet</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\libraries\RakNet\StringTable.cpp">
-      <Filter>Source Files\Controllers\RakNet</Filter>
+      <Filter>Source Files\Controllers\Networking\RakNet</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\libraries\RakNet\SuperFastHash.cpp">
-      <Filter>Source Files\Controllers\RakNet</Filter>
+      <Filter>Source Files\Controllers\Networking\RakNet</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\libraries\easywsclient.cpp">
+      <Filter>Source Files\Controllers\Networking</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\MagicInternetBox.cpp">
+      <Filter>Source Files\Controllers\Networking</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\NetworkConnection.cpp">
+      <Filter>Source Files\Controllers\Networking</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
