@@ -110,7 +110,8 @@ void NetworkConnection::receive(
 
 									RakNet::BitStream bs;
 									std::vector<uint8_t> connMsg = {NetworkDataType::JoinRoom, 0,
-																	h.numPlayers, pID};
+																	h.numPlayers, pID,
+																	globals::API_VER};
 									bs.Write((uint8_t)ID_USER_PACKET_ENUM);
 									bs.Write((uint8_t)connMsg.size());
 									bs.WriteAlignedBytes(connMsg.data(), connMsg.size());
