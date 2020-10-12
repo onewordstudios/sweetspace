@@ -1,5 +1,8 @@
 #include "StateReconciler.h"
 
+/** Just the top bit in a byte */
+constexpr uint8_t TOP_BIT_MASK = 1 << 7;
+
 constexpr float StateReconciler::DECODE_FLOAT(uint8_t m1, uint8_t m2) {
 	return (float)(m1 + oneByte * m2) / floatPrecision;
 }
@@ -10,13 +13,28 @@ void StateReconciler::encodeFloat(float f, std::vector<uint8_t>& out) {
 	out.push_back((uint8_t)(ff / oneByte));
 }
 
+constexpr uint8_t StateReconciler::ENCODE_LEVEL_NUM(uint8_t level, bool parity) {
+	return parity ? level : (level | TOP_BIT_MASK);
+}
+
+constexpr std::pair<uint8_t, bool> StateReconciler::DECODE_LEVEL_NUM(uint8_t encodedLevel) {
+	if ((encodedLevel & TOP_BIT_MASK) > 0) {
+		return {encodedLevel ^ TOP_BIT_MASK, false};
+	}
+	return {encodedLevel, true};
+}
+
 StateReconciler::StateReconciler(unsigned int oneByte, float floatPrecision, float floatEpsilon) {
 	this->oneByte = oneByte;
 	this->floatPrecision = floatPrecision;
 	this->floatEpsilon = floatEpsilon;
 }
 
-void StateReconciler::encode(std::shared_ptr<ShipModel> state, std::vector<uint8_t>& data) {
+void StateReconciler::encode(std::shared_ptr<ShipModel> state, std::vector<uint8_t>& data,
+							 uint8_t level, bool parity) {
+	// Level data first
+	data.push_back(ENCODE_LEVEL_NUM(level, parity));
+
 	// Adding health and timer
 	auto health = state->getHealth();
 	encodeFloat(health < 0 ? 0 : health, data);
@@ -63,10 +81,18 @@ void StateReconciler::encode(std::shared_ptr<ShipModel> state, std::vector<uint8
 }
 
 bool StateReconciler::reconcile(std::shared_ptr<ShipModel> state,
-								const std::vector<uint8_t>& message) {
-	float health = DECODE_FLOAT(message[1], message[2]);
-	float timer = DECODE_FLOAT(message[3], message[4]);
-	int index = 5; // NOLINT
+								const std::vector<uint8_t>& message, uint8_t level, bool parity) {
+	auto levelData = DECODE_LEVEL_NUM(message[1]);
+	if (levelData.first != level || levelData.second != parity) {
+		return false;
+	}
+
+	int index = 2;
+
+	float health = DECODE_FLOAT(message[index], message[index + 1]);
+	index += 2;
+	float timer = DECODE_FLOAT(message[index], message[index + 1]);
+	index += 2;
 
 	if (abs(state->getHealth() - health) > 1.0f) {
 		state->setHealth(health);
