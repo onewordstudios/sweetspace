@@ -97,15 +97,14 @@ class MagicInternetBox {
 
 	/** Current level number, or -1 if unassigned */
 	int levelNum;
+	/** Parity of current level (to sync state syncs) */
+	bool levelParity;
 
 	/** Whether to skip tutorial levels */
 	bool skipTutorial;
 
-	/** Start the currently assigned level */
-	void startLevel();
-
 	/** Start the given level */
-	void startLevel(int num);
+	void startLevelInternal(int num, bool parity);
 
 	/** Number of connected players */
 	unsigned int numPlayers;

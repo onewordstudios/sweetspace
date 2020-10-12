@@ -55,6 +55,7 @@ MagicInternetBox::MagicInternetBox()
 	status = Uninitialized;
 	events = None;
 	levelNum = -1;
+	levelParity = true;
 	currFrame = 0;
 	playerID = -1;
 	skipTutorial = false;
@@ -64,10 +65,9 @@ MagicInternetBox::MagicInternetBox()
 	activePlayers.fill(false);
 }
 
-void MagicInternetBox::startLevel() { startLevel(levelNum); }
-
-void MagicInternetBox::startLevel(int num) {
+void MagicInternetBox::startLevelInternal(int num, bool parity) {
 	levelNum = num;
+	levelParity = parity;
 	stateReconciler.reset();
 	if (num >= MAX_NUM_LEVELS || num < 0) {
 		events = EndGame;
@@ -244,12 +244,16 @@ void MagicInternetBox::restartGame() {
 		CULog("ERROR: Trying to restart game during invalid state %d", status);
 		return;
 	}
+
+	levelParity = !levelParity;
+
 	std::vector<uint8_t> data;
 	data.push_back((uint8_t)ChangeGame);
 	data.push_back((uint8_t)0);
+	data.push_back((uint8_t)levelParity);
 	conn->send(data);
 
-	startLevel();
+	startLevelInternal(levelNum, levelParity);
 }
 
 void MagicInternetBox::nextLevel() {
@@ -265,12 +269,14 @@ void MagicInternetBox::nextLevel() {
 			level++;
 		}
 	}
-	startLevel(level);
+	levelParity = !levelParity;
+	startLevelInternal(level, levelParity);
 
 	std::vector<uint8_t> data;
 	data.push_back((uint8_t)ChangeGame);
 	data.push_back((uint8_t)1);
 	data.push_back((uint8_t)level);
+	data.push_back((uint8_t)levelParity);
 	conn->send(data);
 }
 
@@ -418,7 +424,7 @@ void MagicInternetBox::update(std::shared_ptr<ShipModel> state) {
 				if (!state->isLevelOver()) {
 					std::vector<uint8_t> data;
 					data.push_back(StateSync);
-					stateReconciler.encode(state, data);
+					stateReconciler.encode(state, data, (uint8_t)levelNum, levelParity);
 					conn->send(data);
 				}
 			}
@@ -463,18 +469,18 @@ void MagicInternetBox::update(std::shared_ptr<ShipModel> state) {
 			}
 			case StateSync: {
 				if (!state->isLevelOver()) {
-					if (!stateReconciler.reconcile(state, message)) {
-						CULog("Should abort level");
-						// TODO abort level properly
+					if (!stateReconciler.reconcile(state, message, (uint8_t)levelNum,
+												   levelParity)) {
+						CULog("Wrong level state sync; ignoring");
 					}
 				}
 				return;
 			}
 			case ChangeGame: {
 				if (message[1] == 0) {
-					startLevel();
+					startLevelInternal(levelNum, message[2]);
 				} else {
-					startLevel(message[2]);
+					startLevelInternal(message[2], message[3]);
 				}
 				return;
 			}
