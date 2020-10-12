@@ -63,6 +63,7 @@ bool GLaDOS::init(std::shared_ptr<ShipModel> ship, std::shared_ptr<LevelModel> l
 	maxButtons = (int)ship->getButtons().size();
 	blocks = level->getBlocks();
 	events = level->getEvents();
+	readyQueue.clear();
 	std::queue<int> empty1;
 	std::queue<int> empty2;
 	std::queue<int> empty3;
@@ -96,6 +97,7 @@ bool GLaDOS::init(std::shared_ptr<ShipModel> ship, std::shared_ptr<LevelModel> l
  */
 bool GLaDOS::init(std::shared_ptr<ShipModel> ship, const int levelNum) {
 	bool success = true;
+	readyQueue.clear();
 	this->ship = ship;
 	this->mib = MagicInternetBox::getInstance();
 	this->levelNum = levelNum;
