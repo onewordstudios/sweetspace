@@ -213,6 +213,8 @@ class LevelModel : public cugl::Asset {
 		initHealth = DEFAULT_INIT_HEALTH;
 	};
 
+	LevelModel(const LevelModel&) = delete;
+
 	/**
 	 * Destroys this level, releasing all resources.
 	 */

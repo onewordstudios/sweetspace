@@ -37,6 +37,8 @@ class ExternalDonutModel : public DonutModel {
    public:
 	ExternalDonutModel(void) : DonutModel(), networkMove(){};
 
+	ExternalDonutModel(const ExternalDonutModel&) = delete;
+
 #pragma region Static Constructors
 	/**
 	 * Returns a newly allocated donut at the origin.

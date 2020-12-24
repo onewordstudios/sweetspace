@@ -11,7 +11,10 @@
 
 #pragma mark -
 #pragma mark Building Block Model
+#pragma warning(push)
+#pragma warning(disable : 4244)
 constexpr float BREACH_RANGE = 15.0f;
+#pragma warning(pop)
 /**
  * Class that represents a dynamically loaded building block in the game
  *
@@ -124,8 +127,8 @@ class BuildingBlockModel {
 		  range(0),
 		  minRelAngle(0),
 		  breachesNeeded(0),
-		  buttonsNeeded(0),
-		  doorsNeeded(0){};
+		  doorsNeeded(0),
+		  buttonsNeeded(0){};
 
 	bool init(const std::shared_ptr<cugl::JsonValue>& json) {
 		std::shared_ptr<cugl::JsonValue> playerDist = json->get(PLAYER_DIST_FIELD);

@@ -4,7 +4,7 @@ using namespace cugl;
 
 constexpr float RANGE_CLAMP(float x, float y, float z) { return (x < y ? y : (x > z ? z : x)); }
 
-std::shared_ptr<InputController> InputController::instance;
+std::shared_ptr<InputController> InputController::instance; // NOLINT (clang-tidy bug)
 
 #pragma region Input Factors
 

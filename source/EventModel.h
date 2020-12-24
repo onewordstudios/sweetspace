@@ -30,6 +30,7 @@ class EventModel {
 	float probability;
 
    public:
+	EventModel(const EventModel&) = delete;
 #pragma mark Static Constructors
 
 	/**

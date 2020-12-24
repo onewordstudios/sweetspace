@@ -18,6 +18,8 @@ class StabilizerModel {
 	/** Construct a new stabilizer model */
 	StabilizerModel();
 
+	StabilizerModel(const StabilizerModel&) = delete;
+
 	/** Return whether this stabilizer is active */
 	bool getIsActive() { return currState != StabilizerModel::StabilizerState::Inactive; }
 

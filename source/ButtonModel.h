@@ -35,6 +35,8 @@ class ButtonModel {
 	 */
 	ButtonModel(void) : angle(-1), pairID(-1), jumped(false), resolved(false), isActive(false) {}
 
+	ButtonModel(const ButtonModel&) = delete;
+
 	/**
 	 * Initializes a new button with the given angle and pair.
 	 *

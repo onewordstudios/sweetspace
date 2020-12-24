@@ -36,7 +36,7 @@ constexpr int SPARKLE_OFFSET_END = 60;
 constexpr float SPARKLE_SCALE_BIG = 1.0;
 
 /** Scale of small sparkle effect */
-constexpr float SPARKLE_SCALE_SMALL = 0.6;
+constexpr float SPARKLE_SCALE_SMALL = 0.6f;
 
 bool BreachNode::init(std::shared_ptr<BreachModel> breach, std::shared_ptr<DonutModel> player,
 					  float shipSize, std::shared_ptr<cugl::Texture> filmstrip,

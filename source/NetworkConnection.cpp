@@ -54,7 +54,7 @@ void NetworkConnection::broadcast(const std::vector<uint8_t>& msg, RakNet::Syste
 	RakNet::BitStream bs;
 	bs.Write((uint8_t)ID_USER_PACKET_ENUM);
 	bs.Write((uint8_t)msg.size());
-	bs.WriteAlignedBytes(msg.data(), msg.size());
+	bs.WriteAlignedBytes(msg.data(), (unsigned int)msg.size());
 	peer->Send(&bs, MEDIUM_PRIORITY, RELIABLE, 1, ignore, true);
 }
 
@@ -62,7 +62,7 @@ void NetworkConnection::send(const std::vector<uint8_t>& msg) {
 	RakNet::BitStream bs;
 	bs.Write((uint8_t)ID_USER_PACKET_ENUM);
 	bs.Write((uint8_t)msg.size());
-	bs.WriteAlignedBytes(msg.data(), msg.size());
+	bs.WriteAlignedBytes(msg.data(), (unsigned int)msg.size());
 
 	remotePeer.match(
 		[&](HostPeers& h) {
@@ -114,7 +114,8 @@ void NetworkConnection::receive(
 																	globals::API_VER};
 									bs.Write((uint8_t)ID_USER_PACKET_ENUM);
 									bs.Write((uint8_t)connMsg.size());
-									bs.WriteAlignedBytes(connMsg.data(), connMsg.size());
+									bs.WriteAlignedBytes(connMsg.data(),
+														 (unsigned int)connMsg.size());
 									peer->Send(&bs, MEDIUM_PRIORITY, RELIABLE, 1,
 											   packet->systemAddress, false);
 									break;

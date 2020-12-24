@@ -33,7 +33,9 @@ class DoorModel {
 	 * NEVER USE A CONSTRUCTOR WITH NEW. If you want to allocate a model on
 	 * the heap, use one of the static constructors instead.
 	 */
-	DoorModel(void) : angle(0), playersOn(0), isActive(false) {}
+	DoorModel(void) : isActive(false), angle(0), playersOn(0) {}
+
+	DoorModel(const DoorModel&) = delete;
 
 	/**
 	 * Destroys this door, releasing all resources.

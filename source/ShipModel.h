@@ -69,6 +69,8 @@ class ShipModel {
 		  timeLeftInTimer(0),
 		  canonicalTimeElapsed(0) {}
 
+	ShipModel(const ShipModel&) = delete;
+
 	/**
 	 * Destroys this breach, releasing all resources.
 	 */

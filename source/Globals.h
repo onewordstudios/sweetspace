@@ -12,6 +12,9 @@
  */
 namespace globals {
 
+#pragma warning(push)
+#pragma warning(disable : 4244)
+
 /** Network tick frequency */
 constexpr unsigned int NETWORK_TICK = 12; // NOLINT
 
@@ -22,16 +25,16 @@ constexpr uint8_t API_VER = 0; // NOLINT
 constexpr int UNOP_MARKER = 12; // NOLINT
 
 /** Number of tutorial levels */
-constexpr unsigned int NUM_TUTORIAL_LEVELS = 11; // NOLINT
+constexpr size_t NUM_TUTORIAL_LEVELS = 11; // NOLINT
 
 /** Number of characters in a ship ID */
-constexpr unsigned int ROOM_LENGTH = 5; // NOLINT
+constexpr size_t ROOM_LENGTH = 5; // NOLINT
 
 /** Minimum number of players per game */
-constexpr unsigned int MIN_PLAYERS = 2; // NOLINT
+constexpr uint8_t MIN_PLAYERS = 2; // NOLINT
 
 /** Maximum number of players per game */
-constexpr unsigned int MAX_PLAYERS = 6; // NOLINT
+constexpr uint8_t MAX_PLAYERS = 6; // NOLINT
 
 /** The Angle in degrees for which a collision occurs*/
 constexpr float DOOR_WIDTH = 10.0f; // NOLINT
@@ -104,4 +107,6 @@ constexpr float MUSIC_FADE_OUT = 0.2f; // NOLINT
 constexpr int MAX_BYTE = 255; // NOLINT
 #pragma endregion
 } // namespace globals
+
+#pragma warning(pop)
 #endif

@@ -20,6 +20,7 @@ class Unopenable {
 	 * the heap, use one of the static constructors instead.
 	 */
 	Unopenable(void) : angle(0), isActive(false) {}
+	Unopenable(const Unopenable&) = delete;
 
 	/**
 	 * Destroys this unopenable door, releasing all resources.

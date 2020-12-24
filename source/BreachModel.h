@@ -38,6 +38,8 @@ class BreachModel {
 		  timeCreated(0),
 		  isActive(false) {}
 
+	BreachModel(const BreachModel&) = delete;
+
 	/**
 	 * Destroys this breach, releasing all resources.
 	 */

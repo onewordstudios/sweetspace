@@ -72,7 +72,7 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 
 	// Network Initialization
 	net = MagicInternetBox::getInstance();
-	int playerID = net->getPlayerID();
+	int playerID = net->getPlayerID().value();
 
 	if (net->getLevelNum() >= MAX_NUM_LEVELS) {
 		// Reached end of game
@@ -88,7 +88,7 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 	} else if (net->getLevelNum() >= globals::NUM_TUTORIAL_LEVELS ||
 			   std::find(std::begin(tutorial::REAL_LEVELS), std::end(tutorial::REAL_LEVELS),
 						 net->getLevelNum()) != std::end(tutorial::REAL_LEVELS)) {
-		const char* levelName = LEVEL_NAMES.at(net->getLevelNum());
+		const char* levelName = LEVEL_NAMES.at(net->getLevelNum().value());
 
 		CULog("Loading level %s b/c mib gave level num %d", levelName, net->getLevelNum());
 		unsigned int shipNumPlayers = net->getMaxNumPlayers();
@@ -109,11 +109,11 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 		// Tutorial Mode. Allocate an empty ship and let the gm do the rest.
 		// Prepare for maximum hardcoding
 		ship = ShipModel::alloc(0, 0, 0, 0, 0, 0);
-		gm.init(ship, net->getLevelNum());
+		gm.init(ship, net->getLevelNum().value());
 	}
 
 	donutModel = ship->getDonuts().at(static_cast<unsigned long>(playerID));
-	ship->setLevelNum(net->getLevelNum());
+	ship->setLevelNum(net->getLevelNum().value());
 
 	// Scene graph Initialization
 	sgRoot.init(assets, ship, playerID);
@@ -136,9 +136,9 @@ void GameMode::dispose() {
 #pragma region Collision Handlers
 
 void GameMode::breachCollisions() {
-	int playerID = net->getPlayerID();
+	int playerID = net->getPlayerID().value();
 	for (int i = 0; i < ship->getBreaches().size(); i++) {
-		auto breach = ship->getBreaches()[i];
+		auto& breach = ship->getBreaches()[i];
 		if (breach == nullptr || !breach->getIsActive()) {
 			continue;
 		}
@@ -177,11 +177,11 @@ void GameMode::breachCollisions() {
 }
 
 void GameMode::doorCollisions() {
-	int playerID = net->getPlayerID();
+	int playerID = net->getPlayerID().value();
 
 	// Normal Door
 	for (int i = 0; i < ship->getDoors().size(); i++) {
-		auto door = ship->getDoors()[i];
+		auto& door = ship->getDoors()[i];
 		if (door == nullptr || door->halfOpen() || !door->getIsActive()) {
 			continue;
 		}
@@ -219,7 +219,7 @@ void GameMode::doorCollisions() {
 
 	// Unopenable Door
 	for (int i = 0; i < ship->getUnopenable().size(); i++) {
-		auto door = ship->getUnopenable()[i];
+		auto& door = ship->getUnopenable()[i];
 		if (door == nullptr || !door->getIsActive()) {
 			continue;
 		}
@@ -250,7 +250,7 @@ void GameMode::doorCollisions() {
 
 void GameMode::buttonCollisions() {
 	for (int i = 0; i < ship->getButtons().size(); i++) {
-		auto button = ship->getButtons().at(i);
+		auto& button = ship->getButtons().at(i);
 
 		if (button == nullptr || !button->getIsActive()) {
 			continue;
@@ -339,7 +339,7 @@ void GameMode::updateStabilizer() {
 }
 
 void GameMode::updateDonuts(float timestep) {
-	int playerID = net->getPlayerID();
+	uint8_t playerID = net->getPlayerID().value();
 
 	// Jump logic check
 	// We wanted donuts to be able to jump on the win screen, but in the absence of that happening
@@ -358,7 +358,7 @@ void GameMode::updateDonuts(float timestep) {
 	// Attempt to recover to idle animation
 	donutModel->transitionFaceState(DonutModel::FaceState::Idle);
 
-	for (auto donut : ship->getDonuts()) {
+	for (auto& donut : ship->getDonuts()) {
 		donut->update(timestep);
 	}
 }
