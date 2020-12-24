@@ -73,7 +73,7 @@ void MainMenuMode::MainMenuTransitions::init(const std::shared_ptr<AssetManager>
 
 	if (toCredits) {
 		animations.animateY("matchmaking_mainmenubg-landnoship", Tween::TweenType::EaseInOut,
-							screenHeight / CREDITS_BG_POS, TRANSITION_DURATION - 1, 2);
+							screenHeight / CREDITS_BG_POS, TRANSITION_DURATION);
 		animations.fadeIn("matchmaking_mainmenubg-landnoship", TRANSITION_DURATION);
 
 		animations.fadeIn("matchmaking_backbtn", TRANSITION_DURATION);
