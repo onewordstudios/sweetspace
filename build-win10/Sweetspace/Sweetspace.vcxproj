@@ -211,7 +211,6 @@
     <ClInclude Include="..\..\source\InputController.h" />
     <ClInclude Include="..\..\source\LevelConstants.h" />
     <ClInclude Include="..\..\source\LevelModel.h" />
-    <ClInclude Include="..\..\source\libraries\easywsclient.hpp" />
     <ClInclude Include="..\..\source\libraries\RakNet\AutopatcherPatchContext.h" />
     <ClInclude Include="..\..\source\libraries\RakNet\AutopatcherRepositoryInterface.h" />
     <ClInclude Include="..\..\source\libraries\RakNet\Base64Encoder.h" />
@@ -404,7 +403,6 @@
     <ClCompile Include="..\..\source\GameGraphRoot.cpp" />
     <ClCompile Include="..\..\source\GLaDOS.cpp" />
     <ClCompile Include="..\..\source\HealthNode.cpp" />
-    <ClCompile Include="..\..\source\libraries\easywsclient.cpp" />
     <ClCompile Include="..\..\source\libraries\RakNet\Base64Encoder.cpp" />
     <ClCompile Include="..\..\source\libraries\RakNet\BitStream.cpp" />
     <ClCompile Include="..\..\source\libraries\RakNet\CCRakNetSlidingWindow.cpp" />

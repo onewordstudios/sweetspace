@@ -7,7 +7,7 @@ class BreachModel {
 	/** The angle at which the breach exists */
 	float angle;
 	/** The state of the breach in health: 0 means its resolved */
-	unsigned int health;
+	uint8_t health;
 	/** Whether the player is currently on this breach */
 	bool playerOn;
 	/** Which player can clear this breach */
@@ -21,7 +21,7 @@ class BreachModel {
 
    public:
 	/** Default Max Health of a Breach*/
-	static constexpr unsigned int HEALTH_DEFAULT = 3;
+	static constexpr uint8_t HEALTH_DEFAULT = 3;
 #pragma mark Constructors
 	/*
 	 * Creates a new breach at angle 0.
@@ -91,8 +91,7 @@ class BreachModel {
 	 *
 	 * @return true if the obstacle is initialized properly, false otherwise.
 	 */
-	virtual bool init(const float a, const unsigned int health, const uint8_t player,
-					  const float time);
+	virtual bool init(const float a, const uint8_t health, const uint8_t player, const float time);
 
 	/**
 	 * Inits the breach upon recycling.
@@ -129,7 +128,7 @@ class BreachModel {
 	 *
 	 * @return the current health of the breach.
 	 */
-	unsigned int getHealth() { return health; }
+	uint8_t getHealth() { return health; }
 
 	/**
 	 * Returns whether the player is currently on the breach.

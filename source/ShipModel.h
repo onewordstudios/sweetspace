@@ -97,7 +97,7 @@ class ShipModel {
 	 * @return true if the model is initialized properly, false otherwise.
 	 */
 	bool init(uint8_t numPlayers, uint8_t numBreaches, uint8_t numDoors, uint8_t playerID,
-			  unsigned int initHealth, uint8_t numButtons) {
+			  float initHealth, uint8_t numButtons) {
 		return init(numPlayers, numBreaches, numDoors, playerID, globals::DEG_ORIG_CIRCLE,
 					initHealth, numButtons);
 	}
@@ -116,10 +116,10 @@ class ShipModel {
 	 * @return true if the model is initialized properly, false otherwise.
 	 */
 	bool init(uint8_t numPlayers, uint8_t numBreaches, uint8_t numDoors, uint8_t playerID,
-			  float shipSize, unsigned int initHealth, uint8_t numButtons);
+			  float shipSize, float initHealth, uint8_t numButtons);
 
 	bool init(uint8_t numPlayers, uint8_t numBreaches, uint8_t numDoors, uint8_t playerID,
-			  float shipSize, unsigned int initHealth, uint8_t numButtons, uint8_t numUnop) {
+			  float shipSize, float initHealth, uint8_t numButtons, uint8_t numUnop) {
 		// Instantiate door models
 		for (unsigned int i = 0; i < numUnop; i++) {
 			unopenable.push_back(std::make_shared<Unopenable>());
@@ -140,8 +140,8 @@ class ShipModel {
 	 * @return A smart pointer to a newly initialized ship model
 	 */
 	static std::shared_ptr<ShipModel> alloc(uint8_t numPlayers, uint8_t numBreaches,
-											uint8_t numDoors, uint8_t playerID,
-											unsigned int initHealth, uint8_t numButtons) {
+											uint8_t numDoors, uint8_t playerID, float initHealth,
+											uint8_t numButtons) {
 		std::shared_ptr<ShipModel> result = std::make_shared<ShipModel>();
 		return (result->init(numPlayers, numBreaches, numDoors, playerID, initHealth, numButtons)
 					? result
@@ -163,7 +163,7 @@ class ShipModel {
 	 */
 	static std::shared_ptr<ShipModel> alloc(uint8_t numPlayers, uint8_t numBreaches,
 											uint8_t numDoors, uint8_t playerID, float shipSize,
-											unsigned int initHealth, uint8_t numButtons) {
+											float initHealth, uint8_t numButtons) {
 		std::shared_ptr<ShipModel> result = std::make_shared<ShipModel>();
 		return (result->init(numPlayers, numBreaches, numDoors, playerID, shipSize, initHealth,
 							 numButtons)

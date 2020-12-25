@@ -308,7 +308,7 @@ void GLaDOS::update(float dt) {
 	}
 
 	for (int i = 0; i < maxButtons; i++) {
-		auto btn = ship->getButtons().at(i);
+		auto& btn = ship->getButtons().at(i);
 		if (btn == nullptr) {
 			continue;
 		}

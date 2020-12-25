@@ -9,14 +9,14 @@
 constexpr int MAX_NEW_ANGLE_ATTEMPTS = 1000;
 
 bool ShipModel::init(uint8_t numPlayers, uint8_t numBreaches, uint8_t numDoors, uint8_t playerID,
-					 float shipSize, unsigned int initHealth, uint8_t numButtons) {
+					 float shipSize, float initHealth, uint8_t numButtons) {
 	timeless = false;
 	// Instantiate donut models and assign colors
 	for (uint8_t i = 0; i < numPlayers; i++) {
 		donuts.push_back(playerID == i ? PlayerDonutModel::alloc(shipSize)
 									   : ExternalDonutModel::alloc(shipSize));
 		// TODO modulo max number of colors once constants are factored out
-		donuts[i]->setColorId((int)i);
+		donuts[i]->setColorId(i);
 		if (!MagicInternetBox::getInstance()->isPlayerActive(i)) {
 			donuts[i]->setIsActive(false);
 		}
@@ -38,7 +38,7 @@ bool ShipModel::init(uint8_t numPlayers, uint8_t numBreaches, uint8_t numDoors, 
 	}
 
 	// Instantiate health
-	health = (float)initHealth;
+	health = initHealth;
 	this->initHealth = health;
 
 	// Initialize size
@@ -95,7 +95,7 @@ bool ShipModel::failAllTask() {
 		int attempts = 0;
 		while (!goodAngle && attempts < MAX_NEW_ANGLE_ATTEMPTS) {
 			// Generate random angle
-			newAngle = (float)(rand() % (int)(getSize()));
+			newAngle = std::fmodf((float)rand(), getSize());
 			goodAngle = true;
 			attempts += 1;
 			// Check against breaches
@@ -107,15 +107,16 @@ bool ShipModel::failAllTask() {
 					break;
 				}
 			}
+			if (!goodAngle) {
+				continue;
+			}
 			// Check against doors
-			if (goodAngle) {
-				for (unsigned int k = 0; k < doors.size(); k++) {
-					float doorAngle = doors[k]->getAngle();
-					float diff = getAngleDifference(doorAngle, newAngle);
-					if (diff <= MIN_DISTANCE && doorAngle != -1) {
-						goodAngle = false;
-						break;
-					}
+			for (unsigned int k = 0; k < doors.size(); k++) {
+				float doorAngle = doors[k]->getAngle();
+				float diff = getAngleDifference(doorAngle, newAngle);
+				if (diff <= MIN_DISTANCE && doorAngle != -1) {
+					goodAngle = false;
+					break;
 				}
 			}
 		}
@@ -127,15 +128,15 @@ bool ShipModel::failAllTask() {
 void ShipModel::setStabilizerStatus(StabilizerStatus s) { stabilizerStatus = s; }
 
 bool ShipModel::createButton(float angle1, uint8_t id1, float angle2, uint8_t id2) {
-	buttons.at(id1)->init(angle1, buttons.at(id2), id2);
-	buttons.at(id2)->init(angle2, buttons.at(id1), id1);
+	buttons[id1]->init(angle1, buttons.at(id2), id2);
+	buttons[id2]->init(angle2, buttons.at(id1), id1);
 	return true;
 }
 
 bool ShipModel::flagButton(uint8_t id) { return buttons[id]->trigger(); }
 
 void ShipModel::resolveButton(uint8_t id) {
-	auto btn = buttons.at(id);
+	auto& btn = buttons.at(id);
 	if (btn == nullptr || !btn->getIsActive() || btn->isResolved()) {
 		return;
 	}

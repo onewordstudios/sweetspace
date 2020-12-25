@@ -10,7 +10,7 @@
  *
  * @return  true if the obstacle is initialized properly, false otherwise.
  */
-bool BreachModel::init(float a, unsigned int health, uint8_t p, float time) {
+bool BreachModel::init(float a, uint8_t health, uint8_t p, float time) {
 	angle = a;
 	this->health = health;
 	player = p;
