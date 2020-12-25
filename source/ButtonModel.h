@@ -11,13 +11,13 @@ class ButtonModel {
 	/** The height of the button, as percentage down (0 = fully up) */
 	float height = 0;
 	/** The current frame of animation */
-	int frame = 0;
+	unsigned int frame = 0;
 	/** The angle at which the button exists */
 	float angle;
 	/** Pointer to the pair of this button */
 	std::shared_ptr<ButtonModel> pairButton;
 	/** ID of the pair of this button */
-	int pairID;
+	uint8_t pairID;
 	/** Whether this button is jumped on */
 	bool jumped;
 	/** Whether this button is resolved */
@@ -46,7 +46,7 @@ class ButtonModel {
 	 *
 	 * @return true if the obstacle is initialized properly, false otherwise.
 	 */
-	bool init(const float a, std::shared_ptr<ButtonModel> pair, int pairID);
+	bool init(const float a, std::shared_ptr<ButtonModel> pair, uint8_t pairID);
 
 #pragma endregion
 #pragma region Accessors
@@ -87,7 +87,7 @@ class ButtonModel {
 	/**
 	 * Return the ID of the pair of this button
 	 */
-	int getPairID() { return pairID; }
+	uint8_t getPairID() { return pairID; }
 
 #pragma endregion
 #pragma region Mutators

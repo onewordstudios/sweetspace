@@ -8,12 +8,11 @@
 /** Max number of attempts of generating a new teleportation angle */
 constexpr int MAX_NEW_ANGLE_ATTEMPTS = 1000;
 
-bool ShipModel::init(unsigned int numPlayers, unsigned int numBreaches, unsigned int numDoors,
-					 unsigned int playerID, float shipSize, int initHealth,
-					 unsigned int numButtons) {
+bool ShipModel::init(uint8_t numPlayers, uint8_t numBreaches, uint8_t numDoors, uint8_t playerID,
+					 float shipSize, unsigned int initHealth, uint8_t numButtons) {
 	timeless = false;
 	// Instantiate donut models and assign colors
-	for (unsigned int i = 0; i < numPlayers; i++) {
+	for (uint8_t i = 0; i < numPlayers; i++) {
 		donuts.push_back(playerID == i ? PlayerDonutModel::alloc(shipSize)
 									   : ExternalDonutModel::alloc(shipSize));
 		// TODO modulo max number of colors once constants are factored out
@@ -24,23 +23,23 @@ bool ShipModel::init(unsigned int numPlayers, unsigned int numBreaches, unsigned
 	}
 
 	// Instantiate breach models
-	for (unsigned int i = 0; i < numBreaches; i++) {
+	for (uint8_t i = 0; i < numBreaches; i++) {
 		breaches.push_back(std::make_shared<BreachModel>());
 	}
 
 	// Instantiate door models
-	for (unsigned int i = 0; i < numDoors; i++) {
+	for (uint8_t i = 0; i < numDoors; i++) {
 		doors.push_back(std::make_shared<DoorModel>());
 	}
 
 	// Instantiate button models
-	for (unsigned int i = 0; i < numButtons; i++) {
+	for (uint8_t i = 0; i < numButtons; i++) {
 		buttons.push_back(std::make_shared<ButtonModel>());
 	}
 
 	// Instantiate health
 	health = (float)initHealth;
-	this->initHealth = (float)initHealth;
+	this->initHealth = health;
 
 	// Initialize size
 	this->shipSize = shipSize;
@@ -50,32 +49,32 @@ bool ShipModel::init(unsigned int numPlayers, unsigned int numBreaches, unsigned
 	return true;
 }
 
-bool ShipModel::createBreach(float angle, int player, int id) {
+bool ShipModel::createBreach(float angle, uint8_t player, uint8_t id) {
 	breaches.at(id)->init(angle, player, timePassed());
 	return true;
 }
 
-bool ShipModel::createBreach(float angle, int health, int player, int id) {
+bool ShipModel::createBreach(float angle, unsigned int health, uint8_t player, uint8_t id) {
 	breaches.at(id)->init(angle, health, player, timePassed());
 	return true;
 }
 
-bool ShipModel::createDoor(float angle, int id) {
+bool ShipModel::createDoor(float angle, uint8_t id) {
 	doors.at(id)->init(angle);
 	return true;
 }
 
-bool ShipModel::createUnopenable(float angle, int id) {
+bool ShipModel::createUnopenable(float angle, uint8_t id) {
 	unopenable.at(id)->init(angle);
 	return true;
 }
 
-bool ShipModel::resolveBreach(int id) {
+bool ShipModel::resolveBreach(uint8_t id) {
 	breaches.at(id)->decHealth(1);
 	return true;
 }
 
-bool ShipModel::flagDoor(int id, int player, int flag) {
+bool ShipModel::flagDoor(uint8_t id, uint8_t player, uint8_t flag) {
 	if (flag == 0) {
 		doors.at(id)->removePlayer(player);
 	} else {
@@ -127,15 +126,15 @@ bool ShipModel::failAllTask() {
 
 void ShipModel::setStabilizerStatus(StabilizerStatus s) { stabilizerStatus = s; }
 
-bool ShipModel::createButton(float angle1, int id1, float angle2, int id2) {
+bool ShipModel::createButton(float angle1, uint8_t id1, float angle2, uint8_t id2) {
 	buttons.at(id1)->init(angle1, buttons.at(id2), id2);
 	buttons.at(id2)->init(angle2, buttons.at(id1), id1);
 	return true;
 }
 
-bool ShipModel::flagButton(int id) { return buttons[id]->trigger(); }
+bool ShipModel::flagButton(uint8_t id) { return buttons[id]->trigger(); }
 
-void ShipModel::resolveButton(int id) {
+void ShipModel::resolveButton(uint8_t id) {
 	auto btn = buttons.at(id);
 	if (btn == nullptr || !btn->getIsActive() || btn->isResolved()) {
 		return;

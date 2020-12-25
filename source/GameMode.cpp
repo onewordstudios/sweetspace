@@ -136,7 +136,7 @@ void GameMode::dispose() {
 #pragma region Collision Handlers
 
 void GameMode::breachCollisions() {
-	int playerID = net->getPlayerID().value();
+	uint8_t playerID = net->getPlayerID().value();
 	for (int i = 0; i < ship->getBreaches().size(); i++) {
 		auto& breach = ship->getBreaches()[i];
 		if (breach == nullptr || !breach->getIsActive()) {

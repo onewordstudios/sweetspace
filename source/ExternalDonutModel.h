@@ -15,6 +15,7 @@ class ExternalDonutModel : public DonutModel {
 		 * If greater than or equal to NETWORK_TICK, then position should be aligned.
 		 */
 		unsigned int framesSinceUpdate;
+
 		/**
 		 * The actual angle of the donut, computed from the last network update position.
 		 */

@@ -25,7 +25,7 @@ constexpr uint8_t API_VER = 0; // NOLINT
 constexpr int UNOP_MARKER = 12; // NOLINT
 
 /** Number of tutorial levels */
-constexpr size_t NUM_TUTORIAL_LEVELS = 11; // NOLINT
+constexpr uint8_t NUM_TUTORIAL_LEVELS = 11; // NOLINT
 
 /** Number of characters in a ship ID */
 constexpr size_t ROOM_LENGTH = 5; // NOLINT

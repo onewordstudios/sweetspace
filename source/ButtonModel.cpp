@@ -4,19 +4,19 @@
 
 #pragma region Animation Constants
 /** Number of frames to animate down */
-constexpr int DOWN_ANIMATION_DURATION = 5;
+constexpr unsigned int DOWN_ANIMATION_DURATION = 5;
 
 /** Number of frames to animate up */
-constexpr int UP_ANIMATION_DURATION = 10;
+constexpr unsigned int UP_ANIMATION_DURATION = 10;
 
 /** Number of frames for button to stay depressed */
-constexpr int DOWN_DURATION = 45;
+constexpr unsigned int DOWN_DURATION = 45;
 
 /** Number of frames to ignore repeat jump commands */
-constexpr int I_FRAMES = 10;
+constexpr unsigned int I_FRAMES = 10;
 #pragma endregion
 
-bool ButtonModel::init(const float a, std::shared_ptr<ButtonModel> pair, int pairID) {
+bool ButtonModel::init(const float a, std::shared_ptr<ButtonModel> pair, uint8_t pairID) {
 	clear();
 	angle = a;
 	pairButton = pair;

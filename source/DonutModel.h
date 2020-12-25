@@ -81,7 +81,7 @@ class DonutModel {
 	 */
 	void updateJump(float timestep);
 	/** Id of donut's color */
-	int colorId;
+	uint8_t colorId;
 
    public:
 #pragma mark Constructors
@@ -261,8 +261,8 @@ class DonutModel {
 	 */
 	void setIsActive(bool active) { isActive = active; }
 
-	void setColorId(int i) { colorId = i; }
-	int getColorId() { return colorId; }
+	void setColorId(uint8_t i) { colorId = i; }
+	uint8_t getColorId() { return colorId; }
 
 	/**
 	 * Applies a force to the donut.

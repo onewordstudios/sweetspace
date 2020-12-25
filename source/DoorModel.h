@@ -3,19 +3,20 @@
 #include <cugl/cugl.h>
 
 #include <bitset>
+
+#include "Globals.h"
+
 /** The max height of the door*/
-constexpr int MAX_HEIGHT = 1600;
+constexpr unsigned int MAX_HEIGHT = 1600;
 /** The max height of the door*/
-constexpr int HALF_OPEN = 400;
+constexpr unsigned int HALF_OPEN = 400;
 /** The speed of the door raising */
-constexpr int SPEED = 20;
-/** The size to make the bitset */
-constexpr unsigned int MAX_PLAYERS = 8;
+constexpr unsigned int SPEED = 20;
 
 class DoorModel {
    private:
 	/** The height of the door */
-	int height = 0;
+	unsigned int height = 0;
 	/** Whether or not this object is active */
 	bool isActive;
 
@@ -23,7 +24,7 @@ class DoorModel {
 	/** The angle at which the door exists */
 	float angle;
 	/** The state of the door */
-	unsigned char playersOn;
+	std::bitset<globals::MAX_PLAYERS> playersOn;
 
    public:
 #pragma mark Constructors
@@ -33,7 +34,7 @@ class DoorModel {
 	 * NEVER USE A CONSTRUCTOR WITH NEW. If you want to allocate a model on
 	 * the heap, use one of the static constructors instead.
 	 */
-	DoorModel(void) : isActive(false), angle(0), playersOn(0) {}
+	DoorModel(void) : isActive(false), angle(0), playersOn() {}
 
 	DoorModel(const DoorModel&) = delete;
 
@@ -99,37 +100,26 @@ class DoorModel {
 	 *
 	 * @return the current height of the door.
 	 */
-	int getHeight() { return height; }
+	unsigned int getHeight() { return height; }
 
 	/**
 	 * Returns the number of players in range of the door.
 	 *
 	 * @return the number of players in range of the door.
 	 */
-	int getPlayersOn() {
-		std::bitset<MAX_PLAYERS> ids(playersOn);
-		return (int)ids.count();
-	}
-
-	/**
-	 * Sets the current angle of the door in degrees.
-	 *
-	 * @param value The door angle in degrees
-	 */
-	void setAngle(float value) { angle = value; }
+	uint8_t getPlayersOn() { return (uint8_t)playersOn.count(); }
 
 	/**
 	 * Adds the given player's flag from the door.
-	 *
 	 */
-	void addPlayer(int id) { playersOn = playersOn | (unsigned char)pow(2, id); }
+	void addPlayer(uint8_t id) { playersOn.set(id); }
 
 	/**
 	 * Removes the given player's flag from the door. Requires that this player is on the door
 	 */
-	void removePlayer(int id) {
+	void removePlayer(uint8_t id) {
 		if (!resolved()) {
-			playersOn = playersOn ^ (unsigned char)pow(2, id);
+			playersOn.reset(id);
 		}
 	}
 
@@ -153,7 +143,7 @@ class DoorModel {
 	/**
 	 * Returns whether this player is on the door.
 	 */
-	bool isPlayerOn(int id) { return (playersOn & (unsigned char)pow(2, id)) > 0; }
+	bool isPlayerOn(uint8_t id) { return playersOn.test(id); }
 
 	/**
 	 * Returns whether this door is resolved.
@@ -164,7 +154,7 @@ class DoorModel {
 	 * Resets this door.
 	 */
 	void reset() {
-		playersOn = 0;
+		playersOn.reset();
 		height = 0;
 		isActive = false;
 	}
