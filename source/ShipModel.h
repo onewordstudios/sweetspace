@@ -401,7 +401,7 @@ class ShipModel {
 	void resolveButton(uint8_t id);
 
 	/**
-	 * Gets if level is tutorial
+	 * Get current level number
 	 */
 	uint8_t getLevelNum() { return levelNum; }
 

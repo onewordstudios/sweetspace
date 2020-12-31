@@ -87,7 +87,7 @@ class MagicInternetBox {
 	unsigned int currFrame;
 
 	/**
-	 * ID of the current player, or -1 if unassigned
+	 * ID of the current player, or empty if unassigned
 	 */
 	tl::optional<uint8_t> playerID;
 
@@ -96,7 +96,7 @@ class MagicInternetBox {
 	 */
 	std::string roomID;
 
-	/** Current level number, or -1 if unassigned */
+	/** Current level number, or empty if unassigned */
 	tl::optional<uint8_t> levelNum;
 	/** Parity of current level (to sync state syncs) */
 	bool levelParity;
@@ -213,11 +213,6 @@ class MagicInternetBox {
 	 * the next event.
 	 */
 	void acknowledgeNetworkEvent() { events = None; }
-
-	/**
-	 * Disconnect from the room and cleanup this object.
-	 */
-	void leaveRoom();
 
 	/**
 	 * Returns the room ID this controller is connected to.

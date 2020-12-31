@@ -84,7 +84,9 @@ std::shared_ptr<MagicInternetBox> MagicInternetBox::instance; // NOLINT (clang-t
 #pragma region Initialization
 
 MagicInternetBox::MagicInternetBox()
-	: activePlayers(),
+	: playerID(),
+	  levelNum(),
+	  activePlayers(),
 	  stateReconciler(ONE_BYTE, FLOAT_PRECISION, FLOAT_EPSILON),
 	  lastAttemptConnectionTime() {
 #ifdef _WIN32
@@ -101,10 +103,8 @@ MagicInternetBox::MagicInternetBox()
 	conn = nullptr;
 	status = Uninitialized;
 	events = None;
-	levelNum = -1;
 	levelParity = true;
 	currFrame = 0;
-	playerID = -1;
 	skipTutorial = false;
 	numPlayers = 0;
 	maxPlayers = 0;
@@ -244,8 +244,6 @@ void MagicInternetBox::sendData(NetworkDataType type, float angle, int id, int d
 }
 
 MagicInternetBox::MatchmakingStatus MagicInternetBox::matchStatus() { return status; }
-
-void MagicInternetBox::leaveRoom() {}
 
 #pragma region Getters
 
@@ -682,5 +680,6 @@ void MagicInternetBox::reset() {
 	activePlayers.fill(false);
 	stateReconciler.reset();
 	roomID = "";
-	playerID = -1;
+	playerID = tl::nullopt;
+	levelNum = tl::nullopt;
 }

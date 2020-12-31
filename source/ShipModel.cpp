@@ -15,7 +15,7 @@ bool ShipModel::init(uint8_t numPlayers, uint8_t numBreaches, uint8_t numDoors, 
 	for (uint8_t i = 0; i < numPlayers; i++) {
 		donuts.push_back(playerID == i ? PlayerDonutModel::alloc(shipSize)
 									   : ExternalDonutModel::alloc(shipSize));
-		// TODO modulo max number of colors once constants are factored out
+
 		donuts[i]->setColorId(i);
 		if (!MagicInternetBox::getInstance()->isPlayerActive(i)) {
 			donuts[i]->setIsActive(false);
