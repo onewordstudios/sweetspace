@@ -353,13 +353,11 @@ void MagicInternetBox::update() {
 					case 1: {
 						CULog("Room Does Not Exist");
 						status = ClientRoomInvalid;
-						conn = nullptr;
 						return;
 					}
 					case 2: {
 						CULog("Room Full");
 						status = ClientRoomFull;
-						conn = nullptr;
 						return;
 					}
 					case 3:
@@ -400,6 +398,12 @@ void MagicInternetBox::update() {
 				return;
 		}
 	});
+
+	switch (status) {
+		case ClientRoomInvalid:
+		case ClientRoomFull:
+			conn = nullptr;
+	}
 }
 
 void MagicInternetBox::update(std::shared_ptr<ShipModel> state) {
