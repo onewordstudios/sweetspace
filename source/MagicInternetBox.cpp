@@ -43,11 +43,14 @@ typedef int socket_t;
 #define _SOCKET_T_DEFINED
 #endif
 #ifndef INVALID_SOCKET
+// NOLINTNEXTLINE
 #define INVALID_SOCKET (-1)
 #endif
 #ifndef SOCKET_ERROR
+// NOLINTNEXTLINE
 #define SOCKET_ERROR (-1)
 #endif
+// NOLINTNEXTLINE
 #define closesocket(s) ::close(s)
 #include <errno.h>
 #endif
@@ -387,7 +390,7 @@ void MagicInternetBox::update() {
 							status = ClientError;
 							return;
 						}
-						CULog("Join Room Success; player id %d out of %d players", playerID,
+						CULog("Join Room Success; player id %d out of %d players", *playerID,
 							  numPlayers);
 						for (unsigned int i = 0; i < numPlayers; i++) {
 							activePlayers.at(i) = true;
