@@ -51,7 +51,7 @@ MainMenuMode::MainMenuMode()
 
 MainMenuMode::~MainMenuMode() { dispose(); }
 
-bool MainMenuMode::init(const std::shared_ptr<AssetManager>& assets) {
+bool MainMenuMode::init(const std::shared_ptr<AssetManager>& assets, bool toCredits) {
 	// Initialize the scene to a locked width
 	cugl::Size dimen = Application::get()->getDisplaySize();
 	dimen *= globals::SCENE_WIDTH / dimen.width; // Lock the game to a reasonable resolution
@@ -84,7 +84,6 @@ bool MainMenuMode::init(const std::shared_ptr<AssetManager>& assets) {
 
 #pragma region Scene Graph Components
 	bg0stars = assets->get<Node>("matchmaking_mainmenubg2");
-	transition->init(assets);
 
 	creditsBtn = std::dynamic_pointer_cast<Button>(assets->get<Node>("matchmaking_creditsbtn"));
 	credits = assets->get<Node>("matchmaking_credits");
@@ -157,6 +156,8 @@ bool MainMenuMode::init(const std::shared_ptr<AssetManager>& assets) {
 	updateClientLabel();
 	addChild(scene);
 
+	transition->init(assets, toCredits);
+
 	return true;
 }
 
@@ -190,8 +191,6 @@ void MainMenuMode::dispose() {
 }
 
 #pragma endregion
-
-void MainMenuMode::triggerCredits() { transition->to(Credits); }
 
 #pragma region Internal Helpers
 

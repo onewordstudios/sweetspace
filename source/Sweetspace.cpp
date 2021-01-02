@@ -89,8 +89,8 @@ void Sweetspace::update(float timestep) {
 		}
 		case LoadToMain: {
 			loading.dispose(); // Disables the input listeners in this mode
-			SoundEffectController::getInstance()->init(
-				assets); // Prepare sound effects for the main menu
+			// Prepare sound effects for the main menu
+			SoundEffectController::getInstance()->init(assets);
 			mainmenu.init(assets);
 			status = MainMenu;
 			return;
@@ -123,10 +123,9 @@ void Sweetspace::update(float timestep) {
 				gameplay.dispose();
 				if (lastEvent == MagicInternetBox::NetworkEvents::EndGame) {
 					CULog("Winner");
-					mainmenu.init(assets);
+					mainmenu.init(assets, true);
 					mib->reset();
 					status = MainMenu;
-					mainmenu.triggerCredits();
 				} else {
 					CULog("Restarting Level");
 					gameplay.init(assets);

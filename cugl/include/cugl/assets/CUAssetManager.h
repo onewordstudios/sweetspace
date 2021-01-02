@@ -523,7 +523,7 @@ public:
         }
         
         CUAssertLog(false, "No loader assigned for given type");
-        return nullptr;
+        return false;
     }
 
     /**
