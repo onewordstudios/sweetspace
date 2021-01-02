@@ -18,7 +18,7 @@ then
 elif [ $1 == '-ciDiff' ]
 then
     cd ..
-    LIST=$(git diff master --diff-filter=ACMR --name-only --no-color | grep -E '\.cpp$')
+    LIST=$(git diff origin/master --diff-filter=ACMR --name-only --no-color | grep -E '\.cpp$')
     clang-tidy $LIST -- -Icugl/include 1>&2 2>/dev/null
 else
     clang-tidy ../source/$1.cpp -- -I../cugl/include
