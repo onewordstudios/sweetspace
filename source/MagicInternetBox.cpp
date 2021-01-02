@@ -449,6 +449,8 @@ void MagicInternetBox::update() {
 		case ClientRoomFull:
 			conn = nullptr;
 			break;
+		default:
+			break;
 	}
 }
 
