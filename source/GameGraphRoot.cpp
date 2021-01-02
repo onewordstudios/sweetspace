@@ -16,7 +16,7 @@ using namespace std;
 // NOLINTNEXTLINE Simple 4-vectors are unlikely to throw an exception
 const std::vector<Color4> GameGraphRoot::BREACH_COLOR{
 	cugl::Color4(219, 197, 52), cugl::Color4(227, 100, 159), cugl::Color4(158, 212, 87),
-	cugl::Color4(244, 150, 40), cugl::Color4(47, 206, 197),	 cugl::Color4(152, 95, 204) };
+	cugl::Color4(244, 150, 40), cugl::Color4(47, 206, 197),	 cugl::Color4(152, 95, 204)};
 
 #pragma mark -
 #pragma mark Level Layout
@@ -120,7 +120,7 @@ constexpr float TIMER_OFFSET_Y = 50;
  * @return true if the controller is initialized properly, false otherwise.
  */
 bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
-	std::shared_ptr<ShipModel> ship, unsigned int playerID) {
+						 std::shared_ptr<ShipModel> ship, unsigned int playerID) {
 	this->playerID = playerID;
 	this->ship = ship;
 	this->prevPlayerAngle = ship->getDonuts().at(playerID)->getAngle();
@@ -135,8 +135,7 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	// Initialize the scene to a locked width
 	if (assets == nullptr) {
 		return false;
-	}
-	else if (!Scene::init(dimen)) {
+	} else if (!Scene::init(dimen)) {
 		return false;
 	}
 
@@ -272,18 +271,17 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 		// Player node is handled separately
 		if (i == playerID) {
 			donutNode = PlayerDonutNode::alloc(playerModel, screenHeight, bodyTexture, faceIdle,
-				faceDizzy, faceWork, tempDonutNode->getPosition());
+											   faceDizzy, faceWork, tempDonutNode->getPosition());
 			allSpace->addChild(donutNode);
 			tempDonutNode = nullptr;
-		}
-		else {
+		} else {
 			std::shared_ptr<ExternalDonutNode> newDonutNode =
 				ExternalDonutNode::alloc(donutModel, playerModel, ship->getSize(), bodyTexture,
-					faceIdle, faceDizzy, faceWork);
+										 faceIdle, faceDizzy, faceWork);
 			externalDonutsNode->addChild(newDonutNode);
 
 			Vec2 donutPos = Vec2(sin(donutModel->getAngle() * (globals::RADIUS + DONUT_OFFSET)),
-				-cos(donutModel->getAngle()) * (globals::RADIUS + DONUT_OFFSET));
+								 -cos(donutModel->getAngle()) * (globals::RADIUS + DONUT_OFFSET));
 			newDonutNode->setPosition(donutPos);
 		}
 	}
@@ -295,25 +293,25 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	for (int i = 0; i < ship->getBreaches().size(); i++) {
 		std::shared_ptr<BreachModel> breachModel = ship->getBreaches().at((unsigned long)i);
 		string breachColor = PLAYER_COLOR.at((unsigned long)ship->getDonuts()
-			.at((unsigned long)breachModel->getPlayer())
-			->getColorId());
+												 .at((unsigned long)breachModel->getPlayer())
+												 ->getColorId());
 		std::shared_ptr<cugl::Texture> pattern = assets->get<Texture>("breach_" + breachColor);
 		cugl::Color4 color = BREACH_COLOR.at((unsigned long)ship->getDonuts()
-			.at((unsigned long)breachModel->getPlayer())
-			->getColorId());
+												 .at((unsigned long)breachModel->getPlayer())
+												 ->getColorId());
 		// Initialize sparkle nodes
 		std::shared_ptr<SparkleNode> sparkleNodeBig =
 			SparkleNode::alloc(playerModel, ship->getSize(), breachSparkleBig, Color4::WHITE,
-				SparkleNode::SparkleType::Big);
+							   SparkleNode::SparkleType::Big);
 		breachSparklesNode->addChild(sparkleNodeBig);
 		std::shared_ptr<SparkleNode> sparkleNodeSmall =
 			SparkleNode::alloc(playerModel, ship->getSize(), breachSparkleSmall, Color4::WHITE,
-				SparkleNode::SparkleType::Small);
+							   SparkleNode::SparkleType::Small);
 		breachSparklesNode->addChild(sparkleNodeSmall);
 
 		std::shared_ptr<BreachNode> breachNode =
 			BreachNode::alloc(breachModel, playerModel, ship->getSize(), breachFilmstrip, pattern,
-				color, sparkleNodeBig, sparkleNodeSmall);
+							  color, sparkleNodeBig, sparkleNodeSmall);
 		breachNode->setTag((unsigned int)(i + 1));
 
 		// Add the breach node
@@ -350,7 +348,7 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 		std::shared_ptr<ButtonModel> buttonModel = ship->getButtons().at((unsigned long)i);
 		std::shared_ptr<SparkleNode> sparkleNode =
 			SparkleNode::alloc(playerModel, ship->getSize(), breachSparkleBig, Color4::WHITE,
-				SparkleNode::SparkleType::Big);
+							   SparkleNode::SparkleType::Big);
 		buttonSparklesNode->addChild(sparkleNode);
 		std::shared_ptr<ButtonNode> buttonNode = ButtonNode::alloc(
 			buttonModel, playerModel, ship->getSize(),
@@ -371,8 +369,7 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 			tutorial->setScale(TUTORIAL_SCALE);
 			tutorialNode->addChildWithTag(tutorial, i + 1);
 		}
-	}
-	else if (ship->getLevelNum() == tutorial::BUTTON_LEVEL) {
+	} else if (ship->getLevelNum() == tutorial::BUTTON_LEVEL) {
 		for (int i = 0; i < buttonsNode->getChildCount(); i++) {
 			std::shared_ptr<Texture> image = assets->get<Texture>("engine_tutorial");
 			std::shared_ptr<TutorialNode> tutorial = TutorialNode::alloc(image);
@@ -382,8 +379,7 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 			tutorial->setScale(TUTORIAL_SCALE);
 			tutorialNode->addChildWithTag(tutorial, i + 1);
 		}
-	}
-	else if (ship->getLevelNum() == tutorial::REAL_LEVELS.at(4)) {
+	} else if (ship->getLevelNum() == tutorial::REAL_LEVELS.at(4)) {
 		std::shared_ptr<Texture> image = assets->get<Texture>("timer_tutorial1");
 		timerTutorial->setTexture(image);
 		float posY = timerTutorial->getPositionY() + TIMER_OFFSET_Y;
@@ -562,8 +558,7 @@ void GameGraphRoot::update(float timestep) {
 		if (ship->getButtons().at(i)->getIsActive()) {
 			coordHUD->setColor(cugl::Color4::RED);
 			break;
-		}
-		else {
+		} else {
 			coordHUD->setColor(cugl::Color4::WHITE);
 		}
 	}
@@ -574,93 +569,86 @@ void GameGraphRoot::update(float timestep) {
 
 	// State Check for Drawing
 	switch (status) {
-	case Normal:
-		// Hide Unnecessary Overlays
-		lossScreen->setVisible(false);
-		winScreen->setVisible(false);
-		reconnectOverlay->setVisible(false);
-		timeoutDisplay->setVisible(false);
-		// Reset Timeout Counters to negative value
-		timeoutCurrent.mark();
-		timeoutStart.mark();
-		break;
-	case Loss:
-		// Show loss screen
-		lossScreen->setVisible(true);
-		if (playerID != 0) {
-			lostWaitText->setVisible(true);
-			restartBtn->setVisible(false);
-		}
-		break;
-	case Win:
-		// Show Win Screen
-		winScreen->setVisible(true);
-		nearSpace->setVisible(false);
-		healthNode->setVisible(false);
-		rollTutorial->setVisible(false);
-		moveTutorial->setVisible(false);
-		healthTutorial->setVisible(false);
-		communicateTutorial->setVisible(false);
-		timerBorder->setVisible(false);
-		healthNodeOverlay->setVisible(false);
-		healthNodeNumbers->setVisible(false);
-		coordHUD->setVisible(false);
-		if (playerID != 0) {
-			winWaitText->setVisible(true);
-			nextBtn->setVisible(false);
-		}
-		break;
-	case Reconnecting:
-		// Still Reconnecting, Animation Frames
-		// Check for initial reconnection attempt
-		if (timeoutCurrent.ellapsedNanos(timeoutStart) < 0) {
-			timeoutStart.mark();
-		}
-		if (timeoutCurrent.ellapsedMillis(timeoutStart) <
-			CONNECTION_TIMEOUT - 3 * MILLISECONDS_IN_SECONDS) {
-			// Regular Reconnect Display
+		case Normal:
+			// Hide Unnecessary Overlays
+			lossScreen->setVisible(false);
+			winScreen->setVisible(false);
+			reconnectOverlay->setVisible(false);
 			timeoutDisplay->setVisible(false);
+			// Reset Timeout Counters to negative value
 			timeoutCurrent.mark();
-			reconnectOverlay->setVisible(true);
-			reconnectDonut->setAngle(
-				(float)(reconnectDonut->getAngle() - globals::PI_180 * RECONNECT_SPIN_RATIO));
-			currentEllipsesFrame++;
-			if (currentEllipsesFrame > MAX_ELLIPSES_FRAMES) {
-				currentEllipsesFrame = 0;
+			timeoutStart.mark();
+			break;
+		case Loss:
+			// Show loss screen
+			lossScreen->setVisible(true);
+			if (playerID != 0) {
+				lostWaitText->setVisible(true);
+				restartBtn->setVisible(false);
 			}
-			else if (currentEllipsesFrame % MAX_ELLIPSES_FRAMES < FRAMES_PER_SECOND) {
-				reconnectE2->setVisible(false);
-				reconnectE3->setVisible(false);
+			break;
+		case Win:
+			// Show Win Screen
+			winScreen->setVisible(true);
+			nearSpace->setVisible(false);
+			healthNode->setVisible(false);
+			rollTutorial->setVisible(false);
+			moveTutorial->setVisible(false);
+			healthTutorial->setVisible(false);
+			communicateTutorial->setVisible(false);
+			timerBorder->setVisible(false);
+			healthNodeOverlay->setVisible(false);
+			healthNodeNumbers->setVisible(false);
+			coordHUD->setVisible(false);
+			if (playerID != 0) {
+				winWaitText->setVisible(true);
+				nextBtn->setVisible(false);
 			}
-			else if (currentEllipsesFrame % MAX_ELLIPSES_FRAMES < 2 * FRAMES_PER_SECOND) {
-				reconnectE2->setVisible(true);
+			break;
+		case Reconnecting:
+			// Still Reconnecting, Animation Frames
+			// Check for initial reconnection attempt
+			if (timeoutCurrent.ellapsedNanos(timeoutStart) < 0) {
+				timeoutStart.mark();
 			}
-			else if (currentEllipsesFrame % MAX_ELLIPSES_FRAMES < 3 * FRAMES_PER_SECOND) {
-				reconnectE3->setVisible(true);
-			}
-		}
-		else {
-			// 3 Second Timeout Counter back to lobby
-			timeoutDisplay->setVisible(true);
 			if (timeoutCurrent.ellapsedMillis(timeoutStart) <
-				CONNECTION_TIMEOUT - 2 * MILLISECONDS_IN_SECONDS) {
-				timeoutCounter->setText("3");
+				CONNECTION_TIMEOUT - 3 * MILLISECONDS_IN_SECONDS) {
+				// Regular Reconnect Display
+				timeoutDisplay->setVisible(false);
+				timeoutCurrent.mark();
+				reconnectOverlay->setVisible(true);
+				reconnectDonut->setAngle(
+					(float)(reconnectDonut->getAngle() - globals::PI_180 * RECONNECT_SPIN_RATIO));
+				currentEllipsesFrame++;
+				if (currentEllipsesFrame > MAX_ELLIPSES_FRAMES) {
+					currentEllipsesFrame = 0;
+				} else if (currentEllipsesFrame % MAX_ELLIPSES_FRAMES < FRAMES_PER_SECOND) {
+					reconnectE2->setVisible(false);
+					reconnectE3->setVisible(false);
+				} else if (currentEllipsesFrame % MAX_ELLIPSES_FRAMES < 2 * FRAMES_PER_SECOND) {
+					reconnectE2->setVisible(true);
+				} else if (currentEllipsesFrame % MAX_ELLIPSES_FRAMES < 3 * FRAMES_PER_SECOND) {
+					reconnectE3->setVisible(true);
+				}
+			} else {
+				// 3 Second Timeout Counter back to lobby
+				timeoutDisplay->setVisible(true);
+				if (timeoutCurrent.ellapsedMillis(timeoutStart) <
+					CONNECTION_TIMEOUT - 2 * MILLISECONDS_IN_SECONDS) {
+					timeoutCounter->setText("3");
+				} else if (timeoutCurrent.ellapsedMillis(timeoutStart) <
+						   CONNECTION_TIMEOUT - MILLISECONDS_IN_SECONDS) {
+					timeoutCounter->setText("2");
+				} else if (timeoutCurrent.ellapsedMillis(timeoutStart) < CONNECTION_TIMEOUT) {
+					timeoutCounter->setText("1");
+				} else {
+					isBackToMainMenu = true;
+				}
+				timeoutCurrent.mark();
 			}
-			else if (timeoutCurrent.ellapsedMillis(timeoutStart) <
-				CONNECTION_TIMEOUT - MILLISECONDS_IN_SECONDS) {
-				timeoutCounter->setText("2");
-			}
-			else if (timeoutCurrent.ellapsedMillis(timeoutStart) < CONNECTION_TIMEOUT) {
-				timeoutCounter->setText("1");
-			}
-			else {
-				isBackToMainMenu = true;
-			}
-			timeoutCurrent.mark();
-		}
-		break;
-	default:
-		CULog("ERROR: Uncaught DrawingStatus Value Occurred");
+			break;
+		default:
+			CULog("ERROR: Uncaught DrawingStatus Value Occurred");
 	}
 	if (ship->getTimeless()) {
 		coordHUD->setVisible(false);
@@ -674,24 +662,21 @@ void GameGraphRoot::update(float timestep) {
 
 	if (ship->getHealth() < 1) {
 		healthNodeOverlay->setVisible(false);
-	}
-	else {
+	} else {
 		float percentHealth = ship->getHealth() / ship->getInitHealth();
 		if (percentHealth == 1) {
 			healthNodeOverlay->setAngle(((percentHealth * HEALTH_RANGE) + HEALTH_OFFSET + 3) *
-				globals::PI_180);
+										globals::PI_180);
 			std::shared_ptr<Texture> image = assets->get<Texture>("health_green");
 			healthNodeOverlay->setTexture(image);
-		}
-		else {
+		} else {
 			healthNodeOverlay->setAngle(((percentHealth * HEALTH_RANGE) + HEALTH_OFFSET) *
-				globals::PI_180);
+										globals::PI_180);
 		}
 		if (percentHealth < SHIP_HEALTH_RED_CUTOFF) {
 			std::shared_ptr<Texture> image = assets->get<Texture>("health_red");
 			healthNodeOverlay->setTexture(image);
-		}
-		else if (percentHealth < SHIP_HEALTH_YELLOW_CUTOFF) {
+		} else if (percentHealth < SHIP_HEALTH_YELLOW_CUTOFF) {
 			std::shared_ptr<Texture> image = assets->get<Texture>("health_yellow");
 			healthNodeOverlay->setTexture(image);
 		}
@@ -709,8 +694,7 @@ void GameGraphRoot::update(float timestep) {
 						std::shared_ptr<Texture> image = assets->get<Texture>("fix_count3");
 						if (breachHealth == 1) {
 							image = assets->get<Texture>("fix_count1");
-						}
-						else if (breachHealth == 2) {
+						} else if (breachHealth == 2) {
 							image = assets->get<Texture>("fix_count2");
 						}
 						tutorial->setTexture(image);
@@ -724,34 +708,28 @@ void GameGraphRoot::update(float timestep) {
 		if (trunc(ship->canonicalTimeElapsed) == MOVE_TUTORIAL_CUTOFF) {
 			moveTutorial->setVisible(false);
 		}
-	}
-	else if (ship->getLevelNum() == tutorial::REAL_LEVELS.at(0)) {
+	} else if (ship->getLevelNum() == tutorial::REAL_LEVELS.at(0)) {
 		if (trunc(ship->canonicalTimeElapsed) == HEALTH_TUTORIAL_CUTOFF) {
 			communicateTutorial->setVisible(false);
 			healthTutorial->setVisible(true);
-		}
-		else if (trunc(ship->canonicalTimeElapsed) == MOVE_TUTORIAL_CUTOFF) {
+		} else if (trunc(ship->canonicalTimeElapsed) == MOVE_TUTORIAL_CUTOFF) {
 			timerTutorial->setVisible(false);
 			healthTutorial->setVisible(false);
 			communicateTutorial->setVisible(true);
 		}
-	}
-	else if (ship->getLevelNum() == tutorial::REAL_LEVELS.at(4)) {
+	} else if (ship->getLevelNum() == tutorial::REAL_LEVELS.at(4)) {
 		if (trunc(ship->canonicalTimeElapsed) > TIMER_TUTORIAL_CUTOFF) {
 			timerTutorial->setVisible(true);
-		}
-		else {
+		} else {
 			timerTutorial->setVisible(false);
 		}
-	}
-	else if (ship->getLevelNum() == tutorial::STABILIZER_LEVEL) {
+	} else if (ship->getLevelNum() == tutorial::STABILIZER_LEVEL) {
 		rollTutorial->setVisible(true);
 		auto& stabilizer = ship->getStabilizer();
 		if (stabilizer.getIsActive()) {
 			std::shared_ptr<Texture> image = assets->get<Texture>("stabilizer_tutorial1");
 			rollTutorial->setTexture(image);
-		}
-		else {
+		} else {
 			std::shared_ptr<Texture> image = assets->get<Texture>("stabilizer_tutorial0");
 			rollTutorial->setTexture(image);
 		}
@@ -761,21 +739,20 @@ void GameGraphRoot::update(float timestep) {
 	farSpace->setAnchor(Vec2::ANCHOR_CENTER);
 	if (position.x == -BG_SCROLL_LIMIT) {
 		farSpace->setPositionX(0);
-	}
-	else {
+	} else {
 		farSpace->setPosition(position -
-			Vec2(BG_SCROLL_SPEED, 0)); // Reseting the anchor changes the position
+							  Vec2(BG_SCROLL_SPEED, 0)); // Reseting the anchor changes the position
 	}
 
 	// Rotate nearSpace about center.
 	float newPlayerAngle = ship->getDonuts().at(playerID)->getAngle();
 	float delta = (prevPlayerAngle - newPlayerAngle) * globals::PI_180;
 	delta = (delta < -globals::PI)
-		? (delta + ship->getSize() * globals::PI_180)
-		: (delta > globals::PI ? delta - ship->getSize() * globals::PI_180 : delta);
+				? (delta + ship->getSize() * globals::PI_180)
+				: (delta > globals::PI ? delta - ship->getSize() * globals::PI_180 : delta);
 	if (std::abs(delta) > globals::SEG_SIZE) {
 		delta = fmod(prevPlayerAngle, globals::SEG_SIZE / globals::PI_180) -
-			fmod(newPlayerAngle, globals::SEG_SIZE / globals::PI_180);
+				fmod(newPlayerAngle, globals::SEG_SIZE / globals::PI_180);
 		delta = delta * globals::PI_180;
 	}
 	nearSpace->setAngle(wrapAngle(nearSpace->getAngle() + delta));
@@ -796,9 +773,8 @@ void GameGraphRoot::update(float timestep) {
 			std::shared_ptr<PolygonNode> newRightSegment = dynamic_pointer_cast<cugl::PolygonNode>(
 				shipSegsNode->getChildByTag((unsigned int)(rightMostSeg + 1)));
 			newRightSegment->setAngle(wrapAngle(segment->getAngle() + globals::SEG_SIZE));
-		}
-		else if (i == leftMostSeg && wrapAngle(nearSpace->getAngle() + segment->getAngle()) >
-			globals::TWO_PI - globals::SEG_CUTOFF_ANGLE) {
+		} else if (i == leftMostSeg && wrapAngle(nearSpace->getAngle() + segment->getAngle()) >
+										   globals::TWO_PI - globals::SEG_CUTOFF_ANGLE) {
 			leftMostSeg = (i + globals::VISIBLE_SEGS - 1) % globals::VISIBLE_SEGS;
 			rightMostSeg = (i + globals::VISIBLE_SEGS - 2) % globals::VISIBLE_SEGS;
 			std::shared_ptr<PolygonNode> newLeftSegment = dynamic_pointer_cast<cugl::PolygonNode>(
@@ -810,7 +786,7 @@ void GameGraphRoot::update(float timestep) {
 		relSegAngle = relSegAngle >= 0 ? relSegAngle : globals::TWO_PI + relSegAngle;
 		relSegAngle = relSegAngle > globals::PI ? relSegAngle - globals::TWO_PI : relSegAngle;
 		float segAngle = (float)(ship->getDonuts().at(playerID)->getAngle() * globals::PI_180 +
-			relSegAngle + SEG_SCALE * globals::PI_180);
+								 relSegAngle + SEG_SCALE * globals::PI_180);
 		segAngle = fmod(segAngle, ship->getSize() * globals::PI_180);
 		segAngle = segAngle < 0 ? segAngle + ship->getSize() * globals::PI_180 : segAngle;
 		unsigned int segNum = (unsigned int)(segAngle / globals::SEG_SIZE);
@@ -830,11 +806,11 @@ void GameGraphRoot::update(float timestep) {
 		if (!breachNode->getIsAnimatingShrink() && breachModel->getHealth() > 0 &&
 			breachModel->getNeedSpriteUpdate()) {
 			cugl::Color4 color = BREACH_COLOR.at((unsigned long)ship->getDonuts()
-				.at((unsigned long)breachModel->getPlayer())
-				->getColorId());
+													 .at((unsigned long)breachModel->getPlayer())
+													 ->getColorId());
 			string breachColor = PLAYER_COLOR.at((unsigned long)ship->getDonuts()
-				.at((unsigned long)breachModel->getPlayer())
-				->getColorId());
+													 .at((unsigned long)breachModel->getPlayer())
+													 ->getColorId());
 			std::shared_ptr<Texture> image = assets->get<Texture>("breach_" + breachColor);
 			breachNode->resetAppearance(image, color);
 			breachModel->setNeedSpriteUpdate(false);
@@ -860,8 +836,7 @@ void GameGraphRoot::update(float timestep) {
 			}
 			arrow->setVisible(true);
 		}
-	}
-	else {
+	} else {
 		challengePanelHanger->setVisible(false);
 		challengePanel->setVisible(false);
 		challengePanelText->setVisible(false);
@@ -879,27 +854,23 @@ void GameGraphRoot::update(float timestep) {
 			if (ship->getHealth() > SHIP_HEALTH_RED_CUTOFF * ship->getInitHealth()) {
 				currentHealthWarningFrame = 0;
 				setSegHealthWarning(0);
-			}
-			else {
+			} else {
 				setSegHealthWarning(MAX_HEALTH_WARNING_ALPHA / MAX_HEALTH_WARNING_FRAMES * 2);
 				currentHealthWarningFrame = 1;
 			}
-		}
-		else {
+		} else {
 			int alpha = 0;
 			if (currentHealthWarningFrame < MAX_HEALTH_WARNING_FRAMES / 2) {
 				alpha = MAX_HEALTH_WARNING_ALPHA * currentHealthWarningFrame /
-					MAX_HEALTH_WARNING_FRAMES * 2;
-			}
-			else {
+						MAX_HEALTH_WARNING_FRAMES * 2;
+			} else {
 				alpha = MAX_HEALTH_WARNING_ALPHA *
-					(MAX_HEALTH_WARNING_FRAMES - currentHealthWarningFrame) /
-					MAX_HEALTH_WARNING_FRAMES * 2;
+						(MAX_HEALTH_WARNING_FRAMES - currentHealthWarningFrame) /
+						MAX_HEALTH_WARNING_FRAMES * 2;
 			}
 			setSegHealthWarning(alpha);
 		}
-	}
-	else if (ship->getHealth() <= SHIP_HEALTH_RED_CUTOFF * ship->getInitHealth()) {
+	} else if (ship->getHealth() <= SHIP_HEALTH_RED_CUTOFF * ship->getInitHealth()) {
 		setSegHealthWarning(MAX_HEALTH_WARNING_ALPHA / MAX_HEALTH_WARNING_FRAMES * 2);
 		currentHealthWarningFrame = 1;
 	}
@@ -924,21 +895,18 @@ void GameGraphRoot::processButtons() {
 			// Close Pause Screen
 			pauseBtn->setDown(false);
 			pauseScreen->setVisible(false);
-		}
-		else {
+		} else {
 			// Open Pause Screen
 			pauseBtn->setDown(true);
 			pauseScreen->setVisible(true);
 		}
-	}
-	else if (pauseScreen->isVisible()) {
+	} else if (pauseScreen->isVisible()) {
 		// Mute Music Button
 		if (buttonManager.tappedButton(musicBtn, tapData)) {
 			if (musicBtn->isDown()) {
 				musicBtn->setDown(false);
 				AudioChannels::get()->resumeMusic();
-			}
-			else {
+			} else {
 				musicBtn->setDown(true);
 				AudioChannels::get()->pauseMusic();
 			}
@@ -948,8 +916,7 @@ void GameGraphRoot::processButtons() {
 			if (soundBtn->isDown()) {
 				soundBtn->setDown(false);
 				AudioChannels::get()->resumeAllEffects();
-			}
-			else {
+			} else {
 				soundBtn->setDown(true);
 				AudioChannels::get()->pauseAllEffects();
 			}
@@ -958,14 +925,12 @@ void GameGraphRoot::processButtons() {
 		else if (buttonManager.tappedButton(leaveBtn, tapData)) {
 			isBackToMainMenu = true;
 		}
-	}
-	else if (playerID == 0) {
+	} else if (playerID == 0) {
 		if (winScreen->isVisible()) {
 			if (buttonManager.tappedButton(nextBtn, tapData)) {
 				lastButtonPressed = NextLevel;
 			}
-		}
-		else if (lossScreen->isVisible()) {
+		} else if (lossScreen->isVisible()) {
 			// Is this loss?
 			if (buttonManager.tappedButton(restartBtn, tapData)) {
 				lastButtonPressed = Restart;
@@ -1000,13 +965,11 @@ void GameGraphRoot::doTeleportAnimation() {
 		if (currentTeleportationFrame <= TELEPORT_FRAMECUTOFF_FIRST) {
 			stabilizerFailPanel->setVisible(true);
 			stabilizerFailText->setVisible(true);
-		}
-		else if (currentTeleportationFrame <= TELEPORT_FRAMECUTOFF_SECOND) {
+		} else if (currentTeleportationFrame <= TELEPORT_FRAMECUTOFF_SECOND) {
 			blackoutOverlay->setColor(Tween::fade(
 				Tween::linear(0, 1, currentTeleportationFrame - TELEPORT_FRAMECUTOFF_FIRST,
-					TELEPORT_FRAMECUTOFF_SECOND - TELEPORT_FRAMECUTOFF_FIRST)));
-		}
-		else {
+							  TELEPORT_FRAMECUTOFF_SECOND - TELEPORT_FRAMECUTOFF_FIRST)));
+		} else {
 			if (currentTeleportationFrame == TELEPORT_FRAMECUTOFF_SECOND + 1) {
 				// Teleport models
 				for (auto donut : ship->getDonuts()) {
@@ -1015,13 +978,12 @@ void GameGraphRoot::doTeleportAnimation() {
 				ship->setStabilizerStatus(ShipModel::StabilizerStatus::INACTIVE);
 				stabilizerFailPanel->setVisible(false);
 				stabilizerFailText->setVisible(false);
-			}
-			else if (currentTeleportationFrame == TELEPORT_FRAMECUTOFF_SECOND + 2) {
+			} else if (currentTeleportationFrame == TELEPORT_FRAMECUTOFF_SECOND + 2) {
 				CustomNode::recomputeAll();
 			}
 			blackoutOverlay->setColor(Tween::fade(
 				Tween::linear(1, 0, currentTeleportationFrame - TELEPORT_FRAMECUTOFF_SECOND,
-					TELEPORT_FRAMECUTOFF_THIRD - TELEPORT_FRAMECUTOFF_SECOND)));
+							  TELEPORT_FRAMECUTOFF_THIRD - TELEPORT_FRAMECUTOFF_SECOND)));
 		}
 		currentTeleportationFrame += 1;
 		if (currentTeleportationFrame > TELEPORT_FRAMECUTOFF_THIRD) currentTeleportationFrame = 0;
@@ -1043,16 +1005,13 @@ std::string GameGraphRoot::timerText() {
 	if (time > SEC_IN_MIN - 1) {
 		if ((int)time % SEC_IN_MIN < tenSeconds) {
 			ss << "0" << (int)time / SEC_IN_MIN << ":0" << (int)time % SEC_IN_MIN;
-		}
-		else {
+		} else {
 			ss << "0" << (int)time / SEC_IN_MIN << ":" << (int)time % SEC_IN_MIN;
 		}
-	}
-	else {
+	} else {
 		if (time < tenSeconds) {
 			ss << "00:0" << time;
-		}
-		else {
+		} else {
 			ss << "00:" << time;
 		}
 	}
