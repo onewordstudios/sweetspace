@@ -47,6 +47,7 @@ class NetworkConnection {
 	RakNet::NatPunchthroughClient natPunchthroughClient;
 #pragma endregion
 
+#pragma region Connection Data Structures
 	struct HostPeers {
 		uint8_t numPlayers;
 		std::array<std::unique_ptr<RakNet::SystemAddress>, globals::MAX_PLAYERS - 1> peers;
@@ -66,6 +67,7 @@ class NetworkConnection {
 	 * Collection of peers for the host, or the host for clients
 	 */
 	mapbox::util::variant<HostPeers, ClientPeer> remotePeer;
+#pragma endregion
 
 	/** Initialize the connection */
 	void startupConn();
