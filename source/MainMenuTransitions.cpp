@@ -30,7 +30,8 @@ MainMenuMode::MainMenuTransitions::MainMenuTransitions(MainMenuMode* parent) {
 	this->parent = parent;
 }
 
-void MainMenuMode::MainMenuTransitions::init(const std::shared_ptr<AssetManager>& assets) {
+void MainMenuMode::MainMenuTransitions::init(const std::shared_ptr<AssetManager>& assets,
+											 bool toCredits) {
 	auto studioLogo = assets->get<Node>("matchmaking_studiologo");
 
 	auto screenHeight = parent->screenHeight;
@@ -42,16 +43,20 @@ void MainMenuMode::MainMenuTransitions::init(const std::shared_ptr<AssetManager>
 	animations.registerNode("matchmaking_mainmenubg-land", assets);
 	animations.registerNode("matchmaking_mainmenubg-landnoship", assets);
 
-	animations.animateY("matchmaking_mainmenubg-glow", Tween::TweenType::EaseOut, screenHeight / 2,
-						OPEN_TRANSITION);
-	animations.animateY("matchmaking_mainmenubg-ship", Tween::TweenType::EaseOut, screenHeight / 2,
-						OPEN_TRANSITION);
-	animations.animateY("matchmaking_mainmenubg-land", Tween::TweenType::EaseOut, screenHeight / 2,
-						OPEN_TRANSITION);
+	if (!toCredits) {
+		animations.animateY("matchmaking_mainmenubg-glow", Tween::TweenType::EaseOut,
+							screenHeight / 2, OPEN_TRANSITION);
+		animations.animateY("matchmaking_mainmenubg-ship", Tween::TweenType::EaseOut,
+							screenHeight / 2, OPEN_TRANSITION);
+		animations.animateY("matchmaking_mainmenubg-land", Tween::TweenType::EaseOut,
+							screenHeight / 2, OPEN_TRANSITION);
+	}
 
 	for (auto e : MAIN_SCREEN) {
 		animations.registerNode(e, assets);
-		animations.fadeIn(e, TRANSITION_DURATION, OPEN_TRANSITION_FADE);
+		if (!toCredits) {
+			animations.fadeIn(e, TRANSITION_DURATION, OPEN_TRANSITION_FADE);
+		}
 	}
 
 	animations.registerNode("matchmaking_backbtn", assets);
@@ -65,6 +70,21 @@ void MainMenuMode::MainMenuTransitions::init(const std::shared_ptr<AssetManager>
 	animations.registerNode("matchmaking_tutorialbtn", assets);
 
 	animations.registerNode("matchmaking_clienterr", assets);
+
+	if (toCredits) {
+		animations.animateY("matchmaking_mainmenubg-landnoship", Tween::TweenType::EaseInOut,
+							screenHeight / CREDITS_BG_POS, TRANSITION_DURATION);
+		animations.fadeIn("matchmaking_mainmenubg-landnoship", TRANSITION_DURATION);
+
+		animations.fadeIn("matchmaking_backbtn", TRANSITION_DURATION);
+
+		parent->credits->setVisible(true);
+		parent->credits->setColor(Color4::WHITE);
+		parent->credits->setPositionY(0);
+		parent->creditsScrollFrame = 0;
+
+		parent->currState = Credits;
+	}
 }
 
 void MainMenuMode::MainMenuTransitions::to(MatchState destination) {

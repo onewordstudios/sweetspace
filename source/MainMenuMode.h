@@ -211,15 +211,13 @@ class MainMenuMode : public cugl::Scene {
 	 * memory allocation.  Instead, allocation happens in this method.
 	 *
 	 * @param assets    The (loaded) assets for this game mode
+	 * @param toCredits Whether to jump directly to credits
 	 *
 	 * @return true if the controller is initialized properly, false otherwise.
 	 */
-	bool init(const std::shared_ptr<cugl::AssetManager>& assets);
+	bool init(const std::shared_ptr<cugl::AssetManager>& assets, bool toCredits = false);
 
 #pragma endregion
-
-	/** Go directly to the credits sequence */
-	void triggerCredits();
 
 	/**
 	 * The method called to update the game mode.
