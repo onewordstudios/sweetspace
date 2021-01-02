@@ -401,7 +401,6 @@
 		C58C5EEC7CF99C273A252E9F /* TutorialNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C58C508D52C8A85185254C7F /* TutorialNode.cpp */; };
 		C58C5F812801BCDA6A6400BE /* TutorialNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C58C508D52C8A85185254C7F /* TutorialNode.cpp */; };
 		D15220621F9C106302ACEBBB /* BreachNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D1522B5DE1BDF682A53D6F29 /* BreachNode.cpp */; };
-		D152210B21A0FDE6A6995456 /* easywsclient.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D152292423B890A105CFF1E1 /* easywsclient.cpp */; };
 		D15222477324B444CAE67673 /* MagicInternetBox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D15228511721431DE5C3F8BF /* MagicInternetBox.cpp */; };
 		D152241D12DF18170D97502F /* DoorModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D1522CE16711F9484DFFB224 /* DoorModel.cpp */; };
 		D152242AC8E2C5E2BBE9935B /* PlayerDonutNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D1522DC8B550BC37E1C05E7B /* PlayerDonutNode.cpp */; };
@@ -412,7 +411,6 @@
 		D15226BFFD4EF194344E0D85 /* DonutNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D1522912AC958005F84C07D7 /* DonutNode.cpp */; };
 		D15226D74B5F1C4C77EC84B1 /* DoorModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D1522CE16711F9484DFFB224 /* DoorModel.cpp */; };
 		D152272F0C47BB34513BF98A /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = D1522C28835BBA631F29D368 /* README.md */; };
-		D152277E2A8E96B810AEB205 /* easywsclient.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D152292423B890A105CFF1E1 /* easywsclient.cpp */; };
 		D152280455B6C3C470B28DBC /* DoorModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D1522CE16711F9484DFFB224 /* DoorModel.cpp */; };
 		D1522823F15ED3BCD0175E33 /* SparkleNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D15225B281FE45906CC70B95 /* SparkleNode.cpp */; };
 		D152282A744519E31449ADB8 /* SparkleNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D15225B281FE45906CC70B95 /* SparkleNode.cpp */; };
@@ -424,7 +422,6 @@
 		D1522A2D610C4EFF4A6EED6C /* DonutNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D1522912AC958005F84C07D7 /* DonutNode.cpp */; };
 		D1522A6F18E2D619E6A88B4A /* PlayerDonutNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D1522DC8B550BC37E1C05E7B /* PlayerDonutNode.cpp */; };
 		D1522ADD8ABCEE84CF9827B5 /* PlayerDonutNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D1522DC8B550BC37E1C05E7B /* PlayerDonutNode.cpp */; };
-		D1522B1EDA7299CAAE55B21E /* easywsclient.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D152292423B890A105CFF1E1 /* easywsclient.cpp */; };
 		D1522B4D462B93165FD47D77 /* SparkleNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D15225B281FE45906CC70B95 /* SparkleNode.cpp */; };
 		D1522B75CBE989BF3E62FFF0 /* MagicInternetBox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D15228511721431DE5C3F8BF /* MagicInternetBox.cpp */; };
 		D1522D979D30C44099EA9E62 /* DonutNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D1522912AC958005F84C07D7 /* DonutNode.cpp */; };
@@ -863,14 +860,12 @@
 		C58C5D00FFFC42F97DEC65C0 /* ButtonModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ButtonModel.h; sourceTree = "<group>"; };
 		C58C5F587FFB8E623B5C9D7F /* ButtonNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ButtonNode.cpp; sourceTree = "<group>"; };
 		D152222ED700A38FD9334825 /* CustomNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomNode.h; sourceTree = "<group>"; };
-		D15224B9EA517A2BFF54A6C2 /* easywsclient.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = easywsclient.hpp; sourceTree = "<group>"; };
 		D1522514F4482BDE04D4AABE /* PlayerDonutNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayerDonutNode.h; sourceTree = "<group>"; };
 		D15225B281FE45906CC70B95 /* SparkleNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SparkleNode.cpp; sourceTree = "<group>"; };
 		D15227D97E11C33C1D22A5E2 /* DoorModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DoorModel.h; sourceTree = "<group>"; };
 		D15227FD0DE8BAD86857197F /* MagicInternetBox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MagicInternetBox.h; sourceTree = "<group>"; };
 		D15228511721431DE5C3F8BF /* MagicInternetBox.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MagicInternetBox.cpp; sourceTree = "<group>"; };
 		D1522912AC958005F84C07D7 /* DonutNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DonutNode.cpp; sourceTree = "<group>"; };
-		D152292423B890A105CFF1E1 /* easywsclient.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = easywsclient.cpp; sourceTree = "<group>"; };
 		D15229D4A1FC5FE07FD97699 /* BreachNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BreachNode.h; sourceTree = "<group>"; };
 		D15229EF18C3F82477D4E059 /* DonutNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DonutNode.h; sourceTree = "<group>"; };
 		D1522A2BC0E1799E7142209A /* SparkleNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SparkleNode.h; sourceTree = "<group>"; };
@@ -1418,8 +1413,6 @@
 				7B0FBC1024FBBC160026067D /* RakNet */,
 				D1522C28835BBA631F29D368 /* README.md */,
 				D1522B22FF3E0BB5FA6127A8 /* .clang-tidy */,
-				D152292423B890A105CFF1E1 /* easywsclient.cpp */,
-				D15224B9EA517A2BFF54A6C2 /* easywsclient.hpp */,
 			);
 			path = libraries;
 			sourceTree = "<group>";
@@ -1821,7 +1814,6 @@
 				7B0FBD9124FBBC170026067D /* CloudServer.cpp in Sources */,
 				7B341E632463C5E70073D4D2 /* CustomNode.cpp in Sources */,
 				7B0FBD9A24FBBC170026067D /* VariadicSQLParser.cpp in Sources */,
-				D152277E2A8E96B810AEB205 /* easywsclient.cpp in Sources */,
 				7B0FBDE224FBBC170026067D /* PacketizedTCP.cpp in Sources */,
 				7B0FBD8524FBBC170026067D /* NatTypeDetectionClient.cpp in Sources */,
 				7B0FBDD024FBBC170026067D /* FileListTransfer.cpp in Sources */,
@@ -1980,7 +1972,6 @@
 				7B0FBDE124FBBC170026067D /* PacketizedTCP.cpp in Sources */,
 				7B0FBD8424FBBC170026067D /* NatTypeDetectionClient.cpp in Sources */,
 				7B0FBDCF24FBBC170026067D /* FileListTransfer.cpp in Sources */,
-				D1522B1EDA7299CAAE55B21E /* easywsclient.cpp in Sources */,
 				C1222E686D1435B6446D0307 /* ExternalDonutModel.cpp in Sources */,
 				C1222CE9FCD72180B66462B2 /* PlayerDonutModel.cpp in Sources */,
 				D15226D74B5F1C4C77EC84B1 /* DoorModel.cpp in Sources */,
@@ -2135,7 +2126,6 @@
 				7B0FBDE024FBBC170026067D /* PacketizedTCP.cpp in Sources */,
 				7B0FBD8324FBBC170026067D /* NatTypeDetectionClient.cpp in Sources */,
 				7B0FBDCE24FBBC170026067D /* FileListTransfer.cpp in Sources */,
-				D152210B21A0FDE6A6995456 /* easywsclient.cpp in Sources */,
 				C12223392F6704D2EE10713A /* ExternalDonutModel.cpp in Sources */,
 				C12223F92AA43CCF674FE286 /* PlayerDonutModel.cpp in Sources */,
 				D152241D12DF18170D97502F /* DoorModel.cpp in Sources */,
