@@ -403,6 +403,7 @@ void MagicInternetBox::update() {
 		case ClientRoomInvalid:
 		case ClientRoomFull:
 			conn = nullptr;
+			break;
 	}
 }
 
