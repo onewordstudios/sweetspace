@@ -12,7 +12,7 @@ std::unordered_set<CustomNode*> CustomNode::allActiveNodes;
 
 bool CustomNode::init(std::shared_ptr<DonutModel> player, float shipSize, float angle,
 					  float radius) {
-	playerDonutModel = player;
+	playerDonutModel = std::move(player);
 	this->shipSize = shipSize;
 	this->angle = angle;
 	this->radius = radius;
@@ -40,18 +40,18 @@ float CustomNode::getOnScreenAngle(float modelAngle) {
 	return onScreenAngle;
 }
 
-bool CustomNode::isComingIntoView(float onScreenAngle) {
+bool CustomNode::isComingIntoView(float onScreenAngle) const {
 	return (!isShown || isDirty) && onScreenAngle < globals::SEG_CUTOFF_ANGLE &&
 		   onScreenAngle > -globals::SEG_CUTOFF_ANGLE;
 }
 
-bool CustomNode::isGoingOutOfView(float onScreenAngle) {
+bool CustomNode::isGoingOutOfView(float onScreenAngle) const {
 	return isShown && (onScreenAngle >= globals::SEG_CUTOFF_ANGLE ||
 					   onScreenAngle <= -globals::SEG_CUTOFF_ANGLE);
 }
 
 cugl::Vec2 CustomNode::getPositionVec(float relAngle, float radius) {
-	return cugl::Vec2(radius * sin(relAngle), -radius * cos(relAngle));
+	return {radius * sin(relAngle), -radius * cos(relAngle)};
 }
 
 #pragma endregion
@@ -103,7 +103,7 @@ void CustomNode::draw(const shared_ptr<cugl::SpriteBatch>& batch, const cugl::Ma
 }
 
 void CustomNode::recomputeAll() {
-	for (auto node : allActiveNodes) {
+	for (auto* node : allActiveNodes) {
 		node->isDirty = true;
 	}
 }
