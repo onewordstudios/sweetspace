@@ -1,5 +1,5 @@
 ---
-Checks:          'clang-diagnostic-*,clang-analyzer-*,cppcoreguidelines-*,misc-throw-by-value-catch-by-reference,clang-analyzer-alpha.deadcode.UnreachableCode,cert-err58-cpp,clang-analyzer-alpha.*,clang-analyzer-security.insecureAPI.strcpy,-clang-analyzer-security.insecureAPI.rand,readability-identifier-naming,readability-braces-around-statements,-cppcoreguidelines-non-private-member-variables-in-classes,-clang-analyzer-optin.cplusplus.VirtualCall,-cppcoreguidelines-special-member-functions,-clang-diagnostic-overloaded-virtual,-clang-diagnostic-delete-non-abstract-non-virtual-dtor,-cppcoreguidelines-pro-type-vararg'
+Checks:          '*,-clang-analyzer-security.insecureAPI.rand,-clang-analyzer-optin.cplusplus.VirtualCall,-clang-diagnostic-delete-non-abstract-non-virtual-dtor,-cppcoreguidelines-non-private-member-variables-in-classes,-cppcoreguidelines-special-member-functions,-cppcoreguidelines-pro-type-vararg,-llvmlibc-callee-namespace,-llvmlibc-implementation-in-namespace,-google-build-using-namespace,-modernize-use-trailing-return-type,-misc-non-private-member-variables-in-classes,-modernize-use-default-member-init,-clang-diagnostic-overloaded-virtual,-hicpp-special-member-functions,-llvm-header-guard,-hicpp-vararg,-hicpp-uppercase-literal-suffix,-readability-uppercase-literal-suffix,-llvmlibc-restrict-system-libc-headers,-fuchsia-default-arguments-calls,-bugprone-too-small-loop-variable,-google-runtime-references'
 WarningsAsErrors: 		''
 HeaderFilterRegex: 		''
 AnalyzeTemporaryDtors: 	false
@@ -30,7 +30,7 @@ CheckOptions:
   - key:             google-runtime-int.SignedTypePrefix
     value:           int
   - key:             google-runtime-int.TypeSuffix
-    value:           ''
+    value:           _t
   - key:             google-runtime-int.UnsignedTypePrefix
     value:           uint
   - key:             llvm-namespace-comment.ShortNamespaceLines
@@ -359,3 +359,5 @@ CheckOptions:
     value:           '0'
   - key:             readability-simplify-boolean-expr.ChainedConditionalReturn
     value:           '0'
+  - key:             hicpp-signed-bitwise.IgnorePositiveIntegerLiterals
+    value:           '1'

@@ -168,9 +168,6 @@
     <ClInclude Include="..\..\source\StabilizerModel.h">
       <Filter>Header Files\Models</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\source\StateReconciler.h">
-      <Filter>Header Files\Controllers</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\source\AnimationManager.h">
       <Filter>Header Files\Helpers</Filter>
     </ClInclude>
@@ -648,6 +645,9 @@
     <ClInclude Include="..\..\source\NetworkDataType.h">
       <Filter>Header Files\Controllers\Networking</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\source\StateReconciler.h">
+      <Filter>Header Files\Controllers\Networking</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\source\main.cpp">
@@ -739,9 +739,6 @@
     </ClCompile>
     <ClCompile Include="..\..\source\StabilizerModel.cpp">
       <Filter>Source Files\Models</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\StateReconciler.cpp">
-      <Filter>Source Files\Controllers</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\AnimationManager.cpp">
       <Filter>Source Files\Helpers</Filter>
@@ -1083,6 +1080,9 @@
       <Filter>Source Files\Controllers\Networking</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\NetworkConnection.cpp">
+      <Filter>Source Files\Controllers\Networking</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\StateReconciler.cpp">
       <Filter>Source Files\Controllers\Networking</Filter>
     </ClCompile>
   </ItemGroup>
