@@ -11,17 +11,17 @@
 #include <fcntl.h>
 #pragma comment(lib, "ws2_32")
 #include <io.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include <stdio.h>	// NOLINT
+#include <stdlib.h> // NOLINT
+#include <string.h> // NOLINT
 #include <sys/types.h>
 #ifndef _SSIZE_T_DEFINED
-typedef int ssize_t;
-#define _SSIZE_T_DEFINED
+typedef int ssize_t;	 // NOLINT
+#define _SSIZE_T_DEFINED // NOLINT
 #endif
 #ifndef _SOCKET_T_DEFINED
-typedef SOCKET socket_t;
-#define _SOCKET_T_DEFINED
+typedef SOCKET socket_t;  // NOLINT
+#define _SOCKET_T_DEFINED // NOLINT
 #endif
 #else
 #include <fcntl.h>
@@ -64,20 +64,11 @@ using namespace cugl;
 
 #pragma endregion
 
-/** The precision to multiply floating point numbers by */
-constexpr float FLOAT_PRECISION = 10.0f;
-
 /** The state synchronization frequency */
 constexpr unsigned int STATE_SYNC_FREQ = globals::NETWORK_TICK * 5;
 
 /** Minimum number of seconds to wait after a connection attempt before allowing retrys */
 constexpr double MIN_WAIT_TIME = 0.5;
-
-/** One byte */
-constexpr unsigned int ONE_BYTE = 256;
-
-/** How close to consider floating point numbers identical */
-constexpr float FLOAT_EPSILON = 0.1f;
 
 /** How many ticks without a server message before considering oneself disconnected */
 constexpr unsigned int SERVER_TIMEOUT = 300;
@@ -86,19 +77,16 @@ std::shared_ptr<MagicInternetBox> MagicInternetBox::instance; // NOLINT (clang-t
 
 #pragma region Initialization
 
-MagicInternetBox::MagicInternetBox()
-	: playerID(),
-	  levelNum(),
-	  activePlayers(),
-	  stateReconciler(ONE_BYTE, FLOAT_PRECISION, FLOAT_EPSILON),
-	  lastAttemptConnectionTime() {
+MagicInternetBox::MagicInternetBox() : activePlayers() {
 #ifdef _WIN32
 	INT rc; // NOLINT
 	WSADATA wsaData;
 
+	// NOLINTNEXTLINE
 	rc = WSAStartup(MAKEWORD(2, 2), &wsaData);
-	if (rc) {
+	if (rc) { // NOLINT
 		CULogError("WSAStartup Failed");
+		// NOLINTNEXTLINE
 		throw "WSA Startup Failed";
 	}
 #endif
@@ -169,7 +157,7 @@ bool MagicInternetBox::initHost() {
 	return true;
 }
 
-bool MagicInternetBox::initClient(std::string id) {
+bool MagicInternetBox::initClient(const std::string& id) {
 	if (!initConnection()) {
 		status = ClientError;
 		return false;
@@ -184,15 +172,15 @@ bool MagicInternetBox::initClient(std::string id) {
 }
 
 bool MagicInternetBox::reconnect() {
-	if (!initConnection() || !playerID.has_value() || roomID == "") {
+	if (!initConnection() || !playerID.has_value() || roomID.empty()) {
 		status = ReconnectError;
 		return false;
 	}
 
 	std::vector<uint8_t> data;
-	data.push_back((uint8_t)NetworkDataType::JoinRoom);
+	data.push_back(uint8_t{NetworkDataType::JoinRoom});
 	for (unsigned int i = 0; i < globals::ROOM_LENGTH; i++) {
-		data.push_back((uint8_t)roomID.at(i));
+		data.push_back(static_cast<uint8_t>(roomID.at(i)));
 	}
 	data.push_back(playerID.value());
 	conn->send(data);
@@ -216,32 +204,21 @@ Only data3 can handle negative numbers. The first byte is 1 for positive and 0 f
 
 */
 
-void MagicInternetBox::sendData(NetworkDataType type, float angle, int id, int data1, int data2,
-								float data3) {
+void MagicInternetBox::sendData(NetworkDataType type, float angle, uint8_t id, uint8_t data1,
+								uint8_t data2, float data3) {
 	std::vector<uint8_t> data;
 
-	data.push_back((uint8_t)type);
+	data.push_back(static_cast<uint8_t>(type));
 
-	int angleConv = (int)(FLOAT_PRECISION * angle);
+	StateReconciler::ENCODE_FLOAT(angle, data);
 
-	data.push_back((uint8_t)(angleConv % ONE_BYTE));
-	data.push_back((uint8_t)(angleConv / ONE_BYTE));
+	data.push_back(id);
+	data.push_back(data1);
+	data.push_back(data2);
 
-	data.push_back((uint8_t)(id % ONE_BYTE));
-	data.push_back((uint8_t)(id / ONE_BYTE));
-
-	data.push_back((uint8_t)(data1 % ONE_BYTE));
-	data.push_back((uint8_t)(data1 / ONE_BYTE));
-
-	data.push_back((uint8_t)(data2 % ONE_BYTE));
-	data.push_back((uint8_t)(data2 / ONE_BYTE));
-
-	int d3Positive = data3 >= 0 ? 1 : 0;
-	int d3 = (int)(FLOAT_PRECISION * abs(data3));
-
-	data.push_back((uint8_t)d3Positive);
-	data.push_back((uint8_t)(d3 % ONE_BYTE));
-	data.push_back((uint8_t)(d3 / ONE_BYTE));
+	uint8_t d3Positive = data3 >= 0 ? 1 : 0;
+	data.push_back(d3Positive);
+	StateReconciler::ENCODE_FLOAT(abs(data3), data);
 
 	conn->send(data);
 }
@@ -254,7 +231,7 @@ std::string MagicInternetBox::getRoomID() { return roomID; }
 
 tl::optional<uint8_t> MagicInternetBox::getPlayerID() { return playerID; }
 
-uint8_t MagicInternetBox::getNumPlayers() { return numPlayers; }
+uint8_t MagicInternetBox::getNumPlayers() const { return numPlayers; }
 
 bool MagicInternetBox::isPlayerActive(uint8_t playerID) { return activePlayers.at(playerID); }
 
@@ -277,7 +254,7 @@ void MagicInternetBox::startGame(uint8_t levelNum) {
 		}
 	}
 	std::vector<uint8_t> data;
-	data.push_back((uint8_t)StartGame);
+	data.push_back(uint8_t{StartGame});
 	data.push_back(levelNum);
 	this->levelNum = levelNum;
 	conn->send(data);
@@ -296,9 +273,9 @@ void MagicInternetBox::restartGame() {
 	levelParity = !levelParity;
 
 	std::vector<uint8_t> data;
-	data.push_back((uint8_t)ChangeGame);
-	data.push_back((uint8_t)0);
-	data.push_back((uint8_t)levelParity);
+	data.push_back(uint8_t{ChangeGame});
+	data.push_back(0);
+	data.push_back(levelParity ? 1 : 0);
 	conn->send(data);
 
 	startLevelInternal(levelNum.value(), levelParity);
@@ -321,7 +298,7 @@ void MagicInternetBox::nextLevel() {
 	startLevelInternal(level, levelParity);
 
 	std::vector<uint8_t> data;
-	data.push_back((uint8_t)ChangeGame);
+	data.push_back(uint8_t{ChangeGame});
 	data.push_back(1);
 	data.push_back(level);
 	data.push_back(levelParity ? 1 : 0);
@@ -341,11 +318,11 @@ void MagicInternetBox::update() {
 	}
 
 	conn->receive([this](const std::vector<uint8_t>& message) {
-		if (message.size() == 0) {
+		if (message.empty()) {
 			return;
 		}
 
-		NetworkDataType type = static_cast<NetworkDataType>(message[0]);
+		auto type = static_cast<NetworkDataType>(message[0]);
 
 		switch (type) {
 			case GenericError: {
@@ -371,7 +348,7 @@ void MagicInternetBox::update() {
 				}
 				std::stringstream newRoomId;
 				for (size_t i = 0; i < globals::ROOM_LENGTH; i++) {
-					newRoomId << (char)message[i + 1];
+					newRoomId << static_cast<char>(message[i + 1]);
 				}
 				activePlayers[0] = true;
 				roomID = newRoomId.str();
@@ -493,11 +470,11 @@ void MagicInternetBox::update(std::shared_ptr<ShipModel> state) {
 	}
 
 	conn->receive([&state, this](const std::vector<uint8_t>& message) {
-		if (message.size() == 0) {
+		if (message.empty()) {
 			return;
 		}
 
-		NetworkDataType type = static_cast<NetworkDataType>(message[0]);
+		auto type = static_cast<NetworkDataType>(message[0]);
 
 		if (type > AssignedRoom) {
 			CULog("Received invalid connection message during gameplay; %d", message[0]);
@@ -533,9 +510,9 @@ void MagicInternetBox::update(std::shared_ptr<ShipModel> state) {
 			}
 			case ChangeGame: {
 				if (message[1] == 0) {
-					startLevelInternal(levelNum.value(), message[2]);
+					startLevelInternal(levelNum.value(), message[2] != 0);
 				} else {
-					startLevelInternal(message[2], message[3]);
+					startLevelInternal(message[2], message[3] != 0);
 				}
 				return;
 			}
@@ -547,16 +524,13 @@ void MagicInternetBox::update(std::shared_ptr<ShipModel> state) {
 			return;
 		}
 
-		float angle = (float)(message[1] + ONE_BYTE * message[2]) / FLOAT_PRECISION;
-		int id = (int)(message[3] + ONE_BYTE * message[4]);
+		float angle = StateReconciler::DECODE_FLOAT(message[1], message[2]);
+		uint8_t id = message[3];
+		uint8_t data1 = message[4];
 		// Networking code is finnicky and having these magic numbers is the easiest solution
-		// NOLINTNEXTLINE Simple counting numbers
-		int data1 = (int)(message[5] + ONE_BYTE * message[6]);
-		// NOLINTNEXTLINE Ditto
-		int data2 = (int)(message[7] + ONE_BYTE * message[8]);
-		// NOLINTNEXTLINE Ditto
-		float data3 = (message[9] == 1 ? 1 : -1) * (float)(message[10] + ONE_BYTE * message[11]) /
-					  FLOAT_PRECISION;
+		uint8_t data2 = message[5];				   // NOLINT Simple counting numbers
+		float data3 = (message[6] == 1 ? 1 : -1) * // NOLINT
+					  StateReconciler::DECODE_FLOAT(message[7], message[8]); // NOLINT
 
 		switch (type) {
 			case PositionUpdate: {
@@ -677,7 +651,7 @@ void MagicInternetBox::forceDisconnect() {
 	CULog("Force disconnecting");
 
 	std::vector<uint8_t> data;
-	data.push_back((uint8_t)PlayerDisconnect);
+	data.push_back(uint8_t{PlayerDisconnect});
 
 	status = Disconnected;
 	lastConnection = 0;

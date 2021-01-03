@@ -1,5 +1,5 @@
-#ifndef __NETWORK_CONNECTION_H__
-#define __NETWORK_CONNECTION_H__
+#ifndef NETWORK_CONNECTION_H
+#define NETWORK_CONNECTION_H
 
 #include <array>
 #include <functional>
@@ -27,7 +27,7 @@ class NetworkConnection {
 	 *
 	 * @param roomID The RakNet GUID of the host.
 	 */
-	NetworkConnection(std::string roomID);
+	explicit NetworkConnection(std::string roomID);
 
 	/** Delete and cleanup this connection. */
 	~NetworkConnection();
@@ -60,7 +60,7 @@ class NetworkConnection {
 		std::unique_ptr<RakNet::SystemAddress> addr;
 		std::string room;
 
-		ClientPeer(std::string roomID) { room = roomID; }
+		explicit ClientPeer(std::string roomID) { room = std::move(roomID); }
 	};
 
 	/**
@@ -83,4 +83,4 @@ class NetworkConnection {
 	void broadcast(const std::vector<uint8_t>& msg, RakNet::SystemAddress& ignore);
 };
 
-#endif /* __NETWORK_CONNECTION_H__ */
+#endif /* NETWORK_CONNECTION_H */

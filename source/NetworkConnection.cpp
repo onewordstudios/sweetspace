@@ -2,13 +2,15 @@
 
 #include <cugl/cugl.h>
 
+#include <utility>
+
 #include "Globals.h"
 #include "NetworkDataType.h"
 
 /** IP of the NAT punchthrough server */
 constexpr auto SERVER_ADDRESS = "35.231.212.113";
 /** Port of the NAT punchthrough server */
-constexpr unsigned short SERVER_PORT = 61111;
+constexpr uint16_t SERVER_PORT = 61111;
 /** How long to block on shutdown */
 constexpr unsigned int SHUTDOWN_BLOCK = 10;
 
@@ -19,7 +21,7 @@ NetworkConnection::NetworkConnection() {
 
 NetworkConnection::NetworkConnection(std::string roomID) {
 	startupConn();
-	remotePeer = ClientPeer(roomID);
+	remotePeer = ClientPeer(std::move(roomID));
 	peer->SetMaximumIncomingConnections(1);
 }
 
@@ -47,25 +49,25 @@ void NetworkConnection::startupConn() {
 	// Connect to the NAT Punchthrough server
 	CULog("Connecting to punchthrough server");
 	peer->Connect(this->natPunchServerAddress->ToString(false),
-				  this->natPunchServerAddress->GetPort(), 0, 0);
+				  this->natPunchServerAddress->GetPort(), nullptr, 0);
 }
 
 void NetworkConnection::broadcast(const std::vector<uint8_t>& msg, RakNet::SystemAddress& ignore) {
 	RakNet::BitStream bs;
-	bs.Write((uint8_t)ID_USER_PACKET_ENUM);
-	bs.Write((uint8_t)msg.size());
-	bs.WriteAlignedBytes(msg.data(), (unsigned int)msg.size());
+	bs.Write(static_cast<uint8_t>(ID_USER_PACKET_ENUM));
+	bs.Write(static_cast<uint8_t>(msg.size()));
+	bs.WriteAlignedBytes(msg.data(), static_cast<unsigned int>(msg.size()));
 	peer->Send(&bs, MEDIUM_PRIORITY, RELIABLE, 1, ignore, true);
 }
 
 void NetworkConnection::send(const std::vector<uint8_t>& msg) {
 	RakNet::BitStream bs;
-	bs.Write((uint8_t)ID_USER_PACKET_ENUM);
-	bs.Write((uint8_t)msg.size());
-	bs.WriteAlignedBytes(msg.data(), (unsigned int)msg.size());
+	bs.Write(static_cast<uint8_t>(ID_USER_PACKET_ENUM));
+	bs.Write(static_cast<uint8_t>(msg.size()));
+	bs.WriteAlignedBytes(msg.data(), static_cast<unsigned int>(msg.size()));
 
 	remotePeer.match(
-		[&](HostPeers& h) {
+		[&](HostPeers& /*h*/) {
 			peer->Send(&bs, MEDIUM_PRIORITY, RELIABLE, 1, *natPunchServerAddress, true);
 		},
 		[&](ClientPeer& c) { peer->Send(&bs, MEDIUM_PRIORITY, RELIABLE, 1, *c.addr, false); });
@@ -85,7 +87,7 @@ void NetworkConnection::receive(
 					CULog("Connected to punchthrough server");
 
 					remotePeer.match(
-						[&](HostPeers& h) {
+						[&](HostPeers& /*h*/) {
 							CULog("Accepting connections now");
 							peer->SetMaximumIncomingConnections(globals::MAX_PLAYERS - 1);
 						},
@@ -112,17 +114,17 @@ void NetworkConnection::receive(
 									std::vector<uint8_t> connMsg = {NetworkDataType::JoinRoom, 0,
 																	h.numPlayers, pID,
 																	globals::API_VER};
-									bs.Write((uint8_t)ID_USER_PACKET_ENUM);
-									bs.Write((uint8_t)connMsg.size());
+									bs.Write(static_cast<uint8_t>(ID_USER_PACKET_ENUM));
+									bs.Write(static_cast<uint8_t>(connMsg.size()));
 									bs.WriteAlignedBytes(connMsg.data(),
-														 (unsigned int)connMsg.size());
+														 static_cast<unsigned int>(connMsg.size()));
 									peer->Send(&bs, MEDIUM_PRIORITY, RELIABLE, 1,
 											   packet->systemAddress, false);
 									break;
 								}
 							}
 						},
-						[&](ClientPeer& c) {
+						[&](ClientPeer& /*c*/) {
 							CULogError(
 								"A connection request you sent was accepted despite being client?");
 						});
@@ -131,7 +133,7 @@ void NetworkConnection::receive(
 			case ID_NEW_INCOMING_CONNECTION: // Someone connected to you
 				CULog("A peer connected");
 				remotePeer.match(
-					[&](HostPeers& h) { CULogError("How did that happen? You're the host"); },
+					[&](HostPeers& /*h*/) { CULogError("How did that happen? You're the host"); },
 					[&](ClientPeer& c) {
 						if (packet->systemAddress == *c.addr) {
 							CULog("Connected to host :D");
@@ -157,7 +159,7 @@ void NetworkConnection::receive(
 
 						if (hasRoom) {
 							CULog("Connecting to client now");
-							peer->Connect(p.ToString(false), p.GetPort(), 0, 0);
+							peer->Connect(p.ToString(false), p.GetPort(), nullptr, 0);
 						} else {
 							CULogError(
 								"Client attempted to join but room was full - if you're seeing "
@@ -182,7 +184,7 @@ void NetworkConnection::receive(
 				dispatcher(msgConverted);
 
 				remotePeer.match(
-					[&](HostPeers& h) { broadcast(msgConverted, packet->systemAddress); },
+					[&](HostPeers& /*h*/) { broadcast(msgConverted, packet->systemAddress); },
 					[&](ClientPeer& c) {});
 
 				delete[] message; // NOLINT

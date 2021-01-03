@@ -1,5 +1,5 @@
-#ifndef __STATE_RECONCILER_H__
-#define __STATE_RECONCILER_H__
+#ifndef STATE_RECONCILER_H
+#define STATE_RECONCILER_H
 
 #include <cugl/cugl.h>
 
@@ -12,21 +12,10 @@
  */
 class StateReconciler {
    private:
-	/** One byte */
-	unsigned int oneByte;
-	/** The precision to multiply floating point numbers by */
-	float floatPrecision;
-	/** How close to consider floating point numbers identical */
-	float floatEpsilon;
-
-	/** Decode a float from the two bytes in the network packet */
-	constexpr float DECODE_FLOAT(uint8_t m1, uint8_t m2);
-	/** Encode a float and append it to the end of the given vector */
-	void encodeFloat(float f, std::vector<uint8_t>& out);
 	/** Encode the current level into a single byte */
-	constexpr uint8_t ENCODE_LEVEL_NUM(uint8_t level, bool parity);
+	static constexpr uint8_t ENCODE_LEVEL_NUM(uint8_t level, bool parity);
 	/** Decode a level byte into the current level and parity */
-	constexpr std::pair<uint8_t, bool> DECODE_LEVEL_NUM(uint8_t encodedLevel);
+	static constexpr std::pair<uint8_t, bool> DECODE_LEVEL_NUM(uint8_t encodedLevel);
 
 	/** Cache of previously unconforming breaches. Bool = active, float = position. */
 	std::unordered_map<unsigned int, bool> breachCache;
@@ -47,8 +36,11 @@ class StateReconciler {
 	std::unordered_map<unsigned int, float> localUnpairedBtn;
 
    public:
-	/** Construct a new state reconciler */
-	StateReconciler(unsigned int oneByte, float floatPrecision, float floatEpsilon);
+	/** Decode a float from the two bytes in the network packet */
+	static constexpr float DECODE_FLOAT(uint8_t m1, uint8_t m2);
+
+	/** Encode a float and append it to the end of the given vector */
+	static const void ENCODE_FLOAT(float f, std::vector<uint8_t>& out);
 
 	/**
 	 * Encode the state of the game into the specified vector.
@@ -59,8 +51,8 @@ class StateReconciler {
 	 * @param level The current level number
 	 * @paramm parity Level parity from mib
 	 */
-	void encode(std::shared_ptr<ShipModel> state, std::vector<uint8_t>& data, uint8_t level,
-				bool parity);
+	static void encode(const std::shared_ptr<ShipModel>& state, std::vector<uint8_t>& data,
+					   uint8_t level, bool parity);
 
 	/**
 	 * Reconcile the state of the game with the incoming message.
@@ -74,11 +66,11 @@ class StateReconciler {
 	 * @return True iff successful. A return value of false indicates a catastrophic failure that
 	 * cannot be recovered from (typically, the user has the wrong level loaded).
 	 */
-	bool reconcile(std::shared_ptr<ShipModel> state, const std::vector<uint8_t>& message,
+	bool reconcile(const std::shared_ptr<ShipModel>& state, const std::vector<uint8_t>& message,
 				   uint8_t level, bool parity);
 
 	/** Reset this class */
 	void reset();
 };
 
-#endif /* __STATE_RECONCILER_H__ */
+#endif /* STATE_RECONCILER_H */
