@@ -116,7 +116,7 @@ class InputController {
 	/**
 	 * Returns where the finger / mouse is currently pressed, or Vec2::ZERO if unpressed.
 	 */
-	static cugl::Vec2 getCurrTapLoc() ;
+	static cugl::Vec2 getCurrTapLoc();
 
 	/** Whether information about a new tap is available to read */
 	const bool isTapEndAvailable() const { return !tapEnd.isZero(); }

@@ -105,8 +105,8 @@ class AnimationManager {
 	 * @param duration The number of frames to run the animation for
 	 * @param delay The number of frames to wait before starting the animation
 	 */
-	void animateX(const std::string& node, Tween::TweenType ease, float destination, unsigned int duration,
-				  unsigned int delay = 0);
+	void animateX(const std::string& node, Tween::TweenType ease, float destination,
+				  unsigned int duration, unsigned int delay = 0);
 
 	/**
 	 * Animate the y position of a node.
@@ -117,8 +117,8 @@ class AnimationManager {
 	 * @param duration The number of frames to run the animation for
 	 * @param delay The number of frames to wait before starting the animation
 	 */
-	void animateY(const std::string& node, Tween::TweenType ease, float destination, unsigned int duration,
-				  unsigned int delay = 0);
+	void animateY(const std::string& node, Tween::TweenType ease, float destination,
+				  unsigned int duration, unsigned int delay = 0);
 
 	/**
 	 * Fade in a node linearly

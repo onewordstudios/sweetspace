@@ -97,11 +97,13 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 			std::min(level->getMaxDoors() * shipNumPlayers / globals::MIN_PLAYERS,
 					 static_cast<int>(shipNumPlayers) * 2 - 1);
 		unsigned int maxButtons = level->getMaxButtons() * shipNumPlayers / globals::MIN_PLAYERS;
-		if (maxButtons % 2 != 0) { maxButtons += 1;
-}
+		if (maxButtons % 2 != 0) {
+			maxButtons += 1;
+		}
 		ship = ShipModel::alloc(
 			shipNumPlayers, maxEvents, maxDoors, playerID, level->getShipSize(shipNumPlayers),
-			level->getInitHealth() * static_cast<float>(shipNumPlayers) / globals::MIN_PLAYERS, maxButtons);
+			level->getInitHealth() * static_cast<float>(shipNumPlayers) / globals::MIN_PLAYERS,
+			maxButtons);
 		ship->initTimer(level->getTime());
 		gm.init(ship, level);
 	} else {
@@ -299,7 +301,7 @@ void GameMode::updateStabilizer() {
 	bool allRoll = true;
 	auto& allDonuts = ship->getDonuts();
 
-	for (auto & allDonut : allDonuts) {
+	for (auto& allDonut : allDonuts) {
 		if (!allDonut->getIsActive()) {
 			continue;
 		}
@@ -369,7 +371,7 @@ void GameMode::updateTimer(float timestep) {
 	bool allButtonsInactive = true;
 	auto& buttons = ship->getButtons();
 
-	for (auto & button : buttons) {
+	for (auto& button : buttons) {
 		if (button->getIsActive()) {
 			allButtonsInactive = false;
 			break;
@@ -382,7 +384,7 @@ void GameMode::updateHealth() {
 	auto& breaches = ship->getBreaches();
 
 	// Breach health drain
-	for (auto & breache : breaches) {
+	for (auto& breache : breaches) {
 		// this should be adjusted based on the level and number of players
 		if (breache->getIsActive() &&
 			trunc(breache->getTimeCreated()) - trunc(ship->timeLeftInTimer) >
@@ -474,7 +476,8 @@ void GameMode::update(float timestep) {
 	}
 
 	// Set needle percentage in pause menu
-	sgRoot.setNeedlePercentage(static_cast<float>(net->getNumPlayers() - 1) / static_cast<float>(globals::MAX_PLAYERS));
+	sgRoot.setNeedlePercentage(static_cast<float>(net->getNumPlayers() - 1) /
+							   static_cast<float>(globals::MAX_PLAYERS));
 
 	// Connection Status Checks
 	if (!connectionUpdate(timestep)) {

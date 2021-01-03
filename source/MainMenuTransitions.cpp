@@ -24,15 +24,15 @@ constexpr float CREDITS_BG_POS = 2.5;
 constexpr float SHIP_FLY_POS = 1.5;
 
 /** The nodes containing all UI for the starting splash screen */
-constexpr std::array<const char*, 3> MAIN_SCREEN = {"matchmaking_home", "matchmaking_gamelogo",
-													"matchmaking_creditsbtn"};
+constexpr std::array<const char *, 3> MAIN_SCREEN = {"matchmaking_home", "matchmaking_gamelogo",
+													 "matchmaking_creditsbtn"};
 #pragma endregion
 
-MainMenuMode::MainMenuTransitions::MainMenuTransitions(MainMenuMode* parent) {
+MainMenuMode::MainMenuTransitions::MainMenuTransitions(MainMenuMode *parent) {
 	this->parent = parent;
 }
 
-void MainMenuMode::MainMenuTransitions::init(const std::shared_ptr<AssetManager>& assets,
+void MainMenuMode::MainMenuTransitions::init(const std::shared_ptr<AssetManager> &assets,
 											 bool toCredits) {
 	auto studioLogo = assets->get<Node>("matchmaking_studiologo");
 

@@ -106,7 +106,7 @@ void InputController::clear() {
  * the OS, we may see multiple updates of the same touch in a single animation
  * frame, so we need to accumulate all of the data together.
  */
-void InputController::update(float  /*dt*/) {
+void InputController::update(float /*dt*/) {
 // Only process keyboard on desktop
 #ifndef CU_TOUCH_SCREEN
 	auto* keys = Input::get<Keyboard>();
@@ -183,7 +183,7 @@ bool InputController::hasPressedBack() {
  * @param t     The touch information
  * @param event The associated event
  */
-void InputController::touchBeganCB(const cugl::TouchEvent& event, bool  /*focus*/) {
+void InputController::touchBeganCB(const cugl::TouchEvent& event, bool /*focus*/) {
 	tapStart.set(event.position);
 	touchID = event.touch;
 	jumped = true;
@@ -195,7 +195,7 @@ void InputController::touchBeganCB(const cugl::TouchEvent& event, bool  /*focus*
  * @param t     The touch information
  * @param event The associated event
  */
-void InputController::touchEndedCB(const cugl::TouchEvent& event, bool  /*focus*/) {
+void InputController::touchEndedCB(const cugl::TouchEvent& event, bool /*focus*/) {
 	tapEnd.set(event.position);
 }
 
@@ -205,7 +205,8 @@ void InputController::touchEndedCB(const cugl::TouchEvent& event, bool  /*focus*
  * @param t     The touch information
  * @param event The associated event
  */
-void InputController::clickBeganCB(const cugl::MouseEvent& event, Uint8  /*clicks*/, bool  /*focus*/) {
+void InputController::clickBeganCB(const cugl::MouseEvent& event, Uint8 /*clicks*/,
+								   bool /*focus*/) {
 	tapStart.set(event.position);
 	jumped = true;
 }
@@ -216,7 +217,8 @@ void InputController::clickBeganCB(const cugl::MouseEvent& event, Uint8  /*click
  * @param t     The click information
  * @param event The associated event
  */
-void InputController::clickEndedCB(const cugl::MouseEvent& event, Uint8  /*clicks*/, bool  /*focus*/) {
+void InputController::clickEndedCB(const cugl::MouseEvent& event, Uint8 /*clicks*/,
+								   bool /*focus*/) {
 	tapEnd.set(event.position);
 }
 #pragma endregion

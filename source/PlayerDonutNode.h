@@ -33,7 +33,7 @@ class PlayerDonutNode : public DonutNode {
 	 */
 	~PlayerDonutNode() { dispose(); }
 
-	bool init(const std::shared_ptr<DonutModel>& player, float screenHeight,
+	bool init(const std::shared_ptr<DonutModel> &player, float screenHeight,
 			  const std::shared_ptr<cugl::Texture> &bodyTexture,
 			  const std::shared_ptr<cugl::Texture> &faceIdleTexture,
 			  const std::shared_ptr<cugl::Texture> &faceDizzyTexture,

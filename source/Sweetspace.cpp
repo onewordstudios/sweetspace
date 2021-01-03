@@ -38,8 +38,9 @@ void Sweetspace::onStartup() {
 	AudioChannels::start(24);
 	assets->loadDirectoryAsync("json/assets.json", nullptr);
 	for (const auto *level : LEVEL_NAMES) {
-		if (strcmp(level, "") == 0) { continue;
-}
+		if (strcmp(level, "") == 0) {
+			continue;
+		}
 		assets->loadAsync<LevelModel>(level, level, nullptr);
 	}
 

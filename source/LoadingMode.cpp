@@ -32,7 +32,8 @@ bool LoadingMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 	dimen *= globals::SCENE_WIDTH / dimen.width; // Lock the game to a reasonable resolution
 	if (assets == nullptr) {
 		return false;
-	} if (!Scene::init(dimen)) {
+	}
+	if (!Scene::init(dimen)) {
 		return false;
 	}
 
@@ -69,7 +70,7 @@ void LoadingMode::dispose() {
  *
  * @param timestep  The amount of time (in seconds) since the last frame
  */
-void LoadingMode::update(float  /*timestep*/) {
+void LoadingMode::update(float /*timestep*/) {
 	if (progress < 1) {
 		progress = assets->progress();
 		if (progress >= 1) {

@@ -12,7 +12,7 @@ using namespace cugl;
 /** The radius of the ship. Also the y coordinate of the center of the ship */
 constexpr unsigned int RADIUS_OFFSET = 30;
 
-bool ExternalDonutNode::init(const std::shared_ptr<DonutModel>& externalDonutModel,
+bool ExternalDonutNode::init(const std::shared_ptr<DonutModel> &externalDonutModel,
 							 std::shared_ptr<DonutModel> player, float shipSize,
 							 const std::shared_ptr<cugl::Texture> &bodyTexture,
 							 const std::shared_ptr<cugl::Texture> &faceIdleTexture,

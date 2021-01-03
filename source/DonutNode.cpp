@@ -83,15 +83,16 @@ void DonutNode::animateJumping() {
 	float xScale = 0;
 	if (referencedDonutModel->getJumpTime() <= halfJumpTime * SCALING_BEGIN) {
 		// First animation stage
-		xScale = Tween::linear(DONUT_SCALE, DONUT_SCALE * JUMP_SCALE,
-							   static_cast<int>((referencedDonutModel->getJumpTime()) * PERCENTAGE_SCALE),
-							   static_cast<int>(halfJumpTime * SCALING_BEGIN * PERCENTAGE_SCALE));
+		xScale = Tween::linear(
+			DONUT_SCALE, DONUT_SCALE * JUMP_SCALE,
+			static_cast<int>((referencedDonutModel->getJumpTime()) * PERCENTAGE_SCALE),
+			static_cast<int>(halfJumpTime * SCALING_BEGIN * PERCENTAGE_SCALE));
 	} else if (isInScalingWindow) {
 		// Second animation stage
 		xScale = Tween::linear(
 			DONUT_SCALE * JUMP_SCALE, DONUT_SCALE,
 			static_cast<int>((referencedDonutModel->getJumpTime() - halfJumpTime * SCALING_BEGIN) *
-				  PERCENTAGE_SCALE),
+							 PERCENTAGE_SCALE),
 			static_cast<int>(scalingWindowSize * PERCENTAGE_SCALE));
 	} else {
 		// Not in animation stage
@@ -145,6 +146,7 @@ void DonutNode::animateFacialExpression() {
 	faceNodeWorking->setVisible(false);
 	if (visibleFaceNode != nullptr) {
 		visibleFaceNode->setVisible(true);
-		visibleFaceNode->setFrame(nextFrame < visibleFaceNode->getSize() ? static_cast<int>(nextFrame) : 0);
+		visibleFaceNode->setFrame(
+			nextFrame < visibleFaceNode->getSize() ? static_cast<int>(nextFrame) : 0);
 	}
 }

@@ -30,7 +30,7 @@ class UnopenableNode : public CustomNode {
 	 * NEVER USE A CONSTRUCTOR WITH NEW. If you want to allocate an object on
 	 * the heap, use one of the static constructors instead.
 	 */
-	UnopenableNode() {}
+	UnopenableNode() = default;
 
 	/**
 	 * Releases all resources allocated with this node.

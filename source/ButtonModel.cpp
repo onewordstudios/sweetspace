@@ -29,8 +29,9 @@ bool ButtonModel::init(const float a, std::shared_ptr<ButtonModel> pair, uint8_t
 
 int ButtonModel::getSection() {
 	float mod = fmod(getAngle(), static_cast<float>(globals::SEG_DEG));
-	int section = static_cast<int>(mod < (static_cast<float>(globals::SEG_DEG) / 2) ? floorf(getAngle() / globals::SEG_DEG)
-															: ceilf(getAngle() / globals::SEG_DEG));
+	int section = static_cast<int>(mod < (static_cast<float>(globals::SEG_DEG) / 2)
+									   ? floorf(getAngle() / globals::SEG_DEG)
+									   : ceilf(getAngle() / globals::SEG_DEG));
 	return section;
 }
 
@@ -46,7 +47,8 @@ void ButtonModel::update() {
 	} else if (frame - DOWN_ANIMATION_DURATION < DOWN_DURATION) {
 		height = 1.0f;
 	} else if (frame - DOWN_ANIMATION_DURATION - DOWN_DURATION < UP_ANIMATION_DURATION) {
-		height = static_cast<float>(frame - DOWN_ANIMATION_DURATION - DOWN_DURATION) / UP_ANIMATION_DURATION;
+		height = static_cast<float>(frame - DOWN_ANIMATION_DURATION - DOWN_DURATION) /
+				 UP_ANIMATION_DURATION;
 		height = 1.0f - height;
 	} else {
 		height = 0.0f;
