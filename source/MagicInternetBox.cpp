@@ -210,7 +210,7 @@ void MagicInternetBox::sendData(NetworkDataType type, float angle, uint8_t id, u
 
 	data.push_back(static_cast<uint8_t>(type));
 
-	StateReconciler::ENCODE_FLOAT(angle, data);
+	StateReconciler::encodeFloat(angle, data);
 
 	data.push_back(id);
 	data.push_back(data1);
@@ -218,7 +218,7 @@ void MagicInternetBox::sendData(NetworkDataType type, float angle, uint8_t id, u
 
 	uint8_t d3Positive = data3 >= 0 ? 1 : 0;
 	data.push_back(d3Positive);
-	StateReconciler::ENCODE_FLOAT(abs(data3), data);
+	StateReconciler::encodeFloat(abs(data3), data);
 
 	conn->send(data);
 }
@@ -457,7 +457,7 @@ void MagicInternetBox::update(std::shared_ptr<ShipModel> state) {
 				if (!state->isLevelOver()) {
 					std::vector<uint8_t> data;
 					data.push_back(StateSync);
-					stateReconciler.encode(state, data, levelNum.value(), levelParity);
+					StateReconciler::encode(state, data, levelNum.value(), levelParity);
 					conn->send(data);
 				}
 			}
@@ -524,13 +524,13 @@ void MagicInternetBox::update(std::shared_ptr<ShipModel> state) {
 			return;
 		}
 
-		float angle = StateReconciler::DECODE_FLOAT(message[1], message[2]);
+		float angle = StateReconciler::decodeFloat(message[1], message[2]);
 		uint8_t id = message[3];
 		uint8_t data1 = message[4];
 		// Networking code is finnicky and having these magic numbers is the easiest solution
 		uint8_t data2 = message[5];				   // NOLINT Simple counting numbers
 		float data3 = (message[6] == 1 ? 1 : -1) * // NOLINT
-					  StateReconciler::DECODE_FLOAT(message[7], message[8]); // NOLINT
+					  StateReconciler::decodeFloat(message[7], message[8]); // NOLINT
 
 		switch (type) {
 			case PositionUpdate: {

@@ -37,10 +37,10 @@ class StateReconciler {
 
    public:
 	/** Decode a float from the two bytes in the network packet */
-	static constexpr float DECODE_FLOAT(uint8_t m1, uint8_t m2);
+	static float decodeFloat(uint8_t m1, uint8_t m2);
 
 	/** Encode a float and append it to the end of the given vector */
-	static const void ENCODE_FLOAT(float f, std::vector<uint8_t>& out);
+	static void encodeFloat(float f, std::vector<uint8_t>& out);
 
 	/**
 	 * Encode the state of the game into the specified vector.

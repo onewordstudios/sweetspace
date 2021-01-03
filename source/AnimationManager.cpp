@@ -1,12 +1,14 @@
 #include "AnimationManager.h"
 
+#include <utility>
+
 #include "InputController.h"
 #include "Tween.h"
 
 AnimationManager::AnimationManager() : currentFrame(0) {}
 
 void AnimationManager::reset() {
-	for (auto n : initialData) {
+	for (const auto& n : initialData) {
 		n.node->setPositionX(n.posX);
 		n.node->setPositionY(n.posY);
 		n.node->setColor(cugl::Color4::WHITE);
@@ -18,7 +20,7 @@ void AnimationManager::reset() {
 	initialData.clear();
 }
 
-void AnimationManager::registerNode(std::string name,
+void AnimationManager::registerNode(const std::string& name,
 									const std::shared_ptr<cugl::AssetManager>& assets) {
 	auto node = assets->get<cugl::Node>(name);
 
@@ -39,7 +41,7 @@ bool AnimationManager::step() {
 	}
 
 	for (auto i = inProgress.begin(); i != inProgress.end();) {
-		auto anim = *i;
+		auto& anim = *i;
 
 		// Ignore animations that haven't started
 		if (currentFrame < anim.startFrame) {
@@ -60,9 +62,10 @@ bool AnimationManager::step() {
 		float val = 0; // The 0 is unused, but let's make the linter happy
 		{
 			// Scoping these temporary variables to avoid polluting the function
-			float s1 = anim.startVal, e1 = anim.endVal;
-			int s2 = (int)(currentFrame - anim.startFrame),
-				e2 = (int)(anim.endFrame - anim.startFrame);
+			float s1 = anim.startVal;
+			float e1 = anim.endVal;
+			int s2 = static_cast<int>(currentFrame - anim.startFrame);
+			int e2 = static_cast<int>(anim.endFrame - anim.startFrame);
 
 			switch (anim.ease) {
 				case Tween::TweenType::Linear:
@@ -108,31 +111,31 @@ bool AnimationManager::step() {
 void AnimationManager::queue(std::shared_ptr<cugl::Node> node, AnimationProperty property,
 							 Tween::TweenType ease, float startVal, float endVal,
 							 unsigned int duration, unsigned int delay) {
-	inProgress.push_back({node, property, ease, startVal, endVal, delay + currentFrame,
+	inProgress.push_back({std::move(node), property, ease, startVal, endVal, delay + currentFrame,
 						  duration + delay + currentFrame});
 }
 
-void AnimationManager::animateX(std::string node, Tween::TweenType ease, float destination,
+void AnimationManager::animateX(const std::string& node, Tween::TweenType ease, float destination,
 								unsigned int duration, unsigned int delay) {
-	auto n = nodes.at(node);
+	std::shared_ptr<cugl::Node> n = nodes.at(node);
 	queue(n, PositionX, ease, n->getPositionX(), destination, duration, delay);
 }
 
-void AnimationManager::animateY(std::string node, Tween::TweenType ease, float destination,
+void AnimationManager::animateY(const std::string& node, Tween::TweenType ease, float destination,
 								unsigned int duration, unsigned int delay) {
-	auto n = nodes.at(node);
+	std::shared_ptr<cugl::Node> n = nodes.at(node);
 	queue(n, PositionY, ease, n->getPositionY(), destination, duration, delay);
 }
 
-void AnimationManager::fadeIn(std::string node, unsigned int duration, unsigned int delay) {
+void AnimationManager::fadeIn(const std::string& node, unsigned int duration, unsigned int delay) {
 	queue(nodes.at(node), Visibility, Tween::TweenType::Linear, 0, 1, duration, delay);
 }
 
-void AnimationManager::fadeOut(std::string node, unsigned int duration, unsigned int delay) {
+void AnimationManager::fadeOut(const std::string& node, unsigned int duration, unsigned int delay) {
 	fadeOut(nodes.at(node), duration, delay);
 }
 
 void AnimationManager::fadeOut(std::shared_ptr<cugl::Node> node, unsigned int duration,
 							   unsigned int delay) {
-	queue(node, Visibility, Tween::TweenType::Linear, 1, 0, duration, delay);
+	queue(std::move(node), Visibility, Tween::TweenType::Linear, 1, 0, duration, delay);
 }

@@ -2,6 +2,8 @@
 
 #include <cugl/2d/CUPolygonNode.h>
 
+#include <utility>
+
 #include "GameGraphRoot.h"
 #include "Globals.h"
 #include "Tween.h"
@@ -38,17 +40,18 @@ constexpr float SPARKLE_SCALE_BIG = 1.0;
 /** Scale of small sparkle effect */
 constexpr float SPARKLE_SCALE_SMALL = 0.6f;
 
-bool BreachNode::init(std::shared_ptr<BreachModel> breach, std::shared_ptr<DonutModel> player,
-					  float shipSize, std::shared_ptr<cugl::Texture> filmstrip,
-					  std::shared_ptr<cugl::Texture> pattern, cugl::Color4 color,
+bool BreachNode::init(const std::shared_ptr<BreachModel>& breach,
+					  std::shared_ptr<DonutModel> player, float shipSize,
+					  const std::shared_ptr<cugl::Texture>& filmstrip,
+					  const std::shared_ptr<cugl::Texture>& pattern, cugl::Color4 color,
 					  std::shared_ptr<SparkleNode> sparkleBig,
 					  std::shared_ptr<SparkleNode> sparkleSmall) {
-	CustomNode::init(player, shipSize, breach->getAngle(), globals::RADIUS);
+	CustomNode::init(std::move(player), shipSize, breach->getAngle(), globals::RADIUS);
 
 	breachModel = breach;
-	sparkleNodeBig = sparkleBig;
+	sparkleNodeBig = std::move(sparkleBig);
 	sparkleNodeBig->setScale(SPARKLE_SCALE_BIG);
-	sparkleNodeSmall = sparkleSmall;
+	sparkleNodeSmall = std::move(sparkleSmall);
 	sparkleNodeSmall->setScale(SPARKLE_SCALE_SMALL);
 	setScale(BREACH_SCALE);
 	prevHealth = breach->getHealth();
@@ -88,8 +91,9 @@ void BreachNode::postPosition() {
 		isAnimatingShrink = true;
 		currentFrameIdle = 0;
 
-		float yOffset = Tween::linear(SPARKLE_OFFSET_BEGIN, SPARKLE_OFFSET_END,
-									  (int)shapeNode->getFrame(), shapeNode->getSize());
+		float yOffset =
+			Tween::linear(SPARKLE_OFFSET_BEGIN, SPARKLE_OFFSET_END,
+						  static_cast<int>(shapeNode->getFrame()), shapeNode->getSize());
 		sparkleNodeSmall->setRadius(radius + yOffset);
 		sparkleNodeSmall->setAngle(getAngle());
 		sparkleNodeSmall->setOnShipAngle(angle);
@@ -107,8 +111,8 @@ void BreachNode::postPosition() {
 			}
 		} else {
 			// Continue shrink animation
-			shapeNode->setFrame((int)shapeNode->getFrame() + 1);
-			patternNode->setFrame((int)(shapeNode->getFrame()));
+			shapeNode->setFrame(static_cast<int>(shapeNode->getFrame()) + 1);
+			patternNode->setFrame(static_cast<int>(shapeNode->getFrame()));
 		}
 	} else {
 		// Play idle animation
@@ -116,8 +120,9 @@ void BreachNode::postPosition() {
 			(currentFrameIdle < NUM_IDLE_FRAMES * NUM_SKIP_FRAMES
 				 ? currentFrameIdle / NUM_SKIP_FRAMES
 				 : (NUM_IDLE_FRAMES * NUM_SKIP_FRAMES * 2 - currentFrameIdle) / NUM_SKIP_FRAMES);
-		shapeNode->setFrame((int)getFrameFromHealth(breachModel->getHealth()) + magicNum);
-		patternNode->setFrame((int)shapeNode->getFrame());
+		shapeNode->setFrame(static_cast<int>(getFrameFromHealth(breachModel->getHealth())) +
+							magicNum);
+		patternNode->setFrame(static_cast<int>(shapeNode->getFrame()));
 		currentFrameIdle = currentFrameIdle == NUM_IDLE_FRAMES * 2 * NUM_SKIP_FRAMES - 1
 							   ? 0
 							   : currentFrameIdle + 1;
@@ -125,8 +130,8 @@ void BreachNode::postPosition() {
 	prevHealth = breachModel->getHealth();
 	patternNode->setScale(
 		(PATTERN_SCALE + (-PATTERN_SCALE + 1) *
-							 (float)(shapeNode->getSize() - shapeNode->getFrame()) /
-							 (float)shapeNode->getSize()));
+							 static_cast<float>(shapeNode->getSize() - shapeNode->getFrame()) /
+							 static_cast<float>(shapeNode->getSize())));
 }
 
 void BreachNode::becomeInactive() {
@@ -138,7 +143,7 @@ void BreachNode::becomeInactive() {
 
 void BreachNode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch, const Mat4& transform,
 					  Color4 tint) {
-	patternNode->setPositionY(
-		Tween::linear(0, PATTERN_OFFSET, (int)shapeNode->getFrame(), shapeNode->getSize()));
+	patternNode->setPositionY(Tween::linear(
+		0, PATTERN_OFFSET, static_cast<int>(shapeNode->getFrame()), shapeNode->getSize()));
 	CustomNode::draw(batch, transform, tint);
 }

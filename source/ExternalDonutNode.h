@@ -29,7 +29,7 @@ class ExternalDonutNode : public DonutNode {
 	 */
 	~ExternalDonutNode() { dispose(); }
 
-	bool init(std::shared_ptr<DonutModel> externalDonutModel, std::shared_ptr<DonutModel> player,
+	bool init(const std::shared_ptr<DonutModel>& externalDonutModel, std::shared_ptr<DonutModel> player,
 			  float shipSize, const std::shared_ptr<cugl::Texture> &bodyTexture,
 			  const std::shared_ptr<cugl::Texture> &faceIdleTexture,
 			  const std::shared_ptr<cugl::Texture> &faceDizzyTexture,

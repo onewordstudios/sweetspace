@@ -50,7 +50,7 @@ class PlayerDonutModel : public DonutModel {
 	 *
 	 * @param timestep  Time elapsed (in seconds) since last called.
 	 */
-	void update(float timestep = 0.0f) override;
+	void update(float timestep) override;
 };
 
 #endif

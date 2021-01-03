@@ -89,18 +89,18 @@ bool ShipModel::createAllTask() {
 }
 
 bool ShipModel::failAllTask() {
-	for (int i = 0; i < donuts.size(); i++) {
+	for (auto& donut : donuts) {
 		float newAngle = 0;
 		bool goodAngle = false;
 		int attempts = 0;
 		while (!goodAngle && attempts < MAX_NEW_ANGLE_ATTEMPTS) {
 			// Generate random angle
-			newAngle = std::fmodf((float)rand(), getSize());
+			newAngle = std::fmodf(static_cast<float>(rand()), getSize());
 			goodAngle = true;
 			attempts += 1;
 			// Check against breaches
-			for (unsigned int k = 0; k < breaches.size(); k++) {
-				float breachAngle = breaches[k]->getAngle();
+			for (auto& breach : breaches) {
+				float breachAngle = breach->getAngle();
 				float diff = getAngleDifference(breachAngle, newAngle);
 				if (diff <= MIN_DISTANCE && breachAngle != -1) {
 					goodAngle = false;
@@ -111,8 +111,8 @@ bool ShipModel::failAllTask() {
 				continue;
 			}
 			// Check against doors
-			for (unsigned int k = 0; k < doors.size(); k++) {
-				float doorAngle = doors[k]->getAngle();
+			for (auto& door : doors) {
+				float doorAngle = door->getAngle();
 				float diff = getAngleDifference(doorAngle, newAngle);
 				if (diff <= MIN_DISTANCE && doorAngle != -1) {
 					goodAngle = false;
@@ -120,7 +120,7 @@ bool ShipModel::failAllTask() {
 				}
 			}
 		}
-		donuts.at(i)->setTeleportAngle(newAngle);
+		donut->setTeleportAngle(newAngle);
 	}
 	return true;
 }

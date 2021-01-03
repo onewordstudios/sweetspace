@@ -86,7 +86,7 @@ class AnimationManager {
 	 * @param name The scene graph key of the node
 	 * @param assets The asset manager containing the scene graph to get this node from
 	 */
-	void registerNode(std::string name, const std::shared_ptr<cugl::AssetManager>& assets);
+	void registerNode(const std::string& name, const std::shared_ptr<cugl::AssetManager>& assets);
 
 	/**
 	 * Step the animation forward by one frame.
@@ -105,7 +105,7 @@ class AnimationManager {
 	 * @param duration The number of frames to run the animation for
 	 * @param delay The number of frames to wait before starting the animation
 	 */
-	void animateX(std::string node, Tween::TweenType ease, float destination, unsigned int duration,
+	void animateX(const std::string& node, Tween::TweenType ease, float destination, unsigned int duration,
 				  unsigned int delay = 0);
 
 	/**
@@ -117,7 +117,7 @@ class AnimationManager {
 	 * @param duration The number of frames to run the animation for
 	 * @param delay The number of frames to wait before starting the animation
 	 */
-	void animateY(std::string node, Tween::TweenType ease, float destination, unsigned int duration,
+	void animateY(const std::string& node, Tween::TweenType ease, float destination, unsigned int duration,
 				  unsigned int delay = 0);
 
 	/**
@@ -127,7 +127,7 @@ class AnimationManager {
 	 * @param duration The number of frames to run the animation for
 	 * @param delay The number of frames to wait before starting the animation
 	 */
-	void fadeIn(std::string node, unsigned int duration, unsigned int delay = 0);
+	void fadeIn(const std::string& node, unsigned int duration, unsigned int delay = 0);
 
 	/**
 	 * Fade out a node linearly
@@ -136,7 +136,7 @@ class AnimationManager {
 	 * @param duration The number of frames to run the animation for
 	 * @param delay The number of frames to wait before starting the animation
 	 */
-	void fadeOut(std::string node, unsigned int duration, unsigned int delay = 0);
+	void fadeOut(const std::string& node, unsigned int duration, unsigned int delay = 0);
 
 	/**
 	 * Fade out a node linearly

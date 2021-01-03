@@ -1,5 +1,5 @@
-#ifndef __EXTERN_DONUT_MODEL_H__
-#define __EXTERN_DONUT_MODEL_H__
+#ifndef EXTERN_DONUT_MODEL_H
+#define EXTERN_DONUT_MODEL_H
 #include <cugl/cugl.h>
 
 #include "DonutModel.h"
@@ -36,7 +36,7 @@ class ExternalDonutModel : public DonutModel {
 	NetworkMovementData networkMove;
 
    public:
-	ExternalDonutModel(void) : DonutModel(), networkMove(){};
+	ExternalDonutModel() : networkMove(){};
 
 	ExternalDonutModel(const ExternalDonutModel&) = delete;
 
@@ -86,7 +86,7 @@ class ExternalDonutModel : public DonutModel {
 	 *
 	 * @param timestep  Time elapsed (in seconds) since last called.
 	 */
-	void update(float timestep = 0.0f) override;
+	void update(float timestep) override;
 };
 
 #endif

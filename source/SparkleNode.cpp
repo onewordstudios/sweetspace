@@ -2,6 +2,8 @@
 
 #include <cugl/2d/CUAnimationNode.h>
 
+#include <utility>
+
 #include "Globals.h"
 #include "Tween.h"
 
@@ -14,9 +16,9 @@ static constexpr float SPARKLE_SCALE = 0.5f;
 static constexpr int ANIMATION_SPEED = 2;
 
 bool SparkleNode::init(std::shared_ptr<DonutModel> player, float shipSize,
-					   std::shared_ptr<cugl::Texture> texture, cugl::Color4 color,
+					   const std::shared_ptr<cugl::Texture>& texture, cugl::Color4 color,
 					   SparkleType type) {
-	CustomNode::init(player, shipSize, 0, globals::RADIUS);
+	CustomNode::init(std::move(player), shipSize, 0, globals::RADIUS);
 
 	setScale(SPARKLE_SCALE);
 	setPosition(Vec2::ZERO);

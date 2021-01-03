@@ -37,8 +37,7 @@ constexpr float NEEDLE_CUTOFF = 0.01f;
 #pragma region Initialization Logic
 
 MainMenuMode::MainMenuMode()
-	: Scene(),
-	  net(nullptr),
+	: net(nullptr),
 	  startHostThread(nullptr),
 	  screenHeight(0),
 	  gameReady(false),
@@ -196,10 +195,11 @@ void MainMenuMode::dispose() {
 
 void MainMenuMode::updateClientLabel() {
 	std::vector<char> room;
-	for (unsigned int i = 0; i < clientEnteredRoom.size(); i++) {
-		room.push_back('0' + clientEnteredRoom[i]);
+	for (unsigned int i : clientEnteredRoom) {
+		room.push_back('0' + i);
 	}
-	for (unsigned int i = (unsigned int)clientEnteredRoom.size(); i < globals::ROOM_LENGTH; i++) {
+	for (auto i = static_cast<unsigned int>(clientEnteredRoom.size()); i < globals::ROOM_LENGTH;
+		 i++) {
 		room.push_back('_');
 	}
 
@@ -220,7 +220,7 @@ void MainMenuMode::setRoomID() {
 	}
 	roomID = net->getRoomID();
 
-	if (roomID == "") {
+	if (roomID.empty()) {
 		hostLabel->setText("_ _ _ _ _");
 		clientEnteredRoom.clear();
 		updateClientLabel();
@@ -238,7 +238,8 @@ void MainMenuMode::setRoomID() {
 }
 
 void MainMenuMode::setNumPlayers() {
-	float percentage = (float)(net->getNumPlayers() - 1) / (float)globals::MAX_PLAYERS;
+	float percentage =
+		static_cast<float>(net->getNumPlayers() - 1) / static_cast<float>(globals::MAX_PLAYERS);
 	float diff = percentage - needlePos;
 	if (abs(diff) < NEEDLE_CUTOFF) {
 		needlePos = percentage;
@@ -266,7 +267,7 @@ void MainMenuMode::processUpdate() {
 
 	switch (currState) {
 		case HostScreenWait: {
-			if (net->getRoomID() != "") {
+			if (!net->getRoomID().empty()) {
 				transition->to(HostScreen);
 			} else if (!connScreen->isVisible()) {
 				switch (net->matchStatus()) {
@@ -329,15 +330,15 @@ void MainMenuMode::processUpdate() {
 			break;
 		}
 		case Credits: {
-			float pos = ((float)(CREDITS_HEIGHT + screenHeight) *
-						 ((float)(creditsScrollFrame++) / CREDITS_DURATION));
+			float pos = ((CREDITS_HEIGHT + screenHeight) *
+						 (static_cast<float>(creditsScrollFrame++) / CREDITS_DURATION));
 
 			if (InputController::getInstance()->getCurrTapLoc() != Vec2::ZERO) {
 				creditsScrollFrame += FAST_CREDITS_SCROLL_INCREMENT;
 			}
 
 			credits->setPositionY(pos);
-			if ((float)creditsScrollFrame > CREDITS_DURATION) {
+			if (static_cast<float>(creditsScrollFrame) > CREDITS_DURATION) {
 				creditsScrollFrame = 0;
 			}
 			break;
@@ -384,11 +385,11 @@ void MainMenuMode::processButtons() {
 
 	switch (currState) {
 		case StartScreen: {
-			if (buttonManager.tappedButton(hostBtn, tapData)) {
+			if (ButtonManager::tappedButton(hostBtn, tapData)) {
 				transition->to(HostScreenWait);
-			} else if (buttonManager.tappedButton(clientBtn, tapData)) {
+			} else if (ButtonManager::tappedButton(clientBtn, tapData)) {
 				transition->to(ClientScreen);
-			} else if (buttonManager.tappedButton(creditsBtn, tapData)) {
+			} else if (ButtonManager::tappedButton(creditsBtn, tapData)) {
 				transition->to(Credits);
 			}
 			break;
@@ -397,7 +398,7 @@ void MainMenuMode::processButtons() {
 			auto status = net->matchStatus();
 			if (status == MagicInternetBox::MatchmakingStatus::HostError ||
 				status == MagicInternetBox::MatchmakingStatus::HostApiMismatch) {
-				if (buttonManager.tappedButton(backBtn, tapData)) {
+				if (ButtonManager::tappedButton(backBtn, tapData)) {
 					transition->to(StartScreen);
 				}
 			}
@@ -405,11 +406,11 @@ void MainMenuMode::processButtons() {
 		}
 		case HostScreen: {
 			if (net->getNumPlayers() >= globals::MIN_PLAYERS) {
-				if (buttonManager.tappedButton(hostBeginBtn, tapData)) {
+				if (ButtonManager::tappedButton(hostBeginBtn, tapData)) {
 					transition->to(HostLevelSelect);
 				}
 			} else {
-				if (buttonManager.tappedButton(backBtn, tapData)) {
+				if (ButtonManager::tappedButton(backBtn, tapData)) {
 					CULog("Going Back");
 					transition->to(StartScreen);
 				}
@@ -418,13 +419,13 @@ void MainMenuMode::processButtons() {
 		}
 		case HostLevelSelect: {
 			for (unsigned int i = 0; i < NUM_LEVEL_BTNS; i++) {
-				if (buttonManager.tappedButton(levelBtns.at(i), tapData)) {
+				if (ButtonManager::tappedButton(levelBtns.at(i), tapData)) {
 					gameReady = true;
 					net->startGame(LEVEL_ENTRY_POINTS.at(i));
 					return;
 				}
 			}
-			if (buttonManager.tappedButton(hostTutorialSkipBtn, tapData)) {
+			if (ButtonManager::tappedButton(hostTutorialSkipBtn, tapData)) {
 				bool isDown = hostTutorialSkipBtn->isDown();
 				hostTutorialSkipBtn->setDown(!isDown);
 				net->setSkipTutorial(!isDown);
@@ -432,7 +433,7 @@ void MainMenuMode::processButtons() {
 			break;
 		}
 		case ClientScreen: {
-			if (buttonManager.tappedButton(clientJoinBtn, tapData)) {
+			if (ButtonManager::tappedButton(clientJoinBtn, tapData)) {
 				if (clientEnteredRoom.size() != globals::ROOM_LENGTH) {
 					break;
 				}
@@ -447,13 +448,14 @@ void MainMenuMode::processButtons() {
 				net->initClient(room.str());
 
 				break;
-			} else if (buttonManager.tappedButton(backBtn, tapData)) {
+			}
+			if (ButtonManager::tappedButton(backBtn, tapData)) {
 				transition->to(StartScreen);
 				return;
 			}
 
 			for (unsigned int i = 0; i < NUM_DIGITS; i++) {
-				if (buttonManager.tappedButton(clientRoomBtns[i], tapData)) {
+				if (ButtonManager::tappedButton(clientRoomBtns[i], tapData)) {
 					if (clientEnteredRoom.size() < globals::ROOM_LENGTH) {
 						clientEnteredRoom.push_back(i);
 						updateClientLabel();
@@ -462,8 +464,8 @@ void MainMenuMode::processButtons() {
 				}
 			}
 
-			if (buttonManager.tappedButton(clientClearBtn, tapData)) {
-				if (clientEnteredRoom.size() > 0) {
+			if (ButtonManager::tappedButton(clientClearBtn, tapData)) {
+				if (!clientEnteredRoom.empty()) {
 					clientEnteredRoom.pop_back();
 					clientJoinBtn->setDown(false);
 					updateClientLabel();
@@ -473,14 +475,14 @@ void MainMenuMode::processButtons() {
 			break;
 		}
 		case ClientScreenError: {
-			if (buttonManager.tappedButton(clientErrorBtn, tapData)) {
+			if (ButtonManager::tappedButton(clientErrorBtn, tapData)) {
 				transition->to(ClientScreen);
 			}
 			break;
 		}
 		case ClientScreenDone:
 		case Credits: {
-			if (buttonManager.tappedButton(backBtn, tapData)) {
+			if (ButtonManager::tappedButton(backBtn, tapData)) {
 				transition->to(StartScreen);
 			}
 			break;
@@ -503,7 +505,7 @@ void MainMenuMode::update(float timestep) {
 	input->update(timestep);
 
 	rotationFrame = (rotationFrame + 1) % ROTATION_MAX;
-	bg0stars->setAngle(globals::TWO_PI * (float)rotationFrame / ROTATION_MAX);
+	bg0stars->setAngle(globals::TWO_PI * static_cast<float>(rotationFrame) / ROTATION_MAX);
 
 	if (transition->step()) {
 		net->update();

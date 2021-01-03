@@ -12,11 +12,11 @@ constexpr uint16_t ONE_BYTE = 256;
 /** How close to consider floating point numbers identical */
 constexpr float FLOAT_EPSILON = 0.1f;
 
-constexpr float StateReconciler::DECODE_FLOAT(uint8_t m1, uint8_t m2) {
+float StateReconciler::decodeFloat(uint8_t m1, uint8_t m2) {
 	return static_cast<float>(m1 + ONE_BYTE * m2) / FLOAT_PRECISION;
 }
 
-const void StateReconciler::ENCODE_FLOAT(float f, std::vector<uint8_t>& out) {
+void StateReconciler::encodeFloat(float f, std::vector<uint8_t>& out) {
 	auto ff = static_cast<uint16_t>(f * FLOAT_PRECISION);
 	out.push_back(static_cast<uint8_t>(ff % ONE_BYTE));
 	out.push_back(static_cast<uint8_t>(ff / ONE_BYTE));
@@ -40,8 +40,8 @@ void StateReconciler::encode(const std::shared_ptr<ShipModel>& state, std::vecto
 
 	// Adding health and timer
 	auto health = state->getHealth();
-	ENCODE_FLOAT(health < 0 ? 0 : health, data);
-	ENCODE_FLOAT(state->timeLeftInTimer, data);
+	encodeFloat(health < 0 ? 0 : health, data);
+	encodeFloat(state->timeLeftInTimer, data);
 
 	// Send Breaches
 	const auto& breaches = state->getBreaches();
@@ -49,7 +49,7 @@ void StateReconciler::encode(const std::shared_ptr<ShipModel>& state, std::vecto
 	for (const auto& breach : breaches) {
 		data.push_back(breach->getHealth());
 		data.push_back(breach->getPlayer());
-		ENCODE_FLOAT(breach->getAngle(), data);
+		encodeFloat(breach->getAngle(), data);
 	}
 
 	// Send Doors
@@ -62,7 +62,7 @@ void StateReconciler::encode(const std::shared_ptr<ShipModel>& state, std::vecto
 			data.push_back(0);
 		} else {
 			data.push_back(1);
-			ENCODE_FLOAT(door->getAngle(), data);
+			encodeFloat(door->getAngle(), data);
 		}
 	}
 
@@ -77,7 +77,7 @@ void StateReconciler::encode(const std::shared_ptr<ShipModel>& state, std::vecto
 			data.push_back(0);
 		} else {
 			data.push_back(1);
-			ENCODE_FLOAT(btn->getAngle(), data);
+			encodeFloat(btn->getAngle(), data);
 			data.push_back(btn->getPairID());
 		}
 	}
@@ -92,9 +92,9 @@ bool StateReconciler::reconcile(const std::shared_ptr<ShipModel>& state,
 
 	size_t index = 2;
 
-	float health = DECODE_FLOAT(message[index], message[index + 1]);
+	float health = decodeFloat(message[index], message[index + 1]);
 	index += 2;
-	float timer = DECODE_FLOAT(message[index], message[index + 1]);
+	float timer = decodeFloat(message[index], message[index + 1]);
 	index += 2;
 
 	if (abs(state->getHealth() - health) > 1.0f) {
@@ -113,7 +113,7 @@ bool StateReconciler::reconcile(const std::shared_ptr<ShipModel>& state,
 	}
 	for (uint8_t i = 0; i < breaches.size(); i++) {
 		if (breaches[i]->getHealth() == 0 && message[index] > 0) {
-			float angle = DECODE_FLOAT(message[index + 2], message[index + 3]);
+			float angle = decodeFloat(message[index + 2], message[index + 3]);
 			if (breachCache.count(i) != 0 && breachCache[i]) {
 				CULog("Found resolved breach that should be unresolved, id %d", i);
 				state->createBreach(angle, message[index], message[index + 1], static_cast<int>(i));
@@ -142,7 +142,7 @@ bool StateReconciler::reconcile(const std::shared_ptr<ShipModel>& state,
 	}
 	for (uint8_t i = 0; i < doors.size(); i++) {
 		if (message[index] != 0u) {
-			float angle = DECODE_FLOAT(message[index + 1], message[index + 2]);
+			float angle = decodeFloat(message[index + 1], message[index + 2]);
 			if (abs(doors[i]->getAngle() - angle) > FLOAT_EPSILON) {
 				if (doorCache.count(i) != 0 && doorCache[i]) {
 					CULog("Found open door that should be closed, id %d", i);
@@ -176,7 +176,7 @@ bool StateReconciler::reconcile(const std::shared_ptr<ShipModel>& state,
 	localUnpairedBtn.clear();
 	for (uint8_t i = 0; i < btns.size(); i++) {
 		if (message[index] != 0u) {
-			float angle = DECODE_FLOAT(message[index + 1], message[index + 2]);
+			float angle = decodeFloat(message[index + 1], message[index + 2]);
 			if (abs(btns[i]->getAngle() - angle) > FLOAT_EPSILON) {
 				CULog("Found fixed button that should be broken, id %d", i);
 				if (localUnpairedBtn.count(message[index + 3]) == 0) {

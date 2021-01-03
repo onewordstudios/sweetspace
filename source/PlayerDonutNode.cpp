@@ -6,7 +6,7 @@
 
 using namespace cugl;
 
-bool PlayerDonutNode::init(std::shared_ptr<DonutModel> player, float screenHeight,
+bool PlayerDonutNode::init(const std::shared_ptr<DonutModel>& player, float screenHeight,
 						   const std::shared_ptr<cugl::Texture>& bodyTexture,
 						   const std::shared_ptr<cugl::Texture>& faceIdleTexture,
 						   const std::shared_ptr<cugl::Texture>& faceDizzyTexture,
@@ -26,8 +26,8 @@ bool PlayerDonutNode::init(std::shared_ptr<DonutModel> player, float screenHeigh
 
 void PlayerDonutNode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch, const Mat4& transform,
 						   Color4 tint) {
-	float angle = (float)(rotationNode->getAngle() -
-						  playerDonutModel->getVelocity() * globals::PI_180 * globals::SPIN_RATIO);
+	auto angle = (rotationNode->getAngle() -
+				  playerDonutModel->getVelocity() * globals::PI_180 * globals::SPIN_RATIO);
 	setAnchor(Vec2::ANCHOR_CENTER);
 	rotationNode->setAngle(angle);
 	// Draw Jump Offset
@@ -35,5 +35,6 @@ void PlayerDonutNode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch, cons
 	setPositionY(donutNewY);
 	animateJumping();
 	animateFacialExpression();
+	// NOLINTNEXTLINE Intentional skip of CustomNode
 	Node::draw(batch, transform, tint);
 }

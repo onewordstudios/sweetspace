@@ -95,12 +95,13 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 		unsigned int maxEvents = level->getMaxBreaches() * shipNumPlayers / globals::MIN_PLAYERS;
 		unsigned int maxDoors =
 			std::min(level->getMaxDoors() * shipNumPlayers / globals::MIN_PLAYERS,
-					 (int)shipNumPlayers * 2 - 1);
+					 static_cast<int>(shipNumPlayers) * 2 - 1);
 		unsigned int maxButtons = level->getMaxButtons() * shipNumPlayers / globals::MIN_PLAYERS;
-		if (maxButtons % 2 != 0) maxButtons += 1;
+		if (maxButtons % 2 != 0) { maxButtons += 1;
+}
 		ship = ShipModel::alloc(
 			shipNumPlayers, maxEvents, maxDoors, playerID, level->getShipSize(shipNumPlayers),
-			level->getInitHealth() * (float)shipNumPlayers / globals::MIN_PLAYERS, maxButtons);
+			level->getInitHealth() * static_cast<float>(shipNumPlayers) / globals::MIN_PLAYERS, maxButtons);
 		ship->initTimer(level->getTime());
 		gm.init(ship, level);
 	} else {
@@ -298,17 +299,17 @@ void GameMode::updateStabilizer() {
 	bool allRoll = true;
 	auto& allDonuts = ship->getDonuts();
 
-	for (unsigned int i = 0; i < allDonuts.size(); i++) {
-		if (!allDonuts[i]->getIsActive()) {
+	for (auto & allDonut : allDonuts) {
+		if (!allDonut->getIsActive()) {
 			continue;
 		}
 		if (stabilizer.isLeft()) {
-			if (allDonuts[i]->getVelocity() >= 0) {
+			if (allDonut->getVelocity() >= 0) {
 				allRoll = false;
 				break;
 			}
 		} else {
-			if (allDonuts[i]->getVelocity() <= 0) {
+			if (allDonut->getVelocity() <= 0) {
 				allRoll = false;
 				break;
 			}
@@ -368,8 +369,8 @@ void GameMode::updateTimer(float timestep) {
 	bool allButtonsInactive = true;
 	auto& buttons = ship->getButtons();
 
-	for (int i = 0; i < buttons.size(); i++) {
-		if (buttons[i]->getIsActive()) {
+	for (auto & button : buttons) {
+		if (button->getIsActive()) {
 			allButtonsInactive = false;
 			break;
 		}
@@ -381,10 +382,10 @@ void GameMode::updateHealth() {
 	auto& breaches = ship->getBreaches();
 
 	// Breach health drain
-	for (int i = 0; i < breaches.size(); i++) {
+	for (auto & breache : breaches) {
 		// this should be adjusted based on the level and number of players
-		if (breaches[i]->getIsActive() &&
-			trunc(breaches[i]->getTimeCreated()) - trunc(ship->timeLeftInTimer) >
+		if (breache->getIsActive() &&
+			trunc(breache->getTimeCreated()) - trunc(ship->timeLeftInTimer) >
 				BREACH_HEALTH_GRACE_PERIOD) {
 			ship->decHealth(BREACH_HEALTH_PENALTY);
 		}
@@ -473,7 +474,7 @@ void GameMode::update(float timestep) {
 	}
 
 	// Set needle percentage in pause menu
-	sgRoot.setNeedlePercentage((float)(net->getNumPlayers() - 1) / (float)globals::MAX_PLAYERS);
+	sgRoot.setNeedlePercentage(static_cast<float>(net->getNumPlayers() - 1) / static_cast<float>(globals::MAX_PLAYERS));
 
 	// Connection Status Checks
 	if (!connectionUpdate(timestep)) {

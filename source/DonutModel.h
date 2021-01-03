@@ -1,5 +1,5 @@
-﻿#ifndef __DONUT_MODEL_H__
-#define __DONUT_MODEL_H__
+﻿#ifndef DONUT_MODEL_H_
+#define DONUT_MODEL_H_
 #include <cugl/cugl.h>
 
 #pragma mark -
@@ -91,7 +91,7 @@ class DonutModel {
 	 * NEVER USE A CONSTRUCTOR WITH NEW. If you want to allocate a model on
 	 * the heap, use one of the static constructors instead.
 	 */
-	DonutModel(void)
+	DonutModel()
 		: angle(0),
 		  shipSize(DEFAULT_SHIP_SIZE),
 		  velocity(0),
@@ -107,7 +107,7 @@ class DonutModel {
 	/**
 	 * Destroys this donut, releasing all resources.
 	 */
-	~DonutModel(void) { dispose(); }
+	~DonutModel() { dispose(); }
 
 	/**
 	 * Disposes all resources and assets of this donut
@@ -161,7 +161,7 @@ class DonutModel {
 	 *
 	 * @return the current angle of the donut in degrees.
 	 */
-	float getAngle() { return angle; }
+	float getAngle() const { return angle; }
 
 	/**
 	 * Sets the current angle of the donut in degrees.
@@ -186,7 +186,7 @@ class DonutModel {
 	 *
 	 * @return the jump offset.
 	 */
-	float getJumpOffset() { return jumpOffset; }
+	float getJumpOffset() const { return jumpOffset; }
 
 	/**
 	 * Sets the current jump offset of the donut.
@@ -207,10 +207,10 @@ class DonutModel {
 	 *
 	 * @return whether the donut is currently jumping.
 	 */
-	bool isJumping() { return jumping; }
+	bool isJumping() const { return jumping; }
 
 	/** Returns whether the donut is currently jumping and is on the descent of the jump arc */
-	bool isDescending() {
+	bool isDescending() const {
 		return jumping && (GRAVITY / 2 * jumpTime * jumpTime > jumpVelocity * jumpTime);
 	}
 
@@ -218,7 +218,7 @@ class DonutModel {
 	 * Returns the donut's jump time
 	 * @return
 	 */
-	float getJumpTime() { return jumpTime; }
+	float getJumpTime() const { return jumpTime; }
 
 	/**
 	 * Sets the velocity of the donut directly.
@@ -233,7 +233,7 @@ class DonutModel {
 	 *
 	 * @return the current velocity of the donut.
 	 */
-	float getVelocity() { return velocity; }
+	float getVelocity() const { return velocity; }
 
 	/**
 	 * Sets the friction applied to the donut directly.
@@ -247,14 +247,14 @@ class DonutModel {
 	 *
 	 * @return the current friction applied to the donut.
 	 */
-	float getFriction() { return friction; }
+	float getFriction() const { return friction; }
 
 	/**
 	 * Returns whether this donut is active.
 	 *
 	 * @return whether this donut is active.
 	 */
-	bool getIsActive() { return isActive; }
+	bool getIsActive() const { return isActive; }
 
 	/**
 	 * Sets whether this donut is active.
@@ -262,7 +262,7 @@ class DonutModel {
 	void setIsActive(bool active) { isActive = active; }
 
 	void setColorId(uint8_t i) { colorId = i; }
-	uint8_t getColorId() { return colorId; }
+	uint8_t getColorId() const { return colorId; }
 
 	/**
 	 * Applies a force to the donut.
@@ -300,7 +300,7 @@ class DonutModel {
 	 *
 	 * @param timestep  Time elapsed (in seconds) since last called.
 	 */
-	virtual void update(float timestep = 0.0f) = 0;
+	virtual void update(float timestep) = 0;
 
 	/**
 	 * Resets the donut back to its original settings

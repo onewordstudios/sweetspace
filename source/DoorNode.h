@@ -60,7 +60,7 @@ class DoorNode : public CustomNode {
 	 * @param rows      The number of rows in the filmstrip
 	 * @param cols      The number of columns in the filmstrip
 	 */
-	virtual bool init(std::shared_ptr<DoorModel> door, std::shared_ptr<DonutModel> player,
+	virtual bool init(const std::shared_ptr<DoorModel> &door, std::shared_ptr<DonutModel> player,
 					  float shipSize, const std::shared_ptr<cugl::Texture> &texture, int rows,
 					  int cols, int size);
 

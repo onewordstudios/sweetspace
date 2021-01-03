@@ -70,8 +70,10 @@ class ButtonNode : public CustomNode {
 	 */
 	virtual bool init(std::shared_ptr<ButtonModel> btn, std::shared_ptr<DonutModel> player,
 					  float shipSize, std::shared_ptr<cugl::Texture> baseDown,
-					  std::shared_ptr<cugl::Texture> baseUp, std::shared_ptr<cugl::Texture> btnDown,
-					  std::shared_ptr<cugl::Texture> btnUp, std::shared_ptr<cugl::Font> labelFont,
+					  const std::shared_ptr<cugl::Texture> &baseUp,
+					  std::shared_ptr<cugl::Texture> btnDown,
+					  const std::shared_ptr<cugl::Texture> &btnUp,
+					  const std::shared_ptr<cugl::Font> &labelFont,
 					  std::shared_ptr<SparkleNode> sparkleNode);
 
 	/**

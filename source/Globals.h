@@ -1,8 +1,8 @@
-#ifndef __GLOBALS_H__
-#define __GLOBALS_H__
+#ifndef GLOBALS_H_
+#define GLOBALS_H_
 
-#include <stddef.h>
-#include <stdint.h>
+#include <cstddef>
+#include <cstdint>
 
 /**
  * A namespace for storing constants that are useful across the program.

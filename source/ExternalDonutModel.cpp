@@ -25,7 +25,7 @@ void ExternalDonutModel::update(float timestep) {
 	networkMove.framesSinceUpdate++;
 	if (networkMove.framesSinceUpdate < globals::NETWORK_TICK) {
 		// Interpolate position
-		float percent = (float)networkMove.framesSinceUpdate / globals::NETWORK_TICK;
+		float percent = static_cast<float>(networkMove.framesSinceUpdate) / globals::NETWORK_TICK;
 		networkMove.oldAngle += velocity;
 		networkMove.angle += velocity;
 

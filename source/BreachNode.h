@@ -79,9 +79,10 @@ class BreachNode : public CustomNode {
 	 * @param pattern	The texture of the inside pattern
 	 * @param color		The color of the player's breach
 	 */
-	virtual bool init(std::shared_ptr<BreachModel> breach, std::shared_ptr<DonutModel> player,
-					  float shipSize, std::shared_ptr<cugl::Texture> filmstrip,
-					  std::shared_ptr<cugl::Texture> pattern, cugl::Color4 color,
+	virtual bool init(const std::shared_ptr<BreachModel> &breach,
+					  std::shared_ptr<DonutModel> player, float shipSize,
+					  const std::shared_ptr<cugl::Texture> &filmstrip,
+					  const std::shared_ptr<cugl::Texture> &pattern, cugl::Color4 color,
 					  std::shared_ptr<SparkleNode> sparkle,
 					  std::shared_ptr<SparkleNode> sparkleSmall);
 

@@ -2,6 +2,8 @@
 
 #include <cugl/cugl.h>
 
+#include <memory>
+
 #include "MainMenuMode.h"
 
 #pragma region Animation Constants
@@ -52,7 +54,7 @@ void MainMenuMode::MainMenuTransitions::init(const std::shared_ptr<AssetManager>
 							screenHeight / 2, OPEN_TRANSITION);
 	}
 
-	for (auto e : MAIN_SCREEN) {
+	for (const auto *e : MAIN_SCREEN) {
 		animations.registerNode(e, assets);
 		if (!toCredits) {
 			animations.fadeIn(e, TRANSITION_DURATION, OPEN_TRANSITION_FADE);
@@ -93,10 +95,10 @@ void MainMenuMode::MainMenuTransitions::to(MatchState destination) {
 		case StartScreen: {
 			switch (destination) {
 				case HostScreenWait:
-					parent->startHostThread = std::unique_ptr<std::thread>(new std::thread([]() {
+					parent->startHostThread = std::make_unique<std::thread>([]() {
 						MagicInternetBox::getInstance()->initHost();
 						CULog("SEPARATE THREAD FINISHED INIT HOST");
-					}));
+					});
 					parent->hostNeedle->setAngle(0);
 					parent->needlePos = 0;
 					parent->clientWaitHost->setVisible(false);
@@ -294,7 +296,7 @@ bool MainMenuMode::MainMenuTransitions::step() { return animations.step(); }
 
 void MainMenuMode::MainMenuTransitions::mainMenuOut() {
 	auto screenHeight = parent->screenHeight;
-	for (auto e : MAIN_SCREEN) {
+	for (const auto *e : MAIN_SCREEN) {
 		animations.fadeOut(e, TRANSITION_DURATION);
 	}
 	animations.animateY("matchmaking_mainmenubg-ship", Tween::TweenType::EaseIn,
@@ -304,7 +306,7 @@ void MainMenuMode::MainMenuTransitions::mainMenuOut() {
 
 void MainMenuMode::MainMenuTransitions::mainMenuIn() {
 	auto screenHeight = parent->screenHeight;
-	for (auto e : MAIN_SCREEN) {
+	for (const auto *e : MAIN_SCREEN) {
 		animations.fadeIn(e, TRANSITION_DURATION);
 	}
 	animations.animateY("matchmaking_mainmenubg-ship", Tween::TweenType::EaseIn, screenHeight / 2,

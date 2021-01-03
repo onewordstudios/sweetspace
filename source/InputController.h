@@ -116,7 +116,7 @@ class InputController {
 	/**
 	 * Returns where the finger / mouse is currently pressed, or Vec2::ZERO if unpressed.
 	 */
-	const cugl::Vec2 getCurrTapLoc() const;
+	static cugl::Vec2 getCurrTapLoc() ;
 
 	/** Whether information about a new tap is available to read */
 	const bool isTapEndAvailable() const { return !tapEnd.isZero(); }
@@ -133,7 +133,7 @@ class InputController {
 	/**
 	 * Return whether the player has pressed back since the last time this method was queried
 	 */
-	const bool hasPressedBack();
+	bool hasPressedBack();
 
 #pragma endregion
 #pragma region Gameplay Input Results
