@@ -167,6 +167,7 @@ class LevelModel : public cugl::Asset {
 	 */
 	bool preload(const std::shared_ptr<cugl::JsonValue>& json) override {
 		if (json == nullptr) {
+			// NOLINTNEXTLINE idk why but clang-tidy is complaining
 			CUAssertLog(false, "Failed to load level file");
 			return false;
 		}
