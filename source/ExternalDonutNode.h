@@ -18,7 +18,7 @@ class ExternalDonutNode : public DonutNode {
 	/**
 	 * Creates an node.
 	 */
-	ExternalDonutNode() : DonutNode() {}
+	ExternalDonutNode() = default;
 
 	/**
 	 * Releases all resources allocated with this node.
@@ -37,14 +37,14 @@ class ExternalDonutNode : public DonutNode {
 			  const std::shared_ptr<cugl::Texture> &faceWorkTexture);
 
 	static std::shared_ptr<ExternalDonutNode> alloc(
-		std::shared_ptr<DonutModel> externalDonutModel, std::shared_ptr<DonutModel> player,
+		const std::shared_ptr<DonutModel> &externalDonutModel, std::shared_ptr<DonutModel> player,
 		float shipSize, const std::shared_ptr<cugl::Texture> &bodyTexture,
 		const std::shared_ptr<cugl::Texture> &faceIdleTexture,
 		const std::shared_ptr<cugl::Texture> &faceDizzyTexture,
 		const std::shared_ptr<cugl::Texture> &faceWorkTexture) {
 		std::shared_ptr<ExternalDonutNode> node = std::make_shared<ExternalDonutNode>();
-		return node->init(externalDonutModel, player, shipSize, bodyTexture, faceIdleTexture,
-						  faceDizzyTexture, faceWorkTexture)
+		return node->init(externalDonutModel, std::move(player), shipSize, bodyTexture,
+						  faceIdleTexture, faceDizzyTexture, faceWorkTexture)
 				   ? node
 				   : nullptr;
 	}

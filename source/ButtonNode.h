@@ -1,5 +1,5 @@
-#ifndef __SWEETSPACE_BUTTONNODE_H__
-#define __SWEETSPACE_BUTTONNODE_H__
+#ifndef SWEETSPACE_BUTTONNODE_H
+#define SWEETSPACE_BUTTONNODE_H
 
 #include "ButtonModel.h"
 #include "CustomNode.h"
@@ -46,7 +46,7 @@ class ButtonNode : public CustomNode {
 	 * NEVER USE A CONSTRUCTOR WITH NEW. If you want to allocate an object on
 	 * the heap, use one of the static constructors instead.
 	 */
-	ButtonNode() : CustomNode() {}
+	ButtonNode() = default;
 
 	/**
 	 * Releases all resources allocated with this node.
@@ -94,12 +94,12 @@ class ButtonNode : public CustomNode {
 	 */
 	static std::shared_ptr<ButtonNode> alloc(
 		std::shared_ptr<ButtonModel> btn, std::shared_ptr<DonutModel> player, float shipSize,
-		std::shared_ptr<cugl::Texture> baseDown, std::shared_ptr<cugl::Texture> baseUp,
-		std::shared_ptr<cugl::Texture> btnDown, std::shared_ptr<cugl::Texture> btnUp,
-		std::shared_ptr<cugl::Font> labelFont, std::shared_ptr<SparkleNode> sparkleNode) {
+		std::shared_ptr<cugl::Texture> baseDown, const std::shared_ptr<cugl::Texture> &baseUp,
+		std::shared_ptr<cugl::Texture> btnDown, const std::shared_ptr<cugl::Texture> &btnUp,
+		const std::shared_ptr<cugl::Font> &labelFont, std::shared_ptr<SparkleNode> sparkleNode) {
 		std::shared_ptr<ButtonNode> node = std::make_shared<ButtonNode>();
-		return (node->init(btn, player, shipSize, baseDown, baseUp, btnDown, btnUp, labelFont,
-						   sparkleNode)
+		return (node->init(std::move(btn), std::move(player), shipSize, std::move(baseDown), baseUp,
+						   std::move(btnDown), btnUp, labelFont, std::move(sparkleNode))
 					? node
 					: nullptr);
 	}

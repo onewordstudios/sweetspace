@@ -27,7 +27,7 @@ class TutorialNode : public cugl::AnimationNode {
 	 * NEVER USE A CONSTRUCTOR WITH NEW. If you want to allocate an object on
 	 * the heap, use one of the static constructors instead.
 	 */
-	TutorialNode() : cugl::AnimationNode() {}
+	TutorialNode() : isLabel(false) {}
 
 	/**
 	 * Releases all resources allocated with this node.
@@ -61,14 +61,14 @@ class TutorialNode : public cugl::AnimationNode {
 
 #pragma mark -
 
-	void setBreachNode(std::shared_ptr<BreachNode> node) { breachNode = node; }
-	void setDoorNode(std::shared_ptr<DoorNode> node) { doorNode = node; }
-	void setButtonNode(std::shared_ptr<ButtonNode> node) { buttonNode = node; }
+	void setBreachNode(std::shared_ptr<BreachNode> node) { breachNode = std::move(node); }
+	void setDoorNode(std::shared_ptr<DoorNode> node) { doorNode = std::move(node); }
+	void setButtonNode(std::shared_ptr<ButtonNode> node) { buttonNode = std::move(node); }
 	int getPlayer() { return breachNode->getModel()->getPlayer(); }
 	std::shared_ptr<ButtonNode> getButtonNode() { return buttonNode; }
 	std::shared_ptr<BreachNode> getBreachNode() { return breachNode; }
 	void setIsLabel(bool b) { isLabel = b; }
-	int getRollsLeft() { return count; }
+	int getRollsLeft() const { return count; }
 
 	void draw(const std::shared_ptr<cugl::SpriteBatch> &batch, const cugl::Mat4 &transform,
 			  cugl::Color4 tint) override;

@@ -22,7 +22,7 @@ class HealthNode : public cugl::AnimationNode {
 	 * NEVER USE A CONSTRUCTOR WITH NEW. If you want to allocate an object on
 	 * the heap, use one of the static constructors instead.
 	 */
-	HealthNode() : cugl::AnimationNode() {}
+	HealthNode() : section(0) {}
 
 	/**
 	 * Releases all resources allocated with this node.
@@ -57,11 +57,11 @@ class HealthNode : public cugl::AnimationNode {
 
 #pragma mark -
 
-	void setModel(std::shared_ptr<ShipModel> model) { ship = model; }
+	void setModel(std::shared_ptr<ShipModel> model) { ship = std::move(model); }
 
 	void setSection(int s) { section = s; }
 
-	int getSection() { return section; }
+	int getSection() const { return section; }
 
 	void draw(const std::shared_ptr<cugl::SpriteBatch> &batch, const cugl::Mat4 &transform,
 			  cugl::Color4 tint) override;

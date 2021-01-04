@@ -57,7 +57,7 @@ class BreachNode : public CustomNode {
 	 * NEVER USE A CONSTRUCTOR WITH NEW. If you want to allocate an object on
 	 * the heap, use one of the static constructors instead.
 	 */
-	BreachNode() : CustomNode(), isAnimatingShrink(false), prevHealth(0), currentFrameIdle(0) {}
+	BreachNode() : isAnimatingShrink(false), prevHealth(0), currentFrameIdle(0) {}
 
 	/**
 	 * Releases all resources allocated with this node.
@@ -98,16 +98,16 @@ class BreachNode : public CustomNode {
 	 *
 	 * @return a newly allocated node at the world origin.
 	 */
-	static std::shared_ptr<BreachNode> alloc(std::shared_ptr<BreachModel> breach,
+	static std::shared_ptr<BreachNode> alloc(const std::shared_ptr<BreachModel> &breach,
 											 std::shared_ptr<DonutModel> player, float shipSize,
-											 std::shared_ptr<cugl::Texture> filmstrip,
-											 std::shared_ptr<cugl::Texture> pattern,
+											 const std::shared_ptr<cugl::Texture> &filmstrip,
+											 const std::shared_ptr<cugl::Texture> &pattern,
 											 cugl::Color4 color,
 											 std::shared_ptr<SparkleNode> sparkleBig,
 											 std::shared_ptr<SparkleNode> sparkleSmall) {
 		std::shared_ptr<BreachNode> result = std::make_shared<BreachNode>();
-		return (result->init(breach, player, shipSize, filmstrip, pattern, color, sparkleBig,
-							 sparkleSmall)
+		return (result->init(breach, std::move(player), shipSize, filmstrip, pattern, color,
+							 std::move(sparkleBig), std::move(sparkleSmall))
 					? result
 					: nullptr);
 	}
@@ -115,7 +115,7 @@ class BreachNode : public CustomNode {
 #pragma mark -
 #pragma mark Getters & Setters
 
-	bool getIsAnimatingShrink() { return isAnimatingShrink; }
+	bool getIsAnimatingShrink() const { return isAnimatingShrink; }
 
 	std::shared_ptr<cugl::AnimationNode> getShapeNode() { return shapeNode; }
 
@@ -142,7 +142,7 @@ class BreachNode : public CustomNode {
 	 * @param pattern
 	 * @param color
 	 */
-	void resetAppearance(std::shared_ptr<cugl::Texture> pattern, cugl::Color4 color) {
+	void resetAppearance(const std::shared_ptr<cugl::Texture> &pattern, cugl::Color4 color) {
 		shapeNode->setColor(color);
 		patternNode->setTexture(pattern);
 		patternNode->setColor(color);
