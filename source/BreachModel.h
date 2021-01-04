@@ -1,5 +1,5 @@
-﻿#ifndef __BREACH_MODEL_H__
-#define __BREACH_MODEL_H__
+﻿#ifndef BREACH_MODEL_H
+#define BREACH_MODEL_H
 #include <cugl/cugl.h>
 class BreachModel {
    private:
@@ -29,7 +29,7 @@ class BreachModel {
 	 * NEVER USE A CONSTRUCTOR WITH NEW. If you want to allocate a model on
 	 * the heap, use one of the static constructors instead.
 	 */
-	BreachModel(void)
+	BreachModel()
 		: angle(0),
 		  health(0),
 		  playerOn(false),
@@ -43,7 +43,7 @@ class BreachModel {
 	/**
 	 * Destroys this breach, releasing all resources.
 	 */
-	~BreachModel(void) { dispose(); }
+	~BreachModel() { dispose(); }
 
 	/**
 	 * Disposes all resources and assets of this breach
@@ -91,7 +91,7 @@ class BreachModel {
 	 *
 	 * @return true if the obstacle is initialized properly, false otherwise.
 	 */
-	virtual bool init(const float a, const uint8_t health, const uint8_t player, const float time);
+	virtual bool init(float a, uint8_t health, uint8_t player, float time);
 
 	/**
 	 * Inits the breach upon recycling.
@@ -121,28 +121,28 @@ class BreachModel {
 	 *
 	 * @return the current angle of the breach in degrees.
 	 */
-	float getAngle() { return angle; }
+	float getAngle() const { return angle; }
 
 	/**
 	 * Returns the current health of the breach.
 	 *
 	 * @return the current health of the breach.
 	 */
-	uint8_t getHealth() { return health; }
+	uint8_t getHealth() const { return health; }
 
 	/**
 	 * Returns whether the player is currently on the breach.
 	 *
 	 * @return whether the player is currently on the breach.
 	 */
-	bool isPlayerOn() { return playerOn; }
+	bool isPlayerOn() const { return playerOn; }
 
 	/**
 	 * Returns whether the breach is currently active.
 	 *
 	 * @return whether the breach is currently active.
 	 */
-	bool getIsActive() { return isActive; }
+	bool getIsActive() const { return isActive; }
 
 	/**
 	 * Sets the current angle of the breach in degrees.
@@ -183,7 +183,7 @@ class BreachModel {
 	 *
 	 * @return Which player is assigned to this breach.
 	 */
-	uint8_t getPlayer() { return player; }
+	uint8_t getPlayer() const { return player; }
 
 	/**
 	 * Sets which player is assigned to this breach.
@@ -196,7 +196,7 @@ class BreachModel {
 	 * Gets the needSpriteUpdate field.
 	 * @return
 	 */
-	bool getNeedSpriteUpdate() { return needSpriteUpdate; }
+	bool getNeedSpriteUpdate() const { return needSpriteUpdate; }
 
 	/**
 	 * Sets the needSpriteUpdate field.
@@ -214,6 +214,6 @@ class BreachModel {
 	 * Gets the time at which breach was created.
 	 * @return time at which breach was created
 	 */
-	float getTimeCreated() { return timeCreated; }
+	float getTimeCreated() const { return timeCreated; }
 };
 #endif /* __BREACH_MODEL_H__ */
