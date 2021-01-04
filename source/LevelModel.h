@@ -1,5 +1,5 @@
-#ifndef __JS_LEVEL_MODEL_H__
-#define __JS_LEVEL_MODEL_H__
+#ifndef JS_LEVEL_MODEL_H
+#define JS_LEVEL_MODEL_H
 #include <cugl/2d/physics/CUObstacleWorld.h>
 #include <cugl/assets/CUAsset.h>
 #include <cugl/cugl.h>

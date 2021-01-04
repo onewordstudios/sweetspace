@@ -1,5 +1,6 @@
-﻿#ifndef __UNOPENABLE_H__
-#define __UNOPENABLE_H__
+﻿#ifndef UNOPENABLE_H
+#define UNOPENABLE_H
+
 #include <cugl/cugl.h>
 
 class Unopenable {
@@ -19,13 +20,13 @@ class Unopenable {
 	 * NEVER USE A CONSTRUCTOR WITH NEW. If you want to allocate a model on
 	 * the heap, use one of the static constructors instead.
 	 */
-	Unopenable(void) : angle(0), isActive(false) {}
+	Unopenable() : isActive(false), angle(0) {}
 	Unopenable(const Unopenable&) = delete;
 
 	/**
 	 * Destroys this unopenable door, releasing all resources.
 	 */
-	~Unopenable(void) { dispose(); }
+	~Unopenable() { dispose(); }
 
 	/**
 	 * Disposes all resources and assets of this unopenable door
@@ -70,14 +71,14 @@ class Unopenable {
 	 *
 	 * @return the current angle of the unopenable door in degrees.
 	 */
-	float getAngle() { return angle; }
+	float getAngle() const { return angle; }
 
 	/**
 	 * Returns whether the unopenable door is currently active.
 	 *
 	 * @return whether the unopenable door is currently active.
 	 */
-	bool getIsActive() { return isActive; }
+	bool getIsActive() const { return isActive; }
 
 	/**
 	 * Sets the current angle of the unopenable door in degrees.
@@ -86,4 +87,4 @@ class Unopenable {
 	 */
 	void setAngle(float value) { angle = value; }
 };
-#endif /* __UNOPENABLE_H__ */
+#endif /* UNOPENABLE_H */

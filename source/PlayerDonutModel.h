@@ -1,5 +1,5 @@
-#ifndef __PLAYER_DONUT_MODEL_H__
-#define __PLAYER_DONUT_MODEL_H__
+#ifndef PLAYER_DONUT_MODEL_H
+#define PLAYER_DONUT_MODEL_H
 #include <cugl/cugl.h>
 
 #include "DonutModel.h"

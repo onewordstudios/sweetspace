@@ -1,5 +1,5 @@
-#ifndef __JS_EVENT_MODEL_H__
-#define __JS_EVENT_MODEL_H__
+#ifndef JS_EVENT_MODEL_H
+#define JS_EVENT_MODEL_H
 #include <cugl/cugl.h>
 #include <cugl/io/CUJsonReader.h>
 
@@ -57,21 +57,21 @@ class EventModel {
 	 *
 	 * @return start time
 	 */
-	int getStart() { return timeStart; }
+	int getStart() const { return timeStart; }
 
 	/**
 	 * Returns the end time
 	 *
 	 * @return end time
 	 */
-	int getEnd() { return timeStop; }
+	int getEnd() const { return timeStop; }
 
 	/**
 	 * Returns the probability this event is generated per update frame
 	 *
 	 * @return probability per update frame
 	 */
-	float getProbability() { return probability; }
+	float getProbability() const { return probability; }
 
 	/**
 	 * Returns whether this event is active
@@ -79,21 +79,21 @@ class EventModel {
 	 * @param time the current game time
 	 * @return whether this event is active
 	 */
-	bool isActive(int time) { return time <= timeStop && time >= timeStart; }
+	bool isActive(int time) const { return time <= timeStop && time >= timeStart; }
 
 	/**
 	 * Returns whether this event is one time
 	 *
 	 * @return whether this event is one time
 	 */
-	bool isOneTime() { return timeStop == timeStart; }
+	bool isOneTime() const { return timeStop == timeStart; }
 
 #pragma mark -
 #pragma mark Initializers
 	/**
 	 * Creates a new, empty level.
 	 */
-	EventModel(void) : block(""), timeStart(0), timeStop(0), probability(0){};
+	EventModel() : timeStart(0), timeStop(0), probability(0){};
 
 	bool init(const std::shared_ptr<cugl::JsonValue>& json) {
 		block = json->get(BLOCK_FIELD)->asString();
@@ -106,7 +106,7 @@ class EventModel {
 	/**
 	 * Destroys this level, releasing all resources.
 	 */
-	virtual ~EventModel(void){};
+	virtual ~EventModel() = default;
 };
 
 #endif /* defined(__JS_LEVEL_MODEL_H__) */

@@ -1,5 +1,5 @@
-#ifndef __JS_BUILDING_BLOCK_MODEL_H__
-#define __JS_BUILDING_BLOCK_MODEL_H__
+#ifndef JS_BUILDING_BLOCK_MODEL_H
+#define JS_BUILDING_BLOCK_MODEL_H
 #include <cugl/assets/CUAsset.h>
 #include <cugl/cugl.h>
 #include <cugl/io/CUJsonReader.h>
@@ -89,38 +89,38 @@ class BuildingBlockModel {
 	 *
 	 * @return player
 	 */
-	int getPlayer() { return player; }
+	int getPlayer() const { return player; }
 
 	/**
 	 * Returns the distance at which this should be generated
 	 *
 	 * @return distance
 	 */
-	int getDistance() { return distance; }
+	int getDistance() const { return distance; }
 
 	/**
 	 * Returns the total width taken up by this building block
 	 *
 	 * @return range of building block
 	 */
-	int getRange() { return range; }
+	int getRange() const { return range; }
 
 	/**
 	 * Returns the min
 	 *
 	 * @return min
 	 */
-	int getMin() { return minRelAngle; }
-	int getBreachesNeeded() { return breachesNeeded; }
-	int getDoorsNeeded() { return doorsNeeded; }
-	int getButtonsNeeded() { return buttonsNeeded; }
+	int getMin() const { return minRelAngle; }
+	int getBreachesNeeded() const { return breachesNeeded; }
+	int getDoorsNeeded() const { return doorsNeeded; }
+	int getButtonsNeeded() const { return buttonsNeeded; }
 
 #pragma mark -
 #pragma mark Initializers
 	/**
 	 * Creates a new, empty level.
 	 */
-	BuildingBlockModel(void)
+	BuildingBlockModel()
 		: type(Random),
 		  player(0),
 		  distance(-1),
@@ -132,7 +132,7 @@ class BuildingBlockModel {
 
 	bool init(const std::shared_ptr<cugl::JsonValue>& json) {
 		std::shared_ptr<cugl::JsonValue> playerDist = json->get(PLAYER_DIST_FIELD);
-		type = (PlayerDistType)playerDist->get(SPAWN_RULE_FIELD)->asInt();
+		type = static_cast<PlayerDistType>(playerDist->get(SPAWN_RULE_FIELD)->asInt());
 		switch (type) {
 			case MinDist:
 				distance = playerDist->get(DISTANCE_FIELD)->asInt();
@@ -145,7 +145,7 @@ class BuildingBlockModel {
 				break;
 		}
 		std::shared_ptr<cugl::JsonValue> objectJson = json->get(OBJECTS_FIELD);
-		int numObjects = (int)objectJson->size();
+		int numObjects = static_cast<int>(objectJson->size());
 		int maxAngle = 0;
 		int minAngle = 0;
 		int leftWidth = 0;
@@ -156,7 +156,9 @@ class BuildingBlockModel {
 						  object->get(OBJECT_ANGLE_FIELD)->asInt(),
 						  object->get(OBJECT_PLAYER_FIELD)->asInt()};
 			objects.push_back(obj);
-			if (obj.type == Roll) continue;
+			if (obj.type == Roll) {
+				continue;
+			}
 			if (obj.angle >= maxAngle) {
 				maxAngle = obj.angle;
 				switch (obj.type) {
@@ -188,23 +190,23 @@ class BuildingBlockModel {
 			minRelAngle = minAngle - leftWidth;
 			range = maxAngle + rightWidth - minRelAngle;
 		}
-		breachesNeeded = (int)count_if(
+		breachesNeeded = static_cast<int>(count_if(
 			objects.begin(), objects.end(),
-			[](BuildingBlockModel::Object o) { return o.type == BuildingBlockModel::Breach; });
-		doorsNeeded = (int)count_if(
+			[](BuildingBlockModel::Object o) { return o.type == BuildingBlockModel::Breach; }));
+		doorsNeeded = static_cast<int>(count_if(
 			objects.begin(), objects.end(),
-			[](BuildingBlockModel::Object o) { return o.type == BuildingBlockModel::Door; });
-		buttonsNeeded =
-			2 * (int)count_if(objects.begin(), objects.end(), [](BuildingBlockModel::Object o) {
-				return o.type == BuildingBlockModel::Button;
-			});
+			[](BuildingBlockModel::Object o) { return o.type == BuildingBlockModel::Door; }));
+		buttonsNeeded = 2 * static_cast<int>(count_if(
+								objects.begin(), objects.end(), [](BuildingBlockModel::Object o) {
+									return o.type == BuildingBlockModel::Button;
+								}));
 		return true;
 	}
 
 	/**
 	 * Destroys this level, releasing all resources.
 	 */
-	virtual ~BuildingBlockModel(void){};
+	virtual ~BuildingBlockModel() = default;
 };
 
-#endif /* defined(__JS_LEVEL_MODEL_H__) */
+#endif /* JS_BUILDING_BLOCK_MODEL_H */

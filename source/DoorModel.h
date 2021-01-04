@@ -1,5 +1,5 @@
-﻿#ifndef __DOOR_MODEL_H__
-#define __DOOR_MODEL_H__
+﻿#ifndef DOOR_MODEL_H
+#define DOOR_MODEL_H
 #include <cugl/cugl.h>
 
 #include <bitset>
@@ -34,14 +34,14 @@ class DoorModel {
 	 * NEVER USE A CONSTRUCTOR WITH NEW. If you want to allocate a model on
 	 * the heap, use one of the static constructors instead.
 	 */
-	DoorModel(void) : isActive(false), angle(0), playersOn() {}
+	DoorModel() : isActive(false), angle(0) {}
 
 	DoorModel(const DoorModel&) = delete;
 
 	/**
 	 * Destroys this door, releasing all resources.
 	 */
-	~DoorModel(void) { dispose(); }
+	~DoorModel() { dispose(); }
 
 	/**
 	 * Disposes all resources and assets of this door
@@ -86,28 +86,28 @@ class DoorModel {
 	 *
 	 * @return the current angle of the door in degrees.
 	 */
-	float getAngle() { return angle; }
+	float getAngle() const { return angle; }
 
 	/**
 	 * Returns whether the breach is currently active.
 	 *
 	 * @return whether the breach is currently active.
 	 */
-	bool getIsActive() { return isActive; }
+	bool getIsActive() const { return isActive; }
 
 	/**
 	 * Returns the current height of the door.
 	 *
 	 * @return the current height of the door.
 	 */
-	unsigned int getHeight() { return height; }
+	unsigned int getHeight() const { return height; }
 
 	/**
 	 * Returns the number of players in range of the door.
 	 *
 	 * @return the number of players in range of the door.
 	 */
-	uint8_t getPlayersOn() { return (uint8_t)playersOn.count(); }
+	uint8_t getPlayersOn() { return static_cast<uint8_t>(playersOn.count()); }
 
 	/**
 	 * Adds the given player's flag from the door.
@@ -127,13 +127,15 @@ class DoorModel {
 	 * Raises the door.
 	 */
 	void raiseDoor() {
-		if (height < MAX_HEIGHT) height += SPEED;
+		if (height < MAX_HEIGHT) {
+			height += SPEED;
+		}
 	}
 
 	/**
 	 * Returns whether this door can be passed under.
 	 */
-	bool halfOpen() { return height >= HALF_OPEN; }
+	bool halfOpen() const { return height >= HALF_OPEN; }
 
 	/**
 	 * Returns whether this door has been resolved and opened.
@@ -159,4 +161,4 @@ class DoorModel {
 		isActive = false;
 	}
 };
-#endif /* __DOOR_MODEL_H__ */
+#endif /* DOOR_MODEL_H */
