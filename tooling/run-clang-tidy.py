@@ -142,8 +142,6 @@ def main():
   db_path = 'compile_commands.json'
 
   files = args.cpp
-  print("Files to run:")
-  print(args.cpp)
 
   max_task = multiprocessing.cpu_count()
   tmpdir = None
