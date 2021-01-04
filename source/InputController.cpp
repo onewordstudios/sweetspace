@@ -152,6 +152,7 @@ bool InputController::hasJumped() {
 	return false;
 }
 
+// NOLINTNEXTLINE clang-tidy can't see the touchscreen stuff b/c of the macro
 cugl::Vec2 InputController::getCurrTapLoc() {
 #ifndef CU_TOUCH_SCREEN
 	auto* mouse = Input::get<Mouse>();
