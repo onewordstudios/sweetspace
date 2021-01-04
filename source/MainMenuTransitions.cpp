@@ -6,6 +6,8 @@
 
 #include "MainMenuMode.h"
 
+using namespace cugl;
+
 #pragma region Animation Constants
 
 /** Duration of a standard transition */

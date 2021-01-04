@@ -11,6 +11,8 @@
 #include "MainMenuTransitions.h"
 #include "Tween.h"
 
+using namespace cugl;
+
 /** Number of buttons for room ID entry */
 constexpr unsigned int NUM_DIGITS = 10;
 

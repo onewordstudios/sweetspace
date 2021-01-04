@@ -31,7 +31,7 @@ class MainMenuMode::MainMenuTransitions {
 	 * @param assets The asset manager with the main menu's assets
 	 * @param toCredits Whether to initialize and jump straight to credits
 	 */
-	void init(const std::shared_ptr<AssetManager>& assets, bool toCredits = false);
+	void init(const std::shared_ptr<cugl::AssetManager>& assets, bool toCredits = false);
 
 	/**
 	 * Transition to a new mode
