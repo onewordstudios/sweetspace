@@ -1,5 +1,5 @@
-﻿#ifndef __SWEETSPACE_H__
-#define __SWEETSPACE_H__
+﻿#ifndef SWEETSPACE_H
+#define SWEETSPACE_H
 #include <cugl/cugl.h>
 
 #include "GameMode.h"
@@ -63,15 +63,7 @@ class Sweetspace : public cugl::Application {
 	 * of initialization from the constructor allows main.cpp to perform
 	 * advanced configuration of the application before it starts.
 	 */
-	Sweetspace()
-		: cugl::Application(),
-		  status(Loading),
-		  gameplay(),
-		  loading(),
-		  mainmenu(),
-		  loaded(false),
-		  matched(false),
-		  gameStarted(false) {}
+	Sweetspace() : status(Loading), loaded(false), matched(false), gameStarted(false) {}
 
 	/**
 	 * Disposes of this application, releasing all resources.
@@ -80,7 +72,7 @@ class Sweetspace : public cugl::Application {
 	 * It simply calls the dispose() method in Application.  There is nothing
 	 * special to do here.
 	 */
-	~Sweetspace() {}
+	~Sweetspace() = default;
 
 	/**
 	 * The method called after OpenGL is initialized, but before running the application.

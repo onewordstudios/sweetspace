@@ -1,5 +1,5 @@
-﻿#ifndef __GAME_MODE_H__
-#define __GAME_MODE_H__
+﻿#ifndef GAME_MODE_H
+#define GAME_MODE_H
 #include <cugl/cugl.h>
 
 #include <vector>
@@ -135,7 +135,7 @@ class GameMode {
 	 *
 	 * @return whether to go back to the main menu
 	 */
-	bool getIsBackToMainMenu() { return isBackToMainMenu; }
+	bool getIsBackToMainMenu() const { return isBackToMainMenu; }
 };
 
-#endif /* __GAME_MODE_H__ */
+#endif /* GAME_MODE_H */

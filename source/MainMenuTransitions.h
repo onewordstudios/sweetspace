@@ -1,5 +1,5 @@
-#ifndef __MAIN_MENU_TRANSITIONS_H__
-#define __MAIN_MENU_TRANSITIONS_H__
+#ifndef MAIN_MENU_TRANSITIONS_H
+#define MAIN_MENU_TRANSITIONS_H
 #include <cugl/cugl.h>
 
 #include "MainMenuMode.h"
@@ -23,7 +23,7 @@ class MainMenuMode::MainMenuTransitions {
 	 *
 	 * @param parent A pointer to the main menu mode itself
 	 */
-	MainMenuTransitions(MainMenuMode* parent);
+	explicit MainMenuTransitions(MainMenuMode* parent);
 
 	/**
 	 * Start the transition into the main menu mode.
@@ -52,4 +52,4 @@ class MainMenuMode::MainMenuTransitions {
 	 */
 	void reset();
 };
-#endif /* __MAIN_MENU_TRANSITIONS_H__ */
+#endif /* MAIN_MENU_TRANSITIONS_H */
