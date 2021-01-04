@@ -1,5 +1,5 @@
-#ifndef __NETWORK_DATA_TYPE_H__
-#define __NETWORK_DATA_TYPE_H__
+#ifndef NETWORK_DATA_TYPE_H
+#define NETWORK_DATA_TYPE_H
 
 /**
  * The type of data being sent during a network packet

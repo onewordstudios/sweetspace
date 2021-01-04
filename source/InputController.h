@@ -1,5 +1,5 @@
-﻿#ifndef __INPUT_CONTROLLER_H__
-#define __INPUT_CONTROLLER_H__
+﻿#ifndef INPUT_CONTROLLER_H
+#define INPUT_CONTROLLER_H
 #include <cugl/cugl.h>
 
 /**
@@ -17,7 +17,7 @@ class InputController {
 	/**
 	 * The singleton instance of this class.
 	 */
-	static std::shared_ptr<InputController> instance;
+	static std::shared_ptr<InputController> instance; // NOLINT
 
 	/** Whether or not this input is active */
 	bool active;
@@ -119,11 +119,11 @@ class InputController {
 	static cugl::Vec2 getCurrTapLoc();
 
 	/** Whether information about a new tap is available to read */
-	const bool isTapEndAvailable() const { return !tapEnd.isZero(); }
+	bool isTapEndAvailable() const { return !tapEnd.isZero(); }
 
 	/** Returns the start and end locations of the last tap iff isTapEndAvailable is true, otherwise
 	 * undefined */
-	const std::tuple<cugl::Vec2, cugl::Vec2> getTapEndLoc() {
+	std::tuple<cugl::Vec2, cugl::Vec2> getTapEndLoc() {
 		std::tuple<cugl::Vec2, cugl::Vec2> r = std::make_tuple(tapStart, tapEnd);
 		tapStart.setZero();
 		tapEnd.setZero();
@@ -146,7 +146,7 @@ class InputController {
 	 *
 	 * @return The roll amount. -1 is all left, 1 is all right, 0 is neutral.
 	 */
-	const float getRoll() { return rollAmount; }
+	float getRoll() const { return rollAmount; }
 
 	/**
 	 * Return whether the player has jumped since the last time this method was queried
