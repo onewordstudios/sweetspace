@@ -27,7 +27,7 @@ bool ButtonModel::init(const float a, std::shared_ptr<ButtonModel> pair, uint8_t
 	return true;
 };
 
-int ButtonModel::getSection() {
+int ButtonModel::getSection() const {
 	float mod = fmod(getAngle(), static_cast<float>(globals::SEG_DEG));
 	int section = static_cast<int>(mod < (static_cast<float>(globals::SEG_DEG) / 2)
 									   ? floorf(getAngle() / globals::SEG_DEG)

@@ -4,7 +4,6 @@
 
 #include <map>
 
-using namespace cugl;
 /**
  * This class represents sound effects
  *
@@ -67,8 +66,8 @@ class SoundEffectController {
 		doorCollide = assets->get<cugl::Sound>(DOOR_FILE);
 		fixBreach = assets->get<cugl::Sound>(FIX_FILE);
 		slowBreach = assets->get<cugl::Sound>(SLOW_FILE);
-		click = assets->get<Sound>(CLICK_FILE);
-		teleport = assets->get<Sound>(TELEPORT_FILE);
+		click = assets->get<cugl::Sound>(CLICK_FILE);
+		teleport = assets->get<cugl::Sound>(TELEPORT_FILE);
 	}
 
 	/**
@@ -81,8 +80,8 @@ class SoundEffectController {
 		// Check if this event has already been registered
 		if (!activeEffects[{e, id}]) {
 			activeEffects[{e, id}] = true;
-			std::shared_ptr<Sound> sound;
-			const char* key; // NOLINT switch statement sets it
+			std::shared_ptr<cugl::Sound> sound; // NOLINT switch statement sets these
+			const char* key;					// NOLINT
 			switch (e) {
 				case JUMP:
 					sound = jump;
@@ -109,9 +108,9 @@ class SoundEffectController {
 					key = TELEPORT_FILE;
 					break;
 			}
-			if (!AudioChannels::get()->isActiveEffect(key)) {
-				AudioChannels::get()->playEffect(key, sound, false);
-				AudioChannels::get()->setEffectPan(key, 0);
+			if (!cugl::AudioChannels::get()->isActiveEffect(key)) {
+				cugl::AudioChannels::get()->playEffect(key, sound, false);
+				cugl::AudioChannels::get()->setEffectPan(key, 0);
 			}
 		}
 	}

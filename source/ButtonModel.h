@@ -61,7 +61,7 @@ class ButtonModel {
 	/**
 	 * Returns the section of the ship containing this button.
 	 */
-	int getSection();
+	int getSection() const;
 
 	/**
 	 * Returns the current height of the button, as percentage down, where 0 = fully up and 1 =
