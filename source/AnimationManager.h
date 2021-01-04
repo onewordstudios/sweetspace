@@ -1,5 +1,5 @@
-#ifndef __ANIMATION_MANAGER_H__
-#define __ANIMATION_MANAGER_H__
+#ifndef ANIMATION_MANAGER_H
+#define ANIMATION_MANAGER_H
 #include <cugl/cugl.h>
 
 #include <list>

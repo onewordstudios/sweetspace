@@ -1,5 +1,5 @@
-﻿#ifndef __JS_LEVEL_CONSTANTS_H__
-#define __JS_LEVEL_CONSTANTS_H__
+﻿#ifndef JS_LEVEL_CONSTANTS_H
+#define JS_LEVEL_CONSTANTS_H
 
 #include <array>
 

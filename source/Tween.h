@@ -1,5 +1,5 @@
-#ifndef __TWEEN_H__
-#define __TWEEN_H__
+#ifndef TWEEN_H
+#define TWEEN_H
 
 #include <cugl/cugl.h>
 

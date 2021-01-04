@@ -1,5 +1,5 @@
-﻿#ifndef __TUTORIAL_CONSTANTS_H__
-#define __TUTORIAL_CONSTANTS_H__
+﻿#ifndef TUTORIAL_CONSTANTS_H
+#define TUTORIAL_CONSTANTS_H
 
 #include <array>
 
@@ -7,22 +7,21 @@
 
 namespace tutorial {
 constexpr uint8_t NUM_REAL_LEVELS = 7;
-constexpr std::array<uint8_t, NUM_REAL_LEVELS> REAL_LEVELS =			 // NOLINT
-	{1, 3, 4, 5, 7, 8, 9};												 // NOLINT
+constexpr std::array<uint8_t, NUM_REAL_LEVELS> REAL_LEVELS = {1, 3, 4, 5, 7, 8, 9};
 constexpr std::array<uint8_t, globals::NUM_TUTORIAL_LEVELS> MAX_BREACH = // NOLINT
-	{10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10};						 // NOLINT
-constexpr std::array<uint8_t, globals::NUM_TUTORIAL_LEVELS> MAX_DOOR =	 // NOLINT
-	{0, 0, 2, 10, 0, 0, 10, 0, 0, 0, 0};								 // NOLINT
+	{10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10};
+constexpr std::array<uint8_t, globals::NUM_TUTORIAL_LEVELS> MAX_DOOR = // NOLINT
+	{0, 0, 2, 10, 0, 0, 10, 0, 0, 0, 0};
 constexpr std::array<uint8_t, globals::NUM_TUTORIAL_LEVELS> MAX_BUTTON = // NOLINT
 	{10, 10, 10, 10, 10, 10, 15, 10, 10, 10, 10};
 constexpr std::array<float, globals::NUM_TUTORIAL_LEVELS> HEALTH = { // NOLINT
-	1000, 10, 1000, 10, 10, 10, 1000, 10, 10, 10, 1000};			 // NOLINT
+	1000, 10, 1000, 10, 10, 10, 1000, 10, 10, 10, 1000};
 constexpr std::array<float, globals::NUM_TUTORIAL_LEVELS> SIZE_PER = // NOLINT
-	{180, 180, 180, 180, 180, 180, 180, 180, 180, 180, 180};		 // NOLINT
+	{180, 180, 180, 180, 180, 180, 180, 180, 180, 180, 180};
 constexpr std::array<bool, globals::NUM_TUTORIAL_LEVELS> SECTIONED = // NOLINT
-	{1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0};
+	{true, false, false, false, false, false, true, false, false, false, false};
 constexpr std::array<unsigned int, globals::NUM_TUTORIAL_LEVELS> CUSTOM_EVENTS = // NOLINT
-	{2, 1, 1, 1, 1, 1, 1, 10, 10, 10, 10};										 // NOLINT
+	{2, 1, 1, 1, 1, 1, 1, 10, 10, 10, 10};
 
 constexpr float BUTTON_PADDING = 30.0f;	   // NOLINT
 constexpr float FAKE_DOOR_PADDING = 25.0f; // NOLINT
