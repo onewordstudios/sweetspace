@@ -10,21 +10,21 @@ then
     echo ''
 elif [ $1 == '-all' ]
 then
-    clang-tidy ../source/*.cpp ../source/$1.cpp --header-filter=.*source\/[^\/]*.h -- -I../cugl/include
+    clang-tidy ../source/*.cpp ../source/$1.cpp --header-filter=.*source\/[^\/]*\.h -- -I../cugl/include
 elif [ $1 == '-ci' ]
 then
-    clang-tidy ../source/*.cpp ../source/$1.cpp --header-filter=.*source\/[^\/]*.h -- -I../cugl/include 1>&2 2>/dev/null
+    clang-tidy ../source/*.cpp ../source/$1.cpp --header-filter=.*source\/[^\/]*\.h -- -I../cugl/include 1>&2 2>/dev/null
     exit 0
 elif [ $1 == '-ciDiff' ]
 then
     cd ..
     LIST=$(git diff origin/master --diff-filter=ACMR --name-only --no-color | grep -E '\.cpp$')
-    clang-tidy $LIST --header-filter=.*source\/[^\/]*.h -- -Icugl/include 1>&2 2>/dev/null
+    clang-tidy $LIST --header-filter=.*source\/[^\/]*\.h -- -Icugl/include 1>&2 2>/dev/null
 elif [ $1 == '-ciDiffFast' ]
 then
     cd ..
     LIST=$(git diff origin/master --diff-filter=ACMR --name-only --no-color | grep -E '\.cpp$')
-    tooling/run-clang-tidy.py -header-filter=".*source\/[^\/]*.h" -cpp $LIST
+    tooling/run-clang-tidy.py -header-filter=".*source\/[^\/]*\.h" -cpp $LIST 1>&2 2>/dev/null
 else
-    clang-tidy ../source/$1.cpp --header-filter=.*source\/[^\/]*.h -- -I../cugl/include
+    clang-tidy ../source/$1.cpp --header-filter=.*source\/[^\/]*\.h -- -I../cugl/include
 fi
