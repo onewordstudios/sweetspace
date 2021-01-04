@@ -30,17 +30,17 @@ typedef SOCKET socket_t;  // NOLINT
 #include <netinet/in.h>
 #endif
 #include <netinet/tcp.h>
-#include <stdint.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include <stdint.h> // NOLINT
+#include <stdio.h> // NOLINT
+#include <stdlib.h> // NOLINT
+#include <string.h> // NOLINT
 #include <sys/socket.h>
 #include <sys/time.h>
 #include <sys/types.h>
 #include <unistd.h>
 #ifndef _SOCKET_T_DEFINED
-typedef int socket_t;
-#define _SOCKET_T_DEFINED
+typedef int socket_t; // NOLINT
+#define _SOCKET_T_DEFINED // NOLINT
 #endif
 #ifndef INVALID_SOCKET
 // NOLINTNEXTLINE
@@ -52,7 +52,7 @@ typedef int socket_t;
 #endif
 // NOLINTNEXTLINE
 #define closesocket(s) ::close(s)
-#include <errno.h>
+#include <errno.h> // NOLINT
 #endif
 
 #include "Globals.h"
