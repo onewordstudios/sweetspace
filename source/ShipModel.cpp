@@ -54,7 +54,7 @@ bool ShipModel::createBreach(float angle, uint8_t player, uint8_t id) {
 	return true;
 }
 
-bool ShipModel::createBreach(float angle, unsigned int health, uint8_t player, uint8_t id) {
+bool ShipModel::createBreach(float angle, uint8_t health, uint8_t player, uint8_t id) {
 	breaches.at(id)->init(angle, health, player, timePassed());
 	return true;
 }
@@ -99,7 +99,7 @@ bool ShipModel::failAllTask() {
 			goodAngle = true;
 			attempts += 1;
 			// Check against breaches
-			for (unsigned int k = 0; k < breaches.size(); k++) {
+			for (uint8_t k = 0; k < breaches.size(); k++) {
 				float breachAngle = breaches[k]->getAngle();
 				float diff = getAngleDifference(breachAngle, newAngle);
 				if (diff <= MIN_DISTANCE && breachAngle != -1) {
@@ -111,7 +111,7 @@ bool ShipModel::failAllTask() {
 				continue;
 			}
 			// Check against doors
-			for (unsigned int k = 0; k < doors.size(); k++) {
+			for (uint8_t k = 0; k < doors.size(); k++) {
 				float doorAngle = doors[k]->getAngle();
 				float diff = getAngleDifference(doorAngle, newAngle);
 				if (diff <= MIN_DISTANCE && doorAngle != -1) {
