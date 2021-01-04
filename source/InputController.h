@@ -1,4 +1,4 @@
-﻿#ifndef INPUT_CONTROLLER_H
+#ifndef INPUT_CONTROLLER_H
 #define INPUT_CONTROLLER_H
 #include <cugl/cugl.h>
 
@@ -116,7 +116,7 @@ class InputController {
 	/**
 	 * Returns where the finger / mouse is currently pressed, or Vec2::ZERO if unpressed.
 	 */
-	static cugl::Vec2 getCurrTapLoc();
+	cugl::Vec2 getCurrTapLoc();
 
 	/** Whether information about a new tap is available to read */
 	bool isTapEndAvailable() const { return !tapEnd.isZero(); }

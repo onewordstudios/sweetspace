@@ -1,4 +1,4 @@
-﻿#include "InputController.h"
+#include "InputController.h"
 
 using namespace cugl;
 
