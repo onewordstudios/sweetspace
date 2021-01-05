@@ -45,6 +45,8 @@ class MagicInternetBox {
 		ClientRoomInvalid,
 		/** Room ID is full already */
 		ClientRoomFull,
+		/** Client API does not match host */
+		ClientApiMismatch,
 		/** Unknown error as client */
 		ClientError,
 		/** Game has started */

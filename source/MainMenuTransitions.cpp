@@ -101,6 +101,7 @@ void MainMenuMode::MainMenuTransitions::to(MatchState destination) {
 						MagicInternetBox::getInstance()->initHost();
 						CULog("SEPARATE THREAD FINISHED INIT HOST");
 					});
+					parent->connScreen->setText("Connecting to Server...");
 					parent->hostNeedle->setAngle(0);
 					parent->needlePos = 0;
 					parent->clientWaitHost->setVisible(false);

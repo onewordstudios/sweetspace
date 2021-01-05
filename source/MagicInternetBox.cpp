@@ -338,7 +338,7 @@ void MagicInternetBox::update() {
 				if (playerID == 0) {
 					status = HostApiMismatch;
 				} else {
-					status = ClientError;
+					status = ClientApiMismatch;
 				}
 				return;
 			}
@@ -364,7 +364,7 @@ void MagicInternetBox::update() {
 						if (message[4] > globals::API_VER) {
 							CULog("Error API out of date; current is %d but server is %d",
 								  globals::API_VER, message[4]);
-							status = ClientError;
+							status = ClientApiMismatch;
 							return;
 						}
 						CULog("Join Room Success; player id %d out of %d players", *playerID,

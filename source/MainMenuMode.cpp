@@ -271,7 +271,7 @@ void MainMenuMode::processUpdate() {
 		case HostScreenWait: {
 			if (!net->getRoomID().empty()) {
 				transition->to(HostScreen);
-			} else if (!connScreen->isVisible()) {
+			} else {
 				switch (net->matchStatus()) {
 					case MagicInternetBox::MatchmakingStatus::HostError:
 						connScreen->setText("Error Connecting :(");
@@ -286,8 +286,10 @@ void MainMenuMode::processUpdate() {
 					default:
 						break;
 				}
-				connScreen->setVisible(true);
-				connScreen->setColor(cugl::Color4::WHITE);
+				if (!connScreen->isVisible()) {
+					connScreen->setVisible(true);
+					connScreen->setColor(cugl::Color4::WHITE);
+				}
 			}
 			break;
 		}
@@ -316,8 +318,12 @@ void MainMenuMode::processUpdate() {
 					clientErrorLabel->setText("That ship is full.");
 					transition->to(ClientScreenError);
 					break;
-				case MagicInternetBox::MatchmakingStatus::ClientError:
+				case MagicInternetBox::MatchmakingStatus::ClientApiMismatch:
 					clientErrorLabel->setText("Your app is out of date. Please update.");
+					transition->to(ClientScreenError);
+					break;
+				case MagicInternetBox::MatchmakingStatus::ClientError:
+					clientErrorLabel->setText("Check your internet?");
 					transition->to(ClientScreenError);
 					break;
 				case MagicInternetBox::MatchmakingStatus::ClientWaitingOnOthers:
