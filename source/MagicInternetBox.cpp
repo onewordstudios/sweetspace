@@ -121,6 +121,7 @@ bool MagicInternetBox::initConnection() {
 		case HostError:
 		case ClientRoomInvalid:
 		case ClientRoomFull:
+		case ClientApiMismatch:
 		case ClientError:
 		case ReconnectError:
 			break;
@@ -312,6 +313,7 @@ void MagicInternetBox::update() {
 		case Uninitialized:
 		case ClientRoomInvalid:
 		case ClientRoomFull:
+		case ClientApiMismatch:
 			return;
 		default:
 			break;
@@ -425,6 +427,7 @@ void MagicInternetBox::update() {
 	});
 
 	switch (status) {
+		case ClientApiMismatch:
 		case ClientRoomInvalid:
 		case ClientRoomFull:
 			conn = nullptr;
