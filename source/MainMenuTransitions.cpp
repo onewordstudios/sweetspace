@@ -91,6 +91,7 @@ void MainMenuMode::MainMenuTransitions::init(const std::shared_ptr<AssetManager>
 	}
 }
 
+// NOLINTNEXTLINE Bespoke UI code is gonna be big
 void MainMenuMode::MainMenuTransitions::to(MatchState destination) {
 	auto screenHeight = parent->screenHeight;
 	switch (parent->currState) {
