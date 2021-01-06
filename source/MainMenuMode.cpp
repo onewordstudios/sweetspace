@@ -319,7 +319,7 @@ void MainMenuMode::processUpdate() {
 					transition->to(ClientScreenError);
 					break;
 				case MagicInternetBox::MatchmakingStatus::ClientApiMismatch:
-					clientErrorLabel->setText("Your app is out of date. Please update.");
+					clientErrorLabel->setText("Your app is outdated. Please update.");
 					transition->to(ClientScreenError);
 					break;
 				case MagicInternetBox::MatchmakingStatus::ClientError:
