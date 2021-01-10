@@ -169,7 +169,7 @@ void MainMenuMode::MainMenuTransitions::to(MatchState destination) {
 				case StartScreen:
 					mainMenuIn();
 					parent->startHostThread->detach();
-					parent->net->reset();
+					MagicInternetBox::getInstance()->reset();
 					animations.fadeOut(parent->connScreen, TRANSITION_DURATION);
 					break;
 				default:
@@ -191,7 +191,7 @@ void MainMenuMode::MainMenuTransitions::to(MatchState destination) {
 					parent->currState = HostLevelSelect;
 					break;
 				case StartScreen:
-					parent->net->reset();
+					MagicInternetBox::getInstance()->reset();
 					animations.animateY("matchmaking_host", Tween::TweenType::EaseIn, -screenHeight,
 										TRANSITION_DURATION);
 					animations.fadeOut("matchmaking_host", 1, TRANSITION_DURATION);
@@ -249,7 +249,7 @@ void MainMenuMode::MainMenuTransitions::to(MatchState destination) {
 			break;
 		}
 		case ClientScreenDone: {
-			parent->net->reset();
+			MagicInternetBox::getInstance()->reset();
 
 			animations.animateY("matchmaking_host", Tween::TweenType::EaseIn, -screenHeight,
 								TRANSITION_DURATION);
@@ -273,6 +273,7 @@ void MainMenuMode::MainMenuTransitions::to(MatchState destination) {
 
 			parent->clientEnteredRoom.clear();
 			parent->updateClientLabel();
+			MagicInternetBox::getInstance()->reset();
 			break;
 		}
 		case Credits: {
