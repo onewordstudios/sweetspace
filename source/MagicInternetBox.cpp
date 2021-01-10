@@ -121,6 +121,7 @@ bool MagicInternetBox::initConnection() {
 		case HostError:
 		case ClientRoomInvalid:
 		case ClientRoomFull:
+		case ClientApiMismatch:
 		case ClientError:
 		case ReconnectError:
 			break;
@@ -312,6 +313,7 @@ void MagicInternetBox::update() {
 		case Uninitialized:
 		case ClientRoomInvalid:
 		case ClientRoomFull:
+		case ClientApiMismatch:
 			return;
 		default:
 			break;
@@ -338,7 +340,7 @@ void MagicInternetBox::update() {
 				if (playerID == 0) {
 					status = HostApiMismatch;
 				} else {
-					status = ClientError;
+					status = ClientApiMismatch;
 				}
 				return;
 			}
@@ -364,7 +366,7 @@ void MagicInternetBox::update() {
 						if (message[4] > globals::API_VER) {
 							CULog("Error API out of date; current is %d but server is %d",
 								  globals::API_VER, message[4]);
-							status = ClientError;
+							status = ClientApiMismatch;
 							return;
 						}
 						CULog("Join Room Success; player id %d out of %d players", *playerID,
@@ -425,6 +427,7 @@ void MagicInternetBox::update() {
 	});
 
 	switch (status) {
+		case ClientApiMismatch:
 		case ClientRoomInvalid:
 		case ClientRoomFull:
 			conn = nullptr;

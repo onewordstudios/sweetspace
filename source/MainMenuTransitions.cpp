@@ -91,6 +91,7 @@ void MainMenuMode::MainMenuTransitions::init(const std::shared_ptr<AssetManager>
 	}
 }
 
+// NOLINTNEXTLINE Bespoke UI code is gonna be big
 void MainMenuMode::MainMenuTransitions::to(MatchState destination) {
 	auto screenHeight = parent->screenHeight;
 	switch (parent->currState) {
@@ -101,6 +102,7 @@ void MainMenuMode::MainMenuTransitions::to(MatchState destination) {
 						MagicInternetBox::getInstance()->initHost();
 						CULog("SEPARATE THREAD FINISHED INIT HOST");
 					});
+					parent->connScreen->setText("Connecting to Server...");
 					parent->hostNeedle->setAngle(0);
 					parent->needlePos = 0;
 					parent->clientWaitHost->setVisible(false);
