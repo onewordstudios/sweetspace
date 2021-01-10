@@ -22,7 +22,7 @@ class PlayerDonutNode : public DonutNode {
 	/**
 	 * Creates an node.
 	 */
-	PlayerDonutNode() : DonutNode(), screenHeight(0) {}
+	PlayerDonutNode() : screenHeight(0) {}
 
 	/**
 	 * Releases all resources allocated with this node.
@@ -33,14 +33,14 @@ class PlayerDonutNode : public DonutNode {
 	 */
 	~PlayerDonutNode() { dispose(); }
 
-	bool init(std::shared_ptr<DonutModel> player, float screenHeight,
+	bool init(const std::shared_ptr<DonutModel> &player, float screenHeight,
 			  const std::shared_ptr<cugl::Texture> &bodyTexture,
 			  const std::shared_ptr<cugl::Texture> &faceIdleTexture,
 			  const std::shared_ptr<cugl::Texture> &faceDizzyTexture,
 			  const std::shared_ptr<cugl::Texture> &faceWorkTexture, const cugl::Vec2 &position);
 
 	static std::shared_ptr<PlayerDonutNode> alloc(
-		std::shared_ptr<DonutModel> player, float screenHeight,
+		const std::shared_ptr<DonutModel> &player, float screenHeight,
 		const std::shared_ptr<cugl::Texture> &bodyTexture,
 		const std::shared_ptr<cugl::Texture> &faceIdleTexture,
 		const std::shared_ptr<cugl::Texture> &faceDizzyTexture,

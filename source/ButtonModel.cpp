@@ -1,5 +1,7 @@
 ﻿#include "ButtonModel.h"
 
+#include <utility>
+
 #include "Globals.h"
 
 #pragma region Animation Constants
@@ -19,16 +21,17 @@ constexpr unsigned int I_FRAMES = 10;
 bool ButtonModel::init(const float a, std::shared_ptr<ButtonModel> pair, uint8_t pairID) {
 	clear();
 	angle = a;
-	pairButton = pair;
+	pairButton = std::move(pair);
 	this->pairID = pairID;
 	isActive = true;
 	return true;
 };
 
-int ButtonModel::getSection() {
-	float mod = fmod(getAngle(), (float)globals::SEG_DEG);
-	int section = (int)(mod < ((float)globals::SEG_DEG / 2) ? floorf(getAngle() / globals::SEG_DEG)
-															: ceilf(getAngle() / globals::SEG_DEG));
+int ButtonModel::getSection() const {
+	float mod = fmod(getAngle(), static_cast<float>(globals::SEG_DEG));
+	int section = static_cast<int>(mod < (static_cast<float>(globals::SEG_DEG) / 2)
+									   ? floorf(getAngle() / globals::SEG_DEG)
+									   : ceilf(getAngle() / globals::SEG_DEG));
 	return section;
 }
 
@@ -40,11 +43,12 @@ void ButtonModel::update() {
 	frame++;
 
 	if (frame < DOWN_ANIMATION_DURATION) {
-		height = (float)frame / DOWN_ANIMATION_DURATION;
+		height = static_cast<float>(frame) / DOWN_ANIMATION_DURATION;
 	} else if (frame - DOWN_ANIMATION_DURATION < DOWN_DURATION) {
 		height = 1.0f;
 	} else if (frame - DOWN_ANIMATION_DURATION - DOWN_DURATION < UP_ANIMATION_DURATION) {
-		height = (float)(frame - DOWN_ANIMATION_DURATION - DOWN_DURATION) / UP_ANIMATION_DURATION;
+		height = static_cast<float>(frame - DOWN_ANIMATION_DURATION - DOWN_DURATION) /
+				 UP_ANIMATION_DURATION;
 		height = 1.0f - height;
 	} else {
 		height = 0.0f;

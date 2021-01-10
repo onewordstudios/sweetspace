@@ -1,12 +1,9 @@
-#ifndef __SOUND_EFFECT_CONTROLLER_H__
-#define __SOUND_EFFECT_CONTROLLER_H__
+#ifndef SOUND_EFFECT_CONTROLLER_H
+#define SOUND_EFFECT_CONTROLLER_H
 #include <cugl/cugl.h>
 
 #include <map>
 
-using namespace cugl;
-
-constexpr int NUM_EFFECTS = 6;
 /**
  * This class represents sound effects
  *
@@ -17,7 +14,7 @@ class SoundEffectController {
 	/**
 	 * The singleton instance of this class.
 	 */
-	static std::shared_ptr<SoundEffectController> instance;
+	static std::shared_ptr<SoundEffectController> instance; // NOLINT
 
 	/** List of actively playing effects. */
 	std::map<std::pair<int, int>, bool> activeEffects;
@@ -42,7 +39,7 @@ class SoundEffectController {
 	 * This constructor does NOT do any initialzation.  It simply allocates the
 	 * object. This makes it safe to use this class without a pointer.
 	 */
-	SoundEffectController() {}
+	SoundEffectController() = default;
 
    public:
 	enum Effect { JUMP = 0, DOOR = 1, FIX = 2, SLOW = 3, CLICK = 4, TELEPORT = 5 };
@@ -69,8 +66,8 @@ class SoundEffectController {
 		doorCollide = assets->get<cugl::Sound>(DOOR_FILE);
 		fixBreach = assets->get<cugl::Sound>(FIX_FILE);
 		slowBreach = assets->get<cugl::Sound>(SLOW_FILE);
-		click = assets->get<Sound>(CLICK_FILE);
-		teleport = assets->get<Sound>(TELEPORT_FILE);
+		click = assets->get<cugl::Sound>(CLICK_FILE);
+		teleport = assets->get<cugl::Sound>(TELEPORT_FILE);
 	}
 
 	/**
@@ -83,8 +80,8 @@ class SoundEffectController {
 		// Check if this event has already been registered
 		if (!activeEffects[{e, id}]) {
 			activeEffects[{e, id}] = true;
-			std::shared_ptr<Sound> sound;
-			const char* key;
+			std::shared_ptr<cugl::Sound> sound; // NOLINT switch statement sets these
+			const char* key;					// NOLINT
 			switch (e) {
 				case JUMP:
 					sound = jump;
@@ -111,9 +108,9 @@ class SoundEffectController {
 					key = TELEPORT_FILE;
 					break;
 			}
-			if (!AudioChannels::get()->isActiveEffect(key)) {
-				AudioChannels::get()->playEffect(key, sound, false);
-				AudioChannels::get()->setEffectPan(key, 0);
+			if (!cugl::AudioChannels::get()->isActiveEffect(key)) {
+				cugl::AudioChannels::get()->playEffect(key, sound, false);
+				cugl::AudioChannels::get()->setEffectPan(key, 0);
 			}
 		}
 	}
@@ -137,7 +134,7 @@ class SoundEffectController {
 	/**
 	 * Deactivates and disposes of this sound effect controller.
 	 */
-	~SoundEffectController() {}
+	~SoundEffectController() = default;
 
 	/**
 	 * Deactivates and disposes of the instance, if it exists. Note that subsequent calls to {@link

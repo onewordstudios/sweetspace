@@ -1,5 +1,5 @@
-﻿#ifndef __SHIP_MODEL_H__
-#define __SHIP_MODEL_H__
+﻿#ifndef SHIP_MODEL_H
+#define SHIP_MODEL_H
 #include <cugl/cugl.h>
 
 #include "BreachModel.h"
@@ -12,6 +12,10 @@
 
 class ShipModel {
    private:
+	/** Random number generator */
+	std::minstd_rand rand;
+
+#pragma region Models
 	/** Current list of breaches on ship*/
 	std::vector<std::shared_ptr<DonutModel>> donuts;
 	/** Current list of breaches on ship*/
@@ -24,6 +28,9 @@ class ShipModel {
 	std::vector<std::shared_ptr<ButtonModel>> buttons;
 	/** Stabilizer model */
 	StabilizerModel stabilizer;
+#pragma endregion
+
+#pragma region Ship Status
 	/** Initial health of the ship*/
 	float initHealth;
 	/** Current health of the ship*/
@@ -36,6 +43,7 @@ class ShipModel {
 	float totalTime;
 	/** If is in tutorial level*/
 	uint8_t levelNum;
+#pragma endregion
 	/** Minimum distance from obstacles for stabilizer malfunction randomization */
 	static constexpr int MIN_DISTANCE = 15;
 
@@ -55,8 +63,9 @@ class ShipModel {
 	 * NEVER USE A CONSTRUCTOR WITH NEW. If you want to allocate a model on
 	 * the heap, use one of the static constructors instead.
 	 */
-	ShipModel(void)
-		: donuts(0),
+	ShipModel()
+		: rand(static_cast<unsigned int>(time(nullptr))), // NOLINT Randomness is good enough
+		  donuts(0),
 		  breaches(0),
 		  doors(0),
 		  initHealth(0),
@@ -74,7 +83,7 @@ class ShipModel {
 	/**
 	 * Destroys this breach, releasing all resources.
 	 */
-	~ShipModel(void) { dispose(); }
+	~ShipModel() { dispose(); }
 
 	/**
 	 * Disposes all resources and assets
@@ -271,17 +280,17 @@ class ShipModel {
 	 *
 	 * @return health  the health of the ship
 	 */
-	float getHealth() { return health; }
+	float getHealth() const { return health; }
 
 	void setTimeless(bool t) { timeless = t; }
-	bool getTimeless() { return timeless; }
+	bool getTimeless() const { return timeless; }
 
 	/**
 	 * Get health of the ship
 	 *
 	 * @return health  the health of the ship
 	 */
-	float getInitHealth() { return initHealth; }
+	float getInitHealth() const { return initHealth; }
 
 	/**
 	 * Decrement health of the ship
@@ -318,19 +327,19 @@ class ShipModel {
 	 *
 	 * @return if timer has ended
 	 */
-	bool timerEnded() { return timeLeftInTimer < 1; }
+	bool timerEnded() const { return timeLeftInTimer < 1; }
 
 	/**
 	 * Returns whether the level has ended (won or lost)
 	 */
-	bool isLevelOver() { return timerEnded() || health <= 0; }
+	bool isLevelOver() const { return timerEnded() || health <= 0; }
 
 	/**
 	 * Get the amount of time that has passed in the level
 	 *
 	 * @return the time that has passed
 	 */
-	float timePassed() { return canonicalTimeElapsed; }
+	float timePassed() const { return canonicalTimeElapsed; }
 
 	/**
 	 * Set size of the ship
@@ -344,7 +353,7 @@ class ShipModel {
 	 *
 	 * @return the size of the ship
 	 */
-	float getSize() { return shipSize; }
+	float getSize() const { return shipSize; }
 
 	/**
 	 * Returns the amount of time since the level has begun according to the timer, which does not
@@ -352,7 +361,7 @@ class ShipModel {
 	 *
 	 * @return time passed according to timer
 	 */
-	float timePassedIgnoringFreeze() { return totalTime - timeLeftInTimer; }
+	float timePassedIgnoringFreeze() const { return totalTime - timeLeftInTimer; }
 
 	/** Get a reference to the stabilizer status of the ship */
 	StabilizerModel& getStabilizer() { return stabilizer; }
@@ -403,12 +412,12 @@ class ShipModel {
 	/**
 	 * Get current level number
 	 */
-	uint8_t getLevelNum() { return levelNum; }
+	uint8_t getLevelNum() const { return levelNum; }
 
 	/**
 	 * Gets status of challenge
 	 */
-	StabilizerStatus getStabilizerStatus() { return stabilizerStatus; }
+	StabilizerStatus getStabilizerStatus() const { return stabilizerStatus; }
 
 	/**
 	 * Sets if level is tutorial
@@ -420,15 +429,15 @@ class ShipModel {
 	 */
 	void separateDonuts() {
 		for (uint8_t i = 0; i < donuts.size(); i++) {
-			float angle = getSize() * (float)i / donuts.size();
+			float angle = getSize() * static_cast<float>(i) / donuts.size();
 			donuts.at(i)->setAngle(angle);
 		}
 	}
 
 #pragma mark -
 #pragma mark Helpers
-	float getAngleDifference(float angle1, float angle2) {
+	float getAngleDifference(float angle1, float angle2) const {
 		return shipSize / 2 - abs(abs(angle1 - angle2) - shipSize / 2);
 	}
 };
-#endif /* __SHIP_MODEL_H__ */
+#endif /* SHIP_MODEL_H */

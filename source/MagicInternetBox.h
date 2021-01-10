@@ -1,5 +1,5 @@
-﻿#ifndef __NETWORK_CONTROLLER_H__
-#define __NETWORK_CONTROLLER_H__
+﻿#ifndef MIB_H
+#define MIB_H
 
 #include <cugl/cugl.h>
 
@@ -148,7 +148,8 @@ class MagicInternetBox {
 	 * For example, create dual task passes angle to angle, task id to id, the two players to data1
 	 * and data2 respectively, and sets data3 to -1.
 	 */
-	void sendData(NetworkDataType type, float angle, int id, int data1, int data2, float data3);
+	void sendData(NetworkDataType type, float angle, uint8_t id, uint8_t data1, uint8_t data2,
+				  float data3);
 
 	/**
 	 * Create an empty Network Controller instance. Does no initialization.
@@ -184,7 +185,7 @@ class MagicInternetBox {
 	 * @param id The room ID
 	 * @returns Whether a connection was successfully established
 	 */
-	bool initClient(std::string id);
+	bool initClient(const std::string& id);
 
 	/**
 	 * Reconnect to a game that you lost connection from.
@@ -234,11 +235,11 @@ class MagicInternetBox {
 	/**
 	 * Returns the number of connected players, or 0 if uninitialized.
 	 */
-	uint8_t getNumPlayers();
+	uint8_t getNumPlayers() const;
 
 	/** Returns the total number of players in this ship (including disconnected players), or 0 if
 	 * uninitialized. */
-	uint8_t getMaxNumPlayers() { return maxPlayers; }
+	uint8_t getMaxNumPlayers() const { return maxPlayers; }
 
 	/**
 	 * Returns whether the specified player ID is active.
@@ -395,4 +396,4 @@ class MagicInternetBox {
 	void reset();
 };
 
-#endif /* __NETWORK_CONTROLLER_H__ */
+#endif /* MIB_H */

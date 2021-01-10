@@ -1,4 +1,4 @@
-﻿#include "InputController.h"
+#include "InputController.h"
 
 using namespace cugl;
 
@@ -30,7 +30,7 @@ InputController::InputController()
 #ifndef CU_TOUCH_SCREEN
 
 	Input::activate<Mouse>();
-	Mouse* mouse = Input::get<Mouse>();
+	auto* mouse = Input::get<Mouse>();
 	mouse->setPointerAwareness(cugl::Mouse::PointerAwareness::ALWAYS);
 	mouse->addPressListener(LISTENER_KEY,
 							[=](const cugl::MouseEvent& event, Uint8 clicks, bool focus) {
@@ -63,7 +63,7 @@ InputController::~InputController() {
 		Input::deactivate<Keyboard>();
 #ifndef CU_TOUCH_SCREEN
 
-		Mouse* mouse = Input::get<Mouse>();
+		auto* mouse = Input::get<Mouse>();
 		mouse->removePressListener(LISTENER_KEY);
 		mouse->removeReleaseListener(LISTENER_KEY);
 
@@ -106,10 +106,10 @@ void InputController::clear() {
  * the OS, we may see multiple updates of the same touch in a single animation
  * frame, so we need to accumulate all of the data together.
  */
-void InputController::update(float dt) {
+void InputController::update(float /*dt*/) {
 // Only process keyboard on desktop
 #ifndef CU_TOUCH_SCREEN
-	Keyboard* keys = Input::get<Keyboard>();
+	auto* keys = Input::get<Keyboard>();
 	if (keys->keyPressed(JUMP_KEY)) {
 		jumped = true;
 	} else if (keys->keyPressed(KeyCode::ESCAPE)) {
@@ -152,9 +152,10 @@ bool InputController::hasJumped() {
 	return false;
 }
 
-const cugl::Vec2 InputController::getCurrTapLoc() const {
+// NOLINTNEXTLINE clang-tidy can't see the touchscreen stuff b/c of the macro
+cugl::Vec2 InputController::getCurrTapLoc() {
 #ifndef CU_TOUCH_SCREEN
-	Mouse* mouse = Input::get<Mouse>();
+	auto* mouse = Input::get<Mouse>();
 	if (mouse->buttonDown().hasLeft()) {
 		return mouse->pointerPosition();
 	}
@@ -167,7 +168,7 @@ const cugl::Vec2 InputController::getCurrTapLoc() const {
 	return cugl::Vec2::ZERO;
 }
 
-const bool InputController::hasPressedBack() {
+bool InputController::hasPressedBack() {
 	if (backPressed) {
 		backPressed = false;
 		return true;
@@ -183,7 +184,7 @@ const bool InputController::hasPressedBack() {
  * @param t     The touch information
  * @param event The associated event
  */
-void InputController::touchBeganCB(const cugl::TouchEvent& event, bool focus) {
+void InputController::touchBeganCB(const cugl::TouchEvent& event, bool /*focus*/) {
 	tapStart.set(event.position);
 	touchID = event.touch;
 	jumped = true;
@@ -195,7 +196,7 @@ void InputController::touchBeganCB(const cugl::TouchEvent& event, bool focus) {
  * @param t     The touch information
  * @param event The associated event
  */
-void InputController::touchEndedCB(const cugl::TouchEvent& event, bool focus) {
+void InputController::touchEndedCB(const cugl::TouchEvent& event, bool /*focus*/) {
 	tapEnd.set(event.position);
 }
 
@@ -205,7 +206,8 @@ void InputController::touchEndedCB(const cugl::TouchEvent& event, bool focus) {
  * @param t     The touch information
  * @param event The associated event
  */
-void InputController::clickBeganCB(const cugl::MouseEvent& event, Uint8 clicks, bool focus) {
+void InputController::clickBeganCB(const cugl::MouseEvent& event, Uint8 /*clicks*/,
+								   bool /*focus*/) {
 	tapStart.set(event.position);
 	jumped = true;
 }
@@ -216,7 +218,8 @@ void InputController::clickBeganCB(const cugl::MouseEvent& event, Uint8 clicks, 
  * @param t     The click information
  * @param event The associated event
  */
-void InputController::clickEndedCB(const cugl::MouseEvent& event, Uint8 clicks, bool focus) {
+void InputController::clickEndedCB(const cugl::MouseEvent& event, Uint8 /*clicks*/,
+								   bool /*focus*/) {
 	tapEnd.set(event.position);
 }
 #pragma endregion

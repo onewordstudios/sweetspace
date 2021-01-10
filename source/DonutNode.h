@@ -39,7 +39,6 @@ class DonutNode : public CustomNode {
 	static constexpr int ANIMATION_NOTIDLE_H = 4;
 	static constexpr int ANIMATION_NOTIDLE_FRAMES = 20;
 
-   public:
 #pragma mark -
 #pragma mark Constructor
 	/**
@@ -50,7 +49,7 @@ class DonutNode : public CustomNode {
 	 * NEVER USE A CONSTRUCTOR WITH NEW. If you want to allocate an object on
 	 * the heap, use one of the static constructors instead.
 	 */
-	DonutNode() : CustomNode() {}
+	DonutNode() : animationCounter(0), lastFaceState(DonutModel::FaceState::Idle) {}
 
 	/**
 	 * Releases all resources allocated with this node.

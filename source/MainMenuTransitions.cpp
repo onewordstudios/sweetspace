@@ -2,7 +2,11 @@
 
 #include <cugl/cugl.h>
 
+#include <memory>
+
 #include "MainMenuMode.h"
+
+using namespace cugl;
 
 #pragma region Animation Constants
 
@@ -22,15 +26,15 @@ constexpr float CREDITS_BG_POS = 2.5;
 constexpr float SHIP_FLY_POS = 1.5;
 
 /** The nodes containing all UI for the starting splash screen */
-constexpr std::array<const char*, 3> MAIN_SCREEN = {"matchmaking_home", "matchmaking_gamelogo",
-													"matchmaking_creditsbtn"};
+constexpr std::array<const char *, 3> MAIN_SCREEN = {"matchmaking_home", "matchmaking_gamelogo",
+													 "matchmaking_creditsbtn"};
 #pragma endregion
 
-MainMenuMode::MainMenuTransitions::MainMenuTransitions(MainMenuMode* parent) {
+MainMenuMode::MainMenuTransitions::MainMenuTransitions(MainMenuMode *parent) {
 	this->parent = parent;
 }
 
-void MainMenuMode::MainMenuTransitions::init(const std::shared_ptr<AssetManager>& assets,
+void MainMenuMode::MainMenuTransitions::init(const std::shared_ptr<AssetManager> &assets,
 											 bool toCredits) {
 	auto studioLogo = assets->get<Node>("matchmaking_studiologo");
 
@@ -52,7 +56,7 @@ void MainMenuMode::MainMenuTransitions::init(const std::shared_ptr<AssetManager>
 							screenHeight / 2, OPEN_TRANSITION);
 	}
 
-	for (auto e : MAIN_SCREEN) {
+	for (const auto *e : MAIN_SCREEN) {
 		animations.registerNode(e, assets);
 		if (!toCredits) {
 			animations.fadeIn(e, TRANSITION_DURATION, OPEN_TRANSITION_FADE);
@@ -93,10 +97,10 @@ void MainMenuMode::MainMenuTransitions::to(MatchState destination) {
 		case StartScreen: {
 			switch (destination) {
 				case HostScreenWait:
-					parent->startHostThread = std::unique_ptr<std::thread>(new std::thread([]() {
+					parent->startHostThread = std::make_unique<std::thread>([]() {
 						MagicInternetBox::getInstance()->initHost();
 						CULog("SEPARATE THREAD FINISHED INIT HOST");
-					}));
+					});
 					parent->hostNeedle->setAngle(0);
 					parent->needlePos = 0;
 					parent->clientWaitHost->setVisible(false);
@@ -294,7 +298,7 @@ bool MainMenuMode::MainMenuTransitions::step() { return animations.step(); }
 
 void MainMenuMode::MainMenuTransitions::mainMenuOut() {
 	auto screenHeight = parent->screenHeight;
-	for (auto e : MAIN_SCREEN) {
+	for (const auto *e : MAIN_SCREEN) {
 		animations.fadeOut(e, TRANSITION_DURATION);
 	}
 	animations.animateY("matchmaking_mainmenubg-ship", Tween::TweenType::EaseIn,
@@ -304,7 +308,7 @@ void MainMenuMode::MainMenuTransitions::mainMenuOut() {
 
 void MainMenuMode::MainMenuTransitions::mainMenuIn() {
 	auto screenHeight = parent->screenHeight;
-	for (auto e : MAIN_SCREEN) {
+	for (const auto *e : MAIN_SCREEN) {
 		animations.fadeIn(e, TRANSITION_DURATION);
 	}
 	animations.animateY("matchmaking_mainmenubg-ship", Tween::TweenType::EaseIn, screenHeight / 2,

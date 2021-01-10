@@ -2,6 +2,8 @@
 
 #include <cugl/2d/CUNode.h>
 
+#include <utility>
+
 #include "Globals.h"
 #include "Tween.h"
 
@@ -27,17 +29,19 @@ constexpr float SPARKLE_SCALE_SMALL = 0.5;
 
 bool ButtonNode::init(std::shared_ptr<ButtonModel> btn, std::shared_ptr<DonutModel> player,
 					  float shipSize, std::shared_ptr<cugl::Texture> baseDown,
-					  std::shared_ptr<cugl::Texture> baseUp, std::shared_ptr<cugl::Texture> btnDown,
-					  std::shared_ptr<cugl::Texture> btnUp, std::shared_ptr<cugl::Font> labelFont,
+					  const std::shared_ptr<cugl::Texture>& baseUp,
+					  std::shared_ptr<cugl::Texture> btnDown,
+					  const std::shared_ptr<cugl::Texture>& btnUp,
+					  const std::shared_ptr<cugl::Font>& labelFont,
 					  std::shared_ptr<SparkleNode> sparkle) {
-	CustomNode::init(player, shipSize, -1, BUTTON_RADIUS);
+	CustomNode::init(std::move(player), shipSize, -1, BUTTON_RADIUS);
 	// Initialize angle to -1 to force the button to correctly process the label on first frame
 
-	buttonModel = btn;
+	buttonModel = std::move(btn);
 
-	btnBaseDown = baseDown;
+	btnBaseDown = std::move(baseDown);
 	btnBaseUp = baseUp;
-	this->btnDown = btnDown;
+	this->btnDown = std::move(btnDown);
 	this->btnUp = btnUp;
 
 	setScale(BUTTON_SCALE);
@@ -54,7 +58,7 @@ bool ButtonNode::init(std::shared_ptr<ButtonModel> btn, std::shared_ptr<DonutMod
 
 	label = Label::alloc("0000", labelFont);
 
-	sparkleNode = sparkle;
+	sparkleNode = std::move(sparkle);
 	sparkleNode->setScale(SPARKLE_SCALE_SMALL);
 
 	addChild(bodyNode);
@@ -65,7 +69,7 @@ bool ButtonNode::init(std::shared_ptr<ButtonModel> btn, std::shared_ptr<DonutMod
 	label->setHorizontalAlignment(Label::HAlign::CENTER);
 	label->setForeground(Color4::WHITE);
 	label->setAnchor(Vec2::ANCHOR_CENTER);
-	label->setPosition(0, (float)baseUp->getHeight() * BUTTON_LABEL_Y);
+	label->setPosition(0, static_cast<float>(baseUp->getHeight()) * BUTTON_LABEL_Y);
 
 	isDirty = true;
 

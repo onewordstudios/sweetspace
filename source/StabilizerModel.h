@@ -1,8 +1,11 @@
-#ifndef __STABILIZER_MODEL_H__
-#define __STABILIZER_MODEL_H__
+#ifndef STABILIZER_MODEL_H
+#define STABILIZER_MODEL_H
 #include <cugl/cugl.h>
 class StabilizerModel {
    private:
+	/** Random number generator */
+	std::minstd_rand rand;
+
 	enum class StabilizerState { Inactive, Left, Right };
 
 	/** Current state of the challenge */
@@ -21,19 +24,19 @@ class StabilizerModel {
 	StabilizerModel(const StabilizerModel&) = delete;
 
 	/** Return whether this stabilizer is active */
-	bool getIsActive() { return currState != StabilizerModel::StabilizerState::Inactive; }
+	bool getIsActive() const { return currState != StabilizerModel::StabilizerState::Inactive; }
 
 	/** Return whether this stabilizer requires rolling left */
-	bool isLeft() { return currState == StabilizerModel::StabilizerState::Left; }
+	bool isLeft() const { return currState == StabilizerModel::StabilizerState::Left; }
 
 	/** Return the end time of this stabilizer; requires this stabilizer be active */
-	float getEndTime() { return endTime; }
+	float getEndTime() const { return endTime; }
 
 	/** Return the progress made in beating this stabilizer (in 0 to 1) */
-	float getProgress();
+	float getProgress() const;
 
 	/** Return whether this stabilizer was completed; requires this stabilizer be active */
-	bool getIsWin() { return getProgress() >= 1; }
+	bool getIsWin() const { return getProgress() >= 1; }
 
 	/**
 	 * Trigger the challenge, with the current player getting the prompt. Will pick a direction
@@ -49,4 +52,4 @@ class StabilizerModel {
 	/** Reset the challenge */
 	void reset();
 };
-#endif /* __STABILIZER_MODEL_H__ */
+#endif /* STABILIZER_MODEL_H */

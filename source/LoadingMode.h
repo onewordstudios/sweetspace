@@ -1,5 +1,5 @@
-#ifndef __LOADING_MODE_H__
-#define __LOADING_MODE_H__
+#ifndef LOADING_MODE_H
+#define LOADING_MODE_H
 #include <cugl/cugl.h>
 
 /**
@@ -43,7 +43,7 @@ class LoadingMode : public cugl::Scene {
 	 * This constructor does not allocate any objects or start the game.
 	 * This allows us to use the object without a heap pointer.
 	 */
-	LoadingMode() : Scene(), progress(0.0f), ready(false), transition(0) {}
+	LoadingMode() : progress(0.0f), ready(false), transition(0) {}
 
 	/**
 	 * Disposes of all (non-static) resources allocated to this mode.

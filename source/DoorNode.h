@@ -38,7 +38,7 @@ class DoorNode : public CustomNode {
 	 * NEVER USE A CONSTRUCTOR WITH NEW. If you want to allocate an object on
 	 * the heap, use one of the static constructors instead.
 	 */
-	DoorNode() : CustomNode(), height(0), frameCap(0) {}
+	DoorNode() : height(0), frameCap(0) {}
 
 	/**
 	 * Releases all resources allocated with this node.
@@ -60,7 +60,7 @@ class DoorNode : public CustomNode {
 	 * @param rows      The number of rows in the filmstrip
 	 * @param cols      The number of columns in the filmstrip
 	 */
-	virtual bool init(std::shared_ptr<DoorModel> door, std::shared_ptr<DonutModel> player,
+	virtual bool init(const std::shared_ptr<DoorModel> &door, std::shared_ptr<DonutModel> player,
 					  float shipSize, const std::shared_ptr<cugl::Texture> &texture, int rows,
 					  int cols, int size);
 
@@ -76,12 +76,13 @@ class DoorNode : public CustomNode {
 	 *
 	 * @return a newly allocated door node.
 	 */
-	static std::shared_ptr<DoorNode> alloc(std::shared_ptr<DoorModel> door,
+	static std::shared_ptr<DoorNode> alloc(const std::shared_ptr<DoorModel> &door,
 										   std::shared_ptr<DonutModel> player, float shipSize,
 										   const std::shared_ptr<cugl::Texture> &texture, int rows,
 										   int cols, int size) {
 		std::shared_ptr<DoorNode> node = std::make_shared<DoorNode>();
-		return node->init(door, player, shipSize, texture, rows, cols, size) ? node : nullptr;
+		return node->init(door, std::move(player), shipSize, texture, rows, cols, size) ? node
+																						: nullptr;
 	}
 
 #pragma mark -

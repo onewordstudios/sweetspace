@@ -1,20 +1,35 @@
 # SweetSpace
 
-Linter Status [![Build Status](https://dev.azure.com/onewordstudios/sweetspace/_apis/build/status/sweetspace-lint?branchName=master)](https://dev.azure.com/onewordstudios/sweetspace/_build/latest?definitionId=2&branchName=master)
+<table>
+    <tr>
+        <th>Compilation</th>
+        <th>Code Formatting</th>
+        <th>Linter</th>
+    </tr>
+    <tr>
+        <td>
+            <a href="https://dev.azure.com/onewordstudios/sweetspace/_build/latest?definitionId=4&branchName=master"><img src="https://dev.azure.com/onewordstudios/sweetspace/_apis/build/status/sweetspace-compile?branchName=master" alt="Build Status" /></a>
+        </td>
+        <td>
+            <a href="https://dev.azure.com/onewordstudios/sweetspace/_build/latest?definitionId=2&branchName=master"><img src="https://dev.azure.com/onewordstudios/sweetspace/_apis/build/status/sweetspace-format?branchName=master" alt="Build Status" /></a>
+        </td>
+        <td>
+            <a href="https://dev.azure.com/onewordstudios/sweetspace/_build/latest?definitionId=7&branchName=master"><img src="https://dev.azure.com/onewordstudios/sweetspace/_apis/build/status/sweetspace-lint?branchName=master" alt="Build Status" /></a>
+        </td>
+    </tr>
+</table>
 
-Compilation Status [![Build Status](https://dev.azure.com/onewordstudios/sweetspace/_apis/build/status/sweetspace-compile?branchName=master)](https://dev.azure.com/onewordstudios/sweetspace/_build/latest?definitionId=4&branchName=master)
-
-![SweetSpace game logo](http://onewordstudios.fun/sweetspace/sweetspace_hero.png "SweetSpace - game logo")
+![SweetSpace game logo](http://onewordstudios.com/sweetspace/sweetspace_hero.png "SweetSpace - game logo")
 
 Cosmic radiation is tearing through your ship, and you’re the only donuts who can stop it! Donut waste time as you roll and patch your way through these bite-sized holes in your ship. You’ll need to communicate and cooperate to achieve your dream of a sweet, sweet space.
 
-A game developed by [onewordstudios](https://onewordstudios.fun) for CS 4152 at Cornell University.
+A game developed by [onewordstudios](https://onewordstudios.com) for CS 4152 at Cornell University.
 
-Coming August 2020 to Android and iOS.
+Coming 2021 to Android and iOS.
 
 ## onewordstudios Team
 
-<a href="https://onewordstudios.fun"><img src="https://xingmichael.com/School/flourish/studioSmall.png" alt="onewordstudios logo" width="200"/></a>
+<a href="https://onewordstudios.com"><img src="https://onewordstudios.com/flourish/studioSmall.png" alt="onewordstudios logo" width="200"/></a>
 
 **Demi Chang** - Head Chef (Design Lead)
 
@@ -32,6 +47,8 @@ Coming August 2020 to Android and iOS.
 
 Thanks to the [Game Design Initiative at Cornell University](https://gdiac.cis.cornell.edu/) for providing the Cornell University Game Library (CUGL) used for this project.
 
+Networking powered by the open source [RakNet](https://github.com/facebookarchive/RakNet) C++ library.
+
 Continuous Integration provided by [Azure DevOps](https://azure.microsoft.com/en-us/services/devops/).
 
 ## Contributions
@@ -40,7 +57,7 @@ As this is a class project, we are currently not accepting external contribution
 
 ## Copyright
 
-Copyright © 2020 onewordstudios
+Copyright © 2020-2021 onewordstudios
 
 All Rights Reserved
 

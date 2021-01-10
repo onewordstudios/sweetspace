@@ -2,7 +2,7 @@
 
 #include "InputController.h"
 
-void ButtonManager::registerButton(std::shared_ptr<cugl::Button> button) {
+void ButtonManager::registerButton(const std::shared_ptr<cugl::Button>& button) {
 	buttons.push_back(button);
 }
 
@@ -12,8 +12,8 @@ void ButtonManager::process() {
 	if (position == cugl::Vec2::ZERO) {
 		if (wasDown) {
 			wasDown = false;
-			for (unsigned int i = 0; i < downBtns.size(); i++) {
-				downBtns[i]->setDown(false);
+			for (auto& downBtn : downBtns) {
+				downBtn->setDown(false);
 			}
 			downBtns.clear();
 		}
@@ -22,34 +22,34 @@ void ButtonManager::process() {
 
 	if (!wasDown) {
 		wasDown = true;
-		for (unsigned int i = 0; i < buttons.size(); i++) {
-			if (buttons[i]->containsScreen(position)) {
-				if (!buttons[i]->isDown()) {
-					buttons[i]->setDown(true);
-					downBtns.push_back(buttons[i]);
+		for (auto& button : buttons) {
+			if (button->containsScreen(position)) {
+				if (!button->isDown()) {
+					button->setDown(true);
+					downBtns.push_back(button);
 				}
 			} else {
-				if (buttons[i]->isDown()) {
-					buttons[i]->setDown(false);
+				if (button->isDown()) {
+					button->setDown(false);
 				}
 			}
 		}
 	} else {
-		for (unsigned int i = 0; i < downBtns.size(); i++) {
-			if (downBtns[i]->containsScreen(position)) {
-				if (!downBtns[i]->isDown()) {
-					downBtns[i]->setDown(true);
+		for (auto& downBtn : downBtns) {
+			if (downBtn->containsScreen(position)) {
+				if (!downBtn->isDown()) {
+					downBtn->setDown(true);
 				}
 			} else {
-				if (downBtns[i]->isDown()) {
-					downBtns[i]->setDown(false);
+				if (downBtn->isDown()) {
+					downBtn->setDown(false);
 				}
 			}
 		}
 	}
 }
 
-bool ButtonManager::tappedButton(std::shared_ptr<cugl::Button> button,
+bool ButtonManager::tappedButton(const std::shared_ptr<cugl::Button>& button,
 								 std::tuple<cugl::Vec2, cugl::Vec2> tapData) {
 	if (button->containsScreen(std::get<0>(tapData)) &&
 		button->containsScreen(std::get<1>(tapData))) {

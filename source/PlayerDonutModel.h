@@ -1,5 +1,5 @@
-#ifndef __PLAYER_DONUT_MODEL_H__
-#define __PLAYER_DONUT_MODEL_H__
+#ifndef PLAYER_DONUT_MODEL_H
+#define PLAYER_DONUT_MODEL_H
 #include <cugl/cugl.h>
 
 #include "DonutModel.h"
@@ -50,7 +50,7 @@ class PlayerDonutModel : public DonutModel {
 	 *
 	 * @param timestep  Time elapsed (in seconds) since last called.
 	 */
-	void update(float timestep = 0.0f) override;
+	void update(float timestep) override;
 };
 
 #endif

@@ -2,6 +2,8 @@
 
 #include <cugl/2d/CUAnimationNode.h>
 
+#include <utility>
+
 #include "Globals.h"
 
 using namespace cugl;
@@ -17,10 +19,10 @@ constexpr int ONE_PLAYER_FRAME = 16;
 /** The frame of the animation strip to freeze on when two players are on the door */
 constexpr int TWO_PLAYER_FRAME = 31;
 
-bool DoorNode::init(std::shared_ptr<DoorModel> door, std::shared_ptr<DonutModel> player,
+bool DoorNode::init(const std::shared_ptr<DoorModel>& door, std::shared_ptr<DonutModel> player,
 					float shipSize, const std::shared_ptr<cugl::Texture>& texture, int rows,
 					int cols, int size) {
-	CustomNode::init(player, shipSize, door->getAngle(), DOOR_RADIUS);
+	CustomNode::init(std::move(player), shipSize, door->getAngle(), DOOR_RADIUS);
 
 	doorModel = door;
 	animationNode = cugl::AnimationNode::alloc(texture, rows, cols, size);
@@ -47,12 +49,12 @@ void DoorNode::postPosition() {
 	frameCap = doorModel->getPlayersOn() < 2 ? doorModel->getPlayersOn() * ONE_PLAYER_FRAME
 											 : TWO_PLAYER_FRAME;
 	if (animationNode->getFrame() < frameCap) {
-		animationNode->setFrame((int)animationNode->getFrame() + 1);
+		animationNode->setFrame(static_cast<int>(animationNode->getFrame()) + 1);
 	} else if (animationNode->getFrame() > frameCap) {
-		animationNode->setFrame((int)animationNode->getFrame() - 1);
+		animationNode->setFrame(static_cast<int>(animationNode->getFrame()) - 1);
 	}
 
-	float diff = (float)height - (float)doorModel->getHeight();
+	float diff = static_cast<float>(height) - static_cast<float>(doorModel->getHeight());
 	height = doorModel->getHeight();
 	if (diff != 0) {
 		animationNode->shiftPolygon(0, diff);

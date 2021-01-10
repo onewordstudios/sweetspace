@@ -52,7 +52,7 @@ class CustomNode : public cugl::Node {
 	bool wasActive;
 
 	/** Set of all instantiated members of this class */
-	static std::unordered_set<CustomNode *> allActiveNodes;
+	static std::unordered_set<CustomNode *> allActiveNodes; // NOLINT
 
 #pragma region Positioning
 #pragma mark Positioning Methods
@@ -70,7 +70,7 @@ class CustomNode : public cugl::Node {
 	 * @param onScreenAngle The on-screen angle of node relative to the player avatar
 	 * @return
 	 */
-	bool isComingIntoView(float onScreenAngle);
+	bool isComingIntoView(float onScreenAngle) const;
 
 	/**
 	 * Returns true if this node is just going out of viewing bounds
@@ -78,7 +78,7 @@ class CustomNode : public cugl::Node {
 	 * @param onScreenAngle The on-screen angle of node relative to the player avatar
 	 * @return
 	 */
-	bool isGoingOutOfView(float onScreenAngle);
+	bool isGoingOutOfView(float onScreenAngle) const;
 
 	/**
 	 * Returns relative position to nearSpace after polar coord calculation
@@ -87,7 +87,7 @@ class CustomNode : public cugl::Node {
 	 * @param radius Distance from nearSpace origin
 	 * @return
 	 */
-	cugl::Vec2 getPositionVec(float relAngle, float radius);
+	static cugl::Vec2 getPositionVec(float relAngle, float radius);
 #pragma mark -
 #pragma endregion
    protected:
@@ -113,13 +113,7 @@ class CustomNode : public cugl::Node {
 	 * Constructor
 	 */
 	CustomNode()
-		: cugl::Node(),
-		  wasActive(false),
-		  shipSize(0),
-		  isShown(false),
-		  angle(0),
-		  radius(0),
-		  isDirty(false) {
+		: wasActive(false), shipSize(0), isShown(false), angle(0), radius(0), isDirty(false) {
 		allActiveNodes.insert(this);
 	}
 

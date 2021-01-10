@@ -44,7 +44,7 @@ class SparkleNode : public CustomNode {
 	 * NEVER USE A CONSTRUCTOR WITH NEW. If you want to allocate an object on
 	 * the heap, use one of the static constructors instead.
 	 */
-	SparkleNode() : CustomNode(), animationCounter(0), isAnimating(false) {}
+	SparkleNode() : animationCounter(0), isAnimating(false), sparkleType() {}
 
 	/**
 	 * Releases all resources allocated with this node.
@@ -64,7 +64,7 @@ class SparkleNode : public CustomNode {
 	 * @param filmstrip	The texture image to use
 	 */
 	virtual bool init(std::shared_ptr<DonutModel> player, float shipSize,
-					  std::shared_ptr<cugl::Texture> filmstrip, cugl::Color4 color,
+					  const std::shared_ptr<cugl::Texture> &texture, cugl::Color4 color,
 					  SparkleType type);
 
 	/**
@@ -80,10 +80,11 @@ class SparkleNode : public CustomNode {
 	 * @return a newly allocated node at the world origin.
 	 */
 	static std::shared_ptr<SparkleNode> alloc(std::shared_ptr<DonutModel> player, float shipSize,
-											  std::shared_ptr<cugl::Texture> filmstrip,
+											  const std::shared_ptr<cugl::Texture> &filmstrip,
 											  cugl::Color4 color, SparkleType type) {
 		std::shared_ptr<SparkleNode> result = std::make_shared<SparkleNode>();
-		return (result->init(player, shipSize, filmstrip, color, type) ? result : nullptr);
+		return (result->init(std::move(player), shipSize, filmstrip, color, type) ? result
+																				  : nullptr);
 	}
 
 #pragma mark -

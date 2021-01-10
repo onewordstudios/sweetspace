@@ -1,5 +1,5 @@
-#ifndef __MAIN_MENU_MODE_H__
-#define __MAIN_MENU_MODE_H__
+#ifndef MAIN_MENU_MODE_H
+#define MAIN_MENU_MODE_H
 #include <cugl/cugl.h>
 
 #include <array>
@@ -240,7 +240,7 @@ class MainMenuMode : public cugl::Scene {
 	 *
 	 * @return True if game is ready to start, false otherwise
 	 */
-	bool isGameReady() { return gameReady; }
+	bool isGameReady() const { return gameReady; }
 };
 
-#endif /* __MAIN_MENU_MODE_H__ */
+#endif /* MAIN_MENU_MODE_H */

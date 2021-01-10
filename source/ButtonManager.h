@@ -1,5 +1,5 @@
-﻿#ifndef __BUTTON_MANAGER_H__
-#define __BUTTON_MANAGER_H__
+﻿#ifndef BUTTON_MANAGER_H
+#define BUTTON_MANAGER_H
 
 #include <cugl/cugl.h>
 
@@ -31,7 +31,7 @@ class ButtonManager {
 	/**
 	 * Register a button to be managed.
 	 */
-	void registerButton(std::shared_ptr<cugl::Button> button);
+	void registerButton(const std::shared_ptr<cugl::Button>& button);
 
 	/**
 	 * Process input for a frame and update the state of all the buttons.
@@ -47,12 +47,12 @@ class ButtonManager {
 	 * @param button The button
 	 * @param tapData The start and end locations provided by the input controller
 	 */
-	bool tappedButton(std::shared_ptr<cugl::Button> button,
-					  std::tuple<cugl::Vec2, cugl::Vec2> tapData);
+	static bool tappedButton(const std::shared_ptr<cugl::Button>& button,
+							 std::tuple<cugl::Vec2, cugl::Vec2> tapData);
 
 	/**
 	 * Deregisters all buttons
 	 */
 	void clear();
 };
-#endif /* __BUTTON_MANAGER_H__ */
+#endif /* BUTTON_MANAGER_H */

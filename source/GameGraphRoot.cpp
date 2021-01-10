@@ -119,8 +119,9 @@ constexpr float TIMER_OFFSET_Y = 50;
  *
  * @return true if the controller is initialized properly, false otherwise.
  */
-bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
-						 std::shared_ptr<ShipModel> ship, unsigned int playerID) {
+bool GameGraphRoot::init( // NOLINT Yeah it's a big function; we'll live with it for now
+	const std::shared_ptr<cugl::AssetManager>& assets, const std::shared_ptr<ShipModel>& ship,
+	unsigned int playerID) {
 	this->playerID = playerID;
 	this->ship = ship;
 	this->prevPlayerAngle = ship->getDonuts().at(playerID)->getAngle();
@@ -135,7 +136,8 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	// Initialize the scene to a locked width
 	if (assets == nullptr) {
 		return false;
-	} else if (!Scene::init(dimen)) {
+	}
+	if (!Scene::init(dimen)) {
 		return false;
 	}
 
@@ -244,18 +246,19 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 		segment->setAnchor(Vec2::ANCHOR_TOP_CENTER);
 		segment->setScale(SEG_SCALE);
 		segment->setPosition(Vec2(0, 0));
-		segment->setAngle(globals::SEG_SIZE * ((float)i - 2));
+		segment->setAngle(globals::SEG_SIZE * (static_cast<float>(i) - 2));
 		std::shared_ptr<cugl::Label> segLabel = cugl::Label::alloc(
 			cugl::Size(SEG_LABEL_SIZE, SEG_LABEL_SIZE), assets->get<Font>("mont_black_italic_big"));
 		segLabel->setAnchor(Vec2::ANCHOR_CENTER);
 		segLabel->setHorizontalAlignment(Label::HAlign::CENTER);
-		segLabel->setPosition((float)segment->getTexture()->getWidth() / 2, SEG_LABEL_Y);
+		segLabel->setPosition(static_cast<float>(segment->getTexture()->getWidth()) / 2,
+							  SEG_LABEL_Y);
 		segLabel->setForeground(SHIP_LABEL_COLOR);
 		segment->addChild(segLabel);
 		std::shared_ptr<PolygonNode> segmentRed = cugl::PolygonNode::allocWithTexture(segRed);
 		segmentRed->setColor(Color4::CLEAR);
 		segment->addChild(segmentRed);
-		shipSegsNode->addChildWithTag(segment, (unsigned int)(i + 1));
+		shipSegsNode->addChildWithTag(segment, static_cast<unsigned int>(i + 1));
 	}
 
 	std::shared_ptr<DonutModel> playerModel = ship->getDonuts()[playerID];
@@ -264,9 +267,9 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	std::shared_ptr<Texture> faceIdle = assets->get<Texture>("donut_face_idle");
 	std::shared_ptr<Texture> faceDizzy = assets->get<Texture>("donut_face_dizzy");
 	std::shared_ptr<Texture> faceWork = assets->get<Texture>("donut_face_work");
-	for (int i = 0; i < ship->getDonuts().size(); i++) {
-		std::shared_ptr<DonutModel> donutModel = ship->getDonuts().at((unsigned long)i);
-		string donutColor = PLAYER_COLOR.at((unsigned long)donutModel->getColorId());
+	for (uint8_t i = 0; i < ship->getDonuts().size(); i++) {
+		std::shared_ptr<DonutModel> donutModel = ship->getDonuts().at(i);
+		string donutColor = PLAYER_COLOR.at(donutModel->getColorId());
 		std::shared_ptr<Texture> bodyTexture = assets->get<Texture>("donut_" + donutColor);
 		// Player node is handled separately
 		if (i == playerID) {
@@ -290,15 +293,13 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	std::shared_ptr<cugl::Texture> breachFilmstrip = assets->get<Texture>("breach_filmstrip");
 	std::shared_ptr<cugl::Texture> breachSparkleBig = assets->get<Texture>("breach_sparklebig");
 	std::shared_ptr<cugl::Texture> breachSparkleSmall = assets->get<Texture>("breach_sparklesmall");
-	for (int i = 0; i < ship->getBreaches().size(); i++) {
-		std::shared_ptr<BreachModel> breachModel = ship->getBreaches().at((unsigned long)i);
-		string breachColor = PLAYER_COLOR.at((unsigned long)ship->getDonuts()
-												 .at((unsigned long)breachModel->getPlayer())
-												 ->getColorId());
+	for (uint8_t i = 0; i < ship->getBreaches().size(); i++) {
+		std::shared_ptr<BreachModel> breachModel = ship->getBreaches().at(i);
+		string breachColor =
+			PLAYER_COLOR.at(ship->getDonuts().at(breachModel->getPlayer())->getColorId());
 		std::shared_ptr<cugl::Texture> pattern = assets->get<Texture>("breach_" + breachColor);
-		cugl::Color4 color = BREACH_COLOR.at((unsigned long)ship->getDonuts()
-												 .at((unsigned long)breachModel->getPlayer())
-												 ->getColorId());
+		cugl::Color4 color =
+			BREACH_COLOR.at(ship->getDonuts().at(breachModel->getPlayer())->getColorId());
 		// Initialize sparkle nodes
 		std::shared_ptr<SparkleNode> sparkleNodeBig =
 			SparkleNode::alloc(playerModel, ship->getSize(), breachSparkleBig, Color4::WHITE,
@@ -312,7 +313,7 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 		std::shared_ptr<BreachNode> breachNode =
 			BreachNode::alloc(breachModel, playerModel, ship->getSize(), breachFilmstrip, pattern,
 							  color, sparkleNodeBig, sparkleNodeSmall);
-		breachNode->setTag((unsigned int)(i + 1));
+		breachNode->setTag(static_cast<unsigned int>(i + 1));
 
 		// Add the breach node
 		breachesNode->addChild(breachNode);
@@ -321,13 +322,13 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 			std::shared_ptr<TutorialNode> tutorial = TutorialNode::alloc(image);
 			tutorial->setScale(TUTORIAL_SCALE);
 			tutorial->setBreachNode(breachNode);
-			tutorialNode->addChildWithTag(tutorial, (unsigned int)(i + 1));
+			tutorialNode->addChildWithTag(tutorial, static_cast<unsigned int>(i + 1));
 		}
 	}
 
 	// Initialize Doors
-	for (int i = 0; i < ship->getDoors().size(); i++) {
-		std::shared_ptr<DoorModel> doorModel = ship->getDoors().at((unsigned long)i);
+	for (uint8_t i = 0; i < ship->getDoors().size(); i++) {
+		std::shared_ptr<DoorModel> doorModel = ship->getDoors().at(i);
 		std::shared_ptr<Texture> image = assets->get<Texture>("door");
 		std::shared_ptr<DoorNode> doorNode = DoorNode::alloc(
 			doorModel, playerModel, ship->getSize(), image, DOOR_ROWS, DOOR_COLS, DOOR_FRAMES);
@@ -335,8 +336,8 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	}
 
 	// Initialize unopenable doors
-	for (int i = 0; i < ship->getUnopenable().size(); i++) {
-		std::shared_ptr<Unopenable> unopModel = ship->getUnopenable().at((unsigned long)i);
+	for (uint8_t i = 0; i < ship->getUnopenable().size(); i++) {
+		std::shared_ptr<Unopenable> unopModel = ship->getUnopenable().at(i);
 		std::shared_ptr<Texture> image = assets->get<Texture>("unop");
 		std::shared_ptr<UnopenableNode> unopNode =
 			UnopenableNode::alloc(unopModel, playerModel, ship->getSize(), image);
@@ -344,8 +345,8 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	}
 
 	// Initialize Buttons
-	for (int i = 0; i < ship->getButtons().size(); i++) {
-		std::shared_ptr<ButtonModel> buttonModel = ship->getButtons().at((unsigned long)i);
+	for (uint8_t i = 0; i < ship->getButtons().size(); i++) {
+		std::shared_ptr<ButtonModel> buttonModel = ship->getButtons().at(i);
 		std::shared_ptr<SparkleNode> sparkleNode =
 			SparkleNode::alloc(playerModel, ship->getSize(), breachSparkleBig, Color4::WHITE,
 							   SparkleNode::SparkleType::Big);
@@ -363,8 +364,8 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 		for (int i = 0; i < doorsNode->getChildCount(); i++) {
 			std::shared_ptr<Texture> image = assets->get<Texture>("door_tutorial");
 			std::shared_ptr<TutorialNode> tutorial = TutorialNode::alloc(image);
-			shared_ptr<DoorNode> doorNode =
-				dynamic_pointer_cast<DoorNode>(doorsNode->getChildByTag((unsigned int)(i + 1)));
+			shared_ptr<DoorNode> doorNode = dynamic_pointer_cast<DoorNode>(
+				doorsNode->getChildByTag(static_cast<unsigned int>(i + 1)));
 			tutorial->setDoorNode(doorNode);
 			tutorial->setScale(TUTORIAL_SCALE);
 			tutorialNode->addChildWithTag(tutorial, i + 1);
@@ -373,8 +374,8 @@ bool GameGraphRoot::init(const std::shared_ptr<cugl::AssetManager>& assets,
 		for (int i = 0; i < buttonsNode->getChildCount(); i++) {
 			std::shared_ptr<Texture> image = assets->get<Texture>("engine_tutorial");
 			std::shared_ptr<TutorialNode> tutorial = TutorialNode::alloc(image);
-			shared_ptr<ButtonNode> buttonNode =
-				dynamic_pointer_cast<ButtonNode>(buttonsNode->getChildByTag((unsigned int)(i + 1)));
+			shared_ptr<ButtonNode> buttonNode = dynamic_pointer_cast<ButtonNode>(
+				buttonsNode->getChildByTag(static_cast<unsigned int>(i + 1)));
 			tutorial->setButtonNode(buttonNode);
 			tutorial->setScale(TUTORIAL_SCALE);
 			tutorialNode->addChildWithTag(tutorial, i + 1);
@@ -551,16 +552,16 @@ void GameGraphRoot::reset() {
  *
  * @param timestep  The amount of time (in seconds) since the last frame
  */
-void GameGraphRoot::update(float timestep) {
+void GameGraphRoot::update( // NOLINT Yeah it's a big function; we'll live with it for now
+	float /*timestep*/) {
 	// "Drawing" code.  Move everything BUT the donut
 	// Update the HUD
-	for (int i = 0; i < ship->getButtons().size(); i++) {
-		if (ship->getButtons().at(i)->getIsActive()) {
+	for (auto& i : ship->getButtons()) {
+		if (i->getIsActive()) {
 			coordHUD->setColor(cugl::Color4::RED);
 			break;
-		} else {
-			coordHUD->setColor(cugl::Color4::WHITE);
 		}
+		coordHUD->setColor(cugl::Color4::WHITE);
 	}
 	std::string time = timerText();
 	if (time != coordHUD->getText()) {
@@ -618,7 +619,7 @@ void GameGraphRoot::update(float timestep) {
 				timeoutCurrent.mark();
 				reconnectOverlay->setVisible(true);
 				reconnectDonut->setAngle(
-					(float)(reconnectDonut->getAngle() - globals::PI_180 * RECONNECT_SPIN_RATIO));
+					(reconnectDonut->getAngle() - globals::PI_180 * RECONNECT_SPIN_RATIO));
 				currentEllipsesFrame++;
 				if (currentEllipsesFrame > MAX_ELLIPSES_FRAMES) {
 					currentEllipsesFrame = 0;
@@ -764,32 +765,32 @@ void GameGraphRoot::update(float timestep) {
 	std::shared_ptr<PolygonNode> segment;
 	for (int i = 0; i < globals::VISIBLE_SEGS; i++) {
 		segment = dynamic_pointer_cast<cugl::PolygonNode>(
-			shipSegsNode->getChildByTag((unsigned int)(i + 1)));
+			shipSegsNode->getChildByTag(static_cast<unsigned int>(i + 1)));
 		// If segments rotate too far left, move left-most segment to the right side
 		if (i == rightMostSeg &&
 			wrapAngle(nearSpace->getAngle() + segment->getAngle()) < globals::SEG_CUTOFF_ANGLE) {
 			rightMostSeg = (i + 1) % globals::VISIBLE_SEGS;
 			leftMostSeg = (i + 2) % globals::VISIBLE_SEGS;
 			std::shared_ptr<PolygonNode> newRightSegment = dynamic_pointer_cast<cugl::PolygonNode>(
-				shipSegsNode->getChildByTag((unsigned int)(rightMostSeg + 1)));
+				shipSegsNode->getChildByTag((rightMostSeg + 1)));
 			newRightSegment->setAngle(wrapAngle(segment->getAngle() + globals::SEG_SIZE));
 		} else if (i == leftMostSeg && wrapAngle(nearSpace->getAngle() + segment->getAngle()) >
 										   globals::TWO_PI - globals::SEG_CUTOFF_ANGLE) {
 			leftMostSeg = (i + globals::VISIBLE_SEGS - 1) % globals::VISIBLE_SEGS;
 			rightMostSeg = (i + globals::VISIBLE_SEGS - 2) % globals::VISIBLE_SEGS;
 			std::shared_ptr<PolygonNode> newLeftSegment = dynamic_pointer_cast<cugl::PolygonNode>(
-				shipSegsNode->getChildByTag((unsigned int)(leftMostSeg + 1)));
+				shipSegsNode->getChildByTag((leftMostSeg + 1)));
 			newLeftSegment->setAngle(wrapAngle(segment->getAngle() - globals::SEG_SIZE));
 		}
 		// Update text label of segment
 		float relSegAngle = wrapAngle(segment->getAngle() + nearSpace->getAngle());
 		relSegAngle = relSegAngle >= 0 ? relSegAngle : globals::TWO_PI + relSegAngle;
 		relSegAngle = relSegAngle > globals::PI ? relSegAngle - globals::TWO_PI : relSegAngle;
-		float segAngle = (float)(ship->getDonuts().at(playerID)->getAngle() * globals::PI_180 +
-								 relSegAngle + SEG_SCALE * globals::PI_180);
+		auto segAngle = (ship->getDonuts().at(playerID)->getAngle() * globals::PI_180 +
+						 relSegAngle + SEG_SCALE * globals::PI_180);
 		segAngle = fmod(segAngle, ship->getSize() * globals::PI_180);
 		segAngle = segAngle < 0 ? segAngle + ship->getSize() * globals::PI_180 : segAngle;
-		unsigned int segNum = (unsigned int)(segAngle / globals::SEG_SIZE);
+		auto segNum = static_cast<unsigned int>(segAngle / globals::SEG_SIZE);
 		std::shared_ptr<cugl::Label> segLabel =
 			dynamic_pointer_cast<cugl::Label>(segment->getChild(static_cast<unsigned int>(0)));
 		std::string segText = std::to_string(segNum);
@@ -799,18 +800,16 @@ void GameGraphRoot::update(float timestep) {
 	}
 
 	// Update breaches textures if recycled
-	for (int i = 0; i < ship->getBreaches().size(); i++) {
-		std::shared_ptr<BreachModel> breachModel = ship->getBreaches().at((unsigned long)i);
+	for (uint8_t i = 0; i < ship->getBreaches().size(); i++) {
+		std::shared_ptr<BreachModel> breachModel = ship->getBreaches().at(i);
 		shared_ptr<BreachNode> breachNode =
-			dynamic_pointer_cast<BreachNode>(breachesNode->getChildByTag((unsigned int)(i + 1)));
+			dynamic_pointer_cast<BreachNode>(breachesNode->getChildByTag(i + 1));
 		if (!breachNode->getIsAnimatingShrink() && breachModel->getHealth() > 0 &&
 			breachModel->getNeedSpriteUpdate()) {
-			cugl::Color4 color = BREACH_COLOR.at((unsigned long)ship->getDonuts()
-													 .at((unsigned long)breachModel->getPlayer())
-													 ->getColorId());
-			string breachColor = PLAYER_COLOR.at((unsigned long)ship->getDonuts()
-													 .at((unsigned long)breachModel->getPlayer())
-													 ->getColorId());
+			cugl::Color4 color =
+				BREACH_COLOR.at(ship->getDonuts().at(breachModel->getPlayer())->getColorId());
+			string breachColor =
+				PLAYER_COLOR.at(ship->getDonuts().at(breachModel->getPlayer())->getColorId());
 			std::shared_ptr<Texture> image = assets->get<Texture>("breach_" + breachColor);
 			breachNode->resetAppearance(image, color);
 			breachModel->setNeedSpriteUpdate(false);
@@ -831,7 +830,7 @@ void GameGraphRoot::update(float timestep) {
 				arrow->setAngle(globals::PI);
 			}
 			float progress = stabilizer.getProgress() * challengePanelArrows.size();
-			if ((float)i < progress) {
+			if (static_cast<float>(i) < progress) {
 				arrow->setTexture(image);
 			}
 			arrow->setVisible(true);
@@ -841,9 +840,9 @@ void GameGraphRoot::update(float timestep) {
 		challengePanel->setVisible(false);
 		challengePanelText->setVisible(false);
 		std::shared_ptr<Texture> image = assets->get<Texture>("panel_progress_0");
-		for (int i = 0; i < challengePanelArrows.size(); i++) {
-			challengePanelArrows.at(i)->setVisible(false);
-			challengePanelArrows.at(i)->setTexture(image);
+		for (auto& challengePanelArrow : challengePanelArrows) {
+			challengePanelArrow->setVisible(false);
+			challengePanelArrow->setTexture(image);
 		}
 	}
 
@@ -890,7 +889,7 @@ void GameGraphRoot::processButtons() {
 
 	std::tuple<Vec2, Vec2> tapData = InputController::getInstance()->getTapEndLoc();
 	// Pause button
-	if (buttonManager.tappedButton(pauseBtn, tapData)) {
+	if (ButtonManager::tappedButton(pauseBtn, tapData)) {
 		if (pauseBtn->isDown()) {
 			// Close Pause Screen
 			pauseBtn->setDown(false);
@@ -902,7 +901,7 @@ void GameGraphRoot::processButtons() {
 		}
 	} else if (pauseScreen->isVisible()) {
 		// Mute Music Button
-		if (buttonManager.tappedButton(musicBtn, tapData)) {
+		if (ButtonManager::tappedButton(musicBtn, tapData)) {
 			if (musicBtn->isDown()) {
 				musicBtn->setDown(false);
 				AudioChannels::get()->resumeMusic();
@@ -912,7 +911,7 @@ void GameGraphRoot::processButtons() {
 			}
 		}
 		// Mute Sound Button
-		else if (buttonManager.tappedButton(soundBtn, tapData)) {
+		else if (ButtonManager::tappedButton(soundBtn, tapData)) {
 			if (soundBtn->isDown()) {
 				soundBtn->setDown(false);
 				AudioChannels::get()->resumeAllEffects();
@@ -922,17 +921,17 @@ void GameGraphRoot::processButtons() {
 			}
 		}
 		// Leave Button
-		else if (buttonManager.tappedButton(leaveBtn, tapData)) {
+		else if (ButtonManager::tappedButton(leaveBtn, tapData)) {
 			isBackToMainMenu = true;
 		}
 	} else if (playerID == 0) {
 		if (winScreen->isVisible()) {
-			if (buttonManager.tappedButton(nextBtn, tapData)) {
+			if (ButtonManager::tappedButton(nextBtn, tapData)) {
 				lastButtonPressed = NextLevel;
 			}
 		} else if (lossScreen->isVisible()) {
 			// Is this loss?
-			if (buttonManager.tappedButton(restartBtn, tapData)) {
+			if (ButtonManager::tappedButton(restartBtn, tapData)) {
 				lastButtonPressed = Restart;
 			}
 		}
@@ -946,7 +945,7 @@ void GameGraphRoot::setNeedlePercentage(float percentage) {
 void GameGraphRoot::setSegHealthWarning(int alpha) {
 	for (int i = 0; i < globals::VISIBLE_SEGS; i++) {
 		std::shared_ptr<cugl::PolygonNode> segment = dynamic_pointer_cast<cugl::PolygonNode>(
-			shipSegsNode->getChildByTag((unsigned int)(i + 1)));
+			shipSegsNode->getChildByTag(static_cast<unsigned int>(i + 1)));
 		std::shared_ptr<cugl::PolygonNode> segRed = dynamic_pointer_cast<cugl::PolygonNode>(
 			segment->getChild(static_cast<unsigned int>(1)));
 		segRed->setColor(Color4(globals::MAX_BYTE, globals::MAX_BYTE, globals::MAX_BYTE, alpha));
@@ -972,7 +971,7 @@ void GameGraphRoot::doTeleportAnimation() {
 		} else {
 			if (currentTeleportationFrame == TELEPORT_FRAMECUTOFF_SECOND + 1) {
 				// Teleport models
-				for (auto donut : ship->getDonuts()) {
+				for (const auto& donut : ship->getDonuts()) {
 					donut->teleport();
 				}
 				ship->setStabilizerStatus(ShipModel::StabilizerStatus::INACTIVE);
@@ -986,7 +985,9 @@ void GameGraphRoot::doTeleportAnimation() {
 							  TELEPORT_FRAMECUTOFF_THIRD - TELEPORT_FRAMECUTOFF_SECOND)));
 		}
 		currentTeleportationFrame += 1;
-		if (currentTeleportationFrame > TELEPORT_FRAMECUTOFF_THIRD) currentTeleportationFrame = 0;
+		if (currentTeleportationFrame > TELEPORT_FRAMECUTOFF_THIRD) {
+			currentTeleportationFrame = 0;
+		}
 	}
 	prevIsStabilizerFail = ship->getStabilizerStatus() == ShipModel::StabilizerStatus::FAILURE;
 }
@@ -1001,15 +1002,15 @@ void GameGraphRoot::doTeleportAnimation() {
  */
 std::string GameGraphRoot::timerText() {
 	stringstream ss;
-	int time = (int)trunc(ship->timeLeftInTimer);
+	int time = static_cast<int>(trunc(ship->timeLeftInTimer));
 	if (time > SEC_IN_MIN - 1) {
-		if ((int)time % SEC_IN_MIN < tenSeconds) {
-			ss << "0" << (int)time / SEC_IN_MIN << ":0" << (int)time % SEC_IN_MIN;
+		if (time % SEC_IN_MIN < TEN_SECONDS) {
+			ss << "0" << time / SEC_IN_MIN << ":0" << time % SEC_IN_MIN;
 		} else {
-			ss << "0" << (int)time / SEC_IN_MIN << ":" << (int)time % SEC_IN_MIN;
+			ss << "0" << time / SEC_IN_MIN << ":" << time % SEC_IN_MIN;
 		}
 	} else {
-		if (time < tenSeconds) {
+		if (time < TEN_SECONDS) {
 			ss << "00:0" << time;
 		} else {
 			ss << "00:" << time;

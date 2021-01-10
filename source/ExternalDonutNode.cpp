@@ -2,6 +2,8 @@
 
 #include <cugl/2d/CUNode.h>
 
+#include <utility>
+
 #include "GameGraphRoot.h"
 #include "Globals.h"
 
@@ -10,13 +12,13 @@ using namespace cugl;
 /** The radius of the ship. Also the y coordinate of the center of the ship */
 constexpr unsigned int RADIUS_OFFSET = 30;
 
-bool ExternalDonutNode::init(std::shared_ptr<DonutModel> externalDonutModel,
+bool ExternalDonutNode::init(const std::shared_ptr<DonutModel> &externalDonutModel,
 							 std::shared_ptr<DonutModel> player, float shipSize,
 							 const std::shared_ptr<cugl::Texture> &bodyTexture,
 							 const std::shared_ptr<cugl::Texture> &faceIdleTexture,
 							 const std::shared_ptr<cugl::Texture> &faceDizzyTexture,
 							 const std::shared_ptr<cugl::Texture> &faceWorkTexture) {
-	CustomNode::init(player, shipSize, externalDonutModel->getAngle(), globals::RADIUS);
+	CustomNode::init(std::move(player), shipSize, externalDonutModel->getAngle(), globals::RADIUS);
 	DonutNode::init(bodyTexture, faceIdleTexture, faceDizzyTexture, faceWorkTexture,
 					externalDonutModel);
 	return true;

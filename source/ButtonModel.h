@@ -1,5 +1,5 @@
-﻿#ifndef __BUTTON_MODEL_H__
-#define __BUTTON_MODEL_H__
+﻿#ifndef BUTTON_MODEL_H
+#define BUTTON_MODEL_H
 #include <cugl/cugl.h>
 
 #include <bitset>
@@ -33,7 +33,7 @@ class ButtonModel {
 	 * Do not call this constructor using new. These models should exclusively be allocated into an
 	 * object pool by {@code ShipModel} and accessed from there.
 	 */
-	ButtonModel(void) : angle(-1), pairID(-1), jumped(false), resolved(false), isActive(false) {}
+	ButtonModel() : angle(-1), pairID(-1), jumped(false), resolved(false), isActive(false) {}
 
 	ButtonModel(const ButtonModel&) = delete;
 
@@ -46,38 +46,38 @@ class ButtonModel {
 	 *
 	 * @return true if the obstacle is initialized properly, false otherwise.
 	 */
-	bool init(const float a, std::shared_ptr<ButtonModel> pair, uint8_t pairID);
+	bool init(float a, std::shared_ptr<ButtonModel> pair, uint8_t pairID);
 
 #pragma endregion
 #pragma region Accessors
 	/** Returns whether this model is active */
-	bool getIsActive() { return isActive; }
+	bool getIsActive() const { return isActive; }
 
 	/**
 	 * Returns the current angle of the button in degrees.
 	 */
-	float getAngle() { return angle; }
+	float getAngle() const { return angle; }
 
 	/**
 	 * Returns the section of the ship containing this button.
 	 */
-	int getSection();
+	int getSection() const;
 
 	/**
 	 * Returns the current height of the button, as percentage down, where 0 = fully up and 1 =
 	 * fully down
 	 */
-	float getHeight() { return height; }
+	float getHeight() const { return height; }
 
 	/**
 	 * Returns whether this button is resolved.
 	 */
-	bool isResolved() { return resolved; }
+	bool isResolved() const { return resolved; }
 
 	/**
 	 * Returns whether any players are jumping on this button.
 	 */
-	bool isJumpedOn() { return jumped; }
+	bool isJumpedOn() const { return jumped; }
 
 	/**
 	 * Return a pointer to the pair of this button
@@ -87,7 +87,7 @@ class ButtonModel {
 	/**
 	 * Return the ID of the pair of this button
 	 */
-	uint8_t getPairID() { return pairID; }
+	uint8_t getPairID() const { return pairID; }
 
 #pragma endregion
 #pragma region Mutators
@@ -116,4 +116,4 @@ class ButtonModel {
 	void clear();
 #pragma endregion
 };
-#endif /* __BUTTON_MODEL_H__ */
+#endif /* BUTTON_MODEL_H */

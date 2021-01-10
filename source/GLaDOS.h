@@ -1,7 +1,9 @@
-﻿#ifndef __GM_CONTROLLER_H__
-#define __GM_CONTROLLER_H__
+﻿#ifndef GM_CONTROLLER_H
+#define GM_CONTROLLER_H
 
 #include <cugl/cugl.h>
+
+#include <random>
 
 #include "BreachModel.h"
 #include "DonutModel.h"
@@ -20,6 +22,9 @@ class GLaDOS {
    private:
 	/** Whether or not this input is active */
 	bool active;
+
+	/** Random number generator */
+	std::minstd_rand rand;
 
 	/** The state of the ship */
 	std::shared_ptr<ShipModel> ship;
@@ -91,7 +96,7 @@ class GLaDOS {
 	 *
 	 * @return true if the controller was initialized successfully
 	 */
-	bool init(std::shared_ptr<ShipModel> ship, std::shared_ptr<LevelModel> level);
+	bool init(const std::shared_ptr<ShipModel>& ship, const std::shared_ptr<LevelModel>& level);
 
 	/**
 	 * Initializes the GM for tutorial levels
@@ -101,7 +106,7 @@ class GLaDOS {
 	 *
 	 * @return true if the controller was initialized successfully
 	 */
-	bool init(std::shared_ptr<ShipModel> ship, int levelNum);
+	bool init(const std::shared_ptr<ShipModel>& ship, int levelNum);
 
 #pragma mark -
 #pragma mark GM Handling
@@ -130,7 +135,7 @@ class GLaDOS {
 	 */
 	void placeObject(BuildingBlockModel::Object obj, float zeroAngle, int p);
 
-	void placeButtons(float a1, float a2);
+	void placeButtons(float angle1, float angle2);
 
 	/**
 	 * Processes the GM.
@@ -147,10 +152,10 @@ class GLaDOS {
 	/**
 	 * Gets if all player challenge failed.
 	 */
-	bool challengeFail() { return fail; }
+	bool challengeFail() const { return fail; }
 	/**
 	 * Sets if all player challenge failed.
 	 */
 	void setChallengeFail(bool b) { fail = b; }
 };
-#endif /* __GM_CONTROLLER_H__ */
+#endif /* GM_CONTROLLER_H */

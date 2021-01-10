@@ -1,5 +1,5 @@
-#ifndef __JS_LEVEL_MODEL_H__
-#define __JS_LEVEL_MODEL_H__
+#ifndef JS_LEVEL_MODEL_H
+#define JS_LEVEL_MODEL_H
 #include <cugl/2d/physics/CUObstacleWorld.h>
 #include <cugl/assets/CUAsset.h>
 #include <cugl/cugl.h>
@@ -75,7 +75,7 @@ class LevelModel : public cugl::Asset {
 	 *
 	 * @return  an autoreleased level file
 	 */
-	static std::shared_ptr<LevelModel> alloc(std::string file) {
+	static std::shared_ptr<LevelModel> alloc(const std::string& file) {
 		std::shared_ptr<LevelModel> result = std::make_shared<LevelModel>();
 		return (result->init(file) ? result : nullptr);
 	}
@@ -86,21 +86,21 @@ class LevelModel : public cugl::Asset {
 	 *
 	 * @return the max breaches
 	 */
-	const uint8_t getMaxBreaches() const { return maxBreaches; }
+	uint8_t getMaxBreaches() const { return maxBreaches; }
 
 	/**
 	 * Returns the max doors
 	 *
 	 * @return the max doors
 	 */
-	const uint8_t getMaxDoors() const { return maxDoors; }
+	uint8_t getMaxDoors() const { return maxDoors; }
 
 	/**
 	 * Returns the max buttons
 	 *
 	 * @return the max buttons
 	 */
-	const uint8_t getMaxButtons() const { return maxButtons; }
+	uint8_t getMaxButtons() const { return maxButtons; }
 
 	/**
 	 * Returns the ship size given a number of players
@@ -108,8 +108,8 @@ class LevelModel : public cugl::Asset {
 	 * @param players the number of players
 	 * @return the ship size
 	 */
-	const float getShipSize(uint8_t players) const {
-		return baseShipSize + (float)players * perPlayer;
+	float getShipSize(uint8_t players) const {
+		return baseShipSize + static_cast<float>(players) * perPlayer;
 	}
 
 	/**
@@ -117,14 +117,14 @@ class LevelModel : public cugl::Asset {
 	 *
 	 * @return the starting time
 	 */
-	const float getTime() const { return time; }
+	float getTime() const { return time; }
 
 	/**
 	 * Returns the init health
 	 *
 	 * @return the init health
 	 */
-	const float getInitHealth() const { return initHealth; }
+	float getInitHealth() const { return initHealth; }
 
 	/**
 	 * Returns the list of events in the level
@@ -167,12 +167,13 @@ class LevelModel : public cugl::Asset {
 	 */
 	bool preload(const std::shared_ptr<cugl::JsonValue>& json) override {
 		if (json == nullptr) {
+			// NOLINTNEXTLINE idk why but clang-tidy is complaining
 			CUAssertLog(false, "Failed to load level file");
 			return false;
 		}
-		maxBreaches = (uint8_t)json->get(MAX_BREACH_FIELD)->asInt();
-		maxDoors = (uint8_t)json->get(MAX_DOOR_FIELD)->asInt();
-		maxButtons = (uint8_t)json->get(MAX_BUTTON_FIELD)->asInt();
+		maxBreaches = static_cast<uint8_t>(json->get(MAX_BREACH_FIELD)->asInt());
+		maxDoors = static_cast<uint8_t>(json->get(MAX_DOOR_FIELD)->asInt());
+		maxButtons = static_cast<uint8_t>(json->get(MAX_BUTTON_FIELD)->asInt());
 		baseShipSize = json->get(BASE_SHIP_FIELD)->asFloat();
 		perPlayer = json->get(PER_PLAYER_FIELD)->asFloat();
 		time = json->get(TIME_FIELD)->asFloat();
@@ -205,7 +206,7 @@ class LevelModel : public cugl::Asset {
 	/**
 	 * Creates a new, empty level.
 	 */
-	LevelModel(void) {
+	LevelModel() {
 		maxButtons = DEFAULT_MAX_BUTTONS;
 		maxBreaches = DEFAULT_MAX_BREACHES;
 		maxDoors = DEFAULT_MAX_DOORS;
@@ -220,7 +221,7 @@ class LevelModel : public cugl::Asset {
 	/**
 	 * Destroys this level, releasing all resources.
 	 */
-	virtual ~LevelModel(void){};
+	virtual ~LevelModel() = default;
 };
 
 #endif /* defined(__JS_LEVEL_MODEL_H__) */

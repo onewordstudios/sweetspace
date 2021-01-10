@@ -1,5 +1,5 @@
-﻿#ifndef __GAME_GRAPH_ROOT_H__
-#define __GAME_GRAPH_ROOT_H__
+﻿#ifndef GAME_GRAPH_ROOT_H
+#define GAME_GRAPH_ROOT_H
 #include <cugl/cugl.h>
 
 #include <vector>
@@ -50,7 +50,7 @@ class GameGraphRoot : public cugl::Scene {
 
 	/** Seconds in a minute for timer display */
 	static constexpr int SEC_IN_MIN = 60;
-	static constexpr int tenSeconds = 10;
+	static constexpr int TEN_SECONDS = 10;
 
 	// VIEW COMPONENTS
 	/** Filmstrip representing the player's animated donut */
@@ -209,7 +209,7 @@ class GameGraphRoot : public cugl::Scene {
 	 * @param f degree in radians
 	 * @return Wrapped angle in radians
 	 */
-	float wrapAngle(float f) {
+	static float wrapAngle(float f) {
 		float mod = fmod(f, globals::TWO_PI);
 		return mod < 0 ? globals::TWO_PI + mod : mod;
 	};
@@ -244,8 +244,7 @@ class GameGraphRoot : public cugl::Scene {
 	 * This allows us to use the object without a heap pointer.
 	 */
 	GameGraphRoot()
-		: Scene(),
-		  screenHeight(0),
+		: screenHeight(0),
 		  currentEllipsesFrame(0),
 		  leftMostSeg(0),
 		  rightMostSeg(0),
@@ -282,8 +281,8 @@ class GameGraphRoot : public cugl::Scene {
 	 *
 	 * @return true if the controller is initialized properly, false otherwise.
 	 */
-	bool init(const std::shared_ptr<cugl::AssetManager>& assets, std::shared_ptr<ShipModel> ship,
-			  unsigned int playerID);
+	bool init(const std::shared_ptr<cugl::AssetManager>& assets,
+			  const std::shared_ptr<ShipModel>& ship, unsigned int playerID);
 
 #pragma mark -
 #pragma mark Gameplay Handling
@@ -344,7 +343,7 @@ class GameGraphRoot : public cugl::Scene {
 	 *
 	 * @return whether to go back to the main menu
 	 */
-	bool getIsBackToMainMenu() { return isBackToMainMenu; }
+	bool getIsBackToMainMenu() const { return isBackToMainMenu; }
 
 	/**
 	 * Returns the last button pressed, if any, and resets the field so future calls to this method
@@ -356,4 +355,4 @@ class GameGraphRoot : public cugl::Scene {
 		return ret;
 	}
 };
-#endif /* __GAME_GRAPH_ROOT_H__ */
+#endif /* GAME_GRAPH_ROOT_H */
