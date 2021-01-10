@@ -130,7 +130,7 @@ class ShipModel {
 	bool init(uint8_t numPlayers, uint8_t numBreaches, uint8_t numDoors, uint8_t playerID,
 			  float shipSize, float initHealth, uint8_t numButtons, uint8_t numUnop) {
 		// Instantiate door models
-		for (unsigned int i = 0; i < numUnop; i++) {
+		for (uint8_t i = 0; i < numUnop; i++) {
 			unopenable.push_back(std::make_shared<Unopenable>());
 		}
 		return init(numPlayers, numBreaches, numDoors, playerID, shipSize, initHealth, numButtons);
@@ -234,7 +234,7 @@ class ShipModel {
 	 * @param player   the player assigned to the breach.
 	 * @param id   	   the id of breach to be created.
 	 */
-	bool createBreach(float angle, unsigned int health, uint8_t player, uint8_t id);
+	bool createBreach(float angle, uint8_t health, uint8_t player, uint8_t id);
 
 	/**
 	 * Decrement the health of a breach with given id.
