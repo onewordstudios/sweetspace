@@ -54,7 +54,7 @@ bool ShipModel::createBreach(float angle, uint8_t player, uint8_t id) {
 	return true;
 }
 
-bool ShipModel::createBreach(float angle, unsigned int health, uint8_t player, uint8_t id) {
+bool ShipModel::createBreach(float angle, uint8_t health, uint8_t player, uint8_t id) {
 	breaches.at(id)->init(angle, health, player, timePassed());
 	return true;
 }
