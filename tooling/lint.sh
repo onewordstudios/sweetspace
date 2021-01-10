@@ -10,11 +10,12 @@ then
     echo ''
 elif [ $1 == '-all' ]
 then
-    clang-tidy ../source/*.cpp --header-filter=.*source\/[^\/]*\.h -- -I../cugl/include
+    cd ..
+    tooling/run-clang-tidy.py -header-filter=".*source\/[^\/]*\.h" -cpp source/*.cpp
 elif [ $1 == '-fast' ]
 then
     cd ..
-    tooling/run-clang-tidy.py -header-filter=".*source\/[^\/]*\.h" -cpp source/*.cpp
+    tooling/run-clang-tidy.py -header-filter=".*source\/[^\/]*\.h" -cpp source/*.cpp 1>&2 2>/dev/null
 	exit 0
 elif [ $1 == '-ci' ]
 then
