@@ -5,9 +5,9 @@
 
 using namespace cugl;
 
-constexpr float CLEAR_COLOR_R = 13.0f;
-constexpr float CLEAR_COLOR_G = 21.0f;
-constexpr float CLEAR_COLOR_B = 51.0f;
+constexpr uint8_t CLEAR_COLOR_R = 13;
+constexpr uint8_t CLEAR_COLOR_G = 21;
+constexpr uint8_t CLEAR_COLOR_B = 51;
 
 /** Transition duration */
 constexpr int TRANSITION_DURATION = 30;

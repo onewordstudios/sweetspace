@@ -4,6 +4,7 @@
 #include <cugl/cugl.h>
 
 #include <array>
+#include <tl/optional.hpp>
 
 #include "NetworkConnection.h"
 #include "NetworkDataType.h"
@@ -65,7 +66,7 @@ class MagicInternetBox {
 	/**
 	 * The singleton instance of this class.
 	 */
-	static std::shared_ptr<MagicInternetBox> instance;
+	static std::shared_ptr<MagicInternetBox> instance; // NOLINT (clang-tidy bug)
 
 	/** The network connection */
 	std::unique_ptr<NetworkConnection> conn;
@@ -86,17 +87,17 @@ class MagicInternetBox {
 	unsigned int currFrame;
 
 	/**
-	 * ID of the current player, or -1 if unassigned
+	 * ID of the current player, or empty if unassigned
 	 */
-	int playerID;
+	tl::optional<uint8_t> playerID;
 
 	/**
 	 * The ID of the current room, or "" if unassigned
 	 */
 	std::string roomID;
 
-	/** Current level number, or -1 if unassigned */
-	int levelNum;
+	/** Current level number, or empty if unassigned */
+	tl::optional<uint8_t> levelNum;
 	/** Parity of current level (to sync state syncs) */
 	bool levelParity;
 
@@ -104,13 +105,13 @@ class MagicInternetBox {
 	bool skipTutorial;
 
 	/** Start the given level */
-	void startLevelInternal(int num, bool parity);
+	void startLevelInternal(uint8_t num, bool parity);
 
 	/** Number of connected players */
-	unsigned int numPlayers;
+	uint8_t numPlayers;
 
 	/** Maximum number of players for this ship */
-	unsigned int maxPlayers;
+	uint8_t maxPlayers;
 
 	/** Array representing active and inactive players */
 	std::array<bool, globals::MAX_PLAYERS> activePlayers;
@@ -214,11 +215,6 @@ class MagicInternetBox {
 	void acknowledgeNetworkEvent() { events = None; }
 
 	/**
-	 * Disconnect from the room and cleanup this object.
-	 */
-	void leaveRoom();
-
-	/**
 	 * Returns the room ID this controller is connected to.
 	 * Is the empty string if this controller is uninitialized.
 	 */
@@ -227,29 +223,29 @@ class MagicInternetBox {
 	/**
 	 * Returns the current level number, or -1 if uninitialized.
 	 */
-	int getLevelNum() { return levelNum; }
+	tl::optional<uint8_t> getLevelNum() { return levelNum; }
 
 	/**
 	 * Returns the current player ID, or -1 if uninitialized.
 	 * 0 is the host player.
 	 */
-	int getPlayerID();
+	tl::optional<uint8_t> getPlayerID();
 
 	/**
 	 * Returns the number of connected players, or 0 if uninitialized.
 	 */
-	unsigned int getNumPlayers();
+	uint8_t getNumPlayers();
 
 	/** Returns the total number of players in this ship (including disconnected players), or 0 if
 	 * uninitialized. */
-	unsigned int getMaxNumPlayers() { return maxPlayers; }
+	uint8_t getMaxNumPlayers() { return maxPlayers; }
 
 	/**
 	 * Returns whether the specified player ID is active.
 	 *
 	 * PRECONDITION: The playerID must be valid.
 	 */
-	bool isPlayerActive(unsigned int playerID);
+	bool isPlayerActive(uint8_t playerID);
 
 	/**
 	 * Set whether or not the tutorial should be skipped.
@@ -262,7 +258,7 @@ class MagicInternetBox {
 	 *
 	 * @param levelNum The level number to start
 	 */
-	void startGame(int levelNum);
+	void startGame(uint8_t levelNum);
 
 	/**
 	 * Restart the current level.
@@ -296,14 +292,14 @@ class MagicInternetBox {
 	 * @param player The player ID that can resolve this breach
 	 * @param id The breach ID used to identify this breach in the future
 	 */
-	void createBreach(float angle, int player, int id);
+	void createBreach(float angle, uint8_t player, uint8_t id);
 
 	/**
 	 * Inform other players that a breach has shrunk in size by 1.
 	 *
 	 * @param id The breach ID
 	 */
-	void resolveBreach(int id);
+	void resolveBreach(uint8_t id);
 
 	/**
 	 * Inform other players that a task requiring two players has been created
@@ -312,7 +308,7 @@ class MagicInternetBox {
 	 * @param angle The angle of the ship to spawn the task
 	 * @param id The dual-task ID used to identify this task in the future
 	 */
-	void createDualTask(float angle, int id);
+	void createDualTask(float angle, uint8_t id);
 
 	/**
 	 * Inform other players that at least one of the two required players has
@@ -326,7 +322,7 @@ class MagicInternetBox {
 	 * @param player The player ID who is activating the door
 	 * @param flag Whether the player is on or off the door (1 or 0)
 	 */
-	void flagDualTask(int id, int player, int flag);
+	void flagDualTask(uint8_t id, uint8_t player, uint8_t flag);
 
 	/**
 	 * Inform other players that two buttons requiring two players has been created
@@ -336,7 +332,7 @@ class MagicInternetBox {
 	 * @param angle2 The angle of the ship to spawn the button's pair
 	 * @param id2 The ID for the button's pair
 	 */
-	void createButtonTask(float angle1, int id1, float angle2, int id2);
+	void createButtonTask(float angle1, uint8_t id1, float angle2, uint8_t id2);
 
 	/**
 	 * Inform other players that one person is on the button.
@@ -349,21 +345,21 @@ class MagicInternetBox {
 	 * @param player The player ID who is activating the button
 	 * @param flag Whether the player is on or off the door (1 or 0)
 	 */
-	void flagButton(int id);
+	void flagButton(uint8_t id);
 
 	/**
 	 * Inform other players that a pair of buttons have been resolved.
 	 *
 	 * @param id The ID of one of the two buttons.
 	 */
-	void resolveButton(int id);
+	void resolveButton(uint8_t id);
 
 	/**
 	 * Inform other players that a stabilizer malfunction has been created
 	 *
 	 * @param player The player whose screen this message will appear on
 	 */
-	void createAllTask(int player);
+	void createAllTask(uint8_t player);
 
 	/**
 	 * Inform the host that a task requiring all members of the ship has failed, and thus to deduct
@@ -386,7 +382,7 @@ class MagicInternetBox {
 	 *
 	 * @param player The player ID who is jumping
 	 */
-	void jump(int player);
+	void jump(uint8_t player);
 
 	/**
 	 * Disconnect this player from the server, by force.

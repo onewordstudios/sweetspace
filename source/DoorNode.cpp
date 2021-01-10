@@ -52,9 +52,9 @@ void DoorNode::postPosition() {
 		animationNode->setFrame((int)animationNode->getFrame() - 1);
 	}
 
-	int diff = height - doorModel->getHeight();
+	float diff = (float)height - (float)doorModel->getHeight();
 	height = doorModel->getHeight();
 	if (diff != 0) {
-		animationNode->shiftPolygon(0, (float)diff);
+		animationNode->shiftPolygon(0, diff);
 	}
 }

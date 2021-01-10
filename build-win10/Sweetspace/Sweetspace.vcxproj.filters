@@ -639,9 +639,6 @@
     <ClInclude Include="..\..\source\libraries\RakNet\XBox360Includes.h">
       <Filter>Header Files\Controllers\Networking\RakNet</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\source\libraries\easywsclient.hpp">
-      <Filter>Header Files\Controllers\Networking</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\source\MagicInternetBox.h">
       <Filter>Header Files\Controllers\Networking</Filter>
     </ClInclude>
@@ -1081,9 +1078,6 @@
     </ClCompile>
     <ClCompile Include="..\..\source\libraries\RakNet\SuperFastHash.cpp">
       <Filter>Source Files\Controllers\Networking\RakNet</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\libraries\easywsclient.cpp">
-      <Filter>Source Files\Controllers\Networking</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\MagicInternetBox.cpp">
       <Filter>Source Files\Controllers\Networking</Filter>

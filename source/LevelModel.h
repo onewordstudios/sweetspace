@@ -32,21 +32,21 @@ class LevelModel : public cugl::Asset {
    private:
 	/** The maximum number of breaches on ship at any one time. This will probably need to scale
 	 * with the number of players*/
-	unsigned int maxBreaches;
+	uint8_t maxBreaches;
 	/** The maximum number of doors on ship at any one time. This will probably need to scale with
 	 * the number of players*/
-	unsigned int maxDoors;
+	uint8_t maxDoors;
 	/** The maximum number of buttons on ship at any one time. This will probably need to scale with
 	 * the number of players*/
-	unsigned int maxButtons;
+	uint8_t maxButtons;
 	/** Base size of the ship in degrees*/
-	int baseShipSize;
+	float baseShipSize;
 	/** Incremental size of the ship in degrees*/
-	int perPlayer;
+	float perPlayer;
 	/** Starting time for the timer*/
 	float time;
 	/** Starting health for the ship*/
-	int initHealth;
+	float initHealth;
 	/** List of building blocks for this level*/
 	map<std::string, std::shared_ptr<BuildingBlockModel>> blocks;
 	/** List of events for this level*/
@@ -86,21 +86,21 @@ class LevelModel : public cugl::Asset {
 	 *
 	 * @return the max breaches
 	 */
-	const unsigned int getMaxBreaches() const { return maxBreaches; }
+	const uint8_t getMaxBreaches() const { return maxBreaches; }
 
 	/**
 	 * Returns the max doors
 	 *
 	 * @return the max doors
 	 */
-	const unsigned int getMaxDoors() const { return maxDoors; }
+	const uint8_t getMaxDoors() const { return maxDoors; }
 
 	/**
 	 * Returns the max buttons
 	 *
 	 * @return the max buttons
 	 */
-	const unsigned int getMaxButtons() const { return maxButtons; }
+	const uint8_t getMaxButtons() const { return maxButtons; }
 
 	/**
 	 * Returns the ship size given a number of players
@@ -108,7 +108,9 @@ class LevelModel : public cugl::Asset {
 	 * @param players the number of players
 	 * @return the ship size
 	 */
-	const int getShipSize(int players) const { return baseShipSize + players * perPlayer; }
+	const float getShipSize(uint8_t players) const {
+		return baseShipSize + (float)players * perPlayer;
+	}
 
 	/**
 	 * Returns the starting time
@@ -122,7 +124,7 @@ class LevelModel : public cugl::Asset {
 	 *
 	 * @return the init health
 	 */
-	const int getInitHealth() const { return initHealth; }
+	const float getInitHealth() const { return initHealth; }
 
 	/**
 	 * Returns the list of events in the level
@@ -168,13 +170,13 @@ class LevelModel : public cugl::Asset {
 			CUAssertLog(false, "Failed to load level file");
 			return false;
 		}
-		maxBreaches = json->get(MAX_BREACH_FIELD)->asInt();
-		maxDoors = json->get(MAX_DOOR_FIELD)->asInt();
-		maxButtons = json->get(MAX_BUTTON_FIELD)->asInt();
-		baseShipSize = json->get(BASE_SHIP_FIELD)->asInt();
-		perPlayer = json->get(PER_PLAYER_FIELD)->asInt();
+		maxBreaches = (uint8_t)json->get(MAX_BREACH_FIELD)->asInt();
+		maxDoors = (uint8_t)json->get(MAX_DOOR_FIELD)->asInt();
+		maxButtons = (uint8_t)json->get(MAX_BUTTON_FIELD)->asInt();
+		baseShipSize = json->get(BASE_SHIP_FIELD)->asFloat();
+		perPlayer = json->get(PER_PLAYER_FIELD)->asFloat();
 		time = json->get(TIME_FIELD)->asFloat();
-		initHealth = json->get(INIT_HEALTH_FIELD)->asInt();
+		initHealth = json->get(INIT_HEALTH_FIELD)->asFloat();
 		std::shared_ptr<cugl::JsonValue> blocksJson = json->get(BLOCKS_FIELD);
 		for (int i = 0; i < blocksJson->size(); i++) {
 			std::shared_ptr<cugl::JsonValue> block = blocksJson->get(i);
@@ -212,6 +214,8 @@ class LevelModel : public cugl::Asset {
 		time = DEFAULT_TIME;
 		initHealth = DEFAULT_INIT_HEALTH;
 	};
+
+	LevelModel(const LevelModel&) = delete;
 
 	/**
 	 * Destroys this level, releasing all resources.

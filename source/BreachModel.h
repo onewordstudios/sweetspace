@@ -7,11 +7,11 @@ class BreachModel {
 	/** The angle at which the breach exists */
 	float angle;
 	/** The state of the breach in health: 0 means its resolved */
-	int health;
+	uint8_t health;
 	/** Whether the player is currently on this breach */
 	bool playerOn;
 	/** Which player can clear this breach */
-	int player;
+	uint8_t player;
 	/** Set to true if sprite needs to be updated */
 	bool needSpriteUpdate;
 	/** Time at which breach was created */
@@ -21,7 +21,7 @@ class BreachModel {
 
    public:
 	/** Default Max Health of a Breach*/
-	static constexpr unsigned int HEALTH_DEFAULT = 3;
+	static constexpr uint8_t HEALTH_DEFAULT = 3;
 #pragma mark Constructors
 	/*
 	 * Creates a new breach at angle 0.
@@ -37,6 +37,8 @@ class BreachModel {
 		  needSpriteUpdate(false),
 		  timeCreated(0),
 		  isActive(false) {}
+
+	BreachModel(const BreachModel&) = delete;
 
 	/**
 	 * Destroys this breach, releasing all resources.
@@ -89,7 +91,7 @@ class BreachModel {
 	 *
 	 * @return true if the obstacle is initialized properly, false otherwise.
 	 */
-	virtual bool init(const float a, const int health, const int player, const float time);
+	virtual bool init(const float a, const uint8_t health, const uint8_t player, const float time);
 
 	/**
 	 * Inits the breach upon recycling.
@@ -97,17 +99,16 @@ class BreachModel {
 	 * @param he
 	 * @param pl
 	 */
-	void init(float an, int pl, float time) { init(an, HEALTH_DEFAULT, pl, time); }
+	void init(float an, uint8_t pl, float time) { init(an, HEALTH_DEFAULT, pl, time); }
 
 	/**
 	 * Resets this breach
-	 *
 	 */
 	void reset() {
 		angle = 0;
 		health = 0;
 		playerOn = false;
-		player = -1;
+		player = 0;
 		needSpriteUpdate = false;
 		timeCreated = 0;
 		isActive = false;
@@ -127,14 +128,14 @@ class BreachModel {
 	 *
 	 * @return the current health of the breach.
 	 */
-	int getHealth() { return health; }
+	uint8_t getHealth() { return health; }
 
 	/**
 	 * Returns whether the player is currently on the breach.
 	 *
 	 * @return whether the player is currently on the breach.
 	 */
-	int isPlayerOn() { return playerOn; }
+	bool isPlayerOn() { return playerOn; }
 
 	/**
 	 * Returns whether the breach is currently active.
@@ -155,17 +156,18 @@ class BreachModel {
 	 *
 	 * @param health New breach health.
 	 */
-	void setHealth(int value) { health = value; }
+	void setHealth(unsigned int value) { health = value; }
 
 	/**
 	 * Decrements the current health of the breach by value.
 	 *
 	 * @param value Amount to decrement health by.
 	 */
-	void decHealth(int value) {
-		health = health - value;
-		if (health < 0) {
+	void decHealth(unsigned int value) {
+		if (value >= health) {
 			health = 0;
+		} else {
+			health -= value;
 		}
 	}
 
@@ -181,23 +183,23 @@ class BreachModel {
 	 *
 	 * @return Which player is assigned to this breach.
 	 */
-	int getPlayer() { return player; }
+	uint8_t getPlayer() { return player; }
 
 	/**
 	 * Sets which player is assigned to this breach.
 	 *
 	 * @param p The player to assign to the breach.
 	 */
-	void setPlayer(int p) { player = p; }
+	void setPlayer(uint8_t p) { player = p; }
 
 	/**
-	 * Sets the needSpriteUpdate field.
+	 * Gets the needSpriteUpdate field.
 	 * @return
 	 */
 	bool getNeedSpriteUpdate() { return needSpriteUpdate; }
 
 	/**
-	 * Gets the needSpriteUpdate field.
+	 * Sets the needSpriteUpdate field.
 	 * @param b
 	 */
 	void setNeedSpriteUpdate(bool b) { needSpriteUpdate = b; }

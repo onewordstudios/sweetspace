@@ -27,30 +27,31 @@ constexpr auto TIME_STOP_FIELD = "timeStop";	   // NOLINT
 constexpr auto PROBABILITY_FIELD = "probability";  // NOLINT
 
 /** Total number of levels in the game */
-constexpr unsigned int MAX_NUM_LEVELS = 16;
+constexpr uint8_t MAX_NUM_LEVELS = 16;
 
 /** Number of buttons in the level select */
 static constexpr unsigned int NUM_LEVEL_BTNS = 5;
 
 /** List of all level names, used as both keys and values NOLINTNEXTLINE */
-constexpr std::array<const char*, MAX_NUM_LEVELS> LEVEL_NAMES = {"",
-																 "json/tutorial2.owslevel",
-																 "",
-																 "json/tutorial4.owslevel",
-																 "json/level1.owslevel",
-																 "json/level2.owslevel",
-																 "",
-																 "json/tutorial6.owslevel",
-																 "json/tutorial7.owslevel",
-																 "json/level3.owslevel",
-																 "",
-																 "json/level4.owslevel",
-																 "json/level5.owslevel",
-																 "json/level6.owslevel",
-																 "json/level7.owslevel",
-																 "json/level8.owslevel"};
+constexpr std::array<const char*, MAX_NUM_LEVELS> LEVEL_NAMES = // Forcing a line break
+	{"",
+	 "json/tutorial2.owslevel",
+	 "",
+	 "json/tutorial4.owslevel",
+	 "json/level1.owslevel",
+	 "json/level2.owslevel",
+	 "",
+	 "json/tutorial6.owslevel",
+	 "json/tutorial7.owslevel",
+	 "json/level3.owslevel",
+	 "",
+	 "json/level4.owslevel",
+	 "json/level5.owslevel",
+	 "json/level6.owslevel",
+	 "json/level7.owslevel",
+	 "json/level8.owslevel"};
 
 /** List of where the buttons on the level select map */
-constexpr std::array<unsigned int, NUM_LEVEL_BTNS> LEVEL_ENTRY_POINTS = {0, 6, 9, 10, 13}; // NOLINT
+constexpr std::array<uint8_t, NUM_LEVEL_BTNS> LEVEL_ENTRY_POINTS = {0, 6, 9, 10, 13}; // NOLINT
 
 #endif /* defined(__JS_LEVEL_CONSTANTS_H__) */

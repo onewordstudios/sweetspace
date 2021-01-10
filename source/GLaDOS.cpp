@@ -57,7 +57,7 @@ bool GLaDOS::init(std::shared_ptr<ShipModel> ship, std::shared_ptr<LevelModel> l
 	bool success = true;
 	this->ship = ship;
 	this->mib = MagicInternetBox::getInstance();
-	levelNum = mib->getLevelNum();
+	levelNum = mib->getLevelNum().value();
 	maxEvents = (int)ship->getBreaches().size();
 	maxDoors = (int)ship->getDoors().size();
 	maxButtons = (int)ship->getButtons().size();
@@ -109,7 +109,7 @@ bool GLaDOS::init(std::shared_ptr<ShipModel> ship, const int levelNum) {
 	sections = unop;
 	customEventCtr = tutorial::CUSTOM_EVENTS.at(levelNum);
 	float size = (float)tutorial::SIZE_PER.at(levelNum) * (float)mib->getNumPlayers();
-	ship->init(mib->getMaxNumPlayers(), maxEvents, maxDoors, mib->getPlayerID(), size,
+	ship->init(mib->getMaxNumPlayers(), maxEvents, maxDoors, mib->getPlayerID().value(), size,
 			   tutorial::HEALTH.at(levelNum), maxButtons, unop);
 	ship->setTimeless(true);
 	ship->initTimer(1);
@@ -308,7 +308,7 @@ void GLaDOS::update(float dt) {
 	}
 
 	for (int i = 0; i < maxButtons; i++) {
-		auto btn = ship->getButtons().at(i);
+		auto& btn = ship->getButtons().at(i);
 		if (btn == nullptr) {
 			continue;
 		}

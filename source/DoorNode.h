@@ -17,9 +17,9 @@ class DoorNode : public CustomNode {
 	std::shared_ptr<cugl::AnimationNode> animationNode;
 
 	/** The height of the door. */
-	int height;
+	unsigned int height;
 	/** The max frame this door can have. */
-	int frameCap;
+	unsigned int frameCap;
 
 #pragma region State Methods
 	bool isActive() override { return doorModel->getIsActive(); }

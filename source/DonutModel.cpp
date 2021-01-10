@@ -3,7 +3,7 @@
 using namespace cugl;
 
 /** Cutoff value below default friction at which donut is no longer dizzy */
-constexpr float DIZZY_STATE_FRICTION_CUTOFF = 0.1;
+constexpr float DIZZY_STATE_FRICTION_CUTOFF = 0.1f;
 
 #pragma mark -
 #pragma mark Constructors

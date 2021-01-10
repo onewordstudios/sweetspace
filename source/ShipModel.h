@@ -35,7 +35,7 @@ class ShipModel {
 	/** Total level time*/
 	float totalTime;
 	/** If is in tutorial level*/
-	int levelNum;
+	uint8_t levelNum;
 	/** Minimum distance from obstacles for stabilizer malfunction randomization */
 	static constexpr int MIN_DISTANCE = 15;
 
@@ -69,16 +69,18 @@ class ShipModel {
 		  timeLeftInTimer(0),
 		  canonicalTimeElapsed(0) {}
 
+	ShipModel(const ShipModel&) = delete;
+
 	/**
 	 * Destroys this breach, releasing all resources.
 	 */
 	~ShipModel(void) { dispose(); }
 
 	/**
-	 * Disposes all resources and assets of this breach
+	 * Disposes all resources and assets
 	 *
 	 * Any assets owned by this object will be immediately released.  Once
-	 * disposed, a breach may not be used until it is initialized again.
+	 * disposed, a ship may not be used until it is initialized again.
 	 */
 	void dispose();
 
@@ -94,8 +96,8 @@ class ShipModel {
 	 *
 	 * @return true if the model is initialized properly, false otherwise.
 	 */
-	bool init(unsigned int numPlayers, unsigned int numBreaches, unsigned int numDoors,
-			  unsigned int playerID, int initHealth, unsigned int numButtons) {
+	bool init(uint8_t numPlayers, uint8_t numBreaches, uint8_t numDoors, uint8_t playerID,
+			  float initHealth, uint8_t numButtons) {
 		return init(numPlayers, numBreaches, numDoors, playerID, globals::DEG_ORIG_CIRCLE,
 					initHealth, numButtons);
 	}
@@ -113,14 +115,13 @@ class ShipModel {
 	 *
 	 * @return true if the model is initialized properly, false otherwise.
 	 */
-	bool init(unsigned int numPlayers, unsigned int numBreaches, unsigned int numDoors,
-			  unsigned int playerID, float shipSize, int initHealth, unsigned int numButtons);
+	bool init(uint8_t numPlayers, uint8_t numBreaches, uint8_t numDoors, uint8_t playerID,
+			  float shipSize, float initHealth, uint8_t numButtons);
 
-	bool init(unsigned int numPlayers, unsigned int numBreaches, unsigned int numDoors,
-			  unsigned int playerID, float shipSize, int initHealth, unsigned int numButtons,
-			  int numUnop) {
+	bool init(uint8_t numPlayers, uint8_t numBreaches, uint8_t numDoors, uint8_t playerID,
+			  float shipSize, float initHealth, uint8_t numButtons, uint8_t numUnop) {
 		// Instantiate door models
-		for (unsigned int i = 0; i < numUnop; i++) {
+		for (uint8_t i = 0; i < numUnop; i++) {
 			unopenable.push_back(std::make_shared<Unopenable>());
 		}
 		return init(numPlayers, numBreaches, numDoors, playerID, shipSize, initHealth, numButtons);
@@ -138,9 +139,9 @@ class ShipModel {
 	 *
 	 * @return A smart pointer to a newly initialized ship model
 	 */
-	static std::shared_ptr<ShipModel> alloc(unsigned int numPlayers, unsigned int numBreaches,
-											unsigned int numDoors, unsigned int playerID,
-											int initHealth, unsigned int numButtons) {
+	static std::shared_ptr<ShipModel> alloc(uint8_t numPlayers, uint8_t numBreaches,
+											uint8_t numDoors, uint8_t playerID, float initHealth,
+											uint8_t numButtons) {
 		std::shared_ptr<ShipModel> result = std::make_shared<ShipModel>();
 		return (result->init(numPlayers, numBreaches, numDoors, playerID, initHealth, numButtons)
 					? result
@@ -160,10 +161,9 @@ class ShipModel {
 	 *
 	 * @return A smart pointer to a newly initialized ship model
 	 */
-	static std::shared_ptr<ShipModel> alloc(unsigned int numPlayers, unsigned int numBreaches,
-											unsigned int numDoors, unsigned int playerID,
-											float shipSize, int initHealth,
-											unsigned int numButtons) {
+	static std::shared_ptr<ShipModel> alloc(uint8_t numPlayers, uint8_t numBreaches,
+											uint8_t numDoors, uint8_t playerID, float shipSize,
+											float initHealth, uint8_t numButtons) {
 		std::shared_ptr<ShipModel> result = std::make_shared<ShipModel>();
 		return (result->init(numPlayers, numBreaches, numDoors, playerID, shipSize, initHealth,
 							 numButtons)
@@ -212,10 +212,10 @@ class ShipModel {
 	 * Create breach.
 	 *
 	 * @param angle	   the location to create the breach.
-	 * @param health   the health of the breach.
 	 * @param player   the player assigned to the breach.
+	 * @param id   	   the id of breach to be created.
 	 */
-	bool createBreach(float angle, int health, int player);
+	bool createBreach(float angle, uint8_t player, uint8_t id);
 
 	/**
 	 * Create breach with given id.
@@ -225,14 +225,14 @@ class ShipModel {
 	 * @param player   the player assigned to the breach.
 	 * @param id   	   the id of breach to be created.
 	 */
-	bool createBreach(float angle, int health, int player, int id);
+	bool createBreach(float angle, uint8_t health, uint8_t player, uint8_t id);
 
 	/**
 	 * Decrement the health of a breach with given id.
 	 *
 	 * @param id   the id of breach to be resolved.
 	 */
-	bool resolveBreach(int id);
+	bool resolveBreach(uint8_t id);
 
 	/**
 	 * Create door with given id.
@@ -240,7 +240,7 @@ class ShipModel {
 	 * @param angle	   the location to create the door.
 	 * @param id   	   the id of door to be created.
 	 */
-	bool createDoor(float angle, int id);
+	bool createDoor(float angle, uint8_t id);
 
 	/**
 	 * Create door with given id.
@@ -248,7 +248,7 @@ class ShipModel {
 	 * @param angle	   the location to create the door.
 	 * @param id   	   the id of door to be created.
 	 */
-	bool createUnopenable(float angle, int id);
+	bool createUnopenable(float angle, uint8_t id);
 
 	/**
 	 * Flag door with given id.
@@ -257,7 +257,7 @@ class ShipModel {
 	 * @param player   the player id flagging the door.
 	 * @param flag   the flag to set (on or off, 1 or 0)
 	 */
-	bool flagDoor(int id, int player, int flag);
+	bool flagDoor(uint8_t id, uint8_t player, uint8_t flag);
 
 	/**
 	 * Set health of the ship
@@ -291,7 +291,6 @@ class ShipModel {
 	void decHealth(float h) { setHealth(health - h); }
 
 	/**
-
 	 * Initialize the timer for the ship
 	 *
 	 * @param startTime the initial time on the timer
@@ -348,7 +347,8 @@ class ShipModel {
 	float getSize() { return shipSize; }
 
 	/**
-	 * Returns the amount of time since the level has begun, ignoring any pauses due to buttons
+	 * Returns the amount of time since the level has begun according to the timer, which does not
+	 * count time while buttons are active.
 	 *
 	 * @return time passed according to timer
 	 */
@@ -380,7 +380,7 @@ class ShipModel {
 	 * @param angle2       the location to create the button's pair.
 	 * @param id2  	       the id of button's pair to be created.
 	 */
-	bool createButton(float angle1, int id1, float angle2, int id2);
+	bool createButton(float angle1, uint8_t id1, float angle2, uint8_t id2);
 
 	/**
 	 * Flag button with given id.
@@ -391,19 +391,19 @@ class ShipModel {
 	 * triggered (ie was not called during the
 	 * i-frames after the last call to trigger)
 	 */
-	bool flagButton(int id);
+	bool flagButton(uint8_t id);
 
 	/**
 	 * Resolve a button pair
 	 *
 	 * @param id The ID of one of the two buttons
 	 */
-	void resolveButton(int id);
+	void resolveButton(uint8_t id);
 
 	/**
-	 * Gets if level is tutorial
+	 * Get current level number
 	 */
-	int getLevelNum() { return levelNum; }
+	uint8_t getLevelNum() { return levelNum; }
 
 	/**
 	 * Gets status of challenge
@@ -413,15 +413,15 @@ class ShipModel {
 	/**
 	 * Sets if level is tutorial
 	 */
-	void setLevelNum(int l) { levelNum = l; }
+	void setLevelNum(uint8_t l) { levelNum = l; }
 
 	/**
 	 * Separates each donut into their own section
 	 */
 	void separateDonuts() {
-		for (int i = 0; i < getDonuts().size(); i++) {
-			float angle = getSize() * (float)i / getDonuts().size();
-			getDonuts().at(i)->setAngle(angle);
+		for (uint8_t i = 0; i < donuts.size(); i++) {
+			float angle = getSize() * (float)i / donuts.size();
+			donuts.at(i)->setAngle(angle);
 		}
 	}
 

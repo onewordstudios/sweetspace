@@ -1,8 +1,58 @@
 #include "MagicInternetBox.h"
 
 #include <sstream>
+
 #ifdef _WIN32
+#ifndef WIN32_LEAN_AND_MEAN
+#define WIN32_LEAN_AND_MEAN
+#endif
+#include <WS2tcpip.h>
 #include <WinSock2.h>
+#include <fcntl.h>
+#pragma comment(lib, "ws2_32")
+#include <io.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sys/types.h>
+#ifndef _SSIZE_T_DEFINED
+typedef int ssize_t;
+#define _SSIZE_T_DEFINED
+#endif
+#ifndef _SOCKET_T_DEFINED
+typedef SOCKET socket_t;
+#define _SOCKET_T_DEFINED
+#endif
+#else
+#include <fcntl.h>
+#include <netdb.h>
+#if defined(__ANDROID__)
+#include <netinet/in.h>
+#endif
+#include <netinet/tcp.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sys/socket.h>
+#include <sys/time.h>
+#include <sys/types.h>
+#include <unistd.h>
+#ifndef _SOCKET_T_DEFINED
+typedef int socket_t;
+#define _SOCKET_T_DEFINED
+#endif
+#ifndef INVALID_SOCKET
+// NOLINTNEXTLINE
+#define INVALID_SOCKET (-1)
+#endif
+#ifndef SOCKET_ERROR
+// NOLINTNEXTLINE
+#define SOCKET_ERROR (-1)
+#endif
+// NOLINTNEXTLINE
+#define closesocket(s) ::close(s)
+#include <errno.h>
 #endif
 
 #include "Globals.h"
@@ -37,7 +87,9 @@ std::shared_ptr<MagicInternetBox> MagicInternetBox::instance; // NOLINT (clang-t
 #pragma region Initialization
 
 MagicInternetBox::MagicInternetBox()
-	: activePlayers(),
+	: playerID(),
+	  levelNum(),
+	  activePlayers(),
 	  stateReconciler(ONE_BYTE, FLOAT_PRECISION, FLOAT_EPSILON),
 	  lastAttemptConnectionTime() {
 #ifdef _WIN32
@@ -54,10 +106,8 @@ MagicInternetBox::MagicInternetBox()
 	conn = nullptr;
 	status = Uninitialized;
 	events = None;
-	levelNum = -1;
 	levelParity = true;
 	currFrame = 0;
-	playerID = -1;
 	skipTutorial = false;
 	numPlayers = 0;
 	maxPlayers = 0;
@@ -65,7 +115,7 @@ MagicInternetBox::MagicInternetBox()
 	activePlayers.fill(false);
 }
 
-void MagicInternetBox::startLevelInternal(int num, bool parity) {
+void MagicInternetBox::startLevelInternal(uint8_t num, bool parity) {
 	levelNum = num;
 	levelParity = parity;
 	stateReconciler.reset();
@@ -134,7 +184,7 @@ bool MagicInternetBox::initClient(std::string id) {
 }
 
 bool MagicInternetBox::reconnect() {
-	if (!initConnection() || playerID < 0 || roomID == "") {
+	if (!initConnection() || !playerID.has_value() || roomID == "") {
 		status = ReconnectError;
 		return false;
 	}
@@ -144,7 +194,7 @@ bool MagicInternetBox::reconnect() {
 	for (unsigned int i = 0; i < globals::ROOM_LENGTH; i++) {
 		data.push_back((uint8_t)roomID.at(i));
 	}
-	data.push_back(playerID);
+	data.push_back(playerID.value());
 	conn->send(data);
 	status = Reconnecting;
 
@@ -198,21 +248,19 @@ void MagicInternetBox::sendData(NetworkDataType type, float angle, int id, int d
 
 MagicInternetBox::MatchmakingStatus MagicInternetBox::matchStatus() { return status; }
 
-void MagicInternetBox::leaveRoom() {}
-
 #pragma region Getters
 
 std::string MagicInternetBox::getRoomID() { return roomID; }
 
-int MagicInternetBox::getPlayerID() { return playerID; }
+tl::optional<uint8_t> MagicInternetBox::getPlayerID() { return playerID; }
 
-unsigned int MagicInternetBox::getNumPlayers() { return numPlayers; }
+uint8_t MagicInternetBox::getNumPlayers() { return numPlayers; }
 
-bool MagicInternetBox::isPlayerActive(unsigned int playerID) { return activePlayers.at(playerID); }
+bool MagicInternetBox::isPlayerActive(uint8_t playerID) { return activePlayers.at(playerID); }
 
 #pragma endregion
 
-void MagicInternetBox::startGame(int levelNum) {
+void MagicInternetBox::startGame(uint8_t levelNum) {
 	switch (status) {
 		case HostWaitingOnOthers:
 		case ClientWaitingOnOthers:
@@ -230,7 +278,7 @@ void MagicInternetBox::startGame(int levelNum) {
 	}
 	std::vector<uint8_t> data;
 	data.push_back((uint8_t)StartGame);
-	data.push_back((uint8_t)levelNum);
+	data.push_back(levelNum);
 	this->levelNum = levelNum;
 	conn->send(data);
 
@@ -253,7 +301,7 @@ void MagicInternetBox::restartGame() {
 	data.push_back((uint8_t)levelParity);
 	conn->send(data);
 
-	startLevelInternal(levelNum, levelParity);
+	startLevelInternal(levelNum.value(), levelParity);
 }
 
 void MagicInternetBox::nextLevel() {
@@ -262,7 +310,7 @@ void MagicInternetBox::nextLevel() {
 		return;
 	}
 
-	int level = levelNum + 1;
+	uint8_t level = levelNum.value() + 1;
 	if (skipTutorial) {
 		while (strcmp(LEVEL_NAMES.at(level), "") == 0) {
 			CULog("Level Num %d is a tutorial; skipping", level);
@@ -274,9 +322,9 @@ void MagicInternetBox::nextLevel() {
 
 	std::vector<uint8_t> data;
 	data.push_back((uint8_t)ChangeGame);
-	data.push_back((uint8_t)1);
-	data.push_back((uint8_t)level);
-	data.push_back((uint8_t)levelParity);
+	data.push_back(1);
+	data.push_back(level);
+	data.push_back(levelParity ? 1 : 0);
 	conn->send(data);
 }
 
@@ -322,7 +370,7 @@ void MagicInternetBox::update() {
 					break;
 				}
 				std::stringstream newRoomId;
-				for (unsigned int i = 0; i < globals::ROOM_LENGTH; i++) {
+				for (size_t i = 0; i < globals::ROOM_LENGTH; i++) {
 					newRoomId << (char)message[i + 1];
 				}
 				activePlayers[0] = true;
@@ -342,7 +390,7 @@ void MagicInternetBox::update() {
 							status = ClientError;
 							return;
 						}
-						CULog("Join Room Success; player id %d out of %d players", playerID,
+						CULog("Join Room Success; player id %d out of %d players", *playerID,
 							  numPlayers);
 						for (unsigned int i = 0; i < numPlayers; i++) {
 							activePlayers.at(i) = true;
@@ -404,6 +452,8 @@ void MagicInternetBox::update() {
 		case ClientRoomFull:
 			conn = nullptr;
 			break;
+		default:
+			break;
 	}
 }
 
@@ -414,22 +464,23 @@ void MagicInternetBox::update(std::shared_ptr<ShipModel> state) {
 	}
 
 	lastConnection++;
+	uint8_t pID = playerID.value();
 
 	// NETWORK TICK
 	currFrame = (currFrame + 1) % STATE_SYNC_FREQ;
 	if (currFrame % globals::NETWORK_TICK == 0) {
-		std::shared_ptr<DonutModel> player = state->getDonuts()[playerID];
+		std::shared_ptr<DonutModel> player = state->getDonuts()[pID];
 		float angle = player->getAngle();
 		float velocity = player->getVelocity();
-		sendData(PositionUpdate, angle, playerID, -1, -1, velocity);
+		sendData(PositionUpdate, angle, pID, -1, -1, velocity);
 
 		// STATE SYNC (and check for server connection)
 		if (currFrame == 0) {
-			if (playerID == 0) {
+			if (pID == 0) {
 				if (!state->isLevelOver()) {
 					std::vector<uint8_t> data;
 					data.push_back(StateSync);
-					stateReconciler.encode(state, data, (uint8_t)levelNum, levelParity);
+					stateReconciler.encode(state, data, levelNum.value(), levelParity);
 					conn->send(data);
 				}
 			}
@@ -474,8 +525,7 @@ void MagicInternetBox::update(std::shared_ptr<ShipModel> state) {
 			}
 			case StateSync: {
 				if (!state->isLevelOver()) {
-					if (!stateReconciler.reconcile(state, message, (uint8_t)levelNum,
-												   levelParity)) {
+					if (!stateReconciler.reconcile(state, message, levelNum.value(), levelParity)) {
 						CULog("Wrong level state sync; ignoring");
 					}
 				}
@@ -483,7 +533,7 @@ void MagicInternetBox::update(std::shared_ptr<ShipModel> state) {
 			}
 			case ChangeGame: {
 				if (message[1] == 0) {
-					startLevelInternal(levelNum, message[2]);
+					startLevelInternal(levelNum.value(), message[2]);
 				} else {
 					startLevelInternal(message[2], message[3]);
 				}
@@ -585,35 +635,35 @@ void MagicInternetBox::update(std::shared_ptr<ShipModel> state) {
 	});
 }
 
-void MagicInternetBox::createBreach(float angle, int player, int id) {
+void MagicInternetBox::createBreach(float angle, uint8_t player, uint8_t id) {
 	sendData(BreachCreate, angle, id, player, -1, -1.0f);
 	CULog("Creating breach id %d player %d angle %f", id, player, angle);
 }
 
-void MagicInternetBox::resolveBreach(int id) {
+void MagicInternetBox::resolveBreach(uint8_t id) {
 	sendData(BreachShrink, -1.0f, id, -1, -1, -1.0f);
 	CULog("Sending resolve id %d", id);
 }
 
-void MagicInternetBox::createDualTask(float angle, int id) {
+void MagicInternetBox::createDualTask(float angle, uint8_t id) {
 	sendData(DualCreate, angle, id, -1, -1, -1.0f);
 }
 
-void MagicInternetBox::flagDualTask(int id, int player, int flag) {
+void MagicInternetBox::flagDualTask(uint8_t id, uint8_t player, uint8_t flag) {
 	sendData(DualResolve, -1.0f, id, player, flag, -1.0f);
 }
 
-void MagicInternetBox::createAllTask(int player) {
+void MagicInternetBox::createAllTask(uint8_t player) {
 	sendData(AllCreate, -1.0f, player, -1, -1, -1.0f);
 }
 
-void MagicInternetBox::createButtonTask(float angle1, int id1, float angle2, int id2) {
+void MagicInternetBox::createButtonTask(float angle1, uint8_t id1, float angle2, uint8_t id2) {
 	sendData(ButtonCreate, angle1, id1, id2, -1, angle2);
 }
 
-void MagicInternetBox::flagButton(int id) { sendData(ButtonFlag, -1, id, -1, -1, -1.0f); }
+void MagicInternetBox::flagButton(uint8_t id) { sendData(ButtonFlag, -1, id, -1, -1, -1.0f); }
 
-void MagicInternetBox::resolveButton(int id) { sendData(ButtonResolve, -1, id, -1, -1, -1.0f); }
+void MagicInternetBox::resolveButton(uint8_t id) { sendData(ButtonResolve, -1, id, -1, -1, -1.0f); }
 
 void MagicInternetBox::failAllTask() { sendData(AllFail, -1.0f, -1, -1, -1, -1.0f); }
 
@@ -621,7 +671,7 @@ void MagicInternetBox::succeedAllTask() { sendData(AllSucceed, -1.0f, -1, -1, -1
 
 void MagicInternetBox::forceWinLevel() { sendData(ForceWin, -1.0f, -1, -1, -1, -1.0f); }
 
-void MagicInternetBox::jump(int player) { sendData(Jump, -1.0f, player, -1, -1, -1.0f); }
+void MagicInternetBox::jump(uint8_t player) { sendData(Jump, -1.0f, player, -1, -1, -1.0f); }
 
 void MagicInternetBox::forceDisconnect() {
 	CULog("Force disconnecting");
@@ -640,5 +690,6 @@ void MagicInternetBox::reset() {
 	activePlayers.fill(false);
 	stateReconciler.reset();
 	roomID = "";
-	playerID = -1;
+	playerID = tl::nullopt;
+	levelNum = tl::nullopt;
 }

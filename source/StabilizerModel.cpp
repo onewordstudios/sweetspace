@@ -7,7 +7,7 @@ constexpr unsigned int SUCCESS_CUTOFF = 60;
 
 StabilizerModel::StabilizerModel()
 	: currState(StabilizerModel::StabilizerState::Inactive), progress(0), endTime(0) {
-	srand(time(nullptr));
+	srand((unsigned int)time(nullptr));
 }
 
 float StabilizerModel::getProgress() {
