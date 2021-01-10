@@ -16,7 +16,7 @@ elif [ $1 == '-fast' ]
 then
     cd ..
     tooling/run-clang-tidy.py -header-filter=".*source\/[^\/]*\.h" -cpp source/*.cpp 1>&2 2>/dev/null
-	exit 0
+    exit 0
 elif [ $1 == '-ci' ]
 then
     clang-tidy ../source/*.cpp --header-filter=.*source\/[^\/]*\.h -- -I../cugl/include 1>&2 2>/dev/null
