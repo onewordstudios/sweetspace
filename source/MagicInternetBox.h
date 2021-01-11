@@ -22,7 +22,23 @@
  * Ship Model during the call to update.
  */
 class MagicInternetBox {
+   private:
+	class Mimpl;
+	std::unique_ptr<Mimpl> impl;
+
+	/**
+	 * Create an empty Network Controller instance. Does no initialization.
+	 * Call one of the init methods to connect and stuff.
+	 * This constructor is private, as this class is a singleton.
+	 */
+	MagicInternetBox();
+
+	~MagicInternetBox();
+
    public:
+	MagicInternetBox(MagicInternetBox const&) = delete;
+	void operator=(MagicInternetBox const&) = delete;
+
 	/**
 	 * Status of whether the game is ready to start
 	 */
@@ -63,102 +79,6 @@ class MagicInternetBox {
 	 * Important events from the network that the root controller needs to know about
 	 */
 	enum NetworkEvents { None, LoadLevel, EndGame };
-
-   private:
-	/** The network connection */
-	std::unique_ptr<NetworkConnection> conn;
-
-	/**
-	 * The current status
-	 */
-	MatchmakingStatus status;
-
-	/**
-	 * The last major unacknowledged network event
-	 */
-	NetworkEvents events;
-
-	/**
-	 * The current frame, modulo the network tick rate.
-	 */
-	unsigned int currFrame;
-
-	/**
-	 * ID of the current player, or empty if unassigned
-	 */
-	tl::optional<uint8_t> playerID;
-
-	/**
-	 * The ID of the current room, or "" if unassigned
-	 */
-	std::string roomID;
-
-	/** Current level number, or empty if unassigned */
-	tl::optional<uint8_t> levelNum;
-	/** Parity of current level (to sync state syncs) */
-	bool levelParity;
-
-	/** Whether to skip tutorial levels */
-	bool skipTutorial;
-
-	/** Start the given level */
-	void startLevelInternal(uint8_t num, bool parity);
-
-	/** Number of connected players */
-	uint8_t numPlayers;
-
-	/** Maximum number of players for this ship */
-	uint8_t maxPlayers;
-
-	/** Array representing active and inactive players */
-	std::array<bool, globals::MAX_PLAYERS> activePlayers;
-
-	/** Helper controller to reconcile states during state sync */
-	StateReconciler stateReconciler;
-
-	/**
-	 * Number of frames since the last inbound server message
-	 */
-	unsigned int lastConnection;
-
-	/** Time at which the last connection was attempted */
-	std::chrono::time_point<std::chrono::system_clock> lastAttemptConnectionTime;
-
-	/**
-	 * Initialize the network connection.
-	 * Will establish a connection to the server.
-	 *
-	 * @returns Whether the connection was successfully established
-	 */
-	bool initConnection();
-
-	/**
-	 * Send data over the network as described in the architecture specification.
-	 *
-	 * Angle field is for the angle, if applicable.
-	 * ID field is for the ID of the object being acted on, if applicable.
-	 * Remaining data fields should be filled from first applicable data type back in the same order
-	 * that arguments are passed to the calling method in this class.
-	 *
-	 * Any unused fields should be set to -1.
-	 *
-	 * For example, create dual task passes angle to angle, task id to id, the two players to data1
-	 * and data2 respectively, and sets data3 to -1.
-	 */
-	void sendData(NetworkDataType type, float angle, uint8_t id, uint8_t data1, uint8_t data2,
-				  float data3);
-
-	/**
-	 * Create an empty Network Controller instance. Does no initialization.
-	 * Call one of the init methods to connect and stuff.
-	 * This constructor is private, as this class is a singleton.
-	 */
-	MagicInternetBox();
-	~MagicInternetBox() = default;
-
-   public:
-	MagicInternetBox(MagicInternetBox const&) = delete;
-	void operator=(MagicInternetBox const&) = delete;
 
 	/**
 	 * Grab a pointer to the singleton instance of this class
@@ -206,13 +126,13 @@ class MagicInternetBox {
 	/**
 	 * Get the last major unacknowledged network event; does NOT acknowledge the event.
 	 */
-	NetworkEvents lastNetworkEvent() { return events; }
+	NetworkEvents lastNetworkEvent();
 
 	/**
 	 * Acknowledge the last network event, causing {@link lastNetworkEvent()} to return None until
 	 * the next event.
 	 */
-	void acknowledgeNetworkEvent() { events = None; }
+	void acknowledgeNetworkEvent();
 
 	/**
 	 * Returns the room ID this controller is connected to.
@@ -223,7 +143,7 @@ class MagicInternetBox {
 	/**
 	 * Returns the current level number, or -1 if uninitialized.
 	 */
-	tl::optional<uint8_t> getLevelNum() { return levelNum; }
+	tl::optional<uint8_t> getLevelNum();
 
 	/**
 	 * Returns the current player ID, or -1 if uninitialized.
@@ -238,7 +158,7 @@ class MagicInternetBox {
 
 	/** Returns the total number of players in this ship (including disconnected players), or 0 if
 	 * uninitialized. */
-	uint8_t getMaxNumPlayers() const { return maxPlayers; }
+	uint8_t getMaxNumPlayers() const;
 
 	/**
 	 * Returns whether the specified player ID is active.
@@ -250,7 +170,7 @@ class MagicInternetBox {
 	/**
 	 * Set whether or not the tutorial should be skipped.
 	 */
-	void setSkipTutorial(bool skip) { skipTutorial = skip; }
+	void setSkipTutorial(bool skip);
 
 	/**
 	 * Start the game with the current number of players.
