@@ -374,6 +374,7 @@ class MagicInternetBox::Mimpl {
 	}
 #pragma endregion
 
+#pragma region Inbound Networking
 	void update() {
 		switch (status) {
 			case GameStart:
@@ -681,6 +682,7 @@ class MagicInternetBox::Mimpl {
 			}
 		});
 	}
+#pragma endregion
 
 #pragma region Outbound Networking
 	void createBreach(float angle, uint8_t player, uint8_t id) {
