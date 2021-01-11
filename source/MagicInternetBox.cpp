@@ -58,12 +58,6 @@ typedef int socket_t; // NOLINT
 #include "Globals.h"
 #include "LevelConstants.h"
 
-using namespace cugl;
-
-#pragma region API CONSTANTS
-
-#pragma endregion
-
 /** The state synchronization frequency */
 constexpr unsigned int STATE_SYNC_FREQ = globals::NETWORK_TICK * 5;
 
