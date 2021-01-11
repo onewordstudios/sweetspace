@@ -37,7 +37,7 @@ void Sweetspace::onStartup() {
 	// Queue up the other assets NOLINTNEXTLINE
 	AudioChannels::start(24);
 	assets->loadDirectoryAsync("json/assets.json", nullptr);
-	for (const auto *level : LEVEL_NAMES) {
+	for (const auto* level : LEVEL_NAMES) {
 		if (strcmp(level, "") == 0) {
 			continue;
 		}
@@ -112,21 +112,21 @@ void Sweetspace::update(float timestep) {
 		}
 		case Game: {
 			gameplay.update(timestep);
-			auto mib = MagicInternetBox::getInstance();
+			auto& mib = MagicInternetBox::getInstance();
 			if (gameplay.getIsBackToMainMenu()) {
 				gameplay.dispose();
 				mainmenu.init(assets);
-				mib->reset();
+				mib.reset();
 				CULog("Ending");
 				status = MainMenu;
-			} else if (mib->lastNetworkEvent() != MagicInternetBox::NetworkEvents::None) {
-				auto lastEvent = mib->lastNetworkEvent();
-				mib->acknowledgeNetworkEvent();
+			} else if (mib.lastNetworkEvent() != MagicInternetBox::NetworkEvents::None) {
+				auto lastEvent = mib.lastNetworkEvent();
+				mib.acknowledgeNetworkEvent();
 				gameplay.dispose();
 				if (lastEvent == MagicInternetBox::NetworkEvents::EndGame) {
 					CULog("Winner");
 					mainmenu.init(assets, true);
-					mib->reset();
+					mib.reset();
 					status = MainMenu;
 				} else {
 					CULog("Restarting Level");

@@ -27,7 +27,7 @@ class GameMode {
 	/** Controller for GM */
 	GLaDOS gm;
 	/** Networking controller*/
-	std::shared_ptr<MagicInternetBox> net;
+	MagicInternetBox& net;
 
 	// VIEW
 	/** Scenegraph root node */
@@ -83,7 +83,11 @@ class GameMode {
 	 * This constructor does not allocate any objects or start the game.
 	 * This allows us to use the object without a heap pointer.
 	 */
-	GameMode() : input(nullptr), soundEffects(nullptr), net(nullptr), isBackToMainMenu(false) {}
+	GameMode()
+		: input(nullptr),
+		  soundEffects(nullptr),
+		  net(MagicInternetBox::getInstance()),
+		  isBackToMainMenu(false) {}
 
 	/**
 	 * Disposes of all (non-static) resources allocated to this mode.

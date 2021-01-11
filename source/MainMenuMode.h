@@ -21,7 +21,7 @@ class MainMenuMode : public cugl::Scene {
 	/** Controller for abstracting out input across multiple platforms */
 	std::shared_ptr<InputController> input;
 	/** Networking controller*/
-	std::shared_ptr<MagicInternetBox> net;
+	MagicInternetBox& net;
 #pragma endregion
 
 	/** An extra thread used to connect to the server from the host, in case the server is down. */

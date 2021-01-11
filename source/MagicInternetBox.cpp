@@ -67,8 +67,6 @@ constexpr double MIN_WAIT_TIME = 0.5;
 /** How many ticks without a server message before considering oneself disconnected */
 constexpr unsigned int SERVER_TIMEOUT = 300;
 
-std::shared_ptr<MagicInternetBox> MagicInternetBox::instance; // NOLINT (clang-tidy bug)
-
 #pragma region Initialization
 
 MagicInternetBox::MagicInternetBox() : activePlayers() {

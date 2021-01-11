@@ -65,11 +65,6 @@ class MagicInternetBox {
 	enum NetworkEvents { None, LoadLevel, EndGame };
 
    private:
-	/**
-	 * The singleton instance of this class.
-	 */
-	static std::shared_ptr<MagicInternetBox> instance; // NOLINT (clang-tidy bug)
-
 	/** The network connection */
 	std::unique_ptr<NetworkConnection> conn;
 
@@ -159,16 +154,18 @@ class MagicInternetBox {
 	 * This constructor is private, as this class is a singleton.
 	 */
 	MagicInternetBox();
+	~MagicInternetBox() = default;
 
    public:
+	MagicInternetBox(MagicInternetBox const&) = delete;
+	void operator=(MagicInternetBox const&) = delete;
+
 	/**
 	 * Grab a pointer to the singleton instance of this class
 	 */
-	static std::shared_ptr<MagicInternetBox> getInstance() {
-		if (instance == nullptr) {
-			instance = std::shared_ptr<MagicInternetBox>(new MagicInternetBox());
-		}
-		return instance;
+	static MagicInternetBox& getInstance() {
+		static MagicInternetBox m;
+		return m;
 	}
 
 	/**
