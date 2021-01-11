@@ -3,13 +3,9 @@
 
 #include <cugl/cugl.h>
 
-#include <array>
 #include <tl/optional.hpp>
 
-#include "NetworkConnection.h"
-#include "NetworkDataType.h"
 #include "ShipModel.h"
-#include "StateReconciler.h"
 
 /**
  * The controller that handles all communication between clients and the server.

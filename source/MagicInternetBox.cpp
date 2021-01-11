@@ -1,5 +1,6 @@
 #include "MagicInternetBox.h"
 
+#include <array>
 #include <sstream>
 
 #ifdef _WIN32
@@ -57,6 +58,9 @@ typedef int socket_t; // NOLINT
 
 #include "Globals.h"
 #include "LevelConstants.h"
+#include "NetworkConnection.h"
+#include "NetworkDataType.h"
+#include "StateReconciler.h"
 
 /** The state synchronization frequency */
 constexpr unsigned int STATE_SYNC_FREQ = globals::NETWORK_TICK * 5;
