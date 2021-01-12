@@ -201,6 +201,9 @@ void NetworkConnection::receive(
 				remotePeer.match(
 					[&](HostPeers& h) {
 						for (uint8_t i = 0; i < h.peers.size(); i++) {
+							if (h.peers.at(i) == nullptr) {
+								continue;
+							}
 							if (*h.peers.at(i) == packet->systemAddress) {
 								uint8_t pID = i + 1;
 								CULog("Lost connection to player %d", pID);
