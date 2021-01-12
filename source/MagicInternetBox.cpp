@@ -24,36 +24,6 @@ typedef int ssize_t;	 // NOLINT
 typedef SOCKET socket_t;  // NOLINT
 #define _SOCKET_T_DEFINED // NOLINT
 #endif
-#else
-#include <fcntl.h>
-#include <netdb.h>
-#if defined(__ANDROID__)
-#include <netinet/in.h>
-#endif
-#include <netinet/tcp.h>
-#include <stdint.h> // NOLINT
-#include <stdio.h> // NOLINT
-#include <stdlib.h> // NOLINT
-#include <string.h> // NOLINT
-#include <sys/socket.h>
-#include <sys/time.h>
-#include <sys/types.h>
-#include <unistd.h>
-#ifndef _SOCKET_T_DEFINED
-typedef int socket_t; // NOLINT
-#define _SOCKET_T_DEFINED // NOLINT
-#endif
-#ifndef INVALID_SOCKET
-// NOLINTNEXTLINE
-#define INVALID_SOCKET (-1)
-#endif
-#ifndef SOCKET_ERROR
-// NOLINTNEXTLINE
-#define SOCKET_ERROR (-1)
-#endif
-// NOLINTNEXTLINE
-#define closesocket(s) ::close(s)
-#include <errno.h> // NOLINT
 #endif
 
 #include "Globals.h"
