@@ -224,10 +224,17 @@ void NetworkConnection::receive(
 				break;
 			case ID_NAT_PUNCHTHROUGH_FAILED:
 			case ID_CONNECTION_ATTEMPT_FAILED:
-			case ID_NAT_TARGET_UNRESPONSIVE:
-				CULog("Punchthrough failure");
+			case ID_NAT_TARGET_UNRESPONSIVE: {
+				CULog("Punchthrough failure %d", packet->data[0]); // NOLINT
 				dispatcher({NetworkDataType::GenericError});
+
+				bts.IgnoreBytes(sizeof(RakNet::MessageID));
+				RakNet::RakNetGUID recipientGuid;
+				bts.Read(recipientGuid);
+
+				CULog("Attempted punchthrough to GUID %s failed", recipientGuid.ToString());
 				break;
+			}
 			case ID_NO_FREE_INCOMING_CONNECTIONS:
 				CULog("Room full");
 				dispatcher({NetworkDataType::JoinRoom, 2});

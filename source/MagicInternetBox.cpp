@@ -402,7 +402,12 @@ class MagicInternetBox::Mimpl {
 			switch (type) {
 				case GenericError: {
 					if (playerID == 0) {
-						status = HostError;
+						if (status != HostWaitingOnOthers) {
+							status = HostError;
+						} else {
+							CULog("Error occured; swallowing in mib");
+						}
+
 					} else {
 						status = ClientError;
 					}
