@@ -224,6 +224,7 @@ void NetworkConnection::receive(
 				break;
 			case ID_NAT_PUNCHTHROUGH_FAILED:
 			case ID_CONNECTION_ATTEMPT_FAILED:
+			case ID_NAT_TARGET_UNRESPONSIVE:
 				CULog("Punchthrough failure");
 				dispatcher({NetworkDataType::GenericError});
 				break;
