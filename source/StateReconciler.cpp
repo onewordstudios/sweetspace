@@ -26,7 +26,7 @@ constexpr uint8_t StateReconciler::ENCODE_LEVEL_NUM(uint8_t level, bool parity) 
 	return parity ? level : (level | TOP_BIT_MASK);
 }
 
-constexpr std::pair<uint8_t, bool> StateReconciler::DECODE_LEVEL_NUM(uint8_t encodedLevel) {
+std::pair<uint8_t, bool> StateReconciler::decodeLevelNum(uint8_t encodedLevel) {
 	if ((encodedLevel & TOP_BIT_MASK) > 0) {
 		return {encodedLevel ^ TOP_BIT_MASK, false};
 	}
@@ -85,7 +85,7 @@ void StateReconciler::encode(const std::shared_ptr<ShipModel>& state, std::vecto
 
 bool StateReconciler::reconcile(const std::shared_ptr<ShipModel>& state,
 								const std::vector<uint8_t>& message, uint8_t level, bool parity) {
-	auto levelData = DECODE_LEVEL_NUM(message[1]);
+	auto levelData = decodeLevelNum(message[1]);
 	if (levelData.first != level || levelData.second != parity) {
 		return false;
 	}

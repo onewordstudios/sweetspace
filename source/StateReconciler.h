@@ -41,7 +41,7 @@ class StateReconciler {
 	static void encodeFloat(float f, std::vector<uint8_t>& out);
 
 	/** Decode a level byte into the current level and parity */
-	static constexpr std::pair<uint8_t, bool> DECODE_LEVEL_NUM(uint8_t encodedLevel);
+	static std::pair<uint8_t, bool> decodeLevelNum(uint8_t encodedLevel);
 
 	/**
 	 * Encode the state of the game into the specified vector.

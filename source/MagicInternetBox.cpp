@@ -466,7 +466,7 @@ class MagicInternetBox::Mimpl {
 				}
 				case StateSync: {
 					if (status == ReconnectPending) {
-						auto t = StateReconciler::DECODE_LEVEL_NUM(message[1]);
+						auto t = StateReconciler::decodeLevelNum(message[1]);
 						if (t.first == levelNum) {
 							CULog("Reconnect success");
 							status = GameStart;
