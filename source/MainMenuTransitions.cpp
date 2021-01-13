@@ -273,6 +273,7 @@ void MainMenuMode::MainMenuTransitions::to(MatchState destination) {
 
 			parent->clientEnteredRoom.clear();
 			parent->updateClientLabel();
+			MagicInternetBox::getInstance().reset();
 			break;
 		}
 		case Credits: {
