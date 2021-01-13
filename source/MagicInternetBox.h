@@ -65,6 +65,8 @@ class MagicInternetBox {
 		GameStart = 200,
 		/** Attempting to reconnect to a room after dropping */
 		Reconnecting = 500,
+		/** Been accepted back into the game, but waiting to hear current level number */
+		ReconnectPending,
 		/** Unknown error when reconnecting */
 		ReconnectError,
 		/** Game has ended */

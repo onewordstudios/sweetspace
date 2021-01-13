@@ -36,6 +36,12 @@ class NetworkConnection {
 
 	void receive(const std::function<void(const std::vector<uint8_t>&)>& dispatcher);
 
+	/**
+	 * Mark the game as started and ban incoming connections except for reconnects.
+	 * PRECONDITION: Should only be called by host.
+	 */
+	void startGame();
+
    private:
 	/** Connection object */
 	std::unique_ptr<RakNet::RakPeerInterface> peer;
@@ -49,10 +55,11 @@ class NetworkConnection {
 
 #pragma region Connection Data Structures
 	struct HostPeers {
+		bool started;
 		uint8_t numPlayers;
 		std::array<std::unique_ptr<RakNet::SystemAddress>, globals::MAX_PLAYERS - 1> peers;
 
-		HostPeers() { numPlayers = 1; };
+		HostPeers() : started(false), numPlayers(1){};
 	};
 
 	/** Connection to host and room ID for client */

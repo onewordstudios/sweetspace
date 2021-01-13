@@ -432,6 +432,7 @@ bool GameMode::connectionUpdate(float timestep) {
 			sgRoot.update(timestep);
 			return false;
 		case MagicInternetBox::Reconnecting:
+		case MagicInternetBox::ReconnectPending:
 			// Still Reconnecting
 			net.update();
 			sgRoot.setStatus(GameGraphRoot::Reconnecting);

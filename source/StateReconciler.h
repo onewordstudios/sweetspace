@@ -14,8 +14,6 @@ class StateReconciler {
    private:
 	/** Encode the current level into a single byte */
 	static constexpr uint8_t ENCODE_LEVEL_NUM(uint8_t level, bool parity);
-	/** Decode a level byte into the current level and parity */
-	static constexpr std::pair<uint8_t, bool> DECODE_LEVEL_NUM(uint8_t encodedLevel);
 
 	/** Cache of previously unconforming breaches. Bool = active, float = position. */
 	std::unordered_map<unsigned int, bool> breachCache;
@@ -41,6 +39,9 @@ class StateReconciler {
 
 	/** Encode a float and append it to the end of the given vector */
 	static void encodeFloat(float f, std::vector<uint8_t>& out);
+
+	/** Decode a level byte into the current level and parity */
+	static constexpr std::pair<uint8_t, bool> DECODE_LEVEL_NUM(uint8_t encodedLevel);
 
 	/**
 	 * Encode the state of the game into the specified vector.

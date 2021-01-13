@@ -243,13 +243,7 @@ class MagicInternetBox::Mimpl {
 			return false;
 		}
 
-		std::vector<uint8_t> data;
-		data.push_back(uint8_t{NetworkDataType::JoinRoom});
-		for (unsigned int i = 0; i < globals::ROOM_LENGTH; i++) {
-			data.push_back(static_cast<uint8_t>(roomID.at(i)));
-		}
-		data.push_back(playerID.value());
-		conn->send(data);
+		conn = std::make_unique<NetworkConnection>(roomID);
 		status = Reconnecting;
 
 		return true;
@@ -304,6 +298,7 @@ class MagicInternetBox::Mimpl {
 		maxPlayers = numPlayers;
 		status = GameStart;
 		stateReconciler.reset();
+		conn->startGame();
 	}
 
 	void restartGame() {
@@ -442,9 +437,10 @@ class MagicInternetBox::Mimpl {
 								CULog(
 									"ERROR: Received reconnecting response from server when not "
 									"reconnecting");
+								status = ClientRoomFull;
 								return;
 							}
-							status = message[1] == 3 ? GameStart : ReconnectError;
+							status = message[1] == 3 ? ReconnectPending : ReconnectError;
 							return;
 						}
 					}
@@ -466,6 +462,22 @@ class MagicInternetBox::Mimpl {
 					maxPlayers = numPlayers;
 					levelNum = message[1];
 					stateReconciler.reset();
+					return;
+				}
+				case StateSync: {
+					if (status == ReconnectPending) {
+						auto t = StateReconciler::DECODE_LEVEL_NUM(message[1]);
+						if (t.first == levelNum) {
+							CULog("Reconnect success");
+							status = GameStart;
+						} else {
+							CULog("Game level %d, local level %d; abort reconnect", t.first,
+								  *levelNum);
+							status = ReconnectError;
+						}
+					} else {
+						CULog("Received state sync during connection but not reconnecting");
+					}
 					return;
 				}
 				default:
@@ -660,6 +672,12 @@ class MagicInternetBox::Mimpl {
 					break;
 			}
 		});
+		switch (status) {
+			case ReconnectError:
+				conn = nullptr;
+			default:
+				break;
+		}
 	}
 #pragma endregion
 
@@ -702,11 +720,9 @@ class MagicInternetBox::Mimpl {
 	void forceDisconnect() {
 		CULog("Force disconnecting");
 
-		std::vector<uint8_t> data;
-		data.push_back(uint8_t{PlayerDisconnect});
-
 		status = Disconnected;
 		lastConnection = 0;
+		conn = nullptr;
 	}
 
 	/**
@@ -714,7 +730,6 @@ class MagicInternetBox::Mimpl {
 	 */
 	void reset() {
 		forceDisconnect();
-		conn = nullptr;
 		status = Uninitialized;
 		activePlayers.fill(false);
 		stateReconciler.reset();
