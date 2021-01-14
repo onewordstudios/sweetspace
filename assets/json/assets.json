@@ -1037,8 +1037,109 @@
                         				"y_offset" : -100,
                         				"absolute" : true
 									}
-				            	}
-				            }
+				            	},
+								"levels" : {
+									"type" : "Node",
+									"format" : { "type" : "Anchored" },
+									"data"   : {
+										"anchor"   : [0.5,0.5],
+										"scale"    : 0.4,
+										"size" : [1024,1024]
+									},
+									"layout" : {
+										"x_anchor" : "center",
+										"y_anchor" : "middle"
+									},
+									"children" : {
+										"lvl0" : {
+											"type": "Image",
+											"format" : {
+												"type" : "Anchored"
+											},
+											"data": {
+												"texture"   : "level_select_0",
+												"anchor"   : [0.5,0.5],
+												"scale" : 1,
+												"angle" : 45
+											},
+											"layout" : {
+												"x_anchor" : "center",
+												"y_anchor" : "middle",
+												"x_offset" : -1
+											}
+										},
+										"lvl1" : {
+											"type": "Image",
+											"format" : {
+												"type" : "Anchored"
+											},
+											"data": {
+												"texture"  : "level_select_1",
+												"anchor"   : [0.5,0.5],
+												"scale" : 1,
+												"angle" : -15
+											},
+											"layout" : {
+												"x_anchor" : "center",
+												"y_anchor" : "middle",
+												"x_offset" : -0.55,
+												"y_offset" : 0.25
+											}
+										},
+										"lvl2" : {
+											"type": "Image",
+											"format" : {
+												"type" : "Anchored"
+											},
+											"data": {
+												"texture"  : "level_select_2",
+												"anchor"   : [0.5,0.5],
+												"scale" : 1,
+												"angle" : 30
+											},
+											"layout" : {
+												"x_anchor" : "center",
+												"y_anchor" : "middle",
+												"y_offset" : 0.4
+											}
+										},
+										"lvl3" : {
+											"type": "Image",
+											"format" : {
+												"type" : "Anchored"
+											},
+											"data": {
+												"texture"  : "level_select_3",
+												"anchor"   : [0.5,0.5],
+												"scale" : 1,
+												"angle" : -50
+											},
+											"layout" : {
+												"x_anchor" : "center",
+												"y_anchor" : "middle",
+												"x_offset" : 0.55,
+												"y_offset" : 0.25
+											}
+										},
+										"lvl4" : {
+											"type": "Image",
+											"format" : {
+												"type" : "Anchored"
+											},
+											"data": {
+												"texture"  : "level_select_4",
+												"anchor"   : [0.5,0.5],
+												"scale" : 1
+											},
+											"layout" : {
+												"x_anchor" : "center",
+												"y_anchor" : "middle",
+												"x_offset" : 1
+											}
+										}
+									}
+								}
+							}
 						},
                         "reconnect": {
 							"type"      : "Image",
