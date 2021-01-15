@@ -648,6 +648,9 @@
     <ClInclude Include="..\..\source\StateReconciler.h">
       <Filter>Header Files\Controllers\Networking</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\source\WinScreen.h">
+      <Filter>Header Files\SceneGraph</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\source\main.cpp">
@@ -1084,6 +1087,9 @@
     </ClCompile>
     <ClCompile Include="..\..\source\StateReconciler.cpp">
       <Filter>Source Files\Controllers\Networking</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\WinScreen.cpp">
+      <Filter>Source Files\SceneGraph</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

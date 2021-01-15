@@ -431,29 +431,33 @@ bool GameGraphRoot::init( // NOLINT Yeah it's a big function; we'll live with it
 		std::dynamic_pointer_cast<Label>(assets->get<Node>("game_overlay_loss_waitText"));
 
 	// Initialize Win Screen Componenets
-	winScreen = assets->get<Node>("game_overlay_win");
-	nextBtn = std::dynamic_pointer_cast<Button>(assets->get<Node>("game_overlay_win_nextBtn"));
-	winWaitText = std::dynamic_pointer_cast<Label>(assets->get<Node>("game_overlay_win_waitText"));
+	winScreen = std::make_shared<WinScreen>();
+	winScreen->init(assets);
+	// scene->addChild(winScreen);
+	// winScreen = assets->get<Node>("game_overlay_win");
+	// nextBtn = std::dynamic_pointer_cast<Button>(assets->get<Node>("game_overlay_win_nextBtn"));
+	// winWaitText =
+	// std::dynamic_pointer_cast<Label>(assets->get<Node>("game_overlay_win_waitText"));
 
 	reconnectOverlay->setVisible(false);
 	timeoutDisplay->setVisible(false);
 	lossScreen->setVisible(false);
-	winScreen->setVisible(false);
 	nearSpace->setVisible(true);
 	healthNode->setVisible(true);
 	lostWaitText->setVisible(false);
-	winWaitText->setVisible(false);
-	nextBtn->setVisible(true);
+	// winWaitText->setVisible(false);
+	// nextBtn->setVisible(true);
 	restartBtn->setVisible(true);
 
 	lastButtonPressed = None;
 
 	// Register Regular Buttons
 	buttonManager.registerButton(restartBtn);
-	buttonManager.registerButton(nextBtn);
+	// buttonManager.registerButton(nextBtn);
 	buttonManager.registerButton(leaveBtn);
 
 	addChild(scene);
+	addChild(winScreen);
 	return true;
 }
 
@@ -520,8 +524,6 @@ void GameGraphRoot::dispose() {
 		buttonsNode = nullptr;
 
 		winScreen = nullptr;
-		nextBtn = nullptr;
-		winWaitText = nullptr;
 
 		_active = false;
 	}
@@ -590,7 +592,7 @@ void GameGraphRoot::update( // NOLINT Yeah it's a big function; we'll live with 
 			break;
 		case Win:
 			// Show Win Screen
-			winScreen->setVisible(true);
+			// winScreen->setVisible(true);
 			nearSpace->setVisible(false);
 			healthNode->setVisible(false);
 			rollTutorial->setVisible(false);
@@ -601,10 +603,12 @@ void GameGraphRoot::update( // NOLINT Yeah it's a big function; we'll live with 
 			healthNodeOverlay->setVisible(false);
 			healthNodeNumbers->setVisible(false);
 			coordHUD->setVisible(false);
-			if (playerID != 0) {
-				winWaitText->setVisible(true);
-				nextBtn->setVisible(false);
-			}
+			// if (playerID != 0) {
+			// winWaitText->setVisible(true);
+			// nextBtn->setVisible(false);
+			// }
+			winScreen->activate(*MagicInternetBox::getInstance().getLevelNum());
+			winScreen->update();
 			break;
 		case Reconnecting:
 			// Still Reconnecting, Animation Frames
@@ -925,10 +929,10 @@ void GameGraphRoot::processButtons() {
 			isBackToMainMenu = true;
 		}
 	} else if (playerID == 0) {
-		if (winScreen->isVisible()) {
-			if (ButtonManager::tappedButton(nextBtn, tapData)) {
-				lastButtonPressed = NextLevel;
-			}
+		if (winScreen->isActive()) {
+			// if (ButtonManager::tappedButton(nextBtn, tapData)) {
+			//	lastButtonPressed = NextLevel;
+			//}
 		} else if (lossScreen->isVisible()) {
 			// Is this loss?
 			if (ButtonManager::tappedButton(restartBtn, tapData)) {
