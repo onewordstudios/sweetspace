@@ -1406,228 +1406,210 @@
             }
         },
 		"winscreen": {
-							"type"      : "Image",
-				            "format"    : {
-				                "type" : "Anchored"
-				            },
-				            "data": {
-								"texture":  "overlay_dim",
-								"anchor":   [0.5,0.5],
-								"scale":    1
-				            },
-				            "layout" : {
-								"x_anchor" : "center",
-								"y_anchor" : "middle"
-							},
-				            "children":  {
-				            	"bg" : {
-				            		"type": "Image",
-									"format" : {
-										"type" : "Anchored"
-									},
-				                    "data": {
-				                        "texture":  "wl_bg",
-				                        "anchor":   [0.5,0.5],
-				                        "scale":    0.5
-				                    },
-				                    "layout" : {
-				                    	"x_anchor" : "center",
-                        				"y_anchor" : "middle",
-                        				"y_offset" : 75,
-                        				"absolute" : true
-				                    }
-				            	},
-				            	"txt_up" : {
-				            		"type": "Label",
-									"data": {
-										"font"       : "mont_black_italic_big",
-										"text"       : "Congratulations!",
-										"foreground" : [255,255,255,255],
-										"anchor"	 : [0.5,0.5],
-										"valign"     : "middle",
-										"halign"     : "center",
-										"scale" : 0.5
-									},
-									"layout" : {
-										"x_anchor" : "center",
-                        				"y_anchor" : "middle",
-                        				"y_offset" : 100,
-                        				"absolute" : true
-									}
-				            	},
-				            	"txt_down" : {
-				            		"type": "Label",
-									"data": {
-										"font"       : "mont_black_italic_big",
-										"text"       : "You Survived the Journey!",
-										"foreground" : [255,255,255,255],
-										"anchor"	 : [0.5,0.5],
-										"valign"     : "middle",
-										"halign"     : "center",
-										"scale" : 0.5
-									},
-									"layout" : {
-										"x_anchor" : "center",
-                        				"y_anchor" : "middle",
-                        				"y_offset" : 50,
-                        				"absolute" : true
-									}
-				            	},
-				            	"nextBtn" : {
-				            		"type": "Button",
-									"format" : {
-										"type" : "Anchored"
-									},
-									"data": {
-										"upnode"   : "up",
-										"downnode" : "down",
-										"anchor"   : [0.5,1],
-										"scale" : 0.5
-									},
-									"layout" : {
-										"x_anchor" : "center",
-                        				"y_anchor" : "middle",
-                        				"y_offset" : -100,
-                        				"absolute" : true
-									},
-									"children" : {
-										"up" : {
-											"type"   : "Image",
-											"data"   : {
-												"texture"  : "next_btn_up"
-											}
-										},
-										"down" : {
-											"type"   : "Image",
-											"data"   : {
-												"texture"  : "next_btn_down"
-											}
-										}
-									}
-				            	},
-								"waitText" : {
-				            		"type": "Label",
-									"format" : {
-										"type" : "Anchored"
-									},
-									"data": {
-										"font"       : "mont_med",
-										"text"       : "Waiting for host...",
-										"foreground" : [255,255,255,255],
-										"anchor"   : [0.5,1],
-										"scale" : 1,
-										"visible" : false
-									},
-									"layout" : {
-										"x_anchor" : "center",
-                        				"y_anchor" : "middle",
-                        				"y_offset" : -100,
-                        				"absolute" : true
-									}
-				            	},
-								"levels" : {
-									"type" : "Node",
-									"format" : { "type" : "Anchored" },
-									"data"   : {
-										"anchor"   : [0.5,0.5],
-										"scale"    : 0.4,
-										"size" : [1024,1024]
-									},
-									"layout" : {
-										"x_anchor" : "center",
-										"y_anchor" : "middle"
-									},
-									"children" : {
-										"lvl0" : {
-											"type": "Image",
-											"format" : {
-												"type" : "Anchored"
-											},
-											"data": {
-												"texture"   : "level_select_0",
-												"anchor"   : [0.5,0.5],
-												"scale" : 1,
-												"angle" : 45
-											},
-											"layout" : {
-												"x_anchor" : "center",
-												"y_anchor" : "middle",
-												"x_offset" : -1
-											}
-										},
-										"lvl1" : {
-											"type": "Image",
-											"format" : {
-												"type" : "Anchored"
-											},
-											"data": {
-												"texture"  : "level_select_1",
-												"anchor"   : [0.5,0.5],
-												"scale" : 1,
-												"angle" : -15
-											},
-											"layout" : {
-												"x_anchor" : "center",
-												"y_anchor" : "middle",
-												"x_offset" : -0.55,
-												"y_offset" : 0.25
-											}
-										},
-										"lvl2" : {
-											"type": "Image",
-											"format" : {
-												"type" : "Anchored"
-											},
-											"data": {
-												"texture"  : "level_select_2",
-												"anchor"   : [0.5,0.5],
-												"scale" : 1,
-												"angle" : 30
-											},
-											"layout" : {
-												"x_anchor" : "center",
-												"y_anchor" : "middle",
-												"y_offset" : 0.4
-											}
-										},
-										"lvl3" : {
-											"type": "Image",
-											"format" : {
-												"type" : "Anchored"
-											},
-											"data": {
-												"texture"  : "level_select_3",
-												"anchor"   : [0.5,0.5],
-												"scale" : 1,
-												"angle" : -50
-											},
-											"layout" : {
-												"x_anchor" : "center",
-												"y_anchor" : "middle",
-												"x_offset" : 0.55,
-												"y_offset" : 0.25
-											}
-										},
-										"lvl4" : {
-											"type": "Image",
-											"format" : {
-												"type" : "Anchored"
-											},
-											"data": {
-												"texture"  : "level_select_4",
-												"anchor"   : [0.5,0.5],
-												"scale" : 1
-											},
-											"layout" : {
-												"x_anchor" : "center",
-												"y_anchor" : "middle",
-												"x_offset" : 1
-											}
-										}
-									}
-								}
+			"type"      : "Image",
+			"format"    : {
+				"type" : "Anchored"
+			},
+			"data": {
+				"texture":  "overlay_dim",
+				"anchor":   [0.5,0.5],
+				"scale":    1
+			},
+			"layout" : {
+				"x_anchor" : "center",
+				"y_anchor" : "middle"
+			},
+			"children":  {
+				"bg" : {
+					"type": "Image",
+					"format" : {
+						"type" : "Anchored"
+					},
+					"data": {
+						"texture":  "wl_bg",
+						"anchor":   [0.5,0.5],
+						"scale":    0.5
+					},
+					"layout" : {
+						"x_anchor" : "center",
+						"y_anchor" : "middle",
+						"y_offset" : 75,
+						"absolute" : true
+					}
+				},
+				"txt_up" : {
+					"type": "Label",
+					"data": {
+						"font"       : "mont_black_italic_big",
+						"text"       : "Congratulations!",
+						"foreground" : [255,255,255,255],
+						"anchor"	 : [0.5,0.5],
+						"valign"     : "middle",
+						"halign"     : "center",
+						"scale" : 0.5
+					},
+					"layout" : {
+						"x_anchor" : "center",
+						"y_anchor" : "middle",
+						"y_offset" : -30,
+						"absolute" : true
+					}
+				},
+				"nextBtn" : {
+					"type": "Button",
+					"format" : {
+						"type" : "Anchored"
+					},
+					"data": {
+						"upnode"   : "up",
+						"downnode" : "down",
+						"anchor"   : [0.5,1],
+						"scale" : 0.5
+					},
+					"layout" : {
+						"x_anchor" : "center",
+						"y_anchor" : "middle",
+						"y_offset" : -100,
+						"absolute" : true
+					},
+					"children" : {
+						"up" : {
+							"type"   : "Image",
+							"data"   : {
+								"texture"  : "next_btn_up"
 							}
 						},
+						"down" : {
+							"type"   : "Image",
+							"data"   : {
+								"texture"  : "next_btn_down"
+							}
+						}
+					}
+				},
+				"waitText" : {
+					"type": "Label",
+					"format" : {
+						"type" : "Anchored"
+					},
+					"data": {
+						"font"       : "mont_med",
+						"text"       : "Waiting for host...",
+						"foreground" : [255,255,255,255],
+						"anchor"   : [0.5,1],
+						"scale" : 1,
+						"visible" : false
+					},
+					"layout" : {
+						"x_anchor" : "center",
+						"y_anchor" : "middle",
+						"y_offset" : -100,
+						"absolute" : true
+					}
+				},
+				"levels" : {
+					"type" : "Node",
+					"format" : { "type" : "Anchored" },
+					"data"   : {
+						"anchor"   : [0.5,0.5],
+						"scale"    : 0.4,
+						"size" : [1024,1024]
+					},
+					"layout" : {
+						"x_anchor" : "center",
+						"y_anchor" : "middle"
+					},
+					"children" : {
+						"lvl0" : {
+							"type": "Image",
+							"format" : {
+								"type" : "Anchored"
+							},
+							"data": {
+								"texture"   : "level_select_0",
+								"anchor"   : [0.5,0.5],
+								"scale" : 1,
+								"angle" : 45
+							},
+							"layout" : {
+								"x_anchor" : "center",
+								"y_anchor" : "middle",
+								"x_offset" : -1
+							}
+						},
+						"lvl1" : {
+							"type": "Image",
+							"format" : {
+								"type" : "Anchored"
+							},
+							"data": {
+								"texture"  : "level_select_1",
+								"anchor"   : [0.5,0.5],
+								"scale" : 1,
+								"angle" : -15
+							},
+							"layout" : {
+								"x_anchor" : "center",
+								"y_anchor" : "middle",
+								"x_offset" : -0.55,
+								"y_offset" : 0.25
+							}
+						},
+						"lvl2" : {
+							"type": "Image",
+							"format" : {
+								"type" : "Anchored"
+							},
+							"data": {
+								"texture"  : "level_select_2",
+								"anchor"   : [0.5,0.5],
+								"scale" : 1,
+								"angle" : 30
+							},
+							"layout" : {
+								"x_anchor" : "center",
+								"y_anchor" : "middle",
+								"y_offset" : 0.4
+							}
+						},
+						"lvl3" : {
+							"type": "Image",
+							"format" : {
+								"type" : "Anchored"
+							},
+							"data": {
+								"texture"  : "level_select_3",
+								"anchor"   : [0.5,0.5],
+								"scale" : 1,
+								"angle" : -50
+							},
+							"layout" : {
+								"x_anchor" : "center",
+								"y_anchor" : "middle",
+								"x_offset" : 0.55,
+								"y_offset" : 0.25
+							}
+						},
+						"lvl4" : {
+							"type": "Image",
+							"format" : {
+								"type" : "Anchored"
+							},
+							"data": {
+								"texture"  : "level_select_4",
+								"anchor"   : [0.5,0.5],
+								"scale" : 1
+							},
+							"layout" : {
+								"x_anchor" : "center",
+								"y_anchor" : "middle",
+								"x_offset" : 1
+							}
+						}
+					}
+				}
+			}
+		},
         "matchmaking": {
             "type"      : "Node",
             "format"    : {

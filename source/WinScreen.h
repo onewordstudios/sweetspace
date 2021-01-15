@@ -2,13 +2,24 @@
 #define WIN_SCREEN_H
 #include <cugl/cugl.h>
 
+#include "ButtonManager.h"
+
 class WinScreen : public cugl::Node {
    private:
-	uint8_t prevLevel;
-	uint8_t currLevel;
 	size_t currFrame;
 
+	float startPer;
+	float endPer;
+
+	bool isHost;
+
 	std::shared_ptr<cugl::Node> screen;
+	std::shared_ptr<cugl::PathNode> circle;
+
+	std::shared_ptr<cugl::Button> btn;
+	std::shared_ptr<cugl::Node> waitText;
+
+	ButtonManager btns;
 
    public:
 	WinScreen();
@@ -17,9 +28,6 @@ class WinScreen : public cugl::Node {
 	bool init(const std::shared_ptr<cugl::AssetManager> &assets);
 
 	void dispose() override;
-
-	void draw(const shared_ptr<cugl::SpriteBatch> &batch, const cugl::Mat4 &transform,
-			  cugl::Color4 tint) override;
 
 	void activate(uint8_t completedLevel);
 

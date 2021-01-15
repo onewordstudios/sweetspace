@@ -74,6 +74,16 @@ class Tween {
 	static float easeInOut(float start, float end, int currFrame, int maxFrame);
 
 	/**
+	 * Trignometric loop from 0 to 1 and back to 0
+	 *
+	 * @param currFrame The current frame of the animation, >=0 and <= maxFrame
+	 * @param max Frame The last frame of the animation, >=0
+	 *
+	 * @return The interpolated position
+	 */
+	static float loop(size_t currFrame, size_t maxFrame);
+
+	/**
 	 * Generate a color that can be used for fading.
 	 */
 	static cugl::Color4 fade(float a);
