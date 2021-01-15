@@ -33,6 +33,8 @@ class WinScreen : public cugl::Node {
 
 	bool isActive();
 
+	bool tappedNext(std::tuple<cugl::Vec2, cugl::Vec2> tapData);
+
 	void update();
 };
 

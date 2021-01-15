@@ -60,7 +60,14 @@ bool WinScreen::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 	return true;
 }
 
-void WinScreen::dispose() { Node::dispose(); }
+void WinScreen::dispose() {
+	Node::dispose();
+	screen = nullptr;
+	circle = nullptr;
+	btn = nullptr;
+	waitText = nullptr;
+	btns.clear();
+}
 
 float levelToPos(uint8_t lvl) {
 	auto x = std::adjacent_find(LEVEL_ENTRY_POINTS.begin(), LEVEL_ENTRY_POINTS.end(),
@@ -103,6 +110,10 @@ void WinScreen::activate(uint8_t completedLevel) {
 }
 
 bool WinScreen::isActive() { return _isVisible; }
+
+bool WinScreen::tappedNext(std::tuple<cugl::Vec2, cugl::Vec2> tapData) {
+	return ButtonManager::tappedButton(btn, std::move(tapData));
+}
 
 void WinScreen::update() {
 	if (!_isVisible) {

@@ -930,9 +930,9 @@ void GameGraphRoot::processButtons() {
 		}
 	} else if (playerID == 0) {
 		if (winScreen->isActive()) {
-			// if (ButtonManager::tappedButton(nextBtn, tapData)) {
-			//	lastButtonPressed = NextLevel;
-			//}
+			if (winScreen->tappedNext(tapData)) {
+				lastButtonPressed = NextLevel;
+			}
 		} else if (lossScreen->isVisible()) {
 			// Is this loss?
 			if (ButtonManager::tappedButton(restartBtn, tapData)) {
