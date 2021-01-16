@@ -71,6 +71,15 @@ void WinScreen::dispose() {
 	btns.clear();
 }
 
+/**
+ * Convert a level number to its angular position in radians
+ *
+ * @param lvl The level number
+ *
+ * @return The angle, in radians, that the level should be on the level map. Note that level 0 is at
+ * angle 0, which is on the left side of the map, not the traditional right. Angle increases
+ * clockwise from (-1, 0).
+ */
 float levelToPos(uint8_t lvl) {
 	// NOLINTNEXTLINE clang and MSVC disagree for some reason
 	auto x = std::adjacent_find(LEVEL_ENTRY_POINTS.begin(), LEVEL_ENTRY_POINTS.end(),
