@@ -20,7 +20,10 @@ constexpr float HEIGHT_SCALE = 0.3f;
 constexpr float WIDTH_SCALE = 0.8f;
 constexpr float WIDTH_OFFSET = 1.25f;
 
-WinScreen::WinScreen() : currFrame(0), startPer(0), endPer(0), isHost(false) {}
+WinScreen::WinScreen(const std::shared_ptr<cugl::AssetManager>& assets)
+	: currFrame(0), startPer(0), endPer(0), isHost(false) {
+	init(assets);
+}
 
 WinScreen::~WinScreen() { dispose(); }
 
@@ -32,7 +35,7 @@ bool WinScreen::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 
 	isHost = *(MagicInternetBox::getInstance().getPlayerID()) == 0;
 
-	screen = assets->get<Node>("winscreen");
+	auto screen = assets->get<Node>("winscreen");
 	btn = dynamic_pointer_cast<cugl::Button>(assets->get<Node>("winscreen_nextBtn"));
 	waitText = assets->get<Node>("winscreen_waitText");
 	if (isHost) {
@@ -62,7 +65,6 @@ bool WinScreen::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 
 void WinScreen::dispose() {
 	Node::dispose();
-	screen = nullptr;
 	circle = nullptr;
 	btn = nullptr;
 	waitText = nullptr;
@@ -84,7 +86,6 @@ float levelToPos(uint8_t lvl) {
 
 	// Not past the end
 	uint8_t pos = x - LEVEL_ENTRY_POINTS.begin();
-	CULog("Test %d, pos %d", *x, pos);
 	float base = static_cast<float>(pos) / (LEVEL_ENTRY_POINTS.size() - 1);
 	float slice = 1.f / (LEVEL_ENTRY_POINTS.size() - 1);
 	float sliceChunk =
@@ -112,7 +113,8 @@ void WinScreen::activate(uint8_t completedLevel) {
 bool WinScreen::isActive() { return _isVisible; }
 
 bool WinScreen::tappedNext(std::tuple<cugl::Vec2, cugl::Vec2> tapData) {
-	return ButtonManager::tappedButton(btn, std::move(tapData));
+	return isHost && currFrame > TRAVEL_TIME &&
+		   ButtonManager::tappedButton(btn, std::move(tapData));
 }
 
 void WinScreen::update() {
