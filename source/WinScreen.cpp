@@ -72,12 +72,14 @@ void WinScreen::dispose() {
 }
 
 float levelToPos(uint8_t lvl) {
-	const auto *x = std::adjacent_find(LEVEL_ENTRY_POINTS.begin(), LEVEL_ENTRY_POINTS.end(),
+	// NOLINTNEXTLINE clang and MSVC disagree for some reason
+	auto x = std::adjacent_find(LEVEL_ENTRY_POINTS.begin(), LEVEL_ENTRY_POINTS.end(),
 								[=](uint8_t a, uint8_t b) { return a <= lvl && b > lvl; });
 	if (x == LEVEL_ENTRY_POINTS.end()) {
 		// Past the end
 
-		const auto *endIt = LEVEL_ENTRY_POINTS.end();
+		// NOLINTNEXTLINE clang and MSVC disagree for some reason
+		auto endIt = LEVEL_ENTRY_POINTS.end();
 		uint8_t lastEntry = *(--endIt);
 		float t =
 			static_cast<float>(lvl - lastEntry) / static_cast<float>(MAX_NUM_LEVELS - lastEntry);
