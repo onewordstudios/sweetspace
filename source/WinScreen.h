@@ -34,7 +34,7 @@ class WinScreen : public cugl::Node {
 	 *
 	 * @param assets Asset manager to load win screen assets from
 	 */
-	WinScreen(const std::shared_ptr<cugl::AssetManager> &assets);
+	explicit WinScreen(const std::shared_ptr<cugl::AssetManager> &assets);
 	/** Cleanup and delete this win screen */
 	~WinScreen();
 
