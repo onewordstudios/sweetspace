@@ -1,5 +1,7 @@
 #include "Tween.h"
 
+#include <cmath>
+
 /** Max value of a byte */
 constexpr uint8_t MAX_BYTE = 255;
 
@@ -30,6 +32,10 @@ float Tween::easeInOut(float start, float end, int currFrame, int maxFrame) {
 		return easeIn(start, halfPos, currFrame, halfFrame);
 	}
 	return easeOut(halfPos, end, currFrame - halfFrame, halfFrame);
+}
+
+float Tween::loop(size_t currFrame, size_t maxFrame) {
+	return (1 - cosf(2 * static_cast<float>(M_PI) * currFrame / maxFrame)) / 2;
 }
 
 cugl::Color4 Tween::fade(float a) {

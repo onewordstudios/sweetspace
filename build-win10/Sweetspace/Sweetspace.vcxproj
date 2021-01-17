@@ -384,6 +384,7 @@
     <ClInclude Include="..\..\source\Tween.h" />
     <ClInclude Include="..\..\source\Unopenable.h" />
     <ClInclude Include="..\..\source\UnopenableNode.h" />
+    <ClInclude Include="..\..\source\WinScreen.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
@@ -532,6 +533,7 @@
     <ClCompile Include="..\..\source\TutorialNode.cpp" />
     <ClCompile Include="..\..\source\Tween.cpp" />
     <ClCompile Include="..\..\source\UnopenableNode.cpp" />
+    <ClCompile Include="..\..\source\WinScreen.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Sweetspace.rc" />
