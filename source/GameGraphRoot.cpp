@@ -566,7 +566,6 @@ void GameGraphRoot::update( // NOLINT Yeah it's a big function; we'll live with 
 		case Normal:
 			// Hide Unnecessary Overlays
 			lossScreen->setVisible(false);
-			winScreen->setVisible(false);
 			reconnectOverlay->setVisible(false);
 			timeoutDisplay->setVisible(false);
 			// Reset Timeout Counters to negative value
@@ -583,7 +582,7 @@ void GameGraphRoot::update( // NOLINT Yeah it's a big function; we'll live with 
 			break;
 		case Win:
 			// Show Win Screen
-			if (!winScreen->isActive()) {
+			if (!winScreen->isVisible()) {
 				nearSpace->setVisible(false);
 				healthNode->setVisible(false);
 				rollTutorial->setVisible(false);
@@ -917,7 +916,7 @@ void GameGraphRoot::processButtons() {
 			isBackToMainMenu = true;
 		}
 	} else if (playerID == 0) {
-		if (winScreen->isActive()) {
+		if (winScreen->isVisible()) {
 			if (winScreen->tappedNext(tapData)) {
 				lastButtonPressed = NextLevel;
 			}

@@ -4,6 +4,11 @@
 
 #include "ButtonManager.h"
 
+/**
+ * Scene graph node representing the screen to show upon winning a level.
+ * Will cover the whole screen automatically.
+ * Starts disabled; query {@link isVisible()} to check if the screen is active.
+ */
 class WinScreen : public cugl::Node {
    private:
 	/** Current frame of the animation */
@@ -52,16 +57,11 @@ class WinScreen : public cugl::Node {
 	void dispose() override;
 
 	/**
-	 * Activate the win screen
+	 * Activate the win screen.
 	 *
 	 * @param completedLevel The level just completed
 	 */
 	void activate(uint8_t completedLevel);
-
-	/**
-	 * Whether this win screen has been activated
-	 */
-	bool isActive();
 
 	/**
 	 * Whether the given tap data tapped the next level button.
@@ -70,7 +70,7 @@ class WinScreen : public cugl::Node {
 	 *
 	 * @return True iff the next level button was tapped
 	 */
-	bool tappedNext(std::tuple<cugl::Vec2, cugl::Vec2> tapData);
+	bool tappedNext(std::tuple<cugl::Vec2, cugl::Vec2> tapData) const;
 
 	/**
 	 * Update the animation for this node. Should be called once every frame.
