@@ -21,6 +21,8 @@ constexpr float HEIGHT_SCALE = 0.3f;
 constexpr float WIDTH_SCALE = 0.8f;
 constexpr float WIDTH_OFFSET = 1.25f;
 
+constexpr float START_SCALE = 1.1f;
+
 WinScreen::WinScreen(const std::shared_ptr<cugl::AssetManager>& assets)
 	: currFrame(0), startPer(0), endPer(0), isHost(false) {
 	init(assets);
@@ -30,7 +32,7 @@ WinScreen::~WinScreen() { dispose(); }
 
 bool WinScreen::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 	Node::init();
-	setAnchor({0, 0});
+	setAnchor({1.f / 2, 1.f / 2});
 	setPosition(0, 0);
 	setVisible(false);
 
@@ -114,6 +116,7 @@ void WinScreen::activate(uint8_t completedLevel) {
 	setVisible(true);
 	btn->setColor(cugl::Color4::CLEAR);
 	waitText->setColor(cugl::Color4::CLEAR);
+	setColor(cugl::Color4::CLEAR);
 
 	// Find level range
 
@@ -136,6 +139,11 @@ void WinScreen::update() {
 	btns.process();
 	circle->setScale(static_cast<float>(currFrame % LOOP_TIME) / LOOP_TIME);
 	circle->setColor(Tween::fade(Tween::loop(currFrame, LOOP_TIME)));
+
+	if (currFrame <= FADE_TIME) {
+		setScale(Tween::easeOut(START_SCALE, 1.f, currFrame, FADE_TIME));
+		setColor(Tween::fade(Tween::easeOut(0, 1, currFrame, FADE_TIME)));
+	}
 
 	if (currFrame <= TRAVEL_TIME) {
 		float percent = Tween::easeInOut(startPer, endPer, currFrame, TRAVEL_TIME);
