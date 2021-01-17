@@ -39,7 +39,7 @@ constexpr float NEEDLE_CUTOFF = 0.01f;
 #pragma region Initialization Logic
 
 MainMenuMode::MainMenuMode()
-	: net(nullptr),
+	: net(MagicInternetBox::getInstance()),
 	  startHostThread(nullptr),
 	  screenHeight(0),
 	  gameReady(false),
@@ -68,8 +68,6 @@ bool MainMenuMode::init(const std::shared_ptr<AssetManager>& assets, bool toCred
 		AudioChannels::get()->queueMusic(source, true, source->getVolume(), globals::MUSIC_FADE_IN);
 	}
 
-	// Set network controller
-	net = MagicInternetBox::getInstance();
 	input = InputController::getInstance();
 
 	screenHeight = dimen.height;
@@ -217,10 +215,10 @@ void MainMenuMode::updateClientLabel() {
 }
 
 void MainMenuMode::setRoomID() {
-	if (roomID == net->getRoomID()) {
+	if (roomID == net.getRoomID()) {
 		return;
 	}
-	roomID = net->getRoomID();
+	roomID = net.getRoomID();
 
 	if (roomID.empty()) {
 		hostLabel->setText("_ _ _ _ _");
@@ -241,7 +239,7 @@ void MainMenuMode::setRoomID() {
 
 void MainMenuMode::setNumPlayers() {
 	float percentage =
-		static_cast<float>(net->getNumPlayers() - 1) / static_cast<float>(globals::MAX_PLAYERS);
+		static_cast<float>(net.getNumPlayers() - 1) / static_cast<float>(globals::MAX_PLAYERS);
 	float diff = percentage - needlePos;
 	if (abs(diff) < NEEDLE_CUTOFF) {
 		needlePos = percentage;
@@ -252,7 +250,7 @@ void MainMenuMode::setNumPlayers() {
 }
 
 void MainMenuMode::processUpdate() {
-	switch (net->matchStatus()) {
+	switch (net.matchStatus()) {
 		case MagicInternetBox::MatchmakingStatus::ClientRoomInvalid:
 		case MagicInternetBox::MatchmakingStatus::ClientRoomFull:
 		case MagicInternetBox::MatchmakingStatus::ClientError:
@@ -263,16 +261,16 @@ void MainMenuMode::processUpdate() {
 			gameReady = true;
 			return;
 		default:
-			net->update();
+			net.update();
 			break;
 	}
 
 	switch (currState) {
 		case HostScreenWait: {
-			if (!net->getRoomID().empty()) {
+			if (!net.getRoomID().empty()) {
 				transition->to(HostScreen);
 			} else {
-				switch (net->matchStatus()) {
+				switch (net.matchStatus()) {
 					case MagicInternetBox::MatchmakingStatus::HostError:
 						connScreen->setText("Error Connecting :(");
 						backBtn->setVisible(true);
@@ -296,12 +294,12 @@ void MainMenuMode::processUpdate() {
 		case HostScreen: {
 			setNumPlayers();
 			if (backBtn->isVisible()) {
-				if (net->getNumPlayers() > 1) {
+				if (net.getNumPlayers() > 1) {
 					backBtn->setVisible(false);
 					hostBeginBtn->setVisible(true);
 				}
 			} else {
-				if (net->getNumPlayers() == 1) {
+				if (net.getNumPlayers() == 1) {
 					backBtn->setVisible(true);
 					hostBeginBtn->setVisible(false);
 				}
@@ -309,7 +307,7 @@ void MainMenuMode::processUpdate() {
 			break;
 		}
 		case ClientScreenSubmitted: {
-			switch (net->matchStatus()) {
+			switch (net.matchStatus()) {
 				case MagicInternetBox::MatchmakingStatus::ClientRoomInvalid:
 					clientErrorLabel->setText("That ship ID doesn't seem to exist.");
 					transition->to(ClientScreenError);
@@ -368,12 +366,12 @@ void MainMenuMode::processButtons() {
 				startHostThread->detach();
 				// Intentional fall-through
 			case HostScreen:
-				if (net->getNumPlayers() > 1) {
+				if (net.getNumPlayers() > 1) {
 					break;
 				}
 				// Intentional fall-through
 			case ClientScreenDone:
-				net->reset();
+				net.reset();
 				// Intentional fall-through
 			case ClientScreen:
 			case Credits:
@@ -403,7 +401,7 @@ void MainMenuMode::processButtons() {
 			break;
 		}
 		case HostScreenWait: {
-			auto status = net->matchStatus();
+			auto status = net.matchStatus();
 			if (status == MagicInternetBox::MatchmakingStatus::HostError ||
 				status == MagicInternetBox::MatchmakingStatus::HostApiMismatch) {
 				if (ButtonManager::tappedButton(backBtn, tapData)) {
@@ -413,7 +411,7 @@ void MainMenuMode::processButtons() {
 			break;
 		}
 		case HostScreen: {
-			if (net->getNumPlayers() >= globals::MIN_PLAYERS) {
+			if (net.getNumPlayers() >= globals::MIN_PLAYERS) {
 				if (ButtonManager::tappedButton(hostBeginBtn, tapData)) {
 					transition->to(HostLevelSelect);
 				}
@@ -429,14 +427,14 @@ void MainMenuMode::processButtons() {
 			for (unsigned int i = 0; i < NUM_LEVEL_BTNS; i++) {
 				if (ButtonManager::tappedButton(levelBtns.at(i), tapData)) {
 					gameReady = true;
-					net->startGame(LEVEL_ENTRY_POINTS.at(i));
+					net.startGame(LEVEL_ENTRY_POINTS.at(i));
 					return;
 				}
 			}
 			if (ButtonManager::tappedButton(hostTutorialSkipBtn, tapData)) {
 				bool isDown = hostTutorialSkipBtn->isDown();
 				hostTutorialSkipBtn->setDown(!isDown);
-				net->setSkipTutorial(!isDown);
+				net.setSkipTutorial(!isDown);
 			}
 			break;
 		}
@@ -453,7 +451,7 @@ void MainMenuMode::processButtons() {
 
 				currState = ClientScreenSubmitted;
 				clientJoinBtn->setDown(true);
-				net->initClient(room.str());
+				net.initClient(room.str());
 
 				break;
 			}
@@ -516,7 +514,7 @@ void MainMenuMode::update(float timestep) {
 	bg0stars->setAngle(globals::TWO_PI * static_cast<float>(rotationFrame) / ROTATION_MAX);
 
 	if (transition->step()) {
-		net->update();
+		net.update();
 		return;
 	}
 	processUpdate();

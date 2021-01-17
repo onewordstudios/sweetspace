@@ -30,7 +30,7 @@ class GLaDOS {
 	std::shared_ptr<ShipModel> ship;
 
 	/** Network Controller for outbound calls */
-	shared_ptr<MagicInternetBox> mib;
+	MagicInternetBox& mib;
 
 	bool fail;
 

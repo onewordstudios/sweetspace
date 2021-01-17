@@ -110,16 +110,32 @@ void NetworkConnection::receive(
 									dispatcher(joinMsg);
 									broadcast(joinMsg, packet->systemAddress);
 
-									RakNet::BitStream bs;
-									std::vector<uint8_t> connMsg = {NetworkDataType::JoinRoom, 0,
-																	h.numPlayers, pID,
-																	globals::API_VER};
-									bs.Write(static_cast<uint8_t>(ID_USER_PACKET_ENUM));
-									bs.Write(static_cast<uint8_t>(connMsg.size()));
-									bs.WriteAlignedBytes(connMsg.data(),
-														 static_cast<unsigned int>(connMsg.size()));
-									peer->Send(&bs, MEDIUM_PRIORITY, RELIABLE, 1,
-											   packet->systemAddress, false);
+									if (h.started) {
+										// Reconnection attempt
+										RakNet::BitStream bs;
+										std::vector<uint8_t> connMsg = {NetworkDataType::JoinRoom,
+																		3, h.numPlayers, pID,
+																		globals::API_VER};
+										bs.Write(static_cast<uint8_t>(ID_USER_PACKET_ENUM));
+										bs.Write(static_cast<uint8_t>(connMsg.size()));
+										bs.WriteAlignedBytes(
+											connMsg.data(),
+											static_cast<unsigned int>(connMsg.size()));
+										peer->Send(&bs, MEDIUM_PRIORITY, RELIABLE, 1,
+												   packet->systemAddress, false);
+									} else {
+										RakNet::BitStream bs;
+										std::vector<uint8_t> connMsg = {NetworkDataType::JoinRoom,
+																		0, h.numPlayers, pID,
+																		globals::API_VER};
+										bs.Write(static_cast<uint8_t>(ID_USER_PACKET_ENUM));
+										bs.Write(static_cast<uint8_t>(connMsg.size()));
+										bs.WriteAlignedBytes(
+											connMsg.data(),
+											static_cast<unsigned int>(connMsg.size()));
+										peer->Send(&bs, MEDIUM_PRIORITY, RELIABLE, 1,
+												   packet->systemAddress, false);
+									}
 									break;
 								}
 							}
@@ -201,6 +217,9 @@ void NetworkConnection::receive(
 				remotePeer.match(
 					[&](HostPeers& h) {
 						for (uint8_t i = 0; i < h.peers.size(); i++) {
+							if (h.peers.at(i) == nullptr) {
+								continue;
+							}
 							if (*h.peers.at(i) == packet->systemAddress) {
 								uint8_t pID = i + 1;
 								CULog("Lost connection to player %d", pID);
@@ -224,9 +243,17 @@ void NetworkConnection::receive(
 				break;
 			case ID_NAT_PUNCHTHROUGH_FAILED:
 			case ID_CONNECTION_ATTEMPT_FAILED:
-				CULog("Punchthrough failure");
+			case ID_NAT_TARGET_UNRESPONSIVE: {
+				CULog("Punchthrough failure %d", packet->data[0]); // NOLINT
 				dispatcher({NetworkDataType::GenericError});
+
+				bts.IgnoreBytes(sizeof(RakNet::MessageID));
+				RakNet::RakNetGUID recipientGuid;
+				bts.Read(recipientGuid);
+
+				CULog("Attempted punchthrough to GUID %s failed", recipientGuid.ToString());
 				break;
+			}
 			case ID_NO_FREE_INCOMING_CONNECTIONS:
 				CULog("Room full");
 				dispatcher({NetworkDataType::JoinRoom, 2});
@@ -236,4 +263,8 @@ void NetworkConnection::receive(
 				break;
 		}
 	}
+}
+
+void NetworkConnection::startGame() {
+	remotePeer.match([&](HostPeers& h) { h.started = true; }, [&](ClientPeer& c) {});
 }

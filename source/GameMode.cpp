@@ -71,9 +71,8 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 	soundEffects->reset();
 
 	// Network Initialization
-	net = MagicInternetBox::getInstance();
-	uint8_t playerID = net->getPlayerID().value();
-	uint8_t levelID = net->getLevelNum().value();
+	uint8_t playerID = net.getPlayerID().value();
+	uint8_t levelID = net.getLevelNum().value();
 
 	if (levelID >= MAX_NUM_LEVELS) {
 		// Reached end of game
@@ -89,7 +88,7 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 		const char* levelName = LEVEL_NAMES.at(levelID);
 
 		CULog("Loading level %s b/c mib gave level num %d", levelName, levelID);
-		uint8_t shipNumPlayers = net->getMaxNumPlayers();
+		uint8_t shipNumPlayers = net.getMaxNumPlayers();
 
 		std::shared_ptr<LevelModel> level = assets->get<LevelModel>(levelName);
 		unsigned int maxEvents = level->getMaxBreaches() * shipNumPlayers / globals::MIN_PLAYERS;
@@ -137,7 +136,7 @@ void GameMode::dispose() {
 #pragma region Collision Handlers
 
 void GameMode::breachCollisions() {
-	uint8_t playerID = net->getPlayerID().value();
+	uint8_t playerID = net.getPlayerID().value();
 	for (uint8_t i = 0; i < ship->getBreaches().size(); i++) {
 		auto& breach = ship->getBreaches()[i];
 		if (breach == nullptr || !breach->getIsActive()) {
@@ -160,7 +159,7 @@ void GameMode::breachCollisions() {
 				soundEffects->startEvent(SoundEffectController::FIX, i);
 				breach->decHealth(1);
 				breach->setIsPlayerOn(true);
-				net->resolveBreach(i);
+				net.resolveBreach(i);
 			}
 			donutModel->transitionFaceState(DonutModel::FaceState::Working);
 
@@ -177,7 +176,7 @@ void GameMode::breachCollisions() {
 }
 
 void GameMode::doorCollisions() {
-	int playerID = net->getPlayerID().value();
+	int playerID = net.getPlayerID().value();
 
 	// Normal Door
 	for (int i = 0; i < ship->getDoors().size(); i++) {
@@ -206,14 +205,14 @@ void GameMode::doorCollisions() {
 		// Active Door
 		if (abs(diff) < DOOR_ACTIVE_ANGLE) {
 			door->addPlayer(playerID);
-			net->flagDualTask(i, playerID, 1);
+			net.flagDualTask(i, playerID, 1);
 			donutModel->transitionFaceState(DonutModel::FaceState::Colliding);
 
 			// Inactive Door
 		} else if (door->isPlayerOn(playerID)) {
 			soundEffects->endEvent(SoundEffectController::DOOR, i);
 			door->removePlayer(playerID);
-			net->flagDualTask(i, playerID, 0);
+			net.flagDualTask(i, playerID, 0);
 		}
 	}
 
@@ -272,11 +271,11 @@ void GameMode::buttonCollisions() {
 		}
 
 		if (ship->flagButton(i)) {
-			net->flagButton(i);
+			net.flagButton(i);
 			if (button->getPair()->isJumpedOn()) {
 				CULog("Resolving button");
 				ship->resolveButton(i);
-				net->resolveButton(i);
+				net.resolveButton(i);
 			}
 		}
 	}
@@ -324,7 +323,7 @@ void GameMode::updateStabilizer() {
 
 	if (stabilizer.getIsWin()) {
 		ship->setStabilizerStatus(ShipModel::SUCCESS);
-		net->succeedAllTask();
+		net.succeedAllTask();
 		stabilizer.reset();
 	} else if (trunc(ship->canonicalTimeElapsed) == trunc(stabilizer.getEndTime())) {
 		gm.setChallengeFail(true);
@@ -339,7 +338,7 @@ void GameMode::updateStabilizer() {
 }
 
 void GameMode::updateDonuts(float timestep) {
-	uint8_t playerID = net->getPlayerID().value();
+	uint8_t playerID = net.getPlayerID().value();
 
 	// Jump logic check
 	// We wanted donuts to be able to jump on the win screen, but in the absence of that happening
@@ -347,7 +346,7 @@ void GameMode::updateDonuts(float timestep) {
 	if (input->hasJumped() && !donutModel->isJumping()) {
 		soundEffects->startEvent(SoundEffectController::JUMP, playerID);
 		donutModel->startJump();
-		net->jump(playerID);
+		net.jump(playerID);
 	} else {
 		soundEffects->endEvent(SoundEffectController::JUMP, playerID);
 	}
@@ -401,7 +400,7 @@ bool GameMode::lossCheck() {
 
 	sgRoot.setStatus(GameGraphRoot::Loss);
 	if (sgRoot.getAndResetLastButtonPressed() == GameGraphRoot::GameButton::Restart) {
-		net->restartGame();
+		net.restartGame();
 	}
 
 	return true;
@@ -415,26 +414,27 @@ bool GameMode::winCheck() {
 	sgRoot.setStatus(GameGraphRoot::Win);
 	if (sgRoot.getAndResetLastButtonPressed() == GameGraphRoot::GameButton::NextLevel) {
 		CULog("Next Level Pressed");
-		net->nextLevel();
+		net.nextLevel();
 	}
 
 	return true;
 }
 
 bool GameMode::connectionUpdate(float timestep) {
-	switch (net->matchStatus()) {
+	switch (net.matchStatus()) {
 		case MagicInternetBox::Disconnected:
 		case MagicInternetBox::ClientRoomInvalid:
 		case MagicInternetBox::ReconnectError:
-			if (net->reconnect()) {
-				net->update();
+			if (net.reconnect()) {
+				net.update();
 			}
 			sgRoot.setStatus(GameGraphRoot::Reconnecting);
 			sgRoot.update(timestep);
 			return false;
 		case MagicInternetBox::Reconnecting:
+		case MagicInternetBox::ReconnectPending:
 			// Still Reconnecting
-			net->update();
+			net.update();
 			sgRoot.setStatus(GameGraphRoot::Reconnecting);
 			sgRoot.update(timestep);
 			return false;
@@ -442,11 +442,11 @@ bool GameMode::connectionUpdate(float timestep) {
 		case MagicInternetBox::GameEnded:
 			// Game Ended, Replace with Another Screen
 			CULog("Game Ended");
-			net->update(ship);
+			net.update(ship);
 			sgRoot.update(timestep);
 			return false;
 		case MagicInternetBox::GameStart:
-			net->update(ship);
+			net.update(ship);
 			sgRoot.setStatus(GameGraphRoot::Normal);
 			break;
 		default:
@@ -476,7 +476,7 @@ void GameMode::update(float timestep) {
 	}
 
 	// Set needle percentage in pause menu
-	sgRoot.setNeedlePercentage(static_cast<float>(net->getNumPlayers() - 1) /
+	sgRoot.setNeedlePercentage(static_cast<float>(net.getNumPlayers() - 1) /
 							   static_cast<float>(globals::MAX_PLAYERS));
 
 	// Connection Status Checks

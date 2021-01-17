@@ -17,7 +17,7 @@ bool ShipModel::init(uint8_t numPlayers, uint8_t numBreaches, uint8_t numDoors, 
 									   : ExternalDonutModel::alloc(shipSize));
 
 		donuts[i]->setColorId(i);
-		if (!MagicInternetBox::getInstance()->isPlayerActive(i)) {
+		if (!MagicInternetBox::getInstance().isPlayerActive(i)) {
 			donuts[i]->setIsActive(false);
 		}
 	}

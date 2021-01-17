@@ -25,7 +25,7 @@ GLaDOS::GLaDOS()
 	: active(false),
 	  // NOLINTNEXTLINE This ain't the NSA; we don't need better security than this
 	  rand(static_cast<unsigned int>(time(nullptr))),
-	  mib(nullptr),
+	  mib(MagicInternetBox::getInstance()),
 	  fail(false),
 	  maxEvents(0),
 	  levelNum(0),
@@ -59,8 +59,7 @@ bool GLaDOS::init(const std::shared_ptr<ShipModel>& ship,
 				  const std::shared_ptr<LevelModel>& level) {
 	bool success = true;
 	this->ship = ship;
-	this->mib = MagicInternetBox::getInstance();
-	levelNum = mib->getLevelNum().value();
+	levelNum = mib.getLevelNum().value();
 	maxEvents = static_cast<int>(ship->getBreaches().size());
 	maxDoors = static_cast<int>(ship->getDoors().size());
 	maxButtons = static_cast<int>(ship->getButtons().size());
@@ -101,19 +100,18 @@ bool GLaDOS::init(const std::shared_ptr<ShipModel>& ship, const int levelNum) {
 	bool success = true;
 	readyQueue.clear();
 	this->ship = ship;
-	this->mib = MagicInternetBox::getInstance();
 	this->levelNum = levelNum;
 	CULog("Starting level %d", levelNum);
-	maxEvents = tutorial::MAX_BREACH.at(levelNum) * mib->getNumPlayers() / globals::MIN_PLAYERS;
-	maxDoors = tutorial::MAX_DOOR.at(levelNum) * mib->getNumPlayers() / globals::MIN_PLAYERS;
-	maxButtons = tutorial::MAX_BUTTON.at(levelNum) * mib->getNumPlayers() / globals::MIN_PLAYERS;
+	maxEvents = tutorial::MAX_BREACH.at(levelNum) * mib.getNumPlayers() / globals::MIN_PLAYERS;
+	maxDoors = tutorial::MAX_DOOR.at(levelNum) * mib.getNumPlayers() / globals::MIN_PLAYERS;
+	maxButtons = tutorial::MAX_BUTTON.at(levelNum) * mib.getNumPlayers() / globals::MIN_PLAYERS;
 	int unop =
-		static_cast<int>(tutorial::SECTIONED.at(levelNum)) * static_cast<int>(mib->getNumPlayers());
+		static_cast<int>(tutorial::SECTIONED.at(levelNum)) * static_cast<int>(mib.getNumPlayers());
 	sections = unop;
 	customEventCtr = tutorial::CUSTOM_EVENTS.at(levelNum);
 	float size = static_cast<float>(tutorial::SIZE_PER.at(levelNum)) *
-				 static_cast<float>(mib->getNumPlayers());
-	ship->init(mib->getMaxNumPlayers(), maxEvents, maxDoors, mib->getPlayerID().value(), size,
+				 static_cast<float>(mib.getNumPlayers());
+	ship->init(mib.getMaxNumPlayers(), maxEvents, maxDoors, mib.getPlayerID().value(), size,
 			   tutorial::HEALTH.at(levelNum), maxButtons, unop);
 	ship->setTimeless(true);
 	ship->initTimer(1);
@@ -208,13 +206,13 @@ void GLaDOS::placeObject(BuildingBlockModel::Object obj, float zeroAngle, int p)
 			i = breachFree.front();
 			breachFree.pop();
 			ship->createBreach(objAngle, p, i);
-			mib->createBreach(objAngle, p, i);
+			mib.createBreach(objAngle, p, i);
 			break;
 		case BuildingBlockModel::Door:
 			i = doorFree.front();
 			doorFree.pop();
 			ship->createDoor(objAngle, i);
-			mib->createDualTask(objAngle, i);
+			mib.createDualTask(objAngle, i);
 			break;
 		case BuildingBlockModel::Button: {
 			// Roll for pair's angle
@@ -263,8 +261,8 @@ void GLaDOS::placeObject(BuildingBlockModel::Object obj, float zeroAngle, int p)
 			if (stabilizer.getIsActive()) {
 				break;
 			}
-			if (p != mib->getPlayerID() && ship->getDonuts().at(p)->getIsActive()) {
-				mib->createAllTask(p);
+			if (p != mib.getPlayerID() && ship->getDonuts().at(p)->getIsActive()) {
+				mib.createAllTask(p);
 			} else {
 				stabilizer.startChallenge(ship->timePassed());
 			}
@@ -282,7 +280,7 @@ void GLaDOS::placeButtons(float angle1, float angle2) {
 
 	// Dispatch challenge creation
 	ship->createButton(angle1, i, angle2, j);
-	mib->createButtonTask(angle1, i, angle2, j);
+	mib.createButtonTask(angle1, i, angle2, j);
 }
 
 /**
@@ -334,18 +332,18 @@ void GLaDOS::update(float dt) {
 
 	if (fail) {
 		ship->failAllTask();
-		mib->failAllTask();
+		mib.failAllTask();
 		fail = false;
 	}
 
 	// Check if this is the host for generating breaches and doors
-	if (mib->getPlayerID() != 0) {
+	if (mib.getPlayerID() != 0) {
 		return;
 	}
 
 	if (levelNum < globals::NUM_TUTORIAL_LEVELS &&
 		std::find(std::begin(tutorial::REAL_LEVELS), std::end(tutorial::REAL_LEVELS),
-				  mib->getLevelNum()) == std::end(tutorial::REAL_LEVELS)) {
+				  mib.getLevelNum()) == std::end(tutorial::REAL_LEVELS)) {
 		tutorialLevels(dt);
 		return;
 	}
@@ -354,7 +352,7 @@ void GLaDOS::update(float dt) {
 		std::shared_ptr<EventModel> event = events.at(i);
 		int spawnRate =
 			static_cast<int>(globals::MIN_PLAYERS /
-							 (event->getProbability() * static_cast<float>(mib->getNumPlayers())));
+							 (event->getProbability() * static_cast<float>(mib.getNumPlayers())));
 		if (spawnRate < 1) {
 			spawnRate = 1;
 		}
@@ -533,9 +531,9 @@ void GLaDOS::tutorialLevels(float /*dt*/) {
 				customEventCtr--;
 			} else if (customEventCtr <= 0) {
 				// Check if all breaches that can be resolved are resolved.
-				if (ship->getBreaches().size() - breachFree.size() == mib->getNumPlayers()) {
+				if (ship->getBreaches().size() - breachFree.size() == mib.getNumPlayers()) {
 					ship->setTimeless(false);
-					mib->forceWinLevel();
+					mib.forceWinLevel();
 					ship->initTimer(0);
 				}
 			}
@@ -543,7 +541,7 @@ void GLaDOS::tutorialLevels(float /*dt*/) {
 		case tutorial::DOOR_LEVEL:
 			if (ship->getDoors().size() - doorFree.size() == 0) {
 				ship->setTimeless(false);
-				mib->forceWinLevel();
+				mib.forceWinLevel();
 				ship->initTimer(0);
 				break;
 			}
@@ -551,7 +549,7 @@ void GLaDOS::tutorialLevels(float /*dt*/) {
 		case tutorial::BUTTON_LEVEL:
 			if (ship->getButtons().size() - buttonFree.size() == 0) {
 				ship->setTimeless(false);
-				mib->forceWinLevel();
+				mib.forceWinLevel();
 				ship->initTimer(0);
 				break;
 			}
@@ -560,8 +558,8 @@ void GLaDOS::tutorialLevels(float /*dt*/) {
 			if (ship->timePassed() < STABILIZER_START) {
 				break;
 			}
-			if (customEventCtr >= mib->getNumPlayers()) {
-				customEventCtr = static_cast<int>(mib->getNumPlayers()) - 1;
+			if (customEventCtr >= mib.getNumPlayers()) {
+				customEventCtr = static_cast<int>(mib.getNumPlayers()) - 1;
 			}
 			// Don't ask inactive donuts to do anything
 			// Player 0 will never be inactive since this is player 0
@@ -579,9 +577,9 @@ void GLaDOS::tutorialLevels(float /*dt*/) {
 					break;
 				case ShipModel::INACTIVE: {
 					// Hopefully after animation is done, it will always be set to inactive
-					if (customEventCtr != mib->getPlayerID() &&
+					if (customEventCtr != mib.getPlayerID() &&
 						ship->getDonuts().at(customEventCtr)->getIsActive()) {
-						mib->createAllTask(customEventCtr);
+						mib.createAllTask(customEventCtr);
 					} else {
 						ship->createAllTask();
 					}
@@ -593,13 +591,13 @@ void GLaDOS::tutorialLevels(float /*dt*/) {
 					customEventCtr--;
 					if (customEventCtr < 0) {
 						ship->setTimeless(false);
-						mib->forceWinLevel();
+						mib.forceWinLevel();
 						ship->initTimer(0);
 						break;
 					}
-					if (customEventCtr != mib->getPlayerID() &&
+					if (customEventCtr != mib.getPlayerID() &&
 						ship->getDonuts().at(customEventCtr)->getIsActive()) {
-						mib->createAllTask(customEventCtr);
+						mib.createAllTask(customEventCtr);
 					} else {
 						ship->createAllTask();
 					}
