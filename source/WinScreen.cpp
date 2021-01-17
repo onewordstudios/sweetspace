@@ -10,6 +10,7 @@
 
 constexpr size_t TRAVEL_TIME = 180;
 constexpr size_t LOOP_TIME = 60;
+constexpr size_t FADE_TIME = 30;
 
 constexpr float PI = static_cast<float>(M_PI);
 constexpr float CIRCLE_DIM = 50.f;
@@ -123,7 +124,7 @@ void WinScreen::activate(uint8_t completedLevel) {
 }
 
 bool WinScreen::tappedNext(std::tuple<cugl::Vec2, cugl::Vec2> tapData) const {
-	return isHost && currFrame > TRAVEL_TIME &&
+	return isHost && currFrame > TRAVEL_TIME + FADE_TIME &&
 		   ButtonManager::tappedButton(btn, std::move(tapData));
 }
 
@@ -144,8 +145,8 @@ void WinScreen::update() {
 		float y = (sinf(percent) * globals::SCENE_WIDTH * HEIGHT_SCALE + _contentSize.height) / 2;
 		circle->setPositionX(x);
 		circle->setPositionY(y);
-	} else if (currFrame <= TRAVEL_TIME + LOOP_TIME) {
-		auto fadeColor = Tween::fade(static_cast<float>(currFrame - TRAVEL_TIME) / LOOP_TIME);
+	} else if (currFrame <= TRAVEL_TIME + FADE_TIME) {
+		auto fadeColor = Tween::fade(static_cast<float>(currFrame - TRAVEL_TIME) / FADE_TIME);
 		btn->setColor(fadeColor);
 		waitText->setColor(fadeColor);
 	}
