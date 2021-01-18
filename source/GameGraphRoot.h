@@ -15,6 +15,7 @@
 #include "HealthNode.h"
 #include "InputController.h"
 #include "MagicInternetBox.h"
+#include "PauseMenu.h"
 #include "PlayerDonutNode.h"
 #include "ShipModel.h"
 #include "TutorialNode.h"
@@ -118,18 +119,8 @@ class GameGraphRoot : public cugl::Scene {
 	cugl::Timestamp timeoutCurrent;
 
 	// Pause Textures
-	/** Button to Open Pause */
-	std::shared_ptr<cugl::Button> pauseBtn;
-	/** Node to hold all of the Loss Screen.*/
-	std::shared_ptr<cugl::Node> pauseScreen;
-	/** Button to Mute Music */
-	std::shared_ptr<cugl::Button> musicBtn;
-	/** Button to Mute Sound Effects */
-	std::shared_ptr<cugl::Button> soundBtn;
-	/** Button to Leave */
-	std::shared_ptr<cugl::Button> leaveBtn;
-	/** The node containing the player count needle*/
-	std::shared_ptr<cugl::Node> needle;
+	/** Pause menu node */
+	std::shared_ptr<PauseMenu> pauseMenu;
 
 	// Loss Screen Textures
 	/** Node to hold all of the Loss Screen.*/
@@ -295,12 +286,6 @@ class GameGraphRoot : public cugl::Scene {
 	 * Resets the status of the game so that we can play again.
 	 */
 	void reset() override;
-
-	/**
-	 * Spin Dial in pause menu
-	 * @param percentage  The percent of dial to spin
-	 */
-	void setNeedlePercentage(float percentage);
 
 	/**
 	 * Healper function for setting alpha value of ship health warning

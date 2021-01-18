@@ -1131,7 +1131,70 @@
 						}
                     }
                 },
-				"pause": {
+                "timerBorder" : {
+                    "type": "Image",
+                    "data": {
+                      "texture": "timer_border",
+                      "scale": 0.2
+                    },
+                    "layout" : {
+                      "x_anchor" : "center",
+                      "y_anchor" : "top",
+                      "x_offset" : -60,
+                      "y_offset" : -50,
+                      "absolute" : true
+                    }
+                },
+                "hud" : {
+                    "type": "Label",
+                    "data": {
+                        "font"       : "digital",
+                        "text"       : "Coords: (128, 128)  ",
+                        "foreground" : [247,230,77,255],
+                        "size"       : [500,70],
+                        "valign"     : "bottom",
+                        "halign"     : "left"
+                    },
+                    "layout" : {
+                        "x_anchor" : "center",
+                        "y_anchor" : "top",
+                        "x_offset" : -50,
+                        "y_offset" : -40,
+                        "absolute" : true
+                    }
+                },
+                "blackoutOverlay" : {
+                    "type": "Image",
+                    "format"    : {
+                        "type" : "Anchored"
+                    },
+                    "data": {
+                        "texture":  "overlay_black",
+                        "anchor":   [0.5,0.5]
+                    },
+                    "layout" : {
+                        "x_anchor" : "center",
+                        "y_anchor" : "middle",
+                        "absolute" : true
+                    }
+                }
+            }
+        },
+		"pausemenu": {
+			"type"      : "Node",
+            "format"    : {
+                "type" : "Anchored"
+            },
+			"data"   : {
+				"anchor"   : [0.5,0.5],
+				"scale"    : 1
+			},
+			"layout" : {
+				"x_anchor" : "center",
+				"y_anchor" : "middle"
+			},
+			"children" : {
+				"menu": {
 					"type": "Image",
 					"format"    : {
 						"type" : "Anchored"
@@ -1355,56 +1418,9 @@
 							}
 						}
 					}
-				},
-                "timerBorder" : {
-                    "type": "Image",
-                    "data": {
-                      "texture": "timer_border",
-                      "scale": 0.2
-                    },
-                    "layout" : {
-                      "x_anchor" : "center",
-                      "y_anchor" : "top",
-                      "x_offset" : -60,
-                      "y_offset" : -50,
-                      "absolute" : true
-                    }
-                },
-                "hud" : {
-                    "type": "Label",
-                    "data": {
-                        "font"       : "digital",
-                        "text"       : "Coords: (128, 128)  ",
-                        "foreground" : [247,230,77,255],
-                        "size"       : [500,70],
-                        "valign"     : "bottom",
-                        "halign"     : "left"
-                    },
-                    "layout" : {
-                        "x_anchor" : "center",
-                        "y_anchor" : "top",
-                        "x_offset" : -50,
-                        "y_offset" : -40,
-                        "absolute" : true
-                    }
-                },
-                "blackoutOverlay" : {
-                    "type": "Image",
-                    "format"    : {
-                        "type" : "Anchored"
-                    },
-                    "data": {
-                        "texture":  "overlay_black",
-                        "anchor":   [0.5,0.5]
-                    },
-                    "layout" : {
-                        "x_anchor" : "center",
-                        "y_anchor" : "middle",
-                        "absolute" : true
-                    }
-                }
-            }
-        },
+				}
+			}
+		},
 		"winscreen": {
 			"type"      : "Image",
 			"format"    : {

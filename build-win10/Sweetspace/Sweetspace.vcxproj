@@ -371,6 +371,7 @@
     <ClInclude Include="..\..\source\MainMenuTransitions.h" />
     <ClInclude Include="..\..\source\NetworkConnection.h" />
     <ClInclude Include="..\..\source\NetworkDataType.h" />
+    <ClInclude Include="..\..\source\PauseMenu.h" />
     <ClInclude Include="..\..\source\PlayerDonutModel.h" />
     <ClInclude Include="..\..\source\PlayerDonutNode.h" />
     <ClInclude Include="..\..\source\ShipModel.h" />
@@ -522,6 +523,7 @@
     <ClCompile Include="..\..\source\MainMenuMode.cpp" />
     <ClCompile Include="..\..\source\MainMenuTransitions.cpp" />
     <ClCompile Include="..\..\source\NetworkConnection.cpp" />
+    <ClCompile Include="..\..\source\PauseMenu.cpp" />
     <ClCompile Include="..\..\source\PlayerDonutModel.cpp" />
     <ClCompile Include="..\..\source\PlayerDonutNode.cpp" />
     <ClCompile Include="..\..\source\ShipModel.cpp" />

@@ -1,0 +1,59 @@
+#ifndef PAUSE_MENU_H
+#define PAUSE_MENU_H
+
+#include <cugl/cugl.h>
+
+#include "ButtonManager.h"
+
+class PauseMenu : public cugl::Node {
+   private:
+	/** Wrapper node for pause menu */
+	std::shared_ptr<cugl::Node> menu;
+	/** Main pause button node */
+	std::shared_ptr<cugl::Button> pauseBtn;
+
+	/** Current frame of animation */
+	size_t currFrame;
+
+	/** Whether the pause menu is open */
+	bool menuOpen;
+	/** Whether music is paused */
+	bool musicPaused;
+	/** Whether sound effects are paused */
+	bool sfxPaused;
+
+	/** Button manager for all the buttons */
+	ButtonManager btns;
+
+   public:
+	explicit PauseMenu(const std::shared_ptr<cugl::AssetManager> &assets);
+	~PauseMenu();
+
+	/**
+	 * Initialize this win screen with assets from the pointed asset manager.
+	 *
+	 * @param assets Asset manager to load win screen assets from
+	 */
+	bool init(const std::shared_ptr<cugl::AssetManager> &assets);
+
+	/**
+	 * Cleanup and dispose of all assets pointed to by this node
+	 */
+	void dispose() override;
+
+	/**
+	 * Process all buttons in the pause menu. Returns true when leave game is pressed.
+	 *
+	 * @param tapData Tap data from Input Controller
+	 *
+	 * @return True iff the user wishes to leave the game
+	 */
+	bool manageButtons(const std::tuple<cugl::Vec2, cugl::Vec2> &tapData);
+
+	/**
+	 * Update the animation for this node. Should be called once every frame.
+	 */
+	void update();
+};
+
+#endif // PAUSE_MENU_H
