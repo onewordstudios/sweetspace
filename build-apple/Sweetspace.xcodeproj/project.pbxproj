@@ -365,6 +365,9 @@
 		7BD666F22448E8E500D68748 /* MainMenuMode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7BD666F12448E8E500D68748 /* MainMenuMode.cpp */; };
 		7BD666F32448E8E500D68748 /* MainMenuMode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7BD666F12448E8E500D68748 /* MainMenuMode.cpp */; };
 		7BD666F42448E8E500D68748 /* MainMenuMode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7BD666F12448E8E500D68748 /* MainMenuMode.cpp */; };
+		828C645825B61B55001A3F65 /* PauseMenu.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 828C645625B61B54001A3F65 /* PauseMenu.cpp */; };
+		828C645925B61B55001A3F65 /* PauseMenu.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 828C645625B61B54001A3F65 /* PauseMenu.cpp */; };
+		828C645A25B61B55001A3F65 /* PauseMenu.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 828C645625B61B54001A3F65 /* PauseMenu.cpp */; };
 		82AE182225B27616001C436F /* WinScreen.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 82AE182125B27616001C436F /* WinScreen.cpp */; };
 		82AE182325B27619001C436F /* WinScreen.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 82AE182125B27616001C436F /* WinScreen.cpp */; };
 		82AE182425B27619001C436F /* WinScreen.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 82AE182125B27616001C436F /* WinScreen.cpp */; };
@@ -838,6 +841,10 @@
 		7BD666F02448E8E500D68748 /* MainMenuMode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainMenuMode.h; sourceTree = "<group>"; };
 		7BD666F12448E8E500D68748 /* MainMenuMode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MainMenuMode.cpp; sourceTree = "<group>"; };
 		7BDE1A3E243422EC0080F7CB /* Globals.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Globals.h; sourceTree = "<group>"; };
+		828C644D25B61ABC001A3F65 /* AudioController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioController.h; sourceTree = "<group>"; };
+		828C645425B61B00001A3F65 /* NeedleAnimator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NeedleAnimator.h; sourceTree = "<group>"; };
+		828C645625B61B54001A3F65 /* PauseMenu.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PauseMenu.cpp; sourceTree = "<group>"; };
+		828C645725B61B54001A3F65 /* PauseMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PauseMenu.h; sourceTree = "<group>"; };
 		82AE181D25B27616001C436F /* WinScreen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WinScreen.h; sourceTree = "<group>"; };
 		82AE182125B27616001C436F /* WinScreen.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = WinScreen.cpp; sourceTree = "<group>"; };
 		A577C9232422AA0D00B12ADE /* DoorNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DoorNode.cpp; sourceTree = "<group>"; };
@@ -1030,6 +1037,7 @@
 				7B999C95250F8E8B00649EFB /* NetworkDataType.h */,
 				D15227FD0DE8BAD86857197F /* MagicInternetBox.h */,
 				D15228511721431DE5C3F8BF /* MagicInternetBox.cpp */,
+				828C645425B61B00001A3F65 /* NeedleAnimator.h */,
 			);
 			name = Networking;
 			sourceTree = "<group>";
@@ -1312,6 +1320,7 @@
 				7B0FBB0424FBBB6E0026067D /* Networking */,
 				7B3270692425A569004A3B36 /* GLaDOS.h */,
 				C122229A6EDF1DAB4330F1B7 /* GLaDOS.cpp */,
+				828C644D25B61ABC001A3F65 /* AudioController.h */,
 				DF3B743C2403A46A0063552F /* InputController.h */,
 				DF3B74402403A46B0063552F /* InputController.cpp */,
 				A577C969246A50AE00B12ADE /* SoundEffectController.h */,
@@ -1384,8 +1393,7 @@
 		7B106FA924DA53F7008EFDED /* Scene Graph */ = {
 			isa = PBXGroup;
 			children = (
-				82AE182125B27616001C436F /* WinScreen.cpp */,
-				82AE181D25B27616001C436F /* WinScreen.h */,
+				828C645525B61B1F001A3F65 /* Game UI */,
 				DF621BDD24677E3D0059D55B /* UnopenableNode.cpp */,
 				DF621BDC24677E3D0059D55B /* UnopenableNode.h */,
 				A577C9232422AA0D00B12ADE /* DoorNode.cpp */,
@@ -1412,6 +1420,17 @@
 				D1522A2BC0E1799E7142209A /* SparkleNode.h */,
 			);
 			name = "Scene Graph";
+			sourceTree = "<group>";
+		};
+		828C645525B61B1F001A3F65 /* Game UI */ = {
+			isa = PBXGroup;
+			children = (
+				828C645625B61B54001A3F65 /* PauseMenu.cpp */,
+				828C645725B61B54001A3F65 /* PauseMenu.h */,
+				82AE182125B27616001C436F /* WinScreen.cpp */,
+				82AE181D25B27616001C436F /* WinScreen.h */,
+			);
+			name = "Game UI";
 			sourceTree = "<group>";
 		};
 		D1522166C3D73A4C222E4139 /* libraries */ = {
@@ -1754,6 +1773,7 @@
 				DF3B74572403A46B0063552F /* LoadingMode.cpp in Sources */,
 				7B0FBD7324FBBC170026067D /* PluginInterface2.cpp in Sources */,
 				7BD666F42448E8E500D68748 /* MainMenuMode.cpp in Sources */,
+				828C645A25B61B55001A3F65 /* PauseMenu.cpp in Sources */,
 				7B0FBE6024FBBC170026067D /* RakNetSocket2_NativeClient.cpp in Sources */,
 				7B0FBE0F24FBBC170026067D /* NatTypeDetectionServer.cpp in Sources */,
 				7B0FBD8824FBBC170026067D /* PacketLogger.cpp in Sources */,
@@ -1909,6 +1929,7 @@
 				DF3B74562403A46B0063552F /* LoadingMode.cpp in Sources */,
 				7B0FBD7224FBBC170026067D /* PluginInterface2.cpp in Sources */,
 				7BD666F32448E8E500D68748 /* MainMenuMode.cpp in Sources */,
+				828C645925B61B55001A3F65 /* PauseMenu.cpp in Sources */,
 				7B0FBE5F24FBBC170026067D /* RakNetSocket2_NativeClient.cpp in Sources */,
 				7B0FBE0E24FBBC170026067D /* NatTypeDetectionServer.cpp in Sources */,
 				7B0FBD8724FBBC170026067D /* PacketLogger.cpp in Sources */,
@@ -2064,6 +2085,7 @@
 				DF3B74552403A46B0063552F /* LoadingMode.cpp in Sources */,
 				7B0FBD7124FBBC170026067D /* PluginInterface2.cpp in Sources */,
 				7BD666F22448E8E500D68748 /* MainMenuMode.cpp in Sources */,
+				828C645825B61B55001A3F65 /* PauseMenu.cpp in Sources */,
 				7B0FBE5E24FBBC170026067D /* RakNetSocket2_NativeClient.cpp in Sources */,
 				7B0FBE0D24FBBC170026067D /* NatTypeDetectionServer.cpp in Sources */,
 				7B0FBD8624FBBC170026067D /* PacketLogger.cpp in Sources */,
