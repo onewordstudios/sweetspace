@@ -1194,6 +1194,40 @@
 				"y_anchor" : "middle"
 			},
 			"children" : {
+				"pauseBtn" : {
+					"type": "Button",
+					"format" : {
+						"type" : "Anchored"
+					},
+					"data": {
+						"upnode"   : "up",
+						"downnode" : "down",
+						"anchor"   : [1,0],
+						"scale" : 0.5
+					},
+					"layout" : {
+						"x_anchor" : "right",
+						"y_anchor" : "bottom",
+						"x_offset" : -10,
+						"y_offset" : 10,
+						"absolute" : true
+					},
+					"children" : {
+						"up" : {
+							"type"   : "Image",
+							"data"   : {
+								"texture"  : "menu_btn_up"
+							}
+						},
+						"down" : {
+							"type"   : "Image",
+							"data"   : {
+								"texture"  : "menu_btn_up",
+								"scale" : 0.9
+							}
+						}
+					}
+				},
 				"menu": {
 					"type": "Image",
 					"format"    : {
@@ -1383,38 +1417,39 @@
 									}
 								}
 							}
-						}
-					}
-				},
-				"pauseBtn" : {
-					"type": "Button",
-					"format" : {
-						"type" : "Anchored"
-					},
-					"data": {
-						"upnode"   : "up",
-						"downnode" : "down",
-						"anchor"   : [1,0],
-						"scale" : 0.5
-					},
-					"layout" : {
-						"x_anchor" : "right",
-						"y_anchor" : "bottom",
-						"x_offset" : -10,
-						"y_offset" : 10,
-						"absolute" : true
-					},
-					"children" : {
-						"up" : {
-							"type"   : "Image",
-							"data"   : {
-								"texture"  : "menu_btn_up"
-							}
 						},
-						"down" : {
-							"type"   : "Image",
-							"data"   : {
-								"texture"  : "menu_btn_down"
+						"closeBtn" : {
+							"type": "Button",
+							"format" : {
+								"type" : "Anchored"
+							},
+							"data": {
+								"upnode"   : "up",
+								"downnode" : "down",
+								"anchor"   : [1,0],
+								"scale" : 1
+							},
+							"layout" : {
+								"x_anchor" : "right",
+								"y_anchor" : "bottom",
+								"x_offset" : -120,
+								"y_offset" : 120,
+								"absolute" : true
+							},
+							"children" : {
+								"up" : {
+									"type"   : "Image",
+									"data"   : {
+										"texture"  : "menu_btn_down"
+									}
+								},
+								"down" : {
+									"type"   : "Image",
+									"data"   : {
+										"scale" : 0.9,
+										"texture"  : "menu_btn_down"
+									}
+								}
 							}
 						}
 					}
