@@ -415,7 +415,7 @@ bool GameGraphRoot::init( // NOLINT Yeah it's a big function; we'll live with it
 
 	// Initialize Pause Screen Componenets
 	pauseMenu = std::make_shared<PauseMenu>(assets);
-	
+
 	// Initialize Loss Screen Componenets
 	lossScreen = assets->get<Node>("game_overlay_loss");
 	restartBtn =
