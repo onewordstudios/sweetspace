@@ -660,6 +660,9 @@
     <ClInclude Include="..\..\source\PauseMenu.h">
       <Filter>Header Files\SceneGraph\GameUI</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\source\AudioController.h">
+      <Filter>Header Files\Controllers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\source\main.cpp">

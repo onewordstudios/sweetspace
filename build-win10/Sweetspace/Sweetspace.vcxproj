@@ -189,6 +189,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\..\source\AnimationManager.h" />
+    <ClInclude Include="..\..\source\AudioController.h" />
     <ClInclude Include="..\..\source\BreachModel.h" />
     <ClInclude Include="..\..\source\BreachNode.h" />
     <ClInclude Include="..\..\source\BuildingBlockModel.h" />

@@ -1,5 +1,6 @@
 #include "PauseMenu.h"
 
+#include "AudioController.h"
 #include "Globals.h"
 #include "MagicInternetBox.h"
 #include "Tween.h"
@@ -47,6 +48,10 @@ bool PauseMenu::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 	btns.registerButton(pauseBtn);
 	btns.registerButton(leaveBtn);
 
+	auto& audio = AudioController::getInstance();
+	musicMuteBtn->setDown(!audio.isMusicActive());
+	sfxMuteBtn->setDown(!audio.isSfxActive());
+
 	menuOpen = false;
 
 	return true;
@@ -71,21 +76,11 @@ bool PauseMenu::manageButtons(const std::tuple<cugl::Vec2, cugl::Vec2>& tapData)
 	}
 
 	if (ButtonManager::tappedButton(musicMuteBtn, tapData)) {
-		if (musicMuteBtn->isDown()) {
-			musicMuteBtn->setDown(false);
-			cugl::AudioChannels::get()->resumeMusic();
-		} else {
-			musicMuteBtn->setDown(true);
-			cugl::AudioChannels::get()->pauseMusic();
-		}
+		AudioController::getInstance().toggleMusic();
+		musicMuteBtn->setDown(!musicMuteBtn->isDown());
 	} else if (ButtonManager::tappedButton(sfxMuteBtn, tapData)) {
-		if (sfxMuteBtn->isDown()) {
-			sfxMuteBtn->setDown(false);
-			cugl::AudioChannels::get()->resumeAllEffects();
-		} else {
-			sfxMuteBtn->setDown(true);
-			cugl::AudioChannels::get()->pauseAllEffects();
-		}
+		AudioController::getInstance().toggleSfx();
+		sfxMuteBtn->setDown(!sfxMuteBtn->isDown());
 	}
 
 	return menuOpen && ButtonManager::tappedButton(leaveBtn, tapData);
