@@ -76,11 +76,13 @@ bool PauseMenu::manageButtons(const std::tuple<cugl::Vec2, cugl::Vec2>& tapData)
 	}
 
 	if (ButtonManager::tappedButton(musicMuteBtn, tapData)) {
-		AudioController::getInstance().toggleMusic();
-		musicMuteBtn->setDown(!musicMuteBtn->isDown());
+		auto& audio = AudioController::getInstance();
+		audio.toggleMusic();
+		musicMuteBtn->setDown(!audio.isMusicActive());
 	} else if (ButtonManager::tappedButton(sfxMuteBtn, tapData)) {
-		AudioController::getInstance().toggleSfx();
-		sfxMuteBtn->setDown(!sfxMuteBtn->isDown());
+		auto& audio = AudioController::getInstance();
+		audio.toggleSfx();
+		sfxMuteBtn->setDown(!audio.isSfxActive());
 	}
 
 	return menuOpen && ButtonManager::tappedButton(leaveBtn, tapData);
