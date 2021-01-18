@@ -72,6 +72,9 @@ void PauseMenu::dispose() {
 }
 
 bool PauseMenu::manageButtons(const std::tuple<cugl::Vec2, cugl::Vec2>& tapData) {
+	if (!_isVisible) {
+		return false;
+	}
 	if ((!menuOpen && ButtonManager::tappedButton(pauseBtn, tapData)) ||
 		(menuOpen && ButtonManager::tappedButton(closeBtn, tapData))) {
 		menuOpen = !menuOpen;
@@ -93,6 +96,9 @@ bool PauseMenu::manageButtons(const std::tuple<cugl::Vec2, cugl::Vec2>& tapData)
 }
 
 void PauseMenu::update() {
+	if (!_isVisible) {
+		return;
+	}
 	btns.process();
 
 	if (currFrame <= OPEN_SPEED) {

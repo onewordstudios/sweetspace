@@ -573,6 +573,7 @@ void GameGraphRoot::update( // NOLINT Yeah it's a big function; we'll live with 
 		case Loss:
 			// Show loss screen
 			lossScreen->setVisible(true);
+			pauseMenu->setVisible(false);
 			if (playerID != 0) {
 				lostWaitText->setVisible(true);
 				restartBtn->setVisible(false);
@@ -592,6 +593,7 @@ void GameGraphRoot::update( // NOLINT Yeah it's a big function; we'll live with 
 				healthNodeNumbers->setVisible(false);
 				coordHUD->setVisible(false);
 				winScreen->activate(*MagicInternetBox::getInstance().getLevelNum());
+				pauseMenu->setVisible(false);
 			}
 			winScreen->update();
 			break;
