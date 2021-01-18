@@ -13,6 +13,8 @@ class PauseMenu : public cugl::Node {
 	std::shared_ptr<cugl::Node> needle;
 	/** Main pause button node */
 	std::shared_ptr<cugl::Button> pauseBtn;
+	/** Close menu button */
+	std::shared_ptr<cugl::Button> closeBtn;
 	/** Leave button */
 	std::shared_ptr<cugl::Button> leaveBtn;
 	/** Music mute button */

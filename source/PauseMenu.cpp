@@ -26,6 +26,8 @@ bool PauseMenu::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 	needle = assets->get<Node>("pausemenu_menu_dial_hand");
 
 	pauseBtn = std::dynamic_pointer_cast<cugl::Button>(assets->get<Node>("pausemenu_pauseBtn"));
+	closeBtn =
+		std::dynamic_pointer_cast<cugl::Button>(assets->get<Node>("pausemenu_menu_closeBtn"));
 	leaveBtn =
 		std::dynamic_pointer_cast<cugl::Button>(assets->get<Node>("pausemenu_menu_leaveBtn"));
 	musicMuteBtn =
@@ -46,6 +48,7 @@ bool PauseMenu::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 
 	btns.registerButton(pauseBtn);
 	btns.registerButton(leaveBtn);
+	btns.registerButton(closeBtn);
 
 	auto& audio = AudioController::getInstance();
 	musicMuteBtn->setDown(!audio.isMusicActive());
@@ -60,6 +63,7 @@ void PauseMenu::dispose() {
 	menu = nullptr;
 	needle = nullptr;
 	pauseBtn = nullptr;
+	closeBtn = nullptr;
 	leaveBtn = nullptr;
 	musicMuteBtn = nullptr;
 	sfxMuteBtn = nullptr;
@@ -68,7 +72,8 @@ void PauseMenu::dispose() {
 }
 
 bool PauseMenu::manageButtons(const std::tuple<cugl::Vec2, cugl::Vec2>& tapData) {
-	if (ButtonManager::tappedButton(pauseBtn, tapData)) {
+	if ((!menuOpen && ButtonManager::tappedButton(pauseBtn, tapData)) ||
+		(menuOpen && ButtonManager::tappedButton(closeBtn, tapData))) {
 		menuOpen = !menuOpen;
 		currFrame = 0;
 		return false;
