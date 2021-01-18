@@ -414,15 +414,8 @@ bool GameGraphRoot::init( // NOLINT Yeah it's a big function; we'll live with it
 	timeoutStart.mark();
 
 	// Initialize Pause Screen Componenets
-	// pauseBtn = std::dynamic_pointer_cast<Button>(assets->get<Node>("game_pauseBtn"));
 	pauseMenu = std::make_shared<PauseMenu>(assets);
-	// pauseBtn->setDown(false);
-	// pauseScreen->setVisible(false);
-	// musicBtn = std::dynamic_pointer_cast<Button>(assets->get<Node>("game_pause_musicBtn"));
-	// soundBtn = std::dynamic_pointer_cast<Button>(assets->get<Node>("game_pause_soundBtn"));
-	// leaveBtn = std::dynamic_pointer_cast<Button>(assets->get<Node>("game_pause_leaveBtn"));
-	// needle = assets->get<Node>("game_pause_dial_hand");
-
+	
 	// Initialize Loss Screen Componenets
 	lossScreen = assets->get<Node>("game_overlay_loss");
 	restartBtn =
@@ -445,7 +438,6 @@ bool GameGraphRoot::init( // NOLINT Yeah it's a big function; we'll live with it
 
 	// Register Regular Buttons
 	buttonManager.registerButton(restartBtn);
-	// buttonManager.registerButton(leaveBtn);
 
 	addChild(scene);
 	addChild(winScreen);
