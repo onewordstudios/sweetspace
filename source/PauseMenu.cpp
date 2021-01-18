@@ -9,7 +9,7 @@ constexpr float NEEDLE_SPEED = 0.3f;
 constexpr float NEEDLE_CUTOFF = 0.01f;
 
 PauseMenu::PauseMenu(const std::shared_ptr<cugl::AssetManager>& assets)
-	: currFrame(0), menuOpen(false), musicPaused(false), sfxPaused(false) {
+	: currFrame(0), menuOpen(false) {
 	init(assets);
 }
 
@@ -26,6 +26,12 @@ bool PauseMenu::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 	needle = assets->get<Node>("pausemenu_menu_dial_hand");
 
 	pauseBtn = std::dynamic_pointer_cast<cugl::Button>(assets->get<Node>("pausemenu_pauseBtn"));
+	leaveBtn =
+		std::dynamic_pointer_cast<cugl::Button>(assets->get<Node>("pausemenu_menu_leaveBtn"));
+	musicMuteBtn =
+		std::dynamic_pointer_cast<cugl::Button>(assets->get<Node>("pausemenu_menu_musicBtn"));
+	sfxMuteBtn =
+		std::dynamic_pointer_cast<cugl::Button>(assets->get<Node>("pausemenu_menu_soundBtn"));
 
 	cugl::Size dimen = cugl::Application::get()->getDisplaySize();
 	dimen *= globals::SCENE_WIDTH / dimen.width;
@@ -39,6 +45,7 @@ bool PauseMenu::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 	doLayout();
 
 	btns.registerButton(pauseBtn);
+	btns.registerButton(leaveBtn);
 
 	menuOpen = false;
 
@@ -49,22 +56,39 @@ void PauseMenu::dispose() {
 	menu = nullptr;
 	needle = nullptr;
 	pauseBtn = nullptr;
+	leaveBtn = nullptr;
+	musicMuteBtn = nullptr;
+	sfxMuteBtn = nullptr;
+	Node::dispose();
+	btns.clear();
 }
 
 bool PauseMenu::manageButtons(const std::tuple<cugl::Vec2, cugl::Vec2>& tapData) {
 	if (ButtonManager::tappedButton(pauseBtn, tapData)) {
 		menuOpen = !menuOpen;
 		currFrame = 0;
+		return false;
 	}
 
-	// AudioChannels::get()->resumeMusic();
-	// AudioChannels::get()->pauseMusic();
+	if (ButtonManager::tappedButton(musicMuteBtn, tapData)) {
+		if (musicMuteBtn->isDown()) {
+			musicMuteBtn->setDown(false);
+			cugl::AudioChannels::get()->resumeMusic();
+		} else {
+			musicMuteBtn->setDown(true);
+			cugl::AudioChannels::get()->pauseMusic();
+		}
+	} else if (ButtonManager::tappedButton(sfxMuteBtn, tapData)) {
+		if (sfxMuteBtn->isDown()) {
+			sfxMuteBtn->setDown(false);
+			cugl::AudioChannels::get()->resumeAllEffects();
+		} else {
+			sfxMuteBtn->setDown(true);
+			cugl::AudioChannels::get()->pauseAllEffects();
+		}
+	}
 
-	// AudioChannels::get()->resumeAllEffects();
-	// AudioChannels::get()->pauseAllEffects();
-	// cugl::AudioChannels::get()->pauseAllEffects();
-
-	return false;
+	return menuOpen && ButtonManager::tappedButton(leaveBtn, tapData);
 }
 
 void PauseMenu::updateNeedle() {

@@ -13,16 +13,18 @@ class PauseMenu : public cugl::Node {
 	std::shared_ptr<cugl::Node> needle;
 	/** Main pause button node */
 	std::shared_ptr<cugl::Button> pauseBtn;
+	/** Leave button */
+	std::shared_ptr<cugl::Button> leaveBtn;
+	/** Music mute button */
+	std::shared_ptr<cugl::Button> musicMuteBtn;
+	/** SFX mute button */
+	std::shared_ptr<cugl::Button> sfxMuteBtn;
 
 	/** Current frame of animation */
 	size_t currFrame;
 
 	/** Whether the pause menu is open */
 	bool menuOpen;
-	/** Whether music is paused */
-	bool musicPaused;
-	/** Whether sound effects are paused */
-	bool sfxPaused;
 
 	/** Button manager for all the buttons */
 	ButtonManager btns;
