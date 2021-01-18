@@ -9,6 +9,8 @@ class PauseMenu : public cugl::Node {
    private:
 	/** Wrapper node for pause menu */
 	std::shared_ptr<cugl::Node> menu;
+	/** Needle pointing to number of players */
+	std::shared_ptr<cugl::Node> needle;
 	/** Main pause button node */
 	std::shared_ptr<cugl::Button> pauseBtn;
 
@@ -24,6 +26,11 @@ class PauseMenu : public cugl::Node {
 
 	/** Button manager for all the buttons */
 	ButtonManager btns;
+
+	/**
+	 * Update the needle position based on the current number of players
+	 */
+	void updateNeedle();
 
    public:
 	explicit PauseMenu(const std::shared_ptr<cugl::AssetManager> &assets);

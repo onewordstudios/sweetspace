@@ -1,9 +1,12 @@
 #include "PauseMenu.h"
 
 #include "Globals.h"
+#include "MagicInternetBox.h"
 #include "Tween.h"
 
 constexpr size_t OPEN_SPEED = 30;
+constexpr float NEEDLE_SPEED = 0.3f;
+constexpr float NEEDLE_CUTOFF = 0.01f;
 
 PauseMenu::PauseMenu(const std::shared_ptr<cugl::AssetManager>& assets)
 	: currFrame(0), menuOpen(false), musicPaused(false), sfxPaused(false) {
@@ -20,6 +23,8 @@ bool PauseMenu::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 
 	auto screen = assets->get<Node>("pausemenu");
 	menu = assets->get<Node>("pausemenu_menu");
+	needle = assets->get<Node>("pausemenu_menu_dial_hand");
+
 	pauseBtn = std::dynamic_pointer_cast<cugl::Button>(assets->get<Node>("pausemenu_pauseBtn"));
 
 	cugl::Size dimen = cugl::Application::get()->getDisplaySize();
@@ -40,7 +45,11 @@ bool PauseMenu::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 	return true;
 }
 
-void PauseMenu::dispose() {}
+void PauseMenu::dispose() {
+	menu = nullptr;
+	needle = nullptr;
+	pauseBtn = nullptr;
+}
 
 bool PauseMenu::manageButtons(const std::tuple<cugl::Vec2, cugl::Vec2>& tapData) {
 	if (ButtonManager::tappedButton(pauseBtn, tapData)) {
@@ -56,6 +65,21 @@ bool PauseMenu::manageButtons(const std::tuple<cugl::Vec2, cugl::Vec2>& tapData)
 	// cugl::AudioChannels::get()->pauseAllEffects();
 
 	return false;
+}
+
+void PauseMenu::updateNeedle() {
+	float needlePer = static_cast<float>(MagicInternetBox::getInstance().getNumPlayers() - 1) /
+					  static_cast<float>(globals::MAX_PLAYERS);
+	float needleTarget = -needlePer * globals::TWO_PI * globals::NEEDLE_OFFSET;
+	float currNeedle = needle->getAngle();
+	if (needleTarget != needle->getAngle()) {
+		float diff = needleTarget - currNeedle;
+		float newNeedle = diff * NEEDLE_SPEED + currNeedle;
+		if (diff < NEEDLE_CUTOFF) {
+			newNeedle = needleTarget;
+		}
+		needle->setAngle(newNeedle);
+	}
 }
 
 void PauseMenu::update() {
@@ -75,6 +99,8 @@ void PauseMenu::update() {
 		}
 		doLayout();
 	}
+
+	updateNeedle();
 
 	currFrame++;
 }
