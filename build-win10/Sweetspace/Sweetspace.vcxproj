@@ -370,6 +370,7 @@
     <ClInclude Include="..\..\source\MagicInternetBox.h" />
     <ClInclude Include="..\..\source\MainMenuMode.h" />
     <ClInclude Include="..\..\source\MainMenuTransitions.h" />
+    <ClInclude Include="..\..\source\NeedleAnimator.h" />
     <ClInclude Include="..\..\source\NetworkConnection.h" />
     <ClInclude Include="..\..\source\NetworkDataType.h" />
     <ClInclude Include="..\..\source\PauseMenu.h" />

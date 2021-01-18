@@ -29,11 +29,6 @@ class PauseMenu : public cugl::Node {
 	/** Button manager for all the buttons */
 	ButtonManager btns;
 
-	/**
-	 * Update the needle position based on the current number of players
-	 */
-	void updateNeedle();
-
    public:
 	explicit PauseMenu(const std::shared_ptr<cugl::AssetManager> &assets);
 	~PauseMenu();
