@@ -493,7 +493,6 @@ void GameGraphRoot::dispose() {
 		timeoutDisplay = nullptr;
 		timeoutCounter = nullptr;
 
-		// pauseBtn = nullptr;
 		pauseMenu = nullptr;
 
 		lossScreen = nullptr;
