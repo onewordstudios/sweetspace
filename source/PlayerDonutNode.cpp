@@ -7,19 +7,20 @@
 using namespace cugl;
 
 bool PlayerDonutNode::init(const std::shared_ptr<DonutModel>& player, float screenHeight,
-						   const std::shared_ptr<cugl::Texture>& bodyTexture,
-						   const std::shared_ptr<cugl::Texture>& faceIdleTexture,
-						   const std::shared_ptr<cugl::Texture>& faceDizzyTexture,
-						   const std::shared_ptr<cugl::Texture>& faceWorkTexture,
-						   const Vec2& position) {
+						   const std::shared_ptr<cugl::AssetManager>& assets,
+						   const std::string& color, const Vec2& position) {
 	this->screenHeight = screenHeight;
 
 	setAnchor(Vec2::ANCHOR_CENTER);
 	setPosition(position);
-	// donutNode->setShipSize(ship->getSize());
 	initPos = position;
 
-	DonutNode::init(bodyTexture, faceIdleTexture, faceDizzyTexture, faceWorkTexture, player);
+	std::shared_ptr<Texture> faceIdle = assets->get<Texture>("donut_face_idle");
+	std::shared_ptr<Texture> faceDizzy = assets->get<Texture>("donut_face_dizzy");
+	std::shared_ptr<Texture> faceWork = assets->get<Texture>("donut_face_work");
+	std::shared_ptr<Texture> bodyTexture = assets->get<Texture>("donut_" + color);
+
+	DonutNode::init(bodyTexture, faceIdle, faceDizzy, faceWork, player);
 	CustomNode::init(player, 0, 0, 0);
 	return true;
 }

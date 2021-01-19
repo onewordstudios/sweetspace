@@ -22,9 +22,6 @@ const std::vector<Color4> GameGraphRoot::BREACH_COLOR{
 #pragma mark -
 #pragma mark Level Layout
 
-/** Offset of donut sprites from the radius of the ship */
-constexpr int DONUT_OFFSET = 195;
-
 /** Loop range of the background image */
 constexpr int BG_SCROLL_LIMIT = 256;
 
@@ -224,28 +221,19 @@ bool GameGraphRoot::init( // NOLINT Yeah it's a big function; we'll live with it
 	std::shared_ptr<DonutModel> playerModel = ship->getDonuts()[playerID];
 
 	// Initialize Players
-	std::shared_ptr<Texture> faceIdle = assets->get<Texture>("donut_face_idle");
-	std::shared_ptr<Texture> faceDizzy = assets->get<Texture>("donut_face_dizzy");
-	std::shared_ptr<Texture> faceWork = assets->get<Texture>("donut_face_work");
 	for (uint8_t i = 0; i < ship->getDonuts().size(); i++) {
 		std::shared_ptr<DonutModel> donutModel = ship->getDonuts().at(i);
 		string donutColor = PLAYER_COLOR.at(donutModel->getColorId());
-		std::shared_ptr<Texture> bodyTexture = assets->get<Texture>("donut_" + donutColor);
 		// Player node is handled separately
 		if (i == playerID) {
-			donutNode = PlayerDonutNode::alloc(playerModel, screenHeight, bodyTexture, faceIdle,
-											   faceDizzy, faceWork, tempDonutNode->getPosition());
+			donutNode = PlayerDonutNode::alloc(playerModel, screenHeight, assets, donutColor,
+											   tempDonutNode->getPosition());
 			allSpace->addChild(donutNode);
 			tempDonutNode = nullptr;
 		} else {
-			std::shared_ptr<ExternalDonutNode> newDonutNode =
-				ExternalDonutNode::alloc(donutModel, playerModel, ship->getSize(), bodyTexture,
-										 faceIdle, faceDizzy, faceWork);
+			std::shared_ptr<ExternalDonutNode> newDonutNode = ExternalDonutNode::alloc(
+				donutModel, playerModel, ship->getSize(), assets, donutColor);
 			externalDonutsNode->addChild(newDonutNode);
-
-			Vec2 donutPos = Vec2(sin(donutModel->getAngle() * (globals::RADIUS + DONUT_OFFSET)),
-								 -cos(donutModel->getAngle()) * (globals::RADIUS + DONUT_OFFSET));
-			newDonutNode->setPosition(donutPos);
 		}
 	}
 
