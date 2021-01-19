@@ -701,11 +701,8 @@ void GameGraphRoot::update( // NOLINT Yeah it's a big function; we'll live with 
 	prevPlayerAngle = newPlayerAngle;
 
 	// Update ship segments
-	std::shared_ptr<Texture> seg0 = assets->get<Texture>("shipseg0");
-	std::shared_ptr<Texture> seg1 = assets->get<Texture>("shipseg1");
-	std::shared_ptr<PolygonNode> segment;
 	for (int i = 0; i < globals::VISIBLE_SEGS; i++) {
-		segment = dynamic_pointer_cast<cugl::PolygonNode>(
+		std::shared_ptr<ShipSegmentNode> segment = dynamic_pointer_cast<ShipSegmentNode>(
 			shipSegsNode->getChildByTag(static_cast<unsigned int>(i + 1)));
 		// If segments rotate too far left, move left-most segment to the right side
 		if (i == rightMostSeg &&
@@ -724,20 +721,8 @@ void GameGraphRoot::update( // NOLINT Yeah it's a big function; we'll live with 
 			newLeftSegment->setAngle(wrapAngle(segment->getAngle() - globals::SEG_SIZE));
 		}
 		// Update text label of segment
-		float relSegAngle = wrapAngle(segment->getAngle() + nearSpace->getAngle());
-		relSegAngle = relSegAngle >= 0 ? relSegAngle : globals::TWO_PI + relSegAngle;
-		relSegAngle = relSegAngle > globals::PI ? relSegAngle - globals::TWO_PI : relSegAngle;
-		auto segAngle = (ship->getDonuts().at(playerID)->getAngle() * globals::PI_180 +
-						 relSegAngle + ShipSegmentNode::SEG_SCALE * globals::PI_180);
-		segAngle = fmod(segAngle, ship->getSize() * globals::PI_180);
-		segAngle = segAngle < 0 ? segAngle + ship->getSize() * globals::PI_180 : segAngle;
-		auto segNum = static_cast<unsigned int>(segAngle / globals::SEG_SIZE);
-		std::shared_ptr<cugl::Label> segLabel =
-			dynamic_pointer_cast<cugl::Label>(segment->getChild(static_cast<unsigned int>(0)));
-		std::string segText = std::to_string(segNum);
-		if (segLabel->getText() != segText) {
-			segLabel->setText(segText);
-		}
+		segment->updateLabel(nearSpace->getAngle(), ship->getSize(),
+							 ship->getDonuts().at(playerID)->getAngle());
 	}
 
 	// Update breaches textures if recycled

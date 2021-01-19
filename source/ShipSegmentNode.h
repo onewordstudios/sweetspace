@@ -4,6 +4,10 @@
 #include <cugl/cugl.h>
 
 class ShipSegmentNode : public cugl::PolygonNode {
+   private:
+	/** Label with the current segment number */
+	std::shared_ptr<cugl::Label> segLabel;
+
    public:
 	/** The scale of the ship segments. */
 	static constexpr float SEG_SCALE = 0.33f;
@@ -34,6 +38,15 @@ class ShipSegmentNode : public cugl::PolygonNode {
 		std::shared_ptr<ShipSegmentNode> node = std::make_shared<ShipSegmentNode>();
 		return node->init(assets, segmentID) ? node : nullptr;
 	}
+
+	/**
+	 * Compute and update the label display of this ship segment.
+	 *
+	 * @param nearSpaceAngle Current position of nearspace in the scene graph
+	 * @param shipSize Total size of the ship
+	 * @param playerAngle Current position of the player in the ship
+	 */
+	void updateLabel(float nearSpaceAngle, float shipSize, float playerAngle);
 };
 
 #endif // SHIP_SEGMENT_NODE_H

@@ -1,6 +1,7 @@
 #ifndef GLOBALS_H_
 #define GLOBALS_H_
 
+#include <cmath>
 #include <cstddef>
 #include <cstdint>
 
@@ -107,6 +108,10 @@ constexpr float MUSIC_FADE_OUT = 0.2f; // NOLINT
 /** Max color channel value */
 constexpr int MAX_BYTE = 255; // NOLINT
 #pragma endregion
+
+/** Positive remainder of x/y */
+inline float remainderPos(float x, float y) { return fmod(fmod(x, y) + y, y); }
+
 } // namespace globals
 
 #pragma warning(pop)
