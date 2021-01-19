@@ -142,7 +142,6 @@ bool GameGraphRoot::init( // NOLINT Yeah it's a big function; we'll live with it
 	breachesNode = assets->get<Node>("game_field_near_breaches");
 	breachSparklesNode = assets->get<Node>("game_field_near_breachsparkles");
 	buttonSparklesNode = assets->get<Node>("game_field_near_buttonsparkles");
-	shipSegsNode = assets->get<Node>("game_field_near_shipsegments");
 	doorsNode = assets->get<Node>("game_field_near_doors");
 	unopsNode = assets->get<Node>("game_field_near_unops");
 	externalDonutsNode = assets->get<Node>("game_field_near_externaldonuts");
@@ -218,12 +217,9 @@ bool GameGraphRoot::init( // NOLINT Yeah it's a big function; we'll live with it
 	prevIsStabilizerFail = false;
 
 	// Initialize Ship Segments
-	leftMostSeg = 0;
-	rightMostSeg = globals::VISIBLE_SEGS - 1;
-	for (unsigned int i = 0; i < globals::VISIBLE_SEGS; i++) {
-		std::shared_ptr<PolygonNode> segment = ShipSegmentNode::alloc(assets, i);
-		shipSegsNode->addChildWithTag(segment, i + 1);
-	}
+	shipSegsNode = ShipSegmentWrap::alloc(assets);
+	nearSpace->addChild(shipSegsNode);
+	nearSpace->sortZOrder();
 
 	std::shared_ptr<DonutModel> playerModel = ship->getDonuts()[playerID];
 
@@ -421,7 +417,6 @@ void GameGraphRoot::dispose() {
 		coordHUD = nullptr;
 		breachesNode->removeAllChildren();
 		breachesNode = nullptr;
-		shipSegsNode->removeAllChildren();
 		shipSegsNode = nullptr;
 		doorsNode->removeAllChildren();
 		doorsNode = nullptr;
@@ -697,33 +692,12 @@ void GameGraphRoot::update( // NOLINT Yeah it's a big function; we'll live with 
 				fmod(newPlayerAngle, globals::SEG_SIZE / globals::PI_180);
 		delta = delta * globals::PI_180;
 	}
-	nearSpace->setAngle(wrapAngle(nearSpace->getAngle() + delta));
+	nearSpace->setAngle(globals::remainderPos(nearSpace->getAngle() + delta, globals::TWO_PI));
 	prevPlayerAngle = newPlayerAngle;
 
 	// Update ship segments
-	for (int i = 0; i < globals::VISIBLE_SEGS; i++) {
-		std::shared_ptr<ShipSegmentNode> segment = dynamic_pointer_cast<ShipSegmentNode>(
-			shipSegsNode->getChildByTag(static_cast<unsigned int>(i + 1)));
-		// If segments rotate too far left, move left-most segment to the right side
-		if (i == rightMostSeg &&
-			wrapAngle(nearSpace->getAngle() + segment->getAngle()) < globals::SEG_CUTOFF_ANGLE) {
-			rightMostSeg = (i + 1) % globals::VISIBLE_SEGS;
-			leftMostSeg = (i + 2) % globals::VISIBLE_SEGS;
-			std::shared_ptr<PolygonNode> newRightSegment = dynamic_pointer_cast<cugl::PolygonNode>(
-				shipSegsNode->getChildByTag((rightMostSeg + 1)));
-			newRightSegment->setAngle(wrapAngle(segment->getAngle() + globals::SEG_SIZE));
-		} else if (i == leftMostSeg && wrapAngle(nearSpace->getAngle() + segment->getAngle()) >
-										   globals::TWO_PI - globals::SEG_CUTOFF_ANGLE) {
-			leftMostSeg = (i + globals::VISIBLE_SEGS - 1) % globals::VISIBLE_SEGS;
-			rightMostSeg = (i + globals::VISIBLE_SEGS - 2) % globals::VISIBLE_SEGS;
-			std::shared_ptr<PolygonNode> newLeftSegment = dynamic_pointer_cast<cugl::PolygonNode>(
-				shipSegsNode->getChildByTag((leftMostSeg + 1)));
-			newLeftSegment->setAngle(wrapAngle(segment->getAngle() - globals::SEG_SIZE));
-		}
-		// Update text label of segment
-		segment->updateLabel(nearSpace->getAngle(), ship->getSize(),
-							 ship->getDonuts().at(playerID)->getAngle());
-	}
+	shipSegsNode->updateSegments(nearSpace->getAngle(), ship->getSize(),
+								 ship->getDonuts().at(playerID)->getAngle());
 
 	// Update breaches textures if recycled
 	for (uint8_t i = 0; i < ship->getBreaches().size(); i++) {
