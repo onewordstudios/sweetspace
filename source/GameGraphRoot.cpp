@@ -27,15 +27,6 @@ constexpr int DONUT_OFFSET = 195;
 /** The scale of the ship segments. */
 constexpr float SEG_SCALE = 0.33f;
 
-/** Number of animation frames of doors */
-constexpr int DOOR_FRAMES = 32;
-
-/** Number of animation rows of doors */
-constexpr int DOOR_ROWS = 1;
-
-/** Number of animation cols of doors */
-constexpr int DOOR_COLS = 32;
-
 /** Loop range of the background image */
 constexpr int BG_SCROLL_LIMIT = 256;
 
@@ -329,9 +320,8 @@ bool GameGraphRoot::init( // NOLINT Yeah it's a big function; we'll live with it
 	// Initialize Doors
 	for (uint8_t i = 0; i < ship->getDoors().size(); i++) {
 		std::shared_ptr<DoorModel> doorModel = ship->getDoors().at(i);
-		std::shared_ptr<Texture> image = assets->get<Texture>("door");
-		std::shared_ptr<DoorNode> doorNode = DoorNode::alloc(
-			doorModel, playerModel, ship->getSize(), image, DOOR_ROWS, DOOR_COLS, DOOR_FRAMES);
+		std::shared_ptr<DoorNode> doorNode =
+			DoorNode::alloc(doorModel, playerModel, ship->getSize(), assets);
 		doorsNode->addChildWithTag(doorNode, i + 1);
 	}
 
@@ -351,12 +341,8 @@ bool GameGraphRoot::init( // NOLINT Yeah it's a big function; we'll live with it
 			SparkleNode::alloc(playerModel, ship->getSize(), breachSparkleBig, Color4::WHITE,
 							   SparkleNode::SparkleType::Big);
 		buttonSparklesNode->addChild(sparkleNode);
-		std::shared_ptr<ButtonNode> buttonNode = ButtonNode::alloc(
-			buttonModel, playerModel, ship->getSize(),
-			assets->get<Texture>("challenge_btn_base_down"),
-			assets->get<Texture>("challenge_btn_base_up"),
-			assets->get<Texture>("challenge_btn_down"), assets->get<Texture>("challenge_btn_up"),
-			assets->get<Font>("mont_black_italic_big"), sparkleNode);
+		std::shared_ptr<ButtonNode> buttonNode =
+			ButtonNode::alloc(buttonModel, playerModel, ship->getSize(), assets, sparkleNode);
 		buttonsNode->addChildWithTag(buttonNode, i + 1);
 	}
 

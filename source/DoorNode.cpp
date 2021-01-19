@@ -8,6 +8,15 @@
 
 using namespace cugl;
 
+/** Number of animation frames of doors */
+constexpr int DOOR_FRAMES = 32;
+
+/** Number of animation rows of doors */
+constexpr int DOOR_ROWS = 1;
+
+/** Number of animation cols of doors */
+constexpr int DOOR_COLS = 32;
+
 /** The radius used for placement of the doors. */
 constexpr float DOOR_RADIUS = 660;
 
@@ -20,12 +29,12 @@ constexpr int ONE_PLAYER_FRAME = 16;
 constexpr int TWO_PLAYER_FRAME = 31;
 
 bool DoorNode::init(const std::shared_ptr<DoorModel>& door, std::shared_ptr<DonutModel> player,
-					float shipSize, const std::shared_ptr<cugl::Texture>& texture, int rows,
-					int cols, int size) {
+					float shipSize, const std::shared_ptr<cugl::AssetManager>& assets) {
 	CustomNode::init(std::move(player), shipSize, door->getAngle(), DOOR_RADIUS);
 
 	doorModel = door;
-	animationNode = cugl::AnimationNode::alloc(texture, rows, cols, size);
+	animationNode =
+		cugl::AnimationNode::alloc(assets->get<Texture>("door"), DOOR_ROWS, DOOR_COLS, DOOR_FRAMES);
 	animationNode->setAnchor(Vec2::ANCHOR_BOTTOM_CENTER);
 	animationNode->setPosition(0, 0);
 	animationNode->setFrame(0);
