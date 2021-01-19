@@ -666,6 +666,9 @@
     <ClInclude Include="..\..\source\NeedleAnimator.h">
       <Filter>Header Files\Controllers\Networking</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\source\ShipSegmentNode.h">
+      <Filter>Header Files\SceneGraph</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\source\main.cpp">
@@ -1108,6 +1111,9 @@
     </ClCompile>
     <ClCompile Include="..\..\source\PauseMenu.cpp">
       <Filter>Source Files\SceneGraph\GameUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\ShipSegmentNode.cpp">
+      <Filter>Source Files\SceneGraph</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

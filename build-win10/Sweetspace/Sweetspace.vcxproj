@@ -377,6 +377,7 @@
     <ClInclude Include="..\..\source\PlayerDonutModel.h" />
     <ClInclude Include="..\..\source\PlayerDonutNode.h" />
     <ClInclude Include="..\..\source\ShipModel.h" />
+    <ClInclude Include="..\..\source\ShipSegmentNode.h" />
     <ClInclude Include="..\..\source\SoundEffectController.h" />
     <ClInclude Include="..\..\source\SparkleNode.h" />
     <ClInclude Include="..\..\source\StabilizerModel.h" />
@@ -529,6 +530,7 @@
     <ClCompile Include="..\..\source\PlayerDonutModel.cpp" />
     <ClCompile Include="..\..\source\PlayerDonutNode.cpp" />
     <ClCompile Include="..\..\source\ShipModel.cpp" />
+    <ClCompile Include="..\..\source\ShipSegmentNode.cpp" />
     <ClCompile Include="..\..\source\SoundEffectController.cpp" />
     <ClCompile Include="..\..\source\SparkleNode.cpp" />
     <ClCompile Include="..\..\source\StabilizerModel.cpp" />

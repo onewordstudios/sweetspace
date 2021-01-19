@@ -7,6 +7,7 @@
 #include <vector>
 
 #include "Globals.h"
+#include "ShipSegmentNode.h"
 #include "TutorialConstants.h"
 #include "Tween.h"
 
@@ -23,9 +24,6 @@ const std::vector<Color4> GameGraphRoot::BREACH_COLOR{
 
 /** Offset of donut sprites from the radius of the ship */
 constexpr int DONUT_OFFSET = 195;
-
-/** The scale of the ship segments. */
-constexpr float SEG_SCALE = 0.33f;
 
 /** Loop range of the background image */
 constexpr int BG_SCROLL_LIMIT = 256;
@@ -53,12 +51,6 @@ constexpr int MAX_HEALTH_WARNING_FRAMES = 150;
 
 /** Maximum alpha value for health warning overlay */
 constexpr int MAX_HEALTH_WARNING_ALPHA = 100;
-
-/** Size of ship segment label */
-constexpr int SEG_LABEL_SIZE = 100;
-
-/** Y position of ship segment label */
-constexpr int SEG_LABEL_Y = 1113;
 
 /** Maximum number of health labels */
 constexpr int MAX_HEALTH_LABELS = 10;
@@ -228,28 +220,9 @@ bool GameGraphRoot::init( // NOLINT Yeah it's a big function; we'll live with it
 	// Initialize Ship Segments
 	leftMostSeg = 0;
 	rightMostSeg = globals::VISIBLE_SEGS - 1;
-	std::shared_ptr<Texture> seg0 = assets->get<Texture>("shipseg0");
-	std::shared_ptr<Texture> seg1 = assets->get<Texture>("shipseg1");
-	std::shared_ptr<Texture> segRed = assets->get<Texture>("shipsegred");
-	for (int i = 0; i < globals::VISIBLE_SEGS; i++) {
-		std::shared_ptr<PolygonNode> segment =
-			cugl::PolygonNode::allocWithTexture(i % 2 == 0 ? seg0 : seg1);
-		segment->setAnchor(Vec2::ANCHOR_TOP_CENTER);
-		segment->setScale(SEG_SCALE);
-		segment->setPosition(Vec2(0, 0));
-		segment->setAngle(globals::SEG_SIZE * (static_cast<float>(i) - 2));
-		std::shared_ptr<cugl::Label> segLabel = cugl::Label::alloc(
-			cugl::Size(SEG_LABEL_SIZE, SEG_LABEL_SIZE), assets->get<Font>("mont_black_italic_big"));
-		segLabel->setAnchor(Vec2::ANCHOR_CENTER);
-		segLabel->setHorizontalAlignment(Label::HAlign::CENTER);
-		segLabel->setPosition(static_cast<float>(segment->getTexture()->getWidth()) / 2,
-							  SEG_LABEL_Y);
-		segLabel->setForeground(SHIP_LABEL_COLOR);
-		segment->addChild(segLabel);
-		std::shared_ptr<PolygonNode> segmentRed = cugl::PolygonNode::allocWithTexture(segRed);
-		segmentRed->setColor(Color4::CLEAR);
-		segment->addChild(segmentRed);
-		shipSegsNode->addChildWithTag(segment, static_cast<unsigned int>(i + 1));
+	for (unsigned int i = 0; i < globals::VISIBLE_SEGS; i++) {
+		std::shared_ptr<PolygonNode> segment = ShipSegmentNode::alloc(assets, i);
+		shipSegsNode->addChildWithTag(segment, i + 1);
 	}
 
 	std::shared_ptr<DonutModel> playerModel = ship->getDonuts()[playerID];
@@ -755,7 +728,7 @@ void GameGraphRoot::update( // NOLINT Yeah it's a big function; we'll live with 
 		relSegAngle = relSegAngle >= 0 ? relSegAngle : globals::TWO_PI + relSegAngle;
 		relSegAngle = relSegAngle > globals::PI ? relSegAngle - globals::TWO_PI : relSegAngle;
 		auto segAngle = (ship->getDonuts().at(playerID)->getAngle() * globals::PI_180 +
-						 relSegAngle + SEG_SCALE * globals::PI_180);
+						 relSegAngle + ShipSegmentNode::SEG_SCALE * globals::PI_180);
 		segAngle = fmod(segAngle, ship->getSize() * globals::PI_180);
 		segAngle = segAngle < 0 ? segAngle + ship->getSize() * globals::PI_180 : segAngle;
 		auto segNum = static_cast<unsigned int>(segAngle / globals::SEG_SIZE);

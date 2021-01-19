@@ -217,8 +217,7 @@ class GameGraphRoot : public cugl::Scene {
 	const std::vector<string> PLAYER_COLOR{"yellow", "red", "green", "orange", "cyan", "purple"};
 	/** Possible colors for breach representations */
 	static const std::vector<cugl::Color4> BREACH_COLOR;
-	/** Color of ship segment label text */
-	const cugl::Color4 SHIP_LABEL_COLOR{255, 248, 161};
+
 	/** Number of possible player colors */
 	static constexpr int NUM_COLORS = 6;
 
