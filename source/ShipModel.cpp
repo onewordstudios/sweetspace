@@ -125,8 +125,6 @@ bool ShipModel::failAllTask() {
 	return true;
 }
 
-void ShipModel::setStabilizerStatus(StabilizerStatus s) { stabilizerStatus = s; }
-
 bool ShipModel::createButton(float angle1, uint8_t id1, float angle2, uint8_t id2) {
 	buttons[id1]->init(angle1, buttons.at(id2), id2);
 	buttons[id2]->init(angle2, buttons.at(id1), id1);

@@ -554,7 +554,7 @@ void GLaDOS::tutorialLevels(float /*dt*/) {
 				break;
 			}
 			break;
-		case tutorial::STABILIZER_LEVEL:
+		case tutorial::STABILIZER_LEVEL: {
 			if (ship->timePassed() < STABILIZER_START) {
 				break;
 			}
@@ -566,16 +566,17 @@ void GLaDOS::tutorialLevels(float /*dt*/) {
 			while (!ship->getDonuts().at(customEventCtr)->getIsActive() && customEventCtr > 0) {
 				customEventCtr--;
 			}
-			switch (ship->getStabilizerStatus()) {
-				case ShipModel::ANIMATING:
-				case ShipModel::FAILURE:
+			StabilizerModel& stabilizer = ship->getStabilizer();
+			switch (stabilizer.getState()) {
+				case StabilizerModel::StabilizerState::Fail:
 					break;
-				case ShipModel::ACTIVE:
+				case StabilizerModel::StabilizerState::Left:
+				case StabilizerModel::StabilizerState::Right:
 					if (ship->canonicalTimeElapsed - stabilizerStart > STABILIZER_TIMEOUT) {
-						ship->setStabilizerStatus(ShipModel::INACTIVE);
+						stabilizer.reset();
 					}
 					break;
-				case ShipModel::INACTIVE: {
+				case StabilizerModel::StabilizerState::Inactive: {
 					// Hopefully after animation is done, it will always be set to inactive
 					if (customEventCtr != mib.getPlayerID() &&
 						ship->getDonuts().at(customEventCtr)->getIsActive()) {
@@ -584,10 +585,9 @@ void GLaDOS::tutorialLevels(float /*dt*/) {
 						ship->createAllTask();
 					}
 					stabilizerStart = ship->canonicalTimeElapsed;
-					ship->setStabilizerStatus(ShipModel::ACTIVE);
 					break;
 				}
-				case ShipModel::SUCCESS: {
+				case StabilizerModel::StabilizerState::Win: {
 					customEventCtr--;
 					if (customEventCtr < 0) {
 						ship->setTimeless(false);
@@ -602,10 +602,10 @@ void GLaDOS::tutorialLevels(float /*dt*/) {
 						ship->createAllTask();
 					}
 					stabilizerStart = ship->canonicalTimeElapsed;
-					ship->setStabilizerStatus(ShipModel::ACTIVE);
 					break;
 				}
 			}
 			break;
+		}
 	}
 }

@@ -322,18 +322,16 @@ void GameMode::updateStabilizer() {
 	}
 
 	if (stabilizer.getIsWin()) {
-		ship->setStabilizerStatus(ShipModel::SUCCESS);
 		net.succeedAllTask();
-		stabilizer.reset();
+		stabilizer.finish();
 	} else if (trunc(ship->canonicalTimeElapsed) == trunc(stabilizer.getEndTime())) {
 		gm.setChallengeFail(true);
-		ship->setStabilizerStatus(ShipModel::FAILURE);
+		stabilizer.finish();
 
 		// This can't happen a second time in the duration of the sound effect, so we can
 		// just end it immediately
 		soundEffects->startEvent(SoundEffectController::TELEPORT, 0);
 		soundEffects->endEvent(SoundEffectController::TELEPORT, 0);
-		stabilizer.reset();
 	}
 }
 

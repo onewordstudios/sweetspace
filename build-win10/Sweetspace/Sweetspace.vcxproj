@@ -382,6 +382,7 @@
     <ClInclude Include="..\..\source\SoundEffectController.h" />
     <ClInclude Include="..\..\source\SparkleNode.h" />
     <ClInclude Include="..\..\source\StabilizerModel.h" />
+    <ClInclude Include="..\..\source\StabilizerNode.h" />
     <ClInclude Include="..\..\source\StateReconciler.h" />
     <ClInclude Include="..\..\source\Sweetspace.h" />
     <ClInclude Include="..\..\source\TutorialConstants.h" />
@@ -536,6 +537,7 @@
     <ClCompile Include="..\..\source\SoundEffectController.cpp" />
     <ClCompile Include="..\..\source\SparkleNode.cpp" />
     <ClCompile Include="..\..\source\StabilizerModel.cpp" />
+    <ClCompile Include="..\..\source\StabilizerNode.cpp" />
     <ClCompile Include="..\..\source\StateReconciler.cpp" />
     <ClCompile Include="..\..\source\Sweetspace.cpp" />
     <ClCompile Include="..\..\source\TutorialNode.cpp" />

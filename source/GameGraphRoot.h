@@ -19,6 +19,7 @@
 #include "PlayerDonutNode.h"
 #include "ShipModel.h"
 #include "ShipSegmentWrap.h"
+#include "StabilizerNode.h"
 #include "TutorialNode.h"
 #include "UnopenableNode.h"
 #include "WinScreen.h"
@@ -78,11 +79,8 @@ class GameGraphRoot : public cugl::Scene {
 	std::shared_ptr<cugl::Node> unopsNode;
 	/** Parent node of all external donuts, is child of nearSpace */
 	std::shared_ptr<cugl::Node> externalDonutsNode;
-	/** Roll challenge */
-	std::shared_ptr<cugl::PolygonNode> challengePanelHanger;
-	std::shared_ptr<cugl::PolygonNode> challengePanel;
-	std::shared_ptr<cugl::PolygonNode> challengePanelText;
-	std::vector<std::shared_ptr<cugl::PolygonNode>> challengePanelArrows;
+	/** Stabilizer */
+	std::shared_ptr<StabilizerNode> stabilizerNode;
 	/** Health bar */
 	std::shared_ptr<cugl::PolygonNode> healthNode;
 	std::shared_ptr<cugl::PolygonNode> healthNodeOverlay;
@@ -155,10 +153,6 @@ class GameGraphRoot : public cugl::Scene {
 	int currentHealthWarningFrame;
 
 	// TELEPORTATION ANIMATION
-	/** Reference to fail text */
-	std::shared_ptr<cugl::Label> stabilizerFailText;
-	/** Reference to fail text */
-	std::shared_ptr<cugl::PolygonNode> stabilizerFailPanel;
 	/** Reference to black image that covers all */
 	std::shared_ptr<cugl::PolygonNode> blackoutOverlay;
 	/** Current animation frame for stabilizer fail teleportation */

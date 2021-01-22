@@ -149,6 +149,7 @@ class MagicInternetBox::Mimpl {
 	 */
 	void sendData(NetworkDataType type, float angle, uint8_t id, uint8_t data1, uint8_t data2,
 				  float data3) {
+		CUAssertLog(conn != nullptr, "Attempted to send to a null network connection");
 		/*
 
 		DATA FORMAT
@@ -651,16 +652,14 @@ class MagicInternetBox::Mimpl {
 					if (playerID == id) {
 						state->createAllTask();
 					}
-					state->setStabilizerStatus(ShipModel::ACTIVE);
 					break;
 				}
 				case AllFail: {
 					state->failAllTask();
-					state->setStabilizerStatus(ShipModel::FAILURE);
 					break;
 				}
 				case AllSucceed: {
-					state->setStabilizerStatus(ShipModel::SUCCESS);
+					state->getStabilizer().forceWin();
 					break;
 				}
 				case ForceWin: {

@@ -48,10 +48,6 @@ class ShipModel {
 	static constexpr int MIN_DISTANCE = 15;
 
    public:
-	enum StabilizerStatus { INACTIVE, ACTIVE, FAILURE, SUCCESS, ANIMATING };
-	/** StabilizerStatus of all player challenge. 0 = no challenge, 1 = challenge, 2 = challenge
-	 * failed, 3 = challenge success*/
-	StabilizerStatus stabilizerStatus;
 	/** Game countdown timer, contains time left in level */
 	float timeLeftInTimer;
 	/** Time elapsed since level start */
@@ -74,7 +70,6 @@ class ShipModel {
 		  timeless(false),
 		  totalTime(0),
 		  levelNum(0),
-		  stabilizerStatus(INACTIVE),
 		  timeLeftInTimer(0),
 		  canonicalTimeElapsed(0) {}
 
@@ -377,11 +372,6 @@ class ShipModel {
 	bool failAllTask();
 
 	/**
-	 * Set challenge status
-	 */
-	void setStabilizerStatus(StabilizerStatus s);
-
-	/**
 	 * Create button with given id.
 	 *
 	 * @param angle1	   the location to create the button.
@@ -413,11 +403,6 @@ class ShipModel {
 	 * Get current level number
 	 */
 	uint8_t getLevelNum() const { return levelNum; }
-
-	/**
-	 * Gets status of challenge
-	 */
-	StabilizerStatus getStabilizerStatus() const { return stabilizerStatus; }
 
 	/**
 	 * Sets if level is tutorial

@@ -567,164 +567,6 @@
                             "scale": 0.3
                           }
                         },
-                        "challengePanelParent": {
-                            "type": "Node",
-                            "data": {
-                                "anchor":   [0,0],
-                                "position": [0,-300]
-                            },
-                            "children": {
-                                "challengePanelHanger": {
-                                  "type": "Image",
-                                  "data": {
-                                    "texture": "panel_hanger",
-                                    "position": [0, 300],
-                                    "anchor":   [0.5,0.5],
-                                    "scale": 0.7
-                                  }
-                                },
-                                "challengePanel": {
-                                  "type": "Image",
-                                  "data": {
-                                    "texture": "challenge_panel",
-                                    "position": [0, 150],
-                                    "anchor":   [0.5,0.5],
-                                    "scale": [0.7, 0.3]
-                                  }
-                                },
-                                "challengePanelText": {
-                                  "type": "Image",
-                                  "data": {
-                                    "texture": "panel_text",
-                                    "position": [0, 175],
-                                    "anchor":   [0.5,0.5],
-                                    "scale": 0.7
-                                  }
-                                },
-                                "challengePanelFailPanel": {
-                                  "type": "Image",
-                                  "data": {
-                                    "texture": "challenge_panel",
-                                    "position": [0, 150],
-                                    "anchor":   [0.5,0.5],
-                                    "scale": [0.8, 0.3]
-                                  }
-                                },
-                                "challengePanelFailLabel": {
-                                  "type": "Label",
-                                  "data": {
-                                    "font"       : "mont_black_italic_big",
-                                    "text"       : "Stabilizer Failed!",
-                                    "foreground" : [255,248,161,255],
-                                    "anchor"     : [0.5,0.5],
-                                    "valign"     : "middle",
-                                    "halign"     : "center",
-                                    "position"   : [0, 155],
-                                    "scale"      : 0.4
-                                  }
-                                },
-                                "challengePanelArrow1": {
-                                  "type": "Image",
-                                  "data": {
-                                    "texture": "panel_progress_0",
-                                    "position": [-135, 125],
-                                    "anchor":   [0.5,0.5],
-                                    "scale": 0.3,
-                                    "visible": false
-                                  }
-                                },
-                                "challengePanelArrow2": {
-                                  "type": "Image",
-                                  "data": {
-                                    "texture": "panel_progress_0",
-                                    "position": [-105, 125],
-                                    "anchor":   [0.5,0.5],
-                                    "scale": 0.3,
-                                    "visible": false
-                                  }
-                                },
-                                "challengePanelArrow3": {
-                                  "type": "Image",
-                                  "data": {
-                                    "texture": "panel_progress_0",
-                                    "position": [-75, 125],
-                                    "anchor":   [0.5,0.5],
-                                    "scale": 0.3,
-                                    "visible": false
-                                  }
-                                },
-                                "challengePanelArrow4": {
-                                  "type": "Image",
-                                  "data": {
-                                    "texture": "panel_progress_0",
-                                    "position": [-45, 125],
-                                    "anchor":   [0.5,0.5],
-                                    "scale": 0.3,
-                                    "visible": false
-                                  }
-                                },
-                                "challengePanelArrow5": {
-                                  "type": "Image",
-                                  "data": {
-                                    "texture": "panel_progress_0",
-                                    "position": [-15, 125],
-                                    "anchor":   [0.5,0.5],
-                                    "scale": 0.3,
-                                    "visible": false
-                                  }
-                                },
-                                "challengePanelArrow6": {
-                                  "type": "Image",
-                                  "data": {
-                                    "texture": "panel_progress_0",
-                                    "position": [15, 125],
-                                    "anchor":   [0.5,0.5],
-                                    "scale": 0.3,
-                                    "visible": false
-                                  }
-                                },
-                                "challengePanelArrow7": {
-                                  "type": "Image",
-                                  "data": {
-                                    "texture": "panel_progress_0",
-                                    "position": [45, 125],
-                                    "anchor":   [0.5,0.5],
-                                    "scale": 0.3,
-                                    "visible": false
-                                  }
-                                },
-                                "challengePanelArrow8": {
-                                  "type": "Image",
-                                  "data": {
-                                    "texture": "panel_progress_0",
-                                    "position": [75, 125],
-                                    "anchor":   [0.5,0.5],
-                                    "scale": 0.3,
-                                    "visible": false
-                                  }
-                                },
-                                "challengePanelArrow9": {
-                                  "type": "Image",
-                                  "data": {
-                                    "texture": "panel_progress_0",
-                                    "position": [105, 125],
-                                    "anchor":   [0.5,0.5],
-                                    "scale": 0.3,
-                                    "visible": false
-                                  }
-                                },
-                                "challengePanelArrow10": {
-                                  "type": "Image",
-                                  "data": {
-                                    "texture": "panel_progress_0",
-                                    "position": [135, 125],
-                                    "anchor":   [0.5,0.5],
-                                    "scale": 0.3,
-                                    "visible": false
-                                  }
-                                }
-                            }
-                        },
                         "moveTutorial" : {
                           "type": "Image",
                           "data": {
@@ -1173,6 +1015,209 @@
                 }
             }
         },
+		"stabilizer": {
+			"type"      : "Node",
+            "format"    : {
+                "type" : "Anchored"
+            },
+			"data"   : {
+				"anchor"   : [0.5,0.5],
+				"scale"    : 1
+			},
+			"children": {
+				"stabilizerPanel": {
+					"type": "Node",
+					"data": {
+						"anchor":   [0.5,1]
+					},
+					"layout" : {
+						"x_anchor" : "center",
+						"y_anchor" : "top"
+					},
+					"children": {
+						"challengePanelHanger": {
+						  "type": "Image",
+						  "data": {
+							"texture": "panel_hanger",
+							"anchor":   [0.5,1],
+							"scale": 0.7
+						  },
+							"layout" : {
+								"x_anchor" : "center",
+								"y_anchor" : "top"
+							}
+						},
+						"challengePanel": {
+						  "type": "Image",
+						  "data": {
+							"texture": "challenge_panel",
+							"anchor":   [0.5,1],
+							"scale": [0.7, 0.3]
+						  },
+							"layout" : {
+								"x_anchor" : "center",
+								"y_anchor" : "top",
+								"y_offset" : 1,
+								"absolute" : false
+							}
+						},
+						"challengePanelText": {
+						  "type": "Image",
+						  "data": {
+							"texture": "panel_text",
+							"position": [0, 175],
+							"anchor":   [0.5,1],
+							"scale": 0.7
+						  },
+							"layout" : {
+								"x_anchor" : "center",
+								"y_anchor" : "top"
+							}
+						},
+						"challengePanelArrow0": {
+						  "type": "Image",
+						  "data": {
+							"texture": "panel_progress_0",
+							"position": [-135, 125],
+							"anchor":   [0.5,0.5],
+							"scale": 0.3,
+							"visible": false
+						  }
+						},
+						"challengePanelArrow1": {
+						  "type": "Image",
+						  "data": {
+							"texture": "panel_progress_0",
+							"position": [-105, 125],
+							"anchor":   [0.5,0.5],
+							"scale": 0.3,
+							"visible": false
+						  }
+						},
+						"challengePanelArrow2": {
+						  "type": "Image",
+						  "data": {
+							"texture": "panel_progress_0",
+							"position": [-75, 125],
+							"anchor":   [0.5,0.5],
+							"scale": 0.3,
+							"visible": false
+						  }
+						},
+						"challengePanelArrow3": {
+						  "type": "Image",
+						  "data": {
+							"texture": "panel_progress_0",
+							"position": [-45, 125],
+							"anchor":   [0.5,0.5],
+							"scale": 0.3,
+							"visible": false
+						  }
+						},
+						"challengePanelArrow4": {
+						  "type": "Image",
+						  "data": {
+							"texture": "panel_progress_0",
+							"position": [-15, 125],
+							"anchor":   [0.5,0.5],
+							"scale": 0.3,
+							"visible": false
+						  }
+						},
+						"challengePanelArrow5": {
+						  "type": "Image",
+						  "data": {
+							"texture": "panel_progress_0",
+							"position": [15, 125],
+							"anchor":   [0.5,0.5],
+							"scale": 0.3,
+							"visible": false
+						  }
+						},
+						"challengePanelArrow6": {
+						  "type": "Image",
+						  "data": {
+							"texture": "panel_progress_0",
+							"position": [45, 125],
+							"anchor":   [0.5,0.5],
+							"scale": 0.3,
+							"visible": false
+						  }
+						},
+						"challengePanelArrow7": {
+						  "type": "Image",
+						  "data": {
+							"texture": "panel_progress_0",
+							"position": [75, 125],
+							"anchor":   [0.5,0.5],
+							"scale": 0.3,
+							"visible": false
+						  }
+						},
+						"challengePanelArrow8": {
+						  "type": "Image",
+						  "data": {
+							"texture": "panel_progress_0",
+							"position": [105, 125],
+							"anchor":   [0.5,0.5],
+							"scale": 0.3,
+							"visible": false
+						  }
+						},
+						"challengePanelArrow9": {
+						  "type": "Image",
+						  "data": {
+							"texture": "panel_progress_0",
+							"position": [135, 125],
+							"anchor":   [0.5,0.5],
+							"scale": 0.3,
+							"visible": false
+						  }
+						}
+					}
+				},
+				"failPanel": {
+					"type": "Node",
+					"data": {
+						"anchor":   [0,0],
+						"position": [0,-300]
+					},
+					"children": {
+						"challengePanelHanger": {
+						  "type": "Image",
+						  "data": {
+							"texture": "panel_hanger",
+							"position": [0, 300],
+							"anchor":   [0.5,0.5],
+							"scale": 0.7
+						  }
+						},
+						"challengePanelFailPanel": {
+						  "type": "Image",
+						  "data": {
+							"texture": "challenge_panel",
+							"position": [0, 150],
+							"anchor":   [0.5,0.5],
+							"scale": [0.8, 0.3]
+						  }
+						},
+						"challengePanelFailLabel": {
+						  "type": "Label",
+						  "data": {
+							"font"       : "mont_black_italic_big",
+							"text"       : "Stabilizer Failed!",
+							"foreground" : [255,248,161,255],
+							"anchor"     : [0.5,0.5],
+							"valign"     : "middle",
+							"halign"     : "center",
+							"position"   : [0, 155],
+							"scale"      : 0.4
+						  }
+						}
+					}
+				}
+			}
+		},
 		"pausemenu": {
 			"type"      : "Node",
             "format"    : {
