@@ -24,6 +24,7 @@ bool StabilizerModel::getIsActive() const {
 }
 
 float StabilizerModel::getProgress() const {
+	CULog("Progress %d", progress);
 	if (progress > SUCCESS_CUTOFF) {
 		return 1;
 	}

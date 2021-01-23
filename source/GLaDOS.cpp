@@ -26,7 +26,6 @@ GLaDOS::GLaDOS()
 	  // NOLINTNEXTLINE This ain't the NSA; we don't need better security than this
 	  rand(static_cast<unsigned int>(time(nullptr))),
 	  mib(MagicInternetBox::getInstance()),
-	  fail(false),
 	  maxEvents(0),
 	  levelNum(0),
 	  customEventCtr(0),
@@ -82,7 +81,6 @@ bool GLaDOS::init(const std::shared_ptr<ShipModel>& ship,
 	for (int i = 0; i < maxButtons; i++) {
 		buttonFree.push(i);
 	}
-	fail = false;
 
 	active = success;
 	return success;
@@ -131,7 +129,6 @@ bool GLaDOS::init(const std::shared_ptr<ShipModel>& ship, const int levelNum) {
 	for (int i = 0; i < maxButtons; i++) {
 		buttonFree.push(i);
 	}
-	fail = false;
 
 	active = success;
 	if (unop > 0 || levelNum == tutorial::DOOR_LEVEL) {
@@ -330,16 +327,14 @@ void GLaDOS::update(float dt) {
 		}
 	}
 
-	if (fail) {
-		ship->failAllTask();
-		mib.failAllTask();
-		fail = false;
-	}
-
 	// Check if this is the host for generating breaches and doors
 	if (mib.getPlayerID() != 0) {
 		return;
 	}
+
+	// ============================================
+	//  BELOW THIS LINE, ALL ACTIONS ARE HOST-ONLY
+	// ============================================
 
 	if (levelNum < globals::NUM_TUTORIAL_LEVELS &&
 		std::find(std::begin(tutorial::REAL_LEVELS), std::end(tutorial::REAL_LEVELS),
@@ -563,10 +558,30 @@ void GLaDOS::tutorialLevels(float /*dt*/) {
 			}
 			// Don't ask inactive donuts to do anything
 			// Player 0 will never be inactive since this is player 0
-			while (!ship->getDonuts().at(customEventCtr)->getIsActive() && customEventCtr > 0) {
+			while (customEventCtr > 0 && !ship->getDonuts().at(customEventCtr)->getIsActive()) {
 				customEventCtr--;
 			}
-			StabilizerModel& stabilizer = ship->getStabilizer();
+
+			if (ship->canonicalTimeElapsed - stabilizerStart > STABILIZER_TIMEOUT) {
+				if (customEventCtr < 0) {
+					ship->setTimeless(false);
+					mib.forceWinLevel();
+					ship->initTimer(0);
+					break;
+				}
+
+				if (customEventCtr != mib.getPlayerID() &&
+					ship->getDonuts().at(customEventCtr)->getIsActive()) {
+					mib.createAllTask(customEventCtr);
+				} else {
+					ship->createAllTask();
+				}
+				stabilizerStart = ship->canonicalTimeElapsed;
+
+				customEventCtr--;
+			}
+
+			/*StabilizerModel& stabilizer = ship->getStabilizer();
 			switch (stabilizer.getState()) {
 				case StabilizerModel::StabilizerState::Fail:
 					break;
@@ -604,7 +619,7 @@ void GLaDOS::tutorialLevels(float /*dt*/) {
 					stabilizerStart = ship->canonicalTimeElapsed;
 					break;
 				}
-			}
+			}*/
 			break;
 		}
 	}
