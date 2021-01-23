@@ -164,6 +164,9 @@ bool GLaDOS::init(const std::shared_ptr<ShipModel>& ship, const int levelNum) {
 								   angle - tutorial::BUTTON_PADDING, j);
 			}
 			break;
+		case tutorial::STABILIZER_LEVEL:
+			stabilizerStart = -STABILIZER_TIMEOUT;
+			break;
 		default:
 			break;
 	}

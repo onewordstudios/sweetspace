@@ -23,6 +23,7 @@ bool DonutModel::init(const Vec2& pos, float shipSize) {
 	sgPos = pos;
 	// Set Initial jump Velocity based on gravity and max jump height
 	jumpVelocity = sqrt(2 * GRAVITY * JUMP_HEIGHT);
+	velocity = 0;
 	this->shipSize = shipSize;
 	faceState = FaceState::Idle;
 	return true;
