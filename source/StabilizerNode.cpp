@@ -70,6 +70,20 @@ void StabilizerNode::update() {
 			}
 		}
 
+		switch (model.getState()) {
+			case StabilizerModel::StabilizerState::Win:
+				setVisible(false);
+				active = false;
+				break;
+			case StabilizerModel::StabilizerState::Fail:
+				currFrame = 0;
+				stabilizerPanel->setVisible(false);
+				failPanel->setVisible(true);
+				break;
+			default:
+				break;
+		}
+
 		currFrame++;
 	}
 }
