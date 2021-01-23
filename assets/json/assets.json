@@ -1027,8 +1027,12 @@
 			"children": {
 				"stabilizerPanel": {
 					"type": "Node",
+					"format"    : {
+						"type" : "Anchored"
+					},
 					"data": {
-						"anchor":   [0.5,1]
+						"anchor":   [0.5,1],
+						"size" : [700, 500]
 					},
 					"layout" : {
 						"x_anchor" : "center",
@@ -1036,143 +1040,194 @@
 					},
 					"children": {
 						"challengePanelHanger": {
-						  "type": "Image",
-						  "data": {
-							"texture": "panel_hanger",
-							"anchor":   [0.5,1],
-							"scale": 0.7
-						  },
+							"type": "Image",
+							"data": {
+								"texture": "panel_hanger",
+								"anchor":   [0.5,1],
+								"scale": 0.7
+							},
 							"layout" : {
 								"x_anchor" : "center",
 								"y_anchor" : "top"
 							}
 						},
 						"challengePanel": {
-						  "type": "Image",
-						  "data": {
-							"texture": "challenge_panel",
-							"anchor":   [0.5,1],
-							"scale": [0.7, 0.3]
-						  },
+							"type": "Image",
+							"data": {
+								"texture": "challenge_panel",
+								"anchor":   [0.5,1],
+								"scale": [0.7, 0.3]
+							},
 							"layout" : {
 								"x_anchor" : "center",
 								"y_anchor" : "top",
-								"y_offset" : 1,
-								"absolute" : false
+								"y_offset" : -50,
+								"absolute" : true
 							}
 						},
 						"challengePanelText": {
 						  "type": "Image",
 						  "data": {
 							"texture": "panel_text",
-							"position": [0, 175],
 							"anchor":   [0.5,1],
 							"scale": 0.7
 						  },
 							"layout" : {
 								"x_anchor" : "center",
-								"y_anchor" : "top"
+								"y_anchor" : "top",
+								"y_offset" : -60,
+								"absolute" : true
 							}
 						},
 						"challengePanelArrow0": {
 						  "type": "Image",
 						  "data": {
 							"texture": "panel_progress_0",
-							"position": [-135, 125],
 							"anchor":   [0.5,0.5],
-							"scale": 0.3,
-							"visible": false
-						  }
+							"scale": 0.3
+						  },
+							"layout" : {
+								"x_anchor" : "center",
+								"y_anchor" : "top",
+								"x_offset" : -135,
+								"y_offset" : -150,
+								"absolute" : true
+							}
 						},
 						"challengePanelArrow1": {
 						  "type": "Image",
 						  "data": {
 							"texture": "panel_progress_0",
-							"position": [-105, 125],
 							"anchor":   [0.5,0.5],
-							"scale": 0.3,
-							"visible": false
-						  }
+							"scale": 0.3
+						  },
+							"layout" : {
+								"x_anchor" : "center",
+								"y_anchor" : "top",
+								"x_offset" : -105,
+								"y_offset" : -150,
+								"absolute" : true
+							}
 						},
 						"challengePanelArrow2": {
 						  "type": "Image",
 						  "data": {
 							"texture": "panel_progress_0",
-							"position": [-75, 125],
 							"anchor":   [0.5,0.5],
-							"scale": 0.3,
-							"visible": false
-						  }
+							"scale": 0.3
+						  },
+							"layout" : {
+								"x_anchor" : "center",
+								"y_anchor" : "top",
+								"x_offset" : -75,
+								"y_offset" : -150,
+								"absolute" : true
+							}
 						},
 						"challengePanelArrow3": {
 						  "type": "Image",
 						  "data": {
 							"texture": "panel_progress_0",
-							"position": [-45, 125],
 							"anchor":   [0.5,0.5],
-							"scale": 0.3,
-							"visible": false
-						  }
+							"scale": 0.3
+						  },
+							"layout" : {
+								"x_anchor" : "center",
+								"y_anchor" : "top",
+								"x_offset" : -45,
+								"y_offset" : -150,
+								"absolute" : true
+							}
 						},
 						"challengePanelArrow4": {
 						  "type": "Image",
 						  "data": {
 							"texture": "panel_progress_0",
-							"position": [-15, 125],
 							"anchor":   [0.5,0.5],
-							"scale": 0.3,
-							"visible": false
-						  }
+							"scale": 0.3
+						  },
+							"layout" : {
+								"x_anchor" : "center",
+								"y_anchor" : "top",
+								"x_offset" : -15,
+								"y_offset" : -150,
+								"absolute" : true
+							}
 						},
 						"challengePanelArrow5": {
 						  "type": "Image",
 						  "data": {
 							"texture": "panel_progress_0",
-							"position": [15, 125],
 							"anchor":   [0.5,0.5],
-							"scale": 0.3,
-							"visible": false
-						  }
+							"scale": 0.3
+						  },
+							"layout" : {
+								"x_anchor" : "center",
+								"y_anchor" : "top",
+								"x_offset" : 15,
+								"y_offset" : -150,
+								"absolute" : true
+							}
 						},
 						"challengePanelArrow6": {
 						  "type": "Image",
 						  "data": {
 							"texture": "panel_progress_0",
-							"position": [45, 125],
 							"anchor":   [0.5,0.5],
-							"scale": 0.3,
-							"visible": false
-						  }
+							"scale": 0.3
+						  },
+							"layout" : {
+								"x_anchor" : "center",
+								"y_anchor" : "top",
+								"x_offset" : 45,
+								"y_offset" : -150,
+								"absolute" : true
+							}
 						},
 						"challengePanelArrow7": {
 						  "type": "Image",
 						  "data": {
 							"texture": "panel_progress_0",
-							"position": [75, 125],
 							"anchor":   [0.5,0.5],
-							"scale": 0.3,
-							"visible": false
-						  }
+							"scale": 0.3
+						  },
+							"layout" : {
+								"x_anchor" : "center",
+								"y_anchor" : "top",
+								"x_offset" : 75,
+								"y_offset" : -150,
+								"absolute" : true
+							}
 						},
 						"challengePanelArrow8": {
 						  "type": "Image",
 						  "data": {
 							"texture": "panel_progress_0",
-							"position": [105, 125],
 							"anchor":   [0.5,0.5],
-							"scale": 0.3,
-							"visible": false
-						  }
+							"scale": 0.3
+						  },
+							"layout" : {
+								"x_anchor" : "center",
+								"y_anchor" : "top",
+								"x_offset" : 105,
+								"y_offset" : -150,
+								"absolute" : true
+							}
 						},
 						"challengePanelArrow9": {
 						  "type": "Image",
 						  "data": {
 							"texture": "panel_progress_0",
-							"position": [135, 125],
 							"anchor":   [0.5,0.5],
-							"scale": 0.3,
-							"visible": false
-						  }
+							"scale": 0.3
+						  },
+							"layout" : {
+								"x_anchor" : "center",
+								"y_anchor" : "top",
+								"x_offset" : 135,
+								"y_offset" : -150,
+								"absolute" : true
+							}
 						}
 					}
 				},

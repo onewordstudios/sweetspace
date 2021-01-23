@@ -36,9 +36,6 @@ StabilizerNode::StabilizerNode(const std::shared_ptr<cugl::AssetManager>& assets
 	screen->setPosition(0, 0);
 
 	doLayout();
-	CULog("panel size %f x %f, pos (%f, %f)", stabilizerPanel->getSize().width,
-		  stabilizerPanel->getSize().height, stabilizerPanel->getPositionX(),
-		  stabilizerPanel->getPositionY());
 }
 
 StabilizerNode::~StabilizerNode() { removeAllChildren(); }
