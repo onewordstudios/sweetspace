@@ -655,7 +655,7 @@ class MagicInternetBox::Mimpl {
 					break;
 				}
 				case AllFail: {
-					state->failAllTask();
+					state->getStabilizer().fail();
 					break;
 				}
 				case AllSucceed: {

@@ -15,7 +15,6 @@ bool StabilizerModel::getIsActive() const {
 	switch (currState) {
 		case StabilizerState::Inactive:
 		case StabilizerState::Fail:
-		case StabilizerState::Win:
 			return false;
 		case StabilizerState::Left:
 		case StabilizerState::Right:
@@ -36,10 +35,12 @@ void StabilizerModel::startChallenge(float currTime) {
 	currState = (rand() % 2) != 0 ? StabilizerState::Left : StabilizerState::Right;
 }
 
+void StabilizerModel::fail() { currState = StabilizerState::Fail; }
+
 void StabilizerModel::finish() {
 	bool won = getIsWin();
 	reset();
-	currState = won ? StabilizerState::Win : StabilizerState::Fail;
+	currState = won ? StabilizerState::Inactive : StabilizerState::Fail;
 }
 
 void StabilizerModel::reset() {

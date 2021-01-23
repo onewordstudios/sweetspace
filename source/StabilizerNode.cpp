@@ -59,6 +59,12 @@ void StabilizerNode::update() {
 				arrow->setTexture(arrowDim);
 				arrow->setVisible(true);
 			}
+		} else if (model.getState() == StabilizerModel::StabilizerState::Fail) {
+			active = true;
+			currFrame = 0;
+			setVisible(true);
+			stabilizerPanel->setVisible(false);
+			failPanel->setVisible(true);
 		}
 	} else {
 		// Active
@@ -71,7 +77,8 @@ void StabilizerNode::update() {
 		}
 
 		switch (model.getState()) {
-			case StabilizerModel::StabilizerState::Win:
+			case StabilizerModel::StabilizerState::Inactive:
+				currFrame = 0;
 				setVisible(false);
 				active = false;
 				break;

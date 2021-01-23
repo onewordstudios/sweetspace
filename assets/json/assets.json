@@ -1233,9 +1233,16 @@
 				},
 				"failPanel": {
 					"type": "Node",
+					"format"    : {
+						"type" : "Anchored"
+					},
 					"data": {
 						"anchor":   [0.5,1],
 						"size" : [700, 500]
+					},
+					"layout" : {
+						"x_anchor" : "center",
+						"y_anchor" : "top"
 					},
 					"children": {
 						"challengePanelHanger": {
@@ -1278,7 +1285,7 @@
 							"layout" : {
 								"x_anchor" : "center",
 								"y_anchor" : "top",
-								"y_offset" : -125,
+								"y_offset" : -100,
 								"absolute" : true
 							}
 						},
@@ -1296,7 +1303,7 @@
 							"layout" : {
 								"x_anchor" : "center",
 								"y_anchor" : "top",
-								"y_offset" : -175,
+								"y_offset" : -150,
 								"absolute" : true
 							}
 						}

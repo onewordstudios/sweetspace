@@ -4,7 +4,7 @@
 class StabilizerModel {
    public:
 	/** Current state of the stabilizer */
-	enum class StabilizerState { Inactive, Left, Right, Win, Fail };
+	enum class StabilizerState { Inactive, Left, Right, Fail };
 
    private:
 	/** Random number generator */
@@ -53,6 +53,9 @@ class StabilizerModel {
 
 	/** Mark a single frame with everyone rolling together */
 	void incrementProgress() { progress++; }
+
+	/** Immediately fail this challenge (usually b/c we received the command over networking) */
+	void fail();
 
 	/** Complete the challenge, marking as win or loss depending on current status. */
 	void finish();
