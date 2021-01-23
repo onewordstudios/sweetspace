@@ -659,7 +659,7 @@ class MagicInternetBox::Mimpl {
 					break;
 				}
 				case AllSucceed: {
-					state->getStabilizer().forceWin();
+					state->stabilizerTutorial = true;
 					break;
 				}
 				case ForceWin: {

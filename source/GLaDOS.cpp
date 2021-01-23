@@ -556,8 +556,8 @@ void GLaDOS::tutorialLevels(float /*dt*/) {
 			if (ship->timePassed() < STABILIZER_START) {
 				break;
 			}
-			if (customEventCtr >= mib.getNumPlayers()) {
-				customEventCtr = static_cast<int>(mib.getNumPlayers()) - 1;
+			if (customEventCtr >= mib.getMaxNumPlayers()) {
+				customEventCtr = static_cast<int>(mib.getMaxNumPlayers()) - 1;
 			}
 			// Don't ask inactive donuts to do anything
 			// Player 0 will never be inactive since this is player 0
@@ -565,7 +565,27 @@ void GLaDOS::tutorialLevels(float /*dt*/) {
 				customEventCtr--;
 			}
 
+			// If stabilizer was successfully completed
+			if (ship->stabilizerTutorial) {
+				CULog("GLaDOS TUTORIAL: Got stabilizer winner");
+				ship->stabilizerTutorial = false;
+				customEventCtr--;
+				stabilizerStart = -STABILIZER_TIMEOUT;
+				// Decrement the player ID, and guarantee that the timeout is exceeded.
+				// Then break out; when we come back through next frame, the for loop above
+				// will find the next valid player, and then the block below triggers,
+				// sending out the stabilizer task.
+				break;
+			}
+
+			// If timeout expired, which includes if we lose the stabilizer, if the previous packet
+			// got lost, or if we won the previous frame and decremented the player ID
 			if (ship->canonicalTimeElapsed - stabilizerStart > STABILIZER_TIMEOUT) {
+				CULog(
+					"GLaDOS TUTORIAL: Generating stabilizer b/c ship time %f, start time %f, "
+					"timeout %f, and counter %d",
+					ship->canonicalTimeElapsed, stabilizerStart, STABILIZER_TIMEOUT,
+					customEventCtr);
 				if (customEventCtr < 0) {
 					ship->setTimeless(false);
 					mib.forceWinLevel();
@@ -580,49 +600,8 @@ void GLaDOS::tutorialLevels(float /*dt*/) {
 					ship->createAllTask();
 				}
 				stabilizerStart = ship->canonicalTimeElapsed;
-
-				customEventCtr--;
 			}
 
-			/*StabilizerModel& stabilizer = ship->getStabilizer();
-			switch (stabilizer.getState()) {
-				case StabilizerModel::StabilizerState::Fail:
-					break;
-				case StabilizerModel::StabilizerState::Left:
-				case StabilizerModel::StabilizerState::Right:
-					if (ship->canonicalTimeElapsed - stabilizerStart > STABILIZER_TIMEOUT) {
-						stabilizer.reset();
-					}
-					break;
-				case StabilizerModel::StabilizerState::Inactive: {
-					// Hopefully after animation is done, it will always be set to inactive
-					if (customEventCtr != mib.getPlayerID() &&
-						ship->getDonuts().at(customEventCtr)->getIsActive()) {
-						mib.createAllTask(customEventCtr);
-					} else {
-						ship->createAllTask();
-					}
-					stabilizerStart = ship->canonicalTimeElapsed;
-					break;
-				}
-				case StabilizerModel::StabilizerState::Win: {
-					customEventCtr--;
-					if (customEventCtr < 0) {
-						ship->setTimeless(false);
-						mib.forceWinLevel();
-						ship->initTimer(0);
-						break;
-					}
-					if (customEventCtr != mib.getPlayerID() &&
-						ship->getDonuts().at(customEventCtr)->getIsActive()) {
-						mib.createAllTask(customEventCtr);
-					} else {
-						ship->createAllTask();
-					}
-					stabilizerStart = ship->canonicalTimeElapsed;
-					break;
-				}
-			}*/
 			break;
 		}
 	}

@@ -323,6 +323,7 @@ void GameMode::updateStabilizer() {
 
 	if (stabilizer.getIsWin()) {
 		net.succeedAllTask();
+		ship->stabilizerTutorial = true;
 		stabilizer.finish();
 	} else if (trunc(ship->canonicalTimeElapsed) == trunc(stabilizer.getEndTime())) {
 		stabilizer.finish();

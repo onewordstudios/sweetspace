@@ -45,6 +45,7 @@ bool ShipModel::init(uint8_t numPlayers, uint8_t numBreaches, uint8_t numDoors, 
 	this->shipSize = shipSize;
 
 	stabilizer.reset();
+	stabilizerTutorial = false;
 
 	return true;
 }

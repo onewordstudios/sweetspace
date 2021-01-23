@@ -52,6 +52,10 @@ class ShipModel {
 	float timeLeftInTimer;
 	/** Time elapsed since level start */
 	float canonicalTimeElapsed;
+
+	/** Flag set to true when a stabilizer is passed by someone, used only in the tutorial level */
+	bool stabilizerTutorial;
+
 #pragma mark Constructors
 	/*
 	 * Creates a ship.
@@ -71,7 +75,8 @@ class ShipModel {
 		  totalTime(0),
 		  levelNum(0),
 		  timeLeftInTimer(0),
-		  canonicalTimeElapsed(0) {}
+		  canonicalTimeElapsed(0),
+		  stabilizerTutorial(false) {}
 
 	ShipModel(const ShipModel&) = delete;
 

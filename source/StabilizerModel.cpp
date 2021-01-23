@@ -24,7 +24,6 @@ bool StabilizerModel::getIsActive() const {
 }
 
 float StabilizerModel::getProgress() const {
-	CULog("Progress %d", progress);
 	if (progress > SUCCESS_CUTOFF) {
 		return 1;
 	}
@@ -42,8 +41,6 @@ void StabilizerModel::finish() {
 	reset();
 	currState = won ? StabilizerState::Win : StabilizerState::Fail;
 }
-
-void StabilizerModel::forceWin() { currState = StabilizerState::Win; }
 
 void StabilizerModel::reset() {
 	currState = StabilizerState::Inactive;

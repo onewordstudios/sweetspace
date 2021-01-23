@@ -57,9 +57,6 @@ class StabilizerModel {
 	/** Complete the challenge, marking as win or loss depending on current status. */
 	void finish();
 
-	/** Basically tutorial hack; jumps the state of the stabilizer to win */
-	void forceWin();
-
 	/** Reset the challenge */
 	void reset();
 };
