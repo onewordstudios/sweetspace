@@ -163,6 +163,7 @@ void StabilizerNode::update() {
 			failPanel->setAnchor({1.f / 2, Tween::easeIn(1, 0, currFrame, ANIMATE_TIME)});
 			doLayout();
 			if (currFrame == ANIMATE_TIME) {
+				currFrame = 0;
 				state = NodeStatus::Off;
 				setVisible(false);
 			}
