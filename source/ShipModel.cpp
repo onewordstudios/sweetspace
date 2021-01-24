@@ -141,7 +141,7 @@ bool ShipModel::failAllTask() {
 	}
 	CULog("Setting teleport angle %f", newAngle);
 	donut->setTeleportAngle(newAngle);
-	
+
 	return true;
 }
 
