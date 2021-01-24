@@ -109,7 +109,6 @@ bool ShipModel::failAllTask() {
 	stabilizer.fail();
 
 	const auto& donut = donuts.at(*MagicInternetBox::getInstance().getPlayerID());
-	// for (auto& donut : donuts) {
 	float newAngle = 0;
 	bool goodAngle = false;
 	int attempts = 0;
@@ -142,7 +141,7 @@ bool ShipModel::failAllTask() {
 	}
 	CULog("Setting teleport angle %f", newAngle);
 	donut->setTeleportAngle(newAngle);
-	// }
+	
 	return true;
 }
 
