@@ -770,9 +770,9 @@ void GameGraphRoot::doTeleportAnimation() {
 		} else {
 			if (currentTeleportationFrame == TELEPORT_FRAMECUTOFF_SECOND + 1) {
 				// Teleport models
-				for (const auto& donut : ship->getDonuts()) {
-					donut->teleport();
-				}
+				const auto& playerDonut =
+					ship->getDonuts().at(*MagicInternetBox::getInstance().getPlayerID());
+				playerDonut->teleport();
 				stabilizer.reset();
 			} else if (currentTeleportationFrame == TELEPORT_FRAMECUTOFF_SECOND + 2) {
 				CustomNode::recomputeAll();

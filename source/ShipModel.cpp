@@ -90,6 +90,8 @@ bool ShipModel::createAllTask() {
 }
 
 bool ShipModel::failAllTask() {
+	stabilizer.fail();
+
 	for (auto& donut : donuts) {
 		float newAngle = 0;
 		bool goodAngle = false;
@@ -121,6 +123,7 @@ bool ShipModel::failAllTask() {
 				}
 			}
 		}
+		CULog("Setting teleport angle %f", newAngle);
 		donut->setTeleportAngle(newAngle);
 	}
 	return true;

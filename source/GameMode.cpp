@@ -326,8 +326,8 @@ void GameMode::updateStabilizer() {
 		ship->stabilizerTutorial = true;
 		stabilizer.finish();
 	} else if (trunc(ship->canonicalTimeElapsed) == trunc(stabilizer.getEndTime())) {
-		stabilizer.finish();
 		net.failAllTask();
+		ship->failAllTask();
 
 		// This can't happen a second time in the duration of the sound effect, so we can
 		// just end it immediately
