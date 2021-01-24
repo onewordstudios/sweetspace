@@ -755,7 +755,6 @@ void GameGraphRoot::doTeleportAnimation() {
 
 	if (stabilizer.getState() == StabilizerModel::StabilizerState::Fail && !prevIsStabilizerFail) {
 		currentTeleportationFrame = 1;
-		// TODO mark stabilizer as animating
 	}
 	prevIsStabilizerFail = stabilizer.getState() == StabilizerModel::StabilizerState::Fail;
 
