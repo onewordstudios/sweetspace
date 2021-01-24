@@ -10,8 +10,11 @@ class StabilizerNode : public cugl::Node {
 	/** Underlying stabilizer model */
 	const StabilizerModel& model;
 
-	/** Whether anything is currently on screen */
-	bool active;
+	/** Possible states */
+	enum class NodeStatus;
+
+	/** Current state */
+	NodeStatus state;
 
 	/** Current frame of animation */
 	size_t currFrame;
