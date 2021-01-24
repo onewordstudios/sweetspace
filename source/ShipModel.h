@@ -63,20 +63,7 @@ class ShipModel {
 	 * NEVER USE A CONSTRUCTOR WITH NEW. If you want to allocate a model on
 	 * the heap, use one of the static constructors instead.
 	 */
-	ShipModel()
-		: rand(static_cast<unsigned int>(time(nullptr))), // NOLINT Randomness is good enough
-		  donuts(0),
-		  breaches(0),
-		  doors(0),
-		  initHealth(0),
-		  health(0),
-		  shipSize(0),
-		  timeless(false),
-		  totalTime(0),
-		  levelNum(0),
-		  timeLeftInTimer(0),
-		  canonicalTimeElapsed(0),
-		  stabilizerTutorial(false) {}
+	ShipModel();
 
 	ShipModel(const ShipModel&) = delete;
 

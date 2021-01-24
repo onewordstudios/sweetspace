@@ -8,6 +8,22 @@
 /** Max number of attempts of generating a new teleportation angle */
 constexpr int MAX_NEW_ANGLE_ATTEMPTS = 1000;
 
+ShipModel::ShipModel()
+	: rand(static_cast<unsigned int>(
+		  std::chrono::high_resolution_clock::now().time_since_epoch().count())),
+	  donuts(0),
+	  breaches(0),
+	  doors(0),
+	  initHealth(0),
+	  health(0),
+	  shipSize(0),
+	  timeless(false),
+	  totalTime(0),
+	  levelNum(0),
+	  timeLeftInTimer(0),
+	  canonicalTimeElapsed(0),
+	  stabilizerTutorial(false) {}
+
 bool ShipModel::init(uint8_t numPlayers, uint8_t numBreaches, uint8_t numDoors, uint8_t playerID,
 					 float shipSize, float initHealth, uint8_t numButtons) {
 	timeless = false;
@@ -92,40 +108,41 @@ bool ShipModel::createAllTask() {
 bool ShipModel::failAllTask() {
 	stabilizer.fail();
 
-	for (auto& donut : donuts) {
-		float newAngle = 0;
-		bool goodAngle = false;
-		int attempts = 0;
-		while (!goodAngle && attempts < MAX_NEW_ANGLE_ATTEMPTS) {
-			// Generate random angle
-			newAngle = std::fmodf(static_cast<float>(rand()), getSize());
-			goodAngle = true;
-			attempts += 1;
-			// Check against breaches
-			for (auto& breach : breaches) {
-				float breachAngle = breach->getAngle();
-				float diff = getAngleDifference(breachAngle, newAngle);
-				if (diff <= MIN_DISTANCE && breachAngle != -1) {
-					goodAngle = false;
-					break;
-				}
-			}
-			if (!goodAngle) {
-				continue;
-			}
-			// Check against doors
-			for (auto& door : doors) {
-				float doorAngle = door->getAngle();
-				float diff = getAngleDifference(doorAngle, newAngle);
-				if (diff <= MIN_DISTANCE && doorAngle != -1) {
-					goodAngle = false;
-					break;
-				}
+	const auto& donut = donuts.at(*MagicInternetBox::getInstance().getPlayerID());
+	// for (auto& donut : donuts) {
+	float newAngle = 0;
+	bool goodAngle = false;
+	int attempts = 0;
+	while (!goodAngle && attempts < MAX_NEW_ANGLE_ATTEMPTS) {
+		// Generate random angle
+		newAngle = std::fmodf(static_cast<float>(rand()), getSize());
+		goodAngle = true;
+		attempts += 1;
+		// Check against breaches
+		for (auto& breach : breaches) {
+			float breachAngle = breach->getAngle();
+			float diff = getAngleDifference(breachAngle, newAngle);
+			if (diff <= MIN_DISTANCE && breachAngle != -1) {
+				goodAngle = false;
+				break;
 			}
 		}
-		CULog("Setting teleport angle %f", newAngle);
-		donut->setTeleportAngle(newAngle);
+		if (!goodAngle) {
+			continue;
+		}
+		// Check against doors
+		for (auto& door : doors) {
+			float doorAngle = door->getAngle();
+			float diff = getAngleDifference(doorAngle, newAngle);
+			if (diff <= MIN_DISTANCE && doorAngle != -1) {
+				goodAngle = false;
+				break;
+			}
+		}
 	}
+	CULog("Setting teleport angle %f", newAngle);
+	donut->setTeleportAngle(newAngle);
+	// }
 	return true;
 }
 
