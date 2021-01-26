@@ -4,6 +4,7 @@
 #include "Globals.h"
 #include "MagicInternetBox.h"
 #include "PlayerDonutModel.h"
+#include "SoundEffectController.h"
 
 /** Max number of attempts of generating a new teleportation angle */
 constexpr int MAX_NEW_ANGLE_ATTEMPTS = 1000;
@@ -107,6 +108,11 @@ bool ShipModel::createAllTask() {
 
 bool ShipModel::failAllTask() {
 	stabilizer.fail();
+
+	// This can't happen a second time in the duration of the sound effect, so we can
+	// just end it immediately
+	SoundEffectController::getInstance()->startEvent(SoundEffectController::TELEPORT, 0);
+	SoundEffectController::getInstance()->endEvent(SoundEffectController::TELEPORT, 0);
 
 	const auto& donut = donuts.at(*MagicInternetBox::getInstance().getPlayerID());
 	float newAngle = 0;

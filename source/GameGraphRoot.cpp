@@ -361,7 +361,7 @@ void GameGraphRoot::dispose() {
 		healthNode = nullptr;
 
 		blackoutOverlay = nullptr;
-
+		reconnectScreen = nullptr;
 		pauseMenu = nullptr;
 
 		lossScreen = nullptr;
