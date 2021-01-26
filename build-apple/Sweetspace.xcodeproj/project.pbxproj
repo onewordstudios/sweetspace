@@ -371,6 +371,9 @@
 		7B999C9B250F8E9F00649EFB /* NetworkConnection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7B999C9A250F8E9E00649EFB /* NetworkConnection.cpp */; };
 		7B999C9C250F8E9F00649EFB /* NetworkConnection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7B999C9A250F8E9E00649EFB /* NetworkConnection.cpp */; };
 		7B999C9D250F8E9F00649EFB /* NetworkConnection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7B999C9A250F8E9E00649EFB /* NetworkConnection.cpp */; };
+		7BB9B98125C0A91600DFF69F /* ReconnectScreen.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7BB9B97C25C0A91500DFF69F /* ReconnectScreen.cpp */; };
+		7BB9B98225C0A91600DFF69F /* ReconnectScreen.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7BB9B97C25C0A91500DFF69F /* ReconnectScreen.cpp */; };
+		7BB9B98325C0A91600DFF69F /* ReconnectScreen.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7BB9B97C25C0A91500DFF69F /* ReconnectScreen.cpp */; };
 		7BD666F22448E8E500D68748 /* MainMenuMode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7BD666F12448E8E500D68748 /* MainMenuMode.cpp */; };
 		7BD666F32448E8E500D68748 /* MainMenuMode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7BD666F12448E8E500D68748 /* MainMenuMode.cpp */; };
 		7BD666F42448E8E500D68748 /* MainMenuMode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7BD666F12448E8E500D68748 /* MainMenuMode.cpp */; };
@@ -853,6 +856,8 @@
 		7B999C95250F8E8B00649EFB /* NetworkDataType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NetworkDataType.h; sourceTree = "<group>"; };
 		7B999C99250F8E9E00649EFB /* NetworkConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NetworkConnection.h; sourceTree = "<group>"; };
 		7B999C9A250F8E9E00649EFB /* NetworkConnection.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NetworkConnection.cpp; sourceTree = "<group>"; };
+		7BB9B97C25C0A91500DFF69F /* ReconnectScreen.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ReconnectScreen.cpp; sourceTree = "<group>"; };
+		7BB9B98025C0A91500DFF69F /* ReconnectScreen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReconnectScreen.h; sourceTree = "<group>"; };
 		7BD666F02448E8E500D68748 /* MainMenuMode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainMenuMode.h; sourceTree = "<group>"; };
 		7BD666F12448E8E500D68748 /* MainMenuMode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MainMenuMode.cpp; sourceTree = "<group>"; };
 		7BDE1A3E243422EC0080F7CB /* Globals.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Globals.h; sourceTree = "<group>"; };
@@ -1464,6 +1469,8 @@
 				3CDD11B0242D1DDF00FD21F8 /* HealthNode.h */,
 				828C645625B61B54001A3F65 /* PauseMenu.cpp */,
 				828C645725B61B54001A3F65 /* PauseMenu.h */,
+				7BB9B97C25C0A91500DFF69F /* ReconnectScreen.cpp */,
+				7BB9B98025C0A91500DFF69F /* ReconnectScreen.h */,
 				82AE182125B27616001C436F /* WinScreen.cpp */,
 				82AE181D25B27616001C436F /* WinScreen.h */,
 			);
@@ -1842,6 +1849,7 @@
 				DF3B74542403A46B0063552F /* InputController.cpp in Sources */,
 				7B0FBDB824FBBC170026067D /* gettimeofday.cpp in Sources */,
 				7B0FBD7F24FBBC170026067D /* LinuxStrings.cpp in Sources */,
+				7BB9B98325C0A91600DFF69F /* ReconnectScreen.cpp in Sources */,
 				7B0FBD5824FBBC160026067D /* CheckSum.cpp in Sources */,
 				7B0FBE4E24FBBC170026067D /* Base64Encoder.cpp in Sources */,
 				7B0FBD5B24FBBC160026067D /* StringTable.cpp in Sources */,
@@ -2001,6 +2009,7 @@
 				DF3B74622403A46B0063552F /* GameGraphRoot.cpp in Sources */,
 				7B0FBDB724FBBC170026067D /* gettimeofday.cpp in Sources */,
 				7B0FBD7E24FBBC170026067D /* LinuxStrings.cpp in Sources */,
+				7BB9B98225C0A91600DFF69F /* ReconnectScreen.cpp in Sources */,
 				7B0FBD5724FBBC160026067D /* CheckSum.cpp in Sources */,
 				7B0FBE4D24FBBC170026067D /* Base64Encoder.cpp in Sources */,
 				7B0FBD5A24FBBC160026067D /* StringTable.cpp in Sources */,
@@ -2160,6 +2169,7 @@
 				DF3B74612403A46B0063552F /* GameGraphRoot.cpp in Sources */,
 				7B0FBDB624FBBC170026067D /* gettimeofday.cpp in Sources */,
 				7B0FBD7D24FBBC170026067D /* LinuxStrings.cpp in Sources */,
+				7BB9B98125C0A91600DFF69F /* ReconnectScreen.cpp in Sources */,
 				7B0FBD5624FBBC160026067D /* CheckSum.cpp in Sources */,
 				7B0FBE4C24FBBC170026067D /* Base64Encoder.cpp in Sources */,
 				7B0FBD5924FBBC160026067D /* StringTable.cpp in Sources */,
