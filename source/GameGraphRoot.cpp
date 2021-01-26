@@ -423,7 +423,7 @@ void GameGraphRoot::update( // NOLINT Yeah it's a big function; we'll live with 
 		case Normal:
 			// Hide Unnecessary Overlays
 			lossScreen->setVisible(false);
-			reconnectScreen->deactivate();
+			reconnectScreen->deactivateStep();
 			// Reset Timeout Counters to negative value
 			pauseMenu->update();
 			break;
@@ -456,7 +456,7 @@ void GameGraphRoot::update( // NOLINT Yeah it's a big function; we'll live with 
 			break;
 		case Reconnecting:
 			// Still Reconnecting, Animation Frames
-			if (reconnectScreen->step()) {
+			if (reconnectScreen->activeStep()) {
 				isBackToMainMenu = true;
 			}
 			break;

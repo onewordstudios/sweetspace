@@ -27,16 +27,20 @@ class ReconnectScreen : public cugl::Node {
 	~ReconnectScreen();
 
 	/**
-	 * Disable the reconnect screen; call if connection is re-established successfully
+	 * Step the animation for this node when it should be hidden. Call this every frame if
+	 * connected, because if this node was previously visible, the outgoing animation is played
+	 * here.
 	 */
-	void deactivate();
+	void deactivateStep();
 
 	/**
 	 * Activate and update the animation for this node. Should be called once every frame when
 	 * disconnected and should NOT be called otherwise. Will return true if the full reconnect
-	 * timeout animation has passed.
+	 * timeout animation has passed, but will not auto-hide this node when that occurs.
+	 *
+	 * @return True iff timeout animation has completed
 	 */
-	bool step();
+	bool activeStep();
 };
 
 #endif // RECONNECT_SCREEN_H

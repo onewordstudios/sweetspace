@@ -44,9 +44,9 @@ ReconnectScreen::~ReconnectScreen() {
 	removeAllChildren();
 }
 
-void ReconnectScreen::deactivate() { setVisible(false); }
+void ReconnectScreen::deactivateStep() { setVisible(false); }
 
-bool ReconnectScreen::step() {
+bool ReconnectScreen::activeStep() {
 	if (!_isVisible) {
 		setVisible(true);
 		currFrame = 0;
