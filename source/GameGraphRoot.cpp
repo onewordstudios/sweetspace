@@ -28,21 +28,6 @@ constexpr int BG_SCROLL_LIMIT = 256;
 /** Parallax speed of background image */
 constexpr float BG_SCROLL_SPEED = 0.5;
 
-/** Animation cycle length of ellipses */
-constexpr int MAX_ELLIPSES_FRAMES = 180;
-
-/** Presumable number of frames per second */
-constexpr int FRAMES_PER_SECOND = 60;
-
-/** Ratio of spin on reconnect donut */
-constexpr float RECONNECT_SPIN_RATIO = 0.26f;
-
-/** Milliseconds before connection timeout */
-constexpr int CONNECTION_TIMEOUT = 15000;
-
-/** Milliseconds in a second */
-constexpr int MILLISECONDS_IN_SECONDS = 1000;
-
 /** Animation cycle length of ship red flash */
 constexpr int MAX_HEALTH_WARNING_FRAMES = 150;
 
@@ -104,7 +89,6 @@ bool GameGraphRoot::init( // NOLINT Yeah it's a big function; we'll live with it
 	this->prevPlayerAngle = ship->getDonuts().at(playerID)->getAngle();
 	isBackToMainMenu = false;
 	status = Normal;
-	currentEllipsesFrame = 0;
 
 	// Initialize the scene to a locked width
 	cugl::Size dimen = Application::get()->getDisplaySize();
@@ -308,29 +292,9 @@ bool GameGraphRoot::init( // NOLINT Yeah it's a big function; we'll live with it
 	}
 
 	// Overlay Components
-	// Initialize Reconnect Overlay
-	reconnectOverlay = assets->get<Node>("game_overlay_reconnect");
-	reconnectE2 =
-		std::dynamic_pointer_cast<Label>(assets->get<Node>("game_overlay_reconnect_ellipsis2"));
-	reconnectE3 =
-		std::dynamic_pointer_cast<Label>(assets->get<Node>("game_overlay_reconnect_ellipsis3"));
-	std::shared_ptr<PolygonNode> tempReconnectDonut =
-		dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_overlay_reconnect_donut"));
-	reconnectDonut = cugl::PolygonNode::allocWithTexture(
-		assets->get<Texture>("donut_" + PLAYER_COLOR.at(playerID)));
-	reconnectOverlay->addChild(reconnectDonut);
-	reconnectDonut->setAnchor(Vec2::ANCHOR_CENTER);
-	reconnectDonut->setPosition(tempReconnectDonut->getPosition());
-	reconnectDonut->setScale(DonutNode::DONUT_SCALE);
-	reconnectDonut->setVisible(true);
-	tempReconnectDonut = nullptr;
 
-	// Initialize Timeout Display
-	timeoutDisplay = assets->get<Node>("game_overlay_timeout");
-	timeoutCounter =
-		std::dynamic_pointer_cast<Label>(assets->get<Node>("game_overlay_timeout_countdown"));
-	timeoutCurrent.mark();
-	timeoutStart.mark();
+	// Initialize Reconnect Overlay
+	reconnectScreen = std::make_shared<ReconnectScreen>(assets);
 
 	// Initialize Pause Screen Componenets
 	pauseMenu = std::make_shared<PauseMenu>(assets);
@@ -345,8 +309,6 @@ bool GameGraphRoot::init( // NOLINT Yeah it's a big function; we'll live with it
 	// Initialize Win Screen Componenets
 	winScreen = std::make_shared<WinScreen>(assets);
 
-	reconnectOverlay->setVisible(false);
-	timeoutDisplay->setVisible(false);
 	lossScreen->setVisible(false);
 	nearSpace->setVisible(true);
 	healthNode->setVisible(true);
@@ -361,6 +323,7 @@ bool GameGraphRoot::init( // NOLINT Yeah it's a big function; we'll live with it
 	addChild(scene);
 	addChild(stabilizerNode);
 	addChild(winScreen);
+	addChild(reconnectScreen);
 	addChild(pauseMenu);
 	return true;
 }
@@ -398,14 +361,6 @@ void GameGraphRoot::dispose() {
 		healthNode = nullptr;
 
 		blackoutOverlay = nullptr;
-
-		reconnectOverlay = nullptr;
-		reconnectE2 = nullptr;
-		reconnectE3 = nullptr;
-		reconnectDonut = nullptr;
-
-		timeoutDisplay = nullptr;
-		timeoutCounter = nullptr;
 
 		pauseMenu = nullptr;
 
@@ -468,11 +423,8 @@ void GameGraphRoot::update( // NOLINT Yeah it's a big function; we'll live with 
 		case Normal:
 			// Hide Unnecessary Overlays
 			lossScreen->setVisible(false);
-			reconnectOverlay->setVisible(false);
-			timeoutDisplay->setVisible(false);
+			reconnectScreen->deactivate();
 			// Reset Timeout Counters to negative value
-			timeoutCurrent.mark();
-			timeoutStart.mark();
 			pauseMenu->update();
 			break;
 		case Loss:
@@ -504,44 +456,9 @@ void GameGraphRoot::update( // NOLINT Yeah it's a big function; we'll live with 
 			break;
 		case Reconnecting:
 			// Still Reconnecting, Animation Frames
-			// Check for initial reconnection attempt
-			if (timeoutCurrent.ellapsedNanos(timeoutStart) < 0) {
-				timeoutStart.mark();
-			}
-			if (timeoutCurrent.ellapsedMillis(timeoutStart) <
-				CONNECTION_TIMEOUT - 3 * MILLISECONDS_IN_SECONDS) {
-				// Regular Reconnect Display
-				timeoutDisplay->setVisible(false);
-				timeoutCurrent.mark();
-				reconnectOverlay->setVisible(true);
-				reconnectDonut->setAngle(
-					(reconnectDonut->getAngle() - globals::PI_180 * RECONNECT_SPIN_RATIO));
-				currentEllipsesFrame++;
-				if (currentEllipsesFrame > MAX_ELLIPSES_FRAMES) {
-					currentEllipsesFrame = 0;
-				} else if (currentEllipsesFrame % MAX_ELLIPSES_FRAMES < FRAMES_PER_SECOND) {
-					reconnectE2->setVisible(false);
-					reconnectE3->setVisible(false);
-				} else if (currentEllipsesFrame % MAX_ELLIPSES_FRAMES < 2 * FRAMES_PER_SECOND) {
-					reconnectE2->setVisible(true);
-				} else if (currentEllipsesFrame % MAX_ELLIPSES_FRAMES < 3 * FRAMES_PER_SECOND) {
-					reconnectE3->setVisible(true);
-				}
-			} else {
-				// 3 Second Timeout Counter back to lobby
-				timeoutDisplay->setVisible(true);
-				if (timeoutCurrent.ellapsedMillis(timeoutStart) <
-					CONNECTION_TIMEOUT - 2 * MILLISECONDS_IN_SECONDS) {
-					timeoutCounter->setText("3");
-				} else if (timeoutCurrent.ellapsedMillis(timeoutStart) <
-						   CONNECTION_TIMEOUT - MILLISECONDS_IN_SECONDS) {
-					timeoutCounter->setText("2");
-				} else if (timeoutCurrent.ellapsedMillis(timeoutStart) < CONNECTION_TIMEOUT) {
-					timeoutCounter->setText("1");
-				} else {
-					isBackToMainMenu = true;
-				}
-				timeoutCurrent.mark();
+			reconnectScreen->activate();
+			if (reconnectScreen->update()) {
+				isBackToMainMenu = true;
 			}
 			break;
 		default:
@@ -549,8 +466,6 @@ void GameGraphRoot::update( // NOLINT Yeah it's a big function; we'll live with 
 	}
 	if (ship->getTimeless()) {
 		coordHUD->setVisible(false);
-		timeoutCounter->setVisible(false);
-		timeoutDisplay->setVisible(false);
 		timerBorder->setVisible(false);
 	}
 

@@ -376,6 +376,7 @@
     <ClInclude Include="..\..\source\PauseMenu.h" />
     <ClInclude Include="..\..\source\PlayerDonutModel.h" />
     <ClInclude Include="..\..\source\PlayerDonutNode.h" />
+    <ClInclude Include="..\..\source\ReconnectScreen.h" />
     <ClInclude Include="..\..\source\ShipModel.h" />
     <ClInclude Include="..\..\source\ShipSegmentNode.h" />
     <ClInclude Include="..\..\source\ShipSegmentWrap.h" />
@@ -531,6 +532,7 @@
     <ClCompile Include="..\..\source\PauseMenu.cpp" />
     <ClCompile Include="..\..\source\PlayerDonutModel.cpp" />
     <ClCompile Include="..\..\source\PlayerDonutNode.cpp" />
+    <ClCompile Include="..\..\source\ReconnectScreen.cpp" />
     <ClCompile Include="..\..\source\ShipModel.cpp" />
     <ClCompile Include="..\..\source\ShipSegmentNode.cpp" />
     <ClCompile Include="..\..\source\ShipSegmentWrap.cpp" />

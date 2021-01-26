@@ -17,6 +17,7 @@
 #include "MagicInternetBox.h"
 #include "PauseMenu.h"
 #include "PlayerDonutNode.h"
+#include "ReconnectScreen.h"
 #include "ShipModel.h"
 #include "ShipSegmentWrap.h"
 #include "StabilizerNode.h"
@@ -97,25 +98,7 @@ class GameGraphRoot : public cugl::Scene {
 
 	// Reconnection Textures
 	/** Node to hold all of the Reconnect Overlay.*/
-	std::shared_ptr<cugl::Node> reconnectOverlay;
-	/** The player's animated donut in the reconnection screen */
-	std::shared_ptr<cugl::PolygonNode> reconnectDonut;
-	/** Label for second ellipsis point */
-	std::shared_ptr<cugl::Label> reconnectE2;
-	/** Label for third ellipsis point */
-	std::shared_ptr<cugl::Label> reconnectE3;
-	/** Current animation frame for ellipses */
-	int currentEllipsesFrame;
-
-	// Timeout Textures
-	/** Node to hold the timeout Display.*/
-	std::shared_ptr<cugl::Node> timeoutDisplay;
-	/** Label for back to lobby counter */
-	std::shared_ptr<cugl::Label> timeoutCounter;
-	/** Connection Timeout Start */
-	cugl::Timestamp timeoutStart;
-	/** Connection Timeout Counter */
-	cugl::Timestamp timeoutCurrent;
+	std::shared_ptr<ReconnectScreen> reconnectScreen;
 
 	// Pause Textures
 	/** Pause menu node */
@@ -210,7 +193,6 @@ class GameGraphRoot : public cugl::Scene {
 	 */
 	GameGraphRoot()
 		: screenHeight(0),
-		  currentEllipsesFrame(0),
 		  playerID(0),
 		  prevPlayerAngle(0),
 		  currentHealthWarningFrame(0),
