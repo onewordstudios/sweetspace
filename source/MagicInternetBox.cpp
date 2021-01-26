@@ -149,7 +149,10 @@ class MagicInternetBox::Mimpl {
 	 */
 	void sendData(NetworkDataType type, float angle, uint8_t id, uint8_t data1, uint8_t data2,
 				  float data3) {
-		CUAssertLog(conn != nullptr, "Attempted to send to a null network connection");
+		if (conn == nullptr) {
+			CULogError("Attempted to send data to a null network connection; dropping");
+			return;
+		}
 		/*
 
 		DATA FORMAT
