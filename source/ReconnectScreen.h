@@ -13,11 +13,6 @@ class ReconnectScreen : public cugl::Node {
 	std::shared_ptr<cugl::Node> disconnScreen;
 	std::shared_ptr<cugl::Label> countdown;
 
-	/** Connection Timeout Start */
-	cugl::Timestamp timeoutStart;
-	/** Connection Timeout Counter */
-	cugl::Timestamp timeoutCurrent;
-
 	size_t currFrame;
 
    public:
@@ -32,20 +27,16 @@ class ReconnectScreen : public cugl::Node {
 	~ReconnectScreen();
 
 	/**
-	 * Activate the reconnect screen; call when disconnected
-	 */
-	void activate();
-
-	/**
 	 * Disable the reconnect screen; call if connection is re-established successfully
 	 */
 	void deactivate();
 
 	/**
-	 * Update the animation for this node. Should be called once every frame.
-	 * Will return true if the full reconnect timeout animation has passed.
+	 * Activate and update the animation for this node. Should be called once every frame when
+	 * disconnected and should NOT be called otherwise. Will return true if the full reconnect
+	 * timeout animation has passed.
 	 */
-	bool update();
+	bool step();
 };
 
 #endif // RECONNECT_SCREEN_H

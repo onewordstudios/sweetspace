@@ -456,8 +456,7 @@ void GameGraphRoot::update( // NOLINT Yeah it's a big function; we'll live with 
 			break;
 		case Reconnecting:
 			// Still Reconnecting, Animation Frames
-			reconnectScreen->activate();
-			if (reconnectScreen->update()) {
+			if (reconnectScreen->step()) {
 				isBackToMainMenu = true;
 			}
 			break;
