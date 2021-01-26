@@ -63,7 +63,7 @@ void ReconnectScreen::deactivateStep() {
 	// This allows the animation to seemlessly reverse if connection is re-established
 	// before this node finishes animating on screen.
 	setScale(Tween::easeOut(ZOOM, 1, currFrame, ANIM_TIME));
-	setColor(Tween::fade(Tween::linear(0, 1, currFrame, ANIM_TIME)));
+	setColor(Tween::fade(Tween::easeOut(0, 1, currFrame, ANIM_TIME)));
 
 	if (currFrame == 0) {
 		setVisible(false);
@@ -82,7 +82,7 @@ bool ReconnectScreen::activeStep() {
 
 	if (currFrame <= ANIM_TIME) {
 		setScale(Tween::easeOut(ZOOM, 1, currFrame, ANIM_TIME));
-		setColor(Tween::fade(Tween::linear(0, 1, currFrame, ANIM_TIME)));
+		setColor(Tween::fade(Tween::easeOut(0, 1, currFrame, ANIM_TIME)));
 	}
 
 	if (currFrame < CONN_TIMEOUT - 3 * FRAME_UNIT) {
