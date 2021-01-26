@@ -1,6 +1,10 @@
 #include "ReconnectScreen.h"
 
 #include "Globals.h"
+#include "Tween.h"
+
+/** Starting zoom of node */
+constexpr float ZOOM = 1.5f;
 
 /** Ratio of spin on reconnect donut */
 constexpr float RECONNECT_SPIN_RATIO = 0.26f;
@@ -13,6 +17,9 @@ constexpr size_t MAX_ELLIPSES_FRAMES = 3 * FRAME_UNIT;
 
 /** Number of frames before timing out the connection attempt */
 constexpr size_t CONN_TIMEOUT = 15 * FRAME_UNIT;
+
+/** Time to animate in and out */
+constexpr size_t ANIM_TIME = FRAME_UNIT / 2;
 
 ReconnectScreen::ReconnectScreen(const std::shared_ptr<cugl::AssetManager>& assets) : currFrame(0) {
 	Node::init();
@@ -44,7 +51,26 @@ ReconnectScreen::~ReconnectScreen() {
 	removeAllChildren();
 }
 
-void ReconnectScreen::deactivateStep() { setVisible(false); }
+void ReconnectScreen::deactivateStep() {
+	if (!_isVisible) {
+		return;
+	}
+	if (currFrame > ANIM_TIME) {
+		currFrame = ANIM_TIME;
+	}
+
+	// We're decrementing currFrame here, so all animations are coded backwards.
+	// This allows the animation to seemlessly reverse if connection is re-established
+	// before this node finishes animating on screen.
+	setScale(Tween::easeOut(ZOOM, 1, currFrame, ANIM_TIME));
+	setColor(Tween::fade(Tween::linear(0, 1, currFrame, ANIM_TIME)));
+
+	if (currFrame == 0) {
+		setVisible(false);
+		return;
+	}
+	currFrame--;
+}
 
 bool ReconnectScreen::activeStep() {
 	if (!_isVisible) {
@@ -52,6 +78,11 @@ bool ReconnectScreen::activeStep() {
 		currFrame = 0;
 		disconnScreen->setVisible(false);
 		reconnScreen->setVisible(true);
+	}
+
+	if (currFrame <= ANIM_TIME) {
+		setScale(Tween::easeOut(ZOOM, 1, currFrame, ANIM_TIME));
+		setColor(Tween::fade(Tween::linear(0, 1, currFrame, ANIM_TIME)));
 	}
 
 	if (currFrame < CONN_TIMEOUT - 3 * FRAME_UNIT) {
