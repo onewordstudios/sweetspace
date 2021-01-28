@@ -377,7 +377,7 @@ void GameMode::updateHealth() {
 	auto& breaches = ship->getBreaches();
 
 	// Breach health drain
-	for (auto& breach : breaches) {
+	for (const auto& breach : breaches) {
 		// this should be adjusted based on the level and number of players
 		if (breach->getIsActive() && trunc(ship->timePassed()) - trunc(breach->getTimeCreated()) >
 										 BREACH_HEALTH_GRACE_PERIOD) {
