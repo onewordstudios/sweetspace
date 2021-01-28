@@ -1,4 +1,4 @@
-#include "GameMode.h"
+﻿#include "GameMode.h"
 
 #include <cugl/cugl.h>
 
@@ -383,11 +383,12 @@ void GameMode::updateHealth() {
 	auto& breaches = ship->getBreaches();
 
 	// Breach health drain
-	for (auto& breache : breaches) {
+	for (auto& breach : breaches) {
+		CULog("time since creation %f",
+			  trunc(breach->getTimeCreated()) - trunc(ship->timePassed()));
 		// this should be adjusted based on the level and number of players
-		if (breache->getIsActive() &&
-			trunc(breache->getTimeCreated()) - trunc(ship->timeLeftInTimer) >
-				BREACH_HEALTH_GRACE_PERIOD) {
+		if (breach->getIsActive() && trunc(ship->timePassed()) - trunc(breach->getTimeCreated()) >
+										 BREACH_HEALTH_GRACE_PERIOD) {
 			ship->decHealth(BREACH_HEALTH_PENALTY);
 		}
 	}
