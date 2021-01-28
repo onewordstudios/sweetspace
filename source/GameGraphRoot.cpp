@@ -414,14 +414,7 @@ bool GameGraphRoot::init( // NOLINT Yeah it's a big function; we'll live with it
 	timeoutStart.mark();
 
 	// Initialize Pause Screen Componenets
-	pauseBtn = std::dynamic_pointer_cast<Button>(assets->get<Node>("game_pauseBtn"));
-	pauseScreen = assets->get<Node>("game_pause");
-	pauseBtn->setDown(false);
-	pauseScreen->setVisible(false);
-	musicBtn = std::dynamic_pointer_cast<Button>(assets->get<Node>("game_pause_musicBtn"));
-	soundBtn = std::dynamic_pointer_cast<Button>(assets->get<Node>("game_pause_soundBtn"));
-	leaveBtn = std::dynamic_pointer_cast<Button>(assets->get<Node>("game_pause_leaveBtn"));
-	needle = assets->get<Node>("game_pause_dial_hand");
+	pauseMenu = std::make_shared<PauseMenu>(assets);
 
 	// Initialize Loss Screen Componenets
 	lossScreen = assets->get<Node>("game_overlay_loss");
@@ -445,10 +438,10 @@ bool GameGraphRoot::init( // NOLINT Yeah it's a big function; we'll live with it
 
 	// Register Regular Buttons
 	buttonManager.registerButton(restartBtn);
-	buttonManager.registerButton(leaveBtn);
 
 	addChild(scene);
 	addChild(winScreen);
+	addChild(pauseMenu);
 	return true;
 }
 
@@ -500,12 +493,7 @@ void GameGraphRoot::dispose() {
 		timeoutDisplay = nullptr;
 		timeoutCounter = nullptr;
 
-		pauseBtn = nullptr;
-		pauseScreen = nullptr;
-		musicBtn = nullptr;
-		soundBtn = nullptr;
-		leaveBtn = nullptr;
-		needle = nullptr;
+		pauseMenu = nullptr;
 
 		lossScreen = nullptr;
 		restartBtn = nullptr;
@@ -571,10 +559,12 @@ void GameGraphRoot::update( // NOLINT Yeah it's a big function; we'll live with 
 			// Reset Timeout Counters to negative value
 			timeoutCurrent.mark();
 			timeoutStart.mark();
+			pauseMenu->update();
 			break;
 		case Loss:
 			// Show loss screen
 			lossScreen->setVisible(true);
+			pauseMenu->setVisible(false);
 			if (playerID != 0) {
 				lostWaitText->setVisible(true);
 				restartBtn->setVisible(false);
@@ -594,6 +584,7 @@ void GameGraphRoot::update( // NOLINT Yeah it's a big function; we'll live with 
 				healthNodeNumbers->setVisible(false);
 				coordHUD->setVisible(false);
 				winScreen->activate(*MagicInternetBox::getInstance().getLevelNum());
+				pauseMenu->setVisible(false);
 			}
 			winScreen->update();
 			break;
@@ -879,43 +870,13 @@ void GameGraphRoot::processButtons() {
 	}
 
 	std::tuple<Vec2, Vec2> tapData = InputController::getInstance()->getTapEndLoc();
-	// Pause button
-	if (ButtonManager::tappedButton(pauseBtn, tapData)) {
-		if (pauseBtn->isDown()) {
-			// Close Pause Screen
-			pauseBtn->setDown(false);
-			pauseScreen->setVisible(false);
-		} else {
-			// Open Pause Screen
-			pauseBtn->setDown(true);
-			pauseScreen->setVisible(true);
-		}
-	} else if (pauseScreen->isVisible()) {
-		// Mute Music Button
-		if (ButtonManager::tappedButton(musicBtn, tapData)) {
-			if (musicBtn->isDown()) {
-				musicBtn->setDown(false);
-				AudioChannels::get()->resumeMusic();
-			} else {
-				musicBtn->setDown(true);
-				AudioChannels::get()->pauseMusic();
-			}
-		}
-		// Mute Sound Button
-		else if (ButtonManager::tappedButton(soundBtn, tapData)) {
-			if (soundBtn->isDown()) {
-				soundBtn->setDown(false);
-				AudioChannels::get()->resumeAllEffects();
-			} else {
-				soundBtn->setDown(true);
-				AudioChannels::get()->pauseAllEffects();
-			}
-		}
-		// Leave Button
-		else if (ButtonManager::tappedButton(leaveBtn, tapData)) {
-			isBackToMainMenu = true;
-		}
-	} else if (playerID == 0) {
+
+	// Pause menu
+	if (pauseMenu->manageButtons(tapData)) {
+		isBackToMainMenu = true;
+	}
+
+	if (playerID == 0) {
 		if (winScreen->isVisible()) {
 			if (winScreen->tappedNext(tapData)) {
 				lastButtonPressed = NextLevel;
@@ -927,10 +888,6 @@ void GameGraphRoot::processButtons() {
 			}
 		}
 	}
-}
-
-void GameGraphRoot::setNeedlePercentage(float percentage) {
-	needle->setAngle(-percentage * globals::TWO_PI * globals::NEEDLE_OFFSET);
 }
 
 void GameGraphRoot::setSegHealthWarning(int alpha) {

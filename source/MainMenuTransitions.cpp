@@ -104,7 +104,6 @@ void MainMenuMode::MainMenuTransitions::to(MatchState destination) {
 					});
 					parent->connScreen->setText("Connecting to Server...");
 					parent->hostNeedle->setAngle(0);
-					parent->needlePos = 0;
 					parent->clientWaitHost->setVisible(false);
 
 					mainMenuOut();
@@ -228,7 +227,6 @@ void MainMenuMode::MainMenuTransitions::to(MatchState destination) {
 					parent->currState = ClientScreenDone;
 
 					parent->hostNeedle->setAngle(0);
-					parent->needlePos = 0;
 
 					animations.animateY("matchmaking_client", Tween::TweenType::EaseIn,
 										-screenHeight, TRANSITION_DURATION);
@@ -240,7 +238,6 @@ void MainMenuMode::MainMenuTransitions::to(MatchState destination) {
 					parent->clientWaitHost->setVisible(true);
 
 					parent->setRoomID();
-					parent->setNumPlayers();
 
 					break;
 				default:

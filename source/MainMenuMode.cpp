@@ -9,6 +9,7 @@
 #include "Globals.h"
 #include "LevelConstants.h"
 #include "MainMenuTransitions.h"
+#include "NeedleAnimator.h"
 #include "Tween.h"
 
 using namespace cugl;
@@ -29,11 +30,6 @@ constexpr float CREDITS_DURATION = 4500;
 /** How much more to increment the credit scroll frame when tapping to go faster */
 constexpr unsigned int FAST_CREDITS_SCROLL_INCREMENT = 5;
 
-/** How much the needle moves each frame to match its correct position */
-constexpr float NEEDLE_SPEED = 0.3f;
-
-/** When to just snap the needle to its correct position */
-constexpr float NEEDLE_CUTOFF = 0.01f;
 #pragma endregion
 
 #pragma region Initialization Logic
@@ -45,7 +41,6 @@ MainMenuMode::MainMenuMode()
 	  gameReady(false),
 	  rotationFrame(0),
 	  creditsScrollFrame(0),
-	  needlePos(0),
 	  currState(StartScreen) {
 	transition = std::make_unique<MainMenuTransitions>(this);
 }
@@ -237,18 +232,6 @@ void MainMenuMode::setRoomID() {
 	hostLabel->setText(disp.str());
 }
 
-void MainMenuMode::setNumPlayers() {
-	float percentage =
-		static_cast<float>(net.getNumPlayers() - 1) / static_cast<float>(globals::MAX_PLAYERS);
-	float diff = percentage - needlePos;
-	if (abs(diff) < NEEDLE_CUTOFF) {
-		needlePos = percentage;
-	} else {
-		needlePos += NEEDLE_SPEED * diff;
-	}
-	hostNeedle->setAngle(-needlePos * globals::TWO_PI * globals::NEEDLE_OFFSET);
-}
-
 void MainMenuMode::processUpdate() {
 	switch (net.matchStatus()) {
 		case MagicInternetBox::MatchmakingStatus::ClientRoomInvalid:
@@ -292,7 +275,7 @@ void MainMenuMode::processUpdate() {
 			break;
 		}
 		case HostScreen: {
-			setNumPlayers();
+			NeedleAnimator::updateNeedle(hostNeedle);
 			if (backBtn->isVisible()) {
 				if (net.getNumPlayers() > 1) {
 					backBtn->setVisible(false);
@@ -332,7 +315,7 @@ void MainMenuMode::processUpdate() {
 			}
 		}
 		case ClientScreenDone: {
-			setNumPlayers();
+			NeedleAnimator::updateNeedle(hostNeedle);
 			break;
 		}
 		case Credits: {

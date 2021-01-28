@@ -35,7 +35,7 @@ class Tween {
 	 *
 	 * @return The interpolated position
 	 */
-	static float linear(float start, float end, int currFrame, int maxFrame);
+	static float linear(float start, float end, size_t currFrame, size_t maxFrame);
 
 	/**
 	 * Quartic ease in interpolation between start and end.
@@ -47,7 +47,7 @@ class Tween {
 	 *
 	 * @return The interpolated position
 	 */
-	static float easeIn(float start, float end, int currFrame, int maxFrame);
+	static float easeIn(float start, float end, size_t currFrame, size_t maxFrame);
 
 	/**
 	 * Quartic ease out interpolation between start and end.
@@ -59,7 +59,7 @@ class Tween {
 	 *
 	 * @return The interpolated position
 	 */
-	static float easeOut(float start, float end, int currFrame, int maxFrame);
+	static float easeOut(float start, float end, size_t currFrame, size_t maxFrame);
 
 	/**
 	 * Quartic ease in & out interpolation between start and end.
@@ -71,7 +71,7 @@ class Tween {
 	 *
 	 * @return The interpolated position
 	 */
-	static float easeInOut(float start, float end, int currFrame, int maxFrame);
+	static float easeInOut(float start, float end, size_t currFrame, size_t maxFrame);
 
 	/**
 	 * Trignometric loop from 0 to 1 and back to 0

@@ -50,7 +50,7 @@ void ButtonManager::process() {
 }
 
 bool ButtonManager::tappedButton(const std::shared_ptr<cugl::Button>& button,
-								 std::tuple<cugl::Vec2, cugl::Vec2> tapData) {
+								 const std::tuple<cugl::Vec2, cugl::Vec2>& tapData) {
 	if (button->containsScreen(std::get<0>(tapData)) &&
 		button->containsScreen(std::get<1>(tapData))) {
 		// We only need to play sound effects for one button at a time, so start and end

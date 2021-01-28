@@ -475,10 +475,6 @@ void GameMode::update(float timestep) {
 		}
 	}
 
-	// Set needle percentage in pause menu
-	sgRoot.setNeedlePercentage(static_cast<float>(net.getNumPlayers() - 1) /
-							   static_cast<float>(globals::MAX_PLAYERS));
-
 	// Connection Status Checks
 	if (!connectionUpdate(timestep)) {
 		return;

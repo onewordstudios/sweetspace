@@ -55,6 +55,12 @@
     <Filter Include="Source Files\Controllers\Networking\RakNet">
       <UniqueIdentifier>{860b75d5-b054-4944-93d9-1c5224027f0a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\SceneGraph\GameUI">
+      <UniqueIdentifier>{d06123e6-944e-43cb-a0ac-ed4551217f59}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\SceneGraph\GameUI">
+      <UniqueIdentifier>{965840b1-98b8-4e9d-8838-920ce2ba4dbc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -649,7 +655,16 @@
       <Filter>Header Files\Controllers\Networking</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\WinScreen.h">
-      <Filter>Header Files\SceneGraph</Filter>
+      <Filter>Header Files\SceneGraph\GameUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\PauseMenu.h">
+      <Filter>Header Files\SceneGraph\GameUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\AudioController.h">
+      <Filter>Header Files\Controllers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\NeedleAnimator.h">
+      <Filter>Header Files\Controllers\Networking</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1089,7 +1104,10 @@
       <Filter>Source Files\Controllers\Networking</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\WinScreen.cpp">
-      <Filter>Source Files\SceneGraph</Filter>
+      <Filter>Source Files\SceneGraph\GameUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\PauseMenu.cpp">
+      <Filter>Source Files\SceneGraph\GameUI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
