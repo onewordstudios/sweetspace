@@ -61,8 +61,7 @@ class DoorNode : public CustomNode {
 	 * @param cols      The number of columns in the filmstrip
 	 */
 	virtual bool init(const std::shared_ptr<DoorModel> &door, std::shared_ptr<DonutModel> player,
-					  float shipSize, const std::shared_ptr<cugl::Texture> &texture, int rows,
-					  int cols, int size);
+					  float shipSize, const std::shared_ptr<cugl::AssetManager> &assets);
 
 	/**
 	 * Returns a newly allocated filmstrip node from the given texture.
@@ -78,11 +77,9 @@ class DoorNode : public CustomNode {
 	 */
 	static std::shared_ptr<DoorNode> alloc(const std::shared_ptr<DoorModel> &door,
 										   std::shared_ptr<DonutModel> player, float shipSize,
-										   const std::shared_ptr<cugl::Texture> &texture, int rows,
-										   int cols, int size) {
+										   const std::shared_ptr<cugl::AssetManager> &assets) {
 		std::shared_ptr<DoorNode> node = std::make_shared<DoorNode>();
-		return node->init(door, std::move(player), shipSize, texture, rows, cols, size) ? node
-																						: nullptr;
+		return node->init(door, std::move(player), shipSize, assets) ? node : nullptr;
 	}
 
 #pragma mark -

@@ -28,26 +28,22 @@ constexpr int DEPRESSION_AMOUNT = -100;
 constexpr float SPARKLE_SCALE_SMALL = 0.5;
 
 bool ButtonNode::init(std::shared_ptr<ButtonModel> btn, std::shared_ptr<DonutModel> player,
-					  float shipSize, std::shared_ptr<cugl::Texture> baseDown,
-					  const std::shared_ptr<cugl::Texture>& baseUp,
-					  std::shared_ptr<cugl::Texture> btnDown,
-					  const std::shared_ptr<cugl::Texture>& btnUp,
-					  const std::shared_ptr<cugl::Font>& labelFont,
+					  float shipSize, const std::shared_ptr<cugl::AssetManager>& assets,
 					  std::shared_ptr<SparkleNode> sparkle) {
 	CustomNode::init(std::move(player), shipSize, -1, BUTTON_RADIUS);
 	// Initialize angle to -1 to force the button to correctly process the label on first frame
 
 	buttonModel = std::move(btn);
 
-	btnBaseDown = std::move(baseDown);
-	btnBaseUp = baseUp;
-	this->btnDown = std::move(btnDown);
-	this->btnUp = btnUp;
+	btnBaseDown = assets->get<Texture>("challenge_btn_base_down");
+	btnBaseUp = assets->get<Texture>("challenge_btn_base_up");
+	btnDown = assets->get<Texture>("challenge_btn_down");
+	btnUp = assets->get<Texture>("challenge_btn_up");
 
 	setScale(BUTTON_SCALE);
 	setAnchor(Vec2::ANCHOR_BOTTOM_CENTER);
 
-	baseNode = PolygonNode::allocWithTexture(baseUp);
+	baseNode = PolygonNode::allocWithTexture(btnBaseUp);
 	bodyNode = PolygonNode::allocWithTexture(btnUp);
 
 	baseNode->setAnchor(Vec2::ANCHOR_CENTER);
@@ -56,7 +52,7 @@ bool ButtonNode::init(std::shared_ptr<ButtonModel> btn, std::shared_ptr<DonutMod
 	bodyNode->setAnchor(Vec2::ANCHOR_CENTER);
 	bodyNode->setPosition(0, 0);
 
-	label = Label::alloc("0000", labelFont);
+	label = Label::alloc("0000", assets->get<Font>("mont_black_italic_big"));
 
 	sparkleNode = std::move(sparkle);
 	sparkleNode->setScale(SPARKLE_SCALE_SMALL);
@@ -69,7 +65,7 @@ bool ButtonNode::init(std::shared_ptr<ButtonModel> btn, std::shared_ptr<DonutMod
 	label->setHorizontalAlignment(Label::HAlign::CENTER);
 	label->setForeground(Color4::WHITE);
 	label->setAnchor(Vec2::ANCHOR_CENTER);
-	label->setPosition(0, static_cast<float>(baseUp->getHeight()) * BUTTON_LABEL_Y);
+	label->setPosition(0, static_cast<float>(btnBaseUp->getHeight()) * BUTTON_LABEL_Y);
 
 	isDirty = true;
 

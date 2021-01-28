@@ -15,8 +15,11 @@
 #include "HealthNode.h"
 #include "InputController.h"
 #include "MagicInternetBox.h"
+#include "PauseMenu.h"
 #include "PlayerDonutNode.h"
 #include "ShipModel.h"
+#include "ShipSegmentWrap.h"
+#include "StabilizerNode.h"
 #include "TutorialNode.h"
 #include "UnopenableNode.h"
 #include "WinScreen.h"
@@ -69,18 +72,15 @@ class GameGraphRoot : public cugl::Scene {
 	/** Parent node of all breach sparkle nodes, is child of nearSpace */
 	std::shared_ptr<cugl::Node> breachSparklesNode;
 	/** Parent node of all ship segments, is child of nearSpace */
-	std::shared_ptr<cugl::Node> shipSegsNode;
+	std::shared_ptr<ShipSegmentWrap> shipSegsNode;
 	/** Parent node of all doors, is child of nearSpace */
 	std::shared_ptr<cugl::Node> doorsNode;
 	/** Parent node of all unops, is child of nearSpace */
 	std::shared_ptr<cugl::Node> unopsNode;
 	/** Parent node of all external donuts, is child of nearSpace */
 	std::shared_ptr<cugl::Node> externalDonutsNode;
-	/** Roll challenge */
-	std::shared_ptr<cugl::PolygonNode> challengePanelHanger;
-	std::shared_ptr<cugl::PolygonNode> challengePanel;
-	std::shared_ptr<cugl::PolygonNode> challengePanelText;
-	std::vector<std::shared_ptr<cugl::PolygonNode>> challengePanelArrows;
+	/** Stabilizer */
+	std::shared_ptr<StabilizerNode> stabilizerNode;
 	/** Health bar */
 	std::shared_ptr<cugl::PolygonNode> healthNode;
 	std::shared_ptr<cugl::PolygonNode> healthNodeOverlay;
@@ -118,18 +118,8 @@ class GameGraphRoot : public cugl::Scene {
 	cugl::Timestamp timeoutCurrent;
 
 	// Pause Textures
-	/** Button to Open Pause */
-	std::shared_ptr<cugl::Button> pauseBtn;
-	/** Node to hold all of the Loss Screen.*/
-	std::shared_ptr<cugl::Node> pauseScreen;
-	/** Button to Mute Music */
-	std::shared_ptr<cugl::Button> musicBtn;
-	/** Button to Mute Sound Effects */
-	std::shared_ptr<cugl::Button> soundBtn;
-	/** Button to Leave */
-	std::shared_ptr<cugl::Button> leaveBtn;
-	/** The node containing the player count needle*/
-	std::shared_ptr<cugl::Node> needle;
+	/** Pause menu node */
+	std::shared_ptr<PauseMenu> pauseMenu;
 
 	// Loss Screen Textures
 	/** Node to hold all of the Loss Screen.*/
@@ -146,10 +136,6 @@ class GameGraphRoot : public cugl::Scene {
 	/** The donut's base position. */
 	cugl::Vec2 donutPos;
 
-	/** Tag of the left most ship segment */
-	unsigned int leftMostSeg;
-	/** Tag of the right most ship segment */
-	unsigned int rightMostSeg;
 	/** Parent node of all buttons, is child of nearSpace */
 	std::shared_ptr<cugl::Node> buttonsNode;
 	/** Parent node of all button sparkle nodes, is child of nearSpace */
@@ -167,10 +153,6 @@ class GameGraphRoot : public cugl::Scene {
 	int currentHealthWarningFrame;
 
 	// TELEPORTATION ANIMATION
-	/** Reference to fail text */
-	std::shared_ptr<cugl::Label> stabilizerFailText;
-	/** Reference to fail text */
-	std::shared_ptr<cugl::PolygonNode> stabilizerFailPanel;
 	/** Reference to black image that covers all */
 	std::shared_ptr<cugl::PolygonNode> blackoutOverlay;
 	/** Current animation frame for stabilizer fail teleportation */
@@ -199,17 +181,6 @@ class GameGraphRoot : public cugl::Scene {
 	 */
 	DrawStatus status;
 
-	/**
-	 * Returns the wrapped value of input around the ship size.
-	 *
-	 * @param f degree in radians
-	 * @return Wrapped angle in radians
-	 */
-	static float wrapAngle(float f) {
-		float mod = fmod(f, globals::TWO_PI);
-		return mod < 0 ? globals::TWO_PI + mod : mod;
-	};
-
 	/** Process Buttons in Special Screens */
 	void processButtons();
 
@@ -226,8 +197,6 @@ class GameGraphRoot : public cugl::Scene {
 	const std::vector<string> PLAYER_COLOR{"yellow", "red", "green", "orange", "cyan", "purple"};
 	/** Possible colors for breach representations */
 	static const std::vector<cugl::Color4> BREACH_COLOR;
-	/** Color of ship segment label text */
-	const cugl::Color4 SHIP_LABEL_COLOR{255, 248, 161};
 	/** Number of possible player colors */
 	static constexpr int NUM_COLORS = 6;
 
@@ -242,8 +211,6 @@ class GameGraphRoot : public cugl::Scene {
 	GameGraphRoot()
 		: screenHeight(0),
 		  currentEllipsesFrame(0),
-		  leftMostSeg(0),
-		  rightMostSeg(0),
 		  playerID(0),
 		  prevPlayerAngle(0),
 		  currentHealthWarningFrame(0),
@@ -295,12 +262,6 @@ class GameGraphRoot : public cugl::Scene {
 	 * Resets the status of the game so that we can play again.
 	 */
 	void reset() override;
-
-	/**
-	 * Spin Dial in pause menu
-	 * @param percentage  The percent of dial to spin
-	 */
-	void setNeedlePercentage(float percentage);
 
 	/**
 	 * Healper function for setting alpha value of ship health warning

@@ -9,18 +9,29 @@
 
 using namespace cugl;
 
+/** Offset of donut sprites from the radius of the ship */
+constexpr int DONUT_OFFSET = 195;
+
 /** The radius of the ship. Also the y coordinate of the center of the ship */
 constexpr unsigned int RADIUS_OFFSET = 30;
 
 bool ExternalDonutNode::init(const std::shared_ptr<DonutModel> &externalDonutModel,
 							 std::shared_ptr<DonutModel> player, float shipSize,
-							 const std::shared_ptr<cugl::Texture> &bodyTexture,
-							 const std::shared_ptr<cugl::Texture> &faceIdleTexture,
-							 const std::shared_ptr<cugl::Texture> &faceDizzyTexture,
-							 const std::shared_ptr<cugl::Texture> &faceWorkTexture) {
+							 const std::shared_ptr<cugl::AssetManager> &assets,
+							 const std::string &color) {
 	CustomNode::init(std::move(player), shipSize, externalDonutModel->getAngle(), globals::RADIUS);
-	DonutNode::init(bodyTexture, faceIdleTexture, faceDizzyTexture, faceWorkTexture,
-					externalDonutModel);
+
+	auto faceIdle = assets->get<Texture>("donut_face_idle");
+	auto faceDizzy = assets->get<Texture>("donut_face_dizzy");
+	auto faceWork = assets->get<Texture>("donut_face_work");
+	auto bodyTexture = assets->get<Texture>("donut_" + color);
+
+	DonutNode::init(bodyTexture, faceIdle, faceDizzy, faceWork, externalDonutModel);
+
+	Vec2 donutPos = Vec2(sin(externalDonutModel->getAngle() * (globals::RADIUS + DONUT_OFFSET)),
+						 -cos(externalDonutModel->getAngle()) * (globals::RADIUS + DONUT_OFFSET));
+	setPosition(donutPos);
+
 	return true;
 }
 

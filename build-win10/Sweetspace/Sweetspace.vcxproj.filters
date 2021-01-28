@@ -55,11 +55,26 @@
     <Filter Include="Source Files\Controllers\Networking\RakNet">
       <UniqueIdentifier>{860b75d5-b054-4944-93d9-1c5224027f0a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\SceneGraph\GameUI">
+      <UniqueIdentifier>{d06123e6-944e-43cb-a0ac-ed4551217f59}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\SceneGraph\GameUI">
+      <UniqueIdentifier>{965840b1-98b8-4e9d-8838-920ce2ba4dbc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\SceneGraph\ModelNodes">
+      <UniqueIdentifier>{55904110-c84d-4942-aadd-49ca21a310ed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\SceneGraph\ModelNodes">
+      <UniqueIdentifier>{8aae04dc-1734-400d-a1d4-5d05800864c6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\SceneGraph\Ship">
+      <UniqueIdentifier>{013f2831-7ded-4e73-8baa-675c8d67033b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\SceneGraph\Ship">
+      <UniqueIdentifier>{29698c79-3c37-4c95-9f96-2da77fad54ae}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="resource.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\source\Sweetspace.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -84,9 +99,6 @@
     <ClInclude Include="..\..\source\ShipModel.h">
       <Filter>Header Files\Models</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\source\DonutNode.h">
-      <Filter>Header Files\SceneGraph</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\source\PlayerDonutModel.h">
       <Filter>Header Files\Models</Filter>
     </ClInclude>
@@ -96,17 +108,8 @@
     <ClInclude Include="..\..\source\DoorModel.h">
       <Filter>Header Files\Models</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\source\DoorNode.h">
-      <Filter>Header Files\SceneGraph</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\source\GLaDOS.h">
       <Filter>Header Files\Controllers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\source\BreachNode.h">
-      <Filter>Header Files\SceneGraph</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\source\HealthNode.h">
-      <Filter>Header Files\SceneGraph</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\Tween.h">
       <Filter>Header Files\Helpers</Filter>
@@ -129,20 +132,11 @@
     <ClInclude Include="..\..\source\ButtonModel.h">
       <Filter>Header Files\Models</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\source\ButtonNode.h">
-      <Filter>Header Files\SceneGraph</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\source\MainMenuMode.h">
       <Filter>Header Files\Modes</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\LevelConstants.h">
       <Filter>Header Files\Helpers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\source\ExternalDonutNode.h">
-      <Filter>Header Files\SceneGraph</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\source\PlayerDonutNode.h">
-      <Filter>Header Files\SceneGraph</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\CustomNode.h">
       <Filter>Header Files\SceneGraph</Filter>
@@ -155,9 +149,6 @@
     </ClInclude>
     <ClInclude Include="..\..\source\TutorialConstants.h">
       <Filter>Header Files\Helpers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\source\UnopenableNode.h">
-      <Filter>Header Files\SceneGraph</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\SoundEffectController.h">
       <Filter>Header Files\Controllers</Filter>
@@ -649,7 +640,52 @@
       <Filter>Header Files\Controllers\Networking</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\WinScreen.h">
-      <Filter>Header Files\SceneGraph</Filter>
+      <Filter>Header Files\SceneGraph\GameUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\PauseMenu.h">
+      <Filter>Header Files\SceneGraph\GameUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\AudioController.h">
+      <Filter>Header Files\Controllers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\NeedleAnimator.h">
+      <Filter>Header Files\Controllers\Networking</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\ButtonNode.h">
+      <Filter>Header Files\SceneGraph\ModelNodes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\BreachNode.h">
+      <Filter>Header Files\SceneGraph\ModelNodes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\DonutNode.h">
+      <Filter>Header Files\SceneGraph\ModelNodes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\DoorNode.h">
+      <Filter>Header Files\SceneGraph\ModelNodes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\ExternalDonutNode.h">
+      <Filter>Header Files\SceneGraph\ModelNodes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\PlayerDonutNode.h">
+      <Filter>Header Files\SceneGraph\ModelNodes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\UnopenableNode.h">
+      <Filter>Header Files\SceneGraph\ModelNodes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\HealthNode.h">
+      <Filter>Header Files\SceneGraph\GameUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\ShipSegmentNode.h">
+      <Filter>Header Files\SceneGraph\Ship</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\ShipSegmentWrap.h">
+      <Filter>Header Files\SceneGraph\Ship</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\StabilizerNode.h">
+      <Filter>Header Files\SceneGraph\Ship</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -680,9 +716,6 @@
     <ClCompile Include="..\..\source\ShipModel.cpp">
       <Filter>Source Files\Models</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\source\DonutNode.cpp">
-      <Filter>Source Files\SceneGraph</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\source\PlayerDonutModel.cpp">
       <Filter>Source Files\Models</Filter>
     </ClCompile>
@@ -692,17 +725,8 @@
     <ClCompile Include="..\..\source\DoorModel.cpp">
       <Filter>Source Files\Models</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\source\DoorNode.cpp">
-      <Filter>Source Files\SceneGraph</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\source\GLaDOS.cpp">
       <Filter>Source Files\Controllers</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\BreachNode.cpp">
-      <Filter>Source Files\SceneGraph</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\HealthNode.cpp">
-      <Filter>Source Files\SceneGraph</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\Tween.cpp">
       <Filter>Source Files\Helpers</Filter>
@@ -710,28 +734,13 @@
     <ClCompile Include="..\..\source\ButtonManager.cpp">
       <Filter>Source Files\Helpers</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\source\ButtonNode.cpp">
-      <Filter>Source Files\SceneGraph</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\source\ButtonModel.cpp">
       <Filter>Source Files\Models</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\MainMenuMode.cpp">
       <Filter>Source Files\Modes</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\source\ExternalDonutNode.cpp">
-      <Filter>Source Files\SceneGraph</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\PlayerDonutNode.cpp">
-      <Filter>Source Files\SceneGraph</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\source\TutorialNode.cpp">
-      <Filter>Source Files\SceneGraph</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\CustomNode.cpp">
-      <Filter>Source Files\SceneGraph</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\UnopenableNode.cpp">
       <Filter>Source Files\SceneGraph</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\SoundEffectController.cpp">
@@ -1089,7 +1098,46 @@
       <Filter>Source Files\Controllers\Networking</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\WinScreen.cpp">
+      <Filter>Source Files\SceneGraph\GameUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\PauseMenu.cpp">
+      <Filter>Source Files\SceneGraph\GameUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\BreachNode.cpp">
+      <Filter>Source Files\SceneGraph\ModelNodes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\ButtonNode.cpp">
+      <Filter>Source Files\SceneGraph\ModelNodes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\DonutNode.cpp">
+      <Filter>Source Files\SceneGraph\ModelNodes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\DoorNode.cpp">
+      <Filter>Source Files\SceneGraph\ModelNodes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\ExternalDonutNode.cpp">
+      <Filter>Source Files\SceneGraph\ModelNodes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\PlayerDonutNode.cpp">
+      <Filter>Source Files\SceneGraph\ModelNodes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\UnopenableNode.cpp">
+      <Filter>Source Files\SceneGraph\ModelNodes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\HealthNode.cpp">
+      <Filter>Source Files\SceneGraph\GameUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\CustomNode.cpp">
       <Filter>Source Files\SceneGraph</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\ShipSegmentNode.cpp">
+      <Filter>Source Files\SceneGraph\Ship</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\ShipSegmentWrap.cpp">
+      <Filter>Source Files\SceneGraph\Ship</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\StabilizerNode.cpp">
+      <Filter>Source Files\SceneGraph\Ship</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

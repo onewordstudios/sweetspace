@@ -189,6 +189,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\..\source\AnimationManager.h" />
+    <ClInclude Include="..\..\source\AudioController.h" />
     <ClInclude Include="..\..\source\BreachModel.h" />
     <ClInclude Include="..\..\source\BreachNode.h" />
     <ClInclude Include="..\..\source\BuildingBlockModel.h" />
@@ -369,14 +370,19 @@
     <ClInclude Include="..\..\source\MagicInternetBox.h" />
     <ClInclude Include="..\..\source\MainMenuMode.h" />
     <ClInclude Include="..\..\source\MainMenuTransitions.h" />
+    <ClInclude Include="..\..\source\NeedleAnimator.h" />
     <ClInclude Include="..\..\source\NetworkConnection.h" />
     <ClInclude Include="..\..\source\NetworkDataType.h" />
+    <ClInclude Include="..\..\source\PauseMenu.h" />
     <ClInclude Include="..\..\source\PlayerDonutModel.h" />
     <ClInclude Include="..\..\source\PlayerDonutNode.h" />
     <ClInclude Include="..\..\source\ShipModel.h" />
+    <ClInclude Include="..\..\source\ShipSegmentNode.h" />
+    <ClInclude Include="..\..\source\ShipSegmentWrap.h" />
     <ClInclude Include="..\..\source\SoundEffectController.h" />
     <ClInclude Include="..\..\source\SparkleNode.h" />
     <ClInclude Include="..\..\source\StabilizerModel.h" />
+    <ClInclude Include="..\..\source\StabilizerNode.h" />
     <ClInclude Include="..\..\source\StateReconciler.h" />
     <ClInclude Include="..\..\source\Sweetspace.h" />
     <ClInclude Include="..\..\source\TutorialConstants.h" />
@@ -522,12 +528,16 @@
     <ClCompile Include="..\..\source\MainMenuMode.cpp" />
     <ClCompile Include="..\..\source\MainMenuTransitions.cpp" />
     <ClCompile Include="..\..\source\NetworkConnection.cpp" />
+    <ClCompile Include="..\..\source\PauseMenu.cpp" />
     <ClCompile Include="..\..\source\PlayerDonutModel.cpp" />
     <ClCompile Include="..\..\source\PlayerDonutNode.cpp" />
     <ClCompile Include="..\..\source\ShipModel.cpp" />
+    <ClCompile Include="..\..\source\ShipSegmentNode.cpp" />
+    <ClCompile Include="..\..\source\ShipSegmentWrap.cpp" />
     <ClCompile Include="..\..\source\SoundEffectController.cpp" />
     <ClCompile Include="..\..\source\SparkleNode.cpp" />
     <ClCompile Include="..\..\source\StabilizerModel.cpp" />
+    <ClCompile Include="..\..\source\StabilizerNode.cpp" />
     <ClCompile Include="..\..\source\StateReconciler.cpp" />
     <ClCompile Include="..\..\source\Sweetspace.cpp" />
     <ClCompile Include="..\..\source\TutorialNode.cpp" />

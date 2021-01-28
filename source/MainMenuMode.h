@@ -49,9 +49,6 @@ class MainMenuMode : public cugl::Scene {
 	/** Position of credits */
 	unsigned int creditsScrollFrame;
 
-	/** Current position of the needle */
-	float needlePos;
-
 	/**
 	 * An enum with the current state of the matchmaking mode
 	 *
@@ -165,9 +162,6 @@ class MainMenuMode : public cugl::Scene {
 	 * Query mib and update the room ID for the host accordingly
 	 */
 	void setRoomID();
-
-	/** Query mib and update the needle for number of players */
-	void setNumPlayers();
 
 #pragma region Update Handlers
 

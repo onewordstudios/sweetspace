@@ -31,22 +31,15 @@ class ExternalDonutNode : public DonutNode {
 
 	bool init(const std::shared_ptr<DonutModel> &externalDonutModel,
 			  std::shared_ptr<DonutModel> player, float shipSize,
-			  const std::shared_ptr<cugl::Texture> &bodyTexture,
-			  const std::shared_ptr<cugl::Texture> &faceIdleTexture,
-			  const std::shared_ptr<cugl::Texture> &faceDizzyTexture,
-			  const std::shared_ptr<cugl::Texture> &faceWorkTexture);
+			  const std::shared_ptr<cugl::AssetManager> &assets, const std::string &color);
 
 	static std::shared_ptr<ExternalDonutNode> alloc(
 		const std::shared_ptr<DonutModel> &externalDonutModel, std::shared_ptr<DonutModel> player,
-		float shipSize, const std::shared_ptr<cugl::Texture> &bodyTexture,
-		const std::shared_ptr<cugl::Texture> &faceIdleTexture,
-		const std::shared_ptr<cugl::Texture> &faceDizzyTexture,
-		const std::shared_ptr<cugl::Texture> &faceWorkTexture) {
+		float shipSize, const std::shared_ptr<cugl::AssetManager> &assets,
+		const std::string &color) {
 		std::shared_ptr<ExternalDonutNode> node = std::make_shared<ExternalDonutNode>();
-		return node->init(externalDonutModel, std::move(player), shipSize, bodyTexture,
-						  faceIdleTexture, faceDizzyTexture, faceWorkTexture)
-				   ? node
-				   : nullptr;
+		return node->init(externalDonutModel, std::move(player), shipSize, assets, color) ? node
+																						  : nullptr;
 	}
 
 #pragma mark -

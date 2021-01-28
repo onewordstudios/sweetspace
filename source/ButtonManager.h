@@ -48,7 +48,7 @@ class ButtonManager {
 	 * @param tapData The start and end locations provided by the input controller
 	 */
 	static bool tappedButton(const std::shared_ptr<cugl::Button>& button,
-							 std::tuple<cugl::Vec2, cugl::Vec2> tapData);
+							 const std::tuple<cugl::Vec2, cugl::Vec2>& tapData);
 
 	/**
 	 * Deregisters all buttons

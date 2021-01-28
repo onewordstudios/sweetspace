@@ -8,6 +8,22 @@
 /** Max number of attempts of generating a new teleportation angle */
 constexpr int MAX_NEW_ANGLE_ATTEMPTS = 1000;
 
+ShipModel::ShipModel()
+	: rand(static_cast<unsigned int>(
+		  std::chrono::high_resolution_clock::now().time_since_epoch().count())),
+	  donuts(0),
+	  breaches(0),
+	  doors(0),
+	  initHealth(0),
+	  health(0),
+	  shipSize(0),
+	  timeless(false),
+	  totalTime(0),
+	  levelNum(0),
+	  timeLeftInTimer(0),
+	  canonicalTimeElapsed(0),
+	  stabilizerTutorial(false) {}
+
 bool ShipModel::init(uint8_t numPlayers, uint8_t numBreaches, uint8_t numDoors, uint8_t playerID,
 					 float shipSize, float initHealth, uint8_t numButtons) {
 	timeless = false;
@@ -45,6 +61,7 @@ bool ShipModel::init(uint8_t numPlayers, uint8_t numBreaches, uint8_t numDoors, 
 	this->shipSize = shipSize;
 
 	stabilizer.reset();
+	stabilizerTutorial = false;
 
 	return true;
 }
@@ -89,43 +106,44 @@ bool ShipModel::createAllTask() {
 }
 
 bool ShipModel::failAllTask() {
-	for (auto& donut : donuts) {
-		float newAngle = 0;
-		bool goodAngle = false;
-		int attempts = 0;
-		while (!goodAngle && attempts < MAX_NEW_ANGLE_ATTEMPTS) {
-			// Generate random angle
-			newAngle = std::fmodf(static_cast<float>(rand()), getSize());
-			goodAngle = true;
-			attempts += 1;
-			// Check against breaches
-			for (auto& breach : breaches) {
-				float breachAngle = breach->getAngle();
-				float diff = getAngleDifference(breachAngle, newAngle);
-				if (diff <= MIN_DISTANCE && breachAngle != -1) {
-					goodAngle = false;
-					break;
-				}
-			}
-			if (!goodAngle) {
-				continue;
-			}
-			// Check against doors
-			for (auto& door : doors) {
-				float doorAngle = door->getAngle();
-				float diff = getAngleDifference(doorAngle, newAngle);
-				if (diff <= MIN_DISTANCE && doorAngle != -1) {
-					goodAngle = false;
-					break;
-				}
+	stabilizer.fail();
+
+	const auto& donut = donuts.at(*MagicInternetBox::getInstance().getPlayerID());
+	float newAngle = 0;
+	bool goodAngle = false;
+	int attempts = 0;
+	while (!goodAngle && attempts < MAX_NEW_ANGLE_ATTEMPTS) {
+		// Generate random angle
+		newAngle = std::fmodf(static_cast<float>(rand()), getSize());
+		goodAngle = true;
+		attempts += 1;
+		// Check against breaches
+		for (auto& breach : breaches) {
+			float breachAngle = breach->getAngle();
+			float diff = getAngleDifference(breachAngle, newAngle);
+			if (diff <= MIN_DISTANCE && breachAngle != -1) {
+				goodAngle = false;
+				break;
 			}
 		}
-		donut->setTeleportAngle(newAngle);
+		if (!goodAngle) {
+			continue;
+		}
+		// Check against doors
+		for (auto& door : doors) {
+			float doorAngle = door->getAngle();
+			float diff = getAngleDifference(doorAngle, newAngle);
+			if (diff <= MIN_DISTANCE && doorAngle != -1) {
+				goodAngle = false;
+				break;
+			}
+		}
 	}
+	CULog("Setting teleport angle %f", newAngle);
+	donut->setTeleportAngle(newAngle);
+
 	return true;
 }
-
-void ShipModel::setStabilizerStatus(StabilizerStatus s) { stabilizerStatus = s; }
 
 bool ShipModel::createButton(float angle1, uint8_t id1, float angle2, uint8_t id2) {
 	buttons[id1]->init(angle1, buttons.at(id2), id2);

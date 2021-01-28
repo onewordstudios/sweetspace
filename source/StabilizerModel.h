@@ -2,11 +2,13 @@
 #define STABILIZER_MODEL_H
 #include <cugl/cugl.h>
 class StabilizerModel {
+   public:
+	/** Current state of the stabilizer */
+	enum class StabilizerState { Inactive, Left, Right, Fail };
+
    private:
 	/** Random number generator */
 	std::minstd_rand rand;
-
-	enum class StabilizerState { Inactive, Left, Right };
 
 	/** Current state of the challenge */
 	StabilizerModel::StabilizerState currState;
@@ -24,10 +26,13 @@ class StabilizerModel {
 	StabilizerModel(const StabilizerModel&) = delete;
 
 	/** Return whether this stabilizer is active */
-	bool getIsActive() const { return currState != StabilizerModel::StabilizerState::Inactive; }
+	bool getIsActive() const;
 
 	/** Return whether this stabilizer requires rolling left */
-	bool isLeft() const { return currState == StabilizerModel::StabilizerState::Left; }
+	bool isLeft() const { return currState == StabilizerState::Left; }
+
+	/** Get the current state of the stabilizer */
+	StabilizerState getState() const { return currState; }
 
 	/** Return the end time of this stabilizer; requires this stabilizer be active */
 	float getEndTime() const { return endTime; }
@@ -48,6 +53,12 @@ class StabilizerModel {
 
 	/** Mark a single frame with everyone rolling together */
 	void incrementProgress() { progress++; }
+
+	/** Immediately fail this challenge (usually b/c we received the command over networking) */
+	void fail();
+
+	/** Complete the challenge, marking as win or loss depending on current status. */
+	void finish();
 
 	/** Reset the challenge */
 	void reset();

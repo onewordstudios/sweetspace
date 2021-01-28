@@ -48,14 +48,14 @@ class ShipModel {
 	static constexpr int MIN_DISTANCE = 15;
 
    public:
-	enum StabilizerStatus { INACTIVE, ACTIVE, FAILURE, SUCCESS, ANIMATING };
-	/** StabilizerStatus of all player challenge. 0 = no challenge, 1 = challenge, 2 = challenge
-	 * failed, 3 = challenge success*/
-	StabilizerStatus stabilizerStatus;
 	/** Game countdown timer, contains time left in level */
 	float timeLeftInTimer;
 	/** Time elapsed since level start */
 	float canonicalTimeElapsed;
+
+	/** Flag set to true when a stabilizer is passed by someone, used only in the tutorial level */
+	bool stabilizerTutorial;
+
 #pragma mark Constructors
 	/*
 	 * Creates a ship.
@@ -63,20 +63,7 @@ class ShipModel {
 	 * NEVER USE A CONSTRUCTOR WITH NEW. If you want to allocate a model on
 	 * the heap, use one of the static constructors instead.
 	 */
-	ShipModel()
-		: rand(static_cast<unsigned int>(time(nullptr))), // NOLINT Randomness is good enough
-		  donuts(0),
-		  breaches(0),
-		  doors(0),
-		  initHealth(0),
-		  health(0),
-		  shipSize(0),
-		  timeless(false),
-		  totalTime(0),
-		  levelNum(0),
-		  stabilizerStatus(INACTIVE),
-		  timeLeftInTimer(0),
-		  canonicalTimeElapsed(0) {}
+	ShipModel();
 
 	ShipModel(const ShipModel&) = delete;
 
@@ -377,11 +364,6 @@ class ShipModel {
 	bool failAllTask();
 
 	/**
-	 * Set challenge status
-	 */
-	void setStabilizerStatus(StabilizerStatus s);
-
-	/**
 	 * Create button with given id.
 	 *
 	 * @param angle1	   the location to create the button.
@@ -413,11 +395,6 @@ class ShipModel {
 	 * Get current level number
 	 */
 	uint8_t getLevelNum() const { return levelNum; }
-
-	/**
-	 * Gets status of challenge
-	 */
-	StabilizerStatus getStabilizerStatus() const { return stabilizerStatus; }
 
 	/**
 	 * Sets if level is tutorial
