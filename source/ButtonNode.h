@@ -69,11 +69,7 @@ class ButtonNode : public CustomNode {
 	 * @param cols      The number of columns in the filmstrip
 	 */
 	virtual bool init(std::shared_ptr<ButtonModel> btn, std::shared_ptr<DonutModel> player,
-					  float shipSize, std::shared_ptr<cugl::Texture> baseDown,
-					  const std::shared_ptr<cugl::Texture> &baseUp,
-					  std::shared_ptr<cugl::Texture> btnDown,
-					  const std::shared_ptr<cugl::Texture> &btnUp,
-					  const std::shared_ptr<cugl::Font> &labelFont,
+					  float shipSize, const std::shared_ptr<cugl::AssetManager> &assets,
 					  std::shared_ptr<SparkleNode> sparkleNode);
 
 	/**
@@ -92,16 +88,15 @@ class ButtonNode : public CustomNode {
 	 *
 	 * @return a newly allocated filmstrip node from the given texture.
 	 */
-	static std::shared_ptr<ButtonNode> alloc(
-		std::shared_ptr<ButtonModel> btn, std::shared_ptr<DonutModel> player, float shipSize,
-		std::shared_ptr<cugl::Texture> baseDown, const std::shared_ptr<cugl::Texture> &baseUp,
-		std::shared_ptr<cugl::Texture> btnDown, const std::shared_ptr<cugl::Texture> &btnUp,
-		const std::shared_ptr<cugl::Font> &labelFont, std::shared_ptr<SparkleNode> sparkleNode) {
+	static std::shared_ptr<ButtonNode> alloc(std::shared_ptr<ButtonModel> btn,
+											 std::shared_ptr<DonutModel> player, float shipSize,
+											 const std::shared_ptr<cugl::AssetManager> &assets,
+											 std::shared_ptr<SparkleNode> sparkleNode) {
 		std::shared_ptr<ButtonNode> node = std::make_shared<ButtonNode>();
-		return (node->init(std::move(btn), std::move(player), shipSize, std::move(baseDown), baseUp,
-						   std::move(btnDown), btnUp, labelFont, std::move(sparkleNode))
-					? node
-					: nullptr);
+		return (
+			node->init(std::move(btn), std::move(player), shipSize, assets, std::move(sparkleNode))
+				? node
+				: nullptr);
 	}
 
 	/**

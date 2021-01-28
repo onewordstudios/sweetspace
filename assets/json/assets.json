@@ -472,13 +472,6 @@
                                 "scale": 0.9
                             },
                             "children": {
-                                "shipsegments": {
-                                    "type": "Node",
-                                    "data": {
-                                        "anchor":   [0,0],
-                                        "position": [0,0]
-                                    }
-                                },
                                 "breaches": {
                                     "type": "Node",
                                     "data": {

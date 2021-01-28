@@ -7,6 +7,7 @@
 #include <vector>
 
 #include "Globals.h"
+#include "ShipSegmentNode.h"
 #include "TutorialConstants.h"
 #include "Tween.h"
 
@@ -20,21 +21,6 @@ const std::vector<Color4> GameGraphRoot::BREACH_COLOR{
 
 #pragma mark -
 #pragma mark Level Layout
-
-/** Offset of donut sprites from the radius of the ship */
-constexpr int DONUT_OFFSET = 195;
-
-/** The scale of the ship segments. */
-constexpr float SEG_SCALE = 0.33f;
-
-/** Number of animation frames of doors */
-constexpr int DOOR_FRAMES = 32;
-
-/** Number of animation rows of doors */
-constexpr int DOOR_ROWS = 1;
-
-/** Number of animation cols of doors */
-constexpr int DOOR_COLS = 32;
 
 /** Loop range of the background image */
 constexpr int BG_SCROLL_LIMIT = 256;
@@ -62,12 +48,6 @@ constexpr int MAX_HEALTH_WARNING_FRAMES = 150;
 
 /** Maximum alpha value for health warning overlay */
 constexpr int MAX_HEALTH_WARNING_ALPHA = 100;
-
-/** Size of ship segment label */
-constexpr int SEG_LABEL_SIZE = 100;
-
-/** Y position of ship segment label */
-constexpr int SEG_LABEL_Y = 1113;
 
 /** Maximum number of health labels */
 constexpr int MAX_HEALTH_LABELS = 10;
@@ -159,7 +139,6 @@ bool GameGraphRoot::init( // NOLINT Yeah it's a big function; we'll live with it
 	breachesNode = assets->get<Node>("game_field_near_breaches");
 	breachSparklesNode = assets->get<Node>("game_field_near_breachsparkles");
 	buttonSparklesNode = assets->get<Node>("game_field_near_buttonsparkles");
-	shipSegsNode = assets->get<Node>("game_field_near_shipsegments");
 	doorsNode = assets->get<Node>("game_field_near_doors");
 	unopsNode = assets->get<Node>("game_field_near_unops");
 	externalDonutsNode = assets->get<Node>("game_field_near_externaldonuts");
@@ -235,57 +214,26 @@ bool GameGraphRoot::init( // NOLINT Yeah it's a big function; we'll live with it
 	prevIsStabilizerFail = false;
 
 	// Initialize Ship Segments
-	leftMostSeg = 0;
-	rightMostSeg = globals::VISIBLE_SEGS - 1;
-	std::shared_ptr<Texture> seg0 = assets->get<Texture>("shipseg0");
-	std::shared_ptr<Texture> seg1 = assets->get<Texture>("shipseg1");
-	std::shared_ptr<Texture> segRed = assets->get<Texture>("shipsegred");
-	for (int i = 0; i < globals::VISIBLE_SEGS; i++) {
-		std::shared_ptr<PolygonNode> segment =
-			cugl::PolygonNode::allocWithTexture(i % 2 == 0 ? seg0 : seg1);
-		segment->setAnchor(Vec2::ANCHOR_TOP_CENTER);
-		segment->setScale(SEG_SCALE);
-		segment->setPosition(Vec2(0, 0));
-		segment->setAngle(globals::SEG_SIZE * (static_cast<float>(i) - 2));
-		std::shared_ptr<cugl::Label> segLabel = cugl::Label::alloc(
-			cugl::Size(SEG_LABEL_SIZE, SEG_LABEL_SIZE), assets->get<Font>("mont_black_italic_big"));
-		segLabel->setAnchor(Vec2::ANCHOR_CENTER);
-		segLabel->setHorizontalAlignment(Label::HAlign::CENTER);
-		segLabel->setPosition(static_cast<float>(segment->getTexture()->getWidth()) / 2,
-							  SEG_LABEL_Y);
-		segLabel->setForeground(SHIP_LABEL_COLOR);
-		segment->addChild(segLabel);
-		std::shared_ptr<PolygonNode> segmentRed = cugl::PolygonNode::allocWithTexture(segRed);
-		segmentRed->setColor(Color4::CLEAR);
-		segment->addChild(segmentRed);
-		shipSegsNode->addChildWithTag(segment, static_cast<unsigned int>(i + 1));
-	}
+	shipSegsNode = ShipSegmentWrap::alloc(assets);
+	nearSpace->addChild(shipSegsNode);
+	nearSpace->sortZOrder();
 
 	std::shared_ptr<DonutModel> playerModel = ship->getDonuts()[playerID];
 
 	// Initialize Players
-	std::shared_ptr<Texture> faceIdle = assets->get<Texture>("donut_face_idle");
-	std::shared_ptr<Texture> faceDizzy = assets->get<Texture>("donut_face_dizzy");
-	std::shared_ptr<Texture> faceWork = assets->get<Texture>("donut_face_work");
 	for (uint8_t i = 0; i < ship->getDonuts().size(); i++) {
 		std::shared_ptr<DonutModel> donutModel = ship->getDonuts().at(i);
 		string donutColor = PLAYER_COLOR.at(donutModel->getColorId());
-		std::shared_ptr<Texture> bodyTexture = assets->get<Texture>("donut_" + donutColor);
 		// Player node is handled separately
 		if (i == playerID) {
-			donutNode = PlayerDonutNode::alloc(playerModel, screenHeight, bodyTexture, faceIdle,
-											   faceDizzy, faceWork, tempDonutNode->getPosition());
+			donutNode = PlayerDonutNode::alloc(playerModel, screenHeight, assets, donutColor,
+											   tempDonutNode->getPosition());
 			allSpace->addChild(donutNode);
 			tempDonutNode = nullptr;
 		} else {
-			std::shared_ptr<ExternalDonutNode> newDonutNode =
-				ExternalDonutNode::alloc(donutModel, playerModel, ship->getSize(), bodyTexture,
-										 faceIdle, faceDizzy, faceWork);
+			std::shared_ptr<ExternalDonutNode> newDonutNode = ExternalDonutNode::alloc(
+				donutModel, playerModel, ship->getSize(), assets, donutColor);
 			externalDonutsNode->addChild(newDonutNode);
-
-			Vec2 donutPos = Vec2(sin(donutModel->getAngle() * (globals::RADIUS + DONUT_OFFSET)),
-								 -cos(donutModel->getAngle()) * (globals::RADIUS + DONUT_OFFSET));
-			newDonutNode->setPosition(donutPos);
 		}
 	}
 
@@ -329,9 +277,8 @@ bool GameGraphRoot::init( // NOLINT Yeah it's a big function; we'll live with it
 	// Initialize Doors
 	for (uint8_t i = 0; i < ship->getDoors().size(); i++) {
 		std::shared_ptr<DoorModel> doorModel = ship->getDoors().at(i);
-		std::shared_ptr<Texture> image = assets->get<Texture>("door");
-		std::shared_ptr<DoorNode> doorNode = DoorNode::alloc(
-			doorModel, playerModel, ship->getSize(), image, DOOR_ROWS, DOOR_COLS, DOOR_FRAMES);
+		std::shared_ptr<DoorNode> doorNode =
+			DoorNode::alloc(doorModel, playerModel, ship->getSize(), assets);
 		doorsNode->addChildWithTag(doorNode, i + 1);
 	}
 
@@ -351,12 +298,8 @@ bool GameGraphRoot::init( // NOLINT Yeah it's a big function; we'll live with it
 			SparkleNode::alloc(playerModel, ship->getSize(), breachSparkleBig, Color4::WHITE,
 							   SparkleNode::SparkleType::Big);
 		buttonSparklesNode->addChild(sparkleNode);
-		std::shared_ptr<ButtonNode> buttonNode = ButtonNode::alloc(
-			buttonModel, playerModel, ship->getSize(),
-			assets->get<Texture>("challenge_btn_base_down"),
-			assets->get<Texture>("challenge_btn_base_up"),
-			assets->get<Texture>("challenge_btn_down"), assets->get<Texture>("challenge_btn_up"),
-			assets->get<Font>("mont_black_italic_big"), sparkleNode);
+		std::shared_ptr<ButtonNode> buttonNode =
+			ButtonNode::alloc(buttonModel, playerModel, ship->getSize(), assets, sparkleNode);
 		buttonsNode->addChildWithTag(buttonNode, i + 1);
 	}
 
@@ -462,7 +405,6 @@ void GameGraphRoot::dispose() {
 		coordHUD = nullptr;
 		breachesNode->removeAllChildren();
 		breachesNode = nullptr;
-		shipSegsNode->removeAllChildren();
 		shipSegsNode = nullptr;
 		doorsNode->removeAllChildren();
 		doorsNode = nullptr;
@@ -738,48 +680,12 @@ void GameGraphRoot::update( // NOLINT Yeah it's a big function; we'll live with 
 				fmod(newPlayerAngle, globals::SEG_SIZE / globals::PI_180);
 		delta = delta * globals::PI_180;
 	}
-	nearSpace->setAngle(wrapAngle(nearSpace->getAngle() + delta));
+	nearSpace->setAngle(globals::remainderPos(nearSpace->getAngle() + delta, globals::TWO_PI));
 	prevPlayerAngle = newPlayerAngle;
 
 	// Update ship segments
-	std::shared_ptr<Texture> seg0 = assets->get<Texture>("shipseg0");
-	std::shared_ptr<Texture> seg1 = assets->get<Texture>("shipseg1");
-	std::shared_ptr<PolygonNode> segment;
-	for (int i = 0; i < globals::VISIBLE_SEGS; i++) {
-		segment = dynamic_pointer_cast<cugl::PolygonNode>(
-			shipSegsNode->getChildByTag(static_cast<unsigned int>(i + 1)));
-		// If segments rotate too far left, move left-most segment to the right side
-		if (i == rightMostSeg &&
-			wrapAngle(nearSpace->getAngle() + segment->getAngle()) < globals::SEG_CUTOFF_ANGLE) {
-			rightMostSeg = (i + 1) % globals::VISIBLE_SEGS;
-			leftMostSeg = (i + 2) % globals::VISIBLE_SEGS;
-			std::shared_ptr<PolygonNode> newRightSegment = dynamic_pointer_cast<cugl::PolygonNode>(
-				shipSegsNode->getChildByTag((rightMostSeg + 1)));
-			newRightSegment->setAngle(wrapAngle(segment->getAngle() + globals::SEG_SIZE));
-		} else if (i == leftMostSeg && wrapAngle(nearSpace->getAngle() + segment->getAngle()) >
-										   globals::TWO_PI - globals::SEG_CUTOFF_ANGLE) {
-			leftMostSeg = (i + globals::VISIBLE_SEGS - 1) % globals::VISIBLE_SEGS;
-			rightMostSeg = (i + globals::VISIBLE_SEGS - 2) % globals::VISIBLE_SEGS;
-			std::shared_ptr<PolygonNode> newLeftSegment = dynamic_pointer_cast<cugl::PolygonNode>(
-				shipSegsNode->getChildByTag((leftMostSeg + 1)));
-			newLeftSegment->setAngle(wrapAngle(segment->getAngle() - globals::SEG_SIZE));
-		}
-		// Update text label of segment
-		float relSegAngle = wrapAngle(segment->getAngle() + nearSpace->getAngle());
-		relSegAngle = relSegAngle >= 0 ? relSegAngle : globals::TWO_PI + relSegAngle;
-		relSegAngle = relSegAngle > globals::PI ? relSegAngle - globals::TWO_PI : relSegAngle;
-		auto segAngle = (ship->getDonuts().at(playerID)->getAngle() * globals::PI_180 +
-						 relSegAngle + SEG_SCALE * globals::PI_180);
-		segAngle = fmod(segAngle, ship->getSize() * globals::PI_180);
-		segAngle = segAngle < 0 ? segAngle + ship->getSize() * globals::PI_180 : segAngle;
-		auto segNum = static_cast<unsigned int>(segAngle / globals::SEG_SIZE);
-		std::shared_ptr<cugl::Label> segLabel =
-			dynamic_pointer_cast<cugl::Label>(segment->getChild(static_cast<unsigned int>(0)));
-		std::string segText = std::to_string(segNum);
-		if (segLabel->getText() != segText) {
-			segLabel->setText(segText);
-		}
-	}
+	shipSegsNode->updateSegments(nearSpace->getAngle(), ship->getSize(),
+								 ship->getDonuts().at(playerID)->getAngle());
 
 	// Update breaches textures if recycled
 	for (uint8_t i = 0; i < ship->getBreaches().size(); i++) {

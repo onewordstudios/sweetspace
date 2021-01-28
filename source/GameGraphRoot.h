@@ -18,6 +18,7 @@
 #include "PauseMenu.h"
 #include "PlayerDonutNode.h"
 #include "ShipModel.h"
+#include "ShipSegmentWrap.h"
 #include "TutorialNode.h"
 #include "UnopenableNode.h"
 #include "WinScreen.h"
@@ -70,7 +71,7 @@ class GameGraphRoot : public cugl::Scene {
 	/** Parent node of all breach sparkle nodes, is child of nearSpace */
 	std::shared_ptr<cugl::Node> breachSparklesNode;
 	/** Parent node of all ship segments, is child of nearSpace */
-	std::shared_ptr<cugl::Node> shipSegsNode;
+	std::shared_ptr<ShipSegmentWrap> shipSegsNode;
 	/** Parent node of all doors, is child of nearSpace */
 	std::shared_ptr<cugl::Node> doorsNode;
 	/** Parent node of all unops, is child of nearSpace */
@@ -137,10 +138,6 @@ class GameGraphRoot : public cugl::Scene {
 	/** The donut's base position. */
 	cugl::Vec2 donutPos;
 
-	/** Tag of the left most ship segment */
-	unsigned int leftMostSeg;
-	/** Tag of the right most ship segment */
-	unsigned int rightMostSeg;
 	/** Parent node of all buttons, is child of nearSpace */
 	std::shared_ptr<cugl::Node> buttonsNode;
 	/** Parent node of all button sparkle nodes, is child of nearSpace */
@@ -190,17 +187,6 @@ class GameGraphRoot : public cugl::Scene {
 	 */
 	DrawStatus status;
 
-	/**
-	 * Returns the wrapped value of input around the ship size.
-	 *
-	 * @param f degree in radians
-	 * @return Wrapped angle in radians
-	 */
-	static float wrapAngle(float f) {
-		float mod = fmod(f, globals::TWO_PI);
-		return mod < 0 ? globals::TWO_PI + mod : mod;
-	};
-
 	/** Process Buttons in Special Screens */
 	void processButtons();
 
@@ -217,8 +203,6 @@ class GameGraphRoot : public cugl::Scene {
 	const std::vector<string> PLAYER_COLOR{"yellow", "red", "green", "orange", "cyan", "purple"};
 	/** Possible colors for breach representations */
 	static const std::vector<cugl::Color4> BREACH_COLOR;
-	/** Color of ship segment label text */
-	const cugl::Color4 SHIP_LABEL_COLOR{255, 248, 161};
 	/** Number of possible player colors */
 	static constexpr int NUM_COLORS = 6;
 
@@ -233,8 +217,6 @@ class GameGraphRoot : public cugl::Scene {
 	GameGraphRoot()
 		: screenHeight(0),
 		  currentEllipsesFrame(0),
-		  leftMostSeg(0),
-		  rightMostSeg(0),
 		  playerID(0),
 		  prevPlayerAngle(0),
 		  currentHealthWarningFrame(0),
