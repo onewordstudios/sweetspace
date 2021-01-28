@@ -49,9 +49,6 @@ constexpr int MAX_HEALTH_WARNING_FRAMES = 150;
 /** Maximum alpha value for health warning overlay */
 constexpr int MAX_HEALTH_WARNING_ALPHA = 100;
 
-/** Maximum number of health labels */
-constexpr int MAX_HEALTH_LABELS = 10;
-
 /** Percentage of ship health to start showing yellow */
 constexpr float SHIP_HEALTH_YELLOW_CUTOFF = 0.5f;
 
@@ -183,30 +180,9 @@ bool GameGraphRoot::init( // NOLINT Yeah it's a big function; we'll live with it
 	tutorialNode = assets->get<Node>("game_field_near_tutorial");
 	buttonsNode = assets->get<Node>("game_field_near_button");
 	nearSpace->setAngle(0.0f);
+
 	// Initialize Roll Challenge
-	challengePanelHanger = dynamic_pointer_cast<cugl::PolygonNode>(
-		assets->get<Node>("game_field_challengePanelParent_challengePanelHanger"));
-	challengePanelHanger->setVisible(false);
-	challengePanel = dynamic_pointer_cast<cugl::PolygonNode>(
-		assets->get<Node>("game_field_challengePanelParent_challengePanel"));
-	challengePanel->setVisible(false);
-	challengePanelText = dynamic_pointer_cast<cugl::PolygonNode>(
-		assets->get<Node>("game_field_challengePanelParent_challengePanelText"));
-	challengePanelText->setVisible(false);
-
-	for (int i = 0; i < MAX_HEALTH_LABELS; i++) {
-		std::string s = std::to_string(i + 1);
-		std::shared_ptr<cugl::PolygonNode> arrow = dynamic_pointer_cast<cugl::PolygonNode>(
-			assets->get<Node>("game_field_challengePanelParent_challengePanelArrow" + s));
-		challengePanelArrows.push_back(arrow);
-	}
-
-	stabilizerFailText = dynamic_pointer_cast<cugl::Label>(
-		assets->get<Node>("game_field_challengePanelParent_challengePanelFailLabel"));
-	stabilizerFailText->setVisible(false);
-	stabilizerFailPanel = dynamic_pointer_cast<cugl::PolygonNode>(
-		assets->get<Node>("game_field_challengePanelParent_challengePanelFailPanel"));
-	stabilizerFailPanel->setVisible(false);
+	stabilizerNode = std::make_shared<StabilizerNode>(assets, ship->getStabilizer());
 	blackoutOverlay =
 		dynamic_pointer_cast<cugl::PolygonNode>(assets->get<Node>("game_blackoutOverlay"));
 	blackoutOverlay->setColor(Tween::fade(0));
@@ -383,6 +359,7 @@ bool GameGraphRoot::init( // NOLINT Yeah it's a big function; we'll live with it
 	buttonManager.registerButton(restartBtn);
 
 	addChild(scene);
+	addChild(stabilizerNode);
 	addChild(winScreen);
 	addChild(pauseMenu);
 	return true;
@@ -417,14 +394,9 @@ void GameGraphRoot::dispose() {
 		breachSparklesNode->removeAllChildren();
 		breachSparklesNode = nullptr;
 
-		challengePanelHanger = nullptr;
-		challengePanel = nullptr;
-		challengePanelText = nullptr;
-		challengePanelArrows.clear();
+		stabilizerNode = nullptr;
 		healthNode = nullptr;
 
-		stabilizerFailText = nullptr;
-		stabilizerFailPanel = nullptr;
 		blackoutOverlay = nullptr;
 
 		reconnectOverlay = nullptr;
@@ -704,35 +676,7 @@ void GameGraphRoot::update( // NOLINT Yeah it's a big function; we'll live with 
 		}
 	}
 
-	if (ship->getStabilizer().getIsActive()) {
-		challengePanelHanger->setVisible(true);
-		challengePanel->setVisible(true);
-		challengePanelText->setVisible(true);
-		std::shared_ptr<Texture> image = assets->get<Texture>("panel_progress_1");
-
-		auto& stabilizer = ship->getStabilizer();
-
-		for (int i = 0; i < challengePanelArrows.size(); i++) {
-			std::shared_ptr<cugl::PolygonNode> arrow = challengePanelArrows.at(i);
-			if (stabilizer.isLeft()) {
-				arrow->setAngle(globals::PI);
-			}
-			float progress = stabilizer.getProgress() * challengePanelArrows.size();
-			if (static_cast<float>(i) < progress) {
-				arrow->setTexture(image);
-			}
-			arrow->setVisible(true);
-		}
-	} else {
-		challengePanelHanger->setVisible(false);
-		challengePanel->setVisible(false);
-		challengePanelText->setVisible(false);
-		std::shared_ptr<Texture> image = assets->get<Texture>("panel_progress_0");
-		for (auto& challengePanelArrow : challengePanelArrows) {
-			challengePanelArrow->setVisible(false);
-			challengePanelArrow->setTexture(image);
-		}
-	}
+	stabilizerNode->update();
 
 	// Animate health warning flashing
 	if (currentHealthWarningFrame != 0) {
@@ -807,17 +751,17 @@ void GameGraphRoot::setSegHealthWarning(int alpha) {
 }
 
 void GameGraphRoot::doTeleportAnimation() {
-	if (ship->getStabilizerStatus() == ShipModel::StabilizerStatus::FAILURE &&
-		!prevIsStabilizerFail) {
-		// Start teleportation animation
+	StabilizerModel& stabilizer = ship->getStabilizer();
+
+	if (stabilizer.getState() == StabilizerModel::StabilizerState::Fail && !prevIsStabilizerFail) {
 		currentTeleportationFrame = 1;
-		ship->setStabilizerStatus(ShipModel::StabilizerStatus::ANIMATING);
 	}
+	prevIsStabilizerFail = stabilizer.getState() == StabilizerModel::StabilizerState::Fail;
+
 	if (currentTeleportationFrame != 0) {
-		// Continue teleportation animation
 		if (currentTeleportationFrame <= TELEPORT_FRAMECUTOFF_FIRST) {
-			stabilizerFailPanel->setVisible(true);
-			stabilizerFailText->setVisible(true);
+			// Nothing needs to happen here but this branch is left in to keep the logic of the next
+			// few more clear
 		} else if (currentTeleportationFrame <= TELEPORT_FRAMECUTOFF_SECOND) {
 			blackoutOverlay->setColor(Tween::fade(
 				Tween::linear(0, 1, currentTeleportationFrame - TELEPORT_FRAMECUTOFF_FIRST,
@@ -825,12 +769,10 @@ void GameGraphRoot::doTeleportAnimation() {
 		} else {
 			if (currentTeleportationFrame == TELEPORT_FRAMECUTOFF_SECOND + 1) {
 				// Teleport models
-				for (const auto& donut : ship->getDonuts()) {
-					donut->teleport();
-				}
-				ship->setStabilizerStatus(ShipModel::StabilizerStatus::INACTIVE);
-				stabilizerFailPanel->setVisible(false);
-				stabilizerFailText->setVisible(false);
+				const auto& playerDonut =
+					ship->getDonuts().at(*MagicInternetBox::getInstance().getPlayerID());
+				playerDonut->teleport();
+				stabilizer.reset();
 			} else if (currentTeleportationFrame == TELEPORT_FRAMECUTOFF_SECOND + 2) {
 				CustomNode::recomputeAll();
 			}
@@ -838,12 +780,11 @@ void GameGraphRoot::doTeleportAnimation() {
 				Tween::linear(1, 0, currentTeleportationFrame - TELEPORT_FRAMECUTOFF_SECOND,
 							  TELEPORT_FRAMECUTOFF_THIRD - TELEPORT_FRAMECUTOFF_SECOND)));
 		}
-		currentTeleportationFrame += 1;
+		currentTeleportationFrame++;
 		if (currentTeleportationFrame > TELEPORT_FRAMECUTOFF_THIRD) {
 			currentTeleportationFrame = 0;
 		}
 	}
-	prevIsStabilizerFail = ship->getStabilizerStatus() == ShipModel::StabilizerStatus::FAILURE;
 }
 /**
  * Returns an informative string for the timer

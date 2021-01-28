@@ -298,9 +298,9 @@ void GameMode::updateStabilizer() {
 	}
 
 	bool allRoll = true;
-	auto& allDonuts = ship->getDonuts();
+	const auto& allDonuts = ship->getDonuts();
 
-	for (auto& allDonut : allDonuts) {
+	for (const auto& allDonut : allDonuts) {
 		if (!allDonut->getIsActive()) {
 			continue;
 		}
@@ -322,18 +322,17 @@ void GameMode::updateStabilizer() {
 	}
 
 	if (stabilizer.getIsWin()) {
-		ship->setStabilizerStatus(ShipModel::SUCCESS);
 		net.succeedAllTask();
-		stabilizer.reset();
+		ship->stabilizerTutorial = true;
+		stabilizer.finish();
 	} else if (trunc(ship->canonicalTimeElapsed) == trunc(stabilizer.getEndTime())) {
-		gm.setChallengeFail(true);
-		ship->setStabilizerStatus(ShipModel::FAILURE);
+		net.failAllTask();
+		ship->failAllTask();
 
 		// This can't happen a second time in the duration of the sound effect, so we can
 		// just end it immediately
 		soundEffects->startEvent(SoundEffectController::TELEPORT, 0);
 		soundEffects->endEvent(SoundEffectController::TELEPORT, 0);
-		stabilizer.reset();
 	}
 }
 

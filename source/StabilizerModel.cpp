@@ -11,6 +11,17 @@ StabilizerModel::StabilizerModel()
 	  progress(0),
 	  endTime(0) {}
 
+bool StabilizerModel::getIsActive() const {
+	switch (currState) {
+		case StabilizerState::Inactive:
+		case StabilizerState::Fail:
+			return false;
+		case StabilizerState::Left:
+		case StabilizerState::Right:
+			return true;
+	}
+}
+
 float StabilizerModel::getProgress() const {
 	if (progress > SUCCESS_CUTOFF) {
 		return 1;
@@ -21,12 +32,19 @@ float StabilizerModel::getProgress() const {
 void StabilizerModel::startChallenge(float currTime) {
 	endTime = currTime + globals::ROLL_CHALLENGE_LENGTH;
 	progress = 0;
-	currState = (rand() % 2) != 0 ? StabilizerModel::StabilizerState::Left
-								  : StabilizerModel::StabilizerState::Right;
+	currState = (rand() % 2) != 0 ? StabilizerState::Left : StabilizerState::Right;
+}
+
+void StabilizerModel::fail() { currState = StabilizerState::Fail; }
+
+void StabilizerModel::finish() {
+	bool won = getIsWin();
+	reset();
+	currState = won ? StabilizerState::Inactive : StabilizerState::Fail;
 }
 
 void StabilizerModel::reset() {
-	currState = StabilizerModel::StabilizerState::Inactive;
+	currState = StabilizerState::Inactive;
 	progress = 0;
 	endTime = 0;
 }

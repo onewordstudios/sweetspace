@@ -26,7 +26,6 @@ GLaDOS::GLaDOS()
 	  // NOLINTNEXTLINE This ain't the NSA; we don't need better security than this
 	  rand(static_cast<unsigned int>(time(nullptr))),
 	  mib(MagicInternetBox::getInstance()),
-	  fail(false),
 	  maxEvents(0),
 	  levelNum(0),
 	  customEventCtr(0),
@@ -82,7 +81,6 @@ bool GLaDOS::init(const std::shared_ptr<ShipModel>& ship,
 	for (int i = 0; i < maxButtons; i++) {
 		buttonFree.push(i);
 	}
-	fail = false;
 
 	active = success;
 	return success;
@@ -131,7 +129,6 @@ bool GLaDOS::init(const std::shared_ptr<ShipModel>& ship, const int levelNum) {
 	for (int i = 0; i < maxButtons; i++) {
 		buttonFree.push(i);
 	}
-	fail = false;
 
 	active = success;
 	if (unop > 0 || levelNum == tutorial::DOOR_LEVEL) {
@@ -166,6 +163,9 @@ bool GLaDOS::init(const std::shared_ptr<ShipModel>& ship, const int levelNum) {
 				ship->createButton(angle + tutorial::BUTTON_PADDING, k,
 								   angle - tutorial::BUTTON_PADDING, j);
 			}
+			break;
+		case tutorial::STABILIZER_LEVEL:
+			stabilizerStart = -STABILIZER_TIMEOUT;
 			break;
 		default:
 			break;
@@ -330,16 +330,14 @@ void GLaDOS::update(float dt) {
 		}
 	}
 
-	if (fail) {
-		ship->failAllTask();
-		mib.failAllTask();
-		fail = false;
-	}
-
 	// Check if this is the host for generating breaches and doors
 	if (mib.getPlayerID() != 0) {
 		return;
 	}
+
+	// ============================================
+	//  BELOW THIS LINE, ALL ACTIONS ARE HOST-ONLY
+	// ============================================
 
 	if (levelNum < globals::NUM_TUTORIAL_LEVELS &&
 		std::find(std::begin(tutorial::REAL_LEVELS), std::end(tutorial::REAL_LEVELS),
@@ -554,58 +552,57 @@ void GLaDOS::tutorialLevels(float /*dt*/) {
 				break;
 			}
 			break;
-		case tutorial::STABILIZER_LEVEL:
+		case tutorial::STABILIZER_LEVEL: {
 			if (ship->timePassed() < STABILIZER_START) {
 				break;
 			}
-			if (customEventCtr >= mib.getNumPlayers()) {
-				customEventCtr = static_cast<int>(mib.getNumPlayers()) - 1;
+			if (customEventCtr >= mib.getMaxNumPlayers()) {
+				customEventCtr = static_cast<int>(mib.getMaxNumPlayers()) - 1;
 			}
 			// Don't ask inactive donuts to do anything
 			// Player 0 will never be inactive since this is player 0
-			while (!ship->getDonuts().at(customEventCtr)->getIsActive() && customEventCtr > 0) {
+			while (customEventCtr > 0 && !ship->getDonuts().at(customEventCtr)->getIsActive()) {
 				customEventCtr--;
 			}
-			switch (ship->getStabilizerStatus()) {
-				case ShipModel::ANIMATING:
-				case ShipModel::FAILURE:
-					break;
-				case ShipModel::ACTIVE:
-					if (ship->canonicalTimeElapsed - stabilizerStart > STABILIZER_TIMEOUT) {
-						ship->setStabilizerStatus(ShipModel::INACTIVE);
-					}
-					break;
-				case ShipModel::INACTIVE: {
-					// Hopefully after animation is done, it will always be set to inactive
-					if (customEventCtr != mib.getPlayerID() &&
-						ship->getDonuts().at(customEventCtr)->getIsActive()) {
-						mib.createAllTask(customEventCtr);
-					} else {
-						ship->createAllTask();
-					}
-					stabilizerStart = ship->canonicalTimeElapsed;
-					ship->setStabilizerStatus(ShipModel::ACTIVE);
-					break;
-				}
-				case ShipModel::SUCCESS: {
-					customEventCtr--;
-					if (customEventCtr < 0) {
-						ship->setTimeless(false);
-						mib.forceWinLevel();
-						ship->initTimer(0);
-						break;
-					}
-					if (customEventCtr != mib.getPlayerID() &&
-						ship->getDonuts().at(customEventCtr)->getIsActive()) {
-						mib.createAllTask(customEventCtr);
-					} else {
-						ship->createAllTask();
-					}
-					stabilizerStart = ship->canonicalTimeElapsed;
-					ship->setStabilizerStatus(ShipModel::ACTIVE);
-					break;
-				}
+
+			// If stabilizer was successfully completed
+			if (ship->stabilizerTutorial) {
+				CULog("GLaDOS TUTORIAL: Got stabilizer winner");
+				ship->stabilizerTutorial = false;
+				customEventCtr--;
+				stabilizerStart = -STABILIZER_TIMEOUT;
+				// Decrement the player ID, and guarantee that the timeout is exceeded.
+				// Then break out; when we come back through next frame, the for loop above
+				// will find the next valid player, and then the block below triggers,
+				// sending out the stabilizer task.
+				break;
 			}
+
+			// If timeout expired, which includes if we lose the stabilizer, if the previous packet
+			// got lost, or if we won the previous frame and decremented the player ID
+			if (ship->canonicalTimeElapsed - stabilizerStart > STABILIZER_TIMEOUT) {
+				CULog(
+					"GLaDOS TUTORIAL: Generating stabilizer b/c ship time %f, start time %f, "
+					"timeout %f, and counter %d",
+					ship->canonicalTimeElapsed, stabilizerStart, STABILIZER_TIMEOUT,
+					customEventCtr);
+				if (customEventCtr < 0) {
+					ship->setTimeless(false);
+					mib.forceWinLevel();
+					ship->initTimer(0);
+					break;
+				}
+
+				if (customEventCtr != mib.getPlayerID() &&
+					ship->getDonuts().at(customEventCtr)->getIsActive()) {
+					mib.createAllTask(customEventCtr);
+				} else {
+					ship->createAllTask();
+				}
+				stabilizerStart = ship->canonicalTimeElapsed;
+			}
+
 			break;
+		}
 	}
 }

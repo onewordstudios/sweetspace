@@ -32,8 +32,6 @@ class GLaDOS {
 	/** Network Controller for outbound calls */
 	MagicInternetBox& mib;
 
-	bool fail;
-
 	/** The maximum number of events on ship at any one time. This will probably need to scale with
 	 * the number of players*/
 	unsigned int maxEvents;
@@ -147,15 +145,5 @@ class GLaDOS {
 	void tutorialLevels(float dt);
 
 #pragma mark -
-#pragma mark Accessors
-
-	/**
-	 * Gets if all player challenge failed.
-	 */
-	bool challengeFail() const { return fail; }
-	/**
-	 * Sets if all player challenge failed.
-	 */
-	void setChallengeFail(bool b) { fail = b; }
 };
 #endif /* GM_CONTROLLER_H */

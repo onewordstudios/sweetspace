@@ -75,9 +75,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="resource.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\source\Sweetspace.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -684,6 +681,12 @@
     <ClInclude Include="..\..\source\ShipSegmentWrap.h">
       <Filter>Header Files\SceneGraph\Ship</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\StabilizerNode.h">
+      <Filter>Header Files\SceneGraph\Ship</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\source\main.cpp">
@@ -1131,6 +1134,9 @@
       <Filter>Source Files\SceneGraph\Ship</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\ShipSegmentWrap.cpp">
+      <Filter>Source Files\SceneGraph\Ship</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\StabilizerNode.cpp">
       <Filter>Source Files\SceneGraph\Ship</Filter>
     </ClCompile>
   </ItemGroup>
