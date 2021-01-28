@@ -126,9 +126,9 @@ void WinScreen::activate(uint8_t completedLevel) {
 	currFrame = 0;
 }
 
-bool WinScreen::tappedNext(std::tuple<cugl::Vec2, cugl::Vec2> tapData) const {
+bool WinScreen::tappedNext(const std::tuple<cugl::Vec2, cugl::Vec2>& tapData) const {
 	return isHost && currFrame > TRAVEL_TIME + FADE_TIME &&
-		   ButtonManager::tappedButton(btn, std::move(tapData));
+		   ButtonManager::tappedButton(btn, tapData);
 }
 
 void WinScreen::update() {
