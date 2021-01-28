@@ -687,6 +687,9 @@
     <ClInclude Include="..\..\source\StabilizerNode.h">
       <Filter>Header Files\SceneGraph\Ship</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\source\ReconnectScreen.h">
+      <Filter>Header Files\SceneGraph\GameUI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\source\main.cpp">
@@ -1138,6 +1141,9 @@
     </ClCompile>
     <ClCompile Include="..\..\source\StabilizerNode.cpp">
       <Filter>Source Files\SceneGraph\Ship</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\ReconnectScreen.cpp">
+      <Filter>Source Files\SceneGraph\GameUI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
