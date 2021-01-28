@@ -383,8 +383,6 @@ void GameMode::updateHealth() {
 
 	// Breach health drain
 	for (auto& breach : breaches) {
-		CULog("time since creation %f",
-			  trunc(breach->getTimeCreated()) - trunc(ship->timePassed()));
 		// this should be adjusted based on the level and number of players
 		if (breach->getIsActive() && trunc(ship->timePassed()) - trunc(breach->getTimeCreated()) >
 										 BREACH_HEALTH_GRACE_PERIOD) {
