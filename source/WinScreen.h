@@ -70,7 +70,7 @@ class WinScreen : public cugl::Node {
 	 *
 	 * @return True iff the next level button was tapped
 	 */
-	bool tappedNext(std::tuple<cugl::Vec2, cugl::Vec2> tapData) const;
+	bool tappedNext(const std::tuple<cugl::Vec2, cugl::Vec2> &tapData) const;
 
 	/**
 	 * Update the animation for this node. Should be called once every frame.
