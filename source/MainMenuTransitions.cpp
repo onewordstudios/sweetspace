@@ -64,6 +64,13 @@ void MainMenuMode::MainMenuTransitions::init(const std::shared_ptr<AssetManager>
 		animations.fadeIn("matchmaking_creditsbtn", TRANSITION_DURATION, OPEN_TRANSITION_FADE);
 		animations.fadeIn("matchmaking_gamelogo", TRANSITION_DURATION + OPEN_TRANSITION_FADE / 2,
 						  OPEN_TRANSITION_FADE / 2);
+
+		// Parallax the logo up and into position
+		const auto &logo = assets->get<Node>("matchmaking_gamelogo");
+		float dest = logo->getPositionY();
+		logo->setPositionY(screenHeight / CREDITS_BG_POS);
+		animations.animateY("matchmaking_gamelogo", Tween::TweenType::EaseOut, dest,
+							OPEN_TRANSITION);
 	}
 
 	animations.registerNode("matchmaking_backbtn", assets);
