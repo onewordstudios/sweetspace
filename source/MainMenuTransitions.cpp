@@ -68,9 +68,10 @@ void MainMenuMode::MainMenuTransitions::init(const std::shared_ptr<AssetManager>
 		// Parallax the logo up and into position
 		const auto &logo = assets->get<Node>("matchmaking_gamelogo");
 		float dest = logo->getPositionY();
-		logo->setPositionY(screenHeight / CREDITS_BG_POS);
+		logo->setPositionY(screenHeight / 2);
 		animations.animateY("matchmaking_gamelogo", Tween::TweenType::EaseOut, dest,
-							OPEN_TRANSITION);
+							TRANSITION_DURATION + OPEN_TRANSITION_FADE / 2,
+							OPEN_TRANSITION_FADE / 2);
 	}
 
 	animations.registerNode("matchmaking_backbtn", assets);
