@@ -58,9 +58,12 @@ void MainMenuMode::MainMenuTransitions::init(const std::shared_ptr<AssetManager>
 
 	for (const auto *e : MAIN_SCREEN) {
 		animations.registerNode(e, assets);
-		if (!toCredits) {
-			animations.fadeIn(e, TRANSITION_DURATION, OPEN_TRANSITION_FADE);
-		}
+	}
+	if (!toCredits) {
+		animations.fadeIn("matchmaking_home", TRANSITION_DURATION, OPEN_TRANSITION_FADE);
+		animations.fadeIn("matchmaking_creditsbtn", TRANSITION_DURATION, OPEN_TRANSITION_FADE);
+		animations.fadeIn("matchmaking_gamelogo", TRANSITION_DURATION + OPEN_TRANSITION_FADE / 2,
+						  OPEN_TRANSITION_FADE / 2);
 	}
 
 	animations.registerNode("matchmaking_backbtn", assets);
