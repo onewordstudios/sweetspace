@@ -70,7 +70,12 @@ void NetworkConnection::send(const std::vector<uint8_t>& msg) {
 		[&](HostPeers& /*h*/) {
 			peer->Send(&bs, MEDIUM_PRIORITY, RELIABLE, 1, *natPunchServerAddress, true);
 		},
-		[&](ClientPeer& c) { peer->Send(&bs, MEDIUM_PRIORITY, RELIABLE, 1, *c.addr, false); });
+		[&](ClientPeer& c) {
+			if (c.addr == nullptr) {
+				return;
+			}
+			peer->Send(&bs, MEDIUM_PRIORITY, RELIABLE, 1, *c.addr, false);
+		});
 }
 
 void NetworkConnection::receive(
