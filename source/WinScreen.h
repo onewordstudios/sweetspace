@@ -23,6 +23,8 @@ class WinScreen : public cugl::Node {
 	bool isHost;
 
 	/** Scene graph node representing the current location of the ship */
+	std::shared_ptr<cugl::TexturedNode> ship;
+	/** Scene graph node representing the circle behind the ship*/
 	std::shared_ptr<cugl::PathNode> circle;
 	/** Scene graph node for the next level button */
 	std::shared_ptr<cugl::Button> btn;

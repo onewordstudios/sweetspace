@@ -13,8 +13,8 @@ constexpr size_t LOOP_TIME = 60;
 constexpr size_t FADE_TIME = 30;
 
 constexpr float PI = static_cast<float>(M_PI);
-constexpr float CIRCLE_DIM = 50.f;
-constexpr float CIRCLE_STROKE = 2.f;
+constexpr float CIRCLE_DIM = 50.f * 3;
+constexpr float CIRCLE_STROKE = 2.f * 3;
 constexpr unsigned int CIRCLE_SEG = 32;
 
 constexpr float HEIGHT_SCALE = 0.3f;
@@ -52,10 +52,15 @@ bool WinScreen::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 	addChild(screen);
 	btns.registerButton(btn);
 
+	ship = cugl::PolygonNode::allocWithFile("textures/wl_screens/small_ship.png");
+	ship->setAnchor({1.f / 2, 1.f / 2});
+	CULog("Ship size %f", ship->getContentWidth());
 	circle = cugl::PathNode::allocWithEllipse( // Forcing a line break
-		{CIRCLE_DIM / 2, CIRCLE_DIM / 2}, {CIRCLE_DIM, CIRCLE_DIM}, CIRCLE_STROKE, CIRCLE_SEG,
-		cugl::PathJoint::ROUND);
-	addChild(circle);
+		{0, 0}, {CIRCLE_DIM, CIRCLE_DIM}, CIRCLE_STROKE, CIRCLE_SEG, cugl::PathJoint::ROUND);
+	ship->addChild(circle);
+	ship->setScale(1.f / 3);
+	circle->setPosition(ship->getContentWidth() / 2, ship->getContentHeight() / 2);
+	addChild(ship);
 
 	cugl::Size dimen = cugl::Application::get()->getDisplaySize();
 	dimen *= globals::SCENE_WIDTH / dimen.width;
@@ -72,6 +77,7 @@ void WinScreen::dispose() {
 	btn = nullptr;
 	waitText = nullptr;
 	btns.clear();
+	removeAllChildren();
 }
 
 /**
@@ -151,8 +157,8 @@ void WinScreen::update() {
 		// percent = static_cast<float>(currFrame) / TRAVEL_TIME;
 		float x = (WIDTH_OFFSET - cosf(percent)) * globals::SCENE_WIDTH * WIDTH_SCALE / 2;
 		float y = (sinf(percent) * globals::SCENE_WIDTH * HEIGHT_SCALE + _contentSize.height) / 2;
-		circle->setPositionX(x);
-		circle->setPositionY(y);
+		ship->setPositionX(x);
+		ship->setPositionY(y);
 	} else if (currFrame <= TRAVEL_TIME + FADE_TIME) {
 		auto fadeColor = Tween::fade(static_cast<float>(currFrame - TRAVEL_TIME) / FADE_TIME);
 		btn->setColor(fadeColor);
