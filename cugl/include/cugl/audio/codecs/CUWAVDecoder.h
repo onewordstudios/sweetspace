@@ -38,6 +38,7 @@
 #define __CU_WAV_DECODER_H__
 #include "CUAudioDecoder.h"
 #include <SDL/SDL.h>
+#include <memory>
 
 namespace cugl {
     namespace audio {
