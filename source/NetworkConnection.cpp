@@ -27,24 +27,24 @@ NetworkConnection::NetworkConnection(std::string roomID) {
 
 NetworkConnection::~NetworkConnection() {
 	peer->Shutdown(SHUTDOWN_BLOCK);
-	RakNet::RakPeerInterface::DestroyInstance(peer.release());
+	SLNet::RakPeerInterface::DestroyInstance(peer.release());
 }
 
 void NetworkConnection::startupConn() {
-	peer = std::unique_ptr<RakNet::RakPeerInterface>(RakNet::RakPeerInterface::GetInstance());
+	peer = std::unique_ptr<SLNet::RakPeerInterface>(SLNet::RakPeerInterface::GetInstance());
 
 	peer->AttachPlugin(&(natPunchthroughClient));
 	natPunchServerAddress =
-		std::make_unique<RakNet::SystemAddress>(RakNet::SystemAddress(SERVER_ADDRESS, SERVER_PORT));
+		std::make_unique<SLNet::SystemAddress>(SLNet::SystemAddress(SERVER_ADDRESS, SERVER_PORT));
 
 	// Use the default socket descriptor
 	// This will make the OS assign us a random port.
-	RakNet::SocketDescriptor socketDescriptor;
+	SLNet::SocketDescriptor socketDescriptor;
 	// Allow connections for each player and one for the NAT server.
 	peer->Startup(globals::MAX_PLAYERS, &socketDescriptor, 1);
 
 	CULog("Your GUID is: %s",
-		  peer->GetGuidFromSystemAddress(RakNet::UNASSIGNED_SYSTEM_ADDRESS).ToString());
+		  peer->GetGuidFromSystemAddress(SLNet::UNASSIGNED_SYSTEM_ADDRESS).ToString());
 
 	// Connect to the NAT Punchthrough server
 	CULog("Connecting to punchthrough server");
@@ -52,8 +52,8 @@ void NetworkConnection::startupConn() {
 				  this->natPunchServerAddress->GetPort(), nullptr, 0);
 }
 
-void NetworkConnection::broadcast(const std::vector<uint8_t>& msg, RakNet::SystemAddress& ignore) {
-	RakNet::BitStream bs;
+void NetworkConnection::broadcast(const std::vector<uint8_t>& msg, SLNet::SystemAddress& ignore) {
+	SLNet::BitStream bs;
 	bs.Write(static_cast<uint8_t>(ID_USER_PACKET_ENUM));
 	bs.Write(static_cast<uint8_t>(msg.size()));
 	bs.WriteAlignedBytes(msg.data(), static_cast<unsigned int>(msg.size()));
@@ -61,7 +61,7 @@ void NetworkConnection::broadcast(const std::vector<uint8_t>& msg, RakNet::Syste
 }
 
 void NetworkConnection::send(const std::vector<uint8_t>& msg) {
-	RakNet::BitStream bs;
+	SLNet::BitStream bs;
 	bs.Write(static_cast<uint8_t>(ID_USER_PACKET_ENUM));
 	bs.Write(static_cast<uint8_t>(msg.size()));
 	bs.WriteAlignedBytes(msg.data(), static_cast<unsigned int>(msg.size()));
@@ -80,10 +80,10 @@ void NetworkConnection::send(const std::vector<uint8_t>& msg) {
 
 void NetworkConnection::receive(
 	const std::function<void(const std::vector<uint8_t>&)>& dispatcher) {
-	RakNet::Packet* packet = nullptr;
+	SLNet::Packet* packet = nullptr;
 	for (packet = peer->Receive(); packet != nullptr;
 		 peer->DeallocatePacket(packet), packet = peer->Receive()) {
-		RakNet::BitStream bts(packet->data, packet->length, false);
+		SLNet::BitStream bts(packet->data, packet->length, false);
 
 		// NOLINTNEXTLINE Dealing with an old 2000s era C++ library here
 		switch (packet->data[0]) {
@@ -98,7 +98,7 @@ void NetworkConnection::receive(
 						},
 						[&](ClientPeer& c) {
 							CULog("Trying to connect to %s", c.room.c_str());
-							RakNet::RakNetGUID remote;
+							SLNet::RakNetGUID remote;
 							remote.FromString(c.room.c_str());
 							this->natPunchthroughClient.OpenNAT(remote,
 																*(this->natPunchServerAddress));
@@ -117,7 +117,7 @@ void NetworkConnection::receive(
 
 									if (h.started) {
 										// Reconnection attempt
-										RakNet::BitStream bs;
+										SLNet::BitStream bs;
 										std::vector<uint8_t> connMsg = {NetworkDataType::JoinRoom,
 																		3, h.numPlayers, pID,
 																		globals::API_VER};
@@ -129,7 +129,7 @@ void NetworkConnection::receive(
 										peer->Send(&bs, MEDIUM_PRIORITY, RELIABLE, 1,
 												   packet->systemAddress, false);
 									} else {
-										RakNet::BitStream bs;
+										SLNet::BitStream bs;
 										std::vector<uint8_t> connMsg = {NetworkDataType::JoinRoom,
 																		0, h.numPlayers, pID,
 																		globals::API_VER};
@@ -172,7 +172,7 @@ void NetworkConnection::receive(
 						for (size_t i = 0; i < h.peers.size(); i++) {
 							if (h.peers.at(i) == nullptr) {
 								hasRoom = true;
-								h.peers.at(i) = std::make_unique<RakNet::SystemAddress>(p);
+								h.peers.at(i) = std::make_unique<SLNet::SystemAddress>(p);
 								h.numPlayers++;
 								break;
 							}
@@ -189,7 +189,7 @@ void NetworkConnection::receive(
 						}
 					},
 					[&](ClientPeer& c) {
-						c.addr = std::make_unique<RakNet::SystemAddress>(packet->systemAddress);
+						c.addr = std::make_unique<SLNet::SystemAddress>(packet->systemAddress);
 					});
 				break;
 			case ID_USER_PACKET_ENUM: {
@@ -252,8 +252,8 @@ void NetworkConnection::receive(
 				CULog("Punchthrough failure %d", packet->data[0]); // NOLINT
 				dispatcher({NetworkDataType::GenericError});
 
-				bts.IgnoreBytes(sizeof(RakNet::MessageID));
-				RakNet::RakNetGUID recipientGuid;
+				bts.IgnoreBytes(sizeof(SLNet::MessageID));
+				SLNet::RakNetGUID recipientGuid;
 				bts.Read(recipientGuid);
 
 				CULog("Attempted punchthrough to GUID %s failed", recipientGuid.ToString());

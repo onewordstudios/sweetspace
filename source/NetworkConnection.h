@@ -9,11 +9,10 @@
 #include <vector>
 
 #include "Globals.h"
-#include "libraries/RakNet/BitStream.h"
-#include "libraries/RakNet/MessageIdentifiers.h"
-#include "libraries/RakNet/NatPunchthroughClient.h"
-#include "libraries/RakNet/RakNetTypes.h"
-#include "libraries/RakNet/RakPeerInterface.h"
+#include "libraries/SLikeNet/slikenet/BitStream.h"
+#include "libraries/SLikeNet/slikenet/MessageIdentifiers.h"
+#include "libraries/SLikeNet/slikenet/NatPunchthroughClient.h"
+#include "libraries/SLikeNet/slikenet/peerinterface.h"
 
 class NetworkConnection {
    public:
@@ -44,27 +43,27 @@ class NetworkConnection {
 
    private:
 	/** Connection object */
-	std::unique_ptr<RakNet::RakPeerInterface> peer;
+	std::unique_ptr<SLNet::RakPeerInterface> peer;
 
 #pragma region Punchthrough
 	/** Address of punchthrough server */
-	std::unique_ptr<RakNet::SystemAddress> natPunchServerAddress;
+	std::unique_ptr<SLNet::SystemAddress> natPunchServerAddress;
 	/** NAT Punchthrough Client */
-	RakNet::NatPunchthroughClient natPunchthroughClient;
+	SLNet::NatPunchthroughClient natPunchthroughClient;
 #pragma endregion
 
 #pragma region Connection Data Structures
 	struct HostPeers {
 		bool started;
 		uint8_t numPlayers;
-		std::array<std::unique_ptr<RakNet::SystemAddress>, globals::MAX_PLAYERS - 1> peers;
+		std::array<std::unique_ptr<SLNet::SystemAddress>, globals::MAX_PLAYERS - 1> peers;
 
 		HostPeers() : started(false), numPlayers(1){};
 	};
 
 	/** Connection to host and room ID for client */
 	struct ClientPeer {
-		std::unique_ptr<RakNet::SystemAddress> addr;
+		std::unique_ptr<SLNet::SystemAddress> addr;
 		std::string room;
 
 		explicit ClientPeer(std::string roomID) { room = std::move(roomID); }
@@ -87,7 +86,7 @@ class NetworkConnection {
 	 * @param msg The message to send
 	 * @param ignore The address to not send to
 	 */
-	void broadcast(const std::vector<uint8_t>& msg, RakNet::SystemAddress& ignore);
+	void broadcast(const std::vector<uint8_t>& msg, SLNet::SystemAddress& ignore);
 };
 
 #endif /* NETWORK_CONNECTION_H */
