@@ -41,6 +41,7 @@
 #include "CUAudioDecoder.h"
 #include <SDL/SDL.h>
 #include <codecs/FLAC/stream_decoder.h>
+#include <memory>
 
 namespace cugl {
     namespace audio {

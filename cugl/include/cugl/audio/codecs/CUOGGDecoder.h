@@ -41,6 +41,7 @@
 #include "CUAudioDecoder.h"
 #include <SDL/SDL.h>
 #include <codecs/vorbis/vorbisfile.h>
+#include <memory>
 
 namespace cugl {
     namespace audio {
