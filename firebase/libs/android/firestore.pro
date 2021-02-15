@@ -1,0 +1,33 @@
+-ignorewarnings
+-keep,includedescriptorclasses public class com.google.firebase.Timestamp { *; }
+-keep,includedescriptorclasses public class com.google.firebase.example.LoggingUtils { * ; }
+-keep,includedescriptorclasses public class com.google.firebase.firestore.Blob { *; }
+-keep,includedescriptorclasses public class com.google.firebase.firestore.CollectionReference { *; }
+-keep,includedescriptorclasses public class com.google.firebase.firestore.DocumentChange { *; }
+-keep,includedescriptorclasses public class com.google.firebase.firestore.DocumentChange$Type { *; }
+-keep,includedescriptorclasses public class com.google.firebase.firestore.DocumentReference { *; }
+-keep,includedescriptorclasses public class com.google.firebase.firestore.DocumentSnapshot { *; }
+-keep,includedescriptorclasses public class com.google.firebase.firestore.DocumentSnapshot$ServerTimestampBehavior { *; }
+-keep,includedescriptorclasses public class com.google.firebase.firestore.EventListener { *; }
+-keep,includedescriptorclasses public class com.google.firebase.firestore.FieldPath { *; }
+-keep,includedescriptorclasses public class com.google.firebase.firestore.FieldValue { *; }
+-keep,includedescriptorclasses public class com.google.firebase.firestore.FirebaseFirestore { *; }
+-keep,includedescriptorclasses public class com.google.firebase.firestore.FirebaseFirestoreException { *; }
+-keep,includedescriptorclasses public class com.google.firebase.firestore.FirebaseFirestoreException$Code { *; }
+-keep,includedescriptorclasses public class com.google.firebase.firestore.FirebaseFirestoreSettings { *; }
+-keep,includedescriptorclasses public class com.google.firebase.firestore.FirebaseFirestoreSettings$Builder { *; }
+-keep,includedescriptorclasses public class com.google.firebase.firestore.GeoPoint { *; }
+-keep,includedescriptorclasses public class com.google.firebase.firestore.ListenerRegistration { *; }
+-keep,includedescriptorclasses public class com.google.firebase.firestore.MetadataChanges { *; }
+-keep,includedescriptorclasses public class com.google.firebase.firestore.Query { *; }
+-keep,includedescriptorclasses public class com.google.firebase.firestore.Query$Direction { *; }
+-keep,includedescriptorclasses public class com.google.firebase.firestore.QuerySnapshot { *; }
+-keep,includedescriptorclasses public class com.google.firebase.firestore.SetOptions { *; }
+-keep,includedescriptorclasses public class com.google.firebase.firestore.SnapshotMetadata { *; }
+-keep,includedescriptorclasses public class com.google.firebase.firestore.Source { *; }
+-keep,includedescriptorclasses public class com.google.firebase.firestore.Transaction { *; }
+-keep,includedescriptorclasses public class com.google.firebase.firestore.Transaction$Function { *; }
+-keep,includedescriptorclasses public class com.google.firebase.firestore.WriteBatch { *; }
+-keep,includedescriptorclasses public class com.google.firebase.firestore.internal.cpp.SilentRejectionSingleThreadExecutor { *; }
+-keep,includedescriptorclasses public class com.google.firebase.firestore.internal.cpp.TransactionFunction { *; }
+-keep,includedescriptorclasses public class java.lang.IllegalStateException { *; }

@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "510673752781",
+    "project_id": "sweetspace-e5fb8",
+    "storage_bucket": "sweetspace-e5fb8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:510673752781:android:54da5813da51fc97520f84",
+        "android_client_info": {
+          "package_name": "fun.onewordstudios.sweetspace"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "510673752781-ddnpgt2bbu5p2p8d6ovb6e519c4r1ab1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC7UT5YHkUDh8USd-V1fbF6lb4JTAjiqG4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "510673752781-ddnpgt2bbu5p2p8d6ovb6e519c4r1ab1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

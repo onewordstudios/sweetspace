@@ -1,0 +1,7 @@
+-ignorewarnings
+-keep,includedescriptorclasses public class com.google.firebase.example.LoggingUtils { * ; }
+-keep,includedescriptorclasses public class com.google.firebase.functions.FirebaseFunctions { *; }
+-keep,includedescriptorclasses public class com.google.firebase.functions.FirebaseFunctionsException { *; }
+-keep,includedescriptorclasses public class com.google.firebase.functions.FirebaseFunctionsException$Code { *; }
+-keep,includedescriptorclasses public class com.google.firebase.functions.HttpsCallableReference { *; }
+-keep,includedescriptorclasses public class com.google.firebase.functions.HttpsCallableResult { *; }

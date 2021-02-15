@@ -18,6 +18,10 @@
 //      3. This notice may not be removed or altered from any source distribution.
 #include "Globals.h"
 #include "Sweetspace.h"
+#include "firebase/admob.h"
+#include "firebase/admob/types.h"
+#include "firebase/app.h"
+#include "firebase/future.h"
 
 // This keeps us from having to write cugl:: all the time
 using namespace cugl;
@@ -52,6 +56,30 @@ int main(int /*argc*/, char* /*argv*/[]) {
 	app.setSize(globals::SCENE_WIDTH, GAME_HEIGHT);
 	app.setFPS(FRAMERATE);
 	app.setHighDPI(true);
+
+#if defined(__ANDROID__)
+	// Create the Firebase app.
+	JNIEnv* env = (JNIEnv*)SDL_AndroidGetJNIEnv();
+	jobject activity = (jobject)SDL_AndroidGetActivity();
+	firebase::App* fbapp =
+			firebase::App::Create(firebase::AppOptions(),
+								  env,
+								  activity);
+
+	// Your Android AdMob app ID.
+	const char* kAdMobAppID = "ca-app-pub-9909379902934039~2417251914";
+#else
+	// Create the Firebase app.
+	firebase::App* fbapp =
+		firebase::App::Create(firebase::AppOptions());
+
+	// Your iOS AdMob app ID.
+	const char* kAdMobAppID = "ca-app-pub-3940256099942544~3347511713";
+#endif  // __ANDROID__
+
+	// Initialize the AdMob library with your AdMob app ID.
+	firebase::admob::Initialize(*fbapp, kAdMobAppID);
+
 
 	/// DO NOT MODIFY ANYTHING BELOW THIS LINE
 	if (!app.init()) {

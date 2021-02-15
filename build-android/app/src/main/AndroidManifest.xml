@@ -20,6 +20,9 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/CUGLTheme">
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-9909379902934039~2417251914"/>
         <activity
             android:name=".Sweetspace"
             android:configChanges="keyboardHidden|orientation"
