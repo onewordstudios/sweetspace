@@ -563,7 +563,7 @@
                           "data": {
                             "texture": "health_numbers",
                             "anchor":   [0.5,1],
-														"position": [0, 127.5],
+			    "position": [0, 127.5],
                             "scale": 0.306
                           }
                         },
