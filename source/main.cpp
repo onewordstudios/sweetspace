@@ -64,6 +64,7 @@ int main(int /*argc*/, char* /*argv*/[]) {
 	}
 	app.onShutdown();
 
+	// NOLINTNEXTLINE Don't care that this isn't thread safe
 	exit(0);  // Necessary to quit on mobile devices
 	return 0; // This line is never reached
 }
