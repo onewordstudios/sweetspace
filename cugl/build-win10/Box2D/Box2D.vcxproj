@@ -22,7 +22,7 @@
     <ProjectGuid>{98400D17-43A5-1A40-95BE-C53AC78E7694}</ProjectGuid>
     <RootNamespace>Box2D</RootNamespace>
     <Keyword>Win32Proj</Keyword>
-    <WindowsTargetPlatformVersion>10.0.18362.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -172,7 +172,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <Optimization>Full</Optimization>
+      <Optimization>MaxSpeed</Optimization>
       <AdditionalIncludeDirectories>$(PROJECT_DIR)..\..\external;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>false</MinimalRebuild>
@@ -196,6 +196,7 @@
     <Lib>
       <OutputFile>$(OutDir)Box2D.lib</OutputFile>
       <TargetMachine>MachineX64</TargetMachine>
+      <LinkTimeCodeGeneration>false</LinkTimeCodeGeneration>
     </Lib>
     <Link>
       <SubSystem>Windows</SubSystem>

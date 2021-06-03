@@ -545,8 +545,8 @@
                           "data": {
                             "texture": "health_empty",
                             "anchor":   [0.5,0.5],
-                            "position": [0, 0],
-                            "scale": 0.3
+                            "position": [0, 8],
+                            "scale": 0.306
                           }
                         },
                         "health": {
@@ -554,8 +554,8 @@
                           "data": {
                             "texture": "health_green",
                             "anchor":   [0.5,1],
-                            "position": [0, 118],
-                            "scale": 0.3
+                            "position": [0, 127.5],
+                            "scale": 0.306
                           }
                         },
                         "healthNumbers": {
@@ -563,8 +563,8 @@
                           "data": {
                             "texture": "health_numbers",
                             "anchor":   [0.5,1],
-                            "position": [0, 118],
-                            "scale": 0.3
+			    "position": [0, 127.5],
+                            "scale": 0.306
                           }
                         },
                         "moveTutorial" : {
