@@ -190,11 +190,10 @@ void MainMenuMode::dispose() {
 
 void MainMenuMode::updateClientLabel() {
 	std::vector<char> room;
-	for (unsigned int i : clientEnteredRoom) {
-		room.push_back('0' + i);
+	for (uint8_t i : clientEnteredRoom) {
+		room.push_back(static_cast<char>('0' + i));
 	}
-	for (auto i = static_cast<unsigned int>(clientEnteredRoom.size()); i < globals::ROOM_LENGTH;
-		 i++) {
+	for (auto i = clientEnteredRoom.size(); i < globals::ROOM_LENGTH; i++) {
 		room.push_back('_');
 	}
 
