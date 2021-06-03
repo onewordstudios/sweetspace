@@ -428,7 +428,7 @@ void MainMenuMode::processButtons() {
 
 				std::ostringstream room;
 				for (int i = 0; i < globals::ROOM_LENGTH; i++) {
-					room << clientEnteredRoom[i];
+					room << static_cast<char>('0' + clientEnteredRoom[i]);
 				}
 
 				currState = ClientScreenSubmitted;
