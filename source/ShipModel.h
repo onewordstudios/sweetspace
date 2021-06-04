@@ -406,7 +406,7 @@ class ShipModel {
 	 */
 	void separateDonuts() {
 		for (uint8_t i = 0; i < donuts.size(); i++) {
-			float angle = getSize() * static_cast<float>(i) / donuts.size();
+			float angle = getSize() * static_cast<float>(i) / static_cast<float>(donuts.size());
 			donuts.at(i)->setAngle(angle);
 		}
 	}
