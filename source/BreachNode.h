@@ -31,7 +31,7 @@ class BreachNode : public CustomNode {
 	/** Helper function to calculate frame */
 	unsigned int getFrameFromHealth(int health) {
 		if (health <= 0) {
-			return shapeNode->getSize() - 1;
+			health = 1;
 		}
 
 		unsigned int currentHealth =
