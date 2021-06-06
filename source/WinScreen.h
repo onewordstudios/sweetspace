@@ -30,6 +30,13 @@ class WinScreen : public cugl::Node {
 	std::shared_ptr<cugl::Button> btn;
 	/** Scene graph node for the waiting for host text */
 	std::shared_ptr<cugl::Node> waitText;
+	/** Star markers of each individual level */
+	std::vector<std::shared_ptr<cugl::TexturedNode>> levelMarkers;
+
+	/** Helper class managing the level checkpoint icons */
+	class IconManager;
+	/** Helper class managing the level checkpoint icons */
+	std::unique_ptr<IconManager> icons;
 
 	/** Button manager for the next level button */
 	ButtonManager btns;
