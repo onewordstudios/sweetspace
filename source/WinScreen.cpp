@@ -34,6 +34,9 @@ uint8_t closestLevelBtn(uint8_t lvl) {
 	return static_cast<uint8_t>(x - LEVEL_ENTRY_POINTS.begin());
 }
 
+/**
+ * Convert an x coordinate to a coordinate on the level button wrapper (which is transformed)
+ */
 constexpr float LVL_X(float x) { return (-(WIDTH / 2.f) * (1 - LVL_SCALE) + x) / LVL_SCALE; }
 
 class WinScreen::IconManager {
@@ -70,6 +73,12 @@ class WinScreen::IconManager {
 		assets->get<Node>("winscreen_levels")->addChild(finalIcon);
 	}
 
+	~IconManager() {
+		for (size_t i = 0; i < NUM_LEVEL_BTNS; i++) {
+			icons.at(i)->setPosition(initPos.at(i));
+		}
+	}
+
 	void activate(uint8_t lvl, float contentHeight) {
 		finalIcon->setPosition(0, 0);
 		finalIcon->setColor(Tween::fade(0));
@@ -92,9 +101,7 @@ class WinScreen::IconManager {
 				// to the right
 				xDestPos.at(i) = LVL_X(left + static_cast<float>(i - destIcon) * diff);
 			}
-			CULog("Icon number %d going to %f", i, xDestPos.at(i));
 		}
-		CULog("Parent width %f", icons[0]->getParent()->getContentSize().width);
 		yDestPos = WIDTH * HEIGHT_SCALE + contentHeight;
 
 		if (destIcon == NUM_LEVEL_BTNS - 1) {
@@ -194,6 +201,8 @@ bool WinScreen::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 		cugl::Texture::allocWithFile("textures/wl_screens/destination.png");
 	for (size_t i = 0; i < maxLevels; i++) {
 		levelMarkers[i] = cugl::PolygonNode::allocWithTexture(starTexture);
+		levelMarkers[i]->setVisible(false);
+		addChild(levelMarkers[i]);
 	}
 
 	icons = std::make_unique<IconManager>(assets);
@@ -260,14 +269,38 @@ void WinScreen::activate(uint8_t completedLevel) {
 	waitText->setColor(cugl::Color4::CLEAR);
 	setColor(cugl::Color4::CLEAR);
 
-	// Find level range
-
-	startPer = levelToPos(completedLevel);
-	endPer = levelToPos(completedLevel + 1);
-
 	currFrame = 0;
 
 	icons->activate(completedLevel, _contentSize.height);
+
+	// Figure out number of levels to show stars for
+	uint8_t leftLevel = closestLevelBtn(completedLevel);
+	uint8_t rightLevel; // NOLINT
+	if (leftLevel == NUM_LEVEL_BTNS) {
+		leftLevel = LEVEL_ENTRY_POINTS.at(NUM_LEVEL_BTNS - 1);
+		rightLevel = MAX_NUM_LEVELS - 1;
+	} else {
+		rightLevel = LEVEL_ENTRY_POINTS.at(leftLevel + 1);
+		leftLevel = LEVEL_ENTRY_POINTS.at(leftLevel);
+	}
+	uint8_t numLevels = rightLevel - leftLevel;
+	float spacing = WIDTH * WIDTH_SCALE / static_cast<float>(numLevels);
+	float left = (1 - WIDTH_SCALE) * WIDTH / 2;
+
+	for (size_t i = 0; i < levelMarkers.size(); i++) {
+		if (i < numLevels - 1) {
+			levelMarkers.at(i)->setPosition(left + static_cast<float>(i + 1) * spacing,
+											(WIDTH * HEIGHT_SCALE + _contentSize.height) / 2);
+			levelMarkers.at(i)->setVisible(true);
+		} else {
+			levelMarkers.at(i)->setVisible(false);
+		}
+	}
+	ship->setPositionY((WIDTH * HEIGHT_SCALE + _contentSize.height) / 2);
+
+	uint8_t lvlOffset = completedLevel - leftLevel;
+	startPer = left + static_cast<float>(lvlOffset) * spacing;
+	endPer = left + static_cast<float>(lvlOffset + 1) * spacing;
 }
 
 bool WinScreen::tappedNext(const std::tuple<cugl::Vec2, cugl::Vec2>& tapData) const {
@@ -295,10 +328,11 @@ void WinScreen::update() {
 		float percent = Tween::easeInOut(startPer, endPer, currFrame, TRAVEL_TIME);
 		// Uncomment the following line to test the dot circling around
 		// percent = static_cast<float>(currFrame) / TRAVEL_TIME;
-		float x = (WIDTH_OFFSET - cosf(percent)) * globals::SCENE_WIDTH * WIDTH_SCALE / 2;
-		float y = (sinf(percent) * globals::SCENE_WIDTH * HEIGHT_SCALE + _contentSize.height) / 2;
-		ship->setPositionX(x);
-		ship->setPositionY(y);
+
+		// float x = (WIDTH_OFFSET - cosf(percent)) * globals::SCENE_WIDTH * WIDTH_SCALE / 2;
+		// float y = (sinf(percent) * globals::SCENE_WIDTH * HEIGHT_SCALE + _contentSize.height)/2;
+		ship->setPositionX(percent);
+		// ship->setPositionY(y);
 	} else if (currFrame <= TRAVEL_TIME + FADE_TIME) {
 		auto fadeColor = Tween::fade(static_cast<float>(currFrame - TRAVEL_TIME) / FADE_TIME);
 		btn->setColor(fadeColor);
