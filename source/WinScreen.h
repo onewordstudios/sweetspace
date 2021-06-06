@@ -14,10 +14,10 @@ class WinScreen : public cugl::Node {
 	/** Current frame of the animation */
 	size_t currFrame;
 
-	/** Starting angle on the circle (radians) */
-	float startPer;
-	/** Ending angle on the circle (radians) */
-	float endPer;
+	/** Starting position of the ship (x-coord) */
+	float startPos;
+	/** Ending position of the ship (x-coord) */
+	float endPos;
 
 	/** Whether this player is the host */
 	bool isHost;

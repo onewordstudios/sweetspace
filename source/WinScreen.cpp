@@ -20,7 +20,6 @@ constexpr float WIDTH = static_cast<float>(globals::SCENE_WIDTH);
 
 constexpr float HEIGHT_SCALE = 0.3f;
 constexpr float WIDTH_SCALE = 0.6f;
-constexpr float WIDTH_OFFSET = 1.25f;
 
 /** How much the scale of the node holding all the level markers is scaled */
 constexpr float LVL_SCALE = 0.4f;
@@ -37,7 +36,7 @@ uint8_t closestLevelBtn(uint8_t lvl) {
 /**
  * Convert an x coordinate to a coordinate on the level button wrapper (which is transformed)
  */
-constexpr float LVL_X(float x) { return (-(WIDTH / 2.f) * (1 - LVL_SCALE) + x) / LVL_SCALE; }
+constexpr float LVL_X(float x) { return (-(WIDTH / 2) * (1 - LVL_SCALE) + x) / LVL_SCALE; }
 
 class WinScreen::IconManager {
    private:
@@ -158,7 +157,7 @@ uint8_t computeMaxLevelInterval() {
 }
 
 WinScreen::WinScreen(const std::shared_ptr<cugl::AssetManager>& assets)
-	: currFrame(0), startPer(0), endPer(0), isHost(false), levelMarkers(computeMaxLevelInterval()) {
+	: currFrame(0), startPos(0), endPos(0), isHost(false), levelMarkers(computeMaxLevelInterval()) {
 	init(assets);
 }
 
@@ -186,6 +185,16 @@ bool WinScreen::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 	addChild(screen);
 	btns.registerButton(btn);
 
+	const size_t maxLevels = computeMaxLevelInterval();
+	std::shared_ptr<cugl::Texture> starTexture =
+		cugl::Texture::allocWithFile("textures/wl_screens/destination.png");
+	for (size_t i = 0; i < maxLevels; i++) {
+		levelMarkers[i] = cugl::PolygonNode::allocWithTexture(starTexture);
+		levelMarkers[i]->setVisible(false);
+		levelMarkers[i]->setScale(1.f / 2);
+		addChild(levelMarkers[i]);
+	}
+
 	ship = cugl::PolygonNode::allocWithFile("textures/wl_screens/small_ship.png");
 	ship->setAnchor({1.f / 2, 1.f / 2});
 	CULog("Ship size %f", ship->getContentWidth());
@@ -195,15 +204,6 @@ bool WinScreen::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 	ship->setScale(1.f / 3);
 	circle->setPosition(ship->getContentWidth() / 2, ship->getContentHeight() / 2);
 	addChild(ship);
-
-	const size_t maxLevels = computeMaxLevelInterval();
-	std::shared_ptr<cugl::Texture> starTexture =
-		cugl::Texture::allocWithFile("textures/wl_screens/destination.png");
-	for (size_t i = 0; i < maxLevels; i++) {
-		levelMarkers[i] = cugl::PolygonNode::allocWithTexture(starTexture);
-		levelMarkers[i]->setVisible(false);
-		addChild(levelMarkers[i]);
-	}
 
 	icons = std::make_unique<IconManager>(assets);
 
@@ -299,8 +299,8 @@ void WinScreen::activate(uint8_t completedLevel) {
 	ship->setPositionY((WIDTH * HEIGHT_SCALE + _contentSize.height) / 2);
 
 	uint8_t lvlOffset = completedLevel - leftLevel;
-	startPer = left + static_cast<float>(lvlOffset) * spacing;
-	endPer = left + static_cast<float>(lvlOffset + 1) * spacing;
+	startPos = left + static_cast<float>(lvlOffset) * spacing;
+	endPos = left + static_cast<float>(lvlOffset + 1) * spacing;
 }
 
 bool WinScreen::tappedNext(const std::tuple<cugl::Vec2, cugl::Vec2>& tapData) const {
@@ -325,14 +325,8 @@ void WinScreen::update() {
 	}
 
 	if (currFrame <= TRAVEL_TIME) {
-		float percent = Tween::easeInOut(startPer, endPer, currFrame, TRAVEL_TIME);
-		// Uncomment the following line to test the dot circling around
-		// percent = static_cast<float>(currFrame) / TRAVEL_TIME;
-
-		// float x = (WIDTH_OFFSET - cosf(percent)) * globals::SCENE_WIDTH * WIDTH_SCALE / 2;
-		// float y = (sinf(percent) * globals::SCENE_WIDTH * HEIGHT_SCALE + _contentSize.height)/2;
-		ship->setPositionX(percent);
-		// ship->setPositionY(y);
+		float pos = Tween::easeInOut(startPos, endPos, currFrame, TRAVEL_TIME);
+		ship->setPositionX(pos);
 	} else if (currFrame <= TRAVEL_TIME + FADE_TIME) {
 		auto fadeColor = Tween::fade(static_cast<float>(currFrame - TRAVEL_TIME) / FADE_TIME);
 		btn->setColor(fadeColor);
