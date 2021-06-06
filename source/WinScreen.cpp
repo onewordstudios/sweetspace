@@ -201,7 +201,7 @@ bool WinScreen::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 	circle = cugl::PathNode::allocWithEllipse( // Forcing a line break
 		{0, 0}, {CIRCLE_DIM, CIRCLE_DIM}, CIRCLE_STROKE, CIRCLE_SEG, cugl::PathJoint::ROUND);
 	ship->addChild(circle);
-	ship->setScale(1.f / 3);
+	ship->setScale(1.f / 2);
 	circle->setPosition(ship->getContentWidth() / 2, ship->getContentHeight() / 2);
 	addChild(ship);
 

@@ -1399,12 +1399,12 @@
 						"anchor"	 : [0.5,0.5],
 						"valign"     : "middle",
 						"halign"     : "center",
-						"scale" : 0.5
+						"scale" : 0.6
 					},
 					"layout" : {
 						"x_anchor" : "center",
 						"y_anchor" : "middle",
-						"y_offset" : -30,
+						"y_offset" : 0,
 						"absolute" : true
 					}
 				},
