@@ -31,6 +31,7 @@ class BreachNode : public CustomNode {
 	/** Helper function to calculate frame */
 	unsigned int getFrameFromHealth(int health) {
 		if (health <= 0) {
+			CULog("WARNING: Breach node health 0 but getting animation frame");
 			health = 1;
 		}
 
