@@ -18,6 +18,8 @@ class WinScreen : public cugl::Node {
 	float startPos;
 	/** Ending position of the ship (x-coord) */
 	float endPos;
+	/** Whether to shift the whole thing over one afterwards */
+	bool mustShift;
 
 	/** Whether this player is the host */
 	bool isHost;
@@ -40,6 +42,12 @@ class WinScreen : public cugl::Node {
 
 	/** Button manager for the next level button */
 	ButtonManager btns;
+
+	/**
+	 * Layout and make invisible all level markers for a completed level.
+	 * Returns the number of levels and the left level.
+	 */
+	std::pair<uint8_t, uint8_t> layoutLevelMarkers(uint8_t completedLevel);
 
    public:
 	/**

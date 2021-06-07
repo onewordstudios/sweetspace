@@ -18,10 +18,10 @@ constexpr size_t TRAVEL_TIME = 180;
 /** Cycle time for ship's pulsing dot */
 constexpr size_t LOOP_TIME = 60;
 
-constexpr float PI = static_cast<float>(M_PI);
 constexpr float CIRCLE_DIM = 50.f * 3;
 constexpr float CIRCLE_STROKE = 2.f * 3;
 constexpr unsigned int CIRCLE_SEG = 32;
+
 constexpr float WIDTH = static_cast<float>(globals::SCENE_WIDTH);
 
 constexpr float HEIGHT_SCALE = 0.3f;
@@ -64,9 +64,12 @@ class WinScreen::IconManager {
 	/** Destination x position for the final star icon, or <0 if unneeded */
 	float xFinalPos;
 
+	/** Whether to slide the whole screen over one afterwards */
+	bool mustShift;
+
    public:
 	explicit IconManager(const std::shared_ptr<cugl::AssetManager>& assets)
-		: destIcon(0), xDestPos(), yDestPos(-1), xFinalPos(-1) {
+		: destIcon(0), xDestPos(), yDestPos(-1), xFinalPos(-1), mustShift(false) {
 		for (size_t i = 0; i < NUM_LEVEL_BTNS; i++) {
 			icons.at(i) = assets->get<Node>("winscreen_levels_lvl" + std::to_string(i));
 			initPos.at(i) = icons.at(i)->getPosition();
@@ -84,7 +87,9 @@ class WinScreen::IconManager {
 		}
 	}
 
-	void activate(uint8_t lvl, float contentHeight) {
+	void activate(uint8_t lvl, float contentHeight, bool shift) {
+		mustShift = shift;
+
 		finalIcon->setPosition(0, 0);
 		finalIcon->setColor(Tween::fade(0));
 
@@ -117,24 +122,39 @@ class WinScreen::IconManager {
 	}
 
 	void step(size_t currFrame) {
-		if (currFrame > POS_TIME) {
-			return;
-		}
-		for (size_t i = 0; i < NUM_LEVEL_BTNS; i++) {
-			float initX = initPos.at(i).x;
-			float initY = initPos.at(i).y;
+		if (currFrame <= POS_TIME) {
+			for (size_t i = 0; i < NUM_LEVEL_BTNS; i++) {
+				float initX = initPos.at(i).x;
+				float initY = initPos.at(i).y;
 
-			float x = Tween::easeInOut(initX, xDestPos.at(i), currFrame, POS_TIME);
-			float y = Tween::easeInOut(initY, yDestPos, currFrame, POS_TIME);
+				float x = Tween::easeInOut(initX, xDestPos.at(i), currFrame, POS_TIME);
+				float y = Tween::easeInOut(initY, yDestPos, currFrame, POS_TIME);
 
-			icons.at(i)->setPosition(x, y);
-		}
-		if (xFinalPos != -1) {
-			finalIcon->setColor(Tween::fade(Tween::easeOut(0, 1, currFrame, POS_TIME)));
+				icons.at(i)->setPosition(x, y);
+			}
+			if (xFinalPos != -1) {
+				finalIcon->setColor(Tween::fade(Tween::easeOut(0, 1, currFrame, POS_TIME)));
 
-			float x = Tween::easeInOut(0, xFinalPos, currFrame, POS_TIME);
-			float y = Tween::easeInOut(0, yDestPos, currFrame, POS_TIME);
-			finalIcon->setPosition(x, y);
+				float x = Tween::easeInOut(0, xFinalPos, currFrame, POS_TIME);
+				float y = Tween::easeInOut(0, yDestPos, currFrame, POS_TIME);
+				finalIcon->setPosition(x, y);
+			}
+		} else if (mustShift) {
+			if (currFrame > POS_TIME + TRAVEL_TIME + POS_TIME) {
+				return;
+			}
+			if (currFrame < POS_TIME + TRAVEL_TIME) {
+				return;
+			}
+
+			size_t cf = currFrame - POS_TIME - TRAVEL_TIME;
+			float diff = xDestPos[1] - xDestPos[0];
+
+			for (size_t i = 0; i < NUM_LEVEL_BTNS; i++) {
+				float x = Tween::easeInOut(xDestPos.at(i), xDestPos.at(i) - diff, cf, POS_TIME);
+				icons.at(i)->setPositionX(x);
+			}
+			finalIcon->setPositionX(Tween::easeInOut(xFinalPos, xFinalPos - diff, cf, POS_TIME));
 		}
 	}
 };
@@ -162,8 +182,41 @@ uint8_t computeMaxLevelInterval() {
 	return max;
 }
 
+std::pair<uint8_t, uint8_t> WinScreen::layoutLevelMarkers(uint8_t completedLevel) {
+	uint8_t leftLevel = closestLevelBtn(completedLevel);
+	uint8_t rightLevel; // NOLINT
+	if (leftLevel == NUM_LEVEL_BTNS) {
+		leftLevel = LEVEL_ENTRY_POINTS.at(NUM_LEVEL_BTNS - 1);
+		rightLevel = MAX_NUM_LEVELS - 1;
+	} else {
+		rightLevel = LEVEL_ENTRY_POINTS.at(leftLevel + 1);
+		leftLevel = LEVEL_ENTRY_POINTS.at(leftLevel);
+	}
+	uint8_t numLevels = rightLevel - leftLevel;
+	float spacing = WIDTH * WIDTH_SCALE / static_cast<float>(numLevels);
+	float left = (1 - WIDTH_SCALE) * WIDTH / 2;
+
+	for (size_t i = 0; i < levelMarkers.size(); i++) {
+		if (i < numLevels - 1) {
+			levelMarkers.at(i)->setPosition(left + static_cast<float>(i + 1) * spacing,
+											(WIDTH * HEIGHT_SCALE + _contentSize.height) / 2);
+			levelMarkers.at(i)->setVisible(true);
+			levelMarkers.at(i)->setColor(cugl::Color4::CLEAR);
+		} else {
+			levelMarkers.at(i)->setVisible(false);
+		}
+	}
+
+	return {numLevels, leftLevel};
+}
+
 WinScreen::WinScreen(const std::shared_ptr<cugl::AssetManager>& assets)
-	: currFrame(0), startPos(0), endPos(0), isHost(false), levelMarkers(computeMaxLevelInterval()) {
+	: currFrame(0),
+	  startPos(0),
+	  endPos(0),
+	  mustShift(false),
+	  isHost(false),
+	  levelMarkers(computeMaxLevelInterval()) {
 	init(assets);
 }
 
@@ -243,33 +296,18 @@ void WinScreen::activate(uint8_t completedLevel) {
 
 	currFrame = 0;
 
-	icons->activate(completedLevel, _contentSize.height);
+	mustShift = std::find(LEVEL_ENTRY_POINTS.begin(), LEVEL_ENTRY_POINTS.end(),
+						  completedLevel + 1) != LEVEL_ENTRY_POINTS.end();
+	icons->activate(completedLevel, _contentSize.height, mustShift);
 
 	// Figure out number of levels to show stars for
-	uint8_t leftLevel = closestLevelBtn(completedLevel);
-	uint8_t rightLevel; // NOLINT
-	if (leftLevel == NUM_LEVEL_BTNS) {
-		leftLevel = LEVEL_ENTRY_POINTS.at(NUM_LEVEL_BTNS - 1);
-		rightLevel = MAX_NUM_LEVELS - 1;
-	} else {
-		rightLevel = LEVEL_ENTRY_POINTS.at(leftLevel + 1);
-		leftLevel = LEVEL_ENTRY_POINTS.at(leftLevel);
-	}
-	uint8_t numLevels = rightLevel - leftLevel;
+	auto layoutRes = layoutLevelMarkers(completedLevel);
+	uint8_t numLevels = layoutRes.first;
+	uint8_t leftLevel = layoutRes.second;
+	ship->setPositionY((WIDTH * HEIGHT_SCALE + _contentSize.height) / 2);
+
 	float spacing = WIDTH * WIDTH_SCALE / static_cast<float>(numLevels);
 	float left = (1 - WIDTH_SCALE) * WIDTH / 2;
-
-	for (size_t i = 0; i < levelMarkers.size(); i++) {
-		if (i < numLevels - 1) {
-			levelMarkers.at(i)->setPosition(left + static_cast<float>(i + 1) * spacing,
-											(WIDTH * HEIGHT_SCALE + _contentSize.height) / 2);
-			levelMarkers.at(i)->setVisible(true);
-			levelMarkers.at(i)->setColor(cugl::Color4::CLEAR);
-		} else {
-			levelMarkers.at(i)->setVisible(false);
-		}
-	}
-	ship->setPositionY((WIDTH * HEIGHT_SCALE + _contentSize.height) / 2);
 
 	uint8_t lvlOffset = completedLevel - leftLevel;
 	startPos = left + static_cast<float>(lvlOffset) * spacing;
@@ -316,6 +354,16 @@ void WinScreen::update() {
 		for (auto& m : levelMarkers) {
 			m->setColor(fade);
 		}
+	}
+
+	if (mustShift && currFrame > POS_TIME + TRAVEL_TIME &&
+		currFrame <= POS_TIME + TRAVEL_TIME + POS_TIME) {
+		// TODO change icons, etc.
+
+		float start = (1 + WIDTH_SCALE) * WIDTH / 2;
+		float dest = (1 - WIDTH_SCALE) * WIDTH / 2;
+		ship->setPositionX(
+			Tween::easeInOut(start, dest, currFrame - POS_TIME - TRAVEL_TIME, POS_TIME));
 	}
 
 	currFrame++;
