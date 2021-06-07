@@ -78,6 +78,7 @@ class WinScreen::IconManager {
 
 		finalIcon = cugl::PolygonNode::allocWithFile("textures/wl_screens/destination.png");
 		finalIcon->setAnchor({1.f / 2, 1.f / 2});
+		finalIcon->setScale(1 / LVL_SCALE);
 		assets->get<Node>("winscreen_levels")->addChild(finalIcon);
 	}
 
@@ -85,13 +86,11 @@ class WinScreen::IconManager {
 		for (size_t i = 0; i < NUM_LEVEL_BTNS; i++) {
 			icons.at(i)->setPosition(initPos.at(i));
 		}
+		finalIcon->getParent()->removeChild(finalIcon);
 	}
 
 	void activate(uint8_t lvl, float contentHeight, bool shift) {
 		mustShift = shift;
-
-		finalIcon->setPosition(0, 0);
-		finalIcon->setColor(Tween::fade(0));
 
 		destIcon = closestLevelBtn(lvl);
 		if (destIcon == NUM_LEVEL_BTNS) {
@@ -114,8 +113,10 @@ class WinScreen::IconManager {
 		}
 		yDestPos = WIDTH * HEIGHT_SCALE + contentHeight;
 
+		finalIcon->setColor(Tween::fade(0));
+		finalIcon->setPosition(LVL_X(left + diff + diff), yDestPos);
 		if (destIcon == NUM_LEVEL_BTNS - 1) {
-			xFinalPos = left + diff;
+			xFinalPos = LVL_X(left + diff);
 		} else {
 			xFinalPos = -1;
 		}
@@ -135,9 +136,9 @@ class WinScreen::IconManager {
 			if (xFinalPos != -1) {
 				finalIcon->setColor(Tween::fade(Tween::easeOut(0, 1, currFrame, POS_TIME)));
 
-				float x = Tween::easeInOut(0, xFinalPos, currFrame, POS_TIME);
-				float y = Tween::easeInOut(0, yDestPos, currFrame, POS_TIME);
-				finalIcon->setPosition(x, y);
+				float x = Tween::easeInOut(xFinalPos + xDestPos[1] - xDestPos[0], xFinalPos,
+										   currFrame, POS_TIME);
+				finalIcon->setPositionX(x);
 			}
 		} else if (mustShift) {
 			if (currFrame > POS_TIME + TRAVEL_TIME + POS_TIME) {
@@ -154,7 +155,16 @@ class WinScreen::IconManager {
 				float x = Tween::easeInOut(xDestPos.at(i), xDestPos.at(i) - diff, cf, POS_TIME);
 				icons.at(i)->setPositionX(x);
 			}
+
+			if (xFinalPos == -1) {
+				xFinalPos = xDestPos[NUM_LEVEL_BTNS - 1] + diff;
+			}
+
 			finalIcon->setPositionX(Tween::easeInOut(xFinalPos, xFinalPos - diff, cf, POS_TIME));
+			if (cf == 0) {
+				finalIcon->setVisible(true);
+				finalIcon->setColor(cugl::Color4::WHITE);
+			}
 		}
 	}
 };
@@ -196,12 +206,15 @@ std::pair<uint8_t, uint8_t> WinScreen::layoutLevelMarkers(uint8_t completedLevel
 	float spacing = WIDTH * WIDTH_SCALE / static_cast<float>(numLevels);
 	float left = (1 - WIDTH_SCALE) * WIDTH / 2;
 
+	CULog("Num levels computed is %d", numLevels);
 	for (size_t i = 0; i < levelMarkers.size(); i++) {
 		if (i < numLevels - 1) {
 			levelMarkers.at(i)->setPosition(left + static_cast<float>(i + 1) * spacing,
 											(WIDTH * HEIGHT_SCALE + _contentSize.height) / 2);
 			levelMarkers.at(i)->setVisible(true);
 			levelMarkers.at(i)->setColor(cugl::Color4::CLEAR);
+			CULog("Setting this one %d to be at (%f, %f)", i, levelMarkers.at(i)->getPositionX(),
+				  levelMarkers.at(i)->getPositionY());
 		} else {
 			levelMarkers.at(i)->setVisible(false);
 		}
@@ -215,6 +228,7 @@ WinScreen::WinScreen(const std::shared_ptr<cugl::AssetManager>& assets)
 	  startPos(0),
 	  endPos(0),
 	  mustShift(false),
+	  completedLevel(0),
 	  isHost(false),
 	  levelMarkers(computeMaxLevelInterval()) {
 	init(assets);
@@ -289,6 +303,7 @@ void WinScreen::activate(uint8_t completedLevel) {
 		return;
 	}
 
+	this->completedLevel = completedLevel;
 	setVisible(true);
 	btn->setColor(cugl::Color4::CLEAR);
 	waitText->setColor(cugl::Color4::CLEAR);
@@ -359,11 +374,27 @@ void WinScreen::update() {
 	if (mustShift && currFrame > POS_TIME + TRAVEL_TIME &&
 		currFrame <= POS_TIME + TRAVEL_TIME + POS_TIME) {
 		// TODO change icons, etc.
+		size_t cf = currFrame - POS_TIME - TRAVEL_TIME;
 
 		float start = (1 + WIDTH_SCALE) * WIDTH / 2;
 		float dest = (1 - WIDTH_SCALE) * WIDTH / 2;
-		ship->setPositionX(
-			Tween::easeInOut(start, dest, currFrame - POS_TIME - TRAVEL_TIME, POS_TIME));
+		ship->setPositionX(Tween::easeInOut(start, dest, cf, POS_TIME));
+
+		if (cf <= FADE_TIME) {
+			auto fade = Tween::fade(Tween::easeOut(1.f, 0.f, cf, FADE_TIME));
+			for (auto& m : levelMarkers) {
+				m->setColor(fade);
+			}
+		}
+		if (cf == FADE_TIME + 1) {
+			layoutLevelMarkers(completedLevel + 1);
+		}
+		if (cf > POS_TIME - FADE_TIME) {
+			auto fade = Tween::fade(Tween::easeOut(0.f, 1.f, cf - POS_TIME + FADE_TIME, FADE_TIME));
+			for (auto& m : levelMarkers) {
+				m->setColor(fade);
+			}
+		}
 	}
 
 	currFrame++;

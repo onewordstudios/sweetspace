@@ -20,6 +20,8 @@ class WinScreen : public cugl::Node {
 	float endPos;
 	/** Whether to shift the whole thing over one afterwards */
 	bool mustShift;
+	/** Completed level */
+	uint8_t completedLevel;
 
 	/** Whether this player is the host */
 	bool isHost;
