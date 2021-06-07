@@ -8,9 +8,15 @@
 #include "MagicInternetBox.h"
 #include "Tween.h"
 
-constexpr size_t TRAVEL_TIME = 180;
-constexpr size_t LOOP_TIME = 60;
+/** Time for screen to fade in; overlaps with POS_TIME */
 constexpr size_t FADE_TIME = 30;
+/** Time for icons to shift into place; overlaps with FADE_TIME */
+constexpr size_t POS_TIME = 90;
+/** Time for ship to travel */
+constexpr size_t TRAVEL_TIME = 180;
+
+/** Cycle time for ship's pulsing dot */
+constexpr size_t LOOP_TIME = 60;
 
 constexpr float PI = static_cast<float>(M_PI);
 constexpr float CIRCLE_DIM = 50.f * 3;
@@ -24,7 +30,7 @@ constexpr float WIDTH_SCALE = 0.6f;
 /** How much the scale of the node holding all the level markers is scaled */
 constexpr float LVL_SCALE = 0.4f;
 
-constexpr float START_SCALE = 1.1f;
+constexpr float START_SCALE = 1.3f;
 
 uint8_t closestLevelBtn(uint8_t lvl) {
 	// NOLINTNEXTLINE clang and MSVC disagree for some reason
@@ -111,23 +117,23 @@ class WinScreen::IconManager {
 	}
 
 	void step(size_t currFrame) {
-		if (currFrame > FADE_TIME) {
+		if (currFrame > POS_TIME) {
 			return;
 		}
 		for (size_t i = 0; i < NUM_LEVEL_BTNS; i++) {
 			float initX = initPos.at(i).x;
 			float initY = initPos.at(i).y;
 
-			float x = Tween::easeInOut(initX, xDestPos.at(i), currFrame, FADE_TIME);
-			float y = Tween::easeInOut(initY, yDestPos, currFrame, FADE_TIME);
+			float x = Tween::easeInOut(initX, xDestPos.at(i), currFrame, POS_TIME);
+			float y = Tween::easeInOut(initY, yDestPos, currFrame, POS_TIME);
 
 			icons.at(i)->setPosition(x, y);
 		}
 		if (xFinalPos != -1) {
-			finalIcon->setColor(Tween::fade(Tween::easeOut(0, 1, currFrame, FADE_TIME)));
+			finalIcon->setColor(Tween::fade(Tween::easeOut(0, 1, currFrame, POS_TIME)));
 
-			float x = Tween::easeInOut(0, xFinalPos, currFrame, FADE_TIME);
-			float y = Tween::easeInOut(0, yDestPos, currFrame, FADE_TIME);
+			float x = Tween::easeInOut(0, xFinalPos, currFrame, POS_TIME);
+			float y = Tween::easeInOut(0, yDestPos, currFrame, POS_TIME);
 			finalIcon->setPosition(x, y);
 		}
 	}
@@ -301,6 +307,7 @@ void WinScreen::activate(uint8_t completedLevel) {
 	uint8_t lvlOffset = completedLevel - leftLevel;
 	startPos = left + static_cast<float>(lvlOffset) * spacing;
 	endPos = left + static_cast<float>(lvlOffset + 1) * spacing;
+	ship->setPositionX(startPos);
 }
 
 bool WinScreen::tappedNext(const std::tuple<cugl::Vec2, cugl::Vec2>& tapData) const {
@@ -324,13 +331,19 @@ void WinScreen::update() {
 		setColor(Tween::fade(Tween::easeOut(0, 1, currFrame, FADE_TIME)));
 	}
 
-	if (currFrame <= TRAVEL_TIME) {
-		float pos = Tween::easeInOut(startPos, endPos, currFrame, TRAVEL_TIME);
-		ship->setPositionX(pos);
-	} else if (currFrame <= TRAVEL_TIME + FADE_TIME) {
-		auto fadeColor = Tween::fade(static_cast<float>(currFrame - TRAVEL_TIME) / FADE_TIME);
-		btn->setColor(fadeColor);
-		waitText->setColor(fadeColor);
+	if (currFrame > POS_TIME) {
+		size_t cf = currFrame - POS_TIME;
+		if (cf <= TRAVEL_TIME) {
+			float pos = Tween::easeInOut(startPos, endPos, cf, TRAVEL_TIME);
+			ship->setPositionX(pos);
+		} else if (cf <= TRAVEL_TIME + FADE_TIME) {
+			auto fadeColor = Tween::fade(static_cast<float>(cf - TRAVEL_TIME) / FADE_TIME);
+			btn->setColor(fadeColor);
+			waitText->setColor(fadeColor);
+		}
+	} else if (currFrame > POS_TIME - FADE_TIME) {
+		ship->setColor(
+			Tween::fade(Tween::easeOut(0.f, 1.f, currFrame - POS_TIME + FADE_TIME, FADE_TIME)));
 	}
 
 	currFrame++;
