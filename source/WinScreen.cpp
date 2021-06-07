@@ -231,40 +231,6 @@ void WinScreen::dispose() {
 	removeAllChildren();
 }
 
-/**
- * Convert a level number to its angular position in radians
- *
- * @param lvl The level number
- *
- * @return The angle, in radians, that the level should be on the level map. Note that level 0 is at
- * angle 0, which is on the left side of the map, not the traditional right. Angle increases
- * clockwise from (-1, 0).
- */
-float levelToPos(uint8_t lvl) {
-	// NOLINTNEXTLINE clang and MSVC disagree for some reason
-	auto x = std::adjacent_find(LEVEL_ENTRY_POINTS.begin(), LEVEL_ENTRY_POINTS.end(),
-								[=](uint8_t a, uint8_t b) { return a <= lvl && b > lvl; });
-	if (x == LEVEL_ENTRY_POINTS.end()) {
-		// Past the end
-
-		// NOLINTNEXTLINE clang and MSVC disagree for some reason
-		auto endIt = LEVEL_ENTRY_POINTS.end();
-		uint8_t lastEntry = *(--endIt);
-		float t =
-			static_cast<float>(lvl - lastEntry) / static_cast<float>(MAX_NUM_LEVELS - lastEntry);
-		float slice = 1.f / (LEVEL_ENTRY_POINTS.size() - 1);
-		return (1.f + t * slice) * PI;
-	}
-
-	// Not past the end
-	uint8_t pos = static_cast<uint8_t>(x - LEVEL_ENTRY_POINTS.begin());
-	float base = static_cast<float>(pos) / (LEVEL_ENTRY_POINTS.size() - 1);
-	float slice = 1.f / (LEVEL_ENTRY_POINTS.size() - 1);
-	float sliceChunk =
-		static_cast<float>(lvl - *x) / static_cast<float>(LEVEL_ENTRY_POINTS.at(pos + 1) - *x);
-	return (base + slice * sliceChunk) * PI;
-}
-
 void WinScreen::activate(uint8_t completedLevel) {
 	if (_isVisible) {
 		return;
