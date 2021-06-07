@@ -206,15 +206,12 @@ std::pair<uint8_t, uint8_t> WinScreen::layoutLevelMarkers(uint8_t completedLevel
 	float spacing = WIDTH * WIDTH_SCALE / static_cast<float>(numLevels);
 	float left = (1 - WIDTH_SCALE) * WIDTH / 2;
 
-	CULog("Num levels computed is %d", numLevels);
 	for (size_t i = 0; i < levelMarkers.size(); i++) {
 		if (i < numLevels - 1) {
 			levelMarkers.at(i)->setPosition(left + static_cast<float>(i + 1) * spacing,
 											(WIDTH * HEIGHT_SCALE + _contentSize.height) / 2);
 			levelMarkers.at(i)->setVisible(true);
 			levelMarkers.at(i)->setColor(cugl::Color4::CLEAR);
-			CULog("Setting this one %d to be at (%f, %f)", i, levelMarkers.at(i)->getPositionX(),
-				  levelMarkers.at(i)->getPositionY());
 		} else {
 			levelMarkers.at(i)->setVisible(false);
 		}
@@ -270,7 +267,6 @@ bool WinScreen::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 
 	ship = cugl::PolygonNode::allocWithFile("textures/wl_screens/small_ship.png");
 	ship->setAnchor({1.f / 2, 1.f / 2});
-	CULog("Ship size %f", ship->getContentWidth());
 	circle = cugl::PathNode::allocWithEllipse( // Forcing a line break
 		{0, 0}, {CIRCLE_DIM, CIRCLE_DIM}, CIRCLE_STROKE, CIRCLE_SEG, cugl::PathJoint::ROUND);
 	ship->addChild(circle);
