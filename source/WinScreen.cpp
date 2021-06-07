@@ -298,6 +298,7 @@ void WinScreen::activate(uint8_t completedLevel) {
 			levelMarkers.at(i)->setPosition(left + static_cast<float>(i + 1) * spacing,
 											(WIDTH * HEIGHT_SCALE + _contentSize.height) / 2);
 			levelMarkers.at(i)->setVisible(true);
+			levelMarkers.at(i)->setColor(cugl::Color4::CLEAR);
 		} else {
 			levelMarkers.at(i)->setVisible(false);
 		}
@@ -308,6 +309,7 @@ void WinScreen::activate(uint8_t completedLevel) {
 	startPos = left + static_cast<float>(lvlOffset) * spacing;
 	endPos = left + static_cast<float>(lvlOffset + 1) * spacing;
 	ship->setPositionX(startPos);
+	ship->setColor(cugl::Color4::CLEAR);
 }
 
 bool WinScreen::tappedNext(const std::tuple<cugl::Vec2, cugl::Vec2>& tapData) const {
@@ -342,8 +344,12 @@ void WinScreen::update() {
 			waitText->setColor(fadeColor);
 		}
 	} else if (currFrame > POS_TIME - FADE_TIME) {
-		ship->setColor(
-			Tween::fade(Tween::easeOut(0.f, 1.f, currFrame - POS_TIME + FADE_TIME, FADE_TIME)));
+		auto fade =
+			Tween::fade(Tween::easeOut(0.f, 1.f, currFrame - POS_TIME + FADE_TIME, FADE_TIME));
+		ship->setColor(fade);
+		for (auto& m : levelMarkers) {
+			m->setColor(fade);
+		}
 	}
 
 	currFrame++;
