@@ -164,7 +164,7 @@ void GameMode::breachCollisions() {
 			donutModel->transitionFaceState(DonutModel::FaceState::Working);
 
 			// Clearing breach flag
-		} else if (diff > EPSILON_ANGLE && breach->isPlayerOn()) {
+		} else if (breach->isPlayerOn() && diff > EPSILON_ANGLE) {
 			breach->setIsPlayerOn(false);
 			if (playerID == breach->getPlayer()) {
 				soundEffects->endEvent(SoundEffectController::FIX, i);
