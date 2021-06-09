@@ -163,13 +163,7 @@ class BreachModel {
 	 *
 	 * @param value Amount to decrement health by.
 	 */
-	void decHealth(unsigned int value) {
-		if (value >= health) {
-			health = 0;
-		} else {
-			health -= value;
-		}
-	}
+	void decHealth(unsigned int value);
 
 	/**
 	 * Sets whether the player is currently on the breach.
