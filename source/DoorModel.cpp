@@ -37,6 +37,9 @@ void DoorModel::raiseDoor() {
 	if (height < MAX_HEIGHT) {
 		height += SPEED;
 	}
+	if (resolvedAndRaised()) {
+		reset();
+	}
 }
 
 bool DoorModel::halfOpen() const { return height >= HALF_OPEN; }

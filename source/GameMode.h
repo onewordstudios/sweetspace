@@ -58,6 +58,8 @@ class GameMode {
 	void updateTimer(float timestep);
 	/** Process and handle breach health drain */
 	void updateHealth();
+	/** Raise doors that are open */
+	void updateDoors();
 
 	/**
 	 * Handle changes in connection status.

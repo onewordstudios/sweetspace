@@ -290,20 +290,6 @@ void GLaDOS::placeButtons(float angle1, float angle2) {
  */
 void GLaDOS::update(float dt) { // NOLINT
 
-	// Remove doors that have been resolved and opened. Also raise doors that are resolved.
-	for (int i = 0; i < maxDoors; i++) {
-		std::shared_ptr<DoorModel> door = ship->getDoors().at(i);
-		if (door == nullptr) {
-			continue;
-		}
-		if (door->resolvedAndRaised()) {
-			door->reset();
-			doorFree.push(i);
-		} else if (door->resolved()) {
-			door->raiseDoor();
-		}
-	}
-
 	for (int i = 0; i < maxButtons; i++) {
 		auto& btn = ship->getButtons().at(i);
 		if (btn == nullptr) {
@@ -345,6 +331,17 @@ void GLaDOS::update(float dt) { // NOLINT
 
 		if (!breach->getIsActive()) {
 			breachFree.push(i);
+		}
+	}
+
+	std::queue<int>().swap(doorFree);
+	for (int i = 0; i < maxDoors; i++) {
+		std::shared_ptr<DoorModel> door = ship->getDoors().at(i);
+		if (door == nullptr) {
+			continue;
+		}
+		if (!door->getIsActive()) {
+			doorFree.push(i);
 		}
 	}
 

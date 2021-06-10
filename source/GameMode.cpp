@@ -386,6 +386,14 @@ void GameMode::updateHealth() {
 	}
 }
 
+void GameMode::updateDoors() {
+	for (const auto& door : ship->getDoors()) {
+		if (door->getIsActive() && door->resolved()) {
+			door->raiseDoor();
+		}
+	}
+}
+
 bool GameMode::lossCheck() {
 	if (ship->getHealth() >= 1) {
 		return false;
@@ -492,6 +500,7 @@ void GameMode::update(float timestep) {
 
 	breachCollisions();
 	doorCollisions();
+	updateDoors();
 	buttonCollisions();
 
 	updateHealth();
