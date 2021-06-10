@@ -290,20 +290,6 @@ void GLaDOS::placeButtons(float angle1, float angle2) {
  */
 void GLaDOS::update(float dt) { // NOLINT
 
-	for (int i = 0; i < maxButtons; i++) {
-		auto& btn = ship->getButtons().at(i);
-		if (btn == nullptr) {
-			continue;
-		}
-		if (btn->isResolved()) {
-			buttonFree.push(btn->getPairID());
-			buttonFree.push(i);
-
-			btn->getPair()->clear();
-			btn->clear();
-		}
-	}
-
 	// Check if this is the host for generating breaches and doors
 	if (mib.getPlayerID() != 0) {
 		return;
@@ -342,6 +328,17 @@ void GLaDOS::update(float dt) { // NOLINT
 		}
 		if (!door->getIsActive()) {
 			doorFree.push(i);
+		}
+	}
+
+	std::queue<int>().swap(buttonFree);
+	for (int i = 0; i < maxButtons; i++) {
+		auto& btn = ship->getButtons().at(i);
+		if (btn == nullptr) {
+			continue;
+		}
+		if (!btn->getIsActive()) {
+			buttonFree.push(i);
 		}
 	}
 

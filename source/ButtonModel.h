@@ -20,8 +20,6 @@ class ButtonModel {
 	uint8_t pairID;
 	/** Whether this button is jumped on */
 	bool jumped;
-	/** Whether this button is resolved */
-	bool resolved;
 	/** Whether this model is active */
 	bool isActive;
 
@@ -33,7 +31,7 @@ class ButtonModel {
 	 * Do not call this constructor using new. These models should exclusively be allocated into an
 	 * object pool by {@code ShipModel} and accessed from there.
 	 */
-	ButtonModel() : angle(-1), pairID(-1), jumped(false), resolved(false), isActive(false) {}
+	ButtonModel() : angle(-1), pairID(-1), jumped(false), isActive(false) {}
 
 	ButtonModel(const ButtonModel&) = delete;
 
@@ -70,11 +68,6 @@ class ButtonModel {
 	float getHeight() const { return height; }
 
 	/**
-	 * Returns whether this button is resolved.
-	 */
-	bool isResolved() const { return resolved; }
-
-	/**
 	 * Returns whether any players are jumping on this button.
 	 */
 	bool isJumpedOn() const { return jumped; }
@@ -106,14 +99,9 @@ class ButtonModel {
 	bool trigger();
 
 	/**
-	 * Resolve this button
-	 */
-	void resolve() { resolved = true; }
-
-	/**
 	 * Resets this button.
 	 */
-	void clear();
+	void reset();
 #pragma endregion
 };
 #endif /* BUTTON_MODEL_H */

@@ -161,11 +161,11 @@ bool ShipModel::flagButton(uint8_t id) { return buttons[id]->trigger(); }
 
 void ShipModel::resolveButton(uint8_t id) {
 	auto& btn = buttons.at(id);
-	if (btn == nullptr || !btn->getIsActive() || btn->isResolved()) {
+	if (btn == nullptr || !btn->getIsActive()) {
 		return;
 	}
-	btn->getPair()->resolve();
-	btn->resolve();
+	btn->getPair()->reset();
+	btn->reset();
 }
 
 /**
