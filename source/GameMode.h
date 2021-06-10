@@ -2,6 +2,7 @@
 #define GAME_MODE_H
 #include <cugl/cugl.h>
 
+#include <tl/optional.hpp>
 #include <vector>
 
 #include "GLaDOS.h"
@@ -25,7 +26,7 @@ class GameMode {
 	/** Controller for abstracting out sound effects */
 	std::shared_ptr<SoundEffectController> soundEffects;
 	/** Controller for GM */
-	GLaDOS gm;
+	tl::optional<GLaDOS> gm;
 	/** Networking controller*/
 	MagicInternetBox& net;
 

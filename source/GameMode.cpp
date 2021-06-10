@@ -47,6 +47,7 @@ constexpr float BREACH_HEALTH_PENALTY = 0.003f;
  */
 bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 	isBackToMainMenu = false;
+	gm.reset();
 
 	// Music Initialization
 	auto source = assets->get<Sound>("theme");
@@ -83,7 +84,6 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 
 		// Initialize dummy crap so we don't crash this frame
 		ship = ShipModel::alloc(0, 0, 0, 0, 0, 0);
-		gm.init(ship, 0);
 	} else if (!tutorial::IS_TUTORIAL_LEVEL(levelID)) {
 		const char* levelName = LEVEL_NAMES.at(levelID);
 
@@ -104,12 +104,21 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 			level->getInitHealth() * static_cast<float>(shipNumPlayers) / globals::MIN_PLAYERS,
 			maxButtons);
 		ship->initTimer(level->getTime());
-		gm.init(ship, level);
+		if (playerID == 0) {
+			gm.emplace();
+			gm->init(ship, level);
+		}
 	} else {
 		// Tutorial Mode. Allocate an empty ship and let the gm do the rest.
 		// Prepare for maximum hardcoding
 		ship = ShipModel::alloc(0, 0, 0, 0, 0, 0);
-		gm.init(ship, levelID);
+		gm.emplace();
+		gm->init(ship, levelID);
+
+		// Ugly hack for the fact that GLaDOS is responsible for tutorial initialization
+		if (playerID != 0) {
+			gm.reset();
+		}
 	}
 
 	donutModel = ship->getDonuts()[playerID];
@@ -125,7 +134,10 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
  * Disposes of all (non-static) resources allocated to this mode.
  */
 void GameMode::dispose() {
-	gm.dispose();
+	if (gm.has_value()) {
+		gm->dispose();
+		gm.reset();
+	}
 	sgRoot.dispose();
 	donutModel = nullptr;
 }
@@ -506,7 +518,9 @@ void GameMode::update(float timestep) {
 	updateHealth();
 	updateStabilizer();
 
-	gm.update(timestep);
+	if (gm.has_value()) {
+		gm->update(timestep);
+	}
 
 	sgRoot.update(timestep);
 }

@@ -290,8 +290,9 @@ void GLaDOS::placeButtons(float angle1, float angle2) {
  */
 void GLaDOS::update(float dt) { // NOLINT
 
-	// Check if this is the host for generating breaches and doors
+	// Check if this is the host
 	if (mib.getPlayerID() != 0) {
+		CULogError("WARNING: GLaDOS called from non-host");
 		return;
 	}
 
