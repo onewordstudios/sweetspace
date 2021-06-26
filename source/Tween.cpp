@@ -35,7 +35,8 @@ float Tween::easeInOut(float start, float end, size_t currFrame, size_t maxFrame
 }
 
 float Tween::loop(size_t currFrame, size_t maxFrame) {
-	return (1 - cosf(2 * static_cast<float>(M_PI) * currFrame / maxFrame)) / 2;
+	const float t = static_cast<float>(currFrame) / static_cast<float>(maxFrame);
+	return (1 - cosf(2 * static_cast<float>(M_PI) * t)) / 2;
 }
 
 cugl::Color4 Tween::fade(float a) {

@@ -43,6 +43,7 @@ import android.content.Context;
 import android.util.DisplayMetrics;
 import android.view.*;
 
+@SuppressWarnings( "deprecation" )
 public class DeviceOrientation {
     //private final int ORIENTATION_PORTRAIT = ExifInterface.ORIENTATION_ROTATE_90; // 6
     //private final int ORIENTATION_LANDSCAPE_REVERSE = ExifInterface.ORIENTATION_ROTATE_180; // 3

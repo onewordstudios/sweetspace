@@ -37,6 +37,7 @@
 #define __CU_MP3_DECODER_H__
 #include "CUAudioDecoder.h"
 #include <codecs/mpg/mpegsound.h>
+#include <memory>
 
 namespace cugl {
     namespace audio {

@@ -2,7 +2,8 @@ package org.libsdl.app;
 
 import android.content.Context;
 
-import java.lang.reflect.*;
+import java.lang.Class;
+import java.lang.reflect.Method;
 
 /**
     SDL library initialization
@@ -77,7 +78,7 @@ public class SDL {
             catch (final SecurityException se) {
                 throw se;
             }
-        }        
+        }
     }
 
     protected static Context mContext;

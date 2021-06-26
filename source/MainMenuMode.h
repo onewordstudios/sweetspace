@@ -38,7 +38,7 @@ class MainMenuMode : public cugl::Scene {
 	bool gameReady;
 
 	/** The room ID the client is currently entering */
-	std::vector<unsigned int> clientEnteredRoom;
+	std::vector<uint8_t> clientEnteredRoom;
 
 	/** Current room ID */
 	std::string roomID;

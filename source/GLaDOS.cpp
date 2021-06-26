@@ -106,7 +106,7 @@ bool GLaDOS::init(const std::shared_ptr<ShipModel>& ship, const int levelNum) {
 	int unop =
 		static_cast<int>(tutorial::SECTIONED.at(levelNum)) * static_cast<int>(mib.getNumPlayers());
 	sections = unop;
-	customEventCtr = tutorial::CUSTOM_EVENTS.at(levelNum);
+	customEventCtr = static_cast<int>(tutorial::CUSTOM_EVENTS.at(levelNum));
 	float size = static_cast<float>(tutorial::SIZE_PER.at(levelNum)) *
 				 static_cast<float>(mib.getNumPlayers());
 	ship->init(mib.getMaxNumPlayers(), maxEvents, maxDoors, mib.getPlayerID().value(), size,
@@ -193,7 +193,7 @@ void GLaDOS::placeObject(BuildingBlockModel::Object obj, float zeroAngle, vector
  * @param zeroAngle the angle corresponding to the relative angle zero
  * @param p the id to use for the player
  */
-void GLaDOS::placeObject(BuildingBlockModel::Object obj, float zeroAngle, int p) {
+void GLaDOS::placeObject(BuildingBlockModel::Object obj, float zeroAngle, int p) { // NOLINT
 	int i = 0;
 	float objAngle = static_cast<float>(obj.angle) + zeroAngle;
 	if (objAngle < 0) {
@@ -288,7 +288,7 @@ void GLaDOS::placeButtons(float angle1, float angle2) {
  *
  * This method is used to run the GM for generating and managing current ship events
  */
-void GLaDOS::update(float dt) {
+void GLaDOS::update(float dt) { // NOLINT
 	// Removing breaches that have 0 health left
 	for (int i = 0; i < maxEvents; i++) {
 		std::shared_ptr<BreachModel> breach = ship->getBreaches().at(i);

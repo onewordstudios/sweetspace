@@ -5,10 +5,10 @@ android {
     buildToolsVersion "29.0.2"
     defaultConfig {
         applicationId "fun.onewordstudios.sweetspace"
-        minSdkVersion 21
+        minSdkVersion 24
         targetSdkVersion 29
-        versionCode 60001
-        versionName '0.6.0'
+        versionCode 70001
+        versionName '0.7.0'
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {

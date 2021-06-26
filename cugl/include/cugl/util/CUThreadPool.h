@@ -41,6 +41,7 @@
 #include <queue>
 #include <vector>
 #include <thread>
+#include <functional>
 
 // std::thread is not safe on Android and Windows platforms
 #if defined (__WINDOWS__) || defined (__ANDROID__)
