@@ -242,6 +242,7 @@ void MainMenuMode::processUpdate() {
 		case MagicInternetBox::MatchmakingStatus::HostError:
 			break;
 		case MagicInternetBox::MatchmakingStatus::GameStart:
+			AdUtils::hideBanner();
 			gameReady = true;
 			return;
 		default:

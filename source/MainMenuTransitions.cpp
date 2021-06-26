@@ -5,6 +5,7 @@
 #include <memory>
 
 #include "MainMenuMode.h"
+#include "AdUtils.h"
 
 using namespace cugl;
 
@@ -140,6 +141,7 @@ void MainMenuMode::MainMenuTransitions::to(MatchState destination) {
 					parent->credits->setColor(Color4::WHITE);
 					parent->credits->setPositionY(0);
 					parent->creditsScrollFrame = 0;
+					AdUtils::hideBanner();
 
 					mainMenuOut();
 					animations.fadeOut("matchmaking_mainmenubg-glow", TRANSITION_DURATION);
@@ -190,6 +192,7 @@ void MainMenuMode::MainMenuTransitions::to(MatchState destination) {
 		case HostScreen: {
 			switch (destination) {
 				case HostLevelSelect:
+					AdUtils::hideBanner();
 					animations.animateY("matchmaking_host", Tween::TweenType::EaseIn, -screenHeight,
 										TRANSITION_DURATION);
 					animations.fadeOut("matchmaking_host", 1, TRANSITION_DURATION);
@@ -297,6 +300,7 @@ void MainMenuMode::MainMenuTransitions::to(MatchState destination) {
 
 			animations.fadeOut("matchmaking_credits", TRANSITION_DURATION);
 			mainMenuIn();
+			AdUtils::displayBanner();
 			break;
 		}
 		default:

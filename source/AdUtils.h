@@ -28,7 +28,8 @@ private:
 	static const int BANNER_WIDTH = 320;
 	static const int BANNER_HEIGHT = 50;
 	static firebase::admob::AdRequest request;
-
+	static firebase::admob::BannerView* bannerView;
+	static firebase::admob::InterstitialAd* interstitial_ad;
 
 public:
 
@@ -46,41 +47,61 @@ public:
 		const char* kAdMobAppID = "ca-app-pub-9909379902934039~2417251914";
 		// Initialize the AdMob library with your AdMob app ID.
 		firebase::admob::Initialize(*fbapp, kAdMobAppID);
+		bannerView = new firebase::admob::BannerView();
+		interstitial_ad = new firebase::admob::InterstitialAd();
 	};
 
 	/**
 	 * displays a banner ad
 	 */
 	static void displayBanner() {
-		firebase::admob::BannerView* bannerView = new firebase::admob::BannerView();
-		JNIEnv* env = (JNIEnv*)SDL_AndroidGetJNIEnv();
-		jobject activity = (jobject)SDL_AndroidGetActivity();
-		firebase::admob::AdSize ad_size;
-		ad_size.ad_size_type = firebase::admob::kAdSizeStandard;
-		ad_size.width = BANNER_WIDTH;
-		ad_size.height = BANNER_HEIGHT;
+		CULog("Show banner");
+		if(bannerView->InitializeLastResult().status() == firebase::kFutureStatusInvalid) {
+			JNIEnv* env = (JNIEnv*)SDL_AndroidGetJNIEnv();
+			jobject activity = (jobject)SDL_AndroidGetActivity();
+			firebase::admob::AdSize ad_size;
+			ad_size.ad_size_type = firebase::admob::kAdSizeStandard;
+			ad_size.width = BANNER_WIDTH;
+			ad_size.height = BANNER_HEIGHT;
 
-		request.gender = firebase::admob::kGenderUnknown;
+			request.gender = firebase::admob::kGenderUnknown;
 
-		firebase::Future<void> future = bannerView->Initialize(activity, kBannerAdUnit, ad_size);
-		future.OnCompletion(LoadBannerCallback, bannerView);
+			firebase::Future<void> future = bannerView->Initialize(activity, kBannerAdUnit, ad_size);
+			future.OnCompletion(LoadBannerCallback, bannerView);
+			env->DeleteLocalRef(activity);
+		} else {
+			firebase::Future<void> loadFuture = bannerView->LoadAd(request);
+			loadFuture.OnCompletion(ShowBannerCallback, bannerView);
+		}
 
-		env->DeleteLocalRef(activity);
+	};
+
+	/**
+	 * hides a banner ad
+	 */
+	static void hideBanner() {
+		CULog("Hide banner");
+		bannerView->Hide();
 	};
 
 	/**
 	 * Initializes firebase admob
 	 */
 	static void displayInterstitial() {
-		firebase::admob::InterstitialAd* interstitial_ad = new firebase::admob::InterstitialAd();
-		JNIEnv* env = (JNIEnv*)SDL_AndroidGetJNIEnv();
-		jobject activity = (jobject)SDL_AndroidGetActivity();
-		request.gender = firebase::admob::kGenderUnknown;
+		if(interstitial_ad->InitializeLastResult().status() == firebase::kFutureStatusInvalid) {
+			JNIEnv *env = (JNIEnv *) SDL_AndroidGetJNIEnv();
+			jobject activity = (jobject) SDL_AndroidGetActivity();
+			request.gender = firebase::admob::kGenderUnknown;
 
-		firebase::Future<void> future = interstitial_ad->Initialize(activity, kInterstitialAdUnit);
-		future.OnCompletion(LoadInterstitialCallback, interstitial_ad);
+			firebase::Future<void> future = interstitial_ad->Initialize(activity,
+																		kInterstitialAdUnit);
+			future.OnCompletion(LoadInterstitialCallback, interstitial_ad);
 
-		env->DeleteLocalRef(activity);
+			env->DeleteLocalRef(activity);
+		} else {
+			firebase::Future<void> loadFuture = interstitial_ad->LoadAd(request);
+			loadFuture.OnCompletion(ShowInterstitialCallback, interstitial_ad);
+		}
 	};
 
 	static void LoadInterstitialCallback(const firebase::Future<void>& future, void* user_data) {
@@ -107,6 +128,7 @@ public:
 		firebase::admob::BannerView *bannerView = static_cast<firebase::admob::BannerView*>(user_data);
 		if (future.error() == firebase::admob::kAdMobErrorNone) {
 			bannerView->Show();
+			bannerView->MoveTo(firebase::admob::BannerView::kPositionTop);
 		}
 	}
 };
