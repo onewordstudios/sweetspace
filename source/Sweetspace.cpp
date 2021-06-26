@@ -1,4 +1,5 @@
 ﻿#include "Sweetspace.h"
+#include "AdUtils.h"
 
 using namespace cugl;
 
@@ -20,6 +21,9 @@ constexpr unsigned int MODE_ENUM_STEP = 100;
 void Sweetspace::onStartup() {
 	assets = AssetManager::alloc();
 	batch = SpriteBatch::alloc();
+#if defined(__ANDROID__)
+	AdUtils::initialize();
+#endif // __ANDROID__
 
 	// Start up input controller
 	InputController::getInstance();

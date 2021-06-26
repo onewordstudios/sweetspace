@@ -1,4 +1,4 @@
-#include "MainMenuMode.h"
+﻿#include "MainMenuMode.h"
 
 #include <cugl/cugl.h>
 
@@ -11,6 +11,7 @@
 #include "MainMenuTransitions.h"
 #include "NeedleAnimator.h"
 #include "Tween.h"
+#include "AdUtils.h"
 
 using namespace cugl;
 
@@ -70,6 +71,7 @@ bool MainMenuMode::init(const std::shared_ptr<AssetManager>& assets, bool toCred
 	if (!Scene::init(dimen)) {
 		return false;
 	}
+	AdUtils::displayBanner();
 
 	// Acquire the scene built by the asset loader and resize it the scene
 	auto scene = assets->get<Node>("matchmaking");

@@ -696,6 +696,9 @@
     <ClInclude Include="..\..\source\libraries\SLikeNet\slikenet\VariableListDeltaTracker.h">
       <Filter>Header Files\Controllers\Networking\SLikeNet</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\source\AdUtils.h">
+      <Filter>Header Files\Helpers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\source\main.cpp">
