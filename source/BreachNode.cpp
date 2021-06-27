@@ -116,16 +116,14 @@ void BreachNode::postPosition() {
 		}
 	} else {
 		// Play idle animation
-		int magicNum =
-			(currentFrameIdle < NUM_IDLE_FRAMES * NUM_SKIP_FRAMES
-				 ? currentFrameIdle / NUM_SKIP_FRAMES
-				 : (NUM_IDLE_FRAMES * NUM_SKIP_FRAMES * 2 - currentFrameIdle) / NUM_SKIP_FRAMES);
-		shapeNode->setFrame(static_cast<int>(getFrameFromHealth(breachModel->getHealth())) +
-							magicNum);
+		unsigned int twiceStripLength = 2 * NUM_IDLE_FRAMES * NUM_SKIP_FRAMES;
+		unsigned int frameNum = (currentFrameIdle < NUM_IDLE_FRAMES * NUM_SKIP_FRAMES
+									 ? currentFrameIdle / NUM_SKIP_FRAMES
+									 : (twiceStripLength - currentFrameIdle) / NUM_SKIP_FRAMES);
+		unsigned int frameOffset = getFrameFromHealth(breachModel->getHealth());
+		shapeNode->setFrame(static_cast<int>(frameOffset + frameNum));
 		patternNode->setFrame(static_cast<int>(shapeNode->getFrame()));
-		currentFrameIdle = currentFrameIdle == NUM_IDLE_FRAMES * 2 * NUM_SKIP_FRAMES - 1
-							   ? 0
-							   : currentFrameIdle + 1;
+		currentFrameIdle = currentFrameIdle == twiceStripLength - 1 ? 0 : currentFrameIdle + 1;
 	}
 	prevHealth = breachModel->getHealth();
 	patternNode->setScale(

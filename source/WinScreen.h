@@ -14,23 +14,42 @@ class WinScreen : public cugl::Node {
 	/** Current frame of the animation */
 	size_t currFrame;
 
-	/** Starting angle on the circle (radians) */
-	float startPer;
-	/** Ending angle on the circle (radians) */
-	float endPer;
+	/** Starting position of the ship (x-coord) */
+	float startPos;
+	/** Ending position of the ship (x-coord) */
+	float endPos;
+	/** Whether to shift the whole thing over one afterwards */
+	bool mustShift;
+	/** Completed level */
+	uint8_t completedLevel;
 
 	/** Whether this player is the host */
 	bool isHost;
 
 	/** Scene graph node representing the current location of the ship */
+	std::shared_ptr<cugl::TexturedNode> ship;
+	/** Scene graph node representing the circle behind the ship*/
 	std::shared_ptr<cugl::PathNode> circle;
 	/** Scene graph node for the next level button */
 	std::shared_ptr<cugl::Button> btn;
 	/** Scene graph node for the waiting for host text */
 	std::shared_ptr<cugl::Node> waitText;
+	/** Star markers of each individual level */
+	std::vector<std::shared_ptr<cugl::TexturedNode>> levelMarkers;
+
+	/** Helper class managing the level checkpoint icons */
+	class IconManager;
+	/** Helper class managing the level checkpoint icons */
+	std::unique_ptr<IconManager> icons;
 
 	/** Button manager for the next level button */
 	ButtonManager btns;
+
+	/**
+	 * Layout and make invisible all level markers for a completed level.
+	 * Returns the number of levels and the left level.
+	 */
+	std::pair<uint8_t, uint8_t> layoutLevelMarkers(uint8_t completedLevel);
 
    public:
 	/**

@@ -36,6 +36,9 @@
 #ifndef __CU_QUATERNION_H__
 #define __CU_QUATERNION_H__
 
+#pragma warning( push )
+#pragma warning( disable : 4244 )
+
 #include <math.h>
 #include "CUVec3.h"
 #include "CUMathBase.h"
@@ -1347,4 +1350,6 @@ inline const Quaternion operator*(float s, const Quaternion& quat) {
 
 }
 
+
+#pragma warning( pop )
 #endif /* __CU_QUATERNION_H__ */

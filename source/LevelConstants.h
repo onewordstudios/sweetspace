@@ -30,7 +30,7 @@ constexpr auto PROBABILITY_FIELD = "probability";  // NOLINT
 constexpr uint8_t MAX_NUM_LEVELS = 16;
 
 /** Number of buttons in the level select */
-static constexpr unsigned int NUM_LEVEL_BTNS = 5;
+static constexpr size_t NUM_LEVEL_BTNS = 5;
 
 /** List of all level names, used as both keys and values NOLINTNEXTLINE */
 constexpr std::array<const char*, MAX_NUM_LEVELS> LEVEL_NAMES = // Forcing a line break

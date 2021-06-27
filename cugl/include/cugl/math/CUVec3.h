@@ -35,6 +35,9 @@
 #ifndef __CU_VEC3_H__
 #define __CU_VEC3_H__
 
+#pragma warning( push )
+#pragma warning( disable : 4244 )
+
 #include <math.h>
 #include <functional>
 #include <string>
@@ -1351,4 +1354,6 @@ inline const Vec3 operator*(float x, const Vec3& v) {
 typedef Vec3 Point3;
 
 }
+
+#pragma warning( pop )
 #endif /* __CU_VEC3_H__ */
