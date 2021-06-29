@@ -100,7 +100,7 @@ class DoorModel {
 	/**
 	 * Raises the door.
 	 */
-	void raiseDoor();
+	void update(float timestep);
 
 	/**
 	 * Returns whether this door can be passed under.

@@ -33,7 +33,14 @@ void DoorModel::removePlayer(uint8_t id) {
 	}
 }
 
-void DoorModel::raiseDoor() {
+void DoorModel::update(float timestep) { // NOLINT assuming 60fps
+	// Assuming 60fps is probably a bad idea down the line but for now is what all the other code
+	// does too
+
+	if (!getIsActive() || !resolved()) {
+		return;
+	}
+
 	if (height < MAX_HEIGHT) {
 		height += SPEED;
 	}

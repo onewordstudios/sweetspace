@@ -411,6 +411,11 @@ class ShipModel {
 		}
 	}
 
+	/**
+	 * Step all local models for this frame.
+	 */
+	void update(float timestep);
+
 #pragma mark -
 #pragma mark Helpers
 	float getAngleDifference(float angle1, float angle2) const {

@@ -1,5 +1,6 @@
 ﻿#include "ShipModel.h"
 
+#include "CollisionController.h"
 #include "ExternalDonutModel.h"
 #include "Globals.h"
 #include "MagicInternetBox.h"
@@ -166,6 +167,13 @@ void ShipModel::resolveButton(uint8_t id) {
 	}
 	btn->getPair()->reset();
 	btn->reset();
+}
+
+void ShipModel::update(float timestep) {
+	CollisionController::updateCollisions(*this, *MagicInternetBox::getInstance().getPlayerID());
+	for (const auto& door : doors) {
+		door->update(timestep);
+	}
 }
 
 /**

@@ -19,6 +19,9 @@ bool StabilizerModel::getIsActive() const {
 		case StabilizerState::Left:
 		case StabilizerState::Right:
 			return true;
+		default:
+			// Unreachable
+			throw std::exception();
 	}
 }
 

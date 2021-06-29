@@ -44,13 +44,6 @@ class GameMode {
 	bool isBackToMainMenu;
 
 #pragma region Update Helpers
-	/** Process and handle all collisions with breaches */
-	void breachCollisions();
-	/** Process and handle all collisions with doors */
-	void doorCollisions();
-	/** Process and handle all collisions with buttons */
-	void buttonCollisions();
-
 	/** Process and handle the stabilizer */
 	void updateStabilizer();
 	/** Process and handle all donut movements */
@@ -59,8 +52,6 @@ class GameMode {
 	void updateTimer(float timestep);
 	/** Process and handle breach health drain */
 	void updateHealth();
-	/** Raise doors that are open */
-	void updateDoors();
 
 	/**
 	 * Handle changes in connection status.
