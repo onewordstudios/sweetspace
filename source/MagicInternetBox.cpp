@@ -395,6 +395,11 @@ class MagicInternetBox::Mimpl {
 					if (playerID != 0) {
 						break;
 					}
+					if (status == Reconnecting) {
+						CULog("Received room ID while reconnecting; aborting");
+						status = ReconnectError;
+						return;
+					}
 					std::stringstream newRoomId;
 					for (size_t i = 0; i < globals::ROOM_LENGTH; i++) {
 						newRoomId << static_cast<char>(message[i + 1]);
