@@ -2,14 +2,14 @@
 #define AD_UTILS_H
 
 #include <cugl/cugl.h>
+#if defined(__ANDROID__)
 #include "firebase/admob.h"
+#include "firebase/admob/banner_view.h"
+#include "firebase/admob/interstitial_ad.h"
 #include "firebase/admob/types.h"
 #include "firebase/app.h"
 #include "firebase/future.h"
-#include "firebase/admob/banner_view.h"
-#include "firebase/admob/interstitial_ad.h"
 
-#if defined(__ANDROID__)
 // Android ad unit IDs
 extern const char* kBannerAdUnit;
 extern const char* kInterstitialAdUnit;
@@ -23,20 +23,21 @@ extern const char* kInterstitialAdUnit;
  * This is a helper class whose job it is to display ads
  */
 class AdUtils {
-
-private:
+   private:
 	static const int BANNER_WIDTH = 320;
 	static const int BANNER_HEIGHT = 50;
+#if defined(__ANDROID__) || defined(__IPHONEOS__)
 	static firebase::admob::AdRequest request;
 	static firebase::admob::BannerView* bannerView;
 	static firebase::admob::InterstitialAd* interstitial_ad;
+#endif
 
-public:
-
+   public:
 	/**
 	 * Initializes firebase admob
 	 */
 	static void initialize() {
+#if defined(__ANDROID__)
 		// Create the Firebase app.
 		JNIEnv* env = (JNIEnv*)SDL_AndroidGetJNIEnv();
 		jobject activity = (jobject)SDL_AndroidGetActivity();
@@ -49,14 +50,15 @@ public:
 		firebase::admob::Initialize(*fbapp, kAdMobAppID);
 		bannerView = new firebase::admob::BannerView();
 		interstitial_ad = new firebase::admob::InterstitialAd();
+#endif
 	};
 
 	/**
 	 * displays a banner ad
 	 */
 	static void displayBanner() {
-		CULog("Show banner");
-		if(bannerView->InitializeLastResult().status() == firebase::kFutureStatusInvalid) {
+#if defined(__ANDROID__)
+		if (bannerView->InitializeLastResult().status() == firebase::kFutureStatusInvalid) {
 			JNIEnv* env = (JNIEnv*)SDL_AndroidGetJNIEnv();
 			jobject activity = (jobject)SDL_AndroidGetActivity();
 			firebase::admob::AdSize ad_size;
@@ -66,35 +68,38 @@ public:
 
 			request.gender = firebase::admob::kGenderUnknown;
 
-			firebase::Future<void> future = bannerView->Initialize(activity, kBannerAdUnit, ad_size);
+			firebase::Future<void> future =
+				bannerView->Initialize(activity, kBannerAdUnit, ad_size);
 			future.OnCompletion(LoadBannerCallback, bannerView);
 			env->DeleteLocalRef(activity);
 		} else {
 			firebase::Future<void> loadFuture = bannerView->LoadAd(request);
 			loadFuture.OnCompletion(ShowBannerCallback, bannerView);
 		}
-
+#endif
 	};
 
 	/**
 	 * hides a banner ad
 	 */
 	static void hideBanner() {
-		CULog("Hide banner");
+#if defined(__ANDROID__)
 		bannerView->Hide();
+#endif
 	};
 
 	/**
 	 * Initializes firebase admob
 	 */
 	static void displayInterstitial() {
-		if(interstitial_ad->InitializeLastResult().status() == firebase::kFutureStatusInvalid) {
-			JNIEnv *env = (JNIEnv *) SDL_AndroidGetJNIEnv();
-			jobject activity = (jobject) SDL_AndroidGetActivity();
+#if defined(__ANDROID__)
+		if (interstitial_ad->InitializeLastResult().status() == firebase::kFutureStatusInvalid) {
+			JNIEnv* env = (JNIEnv*)SDL_AndroidGetJNIEnv();
+			jobject activity = (jobject)SDL_AndroidGetActivity();
 			request.gender = firebase::admob::kGenderUnknown;
 
-			firebase::Future<void> future = interstitial_ad->Initialize(activity,
-																		kInterstitialAdUnit);
+			firebase::Future<void> future =
+				interstitial_ad->Initialize(activity, kInterstitialAdUnit);
 			future.OnCompletion(LoadInterstitialCallback, interstitial_ad);
 
 			env->DeleteLocalRef(activity);
@@ -102,34 +107,41 @@ public:
 			firebase::Future<void> loadFuture = interstitial_ad->LoadAd(request);
 			loadFuture.OnCompletion(ShowInterstitialCallback, interstitial_ad);
 		}
+#endif
 	};
 
+#if defined(__ANDROID__) || defined(__IPHONEOS__)
 	static void LoadInterstitialCallback(const firebase::Future<void>& future, void* user_data) {
-		firebase::admob::InterstitialAd *interstitial_ad = static_cast<firebase::admob::InterstitialAd*>(user_data);
+		firebase::admob::InterstitialAd* interstitial_ad =
+			static_cast<firebase::admob::InterstitialAd*>(user_data);
 		if (future.error() == firebase::admob::kAdMobErrorNone) {
 			firebase::Future<void> loadFuture = interstitial_ad->LoadAd(request);
 			loadFuture.OnCompletion(ShowInterstitialCallback, interstitial_ad);
 		}
 	}
 	static void ShowInterstitialCallback(const firebase::Future<void>& future, void* user_data) {
-		firebase::admob::InterstitialAd *interstitial_ad = static_cast<firebase::admob::InterstitialAd*>(user_data);
+		firebase::admob::InterstitialAd* interstitial_ad =
+			static_cast<firebase::admob::InterstitialAd*>(user_data);
 		if (future.error() == firebase::admob::kAdMobErrorNone) {
 			interstitial_ad->Show();
 		}
 	}
 	static void LoadBannerCallback(const firebase::Future<void>& future, void* user_data) {
-		firebase::admob::BannerView *bannerView = static_cast<firebase::admob::BannerView*>(user_data);
+		firebase::admob::BannerView* bannerView =
+			static_cast<firebase::admob::BannerView*>(user_data);
 		if (future.error() == firebase::admob::kAdMobErrorNone) {
 			firebase::Future<void> loadFuture = bannerView->LoadAd(request);
 			loadFuture.OnCompletion(ShowBannerCallback, bannerView);
 		}
 	}
 	static void ShowBannerCallback(const firebase::Future<void>& future, void* user_data) {
-		firebase::admob::BannerView *bannerView = static_cast<firebase::admob::BannerView*>(user_data);
+		firebase::admob::BannerView* bannerView =
+			static_cast<firebase::admob::BannerView*>(user_data);
 		if (future.error() == firebase::admob::kAdMobErrorNone) {
 			bannerView->Show();
 			bannerView->MoveTo(firebase::admob::BannerView::kPositionTop);
 		}
 	}
+#endif
 };
 #endif /* AD_UTILS_H */
