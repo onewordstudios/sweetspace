@@ -45,9 +45,7 @@ class GameMode {
 
 #pragma region Update Helpers
 	/** Process inputs for the player donut */
-	void applyInputsToPlayerDonut(float timestep);
-	/** Process and handle the timer */
-	void updateTimer(float timestep);
+	void applyInputsToPlayerDonut();
 
 	/**
 	 * Handle changes in connection status.

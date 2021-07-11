@@ -125,7 +125,7 @@ void GameMode::dispose() {
 #pragma endregion
 #pragma region Update Helpers
 
-void GameMode::applyInputsToPlayerDonut(float timestep) {
+void GameMode::applyInputsToPlayerDonut() {
 	uint8_t playerID = net.getPlayerID().value();
 
 	// Jump logic check
@@ -144,23 +144,6 @@ void GameMode::applyInputsToPlayerDonut(float timestep) {
 	donutModel->applyForce(thrust);
 	// Attempt to recover to idle animation
 	donutModel->transitionFaceState(DonutModel::FaceState::Idle);
-}
-
-void GameMode::updateTimer(float timestep) {
-	if (ship->timerEnded()) {
-		return;
-	}
-
-	bool allButtonsInactive = true;
-	auto& buttons = ship->getButtons();
-
-	for (auto& button : buttons) {
-		if (button->getIsActive()) {
-			allButtonsInactive = false;
-			break;
-		}
-	}
-	ship->updateTimer(timestep, allButtonsInactive);
 }
 
 bool GameMode::lossCheck() {
@@ -250,6 +233,7 @@ void GameMode::update(float timestep) {
 		return;
 	}
 
+	// Grab inputs
 	input->update(timestep);
 
 	// Check for loss
@@ -264,15 +248,18 @@ void GameMode::update(float timestep) {
 		return;
 	}
 
-	updateTimer(timestep);
-	applyInputsToPlayerDonut(timestep);
+	// Process inputs
+	applyInputsToPlayerDonut();
 
+	// Step all models
 	ship->update(timestep);
 
+	// If host, spawn new challenges
 	if (gm.has_value()) {
 		gm->update(timestep);
 	}
 
+	// Process graphics before draw step
 	sgRoot.update(timestep);
 }
 #pragma endregion

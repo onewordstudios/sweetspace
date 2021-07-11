@@ -176,6 +176,19 @@ void ShipModel::resolveButton(uint8_t id) {
 }
 
 void ShipModel::update(float timestep) {
+	// Update timer
+	if (!timerEnded()) {
+		bool allButtonsInactive = true;
+
+		for (auto& button : buttons) {
+			if (button->getIsActive()) {
+				allButtonsInactive = false;
+				break;
+			}
+		}
+		updateTimer(timestep, allButtonsInactive);
+	}
+
 	// Update donut models
 	for (auto& donut : donuts) {
 		donut->update(timestep);
