@@ -44,8 +44,6 @@ class GameMode {
 	bool isBackToMainMenu;
 
 #pragma region Update Helpers
-	/** Process and handle the stabilizer */
-	void updateStabilizer();
 	/** Process and handle all donut movements */
 	void updateDonuts(float timestep);
 	/** Process and handle the timer */

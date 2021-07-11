@@ -174,6 +174,17 @@ void ShipModel::update(float timestep) {
 	for (const auto& door : doors) {
 		door->update(timestep);
 	}
+
+	if (stabilizer.update(getTimeless() ? -1 : timeLeftInTimer, donuts)) {
+		if (stabilizer.getIsWin()) {
+			MagicInternetBox::getInstance().succeedAllTask();
+			stabilizerTutorial = true;
+			stabilizer.finish();
+		} else if (trunc(canonicalTimeElapsed) == trunc(stabilizer.getEndTime())) {
+			MagicInternetBox::getInstance().failAllTask();
+			failAllTask();
+		}
+	}
 }
 
 /**

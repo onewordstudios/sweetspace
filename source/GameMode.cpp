@@ -134,54 +134,6 @@ void GameMode::dispose() {
 #pragma endregion
 #pragma region Update Helpers
 
-void GameMode::updateStabilizer() {
-	auto& stabilizer = ship->getStabilizer();
-
-	if (!stabilizer.getIsActive()) {
-		return;
-	}
-
-	// If there's not enough time left in the level for the challenge, bail
-	if (stabilizer.getIsActive() && !ship->getTimeless() &&
-		trunc(ship->timeLeftInTimer) <= globals::ROLL_CHALLENGE_LENGTH) {
-		stabilizer.reset();
-		return;
-	}
-
-	bool allRoll = true;
-	const auto& allDonuts = ship->getDonuts();
-
-	for (const auto& allDonut : allDonuts) {
-		if (!allDonut->getIsActive()) {
-			continue;
-		}
-		if (stabilizer.isLeft()) {
-			if (allDonut->getVelocity() >= 0) {
-				allRoll = false;
-				break;
-			}
-		} else {
-			if (allDonut->getVelocity() <= 0) {
-				allRoll = false;
-				break;
-			}
-		}
-	}
-
-	if (allRoll) {
-		stabilizer.incrementProgress();
-	}
-
-	if (stabilizer.getIsWin()) {
-		net.succeedAllTask();
-		ship->stabilizerTutorial = true;
-		stabilizer.finish();
-	} else if (trunc(ship->canonicalTimeElapsed) == trunc(stabilizer.getEndTime())) {
-		net.failAllTask();
-		ship->failAllTask();
-	}
-}
-
 void GameMode::updateDonuts(float timestep) {
 	uint8_t playerID = net.getPlayerID().value();
 
@@ -344,7 +296,6 @@ void GameMode::update(float timestep) {
 	ship->update(timestep);
 
 	updateHealth();
-	updateStabilizer();
 
 	if (gm.has_value()) {
 		gm->update(timestep);
