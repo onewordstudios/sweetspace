@@ -203,7 +203,7 @@ bool GameMode::connectionUpdate(float timestep) {
 			sgRoot.setStatus(GameGraphRoot::Normal);
 			break;
 		default:
-			CULog("ERROR: Uncaught MatchmakingStatus Value Occurred");
+			CULog("ERROR: Uncaught MatchmakingStatus Value Occurred %d", net.matchStatus());
 			break;
 	}
 	return true;
