@@ -10,6 +10,12 @@
 /** Max number of attempts of generating a new teleportation angle */
 constexpr int MAX_NEW_ANGLE_ATTEMPTS = 1000;
 
+// Health
+/** Grace period for a breach before it starts deducting health */
+constexpr float BREACH_HEALTH_GRACE_PERIOD = 5.0f;
+/** Amount of health to decrement each frame per breach */
+constexpr float BREACH_HEALTH_PENALTY = 0.003f;
+
 ShipModel::ShipModel()
 	: rand(static_cast<unsigned int>(
 		  std::chrono::high_resolution_clock::now().time_since_epoch().count())),
@@ -170,11 +176,20 @@ void ShipModel::resolveButton(uint8_t id) {
 }
 
 void ShipModel::update(float timestep) {
+	// Update donut models
+	for (auto& donut : donuts) {
+		donut->update(timestep);
+	}
+
+	// Collision Detection
 	CollisionController::updateCollisions(*this, *MagicInternetBox::getInstance().getPlayerID());
+
+	// Update door models
 	for (const auto& door : doors) {
 		door->update(timestep);
 	}
 
+	// Update stabilizer model
 	if (stabilizer.update(getTimeless() ? -1 : timeLeftInTimer, donuts)) {
 		if (stabilizer.getIsWin()) {
 			MagicInternetBox::getInstance().succeedAllTask();
@@ -183,6 +198,15 @@ void ShipModel::update(float timestep) {
 		} else if (trunc(canonicalTimeElapsed) == trunc(stabilizer.getEndTime())) {
 			MagicInternetBox::getInstance().failAllTask();
 			failAllTask();
+		}
+	}
+
+	// Health drain
+	for (const auto& breach : breaches) {
+		// this should be adjusted based on the level and number of players
+		if (breach->getIsActive() && trunc(canonicalTimeElapsed) - trunc(breach->getTimeCreated()) >
+										 BREACH_HEALTH_GRACE_PERIOD) {
+			decHealth(BREACH_HEALTH_PENALTY);
 		}
 	}
 }

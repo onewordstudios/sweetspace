@@ -12,15 +12,6 @@
 using namespace cugl;
 using namespace std;
 
-#pragma region Constants
-
-// Health
-/** Grace period for a breach before it starts deducting health */
-constexpr float BREACH_HEALTH_GRACE_PERIOD = 5.0f;
-/** Amount of health to decrement each frame per breach */
-constexpr float BREACH_HEALTH_PENALTY = 0.003f;
-
-#pragma endregion
 #pragma region Constructors
 
 /**
@@ -134,7 +125,7 @@ void GameMode::dispose() {
 #pragma endregion
 #pragma region Update Helpers
 
-void GameMode::updateDonuts(float timestep) {
+void GameMode::applyInputsToPlayerDonut(float timestep) {
 	uint8_t playerID = net.getPlayerID().value();
 
 	// Jump logic check
@@ -153,10 +144,6 @@ void GameMode::updateDonuts(float timestep) {
 	donutModel->applyForce(thrust);
 	// Attempt to recover to idle animation
 	donutModel->transitionFaceState(DonutModel::FaceState::Idle);
-
-	for (auto& donut : ship->getDonuts()) {
-		donut->update(timestep);
-	}
 }
 
 void GameMode::updateTimer(float timestep) {
@@ -174,19 +161,6 @@ void GameMode::updateTimer(float timestep) {
 		}
 	}
 	ship->updateTimer(timestep, allButtonsInactive);
-}
-
-void GameMode::updateHealth() {
-	auto& breaches = ship->getBreaches();
-
-	// Breach health drain
-	for (const auto& breach : breaches) {
-		// this should be adjusted based on the level and number of players
-		if (breach->getIsActive() && trunc(ship->timePassed()) - trunc(breach->getTimeCreated()) >
-										 BREACH_HEALTH_GRACE_PERIOD) {
-			ship->decHealth(BREACH_HEALTH_PENALTY);
-		}
-	}
 }
 
 bool GameMode::lossCheck() {
@@ -291,11 +265,9 @@ void GameMode::update(float timestep) {
 	}
 
 	updateTimer(timestep);
-	updateDonuts(timestep);
+	applyInputsToPlayerDonut(timestep);
 
 	ship->update(timestep);
-
-	updateHealth();
 
 	if (gm.has_value()) {
 		gm->update(timestep);
