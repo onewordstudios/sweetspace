@@ -19,6 +19,9 @@ bool StabilizerModel::getIsActive() const {
 		case StabilizerState::Left:
 		case StabilizerState::Right:
 			return true;
+		default:
+			// Unreachable
+			throw std::exception();
 	}
 }
 
@@ -33,6 +36,44 @@ void StabilizerModel::startChallenge(float currTime) {
 	endTime = currTime + globals::ROLL_CHALLENGE_LENGTH;
 	progress = 0;
 	currState = (rand() % 2) != 0 ? StabilizerState::Left : StabilizerState::Right;
+}
+
+bool StabilizerModel::update(float timeRemaining,
+							 const std::vector<std::shared_ptr<DonutModel>>& donuts) {
+	if (!getIsActive()) {
+		return false;
+	}
+
+	// If there's not enough time left in the level for the challenge, bail
+	if (timeRemaining >= 0 && trunc(timeRemaining) <= globals::ROLL_CHALLENGE_LENGTH) {
+		reset();
+		return false;
+	}
+
+	bool allRoll = true;
+
+	for (const auto& allDonut : donuts) {
+		if (!allDonut->getIsActive()) {
+			continue;
+		}
+		if (isLeft()) {
+			if (allDonut->getVelocity() >= 0) {
+				allRoll = false;
+				break;
+			}
+		} else {
+			if (allDonut->getVelocity() <= 0) {
+				allRoll = false;
+				break;
+			}
+		}
+	}
+
+	if (allRoll) {
+		progress++;
+	}
+
+	return true;
 }
 
 void StabilizerModel::fail() { currState = StabilizerState::Fail; }

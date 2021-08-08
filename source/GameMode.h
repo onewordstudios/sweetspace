@@ -2,6 +2,7 @@
 #define GAME_MODE_H
 #include <cugl/cugl.h>
 
+#include <tl/optional.hpp>
 #include <vector>
 
 #include "GLaDOS.h"
@@ -25,7 +26,7 @@ class GameMode {
 	/** Controller for abstracting out sound effects */
 	std::shared_ptr<SoundEffectController> soundEffects;
 	/** Controller for GM */
-	GLaDOS gm;
+	tl::optional<GLaDOS> gm;
 	/** Networking controller*/
 	MagicInternetBox& net;
 
@@ -43,21 +44,8 @@ class GameMode {
 	bool isBackToMainMenu;
 
 #pragma region Update Helpers
-	/** Process and handle all collisions with breaches */
-	void breachCollisions();
-	/** Process and handle all collisions with doors */
-	void doorCollisions();
-	/** Process and handle all collisions with buttons */
-	void buttonCollisions();
-
-	/** Process and handle the stabilizer */
-	void updateStabilizer();
-	/** Process and handle all donut movements */
-	void updateDonuts(float timestep);
-	/** Process and handle the timer */
-	void updateTimer(float timestep);
-	/** Process and handle breach health drain */
-	void updateHealth();
+	/** Process inputs for the player donut */
+	void applyInputsToPlayerDonut();
 
 	/**
 	 * Handle changes in connection status.

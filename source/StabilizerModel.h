@@ -1,6 +1,10 @@
 #ifndef STABILIZER_MODEL_H
 #define STABILIZER_MODEL_H
+
 #include <cugl/cugl.h>
+
+#include "DonutModel.h"
+
 class StabilizerModel {
    public:
 	/** Current state of the stabilizer */
@@ -51,8 +55,22 @@ class StabilizerModel {
 	 */
 	void startChallenge(float currTime);
 
-	/** Mark a single frame with everyone rolling together */
-	void incrementProgress() { progress++; }
+	/**
+	 * Step the local state of the challenge.
+	 *
+	 * Is safe to call when inactive; simply no-ops if that's the case.
+	 *
+	 * Will automatically check for donuts rolling in correct direction and	update progress.
+	 * Will NOT fail or finish the challenge after completion (though will cancel if time remaining
+	 * is too low).
+	 *
+	 * @param timeRemaining Amount of time left as displayed on the ship's timer, or -1 for
+	 * timeless levels
+	 * @param donuts All donut models in ship
+	 * @returns True if the model performed computations this frame. If this returns true, the ship
+	 * should check to see if pass or fail happened this frame, and if so process accordingly.
+	 */
+	bool update(float timeRemaining, const std::vector<std::shared_ptr<DonutModel>>& donuts);
 
 	/** Immediately fail this challenge (usually b/c we received the command over networking) */
 	void fail();

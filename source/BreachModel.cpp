@@ -20,4 +20,13 @@ bool BreachModel::init(float a, uint8_t health, uint8_t p, float time) {
 	return true;
 }
 
+void BreachModel::decHealth(unsigned int value) {
+	if (value >= health) {
+		health = 0;
+		isActive = false;
+	} else {
+		health -= value;
+	}
+}
+
 void BreachModel::dispose() {}
