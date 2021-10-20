@@ -113,7 +113,7 @@ void AudioSynchronizer::dispose() {
 bool AudioSynchronizer::attach(const std::shared_ptr<AudioNode>& node, double bpm) {
     if (!_booted) {
         CUAssertLog(_booted, "Cannot attach to an uninitialized audio node");
-        return nullptr;
+        return false;
     } else if (node == nullptr) {
         detach();
         return true;
