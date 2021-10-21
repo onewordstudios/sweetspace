@@ -100,7 +100,7 @@ class ShipModel {
 
 	/**
 	 * Initializes ship model.
-	 *
+	 * 
 	 * @param numPlayers  The number of players in this ship
 	 * @param numBreaches The number of breaches in this ship
 	 * @param numDoors    The number of doors in this ship
