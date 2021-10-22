@@ -66,7 +66,7 @@ class NetworkConnection {
 		std::unique_ptr<SLNet::SystemAddress> addr;
 		std::string room;
 
-		explicit ClientPeer(std::string roomID) { room = std::move(roomID); }
+		explicit ClientPeer(std::string roomID) : room(roomID) {}
 	};
 
 	/**

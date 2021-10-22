@@ -26,7 +26,7 @@ class ButtonManager {
 	bool wasDown;
 
    public:
-	ButtonManager() { wasDown = false; }
+	ButtonManager() : wasDown(false) {}
 
 	/**
 	 * Register a button to be managed.

@@ -206,15 +206,14 @@ class LevelModel : public cugl::Asset {
 	/**
 	 * Creates a new, empty level.
 	 */
-	LevelModel() {
-		maxButtons = DEFAULT_MAX_BUTTONS;
-		maxBreaches = DEFAULT_MAX_BREACHES;
-		maxDoors = DEFAULT_MAX_DOORS;
-		baseShipSize = DEFAULT_BASE_SIZE;
-		perPlayer = DEFAULT_PER_PLAYER;
-		time = DEFAULT_TIME;
-		initHealth = DEFAULT_INIT_HEALTH;
-	};
+	LevelModel()
+		: maxBreaches(DEFAULT_MAX_BREACHES),
+		  maxDoors(DEFAULT_MAX_DOORS),
+		  maxButtons(DEFAULT_MAX_BUTTONS),
+		  baseShipSize(DEFAULT_BASE_SIZE),
+		  perPlayer(DEFAULT_PER_PLAYER),
+		  time(DEFAULT_TIME),
+		  initHealth(DEFAULT_INIT_HEALTH){};
 
 	LevelModel(const LevelModel&) = delete;
 
