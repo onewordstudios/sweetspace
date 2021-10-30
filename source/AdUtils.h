@@ -137,6 +137,18 @@ class AdUtils {
 			loadFuture.OnCompletion(ShowInterstitialCallback, interstitial_ad);
 		}
 #endif
+#if defined(__IPHONEOS__)
+		if (interstitial_ad->InitializeLastResult().status() == firebase::kFutureStatusInvalid) {
+			request.gender = firebase::admob::kGenderUnknown;
+
+			firebase::Future<void> future =
+				interstitial_ad->Initialize(getWindow(), kInterstitialAdUnit);
+			future.OnCompletion(LoadInterstitialCallback, interstitial_ad);
+		} else {
+			firebase::Future<void> loadFuture = interstitial_ad->LoadAd(request);
+			loadFuture.OnCompletion(ShowInterstitialCallback, interstitial_ad);
+		}
+#endif
 	};
 
 #if defined(__ANDROID__) || defined(__IPHONEOS__)
