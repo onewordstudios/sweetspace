@@ -23,8 +23,7 @@ constexpr unsigned int LISTENER_KEY = 1;
  * object. This makes it safe to use this class without a pointer.
  */
 InputController::InputController()
-	: active(false), rollAmount(0.0f), jumped(false), backPressed(false) {
-	touchID = -1;
+	: active(false), touchID(-1), rollAmount(0.0f), jumped(false), backPressed(false) {
 	bool success = Input::activate<Keyboard>();
 
 #ifndef CU_TOUCH_SCREEN
@@ -54,7 +53,6 @@ InputController::InputController()
 		this->touchEndedCB(event, focus);
 	});
 #endif
-	jumped = false;
 	active = success;
 }
 
