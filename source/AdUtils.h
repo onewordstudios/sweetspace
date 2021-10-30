@@ -1,8 +1,8 @@
-﻿#ifndef AD_UTILS_H
+#ifndef AD_UTILS_H
 #define AD_UTILS_H
 
 #include <cugl/cugl.h>
-#if defined(__ANDROID__)
+#if defined(__ANDROID__) || defined(__IPHONEOS__)
 #include "firebase/admob.h"
 #include "firebase/admob/banner_view.h"
 #include "firebase/admob/interstitial_ad.h"
@@ -10,11 +10,6 @@
 #include "firebase/app.h"
 #include "firebase/future.h"
 
-// Android ad unit IDs
-extern const char* kBannerAdUnit;
-extern const char* kInterstitialAdUnit;
-#else
-// iOS ad unit IDs
 extern const char* kBannerAdUnit;
 extern const char* kInterstitialAdUnit;
 #endif
