@@ -1,14 +1,7 @@
 #ifndef AD_UTILS_H
 #define AD_UTILS_H
 
-//#if defined(__IPHONEOS__)
-//extern "C" {
-//#include <objc/objc.h>
-//}  // extern "C"
-//#endif
 #include <cugl/cugl.h>
-//#include <UIKit/UIKit.h>
-//#include <SDL/SDL_syswm.h>
 #if defined(__ANDROID__) || defined(__IPHONEOS__)
 #include "firebase/admob.h"
 #include "firebase/admob/banner_view.h"
@@ -22,6 +15,10 @@ extern const char* kBannerAdUnit;
 extern const char* kInterstitialAdUnit;
 #endif
 
+
+#if defined(__IPHONEOS__)
+firebase::admob::AdParent getWindow();
+#endif
 
 /**
  * This is a helper class whose job it is to display ads
@@ -67,7 +64,6 @@ class AdUtils {
 		interstitial_ad = new firebase::admob::InterstitialAd();
 #endif
 	};
-
 	/**
 	 * displays a banner ad
 	 */
@@ -92,32 +88,25 @@ class AdUtils {
 			loadFuture.OnCompletion(ShowBannerCallback, bannerView);
 		}
 #endif
-//#if defined(__IPHONEOS__)
-//		SDL_SysWMinfo wmInfo;
-//		SDL_VERSION(&wmInfo.version);
-//		cugl::Display* display = cugl::Display::get();
-//		SDL_GetWindowWMInfo(display->_window,&wmInfo);
-//
-//		UIWindow* uiWindow = wmInfo.info.uikit.window;
-//		UIViewController* rootViewController = uiWindow->rootViewController;
-//		firebase::admob::AdParent uiView = rootViewController->view;
-//		if (bannerView->InitializeLastResult().status() == firebase::kFutureStatusInvalid) {
-//			firebase::admob::AdSize ad_size;
-//			ad_size.ad_size_type = firebase::admob::kAdSizeStandard;
-//			ad_size.width = BANNER_WIDTH;
-//			ad_size.height = BANNER_HEIGHT;
-//
-//			request.gender = firebase::admob::kGenderUnknown;
-//
-//			firebase::Future<void> future =
-//				bannerView->Initialize(uiView, kBannerAdUnit, ad_size);
-//			future.OnCompletion(LoadBannerCallback, bannerView);
-//		} else {
-//			firebase::Future<void> loadFuture = bannerView->LoadAd(request);
-//			loadFuture.OnCompletion(ShowBannerCallback, bannerView);
-//		}
-//#endif
+#if defined(__IPHONEOS__)
+		if (bannerView->InitializeLastResult().status() == firebase::kFutureStatusInvalid) {
+			firebase::admob::AdSize ad_size;
+			ad_size.ad_size_type = firebase::admob::kAdSizeStandard;
+			ad_size.width = BANNER_WIDTH;
+			ad_size.height = BANNER_HEIGHT;
+
+			request.gender = firebase::admob::kGenderUnknown;
+
+			firebase::Future<void> future =
+				bannerView->Initialize(getWindow(), kBannerAdUnit, ad_size);
+			future.OnCompletion(LoadBannerCallback, bannerView);
+		} else {
+			firebase::Future<void> loadFuture = bannerView->LoadAd(request);
+			loadFuture.OnCompletion(ShowBannerCallback, bannerView);
+		}
+#endif
 	};
+	
 
 	/**
 	 * hides a banner ad

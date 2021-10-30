@@ -18,6 +18,8 @@
 		437FBE1F272DD92200073161 /* firebase_admob.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 437FBE1D272DD92200073161 /* firebase_admob.framework */; };
 		437FBE6F272DDE4F00073161 /* AdUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 437FBE6E272DDE4F00073161 /* AdUtils.cpp */; };
 		437FBE70272DDE4F00073161 /* AdUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 437FBE6E272DDE4F00073161 /* AdUtils.cpp */; };
+		437FBE81272DF10E00073161 /* iOSHelperThatIHate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 437FBE80272DF10E00073161 /* iOSHelperThatIHate.mm */; };
+		437FBE82272DF10E00073161 /* iOSHelperThatIHate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 437FBE80272DF10E00073161 /* iOSHelperThatIHate.mm */; };
 		6776B245246ED10A76924779 /* Pods_Sweetspace_Sim_.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EFA39776ECB9D0ACD61FF814 /* Pods_Sweetspace_Sim_.framework */; };
 		738C4CC4164C0C3EB38F305A /* Pods_Sweetspace__Mac_.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9AC4B1878D54F5F92C083C81 /* Pods_Sweetspace__Mac_.framework */; };
 		7B02739F2494545C00ED02B5 /* StabilizerModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7B02739E2494545C00ED02B5 /* StabilizerModel.cpp */; };
@@ -590,6 +592,7 @@
 		437FBE1D272DD92200073161 /* firebase_admob.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = firebase_admob.framework; sourceTree = "<group>"; };
 		437FBE6D272DDE4F00073161 /* AdUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AdUtils.h; sourceTree = "<group>"; };
 		437FBE6E272DDE4F00073161 /* AdUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AdUtils.cpp; sourceTree = "<group>"; };
+		437FBE80272DF10E00073161 /* iOSHelperThatIHate.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = iOSHelperThatIHate.mm; sourceTree = "<group>"; };
 		499AD147A238F65231335995 /* Pods-Sweetspace(Sim).debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Sweetspace(Sim).debug.xcconfig"; path = "Target Support Files/Pods-Sweetspace(Sim)/Pods-Sweetspace(Sim).debug.xcconfig"; sourceTree = "<group>"; };
 		5AE40FDB442D9FFC8D4A017D /* Pods-Sweetspace (iOS).release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Sweetspace (iOS).release.xcconfig"; path = "Target Support Files/Pods-Sweetspace (iOS)/Pods-Sweetspace (iOS).release.xcconfig"; sourceTree = "<group>"; };
 		7B02739A2494545B00ED02B5 /* StabilizerModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StabilizerModel.h; sourceTree = "<group>"; };
@@ -1132,6 +1135,7 @@
 				DF621BDB24677E3C0059D55B /* TutorialConstants.h */,
 				7B209DFA24395A8F00B657D2 /* Tween.h */,
 				C1222CCE44B8D9EECD741BF0 /* Tween.cpp */,
+				437FBE80272DF10E00073161 /* iOSHelperThatIHate.mm */,
 			);
 			name = Helpers;
 			sourceTree = "<group>";
@@ -2072,6 +2076,7 @@
 				821F6F6125E748DC00455E92 /* CloudCommon.cpp in Sources */,
 				821F6F7F25E748DC00455E92 /* VitaIncludes.cpp in Sources */,
 				821F6F4C25E748DC00455E92 /* ReliabilityLayer.cpp in Sources */,
+				437FBE82272DF10E00073161 /* iOSHelperThatIHate.mm in Sources */,
 				7B106F9E24DA5167008EFDED /* MainMenuTransitions.cpp in Sources */,
 				D15225B5047A9F0742257B0F /* ExternalDonutNode.cpp in Sources */,
 				821F6EC525E748DB00455E92 /* UDPProxyClient.cpp in Sources */,
@@ -2234,6 +2239,7 @@
 				821F6F6025E748DC00455E92 /* CloudCommon.cpp in Sources */,
 				821F6F7E25E748DC00455E92 /* VitaIncludes.cpp in Sources */,
 				821F6F4B25E748DC00455E92 /* ReliabilityLayer.cpp in Sources */,
+				437FBE81272DF10E00073161 /* iOSHelperThatIHate.mm in Sources */,
 				7B106F9D24DA5167008EFDED /* MainMenuTransitions.cpp in Sources */,
 				C58C5561B66760E8D1E3FC80 /* ShipModel.cpp in Sources */,
 				821F6EC425E748DB00455E92 /* UDPProxyClient.cpp in Sources */,
@@ -2714,6 +2720,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 			};
@@ -2770,6 +2777,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				MTL_ENABLE_DEBUG_INFO = NO;
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 			};
