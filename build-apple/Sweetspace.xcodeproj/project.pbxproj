@@ -10,6 +10,18 @@
 		3CDD11B1242D1DDF00FD21F8 /* HealthNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3CDD11AC242D1DDF00FD21F8 /* HealthNode.cpp */; };
 		3CDD11B2242D1DDF00FD21F8 /* HealthNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3CDD11AC242D1DDF00FD21F8 /* HealthNode.cpp */; };
 		3CDD11B3242D1DDF00FD21F8 /* HealthNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3CDD11AC242D1DDF00FD21F8 /* HealthNode.cpp */; };
+		437FBE15272DD7AA00073161 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 437FBE14272DD7A900073161 /* GoogleService-Info.plist */; };
+		437FBE16272DD7AA00073161 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 437FBE14272DD7A900073161 /* GoogleService-Info.plist */; };
+		437FBE1B272DD84300073161 /* firebase.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 437FBE1A272DD84300073161 /* firebase.framework */; };
+		437FBE1C272DD84300073161 /* firebase.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 437FBE1A272DD84300073161 /* firebase.framework */; };
+		437FBE1E272DD92200073161 /* firebase_admob.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 437FBE1D272DD92200073161 /* firebase_admob.framework */; };
+		437FBE1F272DD92200073161 /* firebase_admob.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 437FBE1D272DD92200073161 /* firebase_admob.framework */; };
+		437FBE6F272DDE4F00073161 /* AdUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 437FBE6E272DDE4F00073161 /* AdUtils.cpp */; };
+		437FBE70272DDE4F00073161 /* AdUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 437FBE6E272DDE4F00073161 /* AdUtils.cpp */; };
+		437FBE75272DED8C00073161 /* StupidIOSWindowBS.mm in Sources */ = {isa = PBXBuildFile; fileRef = 437FBE74272DED8C00073161 /* StupidIOSWindowBS.mm */; };
+		437FBE76272DED8C00073161 /* StupidIOSWindowBS.mm in Sources */ = {isa = PBXBuildFile; fileRef = 437FBE74272DED8C00073161 /* StupidIOSWindowBS.mm */; };
+		6776B245246ED10A76924779 /* Pods_Sweetspace_Sim_.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EFA39776ECB9D0ACD61FF814 /* Pods_Sweetspace_Sim_.framework */; };
+		738C4CC4164C0C3EB38F305A /* Pods_Sweetspace__Mac_.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9AC4B1878D54F5F92C083C81 /* Pods_Sweetspace__Mac_.framework */; };
 		7B02739F2494545C00ED02B5 /* StabilizerModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7B02739E2494545C00ED02B5 /* StabilizerModel.cpp */; };
 		7B0273A02494545C00ED02B5 /* StabilizerModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7B02739E2494545C00ED02B5 /* StabilizerModel.cpp */; };
 		7B0273A12494545C00ED02B5 /* StabilizerModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7B02739E2494545C00ED02B5 /* StabilizerModel.cpp */; };
@@ -44,6 +56,7 @@
 		7BD666F22448E8E500D68748 /* MainMenuMode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7BD666F12448E8E500D68748 /* MainMenuMode.cpp */; };
 		7BD666F32448E8E500D68748 /* MainMenuMode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7BD666F12448E8E500D68748 /* MainMenuMode.cpp */; };
 		7BD666F42448E8E500D68748 /* MainMenuMode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7BD666F12448E8E500D68748 /* MainMenuMode.cpp */; };
+		7C2524B94B372314DC335D3E /* Pods_Sweetspace__iOS_.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A00C396C798C997A4F703447 /* Pods_Sweetspace__iOS_.framework */; };
 		821F6E9C25E748DA00455E92 /* .clang-tidy in Resources */ = {isa = PBXBuildFile; fileRef = 821F6D8B25E748D800455E92 /* .clang-tidy */; };
 		821F6E9D25E748DA00455E92 /* .clang-tidy in Resources */ = {isa = PBXBuildFile; fileRef = 821F6D8B25E748D800455E92 /* .clang-tidy */; };
 		821F6E9E25E748DA00455E92 /* .clang-tidy in Resources */ = {isa = PBXBuildFile; fileRef = 821F6D8B25E748D800455E92 /* .clang-tidy */; };
@@ -571,8 +584,17 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		34884F43488588255D533CF3 /* Pods-Sweetspace (Mac).release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Sweetspace (Mac).release.xcconfig"; path = "Target Support Files/Pods-Sweetspace (Mac)/Pods-Sweetspace (Mac).release.xcconfig"; sourceTree = "<group>"; };
 		3CDD11AC242D1DDF00FD21F8 /* HealthNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HealthNode.cpp; sourceTree = "<group>"; };
 		3CDD11B0242D1DDF00FD21F8 /* HealthNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HealthNode.h; sourceTree = "<group>"; };
+		437FBE14272DD7A900073161 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		437FBE1A272DD84300073161 /* firebase.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = firebase.framework; sourceTree = "<group>"; };
+		437FBE1D272DD92200073161 /* firebase_admob.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = firebase_admob.framework; sourceTree = "<group>"; };
+		437FBE6D272DDE4F00073161 /* AdUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AdUtils.h; sourceTree = "<group>"; };
+		437FBE6E272DDE4F00073161 /* AdUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AdUtils.cpp; sourceTree = "<group>"; };
+		437FBE74272DED8C00073161 /* StupidIOSWindowBS.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = StupidIOSWindowBS.mm; sourceTree = "<group>"; };
+		499AD147A238F65231335995 /* Pods-Sweetspace(Sim).debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Sweetspace(Sim).debug.xcconfig"; path = "Target Support Files/Pods-Sweetspace(Sim)/Pods-Sweetspace(Sim).debug.xcconfig"; sourceTree = "<group>"; };
+		5AE40FDB442D9FFC8D4A017D /* Pods-Sweetspace (iOS).release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Sweetspace (iOS).release.xcconfig"; path = "Target Support Files/Pods-Sweetspace (iOS)/Pods-Sweetspace (iOS).release.xcconfig"; sourceTree = "<group>"; };
 		7B02739A2494545B00ED02B5 /* StabilizerModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StabilizerModel.h; sourceTree = "<group>"; };
 		7B02739E2494545C00ED02B5 /* StabilizerModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = StabilizerModel.cpp; sourceTree = "<group>"; };
 		7B0A2A9424AC24050001CCA0 /* StateReconciler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StateReconciler.h; sourceTree = "<group>"; };
@@ -876,6 +898,8 @@
 		828C645725B61B54001A3F65 /* PauseMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PauseMenu.h; sourceTree = "<group>"; };
 		82AE181D25B27616001C436F /* WinScreen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WinScreen.h; sourceTree = "<group>"; };
 		82AE182125B27616001C436F /* WinScreen.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = WinScreen.cpp; sourceTree = "<group>"; };
+		9AC4B1878D54F5F92C083C81 /* Pods_Sweetspace__Mac_.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Sweetspace__Mac_.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		A00C396C798C997A4F703447 /* Pods_Sweetspace__iOS_.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Sweetspace__iOS_.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A577C9232422AA0D00B12ADE /* DoorNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DoorNode.cpp; sourceTree = "<group>"; };
 		A577C9272422AA0D00B12ADE /* DoorNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DoorNode.h; sourceTree = "<group>"; };
 		A577C9372438F7ED00B12ADE /* LevelModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LevelModel.cpp; sourceTree = "<group>"; };
@@ -900,6 +924,7 @@
 		C58C59370F28300C621B05DD /* ButtonModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ButtonModel.cpp; sourceTree = "<group>"; };
 		C58C5D00FFFC42F97DEC65C0 /* ButtonModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ButtonModel.h; sourceTree = "<group>"; };
 		C58C5F587FFB8E623B5C9D7F /* ButtonNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ButtonNode.cpp; sourceTree = "<group>"; };
+		CAE8B002A16463C5D617BA19 /* Pods-Sweetspace (iOS).debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Sweetspace (iOS).debug.xcconfig"; path = "Target Support Files/Pods-Sweetspace (iOS)/Pods-Sweetspace (iOS).debug.xcconfig"; sourceTree = "<group>"; };
 		D152222ED700A38FD9334825 /* CustomNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomNode.h; sourceTree = "<group>"; };
 		D1522514F4482BDE04D4AABE /* PlayerDonutNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayerDonutNode.h; sourceTree = "<group>"; };
 		D15225B281FE45906CC70B95 /* SparkleNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SparkleNode.cpp; sourceTree = "<group>"; };
@@ -934,6 +959,8 @@
 		DF621BDC24677E3D0059D55B /* UnopenableNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UnopenableNode.h; sourceTree = "<group>"; };
 		DF621BDD24677E3D0059D55B /* UnopenableNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = UnopenableNode.cpp; sourceTree = "<group>"; };
 		DFECA6ED2431610C008342FB /* sounds */ = {isa = PBXFileReference; lastKnownFileType = folder; path = sounds; sourceTree = "<group>"; };
+		E13EB2590AC9D25E08168DE1 /* Pods-Sweetspace(Sim).release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Sweetspace(Sim).release.xcconfig"; path = "Target Support Files/Pods-Sweetspace(Sim)/Pods-Sweetspace(Sim).release.xcconfig"; sourceTree = "<group>"; };
+		E23B3489C21303B2BFE1D992 /* Pods-Sweetspace (Mac).debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Sweetspace (Mac).debug.xcconfig"; path = "Target Support Files/Pods-Sweetspace (Mac)/Pods-Sweetspace (Mac).debug.xcconfig"; sourceTree = "<group>"; };
 		EB0FF5082016E4A700517030 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		EB0FF5FC2016EF4F00517030 /* sweetspace.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = sweetspace.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EB2BE9B41D74952A002FE78B /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
@@ -981,6 +1008,7 @@
 		EBC147191E27F0A8005494CE /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		EBC1471B1E27F0BB005494CE /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
 		EBFE7C041E19B496001007C2 /* json */ = {isa = PBXFileReference; lastKnownFileType = folder; path = json; sourceTree = "<group>"; };
+		EFA39776ECB9D0ACD61FF814 /* Pods_Sweetspace_Sim_.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Sweetspace_Sim_.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -995,8 +1023,10 @@
 				EB62266623DD224A007EA978 /* CoreGraphics.framework in Frameworks */,
 				EB62266723DD224A007EA978 /* CoreMotion.framework in Frameworks */,
 				EB62266823DD224A007EA978 /* CoreVideo.framework in Frameworks */,
+				437FBE1C272DD84300073161 /* firebase.framework in Frameworks */,
 				EB62266923DD224A007EA978 /* AudioToolbox.framework in Frameworks */,
 				EB62266A23DD224A007EA978 /* AVFoundation.framework in Frameworks */,
+				437FBE1F272DD92200073161 /* firebase_admob.framework in Frameworks */,
 				EB62266D23DD224A007EA978 /* QuartzCore.framework in Frameworks */,
 				EB62266C23DD224A007EA978 /* OpenGLES.framework in Frameworks */,
 				EB62266B23DD224A007EA978 /* Metal.framework in Frameworks */,
@@ -1004,6 +1034,7 @@
 				EB62266E23DD224A007EA978 /* ImageIO.framework in Frameworks */,
 				EB62267123DD224A007EA978 /* GameKit.framework in Frameworks */,
 				EB62267023DD224A007EA978 /* GameController.framework in Frameworks */,
+				6776B245246ED10A76924779 /* Pods_Sweetspace_Sim_.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1018,8 +1049,10 @@
 				EB62265C23DD2221007EA978 /* CoreGraphics.framework in Frameworks */,
 				EB62265D23DD2221007EA978 /* CoreMotion.framework in Frameworks */,
 				EB62265E23DD2221007EA978 /* CoreVideo.framework in Frameworks */,
+				437FBE1B272DD84300073161 /* firebase.framework in Frameworks */,
 				EB62265523DD2212007EA978 /* AudioToolbox.framework in Frameworks */,
 				EB62265623DD2212007EA978 /* AVFoundation.framework in Frameworks */,
+				437FBE1E272DD92200073161 /* firebase_admob.framework in Frameworks */,
 				EB62265023DD2207007EA978 /* QuartzCore.framework in Frameworks */,
 				EB62265123DD2207007EA978 /* Metal.framework in Frameworks */,
 				EB62265223DD2207007EA978 /* OpenGLES.framework in Frameworks */,
@@ -1027,6 +1060,7 @@
 				EB62264C23DD21FA007EA978 /* UIKit.framework in Frameworks */,
 				EB62264723DD21E5007EA978 /* GameKit.framework in Frameworks */,
 				EB62264823DD21E5007EA978 /* GameController.framework in Frameworks */,
+				7C2524B94B372314DC335D3E /* Pods_Sweetspace__iOS_.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1050,6 +1084,7 @@
 				EBC1471C1E27F0BB005494CE /* ImageIO.framework in Frameworks */,
 				EB62264123DD2015007EA978 /* GameController.framework in Frameworks */,
 				EB2BE9CF1D749953002FE78B /* ForceFeedback.framework in Frameworks */,
+				738C4CC4164C0C3EB38F305A /* Pods_Sweetspace__Mac_.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1089,6 +1124,8 @@
 		7B106FA424DA5218008EFDED /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				437FBE6E272DDE4F00073161 /* AdUtils.cpp */,
+				437FBE6D272DDE4F00073161 /* AdUtils.h */,
 				7B106F9524DA5166008EFDED /* AnimationManager.h */,
 				7B106F9B24DA5166008EFDED /* AnimationManager.cpp */,
 				7B209DFE24395A9D00B657D2 /* ButtonManager.h */,
@@ -1098,6 +1135,7 @@
 				DF621BDB24677E3C0059D55B /* TutorialConstants.h */,
 				7B209DFA24395A8F00B657D2 /* Tween.h */,
 				C1222CCE44B8D9EECD741BF0 /* Tween.cpp */,
+				437FBE74272DED8C00073161 /* StupidIOSWindowBS.mm */,
 			);
 			name = Helpers;
 			sourceTree = "<group>";
@@ -1506,6 +1544,19 @@
 			name = "Game UI";
 			sourceTree = "<group>";
 		};
+		E71FFF65C7DE05B1A4EA2768 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				E23B3489C21303B2BFE1D992 /* Pods-Sweetspace (Mac).debug.xcconfig */,
+				34884F43488588255D533CF3 /* Pods-Sweetspace (Mac).release.xcconfig */,
+				CAE8B002A16463C5D617BA19 /* Pods-Sweetspace (iOS).debug.xcconfig */,
+				5AE40FDB442D9FFC8D4A017D /* Pods-Sweetspace (iOS).release.xcconfig */,
+				499AD147A238F65231335995 /* Pods-Sweetspace(Sim).debug.xcconfig */,
+				E13EB2590AC9D25E08168DE1 /* Pods-Sweetspace(Sim).release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
 		EB2BE9B71D749870002FE78B /* Assets */ = {
 			isa = PBXGroup;
 			children = (
@@ -1523,6 +1574,9 @@
 			children = (
 				EB7454B11D74D8B7002FBAE6 /* iOS */,
 				EB7454B01D74D8A9002FBAE6 /* Mac */,
+				9AC4B1878D54F5F92C083C81 /* Pods_Sweetspace__Mac_.framework */,
+				A00C396C798C997A4F703447 /* Pods_Sweetspace__iOS_.framework */,
+				EFA39776ECB9D0ACD61FF814 /* Pods_Sweetspace_Sim_.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -1564,6 +1618,8 @@
 		EB7454B11D74D8B7002FBAE6 /* iOS */ = {
 			isa = PBXGroup;
 			children = (
+				437FBE1D272DD92200073161 /* firebase_admob.framework */,
+				437FBE1A272DD84300073161 /* firebase.framework */,
 				EB62266023DD2235007EA978 /* Foundation.framework */,
 				EB62265F23DD2235007EA978 /* MobileCoreServices.framework */,
 				EB62265723DD2220007EA978 /* CoreAudio.framework */,
@@ -1586,12 +1642,14 @@
 		EBBF18881D74904A008E2001 = {
 			isa = PBXGroup;
 			children = (
+				437FBE14272DD7A900073161 /* GoogleService-Info.plist */,
 				EBBF18B11D749176008E2001 /* Source */,
 				EB2BE9B71D749870002FE78B /* Assets */,
 				EBBF18931D74904A008E2001 /* Resources */,
 				EB4880FC1D74AAB600EFC946 /* Frameworks */,
 				EBBF18921D74904A008E2001 /* Products */,
 				EB4EB19D1E3404F3007BCF09 /* CUGL.xcodeproj */,
+				E71FFF65C7DE05B1A4EA2768 /* Pods */,
 			);
 			sourceTree = "<group>";
 			usesTabs = 1;
@@ -1644,9 +1702,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = EB0FF6162016EF4F00517030 /* Build configuration list for PBXNativeTarget "Sweetspace(Sim)" */;
 			buildPhases = (
+				712AE70F60713F5117E61C4A /* [CP] Check Pods Manifest.lock */,
 				EB0FF5F82016EF4F00517030 /* Sources */,
 				EB0FF5F92016EF4F00517030 /* Frameworks */,
 				EB0FF5FA2016EF4F00517030 /* Resources */,
+				D4494F2A06D2657ED5428911 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -1661,9 +1721,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = EB7454A01D74D75C002FBAE6 /* Build configuration list for PBXNativeTarget "Sweetspace (iOS)" */;
 			buildPhases = (
+				C83326A21BA68FC92376B23E /* [CP] Check Pods Manifest.lock */,
 				EB7454881D74D75C002FBAE6 /* Sources */,
 				EB7454891D74D75C002FBAE6 /* Frameworks */,
 				EB74548A1D74D75C002FBAE6 /* Resources */,
+				97512935D74872692A518DCA /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -1678,6 +1740,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = EBBF18A21D74904A008E2001 /* Build configuration list for PBXNativeTarget "Sweetspace (Mac)" */;
 			buildPhases = (
+				F06672A58D6B84D5CA29FB80 /* [CP] Check Pods Manifest.lock */,
 				EBBF188D1D74904A008E2001 /* Sources */,
 				EBBF188E1D74904A008E2001 /* Frameworks */,
 				EBBF188F1D74904A008E2001 /* Resources */,
@@ -1777,6 +1840,7 @@
 				EB0FF6182016EFB200517030 /* Landscape.storyboard in Resources */,
 				DFECA6F32431610C008342FB /* sounds in Resources */,
 				EB0FF6192016EFB200517030 /* Portrait.storyboard in Resources */,
+				437FBE16272DD7AA00073161 /* GoogleService-Info.plist in Resources */,
 				EB42669721F68F6900A9DE61 /* DeviceMargins.plist in Resources */,
 				821F6E9E25E748DA00455E92 /* .clang-tidy in Resources */,
 			);
@@ -1794,6 +1858,7 @@
 				EBFE7C051E19B496001007C2 /* json in Resources */,
 				DFECA6F22431610C008342FB /* sounds in Resources */,
 				EB7454AD1D74D846002FBAE6 /* Portrait.storyboard in Resources */,
+				437FBE15272DD7AA00073161 /* GoogleService-Info.plist in Resources */,
 				EB42669621F68F6900A9DE61 /* DeviceMargins.plist in Resources */,
 				821F6E9D25E748DA00455E92 /* .clang-tidy in Resources */,
 			);
@@ -1814,6 +1879,135 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		712AE70F60713F5117E61C4A /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Sweetspace(Sim)-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		97512935D74872692A518DCA /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Sweetspace (iOS)/Pods-Sweetspace (iOS)-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/FirebaseCore/FirebaseCore.framework",
+				"${BUILT_PRODUCTS_DIR}/FirebaseCoreDiagnostics/FirebaseCoreDiagnostics.framework",
+				"${BUILT_PRODUCTS_DIR}/FirebaseInstallations/FirebaseInstallations.framework",
+				"${BUILT_PRODUCTS_DIR}/GoogleDataTransport/GoogleDataTransport.framework",
+				"${BUILT_PRODUCTS_DIR}/GoogleUtilities/GoogleUtilities.framework",
+				"${BUILT_PRODUCTS_DIR}/PromisesObjC/FBLPromises.framework",
+				"${BUILT_PRODUCTS_DIR}/nanopb/nanopb.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FirebaseCore.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FirebaseCoreDiagnostics.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FirebaseInstallations.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleDataTransport.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleUtilities.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBLPromises.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/nanopb.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Sweetspace (iOS)/Pods-Sweetspace (iOS)-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		C83326A21BA68FC92376B23E /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Sweetspace (iOS)-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		D4494F2A06D2657ED5428911 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Sweetspace(Sim)/Pods-Sweetspace(Sim)-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/FirebaseCore/FirebaseCore.framework",
+				"${BUILT_PRODUCTS_DIR}/FirebaseCoreDiagnostics/FirebaseCoreDiagnostics.framework",
+				"${BUILT_PRODUCTS_DIR}/FirebaseInstallations/FirebaseInstallations.framework",
+				"${BUILT_PRODUCTS_DIR}/GoogleDataTransport/GoogleDataTransport.framework",
+				"${BUILT_PRODUCTS_DIR}/GoogleUtilities/GoogleUtilities.framework",
+				"${BUILT_PRODUCTS_DIR}/PromisesObjC/FBLPromises.framework",
+				"${BUILT_PRODUCTS_DIR}/nanopb/nanopb.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FirebaseCore.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FirebaseCoreDiagnostics.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FirebaseInstallations.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleDataTransport.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleUtilities.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBLPromises.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/nanopb.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Sweetspace(Sim)/Pods-Sweetspace(Sim)-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		F06672A58D6B84D5CA29FB80 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Sweetspace (Mac)-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		EB0FF5F82016EF4F00517030 /* Sources */ = {
@@ -1930,6 +2124,7 @@
 				821F6FD025E748DD00455E92 /* Gets.cpp in Sources */,
 				821F6F2225E748DC00455E92 /* GridSectorizer.cpp in Sources */,
 				821F6FDC25E748DD00455E92 /* RakString.cpp in Sources */,
+				437FBE70272DDE4F00073161 /* AdUtils.cpp in Sources */,
 				821F6FB525E748DC00455E92 /* WSAStartupSingleton.cpp in Sources */,
 				7B3BFC2125BF2DD400A5F6D7 /* ShipSegmentWrap.cpp in Sources */,
 				821F6F4F25E748DC00455E92 /* RakThread.cpp in Sources */,
@@ -1970,6 +2165,7 @@
 				821F6F0D25E748DC00455E92 /* PacketLogger.cpp in Sources */,
 				821F6F9A25E748DC00455E92 /* RandSync.cpp in Sources */,
 				821F6ECB25E748DB00455E92 /* SocketLayer.cpp in Sources */,
+				437FBE76272DED8C00073161 /* StupidIOSWindowBS.mm in Sources */,
 				821F6FEB25E748DD00455E92 /* RakNetSocket2_NativeClient.cpp in Sources */,
 				821F6F1025E748DC00455E92 /* FileList.cpp in Sources */,
 				D1522B4D462B93165FD47D77 /* SparkleNode.cpp in Sources */,
@@ -2091,6 +2287,7 @@
 				821F6FCF25E748DD00455E92 /* Gets.cpp in Sources */,
 				821F6F2125E748DC00455E92 /* GridSectorizer.cpp in Sources */,
 				821F6FDB25E748DD00455E92 /* RakString.cpp in Sources */,
+				437FBE6F272DDE4F00073161 /* AdUtils.cpp in Sources */,
 				821F6FB425E748DC00455E92 /* WSAStartupSingleton.cpp in Sources */,
 				7B3BFC2025BF2DD400A5F6D7 /* ShipSegmentWrap.cpp in Sources */,
 				821F6F4E25E748DC00455E92 /* RakThread.cpp in Sources */,
@@ -2131,6 +2328,7 @@
 				821F6F0C25E748DC00455E92 /* PacketLogger.cpp in Sources */,
 				821F6F9925E748DC00455E92 /* RandSync.cpp in Sources */,
 				821F6ECA25E748DB00455E92 /* SocketLayer.cpp in Sources */,
+				437FBE75272DED8C00073161 /* StupidIOSWindowBS.mm in Sources */,
 				821F6FEA25E748DD00455E92 /* RakNetSocket2_NativeClient.cpp in Sources */,
 				821F6F0F25E748DC00455E92 /* FileList.cpp in Sources */,
 				D1522823F15ED3BCD0175E33 /* SparkleNode.cpp in Sources */,
@@ -2304,6 +2502,7 @@
 /* Begin XCBuildConfiguration section */
 		EB0FF60F2016EF4F00517030 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 499AD147A238F65231335995 /* Pods-Sweetspace(Sim).debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -2323,8 +2522,24 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 7Z3H2LHML6;
+				"EXCLUDED_ARCHS[sdk=*]" = "arm64 i386";
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/FirebaseCore/FirebaseCore.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/FirebaseCoreDiagnostics/FirebaseCoreDiagnostics.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/GoogleDataTransport/GoogleDataTransport.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/GoogleUtilities/GoogleUtilities.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/PromisesObjC/FBLPromises.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/nanopb/nanopb.framework/Headers\"",
+					"\"${PODS_ROOT}/Headers/Public\"",
+					"\"${PODS_ROOT}/Headers/Public/Firebase\"",
+					"$(inherited)",
+					"${PODS_ROOT}/Firebase/CoreOnly/Sources",
+					"\"${PODS_TARGET_SRCROOT}/Sources/FBLPromises/include\"",
+					../firebase/include,
+				);
 				INFOPLIST_FILE = "$(SRCROOT)/Resources/iOS-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -2341,6 +2556,7 @@
 		};
 		EB0FF6102016EF4F00517030 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = E13EB2590AC9D25E08168DE1 /* Pods-Sweetspace(Sim).release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -2360,7 +2576,23 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 7Z3H2LHML6;
+				"EXCLUDED_ARCHS[sdk=*]" = "arm64 i386";
 				GCC_C_LANGUAGE_STANDARD = gnu11;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/FirebaseCore/FirebaseCore.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/FirebaseCoreDiagnostics/FirebaseCoreDiagnostics.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/GoogleDataTransport/GoogleDataTransport.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/GoogleUtilities/GoogleUtilities.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/PromisesObjC/FBLPromises.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/nanopb/nanopb.framework/Headers\"",
+					"\"${PODS_ROOT}/Headers/Public\"",
+					"\"${PODS_ROOT}/Headers/Public/Firebase\"",
+					"$(inherited)",
+					"${PODS_ROOT}/Firebase/CoreOnly/Sources",
+					"\"${PODS_TARGET_SRCROOT}/Sources/FBLPromises/include\"",
+					../firebase/include,
+				);
 				INFOPLIST_FILE = "$(SRCROOT)/Resources/iOS-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -2378,6 +2610,7 @@
 		};
 		EB7454A11D74D75C002FBAE6 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = CAE8B002A16463C5D617BA19 /* Pods-Sweetspace (iOS).debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_CXX_LANGUAGE_STANDARD = "c++14";
@@ -2404,6 +2637,7 @@
 		};
 		EB7454A21D74D75C002FBAE6 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5AE40FDB442D9FFC8D4A017D /* Pods-Sweetspace (iOS).release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_CXX_LANGUAGE_STANDARD = "c++14";
@@ -2465,6 +2699,8 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				"EXCLUDED_ARCHS[sdk=*]" = arm64;
+				FRAMEWORK_SEARCH_PATHS = ./;
 				GCC_C_LANGUAGE_STANDARD = "compiler-default";
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -2525,6 +2761,8 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				"EXCLUDED_ARCHS[sdk=*]" = arm64;
+				FRAMEWORK_SEARCH_PATHS = ./;
 				GCC_C_LANGUAGE_STANDARD = "compiler-default";
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
@@ -2545,6 +2783,7 @@
 		};
 		EBBF18A31D74904A008E2001 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = E23B3489C21303B2BFE1D992 /* Pods-Sweetspace (Mac).debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_CXX_LANGUAGE_STANDARD = "c++14";
@@ -2563,6 +2802,7 @@
 		};
 		EBBF18A41D74904A008E2001 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 34884F43488588255D533CF3 /* Pods-Sweetspace (Mac).release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_CXX_LANGUAGE_STANDARD = "c++14";

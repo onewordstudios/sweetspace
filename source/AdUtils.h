@@ -1,7 +1,14 @@
 #ifndef AD_UTILS_H
 #define AD_UTILS_H
 
+//#if defined(__IPHONEOS__)
+//extern "C" {
+//#include <objc/objc.h>
+//}  // extern "C"
+//#endif
 #include <cugl/cugl.h>
+//#include <UIKit/UIKit.h>
+//#include <SDL/SDL_syswm.h>
 #if defined(__ANDROID__) || defined(__IPHONEOS__)
 #include "firebase/admob.h"
 #include "firebase/admob/banner_view.h"
@@ -10,9 +17,11 @@
 #include "firebase/app.h"
 #include "firebase/future.h"
 
+
 extern const char* kBannerAdUnit;
 extern const char* kInterstitialAdUnit;
 #endif
+
 
 /**
  * This is a helper class whose job it is to display ads
@@ -46,6 +55,17 @@ class AdUtils {
 		bannerView = new firebase::admob::BannerView();
 		interstitial_ad = new firebase::admob::InterstitialAd();
 #endif
+#if defined(__IPHONEOS__)
+		// Create the Firebase app.
+		firebase::App* fbapp = firebase::App::Create();
+
+		// Your Android AdMob app ID.
+		const char* kAdMobAppID = "ca-app-pub-9909379902934039~8465986645";
+		// Initialize the AdMob library with your AdMob app ID.
+		firebase::admob::Initialize(*fbapp, kAdMobAppID);
+		bannerView = new firebase::admob::BannerView();
+		interstitial_ad = new firebase::admob::InterstitialAd();
+#endif
 	};
 
 	/**
@@ -72,13 +92,38 @@ class AdUtils {
 			loadFuture.OnCompletion(ShowBannerCallback, bannerView);
 		}
 #endif
+//#if defined(__IPHONEOS__)
+//		SDL_SysWMinfo wmInfo;
+//		SDL_VERSION(&wmInfo.version);
+//		cugl::Display* display = cugl::Display::get();
+//		SDL_GetWindowWMInfo(display->_window,&wmInfo);
+//
+//		UIWindow* uiWindow = wmInfo.info.uikit.window;
+//		UIViewController* rootViewController = uiWindow->rootViewController;
+//		firebase::admob::AdParent uiView = rootViewController->view;
+//		if (bannerView->InitializeLastResult().status() == firebase::kFutureStatusInvalid) {
+//			firebase::admob::AdSize ad_size;
+//			ad_size.ad_size_type = firebase::admob::kAdSizeStandard;
+//			ad_size.width = BANNER_WIDTH;
+//			ad_size.height = BANNER_HEIGHT;
+//
+//			request.gender = firebase::admob::kGenderUnknown;
+//
+//			firebase::Future<void> future =
+//				bannerView->Initialize(uiView, kBannerAdUnit, ad_size);
+//			future.OnCompletion(LoadBannerCallback, bannerView);
+//		} else {
+//			firebase::Future<void> loadFuture = bannerView->LoadAd(request);
+//			loadFuture.OnCompletion(ShowBannerCallback, bannerView);
+//		}
+//#endif
 	};
 
 	/**
 	 * hides a banner ad
 	 */
 	static void hideBanner() {
-#if defined(__ANDROID__)
+#if defined(__ANDROID__) || defined(__IPHONEOS__)
 		bannerView->Hide();
 #endif
 	};
