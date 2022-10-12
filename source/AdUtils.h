@@ -10,11 +10,9 @@
 #include "firebase/app.h"
 #include "firebase/future.h"
 
-
 extern const char* kBannerAdUnit;
 extern const char* kInterstitialAdUnit;
 #endif
-
 
 #if defined(__IPHONEOS__)
 firebase::admob::AdParent getWindow();
@@ -106,7 +104,6 @@ class AdUtils {
 		}
 #endif
 	};
-	
 
 	/**
 	 * hides a banner ad

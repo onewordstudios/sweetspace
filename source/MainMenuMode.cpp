@@ -1,17 +1,17 @@
-﻿#include "MainMenuMode.h"
+#include "MainMenuMode.h"
 
 #include <cugl/cugl.h>
 
 #include <iostream>
 #include <sstream>
 
+#include "AdUtils.h"
 #include "ExternalDonutModel.h"
 #include "Globals.h"
 #include "LevelConstants.h"
 #include "MainMenuTransitions.h"
 #include "NeedleAnimator.h"
 #include "Tween.h"
-#include "AdUtils.h"
 
 using namespace cugl;
 

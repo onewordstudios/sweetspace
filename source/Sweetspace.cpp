@@ -1,4 +1,5 @@
 #include "Sweetspace.h"
+
 #include "AdUtils.h"
 
 using namespace cugl;
@@ -23,7 +24,7 @@ void Sweetspace::onStartup() {
 	batch = SpriteBatch::alloc();
 #if defined(__ANDROID__) || defined(__IPHONEOS__)
 	AdUtils::initialize();
-#endif 
+#endif
 
 	// Start up input controller
 	InputController::getInstance();

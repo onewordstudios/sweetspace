@@ -439,7 +439,7 @@ void GameGraphRoot::update( // NOLINT Yeah it's a big function; we'll live with 
 				restartBtn->setVisible(false);
 			}
 			if (justLost) {
-				//Show an ad to the losers
+				// Show an ad to the losers
 				AdUtils::displayInterstitial();
 			}
 			break;
