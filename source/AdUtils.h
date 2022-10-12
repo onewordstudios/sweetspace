@@ -10,8 +10,8 @@
 #include "firebase/app.h"
 #include "firebase/future.h"
 
-extern const char* kBannerAdUnit;
-extern const char* kInterstitialAdUnit;
+extern const char* const K_BANNER_AD_UNIT;
+extern const char* const K_INTERSTITIAL_AD_UNIT;
 #endif
 
 #if defined(__IPHONEOS__)
@@ -78,7 +78,7 @@ class AdUtils {
 			request.gender = firebase::admob::kGenderUnknown;
 
 			firebase::Future<void> future =
-				bannerView->Initialize(activity, kBannerAdUnit, ad_size);
+				bannerView->Initialize(activity, K_BANNER_AD_UNIT, ad_size);
 			future.OnCompletion(LoadBannerCallback, bannerView);
 			env->DeleteLocalRef(activity);
 		} else {
@@ -96,7 +96,7 @@ class AdUtils {
 			request.gender = firebase::admob::kGenderUnknown;
 
 			firebase::Future<void> future =
-				bannerView->Initialize(getWindow(), kBannerAdUnit, ad_size);
+				bannerView->Initialize(getWindow(), K_BANNER_AD_UNIT, ad_size);
 			future.OnCompletion(LoadBannerCallback, bannerView);
 		} else {
 			firebase::Future<void> loadFuture = bannerView->LoadAd(request);
@@ -125,7 +125,7 @@ class AdUtils {
 			request.gender = firebase::admob::kGenderUnknown;
 
 			firebase::Future<void> future =
-				interstitial_ad->Initialize(activity, kInterstitialAdUnit);
+				interstitial_ad->Initialize(activity, K_INTERSTITIAL_AD_UNIT);
 			future.OnCompletion(LoadInterstitialCallback, interstitial_ad);
 
 			env->DeleteLocalRef(activity);
@@ -139,7 +139,7 @@ class AdUtils {
 			request.gender = firebase::admob::kGenderUnknown;
 
 			firebase::Future<void> future =
-				interstitial_ad->Initialize(getWindow(), kInterstitialAdUnit);
+				interstitial_ad->Initialize(getWindow(), K_INTERSTITIAL_AD_UNIT);
 			future.OnCompletion(LoadInterstitialCallback, interstitial_ad);
 		} else {
 			firebase::Future<void> loadFuture = interstitial_ad->LoadAd(request);
