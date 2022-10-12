@@ -75,6 +75,7 @@ def get_tidy_invocation(f, clang_tidy_binary, header_filter):
     start.append('-header-filter=' + header_filter)
   start.append('--')
   start.append('-Icugl/include')
+  start.append('-Ifirebase/include')
   return start
 
 
