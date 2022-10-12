@@ -289,55 +289,59 @@ void GLaDOS::placeButtons(float angle1, float angle2) {
  * This method is used to run the GM for generating and managing current ship events
  */
 void GLaDOS::update(float dt) { // NOLINT
-	// Removing breaches that have 0 health left
-	for (int i = 0; i < maxEvents; i++) {
-		std::shared_ptr<BreachModel> breach = ship->getBreaches().at(i);
-		if (breach == nullptr || !breach->getIsActive()) {
-			continue;
-		}
-		// check if health is zero or the assigned player is inactive
-		if (breach->getHealth() == 0 || !ship->getDonuts().at(breach->getPlayer())->getIsActive()) {
-			breach->reset();
-			breachFree.push(i);
-		}
-	}
 
-	// Remove doors that have been resolved and opened. Also raise doors that are resolved.
-	for (int i = 0; i < maxDoors; i++) {
-		std::shared_ptr<DoorModel> door = ship->getDoors().at(i);
-		if (door == nullptr) {
-			continue;
-		}
-		if (door->resolvedAndRaised()) {
-			door->reset();
-			doorFree.push(i);
-		} else if (door->resolved()) {
-			door->raiseDoor();
-		}
-	}
-
-	for (int i = 0; i < maxButtons; i++) {
-		auto& btn = ship->getButtons().at(i);
-		if (btn == nullptr) {
-			continue;
-		}
-		if (btn->isResolved()) {
-			buttonFree.push(btn->getPairID());
-			buttonFree.push(i);
-
-			btn->getPair()->clear();
-			btn->clear();
-		}
-	}
-
-	// Check if this is the host for generating breaches and doors
+	// Check if this is the host
 	if (mib.getPlayerID() != 0) {
+		CULogError("WARNING: GLaDOS called from non-host");
 		return;
 	}
 
 	// ============================================
 	//  BELOW THIS LINE, ALL ACTIONS ARE HOST-ONLY
 	// ============================================
+
+	// Removing breaches that have 0 health left
+	std::queue<int>().swap(breachFree);
+	for (int i = 0; i < maxEvents; i++) {
+		const std::shared_ptr<BreachModel>& breach = ship->getBreaches().at(i);
+		if (breach == nullptr) {
+			continue;
+		}
+
+		// check if the assigned player is inactive
+		if (!ship->getDonuts().at(breach->getPlayer())->getIsActive()) {
+			while (breach->getHealth() > 0) {
+				breach->decHealth(1);
+				mib.resolveBreach(i);
+			}
+		}
+
+		if (!breach->getIsActive()) {
+			breachFree.push(i);
+		}
+	}
+
+	std::queue<int>().swap(doorFree);
+	for (int i = 0; i < maxDoors; i++) {
+		std::shared_ptr<DoorModel> door = ship->getDoors().at(i);
+		if (door == nullptr) {
+			continue;
+		}
+		if (!door->getIsActive()) {
+			doorFree.push(i);
+		}
+	}
+
+	std::queue<int>().swap(buttonFree);
+	for (int i = 0; i < maxButtons; i++) {
+		auto& btn = ship->getButtons().at(i);
+		if (btn == nullptr) {
+			continue;
+		}
+		if (!btn->getIsActive()) {
+			buttonFree.push(i);
+		}
+	}
 
 	if (levelNum < globals::NUM_TUTORIAL_LEVELS &&
 		std::find(std::begin(tutorial::REAL_LEVELS), std::end(tutorial::REAL_LEVELS),

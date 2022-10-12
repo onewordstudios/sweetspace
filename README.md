@@ -45,11 +45,13 @@ Coming 2021 to Android and iOS.
 
 ## Acknowledgements
 
-Thanks to the [Game Design Initiative at Cornell University](https://gdiac.cis.cornell.edu/) for providing the Cornell University Game Library (CUGL) used for this project.
+Thanks to the [Game Design Initiative at Cornell University](https://gdiac.cis.cornell.edu/) for providing the Cornell University Game Library (CUGL) used in this project.
 
-Networking powered by the open source [RakNet](https://github.com/facebookarchive/RakNet) C++ library.
+Networking powered by the open source [SLikeNet](https://github.com/SLikeSoft/SLikeNet) C++ library.
 
 Continuous Integration provided by [Azure DevOps](https://azure.microsoft.com/en-us/services/devops/).
+
+Matchmaking server hosted on [Google Cloud Compute Engine](https://cloud.google.com/compute).
 
 ## Contributions
 

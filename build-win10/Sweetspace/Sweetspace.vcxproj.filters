@@ -699,6 +699,9 @@
     <ClInclude Include="..\..\source\AdUtils.h">
       <Filter>Header Files\Helpers</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\source\CollisionController.h">
+      <Filter>Header Files\Controllers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\source\main.cpp">
@@ -1159,6 +1162,9 @@
     </ClCompile>
     <ClCompile Include="..\..\source\libraries\SLikeNet\UDPForwarder.cpp">
       <Filter>Source Files\Controllers\Networking\SLikeNet</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\CollisionController.cpp">
+      <Filter>Source Files\Controllers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -186,7 +186,17 @@ class MagicInternetBox::Mimpl {
 
    public:
 #pragma region Initialization
-	Mimpl() : activePlayers() {
+	Mimpl()
+		: conn(nullptr),
+		  status(Uninitialized),
+		  events(None),
+		  currFrame(0),
+		  levelParity(true),
+		  skipTutorial(false),
+		  numPlayers(0),
+		  maxPlayers(0),
+		  activePlayers(),
+		  lastConnection(0) {
 #ifdef _WIN32
 		INT rc; // NOLINT
 		WSADATA wsaData;
@@ -199,16 +209,6 @@ class MagicInternetBox::Mimpl {
 			throw "WSA Startup Failed";
 		}
 #endif
-
-		conn = nullptr;
-		status = Uninitialized;
-		events = None;
-		levelParity = true;
-		currFrame = 0;
-		skipTutorial = false;
-		numPlayers = 0;
-		maxPlayers = 0;
-		lastConnection = 0;
 		activePlayers.fill(false);
 	}
 
@@ -394,6 +394,11 @@ class MagicInternetBox::Mimpl {
 				case AssignedRoom: {
 					if (playerID != 0) {
 						break;
+					}
+					if (status == Reconnecting) {
+						CULog("Received room ID while reconnecting; aborting");
+						status = ReconnectError;
+						return;
 					}
 					std::stringstream newRoomId;
 					for (size_t i = 0; i < globals::ROOM_LENGTH; i++) {

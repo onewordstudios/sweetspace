@@ -399,6 +399,9 @@
 		821F6FEF25E748DD00455E92 /* RakMemoryOverride.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 821F6E9B25E748DA00455E92 /* RakMemoryOverride.cpp */; };
 		821F6FF025E748DD00455E92 /* RakMemoryOverride.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 821F6E9B25E748DA00455E92 /* RakMemoryOverride.cpp */; };
 		821F6FF125E748DD00455E92 /* RakMemoryOverride.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 821F6E9B25E748DA00455E92 /* RakMemoryOverride.cpp */; };
+		827A5A20269B926F00469545 /* CollisionController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 827A5A1B269B926E00469545 /* CollisionController.cpp */; };
+		827A5A21269B926F00469545 /* CollisionController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 827A5A1B269B926E00469545 /* CollisionController.cpp */; };
+		827A5A22269B926F00469545 /* CollisionController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 827A5A1B269B926E00469545 /* CollisionController.cpp */; };
 		828C645825B61B55001A3F65 /* PauseMenu.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 828C645625B61B54001A3F65 /* PauseMenu.cpp */; };
 		828C645925B61B55001A3F65 /* PauseMenu.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 828C645625B61B54001A3F65 /* PauseMenu.cpp */; };
 		828C645A25B61B55001A3F65 /* PauseMenu.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 828C645625B61B54001A3F65 /* PauseMenu.cpp */; };
@@ -892,6 +895,8 @@
 		821F6E9925E748DA00455E92 /* RakNetSocket2_NativeClient.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RakNetSocket2_NativeClient.cpp; sourceTree = "<group>"; };
 		821F6E9A25E748DA00455E92 /* RPC4Plugin.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RPC4Plugin.cpp; sourceTree = "<group>"; };
 		821F6E9B25E748DA00455E92 /* RakMemoryOverride.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RakMemoryOverride.cpp; sourceTree = "<group>"; };
+		827A5A1B269B926E00469545 /* CollisionController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CollisionController.cpp; sourceTree = "<group>"; };
+		827A5A1F269B926E00469545 /* CollisionController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CollisionController.h; sourceTree = "<group>"; };
 		828C644D25B61ABC001A3F65 /* AudioController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioController.h; sourceTree = "<group>"; };
 		828C645425B61B00001A3F65 /* NeedleAnimator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NeedleAnimator.h; sourceTree = "<group>"; };
 		828C645625B61B54001A3F65 /* PauseMenu.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PauseMenu.cpp; sourceTree = "<group>"; };
@@ -1110,6 +1115,8 @@
 				7B0FBB0424FBBB6E0026067D /* Networking */,
 				7B3270692425A569004A3B36 /* GLaDOS.h */,
 				C122229A6EDF1DAB4330F1B7 /* GLaDOS.cpp */,
+				827A5A1B269B926E00469545 /* CollisionController.cpp */,
+				827A5A1F269B926E00469545 /* CollisionController.h */,
 				828C644D25B61ABC001A3F65 /* AudioController.h */,
 				DF3B743C2403A46A0063552F /* InputController.h */,
 				DF3B74402403A46B0063552F /* InputController.cpp */,
@@ -2105,6 +2112,7 @@
 				D152280455B6C3C470B28DBC /* DoorModel.cpp in Sources */,
 				821F6F1925E748DC00455E92 /* FileOperations.cpp in Sources */,
 				3CDD11B3242D1DDF00FD21F8 /* HealthNode.cpp in Sources */,
+				827A5A22269B926F00469545 /* CollisionController.cpp in Sources */,
 				C1222A784AAFE1C7BC89BC94 /* GLaDOS.cpp in Sources */,
 				821F6ED425E748DB00455E92 /* SecureHandshake.cpp in Sources */,
 				821F6F2B25E748DC00455E92 /* RakNetSocket2_Windows_Linux.cpp in Sources */,
@@ -2268,6 +2276,7 @@
 				D15226D74B5F1C4C77EC84B1 /* DoorModel.cpp in Sources */,
 				821F6F1825E748DC00455E92 /* FileOperations.cpp in Sources */,
 				3CDD11B2242D1DDF00FD21F8 /* HealthNode.cpp in Sources */,
+				827A5A21269B926F00469545 /* CollisionController.cpp in Sources */,
 				C1222C87F6E3205CB0FD5628 /* GLaDOS.cpp in Sources */,
 				821F6ED325E748DB00455E92 /* SecureHandshake.cpp in Sources */,
 				821F6F2A25E748DC00455E92 /* RakNetSocket2_Windows_Linux.cpp in Sources */,
@@ -2430,6 +2439,7 @@
 				D152241D12DF18170D97502F /* DoorModel.cpp in Sources */,
 				821F6F1725E748DC00455E92 /* FileOperations.cpp in Sources */,
 				3CDD11B1242D1DDF00FD21F8 /* HealthNode.cpp in Sources */,
+				827A5A20269B926F00469545 /* CollisionController.cpp in Sources */,
 				C1222BA1DAB6BA55C0C6DEDA /* GLaDOS.cpp in Sources */,
 				821F6ED225E748DB00455E92 /* SecureHandshake.cpp in Sources */,
 				821F6F2925E748DC00455E92 /* RakNetSocket2_Windows_Linux.cpp in Sources */,

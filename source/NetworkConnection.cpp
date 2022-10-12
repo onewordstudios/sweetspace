@@ -8,7 +8,7 @@
 #include "NetworkDataType.h"
 
 /** IP of the NAT punchthrough server */
-constexpr auto SERVER_ADDRESS = "35.231.174.159";
+constexpr auto SERVER_ADDRESS = "34.138.48.28";
 /** Port of the NAT punchthrough server */
 constexpr uint16_t SERVER_PORT = 61111;
 /** How long to block on shutdown */

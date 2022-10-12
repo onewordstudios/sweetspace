@@ -37,6 +37,9 @@
 #ifndef __CU_VEC4_H__
 #define __CU_VEC4_H__
 
+#pragma warning( push )
+#pragma warning( disable : 4244 )
+
 #include <math.h>
 #include <functional>
 #include <cugl/util/CUDebug.h>
@@ -1542,4 +1545,6 @@ public:
 
 }
 
+
+#pragma warning( pop )
 #endif /* __CU_VEC4_H__ */

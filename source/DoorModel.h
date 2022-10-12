@@ -6,13 +6,6 @@
 
 #include "Globals.h"
 
-/** The max height of the door*/
-constexpr unsigned int MAX_HEIGHT = 1600;
-/** The max height of the door*/
-constexpr unsigned int HALF_OPEN = 400;
-/** The speed of the door raising */
-constexpr unsigned int SPEED = 20;
-
 class DoorModel {
    private:
 	/** The height of the door */
@@ -52,17 +45,6 @@ class DoorModel {
 	void dispose();
 
 	/**
-	 * Initializes a new door.
-	 *
-	 * An initializer does the real work that the constructor does not.  It
-	 * initializes all assets and makes the object read for use.  By separating
-	 * them, we allow ourselfs non-pointer references to complex objects.
-	 *
-	 * @return true if the obstacle is initialized properly, false otherwise.
-	 */
-	virtual bool init() { return init(0.0f); }
-
-	/**
 	 * Initializes a new door with the given angle
 	 *
 	 * An initializer does the real work that the constructor does not.  It
@@ -73,11 +55,7 @@ class DoorModel {
 	 *
 	 * @return true if the obstacle is initialized properly, false otherwise.
 	 */
-	virtual bool init(const float a) {
-		this->angle = a;
-		isActive = true;
-		return true;
-	};
+	virtual bool init(float a);
 
 #pragma mark -
 #pragma mark Accessors
@@ -107,7 +85,7 @@ class DoorModel {
 	 *
 	 * @return the number of players in range of the door.
 	 */
-	uint8_t getPlayersOn() { return static_cast<uint8_t>(playersOn.count()); }
+	uint8_t getPlayersOn() const { return static_cast<uint8_t>(playersOn.count()); }
 
 	/**
 	 * Adds the given player's flag from the door.
@@ -117,48 +95,36 @@ class DoorModel {
 	/**
 	 * Removes the given player's flag from the door. Requires that this player is on the door
 	 */
-	void removePlayer(uint8_t id) {
-		if (!resolved()) {
-			playersOn.reset(id);
-		}
-	}
+	void removePlayer(uint8_t id);
 
 	/**
 	 * Raises the door.
 	 */
-	void raiseDoor() {
-		if (height < MAX_HEIGHT) {
-			height += SPEED;
-		}
-	}
+	void update(float timestep);
 
 	/**
 	 * Returns whether this door can be passed under.
 	 */
-	bool halfOpen() const { return height >= HALF_OPEN; }
+	bool halfOpen() const;
 
 	/**
 	 * Returns whether this door has been resolved and opened.
 	 */
-	bool resolvedAndRaised() { return resolved() && height >= MAX_HEIGHT; }
+	bool resolvedAndRaised() const;
 
 	/**
 	 * Returns whether this player is on the door.
 	 */
-	bool isPlayerOn(uint8_t id) { return playersOn.test(id); }
+	bool isPlayerOn(uint8_t id) const { return playersOn.test(id); }
 
 	/**
 	 * Returns whether this door is resolved.
 	 */
-	bool resolved() { return getPlayersOn() >= 2; }
+	bool resolved() const { return getPlayersOn() >= 2; }
 
 	/**
 	 * Resets this door.
 	 */
-	void reset() {
-		playersOn.reset();
-		height = 0;
-		isActive = false;
-	}
+	void reset();
 };
 #endif /* DOOR_MODEL_H */

@@ -36,6 +36,9 @@
 #ifndef __CU_VEC2_H__
 #define __CU_VEC2_H__
 
+#pragma warning( push )
+#pragma warning( disable : 4244 )
+
 #include <math.h>
 #include <string>
 #include <functional>
@@ -1643,5 +1646,7 @@ inline const Vec2 operator*(float x, const Vec2& v) {
 typedef Vec2 Point2;
 
 }
+
+#pragma warning( pop )
 
 #endif /* __CU_VEC2_H__ */

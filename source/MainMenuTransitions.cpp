@@ -31,9 +31,7 @@ constexpr std::array<const char *, 3> MAIN_SCREEN = {"matchmaking_home", "matchm
 													 "matchmaking_creditsbtn"};
 #pragma endregion
 
-MainMenuMode::MainMenuTransitions::MainMenuTransitions(MainMenuMode *parent) {
-	this->parent = parent;
-}
+MainMenuMode::MainMenuTransitions::MainMenuTransitions(MainMenuMode *parent) : parent(parent) {}
 
 void MainMenuMode::MainMenuTransitions::init(const std::shared_ptr<AssetManager> &assets,
 											 bool toCredits) {

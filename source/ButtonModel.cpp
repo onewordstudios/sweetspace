@@ -19,7 +19,7 @@ constexpr unsigned int I_FRAMES = 10;
 #pragma endregion
 
 bool ButtonModel::init(const float a, std::shared_ptr<ButtonModel> pair, uint8_t pairID) {
-	clear();
+	reset();
 	angle = a;
 	pairButton = std::move(pair);
 	this->pairID = pairID;
@@ -66,10 +66,9 @@ bool ButtonModel::trigger() {
 	return true;
 }
 
-void ButtonModel::clear() {
+void ButtonModel::reset() {
 	jumped = false;
 	height = 0;
-	resolved = false;
 	angle = -1;
 	isActive = false;
 	frame = 0;

@@ -411,6 +411,21 @@ class ShipModel {
 		}
 	}
 
+	/**
+	 * Step all local models for this frame.
+	 *
+	 * This will perform the following, in order:
+	 * - Update the ship's timer
+	 * - Step donut models
+	 * - Perform collision detection
+	 * - Step door models
+	 * - Step stabilizer model
+	 * - Drain health as needed
+	 *
+	 * @param timestep Time since last update
+	 */
+	void update(float timestep);
+
 #pragma mark -
 #pragma mark Helpers
 	float getAngleDifference(float angle1, float angle2) const {
