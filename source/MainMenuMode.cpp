@@ -5,6 +5,7 @@
 #include <iostream>
 #include <sstream>
 
+#include "AdUtils.h"
 #include "ExternalDonutModel.h"
 #include "Globals.h"
 #include "LevelConstants.h"
@@ -70,6 +71,7 @@ bool MainMenuMode::init(const std::shared_ptr<AssetManager>& assets, bool toCred
 	if (!Scene::init(dimen)) {
 		return false;
 	}
+	AdUtils::displayBanner();
 
 	// Acquire the scene built by the asset loader and resize it the scene
 	auto scene = assets->get<Node>("matchmaking");
@@ -240,6 +242,7 @@ void MainMenuMode::processUpdate() {
 		case MagicInternetBox::MatchmakingStatus::HostError:
 			break;
 		case MagicInternetBox::MatchmakingStatus::GameStart:
+			AdUtils::hideBanner();
 			gameReady = true;
 			return;
 		default:

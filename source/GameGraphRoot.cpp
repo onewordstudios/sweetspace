@@ -6,6 +6,7 @@
 #include <sstream>
 #include <vector>
 
+#include "AdUtils.h"
 #include "Globals.h"
 #include "ShipSegmentNode.h"
 #include "TutorialConstants.h"
@@ -418,6 +419,7 @@ void GameGraphRoot::update( // NOLINT Yeah it's a big function; we'll live with 
 		coordHUD->setText(time);
 	}
 
+	bool justLost = false;
 	// State Check for Drawing
 	switch (status) {
 		case Normal:
@@ -428,12 +430,17 @@ void GameGraphRoot::update( // NOLINT Yeah it's a big function; we'll live with 
 			pauseMenu->update();
 			break;
 		case Loss:
+			justLost = !lossScreen->isVisible();
 			// Show loss screen
 			lossScreen->setVisible(true);
 			pauseMenu->setVisible(false);
 			if (playerID != 0) {
 				lostWaitText->setVisible(true);
 				restartBtn->setVisible(false);
+			}
+			if (justLost) {
+				// Show an ad to the losers
+				AdUtils::displayInterstitial();
 			}
 			break;
 		case Win:

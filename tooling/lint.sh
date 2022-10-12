@@ -19,13 +19,13 @@ then
     exit 0
 elif [ $1 == '-ci' ]
 then
-    clang-tidy ../source/*.cpp --header-filter=.*source\/[^\/]*\.h -- -I../cugl/include 1>&2 2>/dev/null
+    clang-tidy ../source/*.cpp --header-filter=.*source\/[^\/]*\.h -- -I../cugl/include -I../firebase/include 1>&2 2>/dev/null
     exit 0
 elif [ $1 == '-ciDiff' ]
 then
     cd ..
     LIST=$(git diff origin/master --diff-filter=ACMR --name-only --no-color | grep -E '\.cpp$')
-    clang-tidy $LIST --header-filter=.*source\/[^\/]*\.h -- -Icugl/include 1>&2 2>/dev/null
+    clang-tidy $LIST --header-filter=.*source\/[^\/]*\.h -- -Icugl/include -Ifirebase/include 1>&2 2>/dev/null
 elif [ $1 == '-ciDiffFast' ]
 then
     cd ..

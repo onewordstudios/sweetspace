@@ -350,9 +350,10 @@ protected:
 
     /** The title (Window name) of the display */
     std::string _title;
-    
+public:
     /** The SDL window, which provides the OpenGL drawing context */
     SDL_Window*   _window;
+protected:
     /** The associated OpenGL drawing context */
     SDL_GLContext _glContext;
     
