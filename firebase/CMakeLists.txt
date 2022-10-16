@@ -24,10 +24,8 @@ endif ()
 
 # Determine the location of the libraries to use based on the platform.
 if(ANDROID)
-  string(REPLACE "_" ";" SPLIT_STL ${ANDROID_STL})
-  list(GET SPLIT_STL 0 STL_DIR)
   set(FIREBASE_SDK_LIBDIR
-      "${FIREBASE_CPP_SDK_DIR}/libs/android/${ANDROID_ABI}/${STL_DIR}")
+      "${FIREBASE_CPP_SDK_DIR}/libs/android/${ANDROID_ABI}")
 elseif(APPLE)
   if(IOS)
     set(FIREBASE_SDK_LIBDIR ${FIREBASE_CPP_SDK_DIR}/libs/ios/universal)
@@ -48,7 +46,7 @@ elseif(MSVC)
   set(MSVC_VS_VERSION VS2019)
   set(FIREBASE_SDK_LIBDIR
       ${FIREBASE_CPP_SDK_DIR}/libs/windows/${MSVC_VS_VERSION}/${MSVC_RUNTIME_MODE}/${MSVC_CPU}/${MSVC_CONFIG})
-else()
+else()  # LINUX
   # Check whether we are building with CXX11 ABI.
   get_directory_property(CURR_DIRECTORY_DEFS COMPILE_DEFINITIONS)
   if ("${CURR_DIRECTORY_DEFS}" MATCHES "_GLIBCXX_USE_CXX11_ABI=0" OR
@@ -58,8 +56,13 @@ else()
   else()
     set(DISABLE_CXX11 FALSE)
     set(LINUX_ABI cxx11)
-  endif()  
-  set(LINUX_CPU x86_64)
+  endif()
+  # Check if we are building for x86
+  if (" ${CMAKE_CXX_FLAGS} " MATCHES " -m32 ")
+    set(LINUX_CPU i386)
+  else()
+    set(LINUX_CPU x86_64)
+  endif()
   set(FIREBASE_SDK_LIBDIR ${FIREBASE_CPP_SDK_DIR}/libs/linux/${LINUX_CPU}/${LINUX_ABI})
 endif()
 
@@ -93,8 +96,8 @@ add_firebase_target(firebase_database)
 add_firebase_target(firebase_dynamic_links)
 add_firebase_target(firebase_firestore)
 add_firebase_target(firebase_functions)
+add_firebase_target(firebase_gma)
 add_firebase_target(firebase_installations)
-add_firebase_target(firebase_instance_id)
 add_firebase_target(firebase_messaging)
 add_firebase_target(firebase_performance)
 add_firebase_target(firebase_remote_config)
@@ -116,10 +119,6 @@ if(NOT APPLE AND NOT ANDROID AND UNIX)
                      apt-get install libsecret-1-dev")
   else()
     set_target_properties(firebase_auth PROPERTIES
-      INTERFACE_INCLUDE_DIRECTORIES "${LIBSECRET_INCLUDE_DIRS}"
-      INTERFACE_LINK_LIBRARIES "${LIBSECRET_LIBRARIES}"
-    )
-    set_target_properties(firebase_instance_id PROPERTIES
       INTERFACE_INCLUDE_DIRECTORIES "${LIBSECRET_INCLUDE_DIRS}"
       INTERFACE_LINK_LIBRARIES "${LIBSECRET_LIBRARIES}"
     )

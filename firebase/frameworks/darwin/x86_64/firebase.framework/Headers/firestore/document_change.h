@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Google
+ * Copyright 2018 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef FIREBASE_FIRESTORE_CLIENT_CPP_SRC_INCLUDE_FIREBASE_FIRESTORE_DOCUMENT_CHANGE_H_
-#define FIREBASE_FIRESTORE_CLIENT_CPP_SRC_INCLUDE_FIREBASE_FIRESTORE_DOCUMENT_CHANGE_H_
+#ifndef FIREBASE_FIRESTORE_SRC_INCLUDE_FIREBASE_FIRESTORE_DOCUMENT_CHANGE_H_
+#define FIREBASE_FIRESTORE_SRC_INCLUDE_FIREBASE_FIRESTORE_DOCUMENT_CHANGE_H_
 
 #include <cstddef>
 
@@ -63,7 +63,13 @@ class DocumentChange {
   /**
    * The sentinel index used as a return value to indicate no matches.
    */
+#if defined(ANDROID)
+  // Older NDK (r16b) fails to define this properly. Fix this when support for
+  // the older NDK is removed.
+  static const std::size_t npos;
+#else
   static constexpr std::size_t npos = static_cast<std::size_t>(-1);
+#endif  // defined(ANDROID)
 
   /**
    * @brief Creates an invalid DocumentChange that has to be reassigned before
@@ -153,7 +159,25 @@ class DocumentChange {
    */
   virtual std::size_t new_index() const;
 
+  /**
+   * @brief Returns true if this `DocumentChange` is valid, false if it is
+   * not valid. An invalid `DocumentChange` could be the result of:
+   *   - Creating a `DocumentChange` using the default constructor.
+   *   - Moving from the `DocumentChange`.
+   *   - Deleting your Firestore instance, which will invalidate all the
+   *     `DocumentChange` instances associated with it.
+   *
+   * @return true if this `DocumentChange` is valid, false if this
+   * `DocumentChange` is invalid.
+   */
+  bool is_valid() const { return internal_ != nullptr; }
+
  private:
+  std::size_t Hash() const;
+
+  friend bool operator==(const DocumentChange& lhs, const DocumentChange& rhs);
+  friend std::size_t DocumentChangeHash(const DocumentChange& change);
+
   friend class FirestoreInternal;
   friend class Wrapper;
   friend struct ConverterImpl;
@@ -165,7 +189,15 @@ class DocumentChange {
   mutable DocumentChangeInternal* internal_ = nullptr;
 };
 
+/** Checks `lhs` and `rhs` for equality. */
+bool operator==(const DocumentChange& lhs, const DocumentChange& rhs);
+
+/** Checks `lhs` and `rhs` for inequality. */
+inline bool operator!=(const DocumentChange& lhs, const DocumentChange& rhs) {
+  return !(lhs == rhs);
+}
+
 }  // namespace firestore
 }  // namespace firebase
 
-#endif  // FIREBASE_FIRESTORE_CLIENT_CPP_SRC_INCLUDE_FIREBASE_FIRESTORE_DOCUMENT_CHANGE_H_
+#endif  // FIREBASE_FIRESTORE_SRC_INCLUDE_FIREBASE_FIRESTORE_DOCUMENT_CHANGE_H_

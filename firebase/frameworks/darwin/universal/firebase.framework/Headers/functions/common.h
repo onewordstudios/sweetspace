@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef FIREBASE_FUNCTIONS_CLIENT_CPP_SRC_INCLUDE_FIREBASE_FUNCTIONS_COMMON_H_
-#define FIREBASE_FUNCTIONS_CLIENT_CPP_SRC_INCLUDE_FIREBASE_FUNCTIONS_COMMON_H_
+#ifndef FIREBASE_FUNCTIONS_SRC_INCLUDE_FIREBASE_FUNCTIONS_COMMON_H_
+#define FIREBASE_FUNCTIONS_SRC_INCLUDE_FIREBASE_FUNCTIONS_COMMON_H_
 
 #include "firebase/variant.h"
 
@@ -25,7 +25,7 @@ namespace functions {
 /// https://github.com/googleapis/googleapis/blob/master/google/rpc/code.proto
 enum Error {
 #ifdef INTERNAL_EXPERIMENTAL
-  // LINT.IfChange
+// LINT.IfChange
 #endif  // INTERNAL_EXPERIMENTAL
 
   // Not an error; returned on success
@@ -182,7 +182,7 @@ enum Error {
   kErrorDataLoss = 15,
 
 #ifdef INTERNAL_EXPERIMENTAL
-  // LINT.ThenChange(//depot_firebase_cpp/functions/client/cpp/src/ios/\
+// LINT.ThenChange(//depot_firebase_cpp/functions/client/cpp/src/ios/\
   //                 callable_reference_ios.mm)
 #endif  // INTERNAL_EXPERIMENTAL
 };
@@ -203,4 +203,4 @@ const char* GetErrorMessage(Error error);
 }  // namespace functions
 }  // namespace firebase
 
-#endif  // FIREBASE_FUNCTIONS_CLIENT_CPP_SRC_INCLUDE_FIREBASE_FUNCTIONS_COMMON_H_
+#endif  // FIREBASE_FUNCTIONS_SRC_INCLUDE_FIREBASE_FUNCTIONS_COMMON_H_

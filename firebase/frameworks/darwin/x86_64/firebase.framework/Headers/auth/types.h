@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef FIREBASE_AUTH_CLIENT_CPP_SRC_INCLUDE_FIREBASE_AUTH_TYPES_H_
-#define FIREBASE_AUTH_CLIENT_CPP_SRC_INCLUDE_FIREBASE_AUTH_TYPES_H_
+#ifndef FIREBASE_AUTH_SRC_INCLUDE_FIREBASE_AUTH_TYPES_H_
+#define FIREBASE_AUTH_SRC_INCLUDE_FIREBASE_AUTH_TYPES_H_
 
 #include <map>
 #include <string>
@@ -419,6 +419,14 @@ enum AuthError {
   /// IDP sign-in.
   kAuthErrorUserCancelled,
 
+  /// Indicates that a request was made to an unsupported backend endpoint in
+  /// passthrough mode.
+  kAuthErrorUnsupportedPassthroughOperation,
+
+  /// Indicates that a token refresh was requested, but neither a refresh token
+  /// nor a custom token provider is available.
+  kAuthErrorTokenRefreshUnavailable,
+
 #endif  // INTERNAL_EXEPERIMENTAL
 };
 
@@ -462,4 +470,4 @@ struct FederatedOAuthProviderData : FederatedProviderData {
 }  // namespace auth
 }  // namespace firebase
 
-#endif  // FIREBASE_AUTH_CLIENT_CPP_SRC_INCLUDE_FIREBASE_AUTH_TYPES_H_
+#endif  // FIREBASE_AUTH_SRC_INCLUDE_FIREBASE_AUTH_TYPES_H_

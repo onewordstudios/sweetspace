@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Google
+ * Copyright 2018 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,10 +14,11 @@
  * limitations under the License.
  */
 
-#ifndef FIREBASE_FIRESTORE_CLIENT_CPP_SRC_INCLUDE_FIREBASE_FIRESTORE_SET_OPTIONS_H_
-#define FIREBASE_FIRESTORE_CLIENT_CPP_SRC_INCLUDE_FIREBASE_FIRESTORE_SET_OPTIONS_H_
+#ifndef FIREBASE_FIRESTORE_SRC_INCLUDE_FIREBASE_FIRESTORE_SET_OPTIONS_H_
+#define FIREBASE_FIRESTORE_SRC_INCLUDE_FIREBASE_FIRESTORE_SET_OPTIONS_H_
 
 #include <string>
+#include <unordered_set>
 #include <vector>
 
 #include "firebase/firestore/field_path.h"
@@ -135,15 +136,26 @@ class SetOptions final {
   static SetOptions MergeFieldPaths(const std::vector<FieldPath>& fields);
 
  private:
+  friend bool operator==(const SetOptions& lhs, const SetOptions& rhs);
   friend class SetOptionsInternal;
 
-  SetOptions(Type type, std::vector<FieldPath> fields);
+  SetOptions(Type type, std::unordered_set<FieldPath> fields);
 
   Type type_ = Type::kOverwrite;
-  std::vector<FieldPath> fields_;
+  std::unordered_set<FieldPath> fields_;
 };
+
+/** Checks `lhs` and `rhs` for equality. */
+inline bool operator==(const SetOptions& lhs, const SetOptions& rhs) {
+  return lhs.type_ == rhs.type_ && lhs.fields_ == rhs.fields_;
+}
+
+/** Checks `lhs` and `rhs` for inequality. */
+inline bool operator!=(const SetOptions& lhs, const SetOptions& rhs) {
+  return !(lhs == rhs);
+}
 
 }  // namespace firestore
 }  // namespace firebase
 
-#endif  // FIREBASE_FIRESTORE_CLIENT_CPP_SRC_INCLUDE_FIREBASE_FIRESTORE_SET_OPTIONS_H_
+#endif  // FIREBASE_FIRESTORE_SRC_INCLUDE_FIREBASE_FIRESTORE_SET_OPTIONS_H_

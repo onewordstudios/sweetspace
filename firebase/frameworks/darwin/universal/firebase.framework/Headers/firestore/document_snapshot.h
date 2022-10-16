@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Google
+ * Copyright 2018 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef FIREBASE_FIRESTORE_CLIENT_CPP_SRC_INCLUDE_FIREBASE_FIRESTORE_DOCUMENT_SNAPSHOT_H_
-#define FIREBASE_FIRESTORE_CLIENT_CPP_SRC_INCLUDE_FIREBASE_FIRESTORE_DOCUMENT_SNAPSHOT_H_
+#ifndef FIREBASE_FIRESTORE_SRC_INCLUDE_FIREBASE_FIRESTORE_DOCUMENT_SNAPSHOT_H_
+#define FIREBASE_FIRESTORE_SRC_INCLUDE_FIREBASE_FIRESTORE_DOCUMENT_SNAPSHOT_H_
 
 #include <iosfwd>
 #include <string>
@@ -230,6 +230,19 @@ class DocumentSnapshot {
       ServerTimestampBehavior stb = ServerTimestampBehavior::kDefault) const;
 
   /**
+   * @brief Returns true if this `DocumentSnapshot` is valid, false if it is
+   * not valid. An invalid `DocumentSnapshot` could be the result of:
+   *   - Creating a `DocumentSnapshot` with the default constructor.
+   *   - Moving from the `DocumentSnapshot`.
+   *   - Deleting your Firestore instance, which will invalidate all the
+   *     `DocumentSnapshot` instances associated with it.
+   *
+   * @return true if this `DocumentSnapshot` is valid, false if this
+   * `DocumentSnapshot` is invalid.
+   */
+  bool is_valid() const { return internal_ != nullptr; }
+
+  /**
    * Returns a string representation of this `DocumentSnapshot` for
    * logging/debugging purposes.
    *
@@ -248,6 +261,12 @@ class DocumentSnapshot {
                                   const DocumentSnapshot& document);
 
  private:
+  std::size_t Hash() const;
+
+  friend bool operator==(const DocumentSnapshot& lhs,
+                         const DocumentSnapshot& rhs);
+  friend std::size_t DocumentSnapshotHash(const DocumentSnapshot& snapshot);
+
   friend class DocumentChangeInternal;
   friend class EventListenerInternal;
   friend class FirestoreInternal;
@@ -263,7 +282,16 @@ class DocumentSnapshot {
   mutable DocumentSnapshotInternal* internal_ = nullptr;
 };
 
+/** Checks `lhs` and `rhs` for equality. */
+bool operator==(const DocumentSnapshot& lhs, const DocumentSnapshot& rhs);
+
+/** Checks `lhs` and `rhs` for inequality. */
+inline bool operator!=(const DocumentSnapshot& lhs,
+                       const DocumentSnapshot& rhs) {
+  return !(lhs == rhs);
+}
+
 }  // namespace firestore
 }  // namespace firebase
 
-#endif  // FIREBASE_FIRESTORE_CLIENT_CPP_SRC_INCLUDE_FIREBASE_FIRESTORE_DOCUMENT_SNAPSHOT_H_
+#endif  // FIREBASE_FIRESTORE_SRC_INCLUDE_FIREBASE_FIRESTORE_DOCUMENT_SNAPSHOT_H_

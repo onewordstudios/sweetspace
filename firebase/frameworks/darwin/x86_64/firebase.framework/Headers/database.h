@@ -12,12 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef FIREBASE_DATABASE_CLIENT_CPP_SRC_INCLUDE_FIREBASE_DATABASE_H_
-#define FIREBASE_DATABASE_CLIENT_CPP_SRC_INCLUDE_FIREBASE_DATABASE_H_
+#ifndef FIREBASE_DATABASE_SRC_INCLUDE_FIREBASE_DATABASE_H_
+#define FIREBASE_DATABASE_SRC_INCLUDE_FIREBASE_DATABASE_H_
 
 #include "firebase/app.h"
-#include "firebase/internal/common.h"
-#include "firebase/log.h"
 #include "firebase/database/common.h"
 #include "firebase/database/data_snapshot.h"
 #include "firebase/database/database_reference.h"
@@ -26,6 +24,8 @@
 #include "firebase/database/mutable_data.h"
 #include "firebase/database/query.h"
 #include "firebase/database/transaction.h"
+#include "firebase/internal/common.h"
+#include "firebase/log.h"
 
 namespace firebase {
 
@@ -196,4 +196,4 @@ class Database {
 }  // namespace database
 }  // namespace firebase
 
-#endif  // FIREBASE_DATABASE_CLIENT_CPP_SRC_INCLUDE_FIREBASE_DATABASE_H_
+#endif  // FIREBASE_DATABASE_SRC_INCLUDE_FIREBASE_DATABASE_H_

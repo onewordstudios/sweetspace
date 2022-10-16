@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef FIREBASE_APP_CLIENT_CPP_SRC_INCLUDE_FIREBASE_APP_H_
-#define FIREBASE_APP_CLIENT_CPP_SRC_INCLUDE_FIREBASE_APP_H_
+#ifndef FIREBASE_APP_SRC_INCLUDE_FIREBASE_APP_H_
+#define FIREBASE_APP_SRC_INCLUDE_FIREBASE_APP_H_
 
 #include "firebase/internal/platform.h"
 
@@ -24,20 +24,16 @@
 #endif  // FIREBASE_PLATFORM_ANDROID
 
 #include <map>
+#include <memory>
 #include <string>
 
-#if FIREBASE_PLATFORM_IOS
+#if FIREBASE_PLATFORM_IOS || FIREBASE_PLATFORM_TVOS
 #ifdef __OBJC__
 @class FIRApp;
 #endif  // __OBJC__
 #endif  // FIREBASE_PLATFORM_IOS
 
-/// @brief Namespace that encompasses all Firebase APIs.
-#if !defined(FIREBASE_NAMESPACE)
-#define FIREBASE_NAMESPACE firebase
-#endif
-
-namespace FIREBASE_NAMESPACE {
+namespace firebase {
 
 #ifdef FIREBASE_LINUX_BUILD_CONFIG_STRING
 // Check to see if the shared object compiler string matches the input
@@ -49,6 +45,14 @@ void CheckCompilerString(const char* input);
 namespace internal {
 class FunctionRegistry;
 }  // namespace internal
+#endif  // INTERNAL_EXPERIMENTAL
+
+#ifdef INTERNAL_EXPERIMENTAL
+#if FIREBASE_PLATFORM_DESKTOP
+namespace heartbeat {
+class HeartbeatController;  // forward declaration
+}  // namespace heartbeat
+#endif  // FIREBASE_PLATFORM_DESKTOP
 #endif  // INTERNAL_EXPERIMENTAL
 
 namespace internal {
@@ -72,7 +76,7 @@ enum InitResult {
   /// @if swig_examples
   /// Use FirebaseApp.CheckDependencies() and
   /// FirebaseApp.FixDependenciesAsync() to resolve this issue.
-  /// @end swig_examples
+  /// @endif
   /// </SWIG>
   ///
   /// Also, on Android, this value can be returned if the Java dependencies of a
@@ -707,36 +711,50 @@ class App {
 #endif  // INTERNAL_EXPERIMENTAL
 
 #ifdef INTERNAL_EXPERIMENTAL
+#if FIREBASE_PLATFORM_DESKTOP
+  // These methods are only visible to SWIG and internal users of firebase::App.
+
+  /// Logs a heartbeat using the internal HeartbeatController.
+  void LogHeartbeat() const;
+
+  /// Get a pointer to the HeartbeatController associated with this app.
+  std::shared_ptr<heartbeat::HeartbeatController> GetHeartbeatController()
+      const;
+#endif  // FIREBASE_PLATFORM_DESKTOP
+#endif  // INTERNAL_EXPERIMENTAL
+
+#ifdef INTERNAL_EXPERIMENTAL
 #if FIREBASE_PLATFORM_ANDROID
   /// Get the platform specific app implementation referenced by this object.
   ///
   /// @return Global reference to the FirebaseApp.  The returned reference
   /// most be deleted after use.
   jobject GetPlatformApp() const;
-#elif FIREBASE_PLATFORM_IOS
+#elif FIREBASE_PLATFORM_IOS || FIREBASE_PLATFORM_TVOS
 #ifdef __OBJC__
   /// Get the platform specific app implementation referenced by this object.
   ///
   /// @return Reference to the FIRApp object owned by this app.
   FIRApp* GetPlatformApp() const;
 #endif  // __OBJC__
-#endif  // FIREBASE_PLATFORM_ANDROID, FIREBASE_PLATFORM_IOS
+#endif  // FIREBASE_PLATFORM_ANDROID, FIREBASE_PLATFORM_IOS,
+        // FIREBASE_PLATFORM_TVOS
 #endif  // INTERNAL_EXPERIMENTAL
 
  private:
   /// Construct the object.
-  App() :
+  App()
+      :
 #if FIREBASE_PLATFORM_ANDROID || defined(DOXYGEN)
-    activity_(nullptr),
+        activity_(nullptr),
 #endif
-    internal_(nullptr) {
+        internal_(nullptr) {
     Initialize();
 
 #ifdef FIREBASE_LINUX_BUILD_CONFIG_STRING
-  CheckCompilerString(FIREBASE_LINUX_BUILD_CONFIG_STRING);
+    CheckCompilerString(FIREBASE_LINUX_BUILD_CONFIG_STRING);
 #endif  // FIREBASE_LINUX_BUILD_CONFIG_STRING
   }
-
 
   /// Initialize internal implementation
   void Initialize();
@@ -764,7 +782,6 @@ class App {
   /// @endcond
 };
 
-// NOLINTNEXTLINE - allow namespace overridden
-}  // namespace FIREBASE_NAMESPACE
+}  // namespace firebase
 
-#endif  // FIREBASE_APP_CLIENT_CPP_SRC_INCLUDE_FIREBASE_APP_H_
+#endif  // FIREBASE_APP_SRC_INCLUDE_FIREBASE_APP_H_

@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Google
+ * Copyright 2018 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,21 +14,18 @@
  * limitations under the License.
  */
 
-#ifndef FIREBASE_FIRESTORE_CLIENT_CPP_SRC_INCLUDE_FIREBASE_FIRESTORE_FIELD_PATH_H_
-#define FIREBASE_FIRESTORE_CLIENT_CPP_SRC_INCLUDE_FIREBASE_FIRESTORE_FIELD_PATH_H_
+#ifndef FIREBASE_FIRESTORE_SRC_INCLUDE_FIREBASE_FIRESTORE_FIELD_PATH_H_
+#define FIREBASE_FIRESTORE_SRC_INCLUDE_FIREBASE_FIRESTORE_FIELD_PATH_H_
 
+#include <initializer_list>
 #include <iosfwd>
 #include <string>
 #include <vector>
 
-#if !defined(_STLPORT_VERSION)
-#include <initializer_list>
-#endif  // !defined(_STLPORT_VERSION)
-
 namespace firebase {
 namespace firestore {
 
-#if !defined(__ANDROID__) && !defined(FIRESTORE_STUB_BUILD)
+#if !defined(__ANDROID__)
 
 namespace model {
 class FieldPath;
@@ -38,7 +35,7 @@ class FieldPath;
 
 class FieldPathPortable;
 
-#endif  // !defined(__ANDROID__) && !defined(FIRESTORE_STUB_BUILD)
+#endif  // !defined(__ANDROID__)
 
 /**
  * @brief A FieldPath refers to a field in a document.
@@ -59,18 +56,13 @@ class FieldPath final {
    */
   FieldPath();
 
-#if !defined(_STLPORT_VERSION)
   /**
    * Creates a FieldPath from the provided field names. If more than one field
    * name is provided, the path will point to a nested field in a document.
    *
    * @param field_names A list of field names.
-   *
-   * @note This method is not available when using the STLPort C++ runtime
-   * library.
    */
   FieldPath(std::initializer_list<std::string> field_names);
-#endif  // !defined(_STLPORT_VERSION)
 
   /**
    * Creates a FieldPath from the provided field names. If more than one field
@@ -131,6 +123,17 @@ class FieldPath final {
   static FieldPath DocumentId();
 
   /**
+   * @brief Returns true if this `FieldPath` is valid, false if it is not valid.
+   * An invalid `FieldPath` could be the result of:
+   *   - Creating a `FieldPath` using the default constructor.
+   *   - Moving from the `FieldPath`.
+   *
+   * @return true if this `FieldPath` is valid, false if this `FieldPath` is
+   * invalid.
+   */
+  bool is_valid() const { return internal_ != nullptr; }
+
+  /**
    * Returns a string representation of this `FieldPath` for
    * logging/debugging purposes.
    *
@@ -150,11 +153,11 @@ class FieldPath final {
  private:
   // The type of the internal object that implements the public interface.
 #if !defined(SWIG)
-#if !defined(__ANDROID__) && !defined(FIRESTORE_STUB_BUILD)
+#if !defined(__ANDROID__)
   using FieldPathInternal = ::firebase::firestore::model::FieldPath;
 #else
   using FieldPathInternal = ::firebase::firestore::FieldPathPortable;
-#endif  // !defined(__ANDROID__) && !defined(FIRESTORE_STUB_BUILD)
+#endif  // !defined(__ANDROID__)
 #endif  // !defined(SWIG)
 
   friend bool operator==(const FieldPath& lhs, const FieldPath& rhs);
@@ -169,6 +172,9 @@ class FieldPath final {
   friend struct ConverterImpl;
 
   explicit FieldPath(FieldPathInternal* internal);
+
+  static FieldPathInternal* InternalFromSegments(
+      std::vector<std::string> field_names);
 
   static FieldPath FromDotSeparatedString(const std::string& path);
 
@@ -196,4 +202,4 @@ struct hash<firebase::firestore::FieldPath> {
 }  // namespace std
 #endif  // !defined(SWIG)
 
-#endif  // FIREBASE_FIRESTORE_CLIENT_CPP_SRC_INCLUDE_FIREBASE_FIRESTORE_FIELD_PATH_H_
+#endif  // FIREBASE_FIRESTORE_SRC_INCLUDE_FIREBASE_FIRESTORE_FIELD_PATH_H_

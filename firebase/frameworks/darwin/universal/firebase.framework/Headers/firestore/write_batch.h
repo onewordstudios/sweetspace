@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Google
+ * Copyright 2018 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,16 +14,18 @@
  * limitations under the License.
  */
 
-#ifndef FIREBASE_FIRESTORE_CLIENT_CPP_SRC_INCLUDE_FIREBASE_FIRESTORE_WRITE_BATCH_H_
-#define FIREBASE_FIRESTORE_CLIENT_CPP_SRC_INCLUDE_FIREBASE_FIRESTORE_WRITE_BATCH_H_
+#ifndef FIREBASE_FIRESTORE_SRC_INCLUDE_FIREBASE_FIRESTORE_WRITE_BATCH_H_
+#define FIREBASE_FIRESTORE_SRC_INCLUDE_FIREBASE_FIRESTORE_WRITE_BATCH_H_
 
 #include "firebase/firestore/map_field_value.h"
 #include "firebase/firestore/set_options.h"
 
 namespace firebase {
 
+/// @cond FIREBASE_APP_INTERNAL
 template <typename T>
 class Future;
+/// @endcond
 
 namespace firestore {
 
@@ -155,6 +157,19 @@ class WriteBatch {
    */
   virtual Future<void> Commit();
 
+  /**
+   * @brief Returns true if this `WriteBatch` is valid, false if it is not
+   * valid. An invalid `WriteBatch` could be the result of:
+   *   - Creating a `WriteBatch` using the default constructor.
+   *   - Moving from the `WriteBatch`.
+   *   - Deleting your Firestore instance, which will invalidate all the
+   *     `WriteBatch` instances associated with it.
+   *
+   * @return true if this `WriteBatch` is valid, false if this `WriteBatch` is
+   * invalid.
+   */
+  bool is_valid() const { return internal_ != nullptr; }
+
  private:
   friend class FirestoreInternal;
   friend class WriteBatchInternal;
@@ -170,4 +185,4 @@ class WriteBatch {
 }  // namespace firestore
 }  // namespace firebase
 
-#endif  // FIREBASE_FIRESTORE_CLIENT_CPP_SRC_INCLUDE_FIREBASE_FIRESTORE_WRITE_BATCH_H_
+#endif  // FIREBASE_FIRESTORE_SRC_INCLUDE_FIREBASE_FIRESTORE_WRITE_BATCH_H_

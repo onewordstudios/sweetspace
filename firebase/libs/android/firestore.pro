@@ -1,4 +1,10 @@
 -ignorewarnings
+-keep,includedescriptorclasses public class com.google.android.gms.tasks.CancellationTokenSource { * ; }
+-keep,includedescriptorclasses public class com.google.android.gms.tasks.Continuation { *; }
+-keep,includedescriptorclasses public class com.google.android.gms.tasks.OnCompleteListener { *; }
+-keep,includedescriptorclasses public class com.google.android.gms.tasks.Task { *; }
+-keep,includedescriptorclasses public class com.google.android.gms.tasks.TaskCompletionSource { * ; }
+-keep,includedescriptorclasses public class com.google.android.gms.tasks.TaskCompletionSource { *; }
 -keep,includedescriptorclasses public class com.google.firebase.Timestamp { *; }
 -keep,includedescriptorclasses public class com.google.firebase.example.LoggingUtils { * ; }
 -keep,includedescriptorclasses public class com.google.firebase.firestore.Blob { *; }
@@ -18,7 +24,11 @@
 -keep,includedescriptorclasses public class com.google.firebase.firestore.FirebaseFirestoreSettings$Builder { *; }
 -keep,includedescriptorclasses public class com.google.firebase.firestore.GeoPoint { *; }
 -keep,includedescriptorclasses public class com.google.firebase.firestore.ListenerRegistration { *; }
+-keep,includedescriptorclasses public class com.google.firebase.firestore.LoadBundleTask { *; }
+-keep,includedescriptorclasses public class com.google.firebase.firestore.LoadBundleTaskProgress { *; }
+-keep,includedescriptorclasses public class com.google.firebase.firestore.LoadBundleTaskProgress$TaskState { *; }
 -keep,includedescriptorclasses public class com.google.firebase.firestore.MetadataChanges { *; }
+-keep,includedescriptorclasses public class com.google.firebase.firestore.OnProgressListener { *; }
 -keep,includedescriptorclasses public class com.google.firebase.firestore.Query { *; }
 -keep,includedescriptorclasses public class com.google.firebase.firestore.Query$Direction { *; }
 -keep,includedescriptorclasses public class com.google.firebase.firestore.QuerySnapshot { *; }
@@ -27,7 +37,9 @@
 -keep,includedescriptorclasses public class com.google.firebase.firestore.Source { *; }
 -keep,includedescriptorclasses public class com.google.firebase.firestore.Transaction { *; }
 -keep,includedescriptorclasses public class com.google.firebase.firestore.Transaction$Function { *; }
+-keep,includedescriptorclasses public class com.google.firebase.firestore.TransactionOptions { *; }
+-keep,includedescriptorclasses public class com.google.firebase.firestore.TransactionOptions$Builder { *; }
 -keep,includedescriptorclasses public class com.google.firebase.firestore.WriteBatch { *; }
+-keep,includedescriptorclasses public class com.google.firebase.firestore.internal.cpp.FirestoreTasks { *; }
 -keep,includedescriptorclasses public class com.google.firebase.firestore.internal.cpp.SilentRejectionSingleThreadExecutor { *; }
 -keep,includedescriptorclasses public class com.google.firebase.firestore.internal.cpp.TransactionFunction { *; }
--keep,includedescriptorclasses public class java.lang.IllegalStateException { *; }

@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef FIREBASE_FUNCTIONS_CLIENT_CPP_SRC_INCLUDE_FIREBASE_FUNCTIONS_H_
-#define FIREBASE_FUNCTIONS_CLIENT_CPP_SRC_INCLUDE_FIREBASE_FUNCTIONS_H_
+#ifndef FIREBASE_FUNCTIONS_SRC_INCLUDE_FIREBASE_FUNCTIONS_H_
+#define FIREBASE_FUNCTIONS_SRC_INCLUDE_FIREBASE_FUNCTIONS_H_
 
 #include <string>
 
@@ -90,6 +90,9 @@ class Functions {
   /// @brief Get a FunctionsReference for the specified path.
   HttpsCallableReference GetHttpsCallable(const char* name) const;
 
+  /// @brief Get a FunctionsReference for the specified URL.
+  HttpsCallableReference GetHttpsCallableFromURL(const char* url) const;
+
   /// @brief Sets an origin for a Cloud Functions emulator to use.
   void UseFunctionsEmulator(const char* origin);
 
@@ -109,4 +112,4 @@ class Functions {
 }  // namespace functions
 }  // namespace firebase
 
-#endif  // FIREBASE_FUNCTIONS_CLIENT_CPP_SRC_INCLUDE_FIREBASE_FUNCTIONS_H_
+#endif  // FIREBASE_FUNCTIONS_SRC_INCLUDE_FIREBASE_FUNCTIONS_H_

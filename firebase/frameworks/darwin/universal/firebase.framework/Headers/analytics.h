@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef FIREBASE_ANALYTICS_CLIENT_CPP_INCLUDE_FIREBASE_ANALYTICS_H_
-#define FIREBASE_ANALYTICS_CLIENT_CPP_INCLUDE_FIREBASE_ANALYTICS_H_
+#ifndef FIREBASE_ANALYTICS_SRC_INCLUDE_FIREBASE_ANALYTICS_H_
+#define FIREBASE_ANALYTICS_SRC_INCLUDE_FIREBASE_ANALYTICS_H_
 
 #include <cstddef>
 #include <cstdint>
@@ -433,6 +433,7 @@ void LogEvent(const char* name);
 // in the C# code.
 %csmethodmodifiers LogEvent "public unsafe"
 #endif  // SWIG
+// clang-format on
 
 /// @brief Log an event with associated parameters.
 ///
@@ -456,7 +457,15 @@ void LogEvent(const char* name);
 /// array.
 void LogEvent(const char* name, const Parameter* parameters,
               size_t number_of_parameters);
-// clang-format on
+
+/// Initiates on-device conversion measurement given a user email address on iOS
+/// (no-op on Android). On iOS, requires dependency
+/// GoogleAppMeasurementOnDeviceConversion to be linked in, otherwise it is a
+/// no-op.
+/// @param[in] email_address User email address. Include a domain name for all
+/// email addresses (e.g. gmail.com or hotmail.co.jp).
+void InitiateOnDeviceConversionMeasurementWithEmailAddress(
+    const char* email_address);
 
 /// @brief Set a user property to the given value.
 ///
@@ -497,18 +506,6 @@ void SetUserId(const char* user_id);
 /// session.
 void SetSessionTimeoutDuration(int64_t milliseconds);
 
-/// @brief Sets the current screen name and screen class, which specifies the
-/// current visual context in your app. This helps identify the areas in your
-/// app where users spend their time and how they interact with your app.
-///
-/// @param screen_name The name of the current screen. Set to nullptr to clear
-/// the current screen name. Limited to 100 characters.
-/// @param screen_class The name of the screen class. If you specify nullptr for
-/// this, it will use the default. On Android, the default is the class name of
-/// the current Activity. On iOS, the default is the class name of the current
-/// UIViewController. Limited to 100 characters.
-void SetCurrentScreen(const char* screen_name, const char* screen_class);
-
 /// Clears all analytics data for this app from the device and resets the app
 /// instance id.
 void ResetAnalyticsData();
@@ -533,4 +530,4 @@ Future<std::string> GetAnalyticsInstanceIdLastResult();
 }  // namespace analytics
 }  // namespace firebase
 
-#endif  // FIREBASE_ANALYTICS_CLIENT_CPP_INCLUDE_FIREBASE_ANALYTICS_H_
+#endif  // FIREBASE_ANALYTICS_SRC_INCLUDE_FIREBASE_ANALYTICS_H_

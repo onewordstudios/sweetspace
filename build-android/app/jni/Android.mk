@@ -13,7 +13,7 @@ CUGL_PATH  := $(CACHE_PATH)/../../../cugl/build-android
 FIREBASE_CPP_SDK_DIR  := $(CACHE_PATH)/../../../firebase
 
 STL:=$(firstword $(subst _, ,$(APP_STL)))
-FIREBASE_LIBRARY_PATH := $(FIREBASE_CPP_SDK_DIR)/libs/android/$(TARGET_ARCH_ABI)/$(STL)
+FIREBASE_LIBRARY_PATH := $(FIREBASE_CPP_SDK_DIR)/libs/android/$(TARGET_ARCH_ABI)
 
 include $(CUGL_PATH)/jni/Android.mk
 include $(PROJ_PATH)/source/Android.mk
@@ -35,7 +35,7 @@ include $(PREBUILT_STATIC_LIBRARY)
 # admob
 include $(CLEAR_VARS)
 LOCAL_MODULE:=firebase_admob
-LOCAL_SRC_FILES:=$(FIREBASE_LIBRARY_PATH)/libfirebase_admob.a
+LOCAL_SRC_FILES:=$(FIREBASE_LIBRARY_PATH)/libfirebase_gma.a
 LOCAL_EXPORT_C_INCLUDES:=$(FIREBASE_CPP_SDK_DIR)/include
 include $(PREBUILT_STATIC_LIBRARY)
 

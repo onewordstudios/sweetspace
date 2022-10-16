@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Google
+ * Copyright 2018 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef FIREBASE_FIRESTORE_CLIENT_CPP_SRC_INCLUDE_FIREBASE_FIRESTORE_FIELD_VALUE_H_
-#define FIREBASE_FIRESTORE_CLIENT_CPP_SRC_INCLUDE_FIREBASE_FIRESTORE_FIELD_VALUE_H_
+#ifndef FIREBASE_FIRESTORE_SRC_INCLUDE_FIREBASE_FIRESTORE_FIELD_VALUE_H_
+#define FIREBASE_FIRESTORE_SRC_INCLUDE_FIREBASE_FIRESTORE_FIELD_VALUE_H_
 
 #include <cstdint>
 #include <iosfwd>
@@ -23,8 +23,8 @@
 #include <string>
 #include <vector>
 
-#include "firebase/internal/type_traits.h"
 #include "firebase/firestore/map_field_value.h"
+#include "firebase/internal/type_traits.h"
 
 namespace firebase {
 
@@ -277,8 +277,9 @@ class FieldValue final {
    * @brief Returns `true` if this `FieldValue` is valid, `false` if it is not
    * valid. An invalid `FieldValue` could be the result of:
    *   - Creating a `FieldValue` using the default constructor.
+   *   - Moving from the `FieldValue`.
    *   - Calling `DocumentSnapshot::Get(field)` for a field that does not exist
-   * in the document.
+   *   in the document.
    *
    * @return `true` if this `FieldValue` is valid, `false` if this `FieldValue`
    * is invalid.
@@ -325,7 +326,6 @@ class FieldValue final {
    */
   static FieldValue ArrayRemove(std::vector<FieldValue> elements);
 
-#if defined(INTERNAL_EXPERIMENTAL) || defined(SWIG)
   /**
    * Returns a special value that can be used with `Set()` or `Update()` that
    * tells the server to increment the field's current value by the given
@@ -348,16 +348,14 @@ class FieldValue final {
     // Note: Doxygen will run into trouble if this function's definition is
     // moved outside the class body.
     static_assert(
-        std::numeric_limits<T>::max() <= std::numeric_limits<int64_t>::max(),
+        (std::numeric_limits<T>::max)() <=
+            (std::numeric_limits<int64_t>::max)(),
         "The integer type you provided is larger than can fit in an int64_t. "
         "If you are sure the value will not be truncated, please explicitly "
         "cast to int64_t before passing it to FieldValue::Increment().");
     return IntegerIncrement(static_cast<int64_t>(by_value));
   }
 
-#endif  // if defined(INTERNAL_EXPERIMENTAL) || defined(SWIG)
-
-#if defined(INTERNAL_EXPERIMENTAL) || defined(SWIG)
   /**
    * Returns a special value that can be used with `Set()` or `Update()` that
    * tells the server to increment the field's current value by the given
@@ -380,15 +378,13 @@ class FieldValue final {
     // Note: Doxygen will run into trouble if this function's definition is
     // moved outside the class body.
     static_assert(
-        std::numeric_limits<T>::max() <= std::numeric_limits<double>::max(),
+        (std::numeric_limits<T>::max)() <= (std::numeric_limits<double>::max)(),
         "The floating point type you provided is larger than can fit in a "
         "double. If you are sure the value will not be truncated, please "
         "explicitly cast to double before passing it to "
         "FieldValue::Increment().");
     return DoubleIncrement(static_cast<double>(by_value));
   }
-
-#endif  // if defined(INTERNAL_EXPERIMENTAL) || defined(SWIG)
 
   /**
    * Returns a string representation of this `FieldValue` for logging/debugging
@@ -437,4 +433,4 @@ inline bool operator!=(const FieldValue& lhs, const FieldValue& rhs) {
 }  // namespace firestore
 }  // namespace firebase
 
-#endif  // FIREBASE_FIRESTORE_CLIENT_CPP_SRC_INCLUDE_FIREBASE_FIRESTORE_FIELD_VALUE_H_
+#endif  // FIREBASE_FIRESTORE_SRC_INCLUDE_FIREBASE_FIRESTORE_FIELD_VALUE_H_

@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-#ifndef FIREBASE_AUTH_CLIENT_CPP_SRC_INCLUDE_FIREBASE_AUTH_H_
-#define FIREBASE_AUTH_CLIENT_CPP_SRC_INCLUDE_FIREBASE_AUTH_H_
+#ifndef FIREBASE_AUTH_SRC_INCLUDE_FIREBASE_AUTH_H_
+#define FIREBASE_AUTH_SRC_INCLUDE_FIREBASE_AUTH_H_
 
 #include <vector>
 
 #include "firebase/app.h"
+#include "firebase/auth/user.h"
 #include "firebase/future.h"
 #include "firebase/internal/common.h"
-#include "firebase/auth/user.h"
 
 #if !defined(DOXYGEN)
 #ifndef SWIG
@@ -161,6 +161,24 @@ class Auth {
   /// @endxmlonly
   /// </SWIG>
   User* current_user();
+
+  /// The current user language code. This can be set to the app’s current
+  /// language by calling set_language_code. The string must be a language code
+  /// that follows BCP 47.  This will return an empty string if the app default
+  /// language code is being used.
+  std::string language_code() const;
+
+  /// Sets the user-facing language code for auth operations that can be
+  /// internationalized, such as FirebaseUser.sendEmailVerification(). This
+  /// language code should follow the conventions defined by the IETF in BCP 47.
+  void set_language_code(const char* language_code);
+
+  /// Sets the user-facing language code to be the default app language. This
+  /// uses a languge associated with the phone's locale data.  On desktop
+  /// this will set the language code to the Firebase service's default. You
+  /// may subsequently customize the language code again by invoking
+  /// set_language_code().
+  void UseAppLanguage();
 
   // ----- Providers -------------------------------------------------------
   /// Asynchronously requests the IDPs (identity providers) that can be used
@@ -514,6 +532,7 @@ class Auth {
   friend void EnableTokenAutoRefresh(AuthData* authData);
   friend void DisableTokenAutoRefresh(AuthData* authData);
   friend void ResetTokenRefreshCounter(AuthData* authData);
+  friend void LogHeartbeat(Auth* auth);
   /// @endcond
 
   // Find Auth instance using App.  Return null if the instance does not exist.
@@ -531,6 +550,13 @@ class Auth {
   static bool GetAuthTokenAsyncForRegistry(App* app, void* force_refresh,
                                            void* out_future);
 
+  // Provides access to the current user's uid, equivalent to calling
+  // this->current_user()->uid(). Returns the current user's uid or an empty
+  // string, if there isn't one. The out pointer is expected to point to an
+  // instance of std::string.
+  static bool GetCurrentUserUidForRegistry(App* app, void* /*unused*/,
+                                           void* out);
+
   // Starts and stops a thread to ensure that the cached auth token is never
   // kept long enough for it to expire.  Refcounted, so multiple classes can
   // register this without causing problems.
@@ -538,6 +564,21 @@ class Auth {
                                                  void* /*unused*/);
   static bool StopTokenRefreshThreadForRegistry(App* app, void* /*unused*/,
                                                 void* /*unused*/);
+
+  // Adds an indirect auth state listener implemented as a callback and a
+  // context object.
+  //
+  // @param callback a function pointer that takes a single void* argument and
+  //     returns void (i.e. it has type void (*)(void*)).
+  // @param context a pointer to an arbitrary object that Auth will pass to
+  //     the callback when the auth state changes.
+  static bool AddAuthStateListenerForRegistry(App* app, void* callback,
+                                              void* context);
+
+  // Removes the indirect auth state listener that was added with the same
+  // arguments.
+  static bool RemoveAuthStateListenerForRegistry(App* app, void* callback,
+                                                 void* context);
 
   // Init and Destroy the platform specific auth data.
   void InitPlatformAuth(AuthData* const auth_data);
@@ -895,4 +936,4 @@ class FederatedOAuthProvider : public FederatedAuthProvider {
 }  // namespace auth
 }  // namespace firebase
 
-#endif  // FIREBASE_AUTH_CLIENT_CPP_SRC_INCLUDE_FIREBASE_AUTH_H_
+#endif  // FIREBASE_AUTH_SRC_INCLUDE_FIREBASE_AUTH_H_

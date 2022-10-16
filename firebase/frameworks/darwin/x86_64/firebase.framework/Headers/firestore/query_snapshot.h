@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Google
+ * Copyright 2018 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef FIREBASE_FIRESTORE_CLIENT_CPP_SRC_INCLUDE_FIREBASE_FIRESTORE_QUERY_SNAPSHOT_H_
-#define FIREBASE_FIRESTORE_CLIENT_CPP_SRC_INCLUDE_FIREBASE_FIRESTORE_QUERY_SNAPSHOT_H_
+#ifndef FIREBASE_FIRESTORE_SRC_INCLUDE_FIREBASE_FIRESTORE_QUERY_SNAPSHOT_H_
+#define FIREBASE_FIRESTORE_SRC_INCLUDE_FIREBASE_FIRESTORE_QUERY_SNAPSHOT_H_
 
 #include <cstddef>
 #include <vector>
@@ -141,9 +141,7 @@ class QuerySnapshot {
    *
    * @return True if there are no documents in the QuerySnapshot.
    */
-  bool empty() const {
-    return size() == 0;
-  }
+  bool empty() const { return size() == 0; }
 
   /**
    * @brief Checks the size of the QuerySnapshot.
@@ -152,7 +150,25 @@ class QuerySnapshot {
    */
   virtual std::size_t size() const;
 
+  /**
+   * @brief Returns true if this `QuerySnapshot` is valid, false if it is not
+   * valid. An invalid `QuerySnapshot` could be the result of:
+   *   - Creating a `QuerySnapshot` using the default constructor.
+   *   - Moving from the `QuerySnapshot`.
+   *   - Deleting your Firestore instance, which will invalidate all the
+   *     `QuerySnapshot` instances associated with it.
+   *
+   * @return true if this `QuerySnapshot` is valid, false if this
+   * `QuerySnapshot` is invalid.
+   */
+  bool is_valid() const { return internal_ != nullptr; }
+
  private:
+  std::size_t Hash() const;
+
+  friend bool operator==(const QuerySnapshot& lhs, const QuerySnapshot& rhs);
+  friend std::size_t QuerySnapshotHash(const QuerySnapshot& snapshot);
+
   friend class EventListenerInternal;
   friend class FirestoreInternal;
   friend struct ConverterImpl;
@@ -164,7 +180,15 @@ class QuerySnapshot {
   mutable QuerySnapshotInternal* internal_ = nullptr;
 };
 
+/** Checks `lhs` and `rhs` for equality. */
+bool operator==(const QuerySnapshot& lhs, const QuerySnapshot& rhs);
+
+/** Checks `lhs` and `rhs` for inequality. */
+inline bool operator!=(const QuerySnapshot& lhs, const QuerySnapshot& rhs) {
+  return !(lhs == rhs);
+}
+
 }  // namespace firestore
 }  // namespace firebase
 
-#endif  // FIREBASE_FIRESTORE_CLIENT_CPP_SRC_INCLUDE_FIREBASE_FIRESTORE_QUERY_SNAPSHOT_H_
+#endif  // FIREBASE_FIRESTORE_SRC_INCLUDE_FIREBASE_FIRESTORE_QUERY_SNAPSHOT_H_

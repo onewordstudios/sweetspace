@@ -14,21 +14,17 @@
  * limitations under the License.
  */
 
-#ifndef FIREBASE_APP_CLIENT_CPP_SRC_INCLUDE_FIREBASE_INTERNAL_TYPE_TRAITS_H_
-#define FIREBASE_APP_CLIENT_CPP_SRC_INCLUDE_FIREBASE_INTERNAL_TYPE_TRAITS_H_
+#ifndef FIREBASE_APP_SRC_INCLUDE_FIREBASE_INTERNAL_TYPE_TRAITS_H_
+#define FIREBASE_APP_SRC_INCLUDE_FIREBASE_INTERNAL_TYPE_TRAITS_H_
 
 #include <cstdlib>
 #include <type_traits>
-
-#if !defined(FIREBASE_NAMESPACE)
-#define FIREBASE_NAMESPACE firebase
-#endif
 
 // Doxygen breaks trying to parse this file, and since it is internal logic,
 // it doesn't need to be included in the generated documentation.
 #ifndef DOXYGEN
 
-namespace FIREBASE_NAMESPACE {
+namespace firebase {
 
 template <typename T>
 struct remove_reference {
@@ -131,8 +127,8 @@ struct is_integer {
 };
 
 // NOLINTNEXTLINE - allow namespace overridden
-}  // namespace FIREBASE_NAMESPACE
+}  // namespace firebase
 
 #endif  // DOXYGEN
 
-#endif  // FIREBASE_APP_CLIENT_CPP_SRC_INCLUDE_FIREBASE_INTERNAL_TYPE_TRAITS_H_
+#endif  // FIREBASE_APP_SRC_INCLUDE_FIREBASE_INTERNAL_TYPE_TRAITS_H_

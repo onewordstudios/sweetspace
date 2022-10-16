@@ -1,6 +1,6 @@
 #include "AdUtils.h"
 
-#include "../firebase/include/firebase/admob/types.h"
+#include "../firebase/include/firebase/gma/types.h"
 #if defined(__ANDROID__)
 // Android ad unit IDs
 const char* const K_BANNER_AD_UNIT = "ca-app-pub-3940256099942544/6300978111";
@@ -12,7 +12,7 @@ const char* const K_INTERSTITIAL_AD_UNIT = "ca-app-pub-9909379902934039/29955317
 #endif
 
 #if defined(__ANDROID__) || defined(__IPHONEOS__)
-firebase::admob::BannerView* AdUtils::bannerView;
-firebase::admob::InterstitialAd* AdUtils::interstitial_ad;
-firebase::admob::AdRequest AdUtils::request = {};
+firebase::gma::AdView* AdUtils::bannerView;
+firebase::gma::InterstitialAd* AdUtils::interstitial_ad;
+firebase::gma::AdRequest AdUtils::request = {};
 #endif

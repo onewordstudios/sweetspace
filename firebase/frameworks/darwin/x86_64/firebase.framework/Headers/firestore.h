@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Google
+ * Copyright 2018 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,15 +14,13 @@
  * limitations under the License.
  */
 
-#ifndef FIREBASE_FIRESTORE_CLIENT_CPP_SRC_INCLUDE_FIREBASE_FIRESTORE_H_
-#define FIREBASE_FIRESTORE_CLIENT_CPP_SRC_INCLUDE_FIREBASE_FIRESTORE_H_
+#ifndef FIREBASE_FIRESTORE_SRC_INCLUDE_FIREBASE_FIRESTORE_H_
+#define FIREBASE_FIRESTORE_SRC_INCLUDE_FIREBASE_FIRESTORE_H_
 
+#include <functional>
 #include <string>
 
 #include "firebase/internal/common.h"
-#if defined(FIREBASE_USE_STD_FUNCTION)
-#include <functional>
-#endif
 
 #include "firebase/app.h"
 #include "firebase/future.h"
@@ -33,10 +31,12 @@
 #include "firebase/firestore/document_change.h"
 #include "firebase/firestore/document_reference.h"
 #include "firebase/firestore/document_snapshot.h"
-#include "firebase/firestore/event_listener.h"
 #include "firebase/firestore/field_path.h"
 #include "firebase/firestore/field_value.h"
+#include "firebase/firestore/firestore_errors.h"
+#include "firebase/firestore/geo_point.h"
 #include "firebase/firestore/listener_registration.h"
+#include "firebase/firestore/load_bundle_task_progress.h"
 #include "firebase/firestore/map_field_value.h"
 #include "firebase/firestore/metadata_changes.h"
 #include "firebase/firestore/query.h"
@@ -45,11 +45,10 @@
 #include "firebase/firestore/settings.h"
 #include "firebase/firestore/snapshot_metadata.h"
 #include "firebase/firestore/source.h"
-#include "firebase/firestore/transaction.h"
-#include "firebase/firestore/write_batch.h"
-#include "firebase/firestore/firestore_errors.h"
-#include "firebase/firestore/geo_point.h"
 #include "firebase/firestore/timestamp.h"
+#include "firebase/firestore/transaction.h"
+#include "firebase/firestore/transaction_options.h"
+#include "firebase/firestore/write_batch.h"
 
 namespace firebase {
 /**
@@ -241,7 +240,6 @@ class Firestore {
    */
   virtual WriteBatch batch() const;
 
-#if defined(FIREBASE_USE_STD_FUNCTION) || defined(DOXYGEN)
   /**
    * Executes the given update and then attempts to commit the changes applied
    * within the transaction. If any document read within the transaction has
@@ -252,27 +250,26 @@ class Firestore {
    * The string reference parameter can be used to set the error message.
    *
    * @return A Future that will be resolved when the transaction finishes.
-   *
-   * @note This method is not available when using the STLPort C++ runtime
-   * library.
    */
   virtual Future<void> RunTransaction(
       std::function<Error(Transaction&, std::string&)> update);
-#endif  // defined(FIREBASE_USE_STD_FUNCTION) || defined(DOXYGEN)
 
   /**
    * Executes the given update and then attempts to commit the changes applied
    * within the transaction. If any document read within the transaction has
-   * changed, the update function will be retried. If it fails to commit after 5
-   * attempts, the transaction will fail.
+   * changed, the update function will be retried. If it fails to commit after
+   * the `max_attempts` specified in the given `TransactionOptions`, the
+   * transaction will fail.
    *
-   * @param update The function to execute within the transaction context.
-   * (Ownership is not transferred; you are responsible for making sure that
-   * transaction is valid as long as the Future has not yet completed.)
+   * @param options The transaction options for controlling execution.
+   * @param update function or lambda to execute within the transaction context.
+   * The string reference parameter can be used to set the error message.
    *
    * @return A Future that will be resolved when the transaction finishes.
    */
-  virtual Future<void> RunTransaction(TransactionFunction* update);
+  virtual Future<void> RunTransaction(
+      TransactionOptions options,
+      std::function<Error(Transaction&, std::string&)> update);
 
   /**
    * Sets the log verbosity of all Firestore instances.
@@ -361,7 +358,6 @@ class Firestore {
    */
   virtual Future<void> ClearPersistence();
 
-#if defined(FIREBASE_USE_STD_FUNCTION) || defined(DOXYGEN)
   /**
    * Attaches a listener for a snapshots-in-sync event. Server-generated
    * updates and local changes can affect multiple snapshot listeners.
@@ -381,29 +377,44 @@ class Firestore {
    */
   virtual ListenerRegistration AddSnapshotsInSyncListener(
       std::function<void()> callback);
-#endif  // defined(FIREBASE_USE_STD_FUNCTION) || defined(DOXYGEN)
 
-#if !defined(FIREBASE_USE_STD_FUNCTION) || defined(DOXYGEN)
   /**
-   * Attaches a listener for a snapshots-in-sync event. Server-generated
-   * updates and local changes can affect multiple snapshot listeners.
-   * The snapshots-in-sync event indicates that all listeners affected by
-   * a given change have fired.
+   * Loads a Firestore bundle into the local cache.
    *
-   * NOTE: The snapshots-in-sync event only indicates that listeners are
-   * in sync with each other, but does not relate to whether those
-   * snapshots are in sync with the server. Use `SnapshotMetadata` in the
-   * individual listeners to determine if a snapshot is from the cache or
-   * the server.
-   *
-   * @param listener A callback to be called every time all snapshot
-   * listeners are in sync with each other.
-   * @return A `ListenerRegistration` object that can be used to remove the
-   * listener.
+   * @param bundle A string containing the bundle to be loaded.
+   * @return A `Future` that is resolved when the loading is either completed
+   * or aborted due to an error.
    */
-  virtual ListenerRegistration AddSnapshotsInSyncListener(
-      EventListener<void>* listener);
-#endif  // !defined(FIREBASE_USE_STD_FUNCTION) || defined(DOXYGEN)
+  virtual Future<LoadBundleTaskProgress> LoadBundle(const std::string& bundle);
+
+  /**
+   * Loads a Firestore bundle into the local cache, with the provided callback
+   * executed for progress updates.
+   *
+   * @param bundle A string containing the bundle to be loaded.
+   * @param progress_callback A callback that is called with progress
+   * updates, and completion or error updates.
+   * @return A `Future` that is resolved when the loading is either completed
+   * or aborted due to an error.
+   */
+  virtual Future<LoadBundleTaskProgress> LoadBundle(
+      const std::string& bundle,
+      std::function<void(const LoadBundleTaskProgress&)> progress_callback);
+
+  /**
+   * Reads a Firestore `Query` from the local cache, identified by the given
+   * name.
+   *
+   * Named queries are packaged into bundles on the server side (along with the
+   * resulting documents) and loaded into local cache using `LoadBundle`. Once
+   * in the local cache, you can use this method to extract a query by name.
+   *
+   * If a query cannot be found, the returned future will complete with its
+   * `error()` set to a non-zero error code.
+   *
+   * @param query_name The name of the query to read from saved bundles.
+   */
+  virtual Future<Query> NamedQuery(const std::string& query_name);
 
  protected:
   /**
@@ -444,4 +455,4 @@ class Firestore {
 }  // namespace firestore
 }  // namespace firebase
 
-#endif  // FIREBASE_FIRESTORE_CLIENT_CPP_SRC_INCLUDE_FIREBASE_FIRESTORE_H_
+#endif  // FIREBASE_FIRESTORE_SRC_INCLUDE_FIREBASE_FIRESTORE_H_

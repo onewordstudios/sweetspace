@@ -1,0 +1,32 @@
+-ignorewarnings
+-keep class com.google.ads.mediation.admob.AdMobAdapter { *; }
+-keep,includedescriptorclasses public class com.google.android.gms.ads.AdError { *; }
+-keep,includedescriptorclasses public class com.google.android.gms.ads.AdInspectorError { *; }
+-keep,includedescriptorclasses public class com.google.android.gms.ads.AdListener { *; }
+-keep,includedescriptorclasses public class com.google.android.gms.ads.AdRequest { *; }
+-keep,includedescriptorclasses public class com.google.android.gms.ads.AdRequest$Builder { *; }
+-keep,includedescriptorclasses public class com.google.android.gms.ads.AdSize { *; }
+-keep,includedescriptorclasses public class com.google.android.gms.ads.AdValue { *; }
+-keep,includedescriptorclasses public class com.google.android.gms.ads.AdView { *; }
+-keep,includedescriptorclasses public class com.google.android.gms.ads.AdapterResponseInfo { *; }
+-keep,includedescriptorclasses public class com.google.android.gms.ads.FullScreenContentCallback { *; }
+-keep,includedescriptorclasses public class com.google.android.gms.ads.LoadAdError { *; }
+-keep,includedescriptorclasses public class com.google.android.gms.ads.MobileAds { *; }
+-keep,includedescriptorclasses public class com.google.android.gms.ads.OnAdInspectorClosedListener { *; }
+-keep,includedescriptorclasses public class com.google.android.gms.ads.OnPaidEventListener { *; }
+-keep,includedescriptorclasses public class com.google.android.gms.ads.OnUserEarnedRewardListener { *; }
+-keep,includedescriptorclasses public class com.google.android.gms.ads.RequestConfiguration { *; }
+-keep,includedescriptorclasses public class com.google.android.gms.ads.RequestConfiguration$Builder { *; }
+-keep,includedescriptorclasses public class com.google.android.gms.ads.ResponseInfo { *; }
+-keep,includedescriptorclasses public class com.google.android.gms.ads.initialization.AdapterStatus { *; }
+-keep,includedescriptorclasses public class com.google.android.gms.ads.initialization.AdapterStatus$State { *; }
+-keep,includedescriptorclasses public class com.google.android.gms.ads.initialization.InitializationStatus { *; }
+-keep,includedescriptorclasses public class com.google.android.gms.ads.initialization.OnInitializationCompleteListener { *; }
+-keep,includedescriptorclasses public class com.google.android.gms.ads.interstitial.InterstitialAd { *; }
+-keep,includedescriptorclasses public class com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback { *; }
+-keep,includedescriptorclasses public class com.google.android.gms.ads.rewarded.RewardItem { *; }
+-keep,includedescriptorclasses public class com.google.android.gms.ads.rewarded.RewardedAd { *; }
+-keep,includedescriptorclasses public class com.google.android.gms.ads.rewarded.RewardedAdLoadCallback { *; }
+-keep,includedescriptorclasses public class com.google.android.gms.ads.rewarded.ServerSideVerificationOptions { *; }
+-keep,includedescriptorclasses public class com.google.android.gms.ads.rewarded.ServerSideVerificationOptions$Builder { *; }
+-keep,includedescriptorclasses public class com.google.firebase.example.LoggingUtils { * ; }

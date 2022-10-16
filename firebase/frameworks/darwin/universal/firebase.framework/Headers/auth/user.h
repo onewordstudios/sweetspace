@@ -14,17 +14,17 @@
  * limitations under the License.
  */
 
-#ifndef FIREBASE_AUTH_CLIENT_CPP_SRC_INCLUDE_FIREBASE_AUTH_USER_H_
-#define FIREBASE_AUTH_CLIENT_CPP_SRC_INCLUDE_FIREBASE_AUTH_USER_H_
+#ifndef FIREBASE_AUTH_SRC_INCLUDE_FIREBASE_AUTH_USER_H_
+#define FIREBASE_AUTH_SRC_INCLUDE_FIREBASE_AUTH_USER_H_
 
 #include <string>
 #include <vector>
 
+#include "firebase/auth/credential.h"
+#include "firebase/auth/types.h"
 #include "firebase/future.h"
 #include "firebase/internal/common.h"
 #include "firebase/variant.h"
-#include "firebase/auth/credential.h"
-#include "firebase/auth/types.h"
 
 namespace firebase {
 namespace auth {
@@ -276,10 +276,9 @@ class User : public UserInfoInterface {
   /// AdditionalUserInfo inside the returned SignInResult.
   ///
   /// Returns an error if the existing credential is not for this user
-  /// or if sign-in with that credential failed. The user should remain
-  /// signed in even if this method failed. If the developer had held
-  /// a reference to that user, the reference will continue to be valid
-  /// after this operation.
+  /// or if sign-in with that credential failed.
+  /// @note: The current user may be signed out if this operation fails on
+  /// Android and desktop platforms.
   Future<SignInResult> ReauthenticateAndRetrieveData(
       const Credential& credential);
 
@@ -499,4 +498,4 @@ class User : public UserInfoInterface {
 }  // namespace auth
 }  // namespace firebase
 
-#endif  // FIREBASE_AUTH_CLIENT_CPP_SRC_INCLUDE_FIREBASE_AUTH_USER_H_
+#endif  // FIREBASE_AUTH_SRC_INCLUDE_FIREBASE_AUTH_USER_H_

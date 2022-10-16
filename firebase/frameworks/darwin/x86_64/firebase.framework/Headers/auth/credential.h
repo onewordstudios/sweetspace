@@ -14,23 +14,25 @@
  * limitations under the License.
  */
 
-#ifndef FIREBASE_AUTH_CLIENT_CPP_SRC_INCLUDE_FIREBASE_AUTH_CREDENTIAL_H_
-#define FIREBASE_AUTH_CLIENT_CPP_SRC_INCLUDE_FIREBASE_AUTH_CREDENTIAL_H_
+#ifndef FIREBASE_AUTH_SRC_INCLUDE_FIREBASE_AUTH_CREDENTIAL_H_
+#define FIREBASE_AUTH_SRC_INCLUDE_FIREBASE_AUTH_CREDENTIAL_H_
 
 #include <stdint.h>
 
 #include <string>
 
-#include "firebase/internal/common.h"
 #include "firebase/auth/types.h"
+#include "firebase/internal/common.h"
 
 namespace firebase {
 
 // Predeclarations.
 class App;
 
+/// @cond FIREBASE_APP_INTERNAL
 template <typename T>
 class Future;
+/// @endcond
 
 namespace auth {
 
@@ -204,7 +206,6 @@ class GoogleAuthProvider {
   /// The string used to identify this provider.
   static const char* const kProviderId;
 };
-
 
 /// @brief Use an access token provided by Microsoft to authenticate.
 class MicrosoftAuthProvider {
@@ -523,6 +524,12 @@ class PhoneAuthProvider {
 
   /// Maximum value of `auto_verify_time_out_ms` in @ref VerifyPhoneNumber.
   /// Larger values will be clamped.
+  ///
+  /// @deprecated This value is no longer used to clamp
+  /// `auto_verify_time_out_ms` in @ref VerifyPhoneNumber. The range is
+  /// determined by the underlying SDK, ex. <a
+  /// href="/docs/reference/android/com/google/firebase/auth/PhoneAuthOptions.Builder"><code>PhoneAuthOptions.Build</code>
+  /// in Android SDK</a>
   static const uint32_t kMaxTimeoutMs;
 
   /// Start the phone number authentication operation.
@@ -534,7 +541,6 @@ class PhoneAuthProvider {
   ///    miliseconds. Currently SMS auto retrieval is only supported on Android.
   ///    If 0, do not do SMS auto retrieval.
   ///    If positive, try to auto-retrieve the SMS verification code.
-  ///    If larger than kMaxTimeoutMs, clamped to kMaxTimeoutMs.
   ///    When the time out is exceeded, listener->OnCodeAutoRetrievalTimeOut()
   ///    is called.
   /// @param[in] force_resending_token If NULL, assume this is a new phone
@@ -612,7 +618,6 @@ class TwitterAuthProvider {
   static const char* const kProviderId;
 };
 
-
 /// @brief Use an access token provided by Yahoo to authenticate.
 class YahooAuthProvider {
  public:
@@ -620,8 +625,7 @@ class YahooAuthProvider {
   static const char* const kProviderId;
 };
 
-
 }  // namespace auth
 }  // namespace firebase
 
-#endif  // FIREBASE_AUTH_CLIENT_CPP_SRC_INCLUDE_FIREBASE_AUTH_CREDENTIAL_H_
+#endif  // FIREBASE_AUTH_SRC_INCLUDE_FIREBASE_AUTH_CREDENTIAL_H_
