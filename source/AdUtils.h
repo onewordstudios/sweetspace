@@ -52,26 +52,8 @@ class AdUtils {
 			return;
 		}
 
-		// Poll the future to wait for its completion either in this
-		// thread, or as part of your game loop by calling
-		// firebase::gma::InitializeLastResult();
-		while (future.status() == firebase::kFutureStatusPending) {
-			// Initialization on-going, continue to wait.
-		}
-
-		// future.status() is either kFutureStatusComplete or there’s an error
-
-		if (future.status() == firebase::kFutureStatusComplete &&
-			future.error() == firebase::gma::kAdErrorCodeNone) {
-			const firebase::gma::AdapterInitializationStatus* status = future.result();
-			// Check status for any mediation adapters you wish to use.
-			// ..
-
-			bannerView = new firebase::gma::AdView();
-			interstitial_ad = new firebase::gma::InterstitialAd();
-		} else {
-			// Handle initialization error.
-		}
+		bannerView = new firebase::gma::AdView();
+		interstitial_ad = new firebase::gma::InterstitialAd();
 #endif
 #if defined(__IPHONEOS__)
 		// Create the Firebase app.
