@@ -7,7 +7,7 @@ target 'Sweetspace (iOS)' do
 
   # Pods for Sweetspace (iOS)
   pod 'Firebase/Core'
-  pod 'Firebase/AdMob'
+  pod 'Google-Mobile-Ads-SDK'
 
 end
 
@@ -25,6 +25,6 @@ target 'Sweetspace(Sim)' do
 
   # Pods for Sweetspace(Sim)
   pod 'Firebase/Core'
-  pod 'Firebase/AdMob'
+  pod 'Google-Mobile-Ads-SDK'
 
 end

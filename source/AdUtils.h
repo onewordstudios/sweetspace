@@ -15,7 +15,7 @@ extern const char* const K_INTERSTITIAL_AD_UNIT;
 #endif
 
 #if defined(__IPHONEOS__)
-firebase::admob::AdParent getWindow();
+firebase::gma::AdParent getWindow();
 #endif
 
 /**
@@ -59,12 +59,11 @@ class AdUtils {
 		// Create the Firebase app.
 		firebase::App* fbapp = firebase::App::Create();
 
-		// Your Android AdMob app ID.
-		const char* kAdMobAppID = "ca-app-pub-9909379902934039~8465986645";
-		// Initialize the AdMob library with your AdMob app ID.
-		firebase::admob::Initialize(*fbapp, kAdMobAppID);
-		bannerView = new firebase::admob::BannerView();
-		interstitial_ad = new firebase::admob::InterstitialAd();
+		firebase::InitResult result;
+		firebase::Future<firebase::gma::AdapterInitializationStatus> future =
+						firebase::gma::Initialize(*fbapp, &result);
+		bannerView = new firebase::gma::AdView();
+		interstitial_ad = new firebase::gma::InterstitialAd();
 #endif
 	};
 	/**
@@ -87,18 +86,12 @@ class AdUtils {
 #endif
 #if defined(__IPHONEOS__)
 		if (bannerView->InitializeLastResult().status() == firebase::kFutureStatusInvalid) {
-			firebase::admob::AdSize ad_size;
-			ad_size.ad_size_type = firebase::admob::kAdSizeStandard;
-			ad_size.width = BANNER_WIDTH;
-			ad_size.height = BANNER_HEIGHT;
-
-			request.gender = firebase::admob::kGenderUnknown;
 
 			firebase::Future<void> future =
-				bannerView->Initialize(getWindow(), K_BANNER_AD_UNIT, ad_size);
+				bannerView->Initialize(getWindow(), K_BANNER_AD_UNIT, firebase::gma::AdSize::kBanner);
 			future.OnCompletion(LoadBannerCallback, bannerView);
 		} else {
-			firebase::Future<void> loadFuture = bannerView->LoadAd(request);
+			firebase::Future<firebase::gma::AdResult> loadFuture = bannerView->LoadAd(request);
 			loadFuture.OnCompletion(ShowBannerCallback, bannerView);
 		}
 #endif
@@ -134,13 +127,13 @@ class AdUtils {
 #endif
 #if defined(__IPHONEOS__)
 		if (interstitial_ad->InitializeLastResult().status() == firebase::kFutureStatusInvalid) {
-			request.gender = firebase::admob::kGenderUnknown;
+
 
 			firebase::Future<void> future =
-				interstitial_ad->Initialize(getWindow(), K_INTERSTITIAL_AD_UNIT);
+				interstitial_ad->Initialize(getWindow());
 			future.OnCompletion(LoadInterstitialCallback, interstitial_ad);
 		} else {
-			firebase::Future<void> loadFuture = interstitial_ad->LoadAd(request);
+			firebase::Future<firebase::gma::AdResult> loadFuture = interstitial_ad->LoadAd(K_INTERSTITIAL_AD_UNIT, request);
 			loadFuture.OnCompletion(ShowInterstitialCallback, interstitial_ad);
 		}
 #endif

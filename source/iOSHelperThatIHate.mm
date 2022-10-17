@@ -14,7 +14,7 @@
 #include <SDL/SDL_syswm.h>
 
 
-firebase::admob::AdParent getWindow(){
+firebase::gma::AdParent getWindow(){
 	SDL_SysWMinfo wmInfo;
 	SDL_VERSION(&wmInfo.version);
 	cugl::Display* display = cugl::Display::get();
@@ -22,6 +22,6 @@ firebase::admob::AdParent getWindow(){
 
     UIWindow* uiWindow = wmInfo.info.uikit.window;
     UIViewController* rootViewController = uiWindow.rootViewController;
-    firebase::admob::AdParent uiView = rootViewController.view;
+    firebase::gma::AdParent uiView = rootViewController.view;
 	return uiView;
 }
