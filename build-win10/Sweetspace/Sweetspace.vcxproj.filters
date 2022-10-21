@@ -168,9 +168,6 @@
     <ClInclude Include="..\..\source\MagicInternetBox.h">
       <Filter>Header Files\Controllers\Networking</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\source\NetworkConnection.h">
-      <Filter>Header Files\Controllers\Networking</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\source\NetworkDataType.h">
       <Filter>Header Files\Controllers\Networking</Filter>
     </ClInclude>
@@ -777,9 +774,6 @@
       <Filter>Source Files\Modes</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\MagicInternetBox.cpp">
-      <Filter>Source Files\Controllers\Networking</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\NetworkConnection.cpp">
       <Filter>Source Files\Controllers\Networking</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\StateReconciler.cpp">

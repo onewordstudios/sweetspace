@@ -25,13 +25,7 @@ enum NetworkDataType {
 	PlayerJoined = 50, // Doubles for both matchmaking and reconnect
 	PlayerDisconnect,  // Doubles for manually disconnecting
 	StartGame,
-	ChangeGame, // Followed by 0 for restart, 1 for next level
-
-	// Matchmaking messages only
-	AssignedRoom = 100, // Doubles for both creating and created
-	JoinRoom,			// Doubles for both joining and join response
-	ApiMismatch,		// Client API version is too old
-	GenericError		// Something broke
+	ChangeGame // Followed by 0 for restart, 1 for next level
 };
 
 #endif /* __NETWORK_DATA_TYPE_H__ */
