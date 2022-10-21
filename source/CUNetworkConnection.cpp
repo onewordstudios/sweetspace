@@ -1,8 +1,9 @@
-#include <cugl/net/CUNetworkConnection.h>
+#include "CUNetworkConnection.h"
 
 #include <cugl/cugl.h>
 
 #include <utility>
+#include <sstream>
 
 
 #ifdef _WIN32
@@ -28,37 +29,9 @@ typedef SOCKET socket_t;
 #endif
 #endif
 
-#include <slikenet/peerinterface.h>
-
-
+#include "libraries/SLikeNet/slikenet/peerinterface.h"
 
 using namespace cugl;
-
-template <class... Fs>
-struct overload;
-
-template <class F0, class... Frest>
-struct overload<F0, Frest...> : F0, overload<Frest...>
-{
-	overload(F0 f0, Frest... rest) : F0(f0), overload<Frest...>(rest...) {}
-
-	using F0::operator();
-	using overload<Frest...>::operator();
-};
-
-template <class F0>
-struct overload<F0> : F0
-{
-	overload(F0 f0) : F0(f0) {}
-
-	using F0::operator();
-};
-
-template <class... Fs>
-auto make_visitor(Fs... fs)
-{
-	return overload<Fs...>(fs...);
-}
 
 /** How long to block on shutdown */
 constexpr unsigned int SHUTDOWN_BLOCK = 10;
@@ -352,11 +325,11 @@ void NetworkConnection::broadcast(const std::vector<uint8_t>& msg, SLNet::System
 void NetworkConnection::send(const std::vector<uint8_t>& msg) { send(msg, Standard); }
 
 void cugl::NetworkConnection::sendOnlyToHost(const std::vector<uint8_t>& msg) {
-	std::visit(make_visitor(
+	remotePeer.match(
 		[&](HostPeers& /*h*/) {},
-		[&](ClientPeer& c) {
+		[&](ClientPeer& /*c*/) {
 			send(msg, DirectToHost);
-		}), remotePeer);
+		});
 }
 
 void NetworkConnection::send(const std::vector<uint8_t>& msg, CustomDataPackets packetType) {
@@ -365,7 +338,7 @@ void NetworkConnection::send(const std::vector<uint8_t>& msg, CustomDataPackets 
 	bs.Write(static_cast<uint8_t>(msg.size()));
 	bs.WriteAlignedBytes(msg.data(), static_cast<unsigned int>(msg.size()));
 
-	std::visit(make_visitor(
+	remotePeer.match(
 		[&](HostPeers& /*h*/) {
 			peer->Send(&bs, MEDIUM_PRIORITY, RELIABLE, 1, *natPunchServerAddress, true);
 		},
@@ -374,7 +347,7 @@ void NetworkConnection::send(const std::vector<uint8_t>& msg, CustomDataPackets 
 				return;
 			}
 			peer->Send(&bs, MEDIUM_PRIORITY, RELIABLE, 1, *c.addr, false);
-		}), remotePeer);
+		});
 }
 
 void cugl::NetworkConnection::directSend(
@@ -449,31 +422,31 @@ void NetworkConnection::receive(
 			// Connected to some remote server
 			if (packet->systemAddress == *(this->natPunchServerAddress)) {
 				// Punchthrough server
-				std::visit(make_visitor(
+				remotePeer.match(
 					[&](HostPeers& h) { ch1HostConnServer(h); },
-					[&](ClientPeer& c) { cc1ClientConnServer(c); }), remotePeer);
+					[&](ClientPeer& c) { cc1ClientConnServer(c); });
 			}
 			else {
-				std::visit(make_visitor(
+				remotePeer.match(
 					[&](HostPeers& h) { cc5HostConfirmClient(h, packet); },
 					[&](ClientPeer& /*c*/) {
 						CULogError(
 							"A connection request you sent was accepted despite being client?");
-					}), remotePeer);
+					});
 			}
 			break;
 		case ID_NEW_INCOMING_CONNECTION: // Someone connected to you
 			CULog("A peer connected");
-			std::visit(make_visitor(
+			remotePeer.match(
 				[&](HostPeers& /*h*/) { CULogError("How did that happen? You're the host"); },
-				[&](ClientPeer& c) { cc4ClientReceiveHostConnection(c, packet); }), remotePeer);
+				[&](ClientPeer& c) { cc4ClientReceiveHostConnection(c, packet); });
 			break;
 		case ID_NAT_PUNCHTHROUGH_SUCCEEDED: // Punchthrough succeeded
 			CULog("Punchthrough success");
 
-			std::visit(make_visitor(
+			remotePeer.match(
 				[&](HostPeers& h) { cc3HostReceivedPunch(h, packet); },
-				[&](ClientPeer& c) { cc2ClientPunchSuccess(c, packet); }), remotePeer);
+				[&](ClientPeer& c) { cc2ClientPunchSuccess(c, packet); });
 			break;
 		case ID_NAT_TARGET_NOT_CONNECTED:
 			status = NetStatus::GenericError;
@@ -483,7 +456,7 @@ void NetworkConnection::receive(
 		case ID_DISCONNECTION_NOTIFICATION:
 		case ID_CONNECTION_LOST:
 			CULog("Received disconnect notification");
-			std::visit(make_visitor(
+			remotePeer.match(
 				[&](HostPeers& h) {
 					for (uint8_t i = 0; i < h.peers.size(); i++) {
 						if (h.peers.at(i) == nullptr) {
@@ -530,7 +503,7 @@ void NetworkConnection::receive(
 							return;
 						}
 					}
-				}), remotePeer);
+				});
 
 			break;
 		case ID_NAT_PUNCHTHROUGH_FAILED:
@@ -555,40 +528,40 @@ void NetworkConnection::receive(
 			auto msgConverted = readBs(bts);
 			dispatcher(msgConverted);
 
-			std::visit(make_visitor(
+			remotePeer.match(
 				[&](HostPeers& /*h*/) { broadcast(msgConverted, packet->systemAddress); },
-				[&](ClientPeer& c) {}), remotePeer);
+				[&](ClientPeer& c) {});
 
 			break;
 		}
 		case ID_USER_PACKET_ENUM + DirectToHost: {
 			auto msgConverted = readBs(bts);
 
-			std::visit(make_visitor(
+			remotePeer.match(
 				[&](HostPeers& /*h*/) {
 					dispatcher(msgConverted);
 				},
 				[&](ClientPeer& c) {
 					CULogError("Received direct to host message as client");
-				}), remotePeer);
+				});
 
 			break;
 		}
 		case ID_USER_PACKET_ENUM + AssignedRoom: {
 
-			std::visit(make_visitor(
+			remotePeer.match(
 				[&](HostPeers& h) { ch2HostGetRoomID(h, bts); },
-				[&](ClientPeer& c) {CULog("Assigned room ID but ignoring"); }), remotePeer);
+				[&](ClientPeer& c) {CULog("Assigned room ID but ignoring"); });
 
 			break;
 		}
 		case ID_USER_PACKET_ENUM + JoinRoom: {
 			auto msgConverted = readBs(bts);
 
-			std::visit(make_visitor(
+			remotePeer.match(
 				[&](HostPeers& h) { cc7HostGetClientData(h, packet, msgConverted); },
 				[&](ClientPeer& c) { cc6ClientAssignedID(c, msgConverted); }
-			), remotePeer);
+			);
 			break;
 		}
 		case ID_USER_PACKET_ENUM + JoinRoomFail: {
@@ -599,34 +572,34 @@ void NetworkConnection::receive(
 		case ID_USER_PACKET_ENUM + Reconnect: {
 			auto msgConverted = readBs(bts);
 
-			std::visit(make_visitor(
+			remotePeer.match(
 				[&](HostPeers& h) { cr2HostGetClientResp(h, packet, msgConverted); },
-				[&](ClientPeer& c) { cr1ClientReceivedInfo(c, msgConverted); }), remotePeer);
+				[&](ClientPeer& c) { cr1ClientReceivedInfo(c, msgConverted); });
 
 			break;
 		}
 		case ID_USER_PACKET_ENUM + PlayerJoined: {
 			auto msgConverted = readBs(bts);
 
-			std::visit(make_visitor(
+			remotePeer.match(
 				[&](HostPeers& h) { CULogError("Received player joined message as host"); },
 				[&](ClientPeer& c) {
 					connectedPlayers.set(msgConverted[0]);
 					numPlayers++;
 					maxPlayers++;
-				}), remotePeer);
+				});
 
 			break;
 		}
 		case ID_USER_PACKET_ENUM + PlayerLeft: {
 			auto msgConverted = readBs(bts);
 
-			std::visit(make_visitor(
+			remotePeer.match(
 				[&](HostPeers& h) { CULogError("Received player left message as host"); },
 				[&](ClientPeer& c) {
 					connectedPlayers.reset(msgConverted[0]);
 					numPlayers--;
-				}), remotePeer);
+				});
 			break;
 		}
 		case ID_USER_PACKET_ENUM + StartGame: {
@@ -642,10 +615,10 @@ void NetworkConnection::receive(
 
 void NetworkConnection::startGame() {
 	CULog("Starting Game");
-	std::visit(make_visitor([&](HostPeers& h) {
+	remotePeer.match([&](HostPeers& h) {
 		h.started = true;
 		broadcast({}, const_cast<SLNet::SystemAddress&>(SLNet::UNASSIGNED_SYSTEM_ADDRESS), StartGame);
-		}, [&](ClientPeer& c) {}), remotePeer);
+		}, [&](ClientPeer& c) {});
 	maxPlayers = numPlayers;
 }
 

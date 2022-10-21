@@ -30,9 +30,12 @@
 #include <variant>
 #include <unordered_set>
 
-#include <slikenet/BitStream.h>
-#include <slikenet/MessageIdentifiers.h>
-#include <slikenet/NatPunchthroughClient.h>
+#include "libraries/SLikeNet/slikenet/BitStream.h"
+#include "libraries/SLikeNet/slikenet/MessageIdentifiers.h"
+#include "libraries/SLikeNet/slikenet/NatPunchthroughClient.h"
+
+#include <tl/optional.hpp>
+#include <mapbox/variant.hpp>
 
 // Forward declarations
 namespace SLNet {
@@ -222,7 +225,7 @@ namespace cugl {
 		 * 
 		 * Otherwise, as client, this will return empty until connected to host and a player ID is assigned.
 		 */
-		std::optional<uint8_t> getPlayerID() { return playerID; }
+		tl::optional<uint8_t> getPlayerID() { return playerID; }
 
 		/**
 		 * Returns the room ID or empty string.
@@ -265,7 +268,7 @@ namespace cugl {
 		/** Number of players connected when the game started */
 		uint8_t maxPlayers;
 		/** Current player ID */
-		std::optional<uint8_t> playerID;
+		tl::optional<uint8_t> playerID;
 		/** Connected room ID */
 		std::string roomID;
 		/** Which players are active */
@@ -313,7 +316,7 @@ namespace cugl {
 		/**
 		 * Collection of peers for the host, or the host for clients
 		 */
-		std::variant<HostPeers, ClientPeer> remotePeer;
+		mapbox::util::variant<HostPeers, ClientPeer> remotePeer;
 #pragma endregion
 
 		enum CustomDataPackets {
@@ -412,9 +415,9 @@ namespace cugl {
 		void directSend(const std::vector<uint8_t>& msg, CustomDataPackets packetType, SLNet::SystemAddress dest);
 
 		/** Last reconnection attempt time, or none if n/a */
-		std::optional<time_t> lastReconnAttempt;
+		tl::optional<time_t> lastReconnAttempt;
 		/** Time when disconnected, or none if connected */
-		std::optional<time_t> disconnTime;
+		tl::optional<time_t> disconnTime;
 
 		/**
 		 * Attempt to reconnect to the host.
