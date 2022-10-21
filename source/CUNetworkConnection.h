@@ -24,12 +24,10 @@
 #include <ctime>
 #include <functional>
 #include <mapbox/variant.hpp>
-#include <optional>
 #include <string>
 #include <thread>
 #include <tl/optional.hpp>
 #include <unordered_set>
-#include <variant>
 #include <vector>
 
 #include "libraries/SLikeNet/slikenet/BitStream.h"
