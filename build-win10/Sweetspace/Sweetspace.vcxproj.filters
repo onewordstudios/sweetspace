@@ -702,6 +702,9 @@
     <ClInclude Include="..\..\source\CollisionController.h">
       <Filter>Header Files\Controllers</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\source\CUNetworkConnection.h">
+      <Filter>Header Files\Controllers\Networking</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\source\main.cpp">
@@ -1165,6 +1168,9 @@
     </ClCompile>
     <ClCompile Include="..\..\source\CollisionController.cpp">
       <Filter>Source Files\Controllers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\CUNetworkConnection.cpp">
+      <Filter>Source Files\Controllers\Networking</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
