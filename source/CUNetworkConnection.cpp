@@ -63,6 +63,7 @@ NetworkConnection::NetworkConnection(ConnectionConfig config, std::string roomID
 	  apiVer(config.apiVersion),
 	  numPlayers(1),
 	  maxPlayers(0),
+	  roomID(roomID),
 	  config(config) {
 	c0StartupConn();
 	remotePeer = ClientPeer(std::move(roomID));
@@ -223,6 +224,9 @@ void cugl::NetworkConnection::cc6ClientAssignedID(ClientPeer& c,
 		numPlayers = msgConverted[0];
 		maxPlayers = msgConverted[1];
 		playerID = msgConverted[2];
+		for (uint8_t i = 0; i < playerID; i++) {
+			connectedPlayers.set(i);
+		}
 		status = NetStatus::Connected;
 	}
 
