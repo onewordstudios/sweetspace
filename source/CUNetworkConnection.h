@@ -34,10 +34,13 @@
 #include "libraries/SLikeNet/slikenet/MessageIdentifiers.h"
 #include "libraries/SLikeNet/slikenet/NatPunchthroughClient.h"
 
+constexpr uint8_t DEFAULT_MAX_PLAYERS = 6;
+constexpr uint8_t ONE_BYTE = 256;
+
 // Forward declarations
 namespace SLNet {
 class RakPeerInterface;
-};
+}; // namespace SLNet
 
 namespace cugl {
 /**
@@ -87,12 +90,11 @@ class NetworkConnection {
 		uint8_t apiVersion;
 
 		ConnectionConfig(const char* punchthroughServerAddr, uint16_t punchthroughServerPort,
-						 uint32_t maxPlayers, uint8_t apiVer) {
-			this->punchthroughServerAddr = punchthroughServerAddr;
-			this->punchthroughServerPort = punchthroughServerPort;
-			this->maxNumPlayers = maxPlayers;
-			this->apiVersion = apiVer;
-		}
+						 uint32_t maxPlayers, uint8_t apiVer)
+			: punchthroughServerAddr(punchthroughServerAddr),
+			  punchthroughServerPort(punchthroughServerPort),
+			  maxNumPlayers(maxPlayers),
+			  apiVersion(apiVer) {}
 	};
 
 	/**
@@ -251,11 +253,11 @@ class NetworkConnection {
 	bool isPlayerActive(uint8_t playerID) { return connectedPlayers.test(playerID); }
 
 	/** Return the number of players currently connected to this game */
-	uint8_t getNumPlayers() { return numPlayers; }
+	uint8_t getNumPlayers() const { return numPlayers; }
 
 	/** Return the number of players present when the game was started
 	 *  (including players that may have disconnected) */
-	uint8_t getTotalPlayers() { return maxPlayers; }
+	uint8_t getTotalPlayers() const { return maxPlayers; }
 #pragma endregion
 
    private:
@@ -266,7 +268,7 @@ class NetworkConnection {
 	/** Current status */
 	NetStatus status;
 	/** API version number */
-	const uint8_t apiVer;
+	const uint8_t apiVer; // NOLINT
 	/** Number of players currently connected */
 	uint8_t numPlayers;
 	/** Number of players connected when the game started */
@@ -276,7 +278,7 @@ class NetworkConnection {
 	/** Connected room ID */
 	std::string roomID;
 	/** Which players are active */
-	std::bitset<256> connectedPlayers;
+	std::bitset<ONE_BYTE> connectedPlayers;
 #pragma endregion
 
 #pragma region Punchthrough
@@ -297,8 +299,8 @@ class NetworkConnection {
 		/** Addresses of all players to reject */
 		std::unordered_set<std::string> toReject;
 
-		HostPeers() : started(false), maxPlayers(6) {
-			for (uint8_t i = 0; i < 5; i++) {
+		HostPeers() : started(false), maxPlayers(DEFAULT_MAX_PLAYERS) {
+			for (uint8_t i = 0; i < DEFAULT_MAX_PLAYERS - 1; i++) {
 				peers.push_back(nullptr);
 			}
 		};
@@ -314,7 +316,7 @@ class NetworkConnection {
 		std::unique_ptr<SLNet::SystemAddress> addr;
 		std::string room;
 
-		explicit ClientPeer(std::string roomID) { room = std::move(roomID); }
+		explicit ClientPeer(std::string roomID) : room(std::move(roomID)) {}
 	};
 
 	/**
