@@ -594,6 +594,11 @@ void NetworkConnection::receive(
 	}
 }
 
+void cugl::NetworkConnection::manualDisconnect() {
+	status = NetStatus::Reconnecting;
+	disconnTime = time(nullptr);
+}
+
 void NetworkConnection::startGame() {
 	CULog("Starting Game");
 	remotePeer.match(

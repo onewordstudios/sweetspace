@@ -64,7 +64,7 @@ class MagicInternetBox::Mimpl {
 	StateReconciler stateReconciler;
 
 	/** Number of frames since the last inbound server message */
-	unsigned int lastConnection;
+	unsigned int framesSinceLastMessage;
 
 	/** Time at which the last connection was attempted */
 	std::chrono::time_point<std::chrono::system_clock> lastAttemptConnectionTime;
@@ -163,7 +163,7 @@ class MagicInternetBox::Mimpl {
 		  currFrame(0),
 		  levelParity(true),
 		  skipTutorial(false),
-		  lastConnection(0) {
+		  framesSinceLastMessage(0) {
 #ifdef _WIN32
 		INT rc; // NOLINT
 		WSADATA wsaData;
@@ -204,17 +204,6 @@ class MagicInternetBox::Mimpl {
 		return true;
 	}
 
-	bool reconnect() {
-		if (!initConnection() || !conn->getPlayerID().has_value() || conn->getRoomID().empty()) {
-			status = ReconnectError;
-			return false;
-		}
-
-		conn = std::make_unique<cugl::NetworkConnection>(SERVER_CONFIG, conn->getRoomID());
-		status = Reconnecting;
-
-		return true;
-	}
 #pragma endregion
 
 #pragma region Getters
@@ -329,7 +318,9 @@ class MagicInternetBox::Mimpl {
 		switch (conn->getStatus()) {
 			case cugl::NetworkConnection::NetStatus::Disconnected:
 			case cugl::NetworkConnection::NetStatus::GenericError:
-				if (conn->getPlayerID().has_value() && *(conn->getPlayerID()) == 0) {
+				if (status == Reconnecting) {
+					status = ReconnectError;
+				} else if (conn->getPlayerID().has_value() && *(conn->getPlayerID()) == 0) {
 					status = HostError;
 				} else {
 					status = ClientError;
@@ -345,6 +336,9 @@ class MagicInternetBox::Mimpl {
 						status = ClientWaitingOnOthers;
 					}
 					return;
+				} else if (status == Reconnecting) {
+					status = ReconnectPending;
+					break;
 				} else {
 					break;
 				}
@@ -428,7 +422,7 @@ class MagicInternetBox::Mimpl {
 			return;
 		}
 
-		lastConnection++;
+		framesSinceLastMessage++;
 		uint8_t pID = conn->getPlayerID().value();
 
 		// NETWORK TICK
@@ -449,10 +443,11 @@ class MagicInternetBox::Mimpl {
 						conn->send(data);
 					}
 				}
-				if (lastConnection > SERVER_TIMEOUT) {
+				if (framesSinceLastMessage > SERVER_TIMEOUT) {
 					CULog(
 						"HAS NOT RECEIVED SERVER MESSAGE IN TIMEOUT FRAMES; assuming disconnected");
 					forceDisconnect();
+					status = Reconnecting;
 					return;
 				}
 			}
@@ -465,7 +460,7 @@ class MagicInternetBox::Mimpl {
 
 			auto type = static_cast<NetworkDataType>(message[0]);
 
-			lastConnection = 0;
+			framesSinceLastMessage = 0;
 
 			switch (type) {
 				case PlayerJoined: {
@@ -631,12 +626,13 @@ class MagicInternetBox::Mimpl {
 	void jump(uint8_t player) { sendData(Jump, -1.0f, player, -1, -1, -1.0f); }
 #pragma endregion
 
+	/**
+	 * Manually disconnect from the server, while keeping the connection.
+	 */
 	void forceDisconnect() {
 		CULog("Force disconnecting");
 
-		status = Disconnected;
-		lastConnection = 0;
-		conn = nullptr;
+		conn->manualDisconnect();
 	}
 
 	/**
@@ -647,6 +643,9 @@ class MagicInternetBox::Mimpl {
 		status = Uninitialized;
 		stateReconciler.reset();
 		levelNum = tl::nullopt;
+
+		framesSinceLastMessage = 0;
+		conn = nullptr;
 	}
 };
 
@@ -656,7 +655,6 @@ MagicInternetBox::MagicInternetBox() : impl(new Mimpl) {}
 MagicInternetBox::~MagicInternetBox() = default;
 bool MagicInternetBox::initHost() { return impl->initHost(); }
 bool MagicInternetBox::initClient(const std::string& id) { return impl->initClient(id); }
-bool MagicInternetBox::reconnect() { return impl->reconnect(); }
 MagicInternetBox::MatchmakingStatus MagicInternetBox::matchStatus() { return impl->matchStatus(); }
 MagicInternetBox::NetworkEvents MagicInternetBox::lastNetworkEvent() {
 	return impl->lastNetworkEvent();
@@ -692,7 +690,6 @@ void MagicInternetBox::failAllTask() { impl->failAllTask(); }
 void MagicInternetBox::succeedAllTask() { impl->succeedAllTask(); }
 void MagicInternetBox::forceWinLevel() { impl->forceWinLevel(); }
 void MagicInternetBox::jump(uint8_t player) { impl->jump(player); }
-void MagicInternetBox::forceDisconnect() { impl->forceDisconnect(); }
 void MagicInternetBox::reset() { impl->reset(); }
 
 #pragma endregion

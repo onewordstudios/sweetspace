@@ -175,6 +175,11 @@ class NetworkConnection {
 	 * you should be using NetworkDeserializer to deserialize it.
 	 */
 	void receive(const std::function<void(const std::vector<uint8_t>&)>& dispatcher);
+
+	/**
+	 * Manually disconnect from the server, while keeping the connection.
+	 */
+	void manualDisconnect();
 #pragma endregion
 
 #pragma region State Management
