@@ -201,8 +201,8 @@ class LevelModel : public cugl::Asset {
 	 */
 	void unload() {}
 
-	//#pragma mark -
-	//#pragma mark Initializers
+	// #pragma mark -
+	// #pragma mark Initializers
 	/**
 	 * Creates a new, empty level.
 	 */
