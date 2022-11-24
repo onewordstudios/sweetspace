@@ -271,13 +271,6 @@ class GameGraphRoot : public cugl::Scene {
 	DrawStatus getStatus() { return status; }
 
 	/**
-	 * Set whether to go back to the main menu (should not be called)
-	 *
-	 * @param b whether to go back to the main menu
-	 */
-	void setIsBackToMainMenu(bool b) { isBackToMainMenu = b; }
-
-	/**
 	 * Get whether to go back to the main menu
 	 *
 	 * @return whether to go back to the main menu
