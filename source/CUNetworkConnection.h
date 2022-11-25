@@ -179,7 +179,7 @@ class NetworkConnection {
 	void receive(const std::function<void(const std::vector<uint8_t>&)>& dispatcher);
 
 	/**
-	 * Manually disconnect from the server, while keeping the connection.
+	 * Manually disconnect from the server, while keeping the initialization state.
 	 */
 	void manualDisconnect();
 #pragma endregion
