@@ -163,20 +163,7 @@ class MagicInternetBox::Mimpl {
 		  currFrame(0),
 		  levelParity(true),
 		  skipTutorial(false),
-		  framesSinceLastMessage(0) {
-#ifdef _WIN32
-		INT rc; // NOLINT
-		WSADATA wsaData;
-
-		// NOLINTNEXTLINE
-		rc = WSAStartup(MAKEWORD(2, 2), &wsaData);
-		if (rc) { // NOLINT
-			CULogError("WSAStartup Failed");
-			// NOLINTNEXTLINE
-			throw "WSA Startup Failed";
-		}
-#endif
-	}
+		  framesSinceLastMessage(0) {}
 
 	bool initHost() {
 		if (!initConnection()) {
@@ -184,7 +171,7 @@ class MagicInternetBox::Mimpl {
 			return false;
 		}
 
-		conn = std::make_unique<cugl::NetworkConnection>(SERVER_CONFIG);
+		conn = cugl::NetworkConnection::newHostConnection(SERVER_CONFIG);
 
 		status = HostConnecting;
 
@@ -197,7 +184,7 @@ class MagicInternetBox::Mimpl {
 			return false;
 		}
 
-		conn = std::make_unique<cugl::NetworkConnection>(SERVER_CONFIG, id);
+		conn = cugl::NetworkConnection::newClientConnection(SERVER_CONFIG, id);
 
 		status = ClientConnecting;
 

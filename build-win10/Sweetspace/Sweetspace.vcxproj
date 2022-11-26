@@ -192,6 +192,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\source\AdHocNetworkConnection.h" />
     <ClInclude Include="..\..\source\AdUtils.h" />
     <ClInclude Include="..\..\source\AnimationManager.h" />
     <ClInclude Include="..\..\source\AudioController.h" />
@@ -219,6 +220,7 @@
     <ClInclude Include="..\..\source\InputController.h" />
     <ClInclude Include="..\..\source\LevelConstants.h" />
     <ClInclude Include="..\..\source\LevelModel.h" />
+    <ClInclude Include="..\..\source\libraries\easywsclient.hpp" />
     <ClInclude Include="..\..\source\libraries\SLikeNet\slikenet\alloca.h" />
     <ClInclude Include="..\..\source\libraries\SLikeNet\slikenet\assert.h" />
     <ClInclude Include="..\..\source\libraries\SLikeNet\slikenet\AutopatcherPatchContext.h" />
@@ -399,10 +401,12 @@
     <ClInclude Include="..\..\source\Tween.h" />
     <ClInclude Include="..\..\source\Unopenable.h" />
     <ClInclude Include="..\..\source\UnopenableNode.h" />
+    <ClInclude Include="..\..\source\WebsocketNetworkConnection.h" />
     <ClInclude Include="..\..\source\WinScreen.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\source\AdHocNetworkConnection.cpp" />
     <ClCompile Include="..\..\source\AnimationManager.cpp" />
     <ClCompile Include="..\..\source\BreachModel.cpp" />
     <ClCompile Include="..\..\source\BreachNode.cpp" />
@@ -421,6 +425,7 @@
     <ClCompile Include="..\..\source\GameGraphRoot.cpp" />
     <ClCompile Include="..\..\source\GLaDOS.cpp" />
     <ClCompile Include="..\..\source\HealthNode.cpp" />
+    <ClCompile Include="..\..\source\libraries\easywsclient.cpp" />
     <ClCompile Include="..\..\source\libraries\SLikeNet\Base64Encoder.cpp" />
     <ClCompile Include="..\..\source\libraries\SLikeNet\BitStream.cpp" />
     <ClCompile Include="..\..\source\libraries\SLikeNet\CCRakNetSlidingWindow.cpp" />
@@ -556,6 +561,7 @@
     <ClCompile Include="..\..\source\TutorialNode.cpp" />
     <ClCompile Include="..\..\source\Tween.cpp" />
     <ClCompile Include="..\..\source\UnopenableNode.cpp" />
+    <ClCompile Include="..\..\source\WebsocketNetworkConnection.cpp" />
     <ClCompile Include="..\..\source\WinScreen.cpp" />
   </ItemGroup>
   <ItemGroup>
