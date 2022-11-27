@@ -84,8 +84,9 @@ class NetworkConnection {
 		 */
 		uint8_t apiVersion;
 
-		ConnectionConfig(const char* punchthroughServerAddr, uint16_t punchthroughServerPort,
-						 uint16_t fallbackServerPort, uint32_t maxPlayers, uint8_t apiVer)
+		constexpr ConnectionConfig(const char* punchthroughServerAddr,
+								   uint16_t punchthroughServerPort, uint16_t fallbackServerPort,
+								   uint32_t maxPlayers, uint8_t apiVer) noexcept
 			: punchthroughServerAddr(punchthroughServerAddr),
 			  punchthroughServerPort(punchthroughServerPort),
 			  fallbackServerPort(fallbackServerPort),
