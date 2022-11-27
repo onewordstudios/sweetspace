@@ -21,10 +21,12 @@ constexpr unsigned int SERVER_TIMEOUT = 300;
 /** IP of the NAT punchthrough server */
 constexpr auto SERVER_ADDRESS = "127.0.0.1";
 /** Port of the NAT punchthrough server */
-constexpr uint16_t SERVER_PORT = 61111;
+constexpr uint16_t SERVER_PORT = 61110; // 61111;
+/** Port of the websocket fallback server */
+constexpr uint16_t FALLBACK_PORT = 8080;
 
 const auto SERVER_CONFIG =
-	cugl::NetworkConnection::ConnectionConfig(SERVER_ADDRESS, SERVER_PORT, 6, 0);
+	cugl::NetworkConnection::ConnectionConfig(SERVER_ADDRESS, SERVER_PORT, FALLBACK_PORT, 6, 0);
 
 class MagicInternetBox::Mimpl {
    private:

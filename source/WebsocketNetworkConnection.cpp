@@ -94,9 +94,13 @@ bool cugl::WebsocketNetworkConnection::initConnection(ConnectionConfig config) {
 	}
 #endif
 
-	const std::string urlBase = "ws://";
+	std::stringstream serverUrl;
+	serverUrl << "ws://";
+	serverUrl << config.punchthroughServerAddr;
+	serverUrl << ':';
+	serverUrl << config.fallbackServerPort;
 
-	ws = WebSocket::from_url(urlBase + config.punchthroughServerAddr + ":8080");
+	ws = WebSocket::from_url(serverUrl.str());
 	if (!ws) { // NOLINT
 		status = NetStatus::GenericError;
 		return false;
@@ -120,8 +124,10 @@ void WebsocketNetworkConnection::sendOnlyToHost(const std::vector<uint8_t>& msg)
 }
 
 void WebsocketNetworkConnection::manualDisconnect() {
-	ws->close();
-	ws = nullptr;
+	if (ws != nullptr) {
+		ws->close();
+		ws = nullptr;
+	}
 	status = NetStatus::Reconnecting;
 }
 
@@ -156,7 +162,7 @@ void WebsocketNetworkConnection::receive(
 			return;
 		}
 
-		const CustomDataPackets type = static_cast<CustomDataPackets>(message[0]);
+		const auto type = static_cast<CustomDataPackets>(message[0]);
 		// Uses some slow array copies, but who cares; this is just the fallback code we hopefully
 		// never need
 		switch (type) {

@@ -73,6 +73,8 @@ class NetworkConnection {
 		const char* punchthroughServerAddr;
 		/** Port to connect on the NAT Punchthrough server */
 		uint16_t punchthroughServerPort;
+		/** Port to connect on the backup server */
+		uint16_t fallbackServerPort;
 		/** Maximum number of players allowed per game (including host) */
 		uint32_t maxNumPlayers;
 		/**
@@ -83,9 +85,10 @@ class NetworkConnection {
 		uint8_t apiVersion;
 
 		ConnectionConfig(const char* punchthroughServerAddr, uint16_t punchthroughServerPort,
-						 uint32_t maxPlayers, uint8_t apiVer)
+						 uint16_t fallbackServerPort, uint32_t maxPlayers, uint8_t apiVer)
 			: punchthroughServerAddr(punchthroughServerAddr),
 			  punchthroughServerPort(punchthroughServerPort),
+			  fallbackServerPort(fallbackServerPort),
 			  maxNumPlayers(maxPlayers),
 			  apiVersion(apiVer) {}
 	};

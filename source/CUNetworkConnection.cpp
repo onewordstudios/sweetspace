@@ -48,6 +48,7 @@ class HostWrapperNetworkConnection : public NetworkConnection {
 				case NetStatus::GenericError:
 				case NetStatus::Disconnected: {
 					if (isAdHoc) {
+						CULog("Failed to connect as host to adhoc; trying websocket");
 						isAdHoc = false;
 						conn = std::make_unique<WebsocketNetworkConnection>(config);
 					}
