@@ -20,6 +20,18 @@
 		437FBE70272DDE4F00073161 /* AdUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 437FBE6E272DDE4F00073161 /* AdUtils.cpp */; };
 		437FBE81272DF10E00073161 /* iOSHelperThatIHate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 437FBE80272DF10E00073161 /* iOSHelperThatIHate.mm */; };
 		437FBE82272DF10E00073161 /* iOSHelperThatIHate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 437FBE80272DF10E00073161 /* iOSHelperThatIHate.mm */; };
+		450124112933DAAC00E6362F /* CUNetworkConnection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4501240F2933DAAC00E6362F /* CUNetworkConnection.cpp */; };
+		450124122933DAAC00E6362F /* CUNetworkConnection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4501240F2933DAAC00E6362F /* CUNetworkConnection.cpp */; };
+		450124132933DAAC00E6362F /* CUNetworkConnection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4501240F2933DAAC00E6362F /* CUNetworkConnection.cpp */; };
+		450124162933DAB300E6362F /* AdHocNetworkConnection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 450124152933DAB300E6362F /* AdHocNetworkConnection.cpp */; };
+		450124172933DAB300E6362F /* AdHocNetworkConnection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 450124152933DAB300E6362F /* AdHocNetworkConnection.cpp */; };
+		450124182933DAB300E6362F /* AdHocNetworkConnection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 450124152933DAB300E6362F /* AdHocNetworkConnection.cpp */; };
+		4501241B2933DABF00E6362F /* WebsocketNetworkConnection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4501241A2933DABF00E6362F /* WebsocketNetworkConnection.cpp */; };
+		4501241C2933DABF00E6362F /* WebsocketNetworkConnection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4501241A2933DABF00E6362F /* WebsocketNetworkConnection.cpp */; };
+		4501241D2933DABF00E6362F /* WebsocketNetworkConnection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4501241A2933DABF00E6362F /* WebsocketNetworkConnection.cpp */; };
+		450124202933DAE600E6362F /* easywsclient.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4501241E2933DAE600E6362F /* easywsclient.cpp */; };
+		450124212933DAE600E6362F /* easywsclient.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4501241E2933DAE600E6362F /* easywsclient.cpp */; };
+		450124222933DAE600E6362F /* easywsclient.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4501241E2933DAE600E6362F /* easywsclient.cpp */; };
 		6776B245246ED10A76924779 /* Pods_Sweetspace_Sim_.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EFA39776ECB9D0ACD61FF814 /* Pods_Sweetspace_Sim_.framework */; };
 		738C4CC4164C0C3EB38F305A /* Pods_Sweetspace__Mac_.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9AC4B1878D54F5F92C083C81 /* Pods_Sweetspace__Mac_.framework */; };
 		7B02739F2494545C00ED02B5 /* StabilizerModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7B02739E2494545C00ED02B5 /* StabilizerModel.cpp */; };
@@ -47,9 +59,6 @@
 		7B3BFC2525BF2DD400A5F6D7 /* ShipSegmentNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7B3BFC1E25BF2DD400A5F6D7 /* ShipSegmentNode.cpp */; };
 		7B3BFC2625BF2DD400A5F6D7 /* ShipSegmentNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7B3BFC1E25BF2DD400A5F6D7 /* ShipSegmentNode.cpp */; };
 		7B3BFC2725BF2DD400A5F6D7 /* ShipSegmentNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7B3BFC1E25BF2DD400A5F6D7 /* ShipSegmentNode.cpp */; };
-		7B999C9B250F8E9F00649EFB /* NetworkConnection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7B999C9A250F8E9E00649EFB /* NetworkConnection.cpp */; };
-		7B999C9C250F8E9F00649EFB /* NetworkConnection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7B999C9A250F8E9E00649EFB /* NetworkConnection.cpp */; };
-		7B999C9D250F8E9F00649EFB /* NetworkConnection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7B999C9A250F8E9E00649EFB /* NetworkConnection.cpp */; };
 		7BB9B98125C0A91600DFF69F /* ReconnectScreen.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7BB9B97C25C0A91500DFF69F /* ReconnectScreen.cpp */; };
 		7BB9B98225C0A91600DFF69F /* ReconnectScreen.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7BB9B97C25C0A91500DFF69F /* ReconnectScreen.cpp */; };
 		7BB9B98325C0A91600DFF69F /* ReconnectScreen.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7BB9B97C25C0A91500DFF69F /* ReconnectScreen.cpp */; };
@@ -596,6 +605,14 @@
 		437FBE6D272DDE4F00073161 /* AdUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AdUtils.h; sourceTree = "<group>"; };
 		437FBE6E272DDE4F00073161 /* AdUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AdUtils.cpp; sourceTree = "<group>"; };
 		437FBE80272DF10E00073161 /* iOSHelperThatIHate.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = iOSHelperThatIHate.mm; sourceTree = "<group>"; };
+		4501240F2933DAAC00E6362F /* CUNetworkConnection.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CUNetworkConnection.cpp; sourceTree = "<group>"; };
+		450124102933DAAC00E6362F /* CUNetworkConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CUNetworkConnection.h; sourceTree = "<group>"; };
+		450124142933DAB300E6362F /* AdHocNetworkConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AdHocNetworkConnection.h; sourceTree = "<group>"; };
+		450124152933DAB300E6362F /* AdHocNetworkConnection.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AdHocNetworkConnection.cpp; sourceTree = "<group>"; };
+		450124192933DABF00E6362F /* WebsocketNetworkConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebsocketNetworkConnection.h; sourceTree = "<group>"; };
+		4501241A2933DABF00E6362F /* WebsocketNetworkConnection.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = WebsocketNetworkConnection.cpp; sourceTree = "<group>"; };
+		4501241E2933DAE600E6362F /* easywsclient.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = easywsclient.cpp; sourceTree = "<group>"; };
+		4501241F2933DAE600E6362F /* easywsclient.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = easywsclient.hpp; sourceTree = "<group>"; };
 		499AD147A238F65231335995 /* Pods-Sweetspace(Sim).debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Sweetspace(Sim).debug.xcconfig"; path = "Target Support Files/Pods-Sweetspace(Sim)/Pods-Sweetspace(Sim).debug.xcconfig"; sourceTree = "<group>"; };
 		5AE40FDB442D9FFC8D4A017D /* Pods-Sweetspace (iOS).release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Sweetspace (iOS).release.xcconfig"; path = "Target Support Files/Pods-Sweetspace (iOS)/Pods-Sweetspace (iOS).release.xcconfig"; sourceTree = "<group>"; };
 		7B02739A2494545B00ED02B5 /* StabilizerModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StabilizerModel.h; sourceTree = "<group>"; };
@@ -617,8 +634,6 @@
 		7B3BFC1D25BF2DD400A5F6D7 /* StabilizerNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StabilizerNode.h; sourceTree = "<group>"; };
 		7B3BFC1E25BF2DD400A5F6D7 /* ShipSegmentNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ShipSegmentNode.cpp; sourceTree = "<group>"; };
 		7B999C95250F8E8B00649EFB /* NetworkDataType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NetworkDataType.h; sourceTree = "<group>"; };
-		7B999C99250F8E9E00649EFB /* NetworkConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NetworkConnection.h; sourceTree = "<group>"; };
-		7B999C9A250F8E9E00649EFB /* NetworkConnection.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NetworkConnection.cpp; sourceTree = "<group>"; };
 		7BB9B97C25C0A91500DFF69F /* ReconnectScreen.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ReconnectScreen.cpp; sourceTree = "<group>"; };
 		7BB9B98025C0A91500DFF69F /* ReconnectScreen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReconnectScreen.h; sourceTree = "<group>"; };
 		7BD666F02448E8E500D68748 /* MainMenuMode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainMenuMode.h; sourceTree = "<group>"; };
@@ -1099,12 +1114,16 @@
 		7B0FBB0424FBBB6E0026067D /* Networking */ = {
 			isa = PBXGroup;
 			children = (
-				7B999C99250F8E9E00649EFB /* NetworkConnection.h */,
-				7B999C9A250F8E9E00649EFB /* NetworkConnection.cpp */,
+				450124152933DAB300E6362F /* AdHocNetworkConnection.cpp */,
+				450124142933DAB300E6362F /* AdHocNetworkConnection.h */,
+				4501240F2933DAAC00E6362F /* CUNetworkConnection.cpp */,
+				450124102933DAAC00E6362F /* CUNetworkConnection.h */,
 				7B999C95250F8E8B00649EFB /* NetworkDataType.h */,
 				D15227FD0DE8BAD86857197F /* MagicInternetBox.h */,
 				D15228511721431DE5C3F8BF /* MagicInternetBox.cpp */,
 				828C645425B61B00001A3F65 /* NeedleAnimator.h */,
+				4501241A2933DABF00E6362F /* WebsocketNetworkConnection.cpp */,
+				450124192933DABF00E6362F /* WebsocketNetworkConnection.h */,
 			);
 			name = Networking;
 			sourceTree = "<group>";
@@ -1245,6 +1264,8 @@
 		821F6D8A25E748D800455E92 /* libraries */ = {
 			isa = PBXGroup;
 			children = (
+				4501241E2933DAE600E6362F /* easywsclient.cpp */,
+				4501241F2933DAE600E6362F /* easywsclient.hpp */,
 				821F6D8B25E748D800455E92 /* .clang-tidy */,
 				821F6D8C25E748D800455E92 /* README.md */,
 				821F6D8D25E748D800455E92 /* SLikeNet */,
@@ -2045,6 +2066,7 @@
 				821F6EEF25E748DB00455E92 /* LogCommandParser.cpp in Sources */,
 				DF3B745D2403A46B0063552F /* Sweetspace.cpp in Sources */,
 				821F6EE325E748DB00455E92 /* Getche.cpp in Sources */,
+				4501241D2933DABF00E6362F /* WebsocketNetworkConnection.cpp in Sources */,
 				821F6F9125E748DC00455E92 /* TwoWayAuthentication.cpp in Sources */,
 				821F6EE925E748DB00455E92 /* CCRakNetSlidingWindow.cpp in Sources */,
 				821F6FCA25E748DD00455E92 /* StatisticsHistory.cpp in Sources */,
@@ -2055,6 +2077,7 @@
 				821F6F3725E748DC00455E92 /* UDPProxyCoordinator.cpp in Sources */,
 				821F6F1F25E748DC00455E92 /* VariadicSQLParser.cpp in Sources */,
 				821F6F6A25E748DC00455E92 /* IncrementalReadInterface.cpp in Sources */,
+				450124182933DAB300E6362F /* AdHocNetworkConnection.cpp in Sources */,
 				821F6FE225E748DD00455E92 /* DynDNS.cpp in Sources */,
 				821F6EDA25E748DB00455E92 /* RakNetSocket.cpp in Sources */,
 				DF3B74632403A46B0063552F /* GameGraphRoot.cpp in Sources */,
@@ -2075,7 +2098,6 @@
 				821F6F1C25E748DC00455E92 /* PacketConsoleLogger.cpp in Sources */,
 				821F6FA625E748DC00455E92 /* NatPunchthroughServer.cpp in Sources */,
 				821F6F7C25E748DC00455E92 /* TeamBalancer.cpp in Sources */,
-				7B999C9D250F8E9F00649EFB /* NetworkConnection.cpp in Sources */,
 				821F6EB025E748DB00455E92 /* ThreadsafePacketLogger.cpp in Sources */,
 				821F6F6425E748DC00455E92 /* PacketFileLogger.cpp in Sources */,
 				821F6FD325E748DD00455E92 /* TableSerializer.cpp in Sources */,
@@ -2112,6 +2134,7 @@
 				D152280455B6C3C470B28DBC /* DoorModel.cpp in Sources */,
 				821F6F1925E748DC00455E92 /* FileOperations.cpp in Sources */,
 				3CDD11B3242D1DDF00FD21F8 /* HealthNode.cpp in Sources */,
+				450124222933DAE600E6362F /* easywsclient.cpp in Sources */,
 				827A5A22269B926F00469545 /* CollisionController.cpp in Sources */,
 				C1222A784AAFE1C7BC89BC94 /* GLaDOS.cpp in Sources */,
 				821F6ED425E748DB00455E92 /* SecureHandshake.cpp in Sources */,
@@ -2165,6 +2188,7 @@
 				C58C5F812801BCDA6A6400BE /* TutorialNode.cpp in Sources */,
 				821F6F8525E748DC00455E92 /* VariableListDeltaTracker.cpp in Sources */,
 				821F6FC425E748DC00455E92 /* RakNetTransport2.cpp in Sources */,
+				450124132933DAAC00E6362F /* CUNetworkConnection.cpp in Sources */,
 				7B0273A12494545C00ED02B5 /* StabilizerModel.cpp in Sources */,
 				821F6F8B25E748DC00455E92 /* RakNetTypes.cpp in Sources */,
 				821F6FF125E748DD00455E92 /* RakMemoryOverride.cpp in Sources */,
@@ -2209,6 +2233,7 @@
 				821F6EEE25E748DB00455E92 /* LogCommandParser.cpp in Sources */,
 				DF3B745C2403A46B0063552F /* Sweetspace.cpp in Sources */,
 				821F6EE225E748DB00455E92 /* Getche.cpp in Sources */,
+				4501241C2933DABF00E6362F /* WebsocketNetworkConnection.cpp in Sources */,
 				821F6F9025E748DC00455E92 /* TwoWayAuthentication.cpp in Sources */,
 				821F6EE825E748DB00455E92 /* CCRakNetSlidingWindow.cpp in Sources */,
 				821F6FC925E748DC00455E92 /* StatisticsHistory.cpp in Sources */,
@@ -2219,6 +2244,7 @@
 				821F6F3625E748DC00455E92 /* UDPProxyCoordinator.cpp in Sources */,
 				821F6F1E25E748DC00455E92 /* VariadicSQLParser.cpp in Sources */,
 				821F6F6925E748DC00455E92 /* IncrementalReadInterface.cpp in Sources */,
+				450124172933DAB300E6362F /* AdHocNetworkConnection.cpp in Sources */,
 				821F6FE125E748DD00455E92 /* DynDNS.cpp in Sources */,
 				821F6ED925E748DB00455E92 /* RakNetSocket.cpp in Sources */,
 				A577C9292422AA0E00B12ADE /* DoorNode.cpp in Sources */,
@@ -2239,7 +2265,6 @@
 				821F6F1B25E748DC00455E92 /* PacketConsoleLogger.cpp in Sources */,
 				821F6FA525E748DC00455E92 /* NatPunchthroughServer.cpp in Sources */,
 				821F6F7B25E748DC00455E92 /* TeamBalancer.cpp in Sources */,
-				7B999C9C250F8E9F00649EFB /* NetworkConnection.cpp in Sources */,
 				821F6EAF25E748DB00455E92 /* ThreadsafePacketLogger.cpp in Sources */,
 				821F6F6325E748DC00455E92 /* PacketFileLogger.cpp in Sources */,
 				821F6FD225E748DD00455E92 /* TableSerializer.cpp in Sources */,
@@ -2276,6 +2301,7 @@
 				D15226D74B5F1C4C77EC84B1 /* DoorModel.cpp in Sources */,
 				821F6F1825E748DC00455E92 /* FileOperations.cpp in Sources */,
 				3CDD11B2242D1DDF00FD21F8 /* HealthNode.cpp in Sources */,
+				450124212933DAE600E6362F /* easywsclient.cpp in Sources */,
 				827A5A21269B926F00469545 /* CollisionController.cpp in Sources */,
 				C1222C87F6E3205CB0FD5628 /* GLaDOS.cpp in Sources */,
 				821F6ED325E748DB00455E92 /* SecureHandshake.cpp in Sources */,
@@ -2329,6 +2355,7 @@
 				C58C5EEC7CF99C273A252E9F /* TutorialNode.cpp in Sources */,
 				821F6F8425E748DC00455E92 /* VariableListDeltaTracker.cpp in Sources */,
 				821F6FC325E748DC00455E92 /* RakNetTransport2.cpp in Sources */,
+				450124122933DAAC00E6362F /* CUNetworkConnection.cpp in Sources */,
 				7B0273A02494545C00ED02B5 /* StabilizerModel.cpp in Sources */,
 				821F6F8A25E748DC00455E92 /* RakNetTypes.cpp in Sources */,
 				821F6FF025E748DD00455E92 /* RakMemoryOverride.cpp in Sources */,
@@ -2349,6 +2376,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				450124112933DAAC00E6362F /* CUNetworkConnection.cpp in Sources */,
 				DF621BDE24677E3D0059D55B /* UnopenableNode.cpp in Sources */,
 				821F6FB025E748DC00455E92 /* LocklessTypes.cpp in Sources */,
 				821F6F3B25E748DC00455E92 /* gettimeofday.cpp in Sources */,
@@ -2403,7 +2431,6 @@
 				821F6F1A25E748DC00455E92 /* PacketConsoleLogger.cpp in Sources */,
 				821F6FA425E748DC00455E92 /* NatPunchthroughServer.cpp in Sources */,
 				821F6F7A25E748DC00455E92 /* TeamBalancer.cpp in Sources */,
-				7B999C9B250F8E9F00649EFB /* NetworkConnection.cpp in Sources */,
 				821F6EAE25E748DB00455E92 /* ThreadsafePacketLogger.cpp in Sources */,
 				821F6F6225E748DC00455E92 /* PacketFileLogger.cpp in Sources */,
 				821F6FD125E748DD00455E92 /* TableSerializer.cpp in Sources */,
@@ -2457,6 +2484,7 @@
 				821F6F8C25E748DC00455E92 /* RakNetSocket2_Vita.cpp in Sources */,
 				C122201B849961CE6B05D3B3 /* ButtonManager.cpp in Sources */,
 				821F6ED525E748DB00455E92 /* EmailSender.cpp in Sources */,
+				450124202933DAE600E6362F /* easywsclient.cpp in Sources */,
 				821F6FCE25E748DD00455E92 /* Gets.cpp in Sources */,
 				821F6F2025E748DC00455E92 /* GridSectorizer.cpp in Sources */,
 				821F6FDA25E748DD00455E92 /* RakString.cpp in Sources */,
@@ -2469,12 +2497,14 @@
 				C12227687FF20FC96584A686 /* Tween.cpp in Sources */,
 				821F6F4125E748DC00455E92 /* _FindFirst.cpp in Sources */,
 				821F6F3E25E748DC00455E92 /* RakNetSocket2_Berkley.cpp in Sources */,
+				450124162933DAB300E6362F /* AdHocNetworkConnection.cpp in Sources */,
 				7B106F9F24DA5167008EFDED /* AnimationManager.cpp in Sources */,
 				C58C5216B68A5A2C01E445BD /* ButtonModel.cpp in Sources */,
 				821F6EB125E748DB00455E92 /* RakPeer.cpp in Sources */,
 				821F6F0225E748DB00455E92 /* LinuxStrings.cpp in Sources */,
 				821F6FAD25E748DC00455E92 /* UDPForwarder.cpp in Sources */,
 				821F6F6B25E748DC00455E92 /* NetworkIDObject.cpp in Sources */,
+				4501241B2933DABF00E6362F /* WebsocketNetworkConnection.cpp in Sources */,
 				821F6EAB25E748DB00455E92 /* NatPunchthroughClient.cpp in Sources */,
 				82AE182225B27616001C436F /* WinScreen.cpp in Sources */,
 				821F6EC025E748DB00455E92 /* Rackspace.cpp in Sources */,
