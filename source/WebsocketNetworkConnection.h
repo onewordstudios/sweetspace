@@ -2,6 +2,7 @@
 #define WEBSOCKET_NETWORK_CONNECTION_H
 
 #include "CUNetworkConnection.h"
+#include "libraries/easywsclient.hpp"
 
 namespace cugl {
 /**
@@ -14,7 +15,7 @@ class WebsocketNetworkConnection : public NetworkConnection {
 
 	WebsocketNetworkConnection(ConnectionConfig config, std::string roomID);
 
-	~WebsocketNetworkConnection();
+	virtual ~WebsocketNetworkConnection();
 #pragma endregion
 
 #pragma region Main Networking Methods
@@ -63,7 +64,18 @@ class WebsocketNetworkConnection : public NetworkConnection {
 	/** Which players are active */
 	std::bitset<ONE_BYTE> connectedPlayers;
 
-	enum CustomDataPackets {
+	/** The actual websocket connection */
+	easywsclient::WebSocket::pointer ws;
+
+	/**
+	 * Initialize the network connection.
+	 * Will establish a connection to the server.
+	 *
+	 * @returns Whether the connection was successfully established
+	 */
+	bool initConnection(ConnectionConfig config);
+
+	enum CustomDataPackets : uint8_t {
 		GeneralMsg = 0,
 		HostMsg,
 
