@@ -19,12 +19,18 @@ constexpr double MIN_WAIT_TIME = 0.5;
 constexpr unsigned int SERVER_TIMEOUT = 300;
 
 /** IP of the NAT punchthrough server */
-constexpr auto SERVER_ADDRESS = "127.0.0.1";
+constexpr auto SERVER_ADDRESS = "34.138.48.28";
 /** Port of the NAT punchthrough server */
 constexpr uint16_t SERVER_PORT = 61111;
+/** Port of the websocket fallback server */
+constexpr uint16_t FALLBACK_PORT = 8080;
+/** Max # of players per game */
+constexpr uint8_t MAX_PLAYERS = 6;
+/** Current game API */
+constexpr uint8_t API = 0;
 
-const auto SERVER_CONFIG =
-	cugl::NetworkConnection::ConnectionConfig(SERVER_ADDRESS, SERVER_PORT, 6, 0);
+constexpr auto SERVER_CONFIG = cugl::NetworkConnection::ConnectionConfig(
+	SERVER_ADDRESS, SERVER_PORT, FALLBACK_PORT, MAX_PLAYERS, API);
 
 class MagicInternetBox::Mimpl {
    private:
@@ -92,7 +98,7 @@ class MagicInternetBox::Mimpl {
 		}
 
 		auto currTime = std::chrono::system_clock::now();
-		std::chrono::duration<double> diff = currTime - lastAttemptConnectionTime;
+		const std::chrono::duration<double> diff = currTime - lastAttemptConnectionTime;
 		if (diff.count() < MIN_WAIT_TIME) {
 			CULog("Reconnect attempt too fast; aborting");
 			return false;
@@ -147,7 +153,7 @@ class MagicInternetBox::Mimpl {
 		data.push_back(data1);
 		data.push_back(data2);
 
-		uint8_t d3Positive = data3 >= 0 ? 1 : 0;
+		const uint8_t d3Positive = data3 >= 0 ? 1 : 0;
 		data.push_back(d3Positive);
 		StateReconciler::encodeFloat(abs(data3), data);
 
@@ -163,20 +169,7 @@ class MagicInternetBox::Mimpl {
 		  currFrame(0),
 		  levelParity(true),
 		  skipTutorial(false),
-		  framesSinceLastMessage(0) {
-#ifdef _WIN32
-		INT rc; // NOLINT
-		WSADATA wsaData;
-
-		// NOLINTNEXTLINE
-		rc = WSAStartup(MAKEWORD(2, 2), &wsaData);
-		if (rc) { // NOLINT
-			CULogError("WSAStartup Failed");
-			// NOLINTNEXTLINE
-			throw "WSA Startup Failed";
-		}
-#endif
-	}
+		  framesSinceLastMessage(0) {}
 
 	bool initHost() {
 		if (!initConnection()) {
@@ -184,7 +177,7 @@ class MagicInternetBox::Mimpl {
 			return false;
 		}
 
-		conn = std::make_unique<cugl::NetworkConnection>(SERVER_CONFIG);
+		conn = cugl::NetworkConnection::newHostConnection(SERVER_CONFIG);
 
 		status = HostConnecting;
 
@@ -197,7 +190,7 @@ class MagicInternetBox::Mimpl {
 			return false;
 		}
 
-		conn = std::make_unique<cugl::NetworkConnection>(SERVER_CONFIG, id);
+		conn = cugl::NetworkConnection::newClientConnection(SERVER_CONFIG, id);
 
 		status = ClientConnecting;
 
@@ -423,14 +416,14 @@ class MagicInternetBox::Mimpl {
 		}
 
 		framesSinceLastMessage++;
-		uint8_t pID = conn->getPlayerID().value();
+		const uint8_t pID = conn->getPlayerID().value();
 
 		// NETWORK TICK
 		currFrame = (currFrame + 1) % STATE_SYNC_FREQ;
 		if (currFrame % globals::NETWORK_TICK == 0) {
-			std::shared_ptr<DonutModel> player = state->getDonuts()[pID];
-			float angle = player->getAngle();
-			float velocity = player->getVelocity();
+			const std::shared_ptr<DonutModel> player = state->getDonuts()[pID];
+			const float angle = player->getAngle();
+			const float velocity = player->getVelocity();
 			sendData(PositionUpdate, angle, pID, -1, -1, velocity);
 
 			// STATE SYNC (and check for server connection)
@@ -464,13 +457,13 @@ class MagicInternetBox::Mimpl {
 
 			switch (type) {
 				case PlayerJoined: {
-					unsigned int playerID = message[1];
+					const unsigned int playerID = message[1];
 					CULog("Player has reconnected, %d", playerID);
 					state->getDonuts()[playerID]->setIsActive(true);
 					return;
 				}
 				case PlayerDisconnect: {
-					unsigned int playerID = message[1];
+					const unsigned int playerID = message[1];
 					CULog("Player has disconnected, %d", playerID);
 					state->getDonuts()[playerID]->setIsActive(false);
 					return;
@@ -500,9 +493,9 @@ class MagicInternetBox::Mimpl {
 				return;
 			}
 
-			float angle = StateReconciler::decodeFloat(message[1], message[2]);
-			uint8_t id = message[3];
-			uint8_t data1 = message[4];
+			const float angle = StateReconciler::decodeFloat(message[1], message[2]);
+			const uint8_t id = message[3];
+			const uint8_t data1 = message[4];
 			// Networking code is finnicky and having these magic numbers is the easiest solution
 			uint8_t data2 = message[5];				   // NOLINT Simple counting numbers
 			float data3 = (message[6] == 1 ? 1 : -1) * // NOLINT
@@ -510,7 +503,7 @@ class MagicInternetBox::Mimpl {
 
 			switch (type) {
 				case PositionUpdate: {
-					std::shared_ptr<DonutModel> donut = state->getDonuts()[id];
+					const std::shared_ptr<DonutModel> donut = state->getDonuts()[id];
 					donut->setAngle(angle);
 					donut->setVelocity(data3);
 					break;
@@ -530,22 +523,22 @@ class MagicInternetBox::Mimpl {
 					break;
 				}
 				case DualCreate: {
-					int taskID = id;
+					const int taskID = id;
 					state->createDoor(angle, taskID);
 					break;
 				}
 				case DualResolve: {
-					int taskID = id;
-					int player = data1;
-					int flag = data2;
+					const int taskID = id;
+					const int player = data1;
+					const int flag = data2;
 					state->flagDoor(taskID, player, flag);
 					break;
 				}
 				case ButtonCreate: {
-					float angle1 = angle;
-					float angle2 = data3;
-					int id1 = id;
-					int id2 = data1;
+					const float angle1 = angle;
+					const float angle2 = data3;
+					const int id1 = id;
+					const int id2 = data1;
 					state->createButton(angle1, id1, angle2, id2);
 					break;
 				}

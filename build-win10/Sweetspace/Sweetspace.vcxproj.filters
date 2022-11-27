@@ -702,6 +702,15 @@
     <ClInclude Include="..\..\source\CUNetworkConnection.h">
       <Filter>Header Files\Controllers\Networking</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\source\libraries\easywsclient.hpp">
+      <Filter>Header Files\Controllers\Networking</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\AdHocNetworkConnection.h">
+      <Filter>Header Files\Controllers\Networking</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\WebsocketNetworkConnection.h">
+      <Filter>Header Files\Controllers\Networking</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\source\main.cpp">
@@ -1164,6 +1173,15 @@
       <Filter>Source Files\Controllers</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\CUNetworkConnection.cpp">
+      <Filter>Source Files\Controllers\Networking</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\libraries\easywsclient.cpp">
+      <Filter>Source Files\Controllers\Networking</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\AdHocNetworkConnection.cpp">
+      <Filter>Source Files\Controllers\Networking</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\WebsocketNetworkConnection.cpp">
       <Filter>Source Files\Controllers\Networking</Filter>
     </ClCompile>
   </ItemGroup>
