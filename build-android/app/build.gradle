@@ -2,14 +2,14 @@ apply plugin: 'com.android.application'
 apply plugin: 'com.google.gms.google-services'
 
 android {
-    compileSdkVersion 30
+    compileSdkVersion 32
     buildToolsVersion "30.0.3"
     defaultConfig {
         applicationId "fun.onewordstudios.sweetspace"
         minSdkVersion 24
-        targetSdkVersion 30
-        versionCode 70001
-        versionName '0.7.0'
+        targetSdkVersion 32
+        versionCode 1000001
+        versionName '1.0.0'
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         externalNativeBuild {
             ndkBuild {
