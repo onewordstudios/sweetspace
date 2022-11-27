@@ -105,18 +105,6 @@ class MagicInternetBox {
 	bool initClient(const std::string& id);
 
 	/**
-	 * Reconnect to a game that you lost connection from.
-	 * Will attempt to rejoin the room. Query {@link matchStatus()} over the next few frames to see
-	 * the progress. If {@code GameEnded} is returned, then the room does not have a valid game
-	 * going at this time.
-	 * Should only be called when this controller has a cached playerID and roomID. Otherwise, will
-	 * fail.
-	 *
-	 * @returns Whether a connection was successfully established
-	 */
-	bool reconnect();
-
-	/**
 	 * Query the current matchmaking status
 	 */
 	MatchmakingStatus matchStatus();
@@ -303,12 +291,7 @@ class MagicInternetBox {
 	void jump(uint8_t player);
 
 	/**
-	 * Disconnect this player from the server, by force.
-	 */
-	void forceDisconnect();
-
-	/**
-	 * Reset the controller entirely; useful when leaving a game.
+	 * Reset the controller; useful when leaving a game.
 	 */
 	void reset();
 };

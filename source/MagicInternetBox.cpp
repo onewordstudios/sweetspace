@@ -3,32 +3,9 @@
 #include <array>
 #include <sstream>
 
-#ifdef _WIN32
-#ifndef WIN32_LEAN_AND_MEAN
-#define WIN32_LEAN_AND_MEAN
-#endif
-#include <WS2tcpip.h>
-#include <WinSock2.h>
-#include <fcntl.h>
-#pragma comment(lib, "ws2_32")
-#include <io.h>
-#include <stdio.h>	// NOLINT
-#include <stdlib.h> // NOLINT
-#include <string.h> // NOLINT
-#include <sys/types.h>
-#ifndef _SSIZE_T_DEFINED
-typedef int ssize_t;	 // NOLINT
-#define _SSIZE_T_DEFINED // NOLINT
-#endif
-#ifndef _SOCKET_T_DEFINED
-typedef SOCKET socket_t;  // NOLINT
-#define _SOCKET_T_DEFINED // NOLINT
-#endif
-#endif
-
+#include "CUNetworkConnection.h"
 #include "Globals.h"
 #include "LevelConstants.h"
-#include "NetworkConnection.h"
 #include "NetworkDataType.h"
 #include "StateReconciler.h"
 
@@ -41,10 +18,24 @@ constexpr double MIN_WAIT_TIME = 0.5;
 /** How many ticks without a server message before considering oneself disconnected */
 constexpr unsigned int SERVER_TIMEOUT = 300;
 
+/** IP of the NAT punchthrough server */
+constexpr auto SERVER_ADDRESS = "34.138.48.28";
+/** Port of the NAT punchthrough server */
+constexpr uint16_t SERVER_PORT = 61111;
+/** Port of the websocket fallback server */
+constexpr uint16_t FALLBACK_PORT = 8080;
+/** Max # of players per game */
+constexpr uint8_t MAX_PLAYERS = 6;
+/** Current game API */
+constexpr uint8_t API = 0;
+
+constexpr auto SERVER_CONFIG = cugl::NetworkConnection::ConnectionConfig(
+	SERVER_ADDRESS, SERVER_PORT, FALLBACK_PORT, MAX_PLAYERS, API);
+
 class MagicInternetBox::Mimpl {
    private:
 	/** The network connection */
-	std::unique_ptr<NetworkConnection> conn;
+	std::unique_ptr<cugl::NetworkConnection> conn;
 
 	/** The current status */
 	MatchmakingStatus status;
@@ -54,12 +45,6 @@ class MagicInternetBox::Mimpl {
 
 	/** The current frame, modulo the network tick rate. */
 	unsigned int currFrame;
-
-	/** ID of the current player, or empty if unassigned */
-	tl::optional<uint8_t> playerID;
-
-	/** The ID of the current room, or "" if unassigned */
-	std::string roomID;
 
 	/** Current level number, or empty if unassigned */
 	tl::optional<uint8_t> levelNum;
@@ -81,20 +66,11 @@ class MagicInternetBox::Mimpl {
 		}
 	}
 
-	/** Number of connected players */
-	uint8_t numPlayers;
-
-	/** Maximum number of players for this ship */
-	uint8_t maxPlayers;
-
-	/** Array representing active and inactive players */
-	std::array<bool, globals::MAX_PLAYERS> activePlayers;
-
 	/** Helper controller to reconcile states during state sync */
 	StateReconciler stateReconciler;
 
 	/** Number of frames since the last inbound server message */
-	unsigned int lastConnection;
+	unsigned int framesSinceLastMessage;
 
 	/** Time at which the last connection was attempted */
 	std::chrono::time_point<std::chrono::system_clock> lastAttemptConnectionTime;
@@ -122,7 +98,7 @@ class MagicInternetBox::Mimpl {
 		}
 
 		auto currTime = std::chrono::system_clock::now();
-		std::chrono::duration<double> diff = currTime - lastAttemptConnectionTime;
+		const std::chrono::duration<double> diff = currTime - lastAttemptConnectionTime;
 		if (diff.count() < MIN_WAIT_TIME) {
 			CULog("Reconnect attempt too fast; aborting");
 			return false;
@@ -177,7 +153,7 @@ class MagicInternetBox::Mimpl {
 		data.push_back(data1);
 		data.push_back(data2);
 
-		uint8_t d3Positive = data3 >= 0 ? 1 : 0;
+		const uint8_t d3Positive = data3 >= 0 ? 1 : 0;
 		data.push_back(d3Positive);
 		StateReconciler::encodeFloat(abs(data3), data);
 
@@ -193,24 +169,7 @@ class MagicInternetBox::Mimpl {
 		  currFrame(0),
 		  levelParity(true),
 		  skipTutorial(false),
-		  numPlayers(0),
-		  maxPlayers(0),
-		  activePlayers(),
-		  lastConnection(0) {
-#ifdef _WIN32
-		INT rc; // NOLINT
-		WSADATA wsaData;
-
-		// NOLINTNEXTLINE
-		rc = WSAStartup(MAKEWORD(2, 2), &wsaData);
-		if (rc) { // NOLINT
-			CULogError("WSAStartup Failed");
-			// NOLINTNEXTLINE
-			throw "WSA Startup Failed";
-		}
-#endif
-		activePlayers.fill(false);
-	}
+		  framesSinceLastMessage(0) {}
 
 	bool initHost() {
 		if (!initConnection()) {
@@ -218,10 +177,8 @@ class MagicInternetBox::Mimpl {
 			return false;
 		}
 
-		conn = std::make_unique<NetworkConnection>();
+		conn = cugl::NetworkConnection::newHostConnection(SERVER_CONFIG);
 
-		this->playerID = 0;
-		this->numPlayers = 1;
 		status = HostConnecting;
 
 		return true;
@@ -233,25 +190,13 @@ class MagicInternetBox::Mimpl {
 			return false;
 		}
 
-		conn = std::make_unique<NetworkConnection>(id);
+		conn = cugl::NetworkConnection::newClientConnection(SERVER_CONFIG, id);
 
-		roomID = id;
 		status = ClientConnecting;
 
 		return true;
 	}
 
-	bool reconnect() {
-		if (!initConnection() || !playerID.has_value() || roomID.empty()) {
-			status = ReconnectError;
-			return false;
-		}
-
-		conn = std::make_unique<NetworkConnection>(roomID);
-		status = Reconnecting;
-
-		return true;
-	}
 #pragma endregion
 
 #pragma region Getters
@@ -261,17 +206,17 @@ class MagicInternetBox::Mimpl {
 
 	void acknowledgeNetworkEvent() { events = MagicInternetBox::NetworkEvents::None; }
 
-	std::string getRoomID() { return roomID; }
+	std::string getRoomID() { return conn->getRoomID(); }
 
 	tl::optional<uint8_t> getLevelNum() { return levelNum; }
 
-	tl::optional<uint8_t> getPlayerID() { return playerID; }
+	tl::optional<uint8_t> getPlayerID() { return conn->getPlayerID(); }
 
-	uint8_t getNumPlayers() const { return numPlayers; }
+	uint8_t getNumPlayers() const { return conn->getNumPlayers(); }
 
-	uint8_t getMaxNumPlayers() const { return maxPlayers; }
+	uint8_t getMaxNumPlayers() const { return conn->getTotalPlayers(); }
 
-	bool isPlayerActive(uint8_t playerID) { return activePlayers.at(playerID); }
+	bool isPlayerActive(uint8_t playerID) { return conn->isPlayerActive(playerID); }
 #pragma endregion
 
 	void setSkipTutorial(bool skip) { skipTutorial = skip; }
@@ -299,7 +244,6 @@ class MagicInternetBox::Mimpl {
 		this->levelNum = levelNum;
 		conn->send(data);
 
-		maxPlayers = numPlayers;
 		status = GameStart;
 		stateReconciler.reset();
 		conn->startGame();
@@ -356,8 +300,57 @@ class MagicInternetBox::Mimpl {
 			case ClientRoomInvalid:
 			case ClientRoomFull:
 			case ClientApiMismatch:
+			case HostApiMismatch:
+			case HostError:
+			case ClientError:
 				return;
 			default:
+				break;
+		}
+
+		switch (conn->getStatus()) {
+			case cugl::NetworkConnection::NetStatus::Disconnected:
+			case cugl::NetworkConnection::NetStatus::GenericError:
+				if (status == Reconnecting) {
+					status = ReconnectError;
+				} else if (conn->getPlayerID().has_value() && *(conn->getPlayerID()) == 0) {
+					status = HostError;
+				} else {
+					status = ClientError;
+				}
+				return;
+			case cugl::NetworkConnection::NetStatus::Connected:
+				if (status != HostWaitingOnOthers && status != ClientWaitingOnOthers) {
+					if (*(conn->getPlayerID()) == 0) {
+						CULog("Host got ID");
+						status = HostWaitingOnOthers;
+					} else {
+						CULog("Join room success");
+						status = ClientWaitingOnOthers;
+					}
+					return;
+				} else if (status == Reconnecting) {
+					status = ReconnectPending;
+					break;
+				} else {
+					break;
+				}
+			case cugl::NetworkConnection::NetStatus::Reconnecting:
+				status = Reconnecting;
+				return;
+			case cugl::NetworkConnection::NetStatus::RoomNotFound:
+				status = ClientRoomInvalid;
+				return;
+			case cugl::NetworkConnection::NetStatus::ApiMismatch:
+				if (*(conn->getPlayerID()) == 0) {
+					CULog("Host api mismatch");
+					status = HostApiMismatch;
+				} else {
+					CULog("Client api mismatch");
+					status = ClientApiMismatch;
+				}
+				return;
+			case cugl::NetworkConnection::NetStatus::Pending:
 				break;
 		}
 
@@ -369,106 +362,16 @@ class MagicInternetBox::Mimpl {
 			auto type = static_cast<NetworkDataType>(message[0]);
 
 			switch (type) {
-				case GenericError: {
-					if (playerID == 0) {
-						if (status != HostWaitingOnOthers) {
-							status = HostError;
-						} else {
-							CULog("Error occured; swallowing in mib");
-						}
-
-					} else {
-						status = ClientError;
-					}
-					return;
-				}
-				case ApiMismatch: {
-					CULog("API Mismatch Occured; Aborting");
-					if (playerID == 0) {
-						status = HostApiMismatch;
-					} else {
-						status = ClientApiMismatch;
-					}
-					return;
-				}
-				case AssignedRoom: {
-					if (playerID != 0) {
-						break;
-					}
-					if (status == Reconnecting) {
-						CULog("Received room ID while reconnecting; aborting");
-						status = ReconnectError;
-						return;
-					}
-					std::stringstream newRoomId;
-					for (size_t i = 0; i < globals::ROOM_LENGTH; i++) {
-						newRoomId << static_cast<char>(message[i + 1]);
-					}
-					activePlayers[0] = true;
-					roomID = newRoomId.str();
-					CULog("Got room ID: %s", roomID.c_str());
-					status = HostWaitingOnOthers;
-					return;
-				}
-				case JoinRoom: {
-					switch (message[1]) {
-						case 0: {
-							numPlayers = message[2];
-							playerID = message[3];
-							if (message[4] > globals::API_VER) {
-								CULog("Error API out of date; current is %d but server is %d",
-									  globals::API_VER, message[4]);
-								status = ClientApiMismatch;
-								return;
-							}
-							CULog("Join Room Success; player id %d out of %d players", *playerID,
-								  numPlayers);
-							for (unsigned int i = 0; i < numPlayers; i++) {
-								activePlayers.at(i) = true;
-							}
-							status = ClientWaitingOnOthers;
-							return;
-						}
-						case 1: {
-							CULog("Room Does Not Exist");
-							status = ClientRoomInvalid;
-							return;
-						}
-						case 2: {
-							CULog("Room Full");
-							status = ClientRoomFull;
-							return;
-						}
-						case 3:
-						case 4: {
-							// Reconnecting
-							if (status != Reconnecting) {
-								CULog(
-									"ERROR: Received reconnecting response from server when not "
-									"reconnecting");
-								status = ClientRoomFull;
-								return;
-							}
-							status = message[1] == 3 ? ReconnectPending : ReconnectError;
-							return;
-						}
-					}
-				}
 				case PlayerJoined: {
 					CULog("Player Joined");
-					activePlayers.at(message[1]) = true;
-					numPlayers++;
 					return;
 				}
 				case PlayerDisconnect: {
 					CULog("Player Left");
-					activePlayers.at(message[1]) = false;
-					numPlayers--;
 					return;
 				}
 				case StartGame: {
 					status = GameStart;
-					maxPlayers = numPlayers;
 					levelNum = message[1];
 					stateReconciler.reset();
 					return;
@@ -512,15 +415,15 @@ class MagicInternetBox::Mimpl {
 			return;
 		}
 
-		lastConnection++;
-		uint8_t pID = playerID.value();
+		framesSinceLastMessage++;
+		const uint8_t pID = conn->getPlayerID().value();
 
 		// NETWORK TICK
 		currFrame = (currFrame + 1) % STATE_SYNC_FREQ;
 		if (currFrame % globals::NETWORK_TICK == 0) {
-			std::shared_ptr<DonutModel> player = state->getDonuts()[pID];
-			float angle = player->getAngle();
-			float velocity = player->getVelocity();
+			const std::shared_ptr<DonutModel> player = state->getDonuts()[pID];
+			const float angle = player->getAngle();
+			const float velocity = player->getVelocity();
 			sendData(PositionUpdate, angle, pID, -1, -1, velocity);
 
 			// STATE SYNC (and check for server connection)
@@ -533,10 +436,11 @@ class MagicInternetBox::Mimpl {
 						conn->send(data);
 					}
 				}
-				if (lastConnection > SERVER_TIMEOUT) {
+				if (framesSinceLastMessage > SERVER_TIMEOUT) {
 					CULog(
 						"HAS NOT RECEIVED SERVER MESSAGE IN TIMEOUT FRAMES; assuming disconnected");
 					forceDisconnect();
+					status = Reconnecting;
 					return;
 				}
 			}
@@ -549,28 +453,19 @@ class MagicInternetBox::Mimpl {
 
 			auto type = static_cast<NetworkDataType>(message[0]);
 
-			if (type > AssignedRoom) {
-				CULog("Received invalid connection message during gameplay; %d", message[0]);
-				return;
-			}
-
-			lastConnection = 0;
+			framesSinceLastMessage = 0;
 
 			switch (type) {
 				case PlayerJoined: {
-					numPlayers++;
-					unsigned int playerID = message[1];
+					const unsigned int playerID = message[1];
 					CULog("Player has reconnected, %d", playerID);
 					state->getDonuts()[playerID]->setIsActive(true);
-					activePlayers.at(playerID) = true;
 					return;
 				}
 				case PlayerDisconnect: {
-					numPlayers--;
-					unsigned int playerID = message[1];
+					const unsigned int playerID = message[1];
 					CULog("Player has disconnected, %d", playerID);
 					state->getDonuts()[playerID]->setIsActive(false);
-					activePlayers.at(playerID) = false;
 					return;
 				}
 				case StateSync: {
@@ -598,9 +493,9 @@ class MagicInternetBox::Mimpl {
 				return;
 			}
 
-			float angle = StateReconciler::decodeFloat(message[1], message[2]);
-			uint8_t id = message[3];
-			uint8_t data1 = message[4];
+			const float angle = StateReconciler::decodeFloat(message[1], message[2]);
+			const uint8_t id = message[3];
+			const uint8_t data1 = message[4];
 			// Networking code is finnicky and having these magic numbers is the easiest solution
 			uint8_t data2 = message[5];				   // NOLINT Simple counting numbers
 			float data3 = (message[6] == 1 ? 1 : -1) * // NOLINT
@@ -608,7 +503,7 @@ class MagicInternetBox::Mimpl {
 
 			switch (type) {
 				case PositionUpdate: {
-					std::shared_ptr<DonutModel> donut = state->getDonuts()[id];
+					const std::shared_ptr<DonutModel> donut = state->getDonuts()[id];
 					donut->setAngle(angle);
 					donut->setVelocity(data3);
 					break;
@@ -628,22 +523,22 @@ class MagicInternetBox::Mimpl {
 					break;
 				}
 				case DualCreate: {
-					int taskID = id;
+					const int taskID = id;
 					state->createDoor(angle, taskID);
 					break;
 				}
 				case DualResolve: {
-					int taskID = id;
-					int player = data1;
-					int flag = data2;
+					const int taskID = id;
+					const int player = data1;
+					const int flag = data2;
 					state->flagDoor(taskID, player, flag);
 					break;
 				}
 				case ButtonCreate: {
-					float angle1 = angle;
-					float angle2 = data3;
-					int id1 = id;
-					int id2 = data1;
+					const float angle1 = angle;
+					const float angle2 = data3;
+					const int id1 = id;
+					const int id2 = data1;
 					state->createButton(angle1, id1, angle2, id2);
 					break;
 				}
@@ -657,7 +552,7 @@ class MagicInternetBox::Mimpl {
 					break;
 				}
 				case AllCreate: {
-					if (playerID == id) {
+					if (*(conn->getPlayerID()) == id) {
 						state->createAllTask();
 					}
 					break;
@@ -724,12 +619,13 @@ class MagicInternetBox::Mimpl {
 	void jump(uint8_t player) { sendData(Jump, -1.0f, player, -1, -1, -1.0f); }
 #pragma endregion
 
+	/**
+	 * Manually disconnect from the server, while keeping the connection.
+	 */
 	void forceDisconnect() {
 		CULog("Force disconnecting");
 
-		status = Disconnected;
-		lastConnection = 0;
-		conn = nullptr;
+		conn->manualDisconnect();
 	}
 
 	/**
@@ -738,11 +634,11 @@ class MagicInternetBox::Mimpl {
 	void reset() {
 		forceDisconnect();
 		status = Uninitialized;
-		activePlayers.fill(false);
 		stateReconciler.reset();
-		roomID = "";
-		playerID = tl::nullopt;
 		levelNum = tl::nullopt;
+
+		framesSinceLastMessage = 0;
+		conn = nullptr;
 	}
 };
 
@@ -752,7 +648,6 @@ MagicInternetBox::MagicInternetBox() : impl(new Mimpl) {}
 MagicInternetBox::~MagicInternetBox() = default;
 bool MagicInternetBox::initHost() { return impl->initHost(); }
 bool MagicInternetBox::initClient(const std::string& id) { return impl->initClient(id); }
-bool MagicInternetBox::reconnect() { return impl->reconnect(); }
 MagicInternetBox::MatchmakingStatus MagicInternetBox::matchStatus() { return impl->matchStatus(); }
 MagicInternetBox::NetworkEvents MagicInternetBox::lastNetworkEvent() {
 	return impl->lastNetworkEvent();
@@ -788,7 +683,6 @@ void MagicInternetBox::failAllTask() { impl->failAllTask(); }
 void MagicInternetBox::succeedAllTask() { impl->succeedAllTask(); }
 void MagicInternetBox::forceWinLevel() { impl->forceWinLevel(); }
 void MagicInternetBox::jump(uint8_t player) { impl->jump(player); }
-void MagicInternetBox::forceDisconnect() { impl->forceDisconnect(); }
 void MagicInternetBox::reset() { impl->reset(); }
 
 #pragma endregion

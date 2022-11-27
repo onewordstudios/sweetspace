@@ -168,9 +168,6 @@
     <ClInclude Include="..\..\source\MagicInternetBox.h">
       <Filter>Header Files\Controllers\Networking</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\source\NetworkConnection.h">
-      <Filter>Header Files\Controllers\Networking</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\source\NetworkDataType.h">
       <Filter>Header Files\Controllers\Networking</Filter>
     </ClInclude>
@@ -702,6 +699,18 @@
     <ClInclude Include="..\..\source\CollisionController.h">
       <Filter>Header Files\Controllers</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\source\CUNetworkConnection.h">
+      <Filter>Header Files\Controllers\Networking</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\libraries\easywsclient.hpp">
+      <Filter>Header Files\Controllers\Networking</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\AdHocNetworkConnection.h">
+      <Filter>Header Files\Controllers\Networking</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\WebsocketNetworkConnection.h">
+      <Filter>Header Files\Controllers\Networking</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\source\main.cpp">
@@ -774,9 +783,6 @@
       <Filter>Source Files\Modes</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\MagicInternetBox.cpp">
-      <Filter>Source Files\Controllers\Networking</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\NetworkConnection.cpp">
       <Filter>Source Files\Controllers\Networking</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\StateReconciler.cpp">
@@ -1165,6 +1171,18 @@
     </ClCompile>
     <ClCompile Include="..\..\source\CollisionController.cpp">
       <Filter>Source Files\Controllers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\CUNetworkConnection.cpp">
+      <Filter>Source Files\Controllers\Networking</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\libraries\easywsclient.cpp">
+      <Filter>Source Files\Controllers\Networking</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\AdHocNetworkConnection.cpp">
+      <Filter>Source Files\Controllers\Networking</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\WebsocketNetworkConnection.cpp">
+      <Filter>Source Files\Controllers\Networking</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

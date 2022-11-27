@@ -192,6 +192,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\source\AdHocNetworkConnection.h" />
     <ClInclude Include="..\..\source\AdUtils.h" />
     <ClInclude Include="..\..\source\AnimationManager.h" />
     <ClInclude Include="..\..\source\AudioController.h" />
@@ -202,6 +203,7 @@
     <ClInclude Include="..\..\source\ButtonModel.h" />
     <ClInclude Include="..\..\source\ButtonNode.h" />
     <ClInclude Include="..\..\source\CollisionController.h" />
+    <ClInclude Include="..\..\source\CUNetworkConnection.h" />
     <ClInclude Include="..\..\source\CustomNode.h" />
     <ClInclude Include="..\..\source\DonutModel.h" />
     <ClInclude Include="..\..\source\DonutNode.h" />
@@ -218,6 +220,7 @@
     <ClInclude Include="..\..\source\InputController.h" />
     <ClInclude Include="..\..\source\LevelConstants.h" />
     <ClInclude Include="..\..\source\LevelModel.h" />
+    <ClInclude Include="..\..\source\libraries\easywsclient.hpp" />
     <ClInclude Include="..\..\source\libraries\SLikeNet\slikenet\alloca.h" />
     <ClInclude Include="..\..\source\libraries\SLikeNet\slikenet\assert.h" />
     <ClInclude Include="..\..\source\libraries\SLikeNet\slikenet\AutopatcherPatchContext.h" />
@@ -379,7 +382,6 @@
     <ClInclude Include="..\..\source\MainMenuMode.h" />
     <ClInclude Include="..\..\source\MainMenuTransitions.h" />
     <ClInclude Include="..\..\source\NeedleAnimator.h" />
-    <ClInclude Include="..\..\source\NetworkConnection.h" />
     <ClInclude Include="..\..\source\NetworkDataType.h" />
     <ClInclude Include="..\..\source\PauseMenu.h" />
     <ClInclude Include="..\..\source\PlayerDonutModel.h" />
@@ -399,10 +401,12 @@
     <ClInclude Include="..\..\source\Tween.h" />
     <ClInclude Include="..\..\source\Unopenable.h" />
     <ClInclude Include="..\..\source\UnopenableNode.h" />
+    <ClInclude Include="..\..\source\WebsocketNetworkConnection.h" />
     <ClInclude Include="..\..\source\WinScreen.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\source\AdHocNetworkConnection.cpp" />
     <ClCompile Include="..\..\source\AnimationManager.cpp" />
     <ClCompile Include="..\..\source\BreachModel.cpp" />
     <ClCompile Include="..\..\source\BreachNode.cpp" />
@@ -410,6 +414,7 @@
     <ClCompile Include="..\..\source\ButtonModel.cpp" />
     <ClCompile Include="..\..\source\ButtonNode.cpp" />
     <ClCompile Include="..\..\source\CollisionController.cpp" />
+    <ClCompile Include="..\..\source\CUNetworkConnection.cpp" />
     <ClCompile Include="..\..\source\CustomNode.cpp" />
     <ClCompile Include="..\..\source\DonutModel.cpp" />
     <ClCompile Include="..\..\source\DonutNode.cpp" />
@@ -420,6 +425,7 @@
     <ClCompile Include="..\..\source\GameGraphRoot.cpp" />
     <ClCompile Include="..\..\source\GLaDOS.cpp" />
     <ClCompile Include="..\..\source\HealthNode.cpp" />
+    <ClCompile Include="..\..\source\libraries\easywsclient.cpp" />
     <ClCompile Include="..\..\source\libraries\SLikeNet\Base64Encoder.cpp" />
     <ClCompile Include="..\..\source\libraries\SLikeNet\BitStream.cpp" />
     <ClCompile Include="..\..\source\libraries\SLikeNet\CCRakNetSlidingWindow.cpp" />
@@ -539,7 +545,6 @@
     <ClCompile Include="..\..\source\LoadingMode.cpp" />
     <ClCompile Include="..\..\source\MainMenuMode.cpp" />
     <ClCompile Include="..\..\source\MainMenuTransitions.cpp" />
-    <ClCompile Include="..\..\source\NetworkConnection.cpp" />
     <ClCompile Include="..\..\source\PauseMenu.cpp" />
     <ClCompile Include="..\..\source\PlayerDonutModel.cpp" />
     <ClCompile Include="..\..\source\PlayerDonutNode.cpp" />
@@ -556,6 +561,7 @@
     <ClCompile Include="..\..\source\TutorialNode.cpp" />
     <ClCompile Include="..\..\source\Tween.cpp" />
     <ClCompile Include="..\..\source\UnopenableNode.cpp" />
+    <ClCompile Include="..\..\source\WebsocketNetworkConnection.cpp" />
     <ClCompile Include="..\..\source\WinScreen.cpp" />
   </ItemGroup>
   <ItemGroup>

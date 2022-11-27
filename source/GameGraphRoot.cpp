@@ -419,7 +419,6 @@ void GameGraphRoot::update( // NOLINT Yeah it's a big function; we'll live with 
 		coordHUD->setText(time);
 	}
 
-	bool justLost = false;
 	// State Check for Drawing
 	switch (status) {
 		case Normal:
@@ -429,8 +428,8 @@ void GameGraphRoot::update( // NOLINT Yeah it's a big function; we'll live with 
 			// Reset Timeout Counters to negative value
 			pauseMenu->update();
 			break;
-		case Loss:
-			justLost = !lossScreen->isVisible();
+		case Loss: {
+			bool justLost = !lossScreen->isVisible();
 			// Show loss screen
 			lossScreen->setVisible(true);
 			pauseMenu->setVisible(false);
@@ -443,6 +442,7 @@ void GameGraphRoot::update( // NOLINT Yeah it's a big function; we'll live with 
 				AdUtils::displayInterstitial();
 			}
 			break;
+		}
 		case Win:
 			// Show Win Screen
 			if (!winScreen->isVisible()) {

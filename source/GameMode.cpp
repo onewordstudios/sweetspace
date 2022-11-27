@@ -178,12 +178,6 @@ bool GameMode::connectionUpdate(float timestep) {
 		case MagicInternetBox::Disconnected:
 		case MagicInternetBox::ClientRoomInvalid:
 		case MagicInternetBox::ReconnectError:
-			if (net.reconnect()) {
-				net.update();
-			}
-			sgRoot.setStatus(GameGraphRoot::Reconnecting);
-			sgRoot.update(timestep);
-			return false;
 		case MagicInternetBox::Reconnecting:
 		case MagicInternetBox::ReconnectPending:
 			// Still Reconnecting
