@@ -132,8 +132,8 @@ bool ShipModel::failAllTask() {
 		attempts += 1;
 		// Check against breaches
 		for (auto& breach : breaches) {
-			float breachAngle = breach->getAngle();
-			float diff = getAngleDifference(breachAngle, newAngle);
+			const float breachAngle = breach->getAngle();
+			const float diff = getAngleDifference(breachAngle, newAngle);
 			if (diff <= MIN_DISTANCE && breachAngle != -1) {
 				goodAngle = false;
 				break;
@@ -144,8 +144,8 @@ bool ShipModel::failAllTask() {
 		}
 		// Check against doors
 		for (auto& door : doors) {
-			float doorAngle = door->getAngle();
-			float diff = getAngleDifference(doorAngle, newAngle);
+			const float doorAngle = door->getAngle();
+			const float diff = getAngleDifference(doorAngle, newAngle);
 			if (diff <= MIN_DISTANCE && doorAngle != -1) {
 				goodAngle = false;
 				break;

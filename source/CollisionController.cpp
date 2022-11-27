@@ -22,7 +22,7 @@ void breachCollisions(ShipModel& ship, uint8_t playerID) {
 			continue;
 		}
 
-		float diff = ship.getAngleDifference(donutModel->getAngle(), breach->getAngle());
+		const float diff = ship.getAngleDifference(donutModel->getAngle(), breach->getAngle());
 
 		// Rolling over other player's breach
 		if (!donutModel->isJumping() && playerID != breach->getPlayer() &&
@@ -66,7 +66,7 @@ void doorCollisions(ShipModel& ship, uint8_t playerID) {
 		}
 
 		float diff = donutModel->getAngle() - door->getAngle();
-		float a = diff + ship.getSize() / 2;
+		const float a = diff + ship.getSize() / 2;
 		diff = a - floor(a / ship.getSize()) * ship.getSize() - ship.getSize() / 2;
 
 		// Stop donut and push it out if inside
@@ -74,10 +74,10 @@ void doorCollisions(ShipModel& ship, uint8_t playerID) {
 			soundEffects->startEvent(SoundEffectController::DOOR, i);
 			donutModel->setVelocity(0);
 			if (diff < 0) {
-				float proposedAngle = door->getAngle() - globals::DOOR_WIDTH;
+				const float proposedAngle = door->getAngle() - globals::DOOR_WIDTH;
 				donutModel->setAngle(proposedAngle < 0 ? ship.getSize() - 1 : proposedAngle);
 			} else {
-				float proposedAngle = door->getAngle() + globals::DOOR_WIDTH;
+				const float proposedAngle = door->getAngle() + globals::DOOR_WIDTH;
 				donutModel->setAngle(proposedAngle >= ship.getSize() ? 0 : proposedAngle);
 			}
 		}
@@ -104,8 +104,8 @@ void doorCollisions(ShipModel& ship, uint8_t playerID) {
 		}
 
 		float diff = donutModel->getAngle() - door->getAngle();
-		float shipSize = ship.getSize();
-		float a = diff + shipSize / 2;
+		const float shipSize = ship.getSize();
+		const float a = diff + shipSize / 2;
 		diff = a - floor(a / shipSize) * shipSize - shipSize / 2;
 
 		// Stop donut and push it out if inside
@@ -113,10 +113,12 @@ void doorCollisions(ShipModel& ship, uint8_t playerID) {
 			soundEffects->startEvent(SoundEffectController::DOOR, i + globals::UNOP_MARKER);
 			donutModel->setVelocity(0);
 			if (diff < 0) {
-				float proposedAngle = ship.getUnopenable()[i]->getAngle() - globals::DOOR_WIDTH;
+				const float proposedAngle =
+					ship.getUnopenable()[i]->getAngle() - globals::DOOR_WIDTH;
 				donutModel->setAngle(proposedAngle < 0 ? ship.getSize() : proposedAngle);
 			} else {
-				float proposedAngle = ship.getUnopenable()[i]->getAngle() + globals::DOOR_WIDTH;
+				const float proposedAngle =
+					ship.getUnopenable()[i]->getAngle() + globals::DOOR_WIDTH;
 				donutModel->setAngle(proposedAngle > ship.getSize() ? 0 : proposedAngle);
 			}
 
@@ -139,8 +141,8 @@ void buttonCollisions(ShipModel& ship, uint8_t playerID) {
 		button->update();
 
 		float diff = donutModel->getAngle() - button->getAngle();
-		float shipSize = ship.getSize();
-		float a = diff + shipSize / 2;
+		const float shipSize = ship.getSize();
+		const float a = diff + shipSize / 2;
 		diff = a - floor(a / shipSize) * shipSize - shipSize / 2;
 
 		if (abs(diff) > globals::BUTTON_ACTIVE_ANGLE) {

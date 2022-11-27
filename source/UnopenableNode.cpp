@@ -19,7 +19,7 @@ bool UnopenableNode::init(const std::shared_ptr<Unopenable>& unop,
 						  const std::shared_ptr<cugl::Texture>& texture) {
 	CustomNode::init(std::move(player), shipSize, unop->getAngle(), DOOR_RADIUS);
 	unopModel = unop;
-	std::shared_ptr<PolygonNode> p = PolygonNode::allocWithTexture(texture);
+	const std::shared_ptr<PolygonNode> p = PolygonNode::allocWithTexture(texture);
 	addChild(p);
 	p->setAnchor(Vec2::ANCHOR_BOTTOM_CENTER);
 	p->setPosition(0, 0);

@@ -15,10 +15,10 @@ bool PlayerDonutNode::init(const std::shared_ptr<DonutModel>& player, float scre
 	setPosition(position);
 	initPos = position;
 
-	std::shared_ptr<Texture> faceIdle = assets->get<Texture>("donut_face_idle");
-	std::shared_ptr<Texture> faceDizzy = assets->get<Texture>("donut_face_dizzy");
-	std::shared_ptr<Texture> faceWork = assets->get<Texture>("donut_face_work");
-	std::shared_ptr<Texture> bodyTexture = assets->get<Texture>("donut_" + color);
+	const std::shared_ptr<Texture> faceIdle = assets->get<Texture>("donut_face_idle");
+	const std::shared_ptr<Texture> faceDizzy = assets->get<Texture>("donut_face_dizzy");
+	const std::shared_ptr<Texture> faceWork = assets->get<Texture>("donut_face_work");
+	const std::shared_ptr<Texture> bodyTexture = assets->get<Texture>("donut_" + color);
 
 	DonutNode::init(bodyTexture, faceIdle, faceDizzy, faceWork, player);
 	CustomNode::init(player, 0, 0, 0);
@@ -32,7 +32,7 @@ void PlayerDonutNode::draw(const std::shared_ptr<cugl::SpriteBatch>& batch, cons
 	setAnchor(Vec2::ANCHOR_CENTER);
 	rotationNode->setAngle(angle);
 	// Draw Jump Offset
-	float donutNewY = initPos.y + playerDonutModel->getJumpOffset() * screenHeight;
+	const float donutNewY = initPos.y + playerDonutModel->getJumpOffset() * screenHeight;
 	setPositionY(donutNewY);
 	animateJumping();
 	animateFacialExpression();

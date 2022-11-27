@@ -43,7 +43,7 @@ StabilizerNode::StabilizerNode(const std::shared_ptr<cugl::AssetManager>& assets
 	arrowLit = assets->get<cugl::Texture>("panel_progress_1");
 
 	for (size_t i = 0; i < MAX_HEALTH_LABELS; i++) {
-		std::string s = std::to_string(i);
+		const std::string s = std::to_string(i);
 		auto arrow = dynamic_pointer_cast<cugl::PolygonNode>(
 			assets->get<Node>("stabilizer_stabilizerPanel_challengePanelArrow" + s));
 		arrows.push_back(arrow);
@@ -100,7 +100,7 @@ void StabilizerNode::update() {
 			}
 
 			for (size_t i = 0; i < MAX_HEALTH_LABELS; i++) {
-				float progress = model.getProgress() * MAX_HEALTH_LABELS;
+				const float progress = model.getProgress() * MAX_HEALTH_LABELS;
 				if (static_cast<float>(i) < progress) {
 					arrows[i]->setTexture(arrowLit);
 				}

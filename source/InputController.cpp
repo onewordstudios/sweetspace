@@ -24,7 +24,7 @@ constexpr unsigned int LISTENER_KEY = 1;
  */
 InputController::InputController()
 	: active(false), touchID(-1), rollAmount(0.0f), jumped(false), backPressed(false) {
-	bool success = Input::activate<Keyboard>();
+	const bool success = Input::activate<Keyboard>();
 
 #ifndef CU_TOUCH_SCREEN
 

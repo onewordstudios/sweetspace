@@ -30,7 +30,7 @@
 #include <unordered_set>
 #include <vector>
 
-// Forward declarations
+// NOLINTNEXTLINE Forward declarations
 namespace SLNet {
 class RakPeerInterface;
 }; // namespace SLNet
@@ -126,6 +126,8 @@ class NetworkConnection {
 	 */
 	static std::unique_ptr<NetworkConnection> newClientConnection(ConnectionConfig config,
 																  std::string roomID);
+
+	virtual ~NetworkConnection() = default;
 #pragma endregion
 
 #pragma region Main Networking Methods

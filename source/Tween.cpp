@@ -14,7 +14,7 @@ float Tween::linear(float start, float end, size_t currFrame, size_t maxFrame) {
 }
 
 float Tween::easeIn(float start, float end, size_t currFrame, size_t maxFrame) {
-	float t = static_cast<float>(currFrame) / static_cast<float>(maxFrame);
+	const float t = static_cast<float>(currFrame) / static_cast<float>(maxFrame);
 	return linInterp(start, end, t * t * t * t);
 }
 

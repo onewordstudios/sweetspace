@@ -56,7 +56,7 @@ void GLaDOS::dispose() {
  */
 bool GLaDOS::init(const std::shared_ptr<ShipModel>& ship,
 				  const std::shared_ptr<LevelModel>& level) {
-	bool success = true;
+	const bool success = true;
 	this->ship = ship;
 	levelNum = mib.getLevelNum().value();
 	maxEvents = static_cast<int>(ship->getBreaches().size());
@@ -95,7 +95,7 @@ bool GLaDOS::init(const std::shared_ptr<ShipModel>& ship,
  * @return true if the controller was initialized successfully
  */
 bool GLaDOS::init(const std::shared_ptr<ShipModel>& ship, const int levelNum) {
-	bool success = true;
+	const bool success = true;
 	readyQueue.clear();
 	this->ship = ship;
 	this->levelNum = levelNum;
@@ -103,12 +103,12 @@ bool GLaDOS::init(const std::shared_ptr<ShipModel>& ship, const int levelNum) {
 	maxEvents = tutorial::MAX_BREACH.at(levelNum) * mib.getNumPlayers() / globals::MIN_PLAYERS;
 	maxDoors = tutorial::MAX_DOOR.at(levelNum) * mib.getNumPlayers() / globals::MIN_PLAYERS;
 	maxButtons = tutorial::MAX_BUTTON.at(levelNum) * mib.getNumPlayers() / globals::MIN_PLAYERS;
-	int unop =
+	const int unop =
 		static_cast<int>(tutorial::SECTIONED.at(levelNum)) * static_cast<int>(mib.getNumPlayers());
 	sections = unop;
 	customEventCtr = static_cast<int>(tutorial::CUSTOM_EVENTS.at(levelNum));
-	float size = static_cast<float>(tutorial::SIZE_PER.at(levelNum)) *
-				 static_cast<float>(mib.getNumPlayers());
+	const float size = static_cast<float>(tutorial::SIZE_PER.at(levelNum)) *
+					   static_cast<float>(mib.getNumPlayers());
 	ship->init(mib.getMaxNumPlayers(), maxEvents, maxDoors, mib.getPlayerID().value(), size,
 			   tutorial::HEALTH.at(levelNum), maxButtons, unop);
 	ship->setTimeless(true);
@@ -135,28 +135,28 @@ bool GLaDOS::init(const std::shared_ptr<ShipModel>& ship, const int levelNum) {
 		ship->separateDonuts();
 	}
 	for (int i = 0; i < unop; i++) {
-		float angle = size / (static_cast<float>(unop) * 2) +
-					  (size * static_cast<float>(i)) / static_cast<float>(unop);
+		const float angle = size / (static_cast<float>(unop) * 2) +
+							(size * static_cast<float>(i)) / static_cast<float>(unop);
 		ship->createUnopenable(angle, i);
 	}
 	switch (levelNum) {
 		case tutorial::DOOR_LEVEL:
 			for (int i = 0; i < maxDoors; i++) {
-				float angle = size / (static_cast<float>(maxDoors) * 2) +
-							  (size * static_cast<float>(i)) / static_cast<float>(maxDoors);
-				int j = doorFree.front();
+				const float angle = size / (static_cast<float>(maxDoors) * 2) +
+									(size * static_cast<float>(i)) / static_cast<float>(maxDoors);
+				const int j = doorFree.front();
 				doorFree.pop();
 				ship->createDoor(angle, j);
 			}
 			break;
 		case tutorial::BUTTON_LEVEL:
 			for (int i = 0; i < unop; i++) {
-				float angle = size / (static_cast<float>(unop) * 2) +
-							  (size * static_cast<float>(i)) / static_cast<float>(unop);
+				const float angle = size / (static_cast<float>(unop) * 2) +
+									(size * static_cast<float>(i)) / static_cast<float>(unop);
 				// Find usable button IDs
-				int k = buttonFree.front();
+				const int k = buttonFree.front();
 				buttonFree.pop();
-				int j = buttonFree.front();
+				const int j = buttonFree.front();
 				buttonFree.pop();
 
 				// Dispatch challenge creation
@@ -181,7 +181,7 @@ bool GLaDOS::init(const std::shared_ptr<ShipModel>& ship, const int levelNum) {
  * @param ids a vector of relative ids, scrambled by the caller
  */
 void GLaDOS::placeObject(BuildingBlockModel::Object obj, float zeroAngle, vector<int> ids) {
-	int p =
+	const int p =
 		obj.player == -1 ? static_cast<int>(rand() % ship->getDonuts().size()) : ids.at(obj.player);
 	placeObject(obj, zeroAngle, p);
 }
@@ -216,7 +216,7 @@ void GLaDOS::placeObject(BuildingBlockModel::Object obj, float zeroAngle, int p)
 			break;
 		case BuildingBlockModel::Button: {
 			// Roll for pair's angle
-			float origAngle = objAngle;
+			const float origAngle = objAngle;
 			float pairAngle = 0;
 			int attempts = 0;
 			bool goodAngle = false;
@@ -224,8 +224,8 @@ void GLaDOS::placeObject(BuildingBlockModel::Object obj, float zeroAngle, int p)
 				pairAngle = static_cast<float>(rand() % static_cast<int>(ship->getSize()));
 				goodAngle = ship->getAngleDifference(pairAngle, origAngle) >= globals::BUTTON_WIDTH;
 				for (unsigned int k = 0; goodAngle && k < ship->getBreaches().size(); k++) {
-					float breachAngle = ship->getBreaches()[k]->getAngle();
-					float diff = ship->getAngleDifference(breachAngle, pairAngle);
+					const float breachAngle = ship->getBreaches()[k]->getAngle();
+					const float diff = ship->getAngleDifference(breachAngle, pairAngle);
 					if (ship->getBreaches()[k]->getIsActive() &&
 						diff < globals::BUTTON_ACTIVE_ANGLE) {
 						goodAngle = false;
@@ -234,16 +234,16 @@ void GLaDOS::placeObject(BuildingBlockModel::Object obj, float zeroAngle, int p)
 				}
 
 				for (unsigned int k = 0; goodAngle && k < ship->getDoors().size(); k++) {
-					float doorAngle = ship->getDoors()[k]->getAngle();
-					float diff = ship->getAngleDifference(doorAngle, pairAngle);
+					const float doorAngle = ship->getDoors()[k]->getAngle();
+					const float diff = ship->getAngleDifference(doorAngle, pairAngle);
 					if (ship->getDoors()[k]->getIsActive() && diff < globals::BUTTON_WIDTH) {
 						goodAngle = false;
 						break;
 					}
 				}
 				for (unsigned int k = 0; goodAngle && k < ship->getButtons().size(); k++) {
-					float buttonAngle = ship->getButtons()[k]->getAngle();
-					float diff = ship->getAngleDifference(buttonAngle, pairAngle);
+					const float buttonAngle = ship->getButtons()[k]->getAngle();
+					const float diff = ship->getAngleDifference(buttonAngle, pairAngle);
 					if (ship->getButtons()[k]->getIsActive() && diff < globals::BUTTON_WIDTH) {
 						goodAngle = false;
 						break;
@@ -273,9 +273,9 @@ void GLaDOS::placeObject(BuildingBlockModel::Object obj, float zeroAngle, int p)
 
 void GLaDOS::placeButtons(float angle1, float angle2) {
 	// Find usable button IDs
-	int i = buttonFree.front();
+	const int i = buttonFree.front();
 	buttonFree.pop();
-	int j = buttonFree.front();
+	const int j = buttonFree.front();
 	buttonFree.pop();
 
 	// Dispatch challenge creation
@@ -323,7 +323,7 @@ void GLaDOS::update(float dt) { // NOLINT
 
 	std::queue<int>().swap(doorFree);
 	for (int i = 0; i < maxDoors; i++) {
-		std::shared_ptr<DoorModel> door = ship->getDoors().at(i);
+		const std::shared_ptr<DoorModel> door = ship->getDoors().at(i);
 		if (door == nullptr) {
 			continue;
 		}
@@ -351,7 +351,7 @@ void GLaDOS::update(float dt) { // NOLINT
 	}
 
 	for (int i = 0; i < events.size(); i++) {
-		std::shared_ptr<EventModel> event = events.at(i);
+		const std::shared_ptr<EventModel> event = events.at(i);
 		int spawnRate =
 			static_cast<int>(globals::MIN_PLAYERS /
 							 (event->getProbability() * static_cast<float>(mib.getNumPlayers())));
@@ -378,12 +378,12 @@ void GLaDOS::update(float dt) { // NOLINT
 		}
 		// NOLINTNEXTLINE It's fine that this shuffle algorithm isn't perfect
 		random_shuffle(ids.begin(), ids.end());
-		shared_ptr<EventModel> event = readyQueue.at(i);
-		shared_ptr<BuildingBlockModel> block = blocks.at(event->getBlock());
-		vector<BuildingBlockModel::Object> objects = block->getObjects();
-		int breachesNeeded = block->getBreachesNeeded();
-		int doorsNeeded = block->getDoorsNeeded();
-		int buttonsNeeded = block->getButtonsNeeded();
+		const shared_ptr<EventModel> event = readyQueue.at(i);
+		const shared_ptr<BuildingBlockModel> block = blocks.at(event->getBlock());
+		const vector<BuildingBlockModel::Object> objects = block->getObjects();
+		const int breachesNeeded = block->getBreachesNeeded();
+		const int doorsNeeded = block->getDoorsNeeded();
+		const int buttonsNeeded = block->getButtonsNeeded();
 
 		// If we don't have enough resources for this event, they're probably already fucked
 		if (doorsNeeded > doorFree.size() || breachesNeeded > breachFree.size() ||
@@ -394,8 +394,8 @@ void GLaDOS::update(float dt) { // NOLINT
 		}
 		// the ids we actually use
 		vector<int> neededIds;
-		for (auto& object : objects) {
-			int id = object.player;
+		for (const auto& object : objects) {
+			const int id = object.player;
 			if (id != -1) {
 				ids.push_back(id);
 			}
@@ -409,7 +409,7 @@ void GLaDOS::update(float dt) { // NOLINT
 				break;
 			}
 			case BuildingBlockModel::SpecificPlayer: {
-				int id = ids.at(block->getPlayer());
+				const int id = ids.at(block->getPlayer());
 				angle =
 					ship->getDonuts().at(id)->getAngle() + static_cast<float>(block->getDistance());
 				break;
@@ -421,10 +421,10 @@ void GLaDOS::update(float dt) { // NOLINT
 		}
 		bool goodAngle = true;
 		for (int j = 0; goodAngle && j < ship->getDonuts().size(); j++) {
-			float diff = ship->getAngleDifference(ship->getDonuts().at(j)->getAngle(), angle);
-			float dist = find(neededIds.begin(), neededIds.end(), j) != neededIds.end()
-							 ? 0
-							 : static_cast<float>(padding);
+			const float diff = ship->getAngleDifference(ship->getDonuts().at(j)->getAngle(), angle);
+			const float dist = find(neededIds.begin(), neededIds.end(), j) != neededIds.end()
+								   ? 0
+								   : static_cast<float>(padding);
 			if (diff < dist + static_cast<float>(block->getRange()) / 2) {
 				goodAngle = false;
 				break;
@@ -432,8 +432,8 @@ void GLaDOS::update(float dt) { // NOLINT
 		}
 		// Make sure it's not too close to other breaches
 		for (unsigned int k = 0; goodAngle && k < ship->getBreaches().size(); k++) {
-			float breachAngle = ship->getBreaches()[k]->getAngle();
-			float diff = ship->getAngleDifference(breachAngle, angle);
+			const float breachAngle = ship->getBreaches()[k]->getAngle();
+			const float diff = ship->getAngleDifference(breachAngle, angle);
 			if (ship->getBreaches()[k]->getIsActive() &&
 				diff < static_cast<float>(block->getRange()) / 2) {
 				goodAngle = false;
@@ -442,8 +442,8 @@ void GLaDOS::update(float dt) { // NOLINT
 		}
 
 		for (unsigned int k = 0; goodAngle && k < ship->getDoors().size(); k++) {
-			float doorAngle = ship->getDoors()[k]->getAngle();
-			float diff = ship->getAngleDifference(doorAngle, angle);
+			const float doorAngle = ship->getDoors()[k]->getAngle();
+			const float diff = ship->getAngleDifference(doorAngle, angle);
 			if (ship->getDoors()[k]->getIsActive() &&
 				diff < static_cast<float>(block->getRange()) / 2) {
 				goodAngle = false;
@@ -452,8 +452,8 @@ void GLaDOS::update(float dt) { // NOLINT
 		}
 
 		for (unsigned int k = 0; goodAngle && k < ship->getButtons().size(); k++) {
-			float buttonAngle = ship->getButtons()[k]->getAngle();
-			float diff = ship->getAngleDifference(buttonAngle, angle);
+			const float buttonAngle = ship->getButtons()[k]->getAngle();
+			const float diff = ship->getAngleDifference(buttonAngle, angle);
 			if (ship->getButtons()[k]->getIsActive() &&
 				diff < static_cast<float>(block->getRange()) / 2) {
 				goodAngle = false;
@@ -472,7 +472,7 @@ void GLaDOS::update(float dt) { // NOLINT
 		} else if (angle >= ship->getSize()) {
 			angle -= ship->getSize();
 		}
-		for (auto& object : objects) {
+		for (const auto& object : objects) {
 			placeObject(object, angle, ids);
 		}
 		readyQueue.erase(readyQueue.begin() + i);
@@ -484,9 +484,9 @@ void GLaDOS::tutorialLevels(float /*dt*/) {
 	switch (levelNum) {
 		case tutorial::BREACH_LEVEL:
 			if (ship->timePassed() >= tutorial::B_L_PART1 && customEventCtr == 2) {
-				float actualWidth = ship->getSize() / static_cast<float>(sections);
+				const float actualWidth = ship->getSize() / static_cast<float>(sections);
 				for (int i = 0; i < ship->getDonuts().size(); i++) {
-					float mid = actualWidth * static_cast<float>(i);
+					const float mid = actualWidth * static_cast<float>(i);
 					float suggestedAngle1 = mid + tutorial::B_L_LOC1;
 					float suggestedAngle2 = mid + tutorial::B_L_LOC2;
 					if (suggestedAngle1 < 0) {
@@ -495,10 +495,10 @@ void GLaDOS::tutorialLevels(float /*dt*/) {
 					if (suggestedAngle2 < 0) {
 						suggestedAngle2 += ship->getSize();
 					}
-					float diff1 = ship->getAngleDifference(suggestedAngle1,
-														   ship->getDonuts().at(i)->getAngle());
-					float diff2 = ship->getAngleDifference(suggestedAngle2,
-														   ship->getDonuts().at(i)->getAngle());
+					const float diff1 = ship->getAngleDifference(
+						suggestedAngle1, ship->getDonuts().at(i)->getAngle());
+					const float diff2 = ship->getAngleDifference(
+						suggestedAngle2, ship->getDonuts().at(i)->getAngle());
 					if (diff1 > diff2) {
 						placeObject({BuildingBlockModel::Breach, 0, -1}, suggestedAngle1,
 									(i + 1) % static_cast<int>(ship->getDonuts().size()));
@@ -509,9 +509,9 @@ void GLaDOS::tutorialLevels(float /*dt*/) {
 				}
 				customEventCtr--;
 			} else if (ship->timePassed() >= tutorial::B_L_PART2 && customEventCtr == 1) {
-				float actualWidth = ship->getSize() / static_cast<float>(sections);
+				const float actualWidth = ship->getSize() / static_cast<float>(sections);
 				for (int i = 0; i < ship->getDonuts().size(); i++) {
-					float mid = actualWidth * static_cast<float>(i);
+					const float mid = actualWidth * static_cast<float>(i);
 					float suggestedAngle1 = mid + tutorial::B_L_LOC3;
 					float suggestedAngle2 = mid + tutorial::B_L_LOC4;
 					if (suggestedAngle1 >= ship->getSize()) {
@@ -520,10 +520,10 @@ void GLaDOS::tutorialLevels(float /*dt*/) {
 					if (suggestedAngle2 >= ship->getSize()) {
 						suggestedAngle2 -= ship->getSize();
 					}
-					float diff1 = ship->getAngleDifference(suggestedAngle1,
-														   ship->getDonuts().at(i)->getAngle());
-					float diff2 = ship->getAngleDifference(suggestedAngle2,
-														   ship->getDonuts().at(i)->getAngle());
+					const float diff1 = ship->getAngleDifference(
+						suggestedAngle1, ship->getDonuts().at(i)->getAngle());
+					const float diff2 = ship->getAngleDifference(
+						suggestedAngle2, ship->getDonuts().at(i)->getAngle());
 					if (diff1 > diff2) {
 						placeObject({BuildingBlockModel::Breach, 0, -1}, suggestedAngle1, i);
 					} else {

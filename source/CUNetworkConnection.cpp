@@ -17,16 +17,18 @@
 #include <fcntl.h>
 #pragma comment(lib, "ws2_32")
 #include <io.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include <stdio.h>	// NOLINT
+#include <stdlib.h> // NOLINT
+#include <string.h> // NOLINT
 #include <sys/types.h>
 #ifndef _SSIZE_T_DEFINED
-typedef int ssize_t;
+typedef int ssize_t; // NOLINT
+// NOLINTNEXTLINE
 #define _SSIZE_T_DEFINED
 #endif
 #ifndef _SOCKET_T_DEFINED
-typedef SOCKET socket_t;
+typedef SOCKET socket_t; // NOLINT
+// NOLINTNEXTLINE
 #define _SOCKET_T_DEFINED
 #endif
 #endif

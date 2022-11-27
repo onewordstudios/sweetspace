@@ -97,8 +97,8 @@ class WinScreen::IconManager {
 			destIcon--;
 		}
 
-		float left = (1 - WIDTH_SCALE) * WIDTH / 2;
-		float diff = WIDTH * WIDTH_SCALE;
+		const float left = (1 - WIDTH_SCALE) * WIDTH / 2;
+		const float diff = WIDTH * WIDTH_SCALE;
 
 		for (size_t i = 0; i < NUM_LEVEL_BTNS; i++) {
 			icons.at(i)->setPosition(initPos.at(i));
@@ -125,19 +125,19 @@ class WinScreen::IconManager {
 	void step(size_t currFrame) {
 		if (currFrame <= POS_TIME) {
 			for (size_t i = 0; i < NUM_LEVEL_BTNS; i++) {
-				float initX = initPos.at(i).x;
-				float initY = initPos.at(i).y;
+				const float initX = initPos.at(i).x;
+				const float initY = initPos.at(i).y;
 
-				float x = Tween::easeInOut(initX, xDestPos.at(i), currFrame, POS_TIME);
-				float y = Tween::easeInOut(initY, yDestPos, currFrame, POS_TIME);
+				const float x = Tween::easeInOut(initX, xDestPos.at(i), currFrame, POS_TIME);
+				const float y = Tween::easeInOut(initY, yDestPos, currFrame, POS_TIME);
 
 				icons.at(i)->setPosition(x, y);
 			}
 			if (xFinalPos != -1) {
 				finalIcon->setColor(Tween::fade(Tween::easeOut(0, 1, currFrame, POS_TIME)));
 
-				float x = Tween::easeInOut(xFinalPos + xDestPos[1] - xDestPos[0], xFinalPos,
-										   currFrame, POS_TIME);
+				const float x = Tween::easeInOut(xFinalPos + xDestPos[1] - xDestPos[0], xFinalPos,
+												 currFrame, POS_TIME);
 				finalIcon->setPositionX(x);
 			}
 		} else if (mustShift) {
@@ -148,11 +148,12 @@ class WinScreen::IconManager {
 				return;
 			}
 
-			size_t cf = currFrame - POS_TIME - TRAVEL_TIME;
-			float diff = xDestPos[1] - xDestPos[0];
+			const size_t cf = currFrame - POS_TIME - TRAVEL_TIME;
+			const float diff = xDestPos[1] - xDestPos[0];
 
 			for (size_t i = 0; i < NUM_LEVEL_BTNS; i++) {
-				float x = Tween::easeInOut(xDestPos.at(i), xDestPos.at(i) - diff, cf, POS_TIME);
+				const float x =
+					Tween::easeInOut(xDestPos.at(i), xDestPos.at(i) - diff, cf, POS_TIME);
 				icons.at(i)->setPositionX(x);
 			}
 
@@ -178,13 +179,13 @@ class WinScreen::IconManager {
 uint8_t computeMaxLevelInterval() {
 	uint8_t max = 0;
 	for (size_t i = 1; i < LEVEL_ENTRY_POINTS.size(); i++) {
-		uint8_t diff = LEVEL_ENTRY_POINTS.at(i) - LEVEL_ENTRY_POINTS.at(i - 1);
+		const uint8_t diff = LEVEL_ENTRY_POINTS.at(i) - LEVEL_ENTRY_POINTS.at(i - 1);
 		if (diff > max) {
 			max = diff;
 		}
 	}
 
-	uint8_t finalDiff = MAX_NUM_LEVELS - LEVEL_ENTRY_POINTS[LEVEL_ENTRY_POINTS.size() - 1];
+	const uint8_t finalDiff = MAX_NUM_LEVELS - LEVEL_ENTRY_POINTS[LEVEL_ENTRY_POINTS.size() - 1];
 	if (finalDiff > max) {
 		max = finalDiff;
 	}
@@ -202,9 +203,9 @@ std::pair<uint8_t, uint8_t> WinScreen::layoutLevelMarkers(uint8_t completedLevel
 		rightLevel = LEVEL_ENTRY_POINTS.at(leftLevel + 1);
 		leftLevel = LEVEL_ENTRY_POINTS.at(leftLevel);
 	}
-	uint8_t numLevels = rightLevel - leftLevel;
-	float spacing = WIDTH * WIDTH_SCALE / static_cast<float>(numLevels);
-	float left = (1 - WIDTH_SCALE) * WIDTH / 2;
+	const uint8_t numLevels = rightLevel - leftLevel;
+	const float spacing = WIDTH * WIDTH_SCALE / static_cast<float>(numLevels);
+	const float left = (1 - WIDTH_SCALE) * WIDTH / 2;
 
 	for (size_t i = 0; i < levelMarkers.size(); i++) {
 		if (i < numLevels - 1) {
@@ -256,7 +257,7 @@ bool WinScreen::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 	btns.registerButton(btn);
 
 	const size_t maxLevels = computeMaxLevelInterval();
-	std::shared_ptr<cugl::Texture> starTexture =
+	const std::shared_ptr<cugl::Texture> starTexture =
 		cugl::Texture::allocWithFile("textures/wl_screens/destination.png");
 	for (size_t i = 0; i < maxLevels; i++) {
 		levelMarkers[i] = cugl::PolygonNode::allocWithTexture(starTexture);
@@ -313,14 +314,14 @@ void WinScreen::activate(uint8_t completedLevel) {
 
 	// Figure out number of levels to show stars for
 	auto layoutRes = layoutLevelMarkers(completedLevel);
-	uint8_t numLevels = layoutRes.first;
-	uint8_t leftLevel = layoutRes.second;
+	const uint8_t numLevels = layoutRes.first;
+	const uint8_t leftLevel = layoutRes.second;
 	ship->setPositionY((WIDTH * HEIGHT_SCALE + _contentSize.height) / 2);
 
-	float spacing = WIDTH * WIDTH_SCALE / static_cast<float>(numLevels);
-	float left = (1 - WIDTH_SCALE) * WIDTH / 2;
+	const float spacing = WIDTH * WIDTH_SCALE / static_cast<float>(numLevels);
+	const float left = (1 - WIDTH_SCALE) * WIDTH / 2;
 
-	uint8_t lvlOffset = completedLevel - leftLevel;
+	const uint8_t lvlOffset = completedLevel - leftLevel;
 	startPos = left + static_cast<float>(lvlOffset) * spacing;
 	endPos = left + static_cast<float>(lvlOffset + 1) * spacing;
 	ship->setPositionX(startPos);
@@ -349,9 +350,9 @@ void WinScreen::update() {
 	}
 
 	if (currFrame > POS_TIME) {
-		size_t cf = currFrame - POS_TIME;
+		const size_t cf = currFrame - POS_TIME;
 		if (cf <= TRAVEL_TIME) {
-			float pos = Tween::easeInOut(startPos, endPos, cf, TRAVEL_TIME);
+			const float pos = Tween::easeInOut(startPos, endPos, cf, TRAVEL_TIME);
 			ship->setPositionX(pos);
 		} else if (cf <= TRAVEL_TIME + FADE_TIME) {
 			auto fadeColor = Tween::fade(static_cast<float>(cf - TRAVEL_TIME) / FADE_TIME);
@@ -370,10 +371,10 @@ void WinScreen::update() {
 	if (mustShift && currFrame > POS_TIME + TRAVEL_TIME &&
 		currFrame <= POS_TIME + TRAVEL_TIME + POS_TIME) {
 		// TODO change icons, etc.
-		size_t cf = currFrame - POS_TIME - TRAVEL_TIME;
+		const size_t cf = currFrame - POS_TIME - TRAVEL_TIME;
 
-		float start = (1 + WIDTH_SCALE) * WIDTH / 2;
-		float dest = (1 - WIDTH_SCALE) * WIDTH / 2;
+		const float start = (1 + WIDTH_SCALE) * WIDTH / 2;
+		const float dest = (1 - WIDTH_SCALE) * WIDTH / 2;
 		ship->setPositionX(Tween::easeInOut(start, dest, cf, POS_TIME));
 
 		if (cf <= FADE_TIME) {

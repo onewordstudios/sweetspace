@@ -192,7 +192,8 @@ void MainMenuMode::dispose() {
 
 void MainMenuMode::updateClientLabel() {
 	std::vector<char> room;
-	for (uint8_t i : clientEnteredRoom) {
+	room.reserve(clientEnteredRoom.size());
+	for (const uint8_t i : clientEnteredRoom) {
 		room.push_back(static_cast<char>('0' + i));
 	}
 	for (auto i = clientEnteredRoom.size(); i < globals::ROOM_LENGTH; i++) {
@@ -321,8 +322,8 @@ void MainMenuMode::processUpdate() {
 			break;
 		}
 		case Credits: {
-			float pos = ((CREDITS_HEIGHT + screenHeight) *
-						 (static_cast<float>(creditsScrollFrame++) / CREDITS_DURATION));
+			const float pos = ((CREDITS_HEIGHT + screenHeight) *
+							   (static_cast<float>(creditsScrollFrame++) / CREDITS_DURATION));
 
 			if (InputController::getInstance()->getCurrTapLoc() != Vec2::ZERO) {
 				creditsScrollFrame += FAST_CREDITS_SCROLL_INCREMENT;
@@ -372,7 +373,7 @@ void MainMenuMode::processButtons() {
 		return;
 	}
 
-	std::tuple<Vec2, Vec2> tapData = InputController::getInstance()->getTapEndLoc();
+	const std::tuple<Vec2, Vec2> tapData = InputController::getInstance()->getTapEndLoc();
 
 	switch (currState) {
 		case StartScreen: {
@@ -417,7 +418,7 @@ void MainMenuMode::processButtons() {
 				}
 			}
 			if (ButtonManager::tappedButton(hostTutorialSkipBtn, tapData)) {
-				bool isDown = hostTutorialSkipBtn->isDown();
+				const bool isDown = hostTutorialSkipBtn->isDown();
 				hostTutorialSkipBtn->setDown(!isDown);
 				net.setSkipTutorial(!isDown);
 			}

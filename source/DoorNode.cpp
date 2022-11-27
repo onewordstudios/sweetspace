@@ -63,7 +63,7 @@ void DoorNode::postPosition() {
 		animationNode->setFrame(static_cast<int>(animationNode->getFrame()) - 1);
 	}
 
-	float diff = static_cast<float>(height) - static_cast<float>(doorModel->getHeight());
+	const float diff = static_cast<float>(height) - static_cast<float>(doorModel->getHeight());
 	height = doorModel->getHeight();
 	if (diff != 0) {
 		animationNode->shiftPolygon(0, diff);

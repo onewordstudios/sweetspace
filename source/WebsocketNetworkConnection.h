@@ -13,9 +13,9 @@ class WebsocketNetworkConnection : public NetworkConnection {
 #pragma region Setup
 	explicit WebsocketNetworkConnection(ConnectionConfig config);
 
-	WebsocketNetworkConnection(ConnectionConfig config, std::string roomID);
+	WebsocketNetworkConnection(ConnectionConfig config, const std::string& roomID);
 
-	virtual ~WebsocketNetworkConnection();
+	~WebsocketNetworkConnection() override;
 #pragma endregion
 
 #pragma region Main Networking Methods

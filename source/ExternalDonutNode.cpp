@@ -28,8 +28,9 @@ bool ExternalDonutNode::init(const std::shared_ptr<DonutModel> &externalDonutMod
 
 	DonutNode::init(bodyTexture, faceIdle, faceDizzy, faceWork, externalDonutModel);
 
-	Vec2 donutPos = Vec2(sin(externalDonutModel->getAngle() * (globals::RADIUS + DONUT_OFFSET)),
-						 -cos(externalDonutModel->getAngle()) * (globals::RADIUS + DONUT_OFFSET));
+	const Vec2 donutPos =
+		Vec2(sin(externalDonutModel->getAngle() * (globals::RADIUS + DONUT_OFFSET)),
+			 -cos(externalDonutModel->getAngle()) * (globals::RADIUS + DONUT_OFFSET));
 	setPosition(donutPos);
 
 	return true;
@@ -46,8 +47,8 @@ void ExternalDonutNode::prePosition() {
 
 void ExternalDonutNode::postPosition() {
 	if (isShown) {
-		float vel = referencedDonutModel->getVelocity();
-		float angle = rotationNode->getAngle() - vel * globals::PI_180 * globals::SPIN_RATIO;
+		const float vel = referencedDonutModel->getVelocity();
+		const float angle = rotationNode->getAngle() - vel * globals::PI_180 * globals::SPIN_RATIO;
 		rotationNode->setAngle(angle);
 		animateJumping();
 	}

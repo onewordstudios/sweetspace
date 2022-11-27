@@ -8,14 +8,14 @@ constexpr float BEG_DONUT = 0.2f;
 constexpr float END_DONUT = 1.0f - BEG_DONUT;
 
 bool ExternalDonutModel::init(const cugl::Vec2& pos, float shipSize) {
-	bool ret = DonutModel::init(pos, shipSize);
+	const bool ret = DonutModel::init(pos, shipSize);
 	// Initialize with finished interpolation
 	networkMove.framesSinceUpdate = globals::NETWORK_TICK;
 	return ret;
 }
 
 void ExternalDonutModel::setAngle(float value) {
-	float newAngle = value;
+	const float newAngle = value;
 	networkMove.framesSinceUpdate = 0;
 	networkMove.oldAngle = angle;
 	networkMove.angle = newAngle;
@@ -25,7 +25,8 @@ void ExternalDonutModel::update(float timestep) {
 	networkMove.framesSinceUpdate++;
 	if (networkMove.framesSinceUpdate < globals::NETWORK_TICK) {
 		// Interpolate position
-		float percent = static_cast<float>(networkMove.framesSinceUpdate) / globals::NETWORK_TICK;
+		const float percent =
+			static_cast<float>(networkMove.framesSinceUpdate) / globals::NETWORK_TICK;
 		networkMove.oldAngle += velocity;
 		networkMove.angle += velocity;
 
