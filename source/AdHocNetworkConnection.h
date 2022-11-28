@@ -130,7 +130,8 @@ class AdHocNetworkConnection : public NetworkConnection {
 		std::unique_ptr<SLNet::SystemAddress> addr;
 		std::string room;
 
-		explicit ClientPeer(std::string roomID) noexcept : room(std::move(roomID)) {}
+		// NOLINTNEXTLINE
+		explicit ClientPeer(std::string roomID) : room(std::move(roomID)) {}
 	};
 
 	/**
