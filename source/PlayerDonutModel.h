@@ -41,6 +41,8 @@ class PlayerDonutModel : public DonutModel {
 		std::shared_ptr<PlayerDonutModel> result = std::make_shared<PlayerDonutModel>();
 		return (result->init(pos, shipSize) ? result : nullptr);
 	}
+
+	virtual ~PlayerDonutModel() = default;
 #pragma endregion
 	/**
 	 * Updates the state of the model

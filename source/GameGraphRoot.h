@@ -208,7 +208,7 @@ class GameGraphRoot : public cugl::Scene {
 	 * This method is different from dispose() in that it ALSO shuts off any
 	 * static resources, like the input controller.
 	 */
-	~GameGraphRoot() { dispose(); }
+	virtual ~GameGraphRoot() { dispose(); }
 
 	/**
 	 * Disposes of all (non-static) resources allocated to this mode.
@@ -282,7 +282,7 @@ class GameGraphRoot : public cugl::Scene {
 	 * will return None until another button is pressed.
 	 */
 	GameButton getAndResetLastButtonPressed() {
-		GameButton ret = lastButtonPressed;
+		const GameButton ret = lastButtonPressed;
 		lastButtonPressed = None;
 		return ret;
 	}

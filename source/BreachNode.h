@@ -35,7 +35,7 @@ class BreachNode : public CustomNode {
 			health = 1;
 		}
 
-		unsigned int currentHealth =
+		const unsigned int currentHealth =
 			health > BreachModel::HEALTH_DEFAULT ? BreachModel::HEALTH_DEFAULT : health;
 		return (BreachModel::HEALTH_DEFAULT - currentHealth) *
 			   (shapeNode->getSize() / BreachModel::HEALTH_DEFAULT);
@@ -71,7 +71,7 @@ class BreachNode : public CustomNode {
 	 * However, the breach and drawing commands will be deleted and no
 	 * longer safe to use.
 	 */
-	~BreachNode() { dispose(); }
+	virtual ~BreachNode() { dispose(); }
 
 	/**
 	 * Properly initialize this breach node. Do NOT use the constructors in the parent class. They
@@ -110,7 +110,7 @@ class BreachNode : public CustomNode {
 											 cugl::Color4 color,
 											 std::shared_ptr<SparkleNode> sparkleBig,
 											 std::shared_ptr<SparkleNode> sparkleSmall) {
-		std::shared_ptr<BreachNode> result = std::make_shared<BreachNode>();
+		const std::shared_ptr<BreachNode> result = std::make_shared<BreachNode>();
 		return (result->init(breach, std::move(player), shipSize, filmstrip, pattern, color,
 							 std::move(sparkleBig), std::move(sparkleSmall))
 					? result

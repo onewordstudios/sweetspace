@@ -40,7 +40,7 @@ class AdHocNetworkConnection : public NetworkConnection {
 
 	AdHocNetworkConnection(ConnectionConfig config, std::string roomID);
 
-	~AdHocNetworkConnection();
+	~AdHocNetworkConnection() override;
 #pragma endregion
 
 #pragma region Main Networking Methods

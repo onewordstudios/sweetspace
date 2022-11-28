@@ -107,7 +107,7 @@ class DonutModel {
 	/**
 	 * Destroys this donut, releasing all resources.
 	 */
-	~DonutModel() { dispose(); }
+	virtual ~DonutModel() { dispose(); }
 
 	/**
 	 * Disposes all resources and assets of this donut

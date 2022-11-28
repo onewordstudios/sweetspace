@@ -190,7 +190,7 @@ class MainMenuMode : public cugl::Scene {
 	/**
 	 * Disposes of all (non-static) resources allocated to this mode.
 	 */
-	~MainMenuMode();
+	virtual ~MainMenuMode();
 
 	/**
 	 * Disposes of all (non-static) resources allocated to this mode.

@@ -40,6 +40,8 @@ class ExternalDonutModel : public DonutModel {
 
 	ExternalDonutModel(const ExternalDonutModel&) = delete;
 
+	virtual ~ExternalDonutModel() = default;
+
 #pragma region Static Constructors
 	/**
 	 * Returns a newly allocated donut at the origin.

@@ -34,10 +34,10 @@ class StabilizerNode : public cugl::Node {
 
    public:
 	StabilizerNode(const std::shared_ptr<cugl::AssetManager>& assets, const StabilizerModel& model);
-	~StabilizerNode();
+	virtual ~StabilizerNode();
 
-	StabilizerNode(StabilizerNode const&) = delete;
-	void operator=(StabilizerNode const&) = delete;
+	StabilizerNode(const StabilizerNode&) = delete;
+	void operator=(const StabilizerNode&) = delete;
 
 	void update();
 };

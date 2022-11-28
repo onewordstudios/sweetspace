@@ -33,7 +33,7 @@ class PauseMenu : public cugl::Node {
 
    public:
 	explicit PauseMenu(const std::shared_ptr<cugl::AssetManager> &assets);
-	~PauseMenu();
+	virtual ~PauseMenu();
 
 	/**
 	 * Initialize this win screen with assets from the pointed asset manager.

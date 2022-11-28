@@ -29,6 +29,8 @@ class StabilizerModel {
 
 	StabilizerModel(const StabilizerModel&) = delete;
 
+	virtual ~StabilizerModel() = default;
+
 	/** Return whether this stabilizer is active */
 	bool getIsActive() const;
 

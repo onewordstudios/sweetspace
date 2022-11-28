@@ -58,7 +58,7 @@ class DonutNode : public CustomNode {
 	 * However, the polygon and drawing commands will be deleted and no
 	 * longer safe to use.
 	 */
-	~DonutNode() { dispose(); }
+	virtual ~DonutNode() { dispose(); }
 
 	/**
 	 * Init child nodes of donut node

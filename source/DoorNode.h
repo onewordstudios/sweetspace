@@ -47,7 +47,7 @@ class DoorNode : public CustomNode {
 	 * However, the polygon and drawing commands will be deleted and no
 	 * longer safe to use.
 	 */
-	~DoorNode() { dispose(); }
+	virtual ~DoorNode() { dispose(); }
 
 	/**
 	 * Properly initialize this door node. Do NOT use the constructors in the parent class. They
@@ -78,7 +78,7 @@ class DoorNode : public CustomNode {
 	static std::shared_ptr<DoorNode> alloc(const std::shared_ptr<DoorModel> &door,
 										   std::shared_ptr<DonutModel> player, float shipSize,
 										   const std::shared_ptr<cugl::AssetManager> &assets) {
-		std::shared_ptr<DoorNode> node = std::make_shared<DoorNode>();
+		const std::shared_ptr<DoorNode> node = std::make_shared<DoorNode>();
 		return node->init(door, std::move(player), shipSize, assets) ? node : nullptr;
 	}
 

@@ -26,7 +26,7 @@ class Unopenable {
 	/**
 	 * Destroys this unopenable door, releasing all resources.
 	 */
-	~Unopenable() { dispose(); }
+	virtual ~Unopenable() { dispose(); }
 
 	/**
 	 * Disposes all resources and assets of this unopenable door

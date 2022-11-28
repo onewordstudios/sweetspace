@@ -31,7 +31,7 @@ class PlayerDonutNode : public DonutNode {
 	 * However, the polygon and drawing commands will be deleted and no
 	 * longer safe to use.
 	 */
-	~PlayerDonutNode() { dispose(); }
+	~PlayerDonutNode() override { dispose(); }
 
 	bool init(const std::shared_ptr<DonutModel> &player, float screenHeight,
 			  const std::shared_ptr<cugl::AssetManager> &assets, const std::string &color,
@@ -42,7 +42,7 @@ class PlayerDonutNode : public DonutNode {
 												  const std::shared_ptr<cugl::AssetManager> &assets,
 												  const std::string &color,
 												  const cugl::Vec2 &position) {
-		std::shared_ptr<PlayerDonutNode> node = std::make_shared<PlayerDonutNode>();
+		const std::shared_ptr<PlayerDonutNode> node = std::make_shared<PlayerDonutNode>();
 		return node->init(player, screenHeight, assets, color, position) ? node : nullptr;
 	}
 

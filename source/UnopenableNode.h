@@ -39,7 +39,7 @@ class UnopenableNode : public CustomNode {
 	 * However, the polygon and drawing commands will be deleted and no
 	 * longer safe to use.
 	 */
-	~UnopenableNode() { dispose(); }
+	virtual ~UnopenableNode() { dispose(); }
 
 	/**
 	 * Properly initialize this Unopenable node. Do NOT use the constructors in the parent class.
@@ -68,7 +68,7 @@ class UnopenableNode : public CustomNode {
 	static std::shared_ptr<UnopenableNode> alloc(const std::shared_ptr<Unopenable> &unop,
 												 std::shared_ptr<DonutModel> player, float shipSize,
 												 const std::shared_ptr<cugl::Texture> &texture) {
-		std::shared_ptr<UnopenableNode> node = std::make_shared<UnopenableNode>();
+		const std::shared_ptr<UnopenableNode> node = std::make_shared<UnopenableNode>();
 		return node->init(unop, std::move(player), shipSize, texture) ? node : nullptr;
 	}
 

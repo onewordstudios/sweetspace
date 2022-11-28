@@ -72,7 +72,7 @@ class Sweetspace : public cugl::Application {
 	 * It simply calls the dispose() method in Application.  There is nothing
 	 * special to do here.
 	 */
-	~Sweetspace() = default;
+	virtual ~Sweetspace() = default;
 
 	/**
 	 * The method called after OpenGL is initialized, but before running the application.

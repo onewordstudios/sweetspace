@@ -24,7 +24,7 @@ class ReconnectScreen : public cugl::Node {
 	 */
 	explicit ReconnectScreen(const std::shared_ptr<cugl::AssetManager> &assets);
 	/** Cleanup and delete this screen */
-	~ReconnectScreen();
+	virtual ~ReconnectScreen();
 
 	/**
 	 * Step the animation for this node when it should be hidden. Call this every frame if
