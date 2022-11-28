@@ -36,7 +36,7 @@ constexpr float FRAMERATE = 60.0f;
  *
  * @return the exit status of the application
  */
-int main(int /*argc*/, char* /*argv*/[]) {
+int main(int argc, char* argv[]) { // NOLINT
 	// Change this to your application class
 	Sweetspace app;
 
