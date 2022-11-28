@@ -55,7 +55,7 @@ class ButtonNode : public CustomNode {
 	 * However, the polygon and drawing commands will be deleted and no
 	 * longer safe to use.
 	 */
-	~ButtonNode() { dispose(); }
+	virtual ~ButtonNode() { dispose(); }
 
 	/**
 	 * Properly initialize this button node. Do NOT use the constructors in the parent class. They
@@ -92,7 +92,7 @@ class ButtonNode : public CustomNode {
 											 std::shared_ptr<DonutModel> player, float shipSize,
 											 const std::shared_ptr<cugl::AssetManager> &assets,
 											 std::shared_ptr<SparkleNode> sparkleNode) {
-		std::shared_ptr<ButtonNode> node = std::make_shared<ButtonNode>();
+		const std::shared_ptr<ButtonNode> node = std::make_shared<ButtonNode>();
 		return (
 			node->init(std::move(btn), std::move(player), shipSize, assets, std::move(sparkleNode))
 				? node

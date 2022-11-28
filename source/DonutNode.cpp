@@ -70,11 +70,12 @@ bool DonutNode::init(const std::shared_ptr<cugl::Texture> &bodyTexture,
 }
 
 void DonutNode::animateJumping() {
-	float halfJumpTime =
+	const float halfJumpTime =
 		sqrt(2 * DonutModel::GRAVITY * DonutModel::JUMP_HEIGHT) / DonutModel::GRAVITY;
-	float scalingWindowSize = halfJumpTime * (SCALING_END - SCALING_BEGIN);
-	bool isInScalingWindow = referencedDonutModel->getJumpTime() > halfJumpTime * SCALING_BEGIN &&
-							 referencedDonutModel->getJumpTime() < halfJumpTime * SCALING_END;
+	const float scalingWindowSize = halfJumpTime * (SCALING_END - SCALING_BEGIN);
+	const bool isInScalingWindow =
+		referencedDonutModel->getJumpTime() > halfJumpTime * SCALING_BEGIN &&
+		referencedDonutModel->getJumpTime() < halfJumpTime * SCALING_END;
 	if (!referencedDonutModel->isJumping()) {
 		// Not jumping. Set scale to normal and return
 		setScale(DONUT_SCALE, DONUT_SCALE);

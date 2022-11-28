@@ -12,16 +12,16 @@ class ShipSegmentWrap : public cugl::Node {
 
    public:
 	ShipSegmentWrap();
-	~ShipSegmentWrap();
+	virtual ~ShipSegmentWrap();
 
-	ShipSegmentWrap(ShipSegmentWrap const&) = delete;
-	void operator=(ShipSegmentWrap const&) = delete;
+	ShipSegmentWrap(const ShipSegmentWrap&) = delete;
+	void operator=(const ShipSegmentWrap&) = delete;
 
 	bool init(const std::shared_ptr<cugl::AssetManager>& assets);
 
 	static std::shared_ptr<ShipSegmentWrap> alloc(
 		const std::shared_ptr<cugl::AssetManager>& assets) {
-		std::shared_ptr<ShipSegmentWrap> node = std::make_shared<ShipSegmentWrap>();
+		const std::shared_ptr<ShipSegmentWrap> node = std::make_shared<ShipSegmentWrap>();
 		return node->init(assets) ? node : nullptr;
 	}
 

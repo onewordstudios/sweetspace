@@ -43,7 +43,7 @@ class BreachModel {
 	/**
 	 * Destroys this breach, releasing all resources.
 	 */
-	~BreachModel() { dispose(); }
+	virtual ~BreachModel() { dispose(); }
 
 	/**
 	 * Disposes all resources and assets of this breach

@@ -45,7 +45,8 @@ WebsocketNetworkConnection::WebsocketNetworkConnection(ConnectionConfig config)
 	status = NetStatus::Pending;
 }
 
-WebsocketNetworkConnection::WebsocketNetworkConnection(ConnectionConfig config, std::string roomID)
+WebsocketNetworkConnection::WebsocketNetworkConnection(ConnectionConfig config,
+													   const std::string& roomID)
 	: apiVer(config.apiVersion), maxPlayers(config.maxNumPlayers), roomID(roomID), ws(nullptr) {
 	if (!initConnection(config)) {
 		status = NetStatus::GenericError;

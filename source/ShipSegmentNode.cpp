@@ -35,7 +35,7 @@ bool ShipSegmentNode::init(const std::shared_ptr<cugl::AssetManager>& assets,
 	segLabel->setForeground(SHIP_LABEL_COLOR);
 	addChild(segLabel);
 
-	std::shared_ptr<PolygonNode> segmentRed = cugl::PolygonNode::allocWithTexture(segRed);
+	const std::shared_ptr<PolygonNode> segmentRed = cugl::PolygonNode::allocWithTexture(segRed);
 	segmentRed->setColor(cugl::Color4::CLEAR);
 	addChild(segmentRed);
 
@@ -51,7 +51,7 @@ void ShipSegmentNode::updateLabel(float nearSpaceAngle, float shipSize, float pl
 	segAngle = segAngle < 0 ? segAngle + shipSize * globals::PI_180 : segAngle;
 
 	auto segNum = static_cast<unsigned int>(segAngle / globals::SEG_SIZE);
-	std::string segText = std::to_string(segNum);
+	const std::string segText = std::to_string(segNum);
 	if (segLabel->getText() != segText) {
 		segLabel->setText(segText);
 	}

@@ -60,7 +60,7 @@ class WinScreen : public cugl::Node {
 	 */
 	explicit WinScreen(const std::shared_ptr<cugl::AssetManager> &assets);
 	/** Cleanup and delete this win screen */
-	~WinScreen();
+	virtual ~WinScreen();
 
 	/**
 	 * Initialize this win screen with assets from the pointed asset manager.

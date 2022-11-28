@@ -83,7 +83,7 @@ class GameMode {
 	 * This method is different from dispose() in that it ALSO shuts off any
 	 * static resources, like the input controller.
 	 */
-	~GameMode() { dispose(); }
+	virtual ~GameMode() { dispose(); }
 
 	/**
 	 * Disposes of all (non-static) resources allocated to this mode.

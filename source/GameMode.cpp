@@ -52,8 +52,8 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 	soundEffects->reset();
 
 	// Network Initialization
-	uint8_t playerID = net.getPlayerID().value();
-	uint8_t levelID = net.getLevelNum().value();
+	const uint8_t playerID = net.getPlayerID().value();
+	const uint8_t levelID = net.getLevelNum().value();
 
 	if (levelID >= MAX_NUM_LEVELS) {
 		// Reached end of game
@@ -68,11 +68,12 @@ bool GameMode::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 		const char* levelName = LEVEL_NAMES.at(levelID);
 
 		CULog("Loading level %s b/c mib gave level num %d", levelName, levelID);
-		uint8_t shipNumPlayers = net.getMaxNumPlayers();
+		const uint8_t shipNumPlayers = net.getMaxNumPlayers();
 
-		std::shared_ptr<LevelModel> level = assets->get<LevelModel>(levelName);
-		unsigned int maxEvents = level->getMaxBreaches() * shipNumPlayers / globals::MIN_PLAYERS;
-		unsigned int maxDoors =
+		const std::shared_ptr<LevelModel> level = assets->get<LevelModel>(levelName);
+		const unsigned int maxEvents =
+			level->getMaxBreaches() * shipNumPlayers / globals::MIN_PLAYERS;
+		const unsigned int maxDoors =
 			std::min(level->getMaxDoors() * shipNumPlayers / globals::MIN_PLAYERS,
 					 static_cast<int>(shipNumPlayers) * 2 - 1);
 		unsigned int maxButtons = level->getMaxButtons() * shipNumPlayers / globals::MIN_PLAYERS;
@@ -126,7 +127,7 @@ void GameMode::dispose() {
 #pragma region Update Helpers
 
 void GameMode::applyInputsToPlayerDonut() {
-	uint8_t playerID = net.getPlayerID().value();
+	const uint8_t playerID = net.getPlayerID().value();
 
 	// Jump logic check
 	// We wanted donuts to be able to jump on the win screen, but in the absence of that happening
@@ -140,7 +141,7 @@ void GameMode::applyInputsToPlayerDonut() {
 	}
 
 	// Move the donut (MODEL ONLY)
-	float thrust = input->getRoll();
+	const float thrust = input->getRoll();
 	donutModel->applyForce(thrust);
 	// Attempt to recover to idle animation
 	donutModel->transitionFaceState(DonutModel::FaceState::Idle);

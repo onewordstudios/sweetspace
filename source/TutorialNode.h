@@ -36,7 +36,7 @@ class TutorialNode : public cugl::AnimationNode {
 	 * However, the polygon and drawing commands will be deleted and no
 	 * longer safe to use.
 	 */
-	~TutorialNode() { dispose(); }
+	virtual ~TutorialNode() { dispose(); }
 
 	/**
 	 * Returns a newly allocated filmstrip node from the given texture.
@@ -55,7 +55,7 @@ class TutorialNode : public cugl::AnimationNode {
 	 * @return a newly allocated filmstrip node from the given texture.
 	 */
 	static std::shared_ptr<TutorialNode> alloc(const std::shared_ptr<cugl::Texture> &texture) {
-		std::shared_ptr<TutorialNode> node = std::make_shared<TutorialNode>();
+		const std::shared_ptr<TutorialNode> node = std::make_shared<TutorialNode>();
 		return (node->initWithTexture(texture) ? node : nullptr);
 	}
 

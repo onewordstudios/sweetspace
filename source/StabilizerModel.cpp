@@ -79,7 +79,7 @@ bool StabilizerModel::update(float timeRemaining,
 void StabilizerModel::fail() { currState = StabilizerState::Fail; }
 
 void StabilizerModel::finish() {
-	bool won = getIsWin();
+	const bool won = getIsWin();
 	reset();
 	currState = won ? StabilizerState::Inactive : StabilizerState::Fail;
 }

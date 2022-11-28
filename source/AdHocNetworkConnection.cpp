@@ -58,9 +58,9 @@ AdHocNetworkConnection::~AdHocNetworkConnection() {
  * Only works if the BitStream was encoded in the standard format used by this clas.
  */
 std::vector<uint8_t> readBs(SLNet::BitStream& bts) {
-	uint8_t ignored;
+	uint8_t ignored; // NOLINT
 	bts.Read(ignored);
-	uint8_t length;
+	uint8_t length; // NOLINT
 	bts.Read(length);
 
 	std::vector<uint8_t> msgConverted;
@@ -96,11 +96,11 @@ void AdHocNetworkConnection::c0StartupConn() {
 				  this->natPunchServerAddress->GetPort(), nullptr, 0);
 }
 
-void cugl::AdHocNetworkConnection::ch1HostConnServer(HostPeers& h) {
+void cugl::AdHocNetworkConnection::ch1HostConnServer(HostPeers& /*h*/) {
 	CULog("Connected to punchthrough server; awaiting room ID");
 }
 
-void cugl::AdHocNetworkConnection::ch2HostGetRoomID(HostPeers& h, SLNet::BitStream& bts) {
+void cugl::AdHocNetworkConnection::ch2HostGetRoomID(HostPeers& /*h*/, SLNet::BitStream& bts) {
 	auto msgConverted = readBs(bts);
 	std::stringstream newRoomId;
 	for (size_t i = 0; i < ROOM_LENGTH; i++) {
@@ -130,10 +130,10 @@ void cugl::AdHocNetworkConnection::cc3HostReceivedPunch(HostPeers& h, SLNet::Pac
 
 	bool hasRoom = false;
 	if (!h.started || numPlayers < maxPlayers) {
-		for (uint8_t i = 0; i < h.peers.size(); i++) {
-			if (h.peers.at(i) == nullptr) {
+		for (auto& i : h.peers) {
+			if (i == nullptr) {
 				hasRoom = true;
-				h.peers.at(i) = std::make_unique<SLNet::SystemAddress>(p);
+				i = std::make_unique<SLNet::SystemAddress>(p);
 				break;
 			}
 		}
@@ -172,7 +172,7 @@ void cugl::AdHocNetworkConnection::cc5HostConfirmClient(HostPeers& h, SLNet::Pac
 
 	for (uint8_t i = 0; i < h.peers.size(); i++) {
 		if (*h.peers.at(i) == packet->systemAddress) {
-			uint8_t pID = i + 1;
+			const uint8_t pID = i + 1;
 			CULog("Player %d accepted connection request", pID);
 
 			if (h.started) {
@@ -194,7 +194,7 @@ void cugl::AdHocNetworkConnection::cc5HostConfirmClient(HostPeers& h, SLNet::Pac
 
 void cugl::AdHocNetworkConnection::cc6ClientAssignedID(ClientPeer& c,
 													   const std::vector<uint8_t>& msgConverted) {
-	bool apiMatch = msgConverted[3] == apiVer;
+	const bool apiMatch = msgConverted[3] == apiVer;
 	if (!apiMatch) {
 		CULogError("API version mismatch; currently %d but host was %d", apiVer, msgConverted[3]);
 		status = NetStatus::ApiMismatch;
@@ -210,14 +210,14 @@ void cugl::AdHocNetworkConnection::cc6ClientAssignedID(ClientPeer& c,
 
 	peer->CloseConnection(*natPunchServerAddress, true);
 
-	directSend({*playerID, (uint8_t)(apiMatch ? 1 : 0)}, JoinRoom, *c.addr);
+	directSend({*playerID, static_cast<uint8_t>(apiMatch ? 1 : 0)}, JoinRoom, *c.addr);
 }
 
 void cugl::AdHocNetworkConnection::cc7HostGetClientData(HostPeers& h, SLNet::Packet* packet,
 														const std::vector<uint8_t>& msgConverted) {
 	for (uint8_t i = 0; i < h.peers.size(); i++) {
 		if (*h.peers.at(i) == packet->systemAddress) {
-			uint8_t pID = i + 1;
+			const uint8_t pID = i + 1;
 			CULog("Host verifying player %d connection info", pID);
 
 			if (pID != msgConverted[0]) {
@@ -234,7 +234,7 @@ void cugl::AdHocNetworkConnection::cc7HostGetClientData(HostPeers& h, SLNet::Pac
 
 			CULog("Player id %d was successfully verified; connection handshake complete", pID);
 			connectedPlayers.set(pID);
-			std::vector<uint8_t> joinMsg = {pID};
+			const std::vector<uint8_t> joinMsg = {pID};
 			broadcast(joinMsg, packet->systemAddress, PlayerJoined);
 			numPlayers++;
 
@@ -385,7 +385,7 @@ void AdHocNetworkConnection::receive(
 		 peer->DeallocatePacket(packet), packet = peer->Receive()) {
 		SLNet::BitStream bts(packet->data, packet->length, false);
 
-		switch (packet->data[0]) {
+		switch (packet->data[0]) { // NOLINT
 			case ID_CONNECTION_REQUEST_ACCEPTED:
 				// Connected to some remote server
 				if (packet->systemAddress == *(this->natPunchServerAddress)) {
@@ -428,9 +428,9 @@ void AdHocNetworkConnection::receive(
 								continue;
 							}
 							if (*h.peers.at(i) == packet->systemAddress) {
-								uint8_t pID = i + 1;
+								const uint8_t pID = i + 1;
 								CULog("Lost connection to player %d", pID);
-								std::vector<uint8_t> disconnMsg{pID};
+								const std::vector<uint8_t> disconnMsg{pID};
 								h.peers.at(i) = nullptr;
 								if (connectedPlayers.test(pID)) {
 									numPlayers--;
@@ -475,7 +475,7 @@ void AdHocNetworkConnection::receive(
 			case ID_NAT_PUNCHTHROUGH_FAILED:
 			case ID_CONNECTION_ATTEMPT_FAILED:
 			case ID_NAT_TARGET_UNRESPONSIVE: {
-				CULogError("Punchthrough failure %d", packet->data[0]);
+				CULogError("Punchthrough failure %d", packet->data[0]); // NOLINT
 
 				status = NetStatus::GenericError;
 				bts.IgnoreBytes(sizeof(SLNet::MessageID));
@@ -504,15 +504,16 @@ void AdHocNetworkConnection::receive(
 				auto msgConverted = readBs(bts);
 
 				remotePeer.match([&](HostPeers& /*h*/) { dispatcher(msgConverted); },
-								 [&](ClientPeer& c) {
+								 [&](ClientPeer& /*c*/) {
 									 CULogError("Received direct to host message as client");
 								 });
 
 				break;
 			}
 			case ID_USER_PACKET_ENUM + AssignedRoom: {
-				remotePeer.match([&](HostPeers& h) { ch2HostGetRoomID(h, bts); },
-								 [&](ClientPeer& c) { CULog("Assigned room ID but ignoring"); });
+				remotePeer.match(
+					[&](HostPeers& h) { ch2HostGetRoomID(h, bts); },
+					[&](ClientPeer& /*c*/) { CULog("Assigned room ID but ignoring"); });
 
 				break;
 			}
@@ -542,8 +543,8 @@ void AdHocNetworkConnection::receive(
 				auto msgConverted = readBs(bts);
 
 				remotePeer.match(
-					[&](HostPeers& h) { CULogError("Received player joined message as host"); },
-					[&](ClientPeer& c) {
+					[&](HostPeers& /*h*/) { CULogError("Received player joined message as host"); },
+					[&](ClientPeer& /*c*/) {
 						connectedPlayers.set(msgConverted[0]);
 						numPlayers++;
 						maxPlayers++;
@@ -555,8 +556,8 @@ void AdHocNetworkConnection::receive(
 				auto msgConverted = readBs(bts);
 
 				remotePeer.match(
-					[&](HostPeers& h) { CULogError("Received player left message as host"); },
-					[&](ClientPeer& c) {
+					[&](HostPeers& /*h*/) { CULogError("Received player left message as host"); },
+					[&](ClientPeer& /*c*/) {
 						connectedPlayers.reset(msgConverted[0]);
 						numPlayers--;
 					});
@@ -567,7 +568,7 @@ void AdHocNetworkConnection::receive(
 				break;
 			}
 			default:
-				CULog("Received unknown message: %d", packet->data[0]);
+				CULog("Received unknown message: %d", packet->data[0]); // NOLINT
 				break;
 		}
 	}
@@ -583,8 +584,9 @@ void AdHocNetworkConnection::startGame() {
 	remotePeer.match(
 		[&](HostPeers& h) {
 			h.started = true;
-			broadcast({}, const_cast<SLNet::SystemAddress&>(SLNet::UNASSIGNED_SYSTEM_ADDRESS),
-					  StartGame);
+			// NOLINTNEXTLINE
+			auto& a = const_cast<SLNet::SystemAddress&>(SLNet::UNASSIGNED_SYSTEM_ADDRESS);
+			broadcast({}, a, StartGame);
 		},
 		[&](ClientPeer& c) {});
 	maxPlayers = numPlayers;

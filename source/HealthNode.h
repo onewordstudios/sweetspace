@@ -31,7 +31,7 @@ class HealthNode : public cugl::AnimationNode {
 	 * However, the polygon and drawing commands will be deleted and no
 	 * longer safe to use.
 	 */
-	~HealthNode() { dispose(); }
+	virtual ~HealthNode() { dispose(); }
 
 	/**
 	 * Returns a newly allocated filmstrip node from the given texture.
@@ -51,7 +51,7 @@ class HealthNode : public cugl::AnimationNode {
 	 */
 	static std::shared_ptr<HealthNode> alloc(const std::shared_ptr<cugl::Texture> &texture,
 											 int rows, int cols) {
-		std::shared_ptr<HealthNode> node = std::make_shared<HealthNode>();
+		const std::shared_ptr<HealthNode> node = std::make_shared<HealthNode>();
 		return (node->initWithFilmstrip(texture, rows, cols) ? node : nullptr);
 	}
 

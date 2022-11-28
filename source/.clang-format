@@ -6,3 +6,4 @@ ColumnLimit:	100
 AllowShortLoopsOnASingleLine: true
 AlignTrailingComments: true
 SpacesBeforeTrailingComments: 1
+QualifierAlignment: Left

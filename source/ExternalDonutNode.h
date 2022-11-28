@@ -27,7 +27,7 @@ class ExternalDonutNode : public DonutNode {
 	 * However, the polygon and drawing commands will be deleted and no
 	 * longer safe to use.
 	 */
-	~ExternalDonutNode() { dispose(); }
+	~ExternalDonutNode() override { dispose(); }
 
 	bool init(const std::shared_ptr<DonutModel> &externalDonutModel,
 			  std::shared_ptr<DonutModel> player, float shipSize,
@@ -37,7 +37,7 @@ class ExternalDonutNode : public DonutNode {
 		const std::shared_ptr<DonutModel> &externalDonutModel, std::shared_ptr<DonutModel> player,
 		float shipSize, const std::shared_ptr<cugl::AssetManager> &assets,
 		const std::string &color) {
-		std::shared_ptr<ExternalDonutNode> node = std::make_shared<ExternalDonutNode>();
+		const std::shared_ptr<ExternalDonutNode> node = std::make_shared<ExternalDonutNode>();
 		return node->init(externalDonutModel, std::move(player), shipSize, assets, color) ? node
 																						  : nullptr;
 	}

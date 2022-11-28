@@ -179,12 +179,12 @@ bool GameGraphRoot::init( // NOLINT Yeah it's a big function; we'll live with it
 	nearSpace->addChild(shipSegsNode);
 	nearSpace->sortZOrder();
 
-	std::shared_ptr<DonutModel> playerModel = ship->getDonuts()[playerID];
+	const std::shared_ptr<DonutModel> playerModel = ship->getDonuts()[playerID];
 
 	// Initialize Players
 	for (uint8_t i = 0; i < ship->getDonuts().size(); i++) {
-		std::shared_ptr<DonutModel> donutModel = ship->getDonuts().at(i);
-		string donutColor = PLAYER_COLOR.at(donutModel->getColorId());
+		const std::shared_ptr<DonutModel> donutModel = ship->getDonuts().at(i);
+		const string donutColor = PLAYER_COLOR.at(donutModel->getColorId());
 		// Player node is handled separately
 		if (i == playerID) {
 			donutNode = PlayerDonutNode::alloc(playerModel, screenHeight, assets, donutColor,
@@ -192,34 +192,37 @@ bool GameGraphRoot::init( // NOLINT Yeah it's a big function; we'll live with it
 			allSpace->addChild(donutNode);
 			tempDonutNode = nullptr;
 		} else {
-			std::shared_ptr<ExternalDonutNode> newDonutNode = ExternalDonutNode::alloc(
+			const std::shared_ptr<ExternalDonutNode> newDonutNode = ExternalDonutNode::alloc(
 				donutModel, playerModel, ship->getSize(), assets, donutColor);
 			externalDonutsNode->addChild(newDonutNode);
 		}
 	}
 
 	// Initialize Breaches
-	std::shared_ptr<cugl::Texture> breachFilmstrip = assets->get<Texture>("breach_filmstrip");
-	std::shared_ptr<cugl::Texture> breachSparkleBig = assets->get<Texture>("breach_sparklebig");
-	std::shared_ptr<cugl::Texture> breachSparkleSmall = assets->get<Texture>("breach_sparklesmall");
+	const std::shared_ptr<cugl::Texture> breachFilmstrip = assets->get<Texture>("breach_filmstrip");
+	const std::shared_ptr<cugl::Texture> breachSparkleBig =
+		assets->get<Texture>("breach_sparklebig");
+	const std::shared_ptr<cugl::Texture> breachSparkleSmall =
+		assets->get<Texture>("breach_sparklesmall");
 	for (uint8_t i = 0; i < ship->getBreaches().size(); i++) {
-		std::shared_ptr<BreachModel> breachModel = ship->getBreaches().at(i);
-		string breachColor =
+		const std::shared_ptr<BreachModel> breachModel = ship->getBreaches().at(i);
+		const string breachColor =
 			PLAYER_COLOR.at(ship->getDonuts().at(breachModel->getPlayer())->getColorId());
-		std::shared_ptr<cugl::Texture> pattern = assets->get<Texture>("breach_" + breachColor);
-		cugl::Color4 color =
+		const std::shared_ptr<cugl::Texture> pattern =
+			assets->get<Texture>("breach_" + breachColor);
+		cugl::Color4 const color =
 			BREACH_COLOR.at(ship->getDonuts().at(breachModel->getPlayer())->getColorId());
 		// Initialize sparkle nodes
-		std::shared_ptr<SparkleNode> sparkleNodeBig =
+		const std::shared_ptr<SparkleNode> sparkleNodeBig =
 			SparkleNode::alloc(playerModel, ship->getSize(), breachSparkleBig, Color4::WHITE,
 							   SparkleNode::SparkleType::Big);
 		breachSparklesNode->addChild(sparkleNodeBig);
-		std::shared_ptr<SparkleNode> sparkleNodeSmall =
+		const std::shared_ptr<SparkleNode> sparkleNodeSmall =
 			SparkleNode::alloc(playerModel, ship->getSize(), breachSparkleSmall, Color4::WHITE,
 							   SparkleNode::SparkleType::Small);
 		breachSparklesNode->addChild(sparkleNodeSmall);
 
-		std::shared_ptr<BreachNode> breachNode =
+		const std::shared_ptr<BreachNode> breachNode =
 			BreachNode::alloc(breachModel, playerModel, ship->getSize(), breachFilmstrip, pattern,
 							  color, sparkleNodeBig, sparkleNodeSmall);
 		breachNode->setTag(static_cast<unsigned int>(i + 1));
@@ -227,8 +230,8 @@ bool GameGraphRoot::init( // NOLINT Yeah it's a big function; we'll live with it
 		// Add the breach node
 		breachesNode->addChild(breachNode);
 		if (ship->getLevelNum() == tutorial::BREACH_LEVEL) {
-			std::shared_ptr<Texture> image = assets->get<Texture>("jump_tutorial0");
-			std::shared_ptr<TutorialNode> tutorial = TutorialNode::alloc(image);
+			const std::shared_ptr<Texture> image = assets->get<Texture>("jump_tutorial0");
+			const std::shared_ptr<TutorialNode> tutorial = TutorialNode::alloc(image);
 			tutorial->setScale(TUTORIAL_SCALE);
 			tutorial->setBreachNode(breachNode);
 			tutorialNode->addChildWithTag(tutorial, static_cast<unsigned int>(i + 1));
@@ -237,38 +240,38 @@ bool GameGraphRoot::init( // NOLINT Yeah it's a big function; we'll live with it
 
 	// Initialize Doors
 	for (uint8_t i = 0; i < ship->getDoors().size(); i++) {
-		std::shared_ptr<DoorModel> doorModel = ship->getDoors().at(i);
-		std::shared_ptr<DoorNode> doorNode =
+		const std::shared_ptr<DoorModel> doorModel = ship->getDoors().at(i);
+		const std::shared_ptr<DoorNode> doorNode =
 			DoorNode::alloc(doorModel, playerModel, ship->getSize(), assets);
 		doorsNode->addChildWithTag(doorNode, i + 1);
 	}
 
 	// Initialize unopenable doors
 	for (uint8_t i = 0; i < ship->getUnopenable().size(); i++) {
-		std::shared_ptr<Unopenable> unopModel = ship->getUnopenable().at(i);
-		std::shared_ptr<Texture> image = assets->get<Texture>("unop");
-		std::shared_ptr<UnopenableNode> unopNode =
+		const std::shared_ptr<Unopenable> unopModel = ship->getUnopenable().at(i);
+		const std::shared_ptr<Texture> image = assets->get<Texture>("unop");
+		const std::shared_ptr<UnopenableNode> unopNode =
 			UnopenableNode::alloc(unopModel, playerModel, ship->getSize(), image);
 		unopsNode->addChildWithTag(unopNode, i + 1);
 	}
 
 	// Initialize Buttons
 	for (uint8_t i = 0; i < ship->getButtons().size(); i++) {
-		std::shared_ptr<ButtonModel> buttonModel = ship->getButtons().at(i);
-		std::shared_ptr<SparkleNode> sparkleNode =
+		const std::shared_ptr<ButtonModel> buttonModel = ship->getButtons().at(i);
+		const std::shared_ptr<SparkleNode> sparkleNode =
 			SparkleNode::alloc(playerModel, ship->getSize(), breachSparkleBig, Color4::WHITE,
 							   SparkleNode::SparkleType::Big);
 		buttonSparklesNode->addChild(sparkleNode);
-		std::shared_ptr<ButtonNode> buttonNode =
+		const std::shared_ptr<ButtonNode> buttonNode =
 			ButtonNode::alloc(buttonModel, playerModel, ship->getSize(), assets, sparkleNode);
 		buttonsNode->addChildWithTag(buttonNode, i + 1);
 	}
 
 	if (ship->getLevelNum() == tutorial::DOOR_LEVEL) {
 		for (int i = 0; i < doorsNode->getChildCount(); i++) {
-			std::shared_ptr<Texture> image = assets->get<Texture>("door_tutorial");
-			std::shared_ptr<TutorialNode> tutorial = TutorialNode::alloc(image);
-			shared_ptr<DoorNode> doorNode = dynamic_pointer_cast<DoorNode>(
+			const std::shared_ptr<Texture> image = assets->get<Texture>("door_tutorial");
+			const std::shared_ptr<TutorialNode> tutorial = TutorialNode::alloc(image);
+			const shared_ptr<DoorNode> doorNode = dynamic_pointer_cast<DoorNode>(
 				doorsNode->getChildByTag(static_cast<unsigned int>(i + 1)));
 			tutorial->setDoorNode(doorNode);
 			tutorial->setScale(TUTORIAL_SCALE);
@@ -276,19 +279,19 @@ bool GameGraphRoot::init( // NOLINT Yeah it's a big function; we'll live with it
 		}
 	} else if (ship->getLevelNum() == tutorial::BUTTON_LEVEL) {
 		for (int i = 0; i < buttonsNode->getChildCount(); i++) {
-			std::shared_ptr<Texture> image = assets->get<Texture>("engine_tutorial");
-			std::shared_ptr<TutorialNode> tutorial = TutorialNode::alloc(image);
-			shared_ptr<ButtonNode> buttonNode = dynamic_pointer_cast<ButtonNode>(
+			const std::shared_ptr<Texture> image = assets->get<Texture>("engine_tutorial");
+			const std::shared_ptr<TutorialNode> tutorial = TutorialNode::alloc(image);
+			const shared_ptr<ButtonNode> buttonNode = dynamic_pointer_cast<ButtonNode>(
 				buttonsNode->getChildByTag(static_cast<unsigned int>(i + 1)));
 			tutorial->setButtonNode(buttonNode);
 			tutorial->setScale(TUTORIAL_SCALE);
 			tutorialNode->addChildWithTag(tutorial, i + 1);
 		}
 	} else if (ship->getLevelNum() == tutorial::REAL_LEVELS.at(4)) {
-		std::shared_ptr<Texture> image = assets->get<Texture>("timer_tutorial1");
+		const std::shared_ptr<Texture> image = assets->get<Texture>("timer_tutorial1");
 		timerTutorial->setTexture(image);
-		float posY = timerTutorial->getPositionY() + TIMER_OFFSET_Y;
-		float posX = timerTutorial->getPositionX() + TIMER_OFFSET_X;
+		const float posY = timerTutorial->getPositionY() + TIMER_OFFSET_Y;
+		const float posX = timerTutorial->getPositionX() + TIMER_OFFSET_X;
 		timerTutorial->setPosition(posX, posY);
 	}
 
@@ -414,7 +417,7 @@ void GameGraphRoot::update( // NOLINT Yeah it's a big function; we'll live with 
 		}
 		coordHUD->setColor(cugl::Color4::WHITE);
 	}
-	std::string time = timerText();
+	std::string const time = timerText();
 	if (time != coordHUD->getText()) {
 		coordHUD->setText(time);
 	}
@@ -429,7 +432,7 @@ void GameGraphRoot::update( // NOLINT Yeah it's a big function; we'll live with 
 			pauseMenu->update();
 			break;
 		case Loss: {
-			bool justLost = !lossScreen->isVisible();
+			const bool justLost = !lossScreen->isVisible();
 			// Show loss screen
 			lossScreen->setVisible(true);
 			pauseMenu->setVisible(false);
@@ -481,21 +484,21 @@ void GameGraphRoot::update( // NOLINT Yeah it's a big function; we'll live with 
 	if (ship->getHealth() < 1) {
 		healthNodeOverlay->setVisible(false);
 	} else {
-		float percentHealth = ship->getHealth() / ship->getInitHealth();
+		const float percentHealth = ship->getHealth() / ship->getInitHealth();
 		if (percentHealth == 1) {
 			healthNodeOverlay->setAngle(((percentHealth * HEALTH_RANGE) + HEALTH_OFFSET + 3) *
 										globals::PI_180);
-			std::shared_ptr<Texture> image = assets->get<Texture>("health_green");
+			const std::shared_ptr<Texture> image = assets->get<Texture>("health_green");
 			healthNodeOverlay->setTexture(image);
 		} else {
 			healthNodeOverlay->setAngle(((percentHealth * HEALTH_RANGE) + HEALTH_OFFSET) *
 										globals::PI_180);
 		}
 		if (percentHealth < SHIP_HEALTH_RED_CUTOFF) {
-			std::shared_ptr<Texture> image = assets->get<Texture>("health_red");
+			const std::shared_ptr<Texture> image = assets->get<Texture>("health_red");
 			healthNodeOverlay->setTexture(image);
 		} else if (percentHealth < SHIP_HEALTH_YELLOW_CUTOFF) {
-			std::shared_ptr<Texture> image = assets->get<Texture>("health_yellow");
+			const std::shared_ptr<Texture> image = assets->get<Texture>("health_yellow");
 			healthNodeOverlay->setTexture(image);
 		}
 	}
@@ -503,12 +506,12 @@ void GameGraphRoot::update( // NOLINT Yeah it's a big function; we'll live with 
 	if (ship->getLevelNum() == tutorial::BREACH_LEVEL) {
 		if (trunc(ship->canonicalTimeElapsed) > BREACH_TUTORIAL_CUTOFF) {
 			for (int i = 0; i < tutorialNode->getChildCount(); i++) {
-				shared_ptr<TutorialNode> tutorial =
+				const shared_ptr<TutorialNode> tutorial =
 					dynamic_pointer_cast<TutorialNode>(tutorialNode->getChildByTag(i + 1));
 				if (tutorial != nullptr) {
 					tutorial->setVisible(true);
 					if (tutorial->getPlayer() == playerID) {
-						int breachHealth = tutorial->getBreachNode()->getModel()->getHealth();
+						const int breachHealth = tutorial->getBreachNode()->getModel()->getHealth();
 						std::shared_ptr<Texture> image = assets->get<Texture>("fix_count3");
 						if (breachHealth == 1) {
 							image = assets->get<Texture>("fix_count1");
@@ -545,15 +548,15 @@ void GameGraphRoot::update( // NOLINT Yeah it's a big function; we'll live with 
 		rollTutorial->setVisible(true);
 		auto& stabilizer = ship->getStabilizer();
 		if (stabilizer.getIsActive()) {
-			std::shared_ptr<Texture> image = assets->get<Texture>("stabilizer_tutorial1");
+			const std::shared_ptr<Texture> image = assets->get<Texture>("stabilizer_tutorial1");
 			rollTutorial->setTexture(image);
 		} else {
-			std::shared_ptr<Texture> image = assets->get<Texture>("stabilizer_tutorial0");
+			const std::shared_ptr<Texture> image = assets->get<Texture>("stabilizer_tutorial0");
 			rollTutorial->setTexture(image);
 		}
 	}
 	// Reanchor the node at the center of the screen and rotate about center.
-	Vec2 position = farSpace->getPosition();
+	const Vec2 position = farSpace->getPosition();
 	farSpace->setAnchor(Vec2::ANCHOR_CENTER);
 	if (position.x == -BG_SCROLL_LIMIT) {
 		farSpace->setPositionX(0);
@@ -563,7 +566,7 @@ void GameGraphRoot::update( // NOLINT Yeah it's a big function; we'll live with 
 	}
 
 	// Rotate nearSpace about center.
-	float newPlayerAngle = ship->getDonuts().at(playerID)->getAngle();
+	const float newPlayerAngle = ship->getDonuts().at(playerID)->getAngle();
 	float delta = (prevPlayerAngle - newPlayerAngle) * globals::PI_180;
 	delta = (delta < -globals::PI)
 				? (delta + ship->getSize() * globals::PI_180)
@@ -582,16 +585,16 @@ void GameGraphRoot::update( // NOLINT Yeah it's a big function; we'll live with 
 
 	// Update breaches textures if recycled
 	for (uint8_t i = 0; i < ship->getBreaches().size(); i++) {
-		std::shared_ptr<BreachModel> breachModel = ship->getBreaches().at(i);
-		shared_ptr<BreachNode> breachNode =
+		const std::shared_ptr<BreachModel> breachModel = ship->getBreaches().at(i);
+		const shared_ptr<BreachNode> breachNode =
 			dynamic_pointer_cast<BreachNode>(breachesNode->getChildByTag(i + 1));
 		if (!breachNode->getIsAnimatingShrink() && breachModel->getHealth() > 0 &&
 			breachModel->getNeedSpriteUpdate()) {
-			cugl::Color4 color =
+			cugl::Color4 const color =
 				BREACH_COLOR.at(ship->getDonuts().at(breachModel->getPlayer())->getColorId());
-			string breachColor =
+			const string breachColor =
 				PLAYER_COLOR.at(ship->getDonuts().at(breachModel->getPlayer())->getColorId());
-			std::shared_ptr<Texture> image = assets->get<Texture>("breach_" + breachColor);
+			const std::shared_ptr<Texture> image = assets->get<Texture>("breach_" + breachColor);
 			breachNode->resetAppearance(image, color);
 			breachModel->setNeedSpriteUpdate(false);
 		}
@@ -640,7 +643,7 @@ void GameGraphRoot::processButtons() {
 		return;
 	}
 
-	std::tuple<Vec2, Vec2> tapData = InputController::getInstance()->getTapEndLoc();
+	const std::tuple<Vec2, Vec2> tapData = InputController::getInstance()->getTapEndLoc();
 
 	// Pause menu
 	if (pauseMenu->manageButtons(tapData)) {
@@ -663,9 +666,9 @@ void GameGraphRoot::processButtons() {
 
 void GameGraphRoot::setSegHealthWarning(int alpha) {
 	for (int i = 0; i < globals::VISIBLE_SEGS; i++) {
-		std::shared_ptr<cugl::PolygonNode> segment = dynamic_pointer_cast<cugl::PolygonNode>(
+		const std::shared_ptr<cugl::PolygonNode> segment = dynamic_pointer_cast<cugl::PolygonNode>(
 			shipSegsNode->getChildByTag(static_cast<unsigned int>(i + 1)));
-		std::shared_ptr<cugl::PolygonNode> segRed = dynamic_pointer_cast<cugl::PolygonNode>(
+		const std::shared_ptr<cugl::PolygonNode> segRed = dynamic_pointer_cast<cugl::PolygonNode>(
 			segment->getChild(static_cast<unsigned int>(1)));
 		segRed->setColor(Color4(globals::MAX_BYTE, globals::MAX_BYTE, globals::MAX_BYTE, alpha));
 	}
@@ -718,7 +721,7 @@ void GameGraphRoot::doTeleportAnimation() {
  */
 std::string GameGraphRoot::timerText() {
 	stringstream ss;
-	int time = static_cast<int>(trunc(ship->timeLeftInTimer));
+	const int time = static_cast<int>(trunc(ship->timeLeftInTimer));
 	if (time > SEC_IN_MIN - 1) {
 		if (time % SEC_IN_MIN < TEN_SECONDS) {
 			ss << "0" << time / SEC_IN_MIN << ":0" << time % SEC_IN_MIN;

@@ -26,8 +26,9 @@ void AnimationManager::registerNode(const std::string& name,
 
 	nodes.insert({name, node});
 
-	cugl::Color4 a;
-	AnimationData currState = {node, node->isVisible(), node->getPositionX(), node->getPositionY()};
+	const cugl::Color4 a;
+	const AnimationData currState = {node, node->isVisible(), node->getPositionX(),
+									 node->getPositionY()};
 	initialData.push_back(currState);
 }
 
@@ -62,10 +63,10 @@ bool AnimationManager::step() {
 		float val = 0; // The 0 is unused, but let's make the linter happy
 		{
 			// Scoping these temporary variables to avoid polluting the function
-			float s1 = anim.startVal;
-			float e1 = anim.endVal;
-			int s2 = static_cast<int>(currentFrame - anim.startFrame);
-			int e2 = static_cast<int>(anim.endFrame - anim.startFrame);
+			const float s1 = anim.startVal;
+			const float e1 = anim.endVal;
+			const int s2 = static_cast<int>(currentFrame - anim.startFrame);
+			const int e2 = static_cast<int>(anim.endFrame - anim.startFrame);
 
 			switch (anim.ease) {
 				case Tween::TweenType::Linear:
@@ -117,13 +118,13 @@ void AnimationManager::queue(std::shared_ptr<cugl::Node> node, AnimationProperty
 
 void AnimationManager::animateX(const std::string& node, Tween::TweenType ease, float destination,
 								unsigned int duration, unsigned int delay) {
-	std::shared_ptr<cugl::Node> n = nodes.at(node);
+	const std::shared_ptr<cugl::Node> n = nodes.at(node);
 	queue(n, PositionX, ease, n->getPositionX(), destination, duration, delay);
 }
 
 void AnimationManager::animateY(const std::string& node, Tween::TweenType ease, float destination,
 								unsigned int duration, unsigned int delay) {
-	std::shared_ptr<cugl::Node> n = nodes.at(node);
+	const std::shared_ptr<cugl::Node> n = nodes.at(node);
 	queue(n, PositionY, ease, n->getPositionY(), destination, duration, delay);
 }
 

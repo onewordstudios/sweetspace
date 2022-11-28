@@ -91,7 +91,7 @@ void BreachNode::postPosition() {
 		isAnimatingShrink = true;
 		currentFrameIdle = 0;
 
-		float yOffset =
+		const float yOffset =
 			Tween::linear(SPARKLE_OFFSET_BEGIN, SPARKLE_OFFSET_END,
 						  static_cast<int>(shapeNode->getFrame()), shapeNode->getSize());
 		sparkleNodeSmall->setRadius(radius + yOffset);
@@ -116,11 +116,12 @@ void BreachNode::postPosition() {
 		}
 	} else {
 		// Play idle animation
-		unsigned int twiceStripLength = 2 * NUM_IDLE_FRAMES * NUM_SKIP_FRAMES;
-		unsigned int frameNum = (currentFrameIdle < NUM_IDLE_FRAMES * NUM_SKIP_FRAMES
-									 ? currentFrameIdle / NUM_SKIP_FRAMES
-									 : (twiceStripLength - currentFrameIdle) / NUM_SKIP_FRAMES);
-		unsigned int frameOffset = getFrameFromHealth(breachModel->getHealth());
+		const unsigned int twiceStripLength = 2 * NUM_IDLE_FRAMES * NUM_SKIP_FRAMES;
+		const unsigned int frameNum =
+			(currentFrameIdle < NUM_IDLE_FRAMES * NUM_SKIP_FRAMES
+				 ? currentFrameIdle / NUM_SKIP_FRAMES
+				 : (twiceStripLength - currentFrameIdle) / NUM_SKIP_FRAMES);
+		const unsigned int frameOffset = getFrameFromHealth(breachModel->getHealth());
 		shapeNode->setFrame(static_cast<int>(frameOffset + frameNum));
 		patternNode->setFrame(static_cast<int>(shapeNode->getFrame()));
 		currentFrameIdle = currentFrameIdle == twiceStripLength - 1 ? 0 : currentFrameIdle + 1;

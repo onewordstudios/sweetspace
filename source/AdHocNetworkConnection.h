@@ -40,7 +40,7 @@ class AdHocNetworkConnection : public NetworkConnection {
 
 	AdHocNetworkConnection(ConnectionConfig config, std::string roomID);
 
-	~AdHocNetworkConnection();
+	~AdHocNetworkConnection() override;
 #pragma endregion
 
 #pragma region Main Networking Methods
@@ -125,11 +125,12 @@ class AdHocNetworkConnection : public NetworkConnection {
 		};
 	};
 
-	/** Connection to host and room ID for client */
+	/** Connection to host and room ID for client NOLINTNEXTLINE */
 	struct ClientPeer {
 		std::unique_ptr<SLNet::SystemAddress> addr;
 		std::string room;
 
+		// NOLINTNEXTLINE
 		explicit ClientPeer(std::string roomID) : room(std::move(roomID)) {}
 	};
 

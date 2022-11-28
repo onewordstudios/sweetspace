@@ -53,7 +53,7 @@ class SparkleNode : public CustomNode {
 	 * However, the breach and drawing commands will be deleted and no
 	 * longer safe to use.
 	 */
-	~SparkleNode() { dispose(); }
+	virtual ~SparkleNode() { dispose(); }
 
 	/**
 	 * Properly initialize this sparkle node. Do NOT use the constructors in the parent class. They
@@ -82,7 +82,7 @@ class SparkleNode : public CustomNode {
 	static std::shared_ptr<SparkleNode> alloc(std::shared_ptr<DonutModel> player, float shipSize,
 											  const std::shared_ptr<cugl::Texture> &filmstrip,
 											  cugl::Color4 color, SparkleType type) {
-		std::shared_ptr<SparkleNode> result = std::make_shared<SparkleNode>();
+		const std::shared_ptr<SparkleNode> result = std::make_shared<SparkleNode>();
 		return (result->init(std::move(player), shipSize, filmstrip, color, type) ? result
 																				  : nullptr);
 	}

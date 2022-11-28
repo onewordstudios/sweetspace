@@ -70,7 +70,7 @@ class ShipModel {
 	/**
 	 * Destroys this breach, releasing all resources.
 	 */
-	~ShipModel() { dispose(); }
+	virtual ~ShipModel() { dispose(); }
 
 	/**
 	 * Disposes all resources and assets
@@ -138,7 +138,7 @@ class ShipModel {
 	static std::shared_ptr<ShipModel> alloc(uint8_t numPlayers, uint8_t numBreaches,
 											uint8_t numDoors, uint8_t playerID, float initHealth,
 											uint8_t numButtons) {
-		std::shared_ptr<ShipModel> result = std::make_shared<ShipModel>();
+		const std::shared_ptr<ShipModel> result = std::make_shared<ShipModel>();
 		return (result->init(numPlayers, numBreaches, numDoors, playerID, initHealth, numButtons)
 					? result
 					: nullptr);
@@ -160,7 +160,7 @@ class ShipModel {
 	static std::shared_ptr<ShipModel> alloc(uint8_t numPlayers, uint8_t numBreaches,
 											uint8_t numDoors, uint8_t playerID, float shipSize,
 											float initHealth, uint8_t numButtons) {
-		std::shared_ptr<ShipModel> result = std::make_shared<ShipModel>();
+		const std::shared_ptr<ShipModel> result = std::make_shared<ShipModel>();
 		return (result->init(numPlayers, numBreaches, numDoors, playerID, shipSize, initHealth,
 							 numButtons)
 					? result
@@ -406,7 +406,8 @@ class ShipModel {
 	 */
 	void separateDonuts() {
 		for (uint8_t i = 0; i < donuts.size(); i++) {
-			float angle = getSize() * static_cast<float>(i) / static_cast<float>(donuts.size());
+			const float angle =
+				getSize() * static_cast<float>(i) / static_cast<float>(donuts.size());
 			donuts.at(i)->setAngle(angle);
 		}
 	}

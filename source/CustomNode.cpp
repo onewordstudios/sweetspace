@@ -69,17 +69,17 @@ void CustomNode::draw(const shared_ptr<cugl::SpriteBatch>& batch, const cugl::Ma
 
 		prePosition();
 
-		float onScreenAngle = getOnScreenAngle(angle);
+		const float onScreenAngle = getOnScreenAngle(angle);
 		if (isComingIntoView(onScreenAngle)) {
 			// Entering visible range
-			float relativeAngle = onScreenAngle - getParent()->getParent()->getAngle();
+			const float relativeAngle = onScreenAngle - getParent()->getParent()->getAngle();
 			setAngle(relativeAngle);
 			setPosition(getPositionVec(relativeAngle, radius));
 			isShown = true;
 			isDirty = false;
 		} else if (isGoingOutOfView(onScreenAngle)) {
 			// Leaving visible range
-			Vec2 hidden = Vec2(OFF_SCREEN_POS, OFF_SCREEN_POS);
+			const Vec2 hidden = Vec2(OFF_SCREEN_POS, OFF_SCREEN_POS);
 			setPosition(hidden);
 			isShown = false;
 		}
@@ -89,7 +89,7 @@ void CustomNode::draw(const shared_ptr<cugl::SpriteBatch>& batch, const cugl::Ma
 	} else {
 		// Model is currently inactive
 		if (isShown) {
-			Vec2 hidden = Vec2(OFF_SCREEN_POS, OFF_SCREEN_POS);
+			const Vec2 hidden = Vec2(OFF_SCREEN_POS, OFF_SCREEN_POS);
 			setPosition(hidden);
 			isShown = false;
 		}

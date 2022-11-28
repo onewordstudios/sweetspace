@@ -15,10 +15,10 @@ class ShipSegmentNode : public cugl::PolygonNode {
 	/** Construct a degenerate segment node */
 	ShipSegmentNode() = default;
 	/** Destruct this segment node */
-	~ShipSegmentNode();
+	virtual ~ShipSegmentNode();
 
-	ShipSegmentNode(ShipSegmentNode const&) = delete;
-	void operator=(ShipSegmentNode const&) = delete;
+	ShipSegmentNode(const ShipSegmentNode&) = delete;
+	void operator=(const ShipSegmentNode&) = delete;
 
 	/**
 	 * Initialize this ship segment node with proper textures and assets
@@ -35,7 +35,7 @@ class ShipSegmentNode : public cugl::PolygonNode {
 	 */
 	static std::shared_ptr<cugl::PolygonNode> alloc(
 		const std::shared_ptr<cugl::AssetManager>& assets, unsigned int segmentID) {
-		std::shared_ptr<ShipSegmentNode> node = std::make_shared<ShipSegmentNode>();
+		const std::shared_ptr<ShipSegmentNode> node = std::make_shared<ShipSegmentNode>();
 		return node->init(assets, segmentID) ? node : nullptr;
 	}
 

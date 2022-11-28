@@ -32,5 +32,5 @@ then
     LIST=$(git diff origin/master --diff-filter=ACMR --name-only --no-color | grep -E '\.cpp$')
     tooling/run-clang-tidy.py -header-filter=".*source\/[^\/]*\.h" -cpp $LIST 1>&2 2>/dev/null
 else
-    clang-tidy ../source/$1.cpp --header-filter=.*source\/[^\/]*\.h -- -I../cugl/include
+    clang-tidy ../source/$1.cpp --header-filter=.*source\/[^\/]*\.h -- -I../cugl/include -I../firebase/include
 fi

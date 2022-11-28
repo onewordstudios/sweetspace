@@ -7,7 +7,7 @@ void ButtonManager::registerButton(const std::shared_ptr<cugl::Button>& button) 
 }
 
 void ButtonManager::process() {
-	cugl::Vec2 position = InputController::getInstance()->getCurrTapLoc();
+	const cugl::Vec2 position = InputController::getInstance()->getCurrTapLoc();
 
 	if (position == cugl::Vec2::ZERO) {
 		if (wasDown) {

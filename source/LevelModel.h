@@ -63,7 +63,7 @@ class LevelModel : public cugl::Asset {
 	 * @return  an autoreleased level file
 	 */
 	static std::shared_ptr<LevelModel> alloc() {
-		std::shared_ptr<LevelModel> result = std::make_shared<LevelModel>();
+		const std::shared_ptr<LevelModel> result = std::make_shared<LevelModel>();
 		return (result->init("") ? result : nullptr);
 	}
 
@@ -76,7 +76,7 @@ class LevelModel : public cugl::Asset {
 	 * @return  an autoreleased level file
 	 */
 	static std::shared_ptr<LevelModel> alloc(const std::string& file) {
-		std::shared_ptr<LevelModel> result = std::make_shared<LevelModel>();
+		const std::shared_ptr<LevelModel> result = std::make_shared<LevelModel>();
 		return (result->init(file) ? result : nullptr);
 	}
 
@@ -152,7 +152,7 @@ class LevelModel : public cugl::Asset {
 	 * @return true if successfully loaded the asset from a file
 	 */
 	bool preload(const std::string& file) override {
-		std::shared_ptr<cugl::JsonReader> reader = cugl::JsonReader::allocWithAsset(file);
+		const std::shared_ptr<cugl::JsonReader> reader = cugl::JsonReader::allocWithAsset(file);
 		return preload(reader->readJson());
 	}
 
@@ -178,15 +178,15 @@ class LevelModel : public cugl::Asset {
 		perPlayer = json->get(PER_PLAYER_FIELD)->asFloat();
 		time = json->get(TIME_FIELD)->asFloat();
 		initHealth = json->get(INIT_HEALTH_FIELD)->asFloat();
-		std::shared_ptr<cugl::JsonValue> blocksJson = json->get(BLOCKS_FIELD);
+		const std::shared_ptr<cugl::JsonValue> blocksJson = json->get(BLOCKS_FIELD);
 		for (int i = 0; i < blocksJson->size(); i++) {
-			std::shared_ptr<cugl::JsonValue> block = blocksJson->get(i);
+			const std::shared_ptr<cugl::JsonValue> block = blocksJson->get(i);
 			blocks.insert(pair<string, std::shared_ptr<BuildingBlockModel>>(
 				block->get(NAME_FIELD)->asString(), BuildingBlockModel::alloc(blocksJson->get(i))));
 		}
-		std::shared_ptr<cugl::JsonValue> eventsJson = json->get(EVENTS_FIELD);
+		const std::shared_ptr<cugl::JsonValue> eventsJson = json->get(EVENTS_FIELD);
 		for (int i = 0; i < eventsJson->size(); i++) {
-			std::shared_ptr<cugl::JsonValue> event = eventsJson->get(i);
+			const std::shared_ptr<cugl::JsonValue> event = eventsJson->get(i);
 			events.push_back(EventModel::alloc(event));
 		}
 		return true;

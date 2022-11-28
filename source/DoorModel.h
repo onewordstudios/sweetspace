@@ -34,7 +34,7 @@ class DoorModel {
 	/**
 	 * Destroys this door, releasing all resources.
 	 */
-	~DoorModel() { dispose(); }
+	virtual ~DoorModel() { dispose(); }
 
 	/**
 	 * Disposes all resources and assets of this door

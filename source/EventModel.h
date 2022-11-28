@@ -15,7 +15,6 @@
  *
  */
 class EventModel {
-   public:
    private:
 	/**The name of the block to generate*/
 	string block;
@@ -39,7 +38,7 @@ class EventModel {
 	 * @return a new building block
 	 */
 	static std::shared_ptr<EventModel> alloc(const std::shared_ptr<cugl::JsonValue>& json) {
-		std::shared_ptr<EventModel> result = std::make_shared<EventModel>();
+		const std::shared_ptr<EventModel> result = std::make_shared<EventModel>();
 		return (result->init(json) ? result : nullptr);
 	}
 
