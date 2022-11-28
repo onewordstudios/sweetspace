@@ -40,7 +40,7 @@ class ExternalDonutModel : public DonutModel {
 
 	ExternalDonutModel(const ExternalDonutModel&) = delete;
 
-	virtual ~ExternalDonutModel() = default;
+	~ExternalDonutModel() override = default;
 
 #pragma region Static Constructors
 	/**
@@ -54,7 +54,7 @@ class ExternalDonutModel : public DonutModel {
 	 * @return a newly allocated donut at the origin.
 	 */
 	static std::shared_ptr<DonutModel> alloc(float shipSize) {
-		std::shared_ptr<ExternalDonutModel> result = std::make_shared<ExternalDonutModel>();
+		const std::shared_ptr<ExternalDonutModel> result = std::make_shared<ExternalDonutModel>();
 		return (result->DonutModel::init(shipSize) ? result : nullptr);
 	}
 
@@ -71,7 +71,7 @@ class ExternalDonutModel : public DonutModel {
 	 * @return a newly allocated donut at the given position.
 	 */
 	static std::shared_ptr<DonutModel> alloc(const cugl::Vec2& pos, float shipSize) {
-		std::shared_ptr<ExternalDonutModel> result = std::make_shared<ExternalDonutModel>();
+		const std::shared_ptr<ExternalDonutModel> result = std::make_shared<ExternalDonutModel>();
 		return (result->init(pos, shipSize) ? result : nullptr);
 	}
 #pragma endregion
