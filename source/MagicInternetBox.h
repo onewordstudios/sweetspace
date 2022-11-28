@@ -32,8 +32,8 @@ class MagicInternetBox {
 	~MagicInternetBox();
 
    public:
-	MagicInternetBox(MagicInternetBox const&) = delete;
-	void operator=(MagicInternetBox const&) = delete;
+	MagicInternetBox(const MagicInternetBox&) = delete;
+	void operator=(const MagicInternetBox&) = delete;
 
 	/**
 	 * Status of whether the game is ready to start

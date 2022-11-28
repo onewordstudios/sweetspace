@@ -15,8 +15,8 @@ class AudioController {
 	~AudioController() = default;
 
    public:
-	AudioController(AudioController const&) = delete;
-	void operator=(AudioController const&) = delete;
+	AudioController(const AudioController&) = delete;
+	void operator=(const AudioController&) = delete;
 
 	/** Get the singleton instance of this class */
 	static AudioController& getInstance() {
