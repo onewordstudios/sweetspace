@@ -8,8 +8,8 @@ android {
         applicationId "fun.onewordstudios.sweetspace"
         minSdkVersion 24
         targetSdkVersion 32
-        versionCode 1000001
-        versionName '1.0.0'
+        versionCode 1000101
+        versionName '1.0.1'
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         externalNativeBuild {
             ndkBuild {
