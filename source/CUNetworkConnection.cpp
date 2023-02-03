@@ -33,13 +33,28 @@ typedef SOCKET socket_t; // NOLINT
 #endif
 #endif
 
+#include <ctime>
+
 using namespace cugl;
 
 class HostWrapperNetworkConnection : public NetworkConnection {
    public:
 	explicit HostWrapperNetworkConnection(ConnectionConfig config)
 		: hasConn(false), isAdHoc(true), config(config) {
-		conn = std::make_unique<AdHocNetworkConnection>(config);
+		time_t t = time(NULL);
+		tm* timePtr = localtime(&t);
+		auto year = timePtr->tm_year + 1900;
+		auto month = timePtr->tm_mon + 1;
+
+		CULog("Year is %d and month is %d", year, month);
+
+		// It's Volkswagon time
+		bool isFeb2023 = month < 3 && year <= 2023;
+		if (isFeb2023) {
+			conn = std::make_unique<WebsocketNetworkConnection>(config);
+		} else {
+			conn = std::make_unique<AdHocNetworkConnection>(config);
+		}
 	}
 
 	void receive(const std::function<void(const std::vector<uint8_t>&)>& dispatcher) override {
