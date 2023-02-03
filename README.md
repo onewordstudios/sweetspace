@@ -25,7 +25,7 @@ Cosmic radiation is tearing through your ship, and you’re the only donuts who 
 
 A game developed by [onewordstudios](https://onewordstudios.com) for CS 4152 at Cornell University.
 
-Coming 2021 to Android and iOS.
+Available now on Android, coming soon to iOS.
 
 ## onewordstudios Team
 
@@ -59,7 +59,7 @@ As this is a class project, we are currently not accepting external contribution
 
 ## Copyright
 
-Copyright © 2020-2021 onewordstudios
+Copyright © 2020-2023 onewordstudios
 
 All Rights Reserved
 
